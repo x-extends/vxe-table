@@ -1,5 +1,8 @@
 .vxe-grid {
   position: relative;
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
   &.is--loading {
     &:before {
       content: "";
@@ -46,6 +49,16 @@
     flex-grow: 1;
     overflow: hidden;
   }
+}
+
+.vxe-grid--aside-left-wrapper,
+.vxe-grid--aside-right-wrapper {
+  flex-shrink: 0;
+  overflow: auto;
+}
+.vxe-grid--body-content-wrapper {
+  flex-grow: 1;
+  overflow: auto;
 }
 
 .vxe-grid {

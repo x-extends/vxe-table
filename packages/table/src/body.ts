@@ -347,12 +347,14 @@ export default defineComponent({
         }
       }
       let cellHeight = ''
-      if (hasEllipsis && (scrollYRHeight || rowHeight)) {
-        cellHeight = `${scrollYRHeight || rowHeight}px`
-      } else if (scrollXLoad || scrollYLoad) {
-        if (!hasEllipsis) {
-          cellHeight = `${rest.height || 24}px`
+      if (hasEllipsis) {
+        if (scrollYRHeight || rowHeight) {
+          cellHeight = `${scrollYRHeight || rowHeight}px`
+        } else if (!isAllOverflow) {
+          cellHeight = `${rest.height || 18}px`
         }
+      } else {
+        cellHeight = `${rest.height || 18}px`
       }
 
       if (mouseConfig && mouseOpts.area && selectCellToRow) {

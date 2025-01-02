@@ -23,7 +23,7 @@
           </template>
         </vxe-column>
         <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
-        <vxe-column field="address" title="Address" show-overflow></vxe-column>
+        <vxe-column field="address" title="Address" :show-overflow="false"></vxe-column>
 
         <template #loading>
           <div>加载中。。。。。。</div>
@@ -92,12 +92,12 @@ onMounted(() => {
       { id: 10003, name: 'Test3', role: 'PM', sex: '0', age: 32, address: 'Shanghai' },
       { id: 10004, name: 'Test4', role: 'Designer', sex: '1', age: 23, address: 'test abc' },
       { id: 10005, name: 'Test5', role: 'Develop', sex: '1', age: 30, address: 'Shanghai' },
-      { id: 10006, name: 'Test6', role: 'Designer', sex: '1', age: 21, address: 'test abc' },
+      { id: 10006, name: 'Test6', role: 'Designer', sex: '1', age: 21, address: 'test abc test abc test abc test abc' },
       { id: 10007, name: 'Test7', role: 'Test', sex: '0', age: 29, address: 'test abc' },
       { id: 10008, name: 'Test8', role: 'Develop', sex: '0', age: 35, address: 'test abc' },
       { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 21, address: 'test abc' },
       { id: 10010, name: 'Test10', role: 'Develop', sex: '0', age: 28, address: 'test abc' },
-      { id: 10011, name: 'Test11', role: 'Test', sex: '0', age: 29, address: 'test abc' },
+      { id: 10011, name: 'Test11', role: 'Test', sex: '0', age: 29, address: 'test abc test abc' },
       { id: 10012, name: 'Test12', role: 'Develop', sex: '1', age: 27, address: 'test abc' },
       { id: 10013, name: 'Test13', role: 'Test', sex: '0', age: 24, address: 'test abc' },
       { id: 10014, name: 'Test14', role: 'Develop', sex: '1', age: 34, address: 'test abc' },

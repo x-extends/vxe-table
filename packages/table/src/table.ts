@@ -1416,12 +1416,28 @@ export default defineComponent({
       }
     }
 
+    // const updateCellOffset = () => {
+    //   const { chTimeout, chRunTime } = internalData
+    //   if (chTimeout) {
+    //     clearTimeout(chTimeout)
+    //   }
+    //   if (!chRunTime || chRunTime + 10 < Date.now()) {
+    //     internalData.chRunTime = Date.now()
+    //     console.log(22)
+    //   }
+    //   internalData.chTimeout = setTimeout(() => {
+    //     internalData.chRunTime = undefined
+    //     internalData.chTimeout = undefined
+    //     console.log(111)
+    //   }, 80)
+    // }
+
     const calcCellHeight = () => {
       const { showOverflow } = props
-      const { tableData, scrollXLoad, scrollYLoad } = reactData
+      const { tableData, scrollXLoad } = reactData
       const { fullAllDataRowIdData } = internalData
       const el = refElem.value
-      if (!showOverflow && (scrollXLoad || scrollYLoad) && el) {
+      if (!showOverflow && el) {
         let paddingTop = 0
         let paddingBottom = 0
         let calcPadding = false
@@ -1452,6 +1468,7 @@ export default defineComponent({
           }
         })
       }
+      // updateCellOffset()
     }
 
     const getOrderField = (column: VxeTableDefines.ColumnInfo) => {
@@ -2478,7 +2495,9 @@ export default defineComponent({
           scrollXStore.offsetSize = offsetXSize
           scrollXStore.visibleSize = visibleXSize
           scrollXStore.endIndex = Math.max(scrollXStore.startIndex + scrollXStore.visibleSize + offsetXSize, scrollXStore.endIndex)
-          tablePrivateMethods.updateScrollXData()
+          tablePrivateMethods.updateScrollXData().then(() => {
+            loadScrollXData()
+          })
         } else {
           tablePrivateMethods.updateScrollXSpace()
         }
@@ -2493,7 +2512,9 @@ export default defineComponent({
           scrollYStore.offsetSize = offsetYSize
           scrollYStore.visibleSize = visibleYSize
           scrollYStore.endIndex = Math.max(scrollYStore.startIndex + visibleYSize + offsetYSize, scrollYStore.endIndex)
-          tablePrivateMethods.updateScrollYData()
+          tablePrivateMethods.updateScrollYData().then(() => {
+            loadScrollYData()
+          })
         } else {
           tablePrivateMethods.updateScrollYSpace()
         }
@@ -2503,7 +2524,7 @@ export default defineComponent({
 
     const handleRecalculateLayout = (reFull: boolean) => {
       const el = refElem.value
-      internalData.reRunTime = Date.now()
+      internalData.rceRunTime = Date.now()
       if (!el || !el.clientWidth) {
         return nextTick()
       }
@@ -3191,10 +3212,14 @@ export default defineComponent({
         internalData.inFooterScroll = false
         internalData.bodyScrollType = ''
         if (isRollX && scrollXLoad) {
-          tablePrivateMethods.updateScrollXData()
+          tablePrivateMethods.updateScrollXData().then(() => {
+            loadScrollXData()
+          })
         }
         if (isRollY && scrollYLoad) {
-          tablePrivateMethods.updateScrollYData()
+          tablePrivateMethods.updateScrollYData().then(() => {
+            loadScrollYData()
+          })
         }
         tableMethods.updateCellAreas()
       }, 200)
@@ -4113,7 +4138,7 @@ export default defineComponent({
        */
       recalculate (reFull?: boolean) {
         return new Promise<void>(resolve => {
-          const { rceTimeout, reRunTime } = internalData
+          const { rceTimeout, rceRunTime } = internalData
           const resizeOpts = computeResizeOpts.value
           const refreshDelay = resizeOpts.refreshDelay || 20
           const el = refElem.value
@@ -4122,7 +4147,7 @@ export default defineComponent({
           }
           if (rceTimeout) {
             clearTimeout(rceTimeout)
-            if (reRunTime && reRunTime + (refreshDelay - 5) < Date.now()) {
+            if (rceRunTime && rceRunTime + (refreshDelay - 5) < Date.now()) {
               resolve(
                 handleRecalculateLayout(!!reFull)
               )

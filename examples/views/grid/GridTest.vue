@@ -1,298 +1,183 @@
 <template>
   <div>
-    <vxe-grid ref='xGrid' v-bind="gridOptions"></vxe-grid>
+    <vxe-select v-model="rowSize" :options="dataOptions" @change="loadData()"></vxe-select>
+    <vxe-table
+      border
+      height="800"
+      :loading="loading"
+      :column-config="{resizable: true}"
+      :scroll-x="{enabled: true, gt: 0}"
+      :scroll-y="{enabled: true, gt: 0}"
+      :data="tableData">
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column field="col0" title="列0" width="100"></vxe-column>
+      <vxe-column field="imgUrl" title="列1" width="80" :cell-render="imgUrlCellRender"></vxe-column>
+      <vxe-column field="col2" title="列2" width="160"></vxe-column>
+      <vxe-column field="col3" title="列3" width="200"></vxe-column>
+      <vxe-column field="col4" title="列4" width="140"></vxe-column>
+      <vxe-column field="col5" title="列5" width="300"></vxe-column>
+      <vxe-column field="col6" title="列6" width="160"></vxe-column>
+      <vxe-column field="col7" title="列7" width="120"></vxe-column>
+      <vxe-column field="col8" title="列8" width="400"></vxe-column>
+      <vxe-column field="col9" title="列9" width="160"></vxe-column>
+      <vxe-column field="col10" title="列10" width="160"></vxe-column>
+      <vxe-column field="col11" title="列11" width="180"></vxe-column>
+      <vxe-column field="col12" title="列12" width="160"></vxe-column>
+      <vxe-column field="col13" title="列13" width="80"></vxe-column>
+      <vxe-column field="col14" title="列14" width="120"></vxe-column>
+      <vxe-column field="col15" title="列15" width="360"></vxe-column>
+      <vxe-column field="col16" title="列16" width="150"></vxe-column>
+      <vxe-column field="col17" title="列17" width="380"></vxe-column>
+      <vxe-column field="col18" title="列18" width="100"></vxe-column>
+      <vxe-column field="col19" title="列19" width="290"></vxe-column>
+      <vxe-column field="col20" title="列20" width="80"></vxe-column>
+      <vxe-column field="col21" title="列21" width="100"></vxe-column>
+      <vxe-column field="col22" title="列22" width="120"></vxe-column>
+      <vxe-column field="col23" title="列23" width="270"></vxe-column>
+      <vxe-column field="col24" title="列24" width="330"></vxe-column>
+      <vxe-column field="col25" title="列25" width="460"></vxe-column>
+      <vxe-column field="col26" title="列26" width="280"></vxe-column>
+      <vxe-column field="col27" title="列27" width="220"></vxe-column>
+      <vxe-column field="col28" title="列28" width="120"></vxe-column>
+      <vxe-column field="col29" title="列29" width="180"></vxe-column>
+      <vxe-column field="col30" title="列30" width="500"></vxe-column>
+      <vxe-column field="col31" title="列31" width="600"></vxe-column>
+      <vxe-column field="col32" title="列32" width="100"></vxe-column>
+      <vxe-column field="col33" title="列33" width="490"></vxe-column>
+      <vxe-column field="col34" title="列34" width="100"></vxe-column>
+      <vxe-column field="col35" title="列35" width="150"></vxe-column>
+      <vxe-column field="col36" title="列36" width="800"></vxe-column>
+      <vxe-column field="col37" title="列37" width="400"></vxe-column>
+      <vxe-column field="col38" title="列38" width="800"></vxe-column>
+      <vxe-column field="col39" title="列39" width="360"></vxe-column>
+      <vxe-column field="col40" title="列40" width="420"></vxe-column>
+      <vxe-column field="col41" title="列41" width="100"></vxe-column>
+      <vxe-column field="col42" title="列42" width="120"></vxe-column>
+      <vxe-column field="col43" title="列43" width="280"></vxe-column>
+      <vxe-column field="col44" title="列44" width="170"></vxe-column>
+      <vxe-column field="col45" title="列45" width="370"></vxe-column>
+      <vxe-column field="col46" title="列46" width="120"></vxe-column>
+      <vxe-column field="col47" title="列47" width="170"></vxe-column>
+      <vxe-column field="col48" title="列48" width="400"></vxe-column>
+      <vxe-column field="col49" title="列49" width="220"></vxe-column>
+      <vxe-column field="col50" title="列50" width="170"></vxe-column>
+      <vxe-column field="col51" title="列51" width="160"></vxe-column>
+      <vxe-column field="col52" title="列52" width="100"></vxe-column>
+      <vxe-column field="col53" title="列53" width="280"></vxe-column>
+      <vxe-column field="col54" title="列54" width="170"></vxe-column>
+      <vxe-column field="col55" title="列55" width="370"></vxe-column>
+      <vxe-column field="col56" title="列56" width="120"></vxe-column>
+      <vxe-column field="col57" title="列57" width="170"></vxe-column>
+      <vxe-column field="col58" title="列58" width="400"></vxe-column>
+      <vxe-column field="col59" title="列59" width="220"></vxe-column>
+      <vxe-column field="col60" title="列60" width="500"></vxe-column>
+      <vxe-column field="col61" title="列61" width="600"></vxe-column>
+      <vxe-column field="col62" title="列62" width="100"></vxe-column>
+      <vxe-column field="col63" title="列63" width="490"></vxe-column>
+      <vxe-column field="col64" title="列64" width="100"></vxe-column>
+      <vxe-column field="col65" title="列65" width="150"></vxe-column>
+      <vxe-column field="col66" title="列66" width="800"></vxe-column>
+      <vxe-column field="col67" title="列67" width="400"></vxe-column>
+      <vxe-column field="col68" title="列68" width="800"></vxe-column>
+      <vxe-column field="col69" title="列69" width="360"></vxe-column>
+      <vxe-column field="col70" title="列70" width="500"></vxe-column>
+      <vxe-column field="col71" title="列71" width="600"></vxe-column>
+      <vxe-column field="col72" title="列72" width="100"></vxe-column>
+      <vxe-column field="col73" title="列73" width="490"></vxe-column>
+      <vxe-column field="col74" title="列74" width="100"></vxe-column>
+      <vxe-column field="col75" title="列75" width="150"></vxe-column>
+      <vxe-column field="col76" title="列76" width="800"></vxe-column>
+      <vxe-column field="col77" title="列77" width="400"></vxe-column>
+      <vxe-column field="col78" title="列78" width="800"></vxe-column>
+      <vxe-column field="col79" title="列79" width="360"></vxe-column>
+      <vxe-column field="col80" title="列80" width="500"></vxe-column>
+      <vxe-column field="col81" title="列81" width="600"></vxe-column>
+      <vxe-column field="col82" title="列82" width="100"></vxe-column>
+      <vxe-column field="col83" title="列83" width="490"></vxe-column>
+      <vxe-column field="col84" title="列84" width="100"></vxe-column>
+      <vxe-column field="col85" title="列85" width="150"></vxe-column>
+      <vxe-column field="col86" title="列86" width="800"></vxe-column>
+      <vxe-column field="col87" title="列87" width="400"></vxe-column>
+      <vxe-column field="col88" title="列88" width="800"></vxe-column>
+      <vxe-column field="col89" title="列89" width="360"></vxe-column>
+    </vxe-table>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from 'vue'
-import XEUtils from 'xe-utils'
+import { ref, reactive, nextTick } from 'vue'
 import { VxeUI } from '../../../packages'
-import type { VxeGridInstance, VxeGridProps } from '../../../types'
+import { VxeColumnPropTypes } from '../../../types'
 
-const xGrid = ref({} as VxeGridInstance)
-
-const postMock = (url:string, body: any): Promise<any> => {
-  return new Promise((resolve) => {
-    console.log(`模拟提交${url}：${JSON.stringify(body)}`)
-    setTimeout(() => {
-      resolve({
-        code: 200,
-        result: {
-          insertRows: 0
-        }
-      })
-    }, 300)
-  })
+interface RowVO {
+  id: number
+  [key: string]: string | number | boolean | any[]
 }
 
-const gridOptions = reactive<VxeGridProps>({
-  border: true,
-  resizable: true,
-  showHeaderOverflow: true,
-  showOverflow: true,
-  keepSource: true,
-  id: 'full_edit_1',
-  height: 600,
-  columnConfig: {
-    useKey: true
-  },
-  cellConfig: {
-    paddingMode: 'compact'
-  },
-  rowConfig: {
-    keyField: 'id',
-    isHover: true
-  },
-  customConfig: {
-    storage: true,
-    checkMethod ({ column }) {
-      if (['nickname', 'role'].includes(column.field)) {
-        return false
-      }
-      return true
-    }
-  },
-  printConfig: {
-    columns: [
-      { field: 'name' },
-      { field: 'email' },
-      { field: 'nickname' },
-      { field: 'age' },
-      { field: 'amount' }
-    ]
-  },
-  sortConfig: {
-    trigger: 'cell',
-    remote: true
-  },
-  filterConfig: {
-    remote: true
-  },
-  pagerConfig: {
-    pageSize: 10,
-    pageSizes: [5, 10, 15, 20, 50, 100, 200, 500, 1000]
-  },
-  formConfig: {
-    titleWidth: 100,
-    titleAlign: 'right',
-    items: [
-      { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'vxe-icon-question-circle-fill' }, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
-      { field: 'email', title: '邮件', span: 8, titlePrefix: { useHTML: true, message: '点击链接：<a class="link" href="https://vxetable.cn" target="_blank">vxe-table官网</a>', icon: 'vxe-icon-question-circle-fill' }, itemRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
-      { field: 'nickname', title: '昵称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入昵称' } } },
-      { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
-      { field: 'sex', title: '性别', span: 8, folding: true, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: '$select', options: [] } },
-      { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: '$input', props: { type: 'number', min: 1, max: 120, placeholder: '请输入年龄' } } },
-      { span: 24, align: 'center', collapseNode: true, itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] } }
-    ]
-  },
-  toolbarConfig: {
-    buttons: [
-      { code: 'insert_edit', name: '新增', icon: 'fa fa-plus' },
-      { code: 'delete', name: '直接删除', icon: 'fa fa-trash-o' },
-      { code: 'mark_cancel', name: '删除/取消', icon: 'fa fa-trash-o' },
-      { code: 'save', name: 'app.body.button.save', icon: 'fa fa-save', status: 'success' }
-    ],
-    refresh: true,
-    import: true,
-    export: true,
-    print: true,
-    zoom: true,
-    custom: true
-  },
-  proxyConfig: {
-    seq: true, // 启用动态序号代理，每一页的序号会根据当前页数变化
-    sort: true, // 启用排序代理，当点击排序时会自动触发 query 行为
-    filter: true, // 启用筛选代理，当点击筛选时会自动触发 query 行为
-    form: true, // 启用表单代理，当点击表单提交按钮时会自动触发 reload 行为
-    // 对应响应结果 { result: [], page: { total: 100 } }
-    props: {
-      result: 'result', // 配置响应结果列表字段
-      total: 'page.total' // 配置响应结果总页数字段
-    },
-    ajax: {
-      // 接收 Promise
-      query: ({ page, sorts, filters, form }) => {
-        const queryParams: any = Object.assign({}, form)
-        // 处理排序条件
-        const firstSort = sorts[0]
-        if (firstSort) {
-          queryParams.sort = firstSort.property
-          queryParams.order = firstSort.order
-        }
-        // 处理筛选条件
-        filters.forEach(({ property, values }) => {
-          queryParams[property] = values.join(',')
-        })
-        return fetch(`https://api.vxetable.cn/demo/api/pub/page/list/${page.pageSize}/${page.currentPage}?${XEUtils.serialize(queryParams)}`).then(response => response.json())
-      },
-      delete: ({ body }) => {
-        return postMock('https://api.vxetable.cn/demo/api/pub/save', body)
-      },
-      save: ({ body }) => postMock('https://api.vxetable.cn/demo/api/pub/save', body)
-    }
-  },
-  columns: [
-    { type: 'checkbox', title: 'ID', width: 120 },
-    { field: 'name', title: 'Name', sortable: true, titleHelp: { message: '名称必须填写2！' }, titleSuffix: { content: '名称必须填写1！' }, editRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
-    {
-      field: 'role',
-      title: 'Role',
-      sortable: true,
-      titlePrefix: { useHTML: true, content: '1点击链接：<a class="link" href="https://vxetable.cn" target="_blank">vxe-table官网</a>' },
-      titleSuffix: { useHTML: true, content: '2点击链接：<a class="link" href="https://vxetable.cn" target="_blank">vxe-table官网</a>' },
-      filters: [
-        { label: '前端开发', value: '前端' },
-        { label: '后端开发', value: '后端' },
-        { label: '测试', value: '测试' },
-        { label: '程序员鼓励师', value: '程序员鼓励师' }
-      ],
-      filterMultiple: false,
-      editRender: { name: 'input', attrs: { placeholder: '请输入角色' } }
-    },
-    { field: 'email', title: 'Email', width: 160, editRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
-    { field: 'nickname', title: 'Nickname', editRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
-    {
-      field: 'sex',
-      title: 'Sex',
-      filters: [
-        { label: '男', value: '1' },
-        { label: '女', value: '0' }
-      ],
-      editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } }
-    },
-    { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
-    {
-      field: 'amount',
-      title: 'Amount',
-      formatter ({ cellValue }) {
-        return cellValue ? `￥${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}` : ''
-      },
-      editRender:
-           { name: '$input', props: { type: 'float', digits: 2, placeholder: '请输入数值' } }
-    },
-    {
-      field: 'updateDate',
-      title: 'Update Date',
-      width: 160,
-      visible: false,
-      sortable: true,
-      formatter ({ cellValue }) {
-        return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
-      }
-    },
-    {
-      field: 'createDate',
-      title: 'Create Date',
-      width: 160,
-      visible: false,
-      sortable: true,
-      formatter ({ cellValue }) {
-        return XEUtils.toDateString(cellValue, 'yyyy-MM-dd')
-      }
-    }
-  ],
-  importConfig: {
-    remote: true,
-    types: ['xlsx'],
-    modes: ['insert'],
-    // 自定义服务端导入
-    importMethod ({ file }) {
-      const $grid = xGrid.value
-      const formBody = new FormData()
-      formBody.append('file', file)
-      return postMock('https://api.vxetable.cn/demo/api/pub/import', formBody).then(data => {
-        VxeUI.modal.message({ content: `成功导入 ${data.result.insertRows} 条记录！`, status: 'success' })
-        // 导入完成，刷新表格
-        $grid.commitProxy('query')
-      }).catch(() => {
-        VxeUI.modal.message({ content: '导入失败，请检查数据是否正确！', status: 'error' })
-      })
-    }
-  },
-  exportConfig: {
-    remote: true,
-    types: ['xlsx'],
-    modes: ['current', 'selected', 'all'],
-    // 自定义服务端导出
-    exportMethod ({ options }) {
-      const $grid = xGrid.value
-      const proxyInfo = $grid.getProxyInfo()
-      // 传给服务端的参数
-      const body = {
-        filename: options.filename,
-        sheetName: options.sheetName,
-        isHeader: options.isHeader,
-        original: options.original,
-        mode: options.mode,
-        pager: proxyInfo ? proxyInfo.pager : null,
-        ids: options.mode === 'selected' ? options.data.map((item) => item.id) : [],
-        fields: options.columns.map((column) => {
-          return {
-            field: column.property,
-            title: column.title
-          }
-        })
-      }
-      // 开始服务端导出
-      return postMock('https://api.vxetable.cn/demo/api/pub/export', body).then(data => {
-        if (data.id) {
-          VxeUI.modal.message({ content: '导出成功，开始下载', status: 'success' })
-          // 读取路径，请求文件
-          fetch(`https://api.vxetable.cn/demo/api/pub/export/download/${data.id}`).then(response => {
-            response.blob().then(blob => {
-              // 开始下载
-              VxeUI.saveFile({ filename: '导出数据', type: 'xlsx', content: blob })
-            })
-          })
-        }
-      }).catch(() => {
-        VxeUI.modal.message({ content: '导出失败！', status: 'error' })
-      })
-    }
-  },
-  checkboxConfig: {
-    labelField: 'id',
-    reserve: true,
-    highlight: true,
-    range: true
-  },
-  editRules: {
-    name: [
-      { required: true, message: 'app.body.valid.rName' },
-      { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
-    ],
-    email: [
-      { required: true, message: '邮件必须填写' }
-    ],
-    role: [
-      { required: true, message: '角色必须填写' }
-    ]
-  },
-  editConfig: {
-    trigger: 'click',
-    mode: 'row',
-    showStatus: true
+const tableData = ref<RowVO[]>([])
+const loading = ref(false)
+
+const rowSize = ref(100)
+const dataOptions = ref([
+  { label: '加载 3 行', value: 3 },
+  { label: '加载 20 行', value: 20 },
+  { label: '加载 100 行', value: 100 },
+  { label: '加载 500 行', value: 500 },
+  { label: '加载 1000 行', value: 1000 },
+  { label: '加载 5000 行', value: 5000 },
+  { label: '加载 10000 行', value: 10000 },
+  { label: '加载 30000 行', value: 30000 }
+])
+
+const imgUrlCellRender = reactive<VxeColumnPropTypes.CellRender>({
+  name: 'VxeImage',
+  props: {
+    width: 36,
+    height: 36
   }
 })
 
-onMounted(() => {
-  const sexList = [
-    { label: '女', value: '0' },
-    { label: '男', value: '1' }
-  ]
-  const { formConfig, columns } = gridOptions
-  if (columns) {
-    const sexColumn = columns[5]
-    if (sexColumn && sexColumn.editRender) {
-      sexColumn.editRender.options = sexList
+// 模拟行数据
+const loadData = () => {
+  loading.value = true
+  setTimeout(() => {
+    const dataList: RowVO[] = []
+    for (let i = 0; i < rowSize.value; i++) {
+      const item: RowVO = {
+        id: 10000 + i,
+        imgUrl: i % 3 === 0 ? 'https://vxeui.com/resource/img/546.gif' : 'https://vxeui.com/resource/img/673.gif'
+      }
+      for (let j = 0; j < 100; j++) {
+        if (i % 9 === 0) {
+          item[`col${j}`] = `值_${i}_${j} 内容9内容9 内容9内容9内容9 内容9内容9内容9内容9 内容9内容9内容9内容9 内容9内容9内容9 内容9内容9`
+        } else if (i % 8 === 0) {
+          item[`col${j}`] = `值_${i}_${j} 内容8内容8内容8内容8`
+        } else if (i % 7 === 0) {
+          item[`col${j}`] = `值_${i}_${j} 内容7内容7`
+        } else if (i % 6 === 0) {
+          item[`col${j}`] = `值_${i}_${j} 内容6内容6内容6内容6内容6内容6内容6内容6`
+        } else if (i % 5 === 0) {
+          item[`col${j}`] = `值_${i}_${j} 内容5内容5内容5内容5内容5`
+        } else if (i % 4 === 0) {
+          item[`col${j}`] = `值_${i}_${j} 内容4内容4内容4内容4内容4内容4内容4内容4内容4内容4内容4内容4`
+        } else {
+          item[`col${j}`] = `值_${i}_${j}`
+        }
+      }
+      dataList.push(item)
     }
-  }
-  if (formConfig && formConfig.items) {
-    const sexItem = formConfig.items[4]
-    if (sexItem && sexItem.itemRender) {
-      sexItem.itemRender.options = sexList
-    }
-  }
-})
+
+    const startTime = Date.now()
+    tableData.value = dataList
+    loading.value = false
+    nextTick(() => {
+      VxeUI.modal.message({
+        content: `加载时间 ${Date.now() - startTime} 毫秒`,
+        status: 'success'
+      })
+    })
+  }, 100)
+}
+
+loadData()
 </script>

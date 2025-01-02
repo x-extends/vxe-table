@@ -1,7 +1,7 @@
 import { defineComponent, h, PropType, ref, Ref, computed, provide, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted, createCommentVNode } from 'vue'
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
-import { getOffsetHeight, getPaddingTopBottomSize, getDomNode } from '../../ui/src/dom'
+import { getOffsetHeight, getPaddingTopBottomSize, getDomNode, toCssUnit } from '../../ui/src/dom'
 import { VxeUI } from '../../ui'
 import VxeTableComponent from '../../table'
 import VxeToolbarComponent from '../../toolbar'
@@ -10,10 +10,10 @@ import tableComponentEmits from '../../table/src/emits'
 import { getSlotVNs } from '../../ui/src/vn'
 import { errLog } from '../../ui/src/log'
 
-import type { ValueOf, VxePagerComponent, VxeFormComponent, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance } from 'vxe-pc-ui'
+import type { ValueOf, VxePagerComponent, VxeFormComponent, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance, VxeComponentStyleType } from 'vxe-pc-ui'
 import type { VxeTableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxeToolbarInstance, GridPrivateRef, VxeTableProps, VxeTableConstructor, VxeTablePrivateMethods, VxeTableEvents, VxeTableDefines, VxeTableEventProps, VxeGridProps } from '../../../types'
 
-const { getConfig, getI18n, commands, hooks, useFns, createEvent, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
+const { getConfig, getI18n, commands, hooks, useFns, createEvent, globalEvents, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
 
 const tableComponentPropKeys = Object.keys(tableComponentProps as any)
 
@@ -146,7 +146,20 @@ export default defineComponent({
     })
 
     const computeStyles = computed(() => {
-      return reactData.isZMax ? { zIndex: reactData.tZindex } : null
+      const { height, maxHeight } = props
+      const { isZMax, tZindex } = reactData
+      const stys: VxeComponentStyleType = {}
+      if (isZMax) {
+        stys.zIndex = tZindex
+      } else {
+        if (height) {
+          stys.height = height === 'auto' || height === '100%' ? '100%' : toCssUnit(height)
+        }
+        if (maxHeight) {
+          stys.maxHeight = maxHeight === 'auto' || maxHeight === '100%' ? '100%' : toCssUnit(maxHeight)
+        }
+      }
+      return stys
     })
 
     const computeTableExtendProps = computed(() => {
@@ -1310,6 +1323,8 @@ export default defineComponent({
     const renderVN = () => {
       const vSize = computeSize.value
       const styles = computeStyles.value
+      const asideLeftSlot = slots.asideLeft || slots['aside-left']
+      const asideRightSlot = slots.asideRight || slots['aside-right']
       return h('div', {
         ref: refElem,
         class: ['vxe-grid', {
@@ -1320,7 +1335,21 @@ export default defineComponent({
           'is--loading': props.loading || reactData.tableLoading
         }],
         style: styles
-      }, renderLayout())
+      }, [
+        asideLeftSlot
+          ? h('div', {
+            class: 'vxe-grid--aside-left-wrapper'
+          }, asideLeftSlot({}))
+          : renderEmptyElement($xeGrid),
+        h('div', {
+          class: 'vxe-grid--body-content-wrapper'
+        }, renderLayout()),
+        asideRightSlot
+          ? h('div', {
+            class: 'vxe-grid--aside-right-wrapper'
+          }, asideRightSlot({}))
+          : renderEmptyElement($xeGrid)
+      ])
     }
 
     $xeGrid.renderVN = renderVN
