@@ -6,7 +6,7 @@ import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
-import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTablePropTypes, TableExportMethods, VxeGridPropTypes, VxeTableDefines } from '../../../../types'
+import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTablePropTypes, VxeColumnPropTypes, TableExportMethods, VxeGridPropTypes, VxeTableDefines } from '../../../../types'
 
 const { getI18n, hooks, renderer } = VxeUI
 
@@ -324,7 +324,7 @@ hooks.add('tableExportModule', {
       return eqEmptyValue(cellValue) ? '' : `${cellValue}`
     }
 
-    const getBodyLabelData = (opts: any, columns: any[], datas: any[]) => {
+    const getBodyLabelData = (opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) => {
       const { isAllExpand, mode } = opts
       const { treeConfig } = props
       const radioOpts = computeRadioOpts.value
@@ -353,7 +353,7 @@ hooks.add('tableExportModule', {
             columns.forEach((column, $columnIndex) => {
               let cellValue: string | number | boolean | null = ''
               const renderOpts = column.editRender || column.cellRender
-              let bodyExportMethod = column.exportMethod || columnOpts.exportMethod
+              let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
               if (!bodyExportMethod && renderOpts && renderOpts.name) {
                 const compConf = renderer.get(renderOpts.name)
                 if (compConf) {
@@ -414,7 +414,7 @@ hooks.add('tableExportModule', {
         columns.forEach((column, $columnIndex) => {
           let cellValue: string | number | boolean | null = ''
           const renderOpts = column.editRender || column.cellRender
-          let bodyExportMethod = column.exportMethod || columnOpts.exportMethod
+          let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
           if (!bodyExportMethod && renderOpts && renderOpts.name) {
             const compConf = renderer.get(renderOpts.name)
             if (compConf) {
@@ -946,7 +946,7 @@ hooks.add('tableExportModule', {
 
     const handleExportAndPrint = (options: VxeTablePropTypes.ExportOpts | VxeTablePropTypes.ExportConfig, isPrint?: boolean) => {
       const { treeConfig, showHeader, showFooter } = props
-      const { initStore, mergeList, isGroup, footerTableData, exportStore, exportParams } = reactData
+      const { initStore, mergeList, mergeFooterList, isGroup, footerTableData, exportStore, exportParams } = reactData
       const { collectColumn } = internalData
       const exportOpts = computeExportOpts.value
       const hasTree = treeConfig
@@ -954,11 +954,14 @@ hooks.add('tableExportModule', {
       const selectRecords = $xeTable.getCheckboxRecords()
       const proxyOpts = $xeGrid ? $xeGrid.getComputeMaps().computeProxyOpts.value : {} as VxeGridPropTypes.ProxyOpts
       const hasFooter = !!footerTableData.length
-      const hasMerge = !hasTree && mergeList.length
+      const hasMerge = !!(mergeList.length || mergeFooterList.length)
       const defOpts = Object.assign({
         message: true,
         isHeader: showHeader,
         isFooter: showFooter,
+        isColgroup: isGroup,
+        isMerge: hasMerge,
+        useStyle: true,
         current: 'current',
         modes: ['current', 'selected'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : [])
       }, options)
@@ -1111,7 +1114,7 @@ hooks.add('tableExportModule', {
         const { filename, sheetName, type, mode, columns, original, columnFilterMethod, beforeExportMethod, includeFields, excludeFields } = opts
         let groups: any[] = []
         const customCols = columns && columns.length ? columns : null
-        const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({ }, opts, { filename: '', sheetName: '', colgroups: [], columns: [], data: [] })
+        const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({ } as { data: any[], colgroups: any[], columns: any[] }, opts, { filename: '', sheetName: '' })
         // 如果设置源数据，则默认导出设置了字段的列
         if (!customCols && !columnFilterMethod) {
           handleOptions.columnFilterMethod = ({ column }) => {

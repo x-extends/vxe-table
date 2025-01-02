@@ -12,10 +12,10 @@ body:
 - type: checkboxes
   id: issue_confirm_read_agreement
   attributes:
-    label: "是否已准备好复现 demo？"
+    label: "是否已准备好复现链接与示例代码？"
     description: "按要求准备好复现 Demo，复现 Demo 操作步骤：https://vxetable.cn/issues.html"
     options:
-    - label: "我已确认要求提供复现链接与示例代码"
+    - label: "我确定已准备好以上复现链接"
       required: true
 - type: textarea
   id: issue_describe
@@ -69,7 +69,7 @@ body:
   id: issue_confirm_latest_version
   attributes:
     label: "是否使用当前最新版本？"
-    description: "我已确认是最新版本，仅支持提交最新版本的问题反馈，非最新版本不予处理，一律关闭"
+    description: "仅支持提交最新版本的问题反馈，非最新版本不予处理，一律自动关闭"
     options:
-    - label: "我已确认是使用最新版本并已按要求提供复现链接与示例代码"
+    - label: "我确定已经更新到最新版本后依然存在该问题"
       required: true

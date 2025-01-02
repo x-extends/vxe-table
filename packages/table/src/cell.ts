@@ -10,7 +10,7 @@ import type { VxeTableConstructor, VxeTableDefines, VxeColumnPropTypes, VxeTable
 
 const { getI18n, getIcon, renderer, formats, renderEmptyElement } = VxeUI
 
-function renderTitlePrefixIcon (params: VxeTableDefines.CellRenderHeaderParams) {
+function renderTitlePrefixIcon (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { $table, column } = params
   const titlePrefix = column.titlePrefix || column.titleHelp
   if (titlePrefix) {
@@ -27,7 +27,7 @@ function renderTitlePrefixIcon (params: VxeTableDefines.CellRenderHeaderParams) 
   return renderEmptyElement($table)
 }
 
-function renderTitleSuffixIcon (params: VxeTableDefines.CellRenderHeaderParams) {
+function renderTitleSuffixIcon (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { $table, column } = params
   const titleSuffix = column.titleSuffix
   if (titleSuffix) {
@@ -44,7 +44,7 @@ function renderTitleSuffixIcon (params: VxeTableDefines.CellRenderHeaderParams) 
   return renderEmptyElement($table)
 }
 
-function renderCellDragIcon (params: VxeTableDefines.CellRenderBodyParams) {
+function renderCellDragIcon (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { $table } = params
   const tableProps = $table.props
   const { dragConfig } = tableProps
@@ -75,7 +75,7 @@ function renderCellDragIcon (params: VxeTableDefines.CellRenderBodyParams) {
   ])
 }
 
-function renderCellBaseVNs (params: VxeTableDefines.CellRenderBodyParams, content: VxeComponentSlotType | VxeComponentSlotType[]) {
+function renderCellBaseVNs (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, content: VxeComponentSlotType | VxeComponentSlotType[]) {
   const { $table, column, level } = params
   const { dragSort } = column
   const tableProps = $table.props
@@ -83,12 +83,12 @@ function renderCellBaseVNs (params: VxeTableDefines.CellRenderBodyParams, conten
   const { computeRowOpts, computeRowDragOpts } = $table.getComputeMaps()
   const rowOpts = computeRowOpts.value
   const rowDragOpts = computeRowDragOpts.value
-  const { showIcon, isCrossDrag, visibleMethod } = rowDragOpts
+  const { showIcon, isPeerDrag, isCrossDrag, visibleMethod } = rowDragOpts
   const rVisibleMethod = visibleMethod || (dragConfig ? dragConfig.rowVisibleMethod : null)
   const vns: VxeComponentSlotType[] = XEUtils.isArray(content) ? content : [content]
   if (dragSort && rowOpts.drag && ((showIcon || (dragConfig ? dragConfig.showRowIcon : false)) && (!rVisibleMethod || rVisibleMethod(params)))) {
     if (treeConfig) {
-      if (isCrossDrag || !level) {
+      if (isPeerDrag || isCrossDrag || !level) {
         vns.unshift(
           renderCellDragIcon(params)
         )
@@ -102,14 +102,14 @@ function renderCellBaseVNs (params: VxeTableDefines.CellRenderBodyParams, conten
   return vns
 }
 
-function renderHeaderCellDragIcon (params: VxeTableDefines.CellRenderHeaderParams) {
+function renderHeaderCellDragIcon (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { $table, column } = params
   const { computeColumnOpts, computeColumnDragOpts } = $table.getComputeMaps()
   const columnOpts = computeColumnOpts.value
   const columnDragOpts = computeColumnDragOpts.value
-  const { showIcon, icon, trigger, isCrossDrag, visibleMethod, disabledMethod } = columnDragOpts
+  const { showIcon, icon, trigger, isPeerDrag, isCrossDrag, visibleMethod, disabledMethod } = columnDragOpts
   if (columnOpts.drag && showIcon && (!visibleMethod || visibleMethod(params))) {
-    if (!column.fixed && (isCrossDrag || !column.parentId)) {
+    if (!column.fixed && (isPeerDrag || isCrossDrag || !column.parentId)) {
       const isDisabled = disabledMethod && disabledMethod(params)
       const ons: Record<string, any> = {}
       if (trigger !== 'cell') {
@@ -136,7 +136,7 @@ function renderHeaderCellDragIcon (params: VxeTableDefines.CellRenderHeaderParam
   return renderEmptyElement($table)
 }
 
-function renderHeaderCellBaseVNs (params: VxeTableDefines.CellRenderHeaderParams, content: VNode | VNode[]) {
+function renderHeaderCellBaseVNs (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, content: VNode | VNode[]) {
   const vns = [
     renderTitlePrefixIcon(params),
     renderHeaderCellDragIcon(params),
@@ -146,21 +146,22 @@ function renderHeaderCellBaseVNs (params: VxeTableDefines.CellRenderHeaderParams
   return vns
 }
 
-function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, content: VxeComponentSlotType | VxeComponentSlotType[]) {
+function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, content: VxeComponentSlotType | VxeComponentSlotType[]) {
   const { $table, column } = params
-  const { props, reactData } = $table
+  const tableProps = $table.props
+  const tableReactData = $table.reactData
   const { computeTooltipOpts } = $table.getComputeMaps()
-  const { showHeaderOverflow: allColumnHeaderOverflow } = props
+  const { showHeaderOverflow: allColumnHeaderOverflow } = tableProps
   const { type, showHeaderOverflow } = column
   const tooltipOpts = computeTooltipOpts.value
   const showAllTip = tooltipOpts.showAll
   const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
   const showTitle = headOverflow === 'title'
   const showTooltip = headOverflow === true || headOverflow === 'tooltip'
-  const ons: any = {}
+  const ons: Record<string, any> = {}
   if (showTitle || showTooltip || showAllTip) {
     ons.onMouseenter = (evnt: MouseEvent) => {
-      if (reactData._isResize) {
+      if (tableReactData._isResize) {
         return
       }
       if (showTitle) {
@@ -172,7 +173,7 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, con
   }
   if (showTooltip || showAllTip) {
     ons.onMouseleave = (evnt: MouseEvent) => {
-      if (reactData._isResize) {
+      if (tableReactData._isResize) {
         return
       }
       if (showTooltip || showAllTip) {
@@ -202,18 +203,18 @@ function formatFooterLabel (footerFormatter: VxeColumnPropTypes.FooterFormatter,
   _columnIndex: number
 }) {
   if (XEUtils.isFunction(footerFormatter)) {
-    return footerFormatter(params)
+    return `${footerFormatter(params)}`
   }
   const isArr = XEUtils.isArray(footerFormatter)
   const gFormatOpts = isArr ? formats.get(footerFormatter[0]) : formats.get(footerFormatter)
   const footerFormatMethod = gFormatOpts ? gFormatOpts.tableFooterCellFormatMethod : null
   if (footerFormatMethod) {
-    return isArr ? footerFormatMethod(params, ...footerFormatter.slice(1)) : footerFormatMethod(params)
+    return `${isArr ? footerFormatMethod(params, ...footerFormatter.slice(1)) : footerFormatMethod(params)}`
   }
   return ''
 }
 
-function getFooterContent (params: VxeTableDefines.CellRenderFooterParams) {
+function getFooterContent (params: VxeTableDefines.CellRenderFooterParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { $table, column, _columnIndex, items, row } = params
   const { slots, editRender, cellRender, footerFormatter } = column
   const renderOpts = editRender || cellRender
@@ -322,7 +323,7 @@ export const Cell = {
   /**
    * 列头标题
    */
-  renderHeaderTitle (params: VxeTableDefines.CellRenderHeaderParams) {
+  renderHeaderTitle (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
     const { slots, editRender, cellRender } = column
     const renderOpts = editRender || cellRender
@@ -341,10 +342,10 @@ export const Cell = {
     }
     return renderTitleContent(params, formatText(column.getTitle(), 1))
   },
-  renderDefaultHeader (params: VxeTableDefines.CellRenderHeaderParams) {
+  renderDefaultHeader (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return renderHeaderCellBaseVNs(params, Cell.renderHeaderTitle(params))
   },
-  renderDefaultCell (params: VxeTableDefines.CellRenderBodyParams) {
+  renderDefaultCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, row, column } = params
     const { slots, editRender, cellRender } = column
     const renderOpts = editRender || cellRender
@@ -379,10 +380,10 @@ export const Cell = {
       )
     ])
   },
-  renderTreeCell (params: VxeTableDefines.CellRenderBodyParams) {
+  renderTreeCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return Cell.renderTreeIcon(params, Cell.renderDefaultCell(params) as VNode[])
   },
-  renderDefaultFooter (params: VxeTableDefines.CellRenderFooterParams) {
+  renderDefaultFooter (params: VxeTableDefines.CellRenderFooterParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return [
       h('span', {
         class: 'vxe-cell--item'
@@ -393,12 +394,13 @@ export const Cell = {
   /**
    * 树节点
    */
-  renderTreeIcon (params: VxeTableDefines.CellRenderBodyParams, cellVNodes: VxeComponentSlotType[]) {
+  renderTreeIcon (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, cellVNodes: VxeComponentSlotType[]) {
     const { $table, isHidden } = params
-    const { reactData, internalData } = $table
+    const tableReactData = $table.reactData
+    const tableInternalData = $table.internalData
     const { computeTreeOpts } = $table.getComputeMaps()
-    const { treeExpandedMaps, treeExpandLazyLoadedMaps } = reactData
-    const { fullAllDataRowIdData } = internalData
+    const { treeExpandedMaps, treeExpandLazyLoadedMaps } = tableReactData
+    const { fullAllDataRowIdData } = tableInternalData
     const treeOpts = computeTreeOpts.value
     const { row, column, level } = params
     const { slots } = column
@@ -409,16 +411,16 @@ export const Cell = {
     const hasChild = rowChilds && rowChilds.length
     const iconSlot = slots ? slots.icon : null
     let hasLazyChilds = false
-    let isAceived = false
+    let isActive = false
     let isLazyLoading = false
     let isLazyLoaded = false
-    const ons: any = {}
+    const ons: Record<string, any> = {}
     if (iconSlot) {
       return $table.callSlot(iconSlot, params)
     }
     if (!isHidden) {
       const rowid = getRowid($table, row)
-      isAceived = !!treeExpandedMaps[rowid]
+      isActive = !!treeExpandedMaps[rowid]
       if (lazy) {
         const rest = fullAllDataRowIdData[rowid]
         isLazyLoading = !!treeExpandLazyLoadedMaps[rowid]
@@ -427,14 +429,14 @@ export const Cell = {
       }
     }
     if (!trigger || trigger === 'default') {
-      ons.onClick = (evnt: Event) => {
+      ons.onClick = (evnt: MouseEvent) => {
         $table.triggerTreeExpandEvent(evnt, params)
       }
     }
     return [
       h('div', {
         class: ['vxe-cell--tree-node', {
-          'is--active': isAceived
+          'is--active': isActive
         }],
         style: {
           paddingLeft: `${level * indent}px`
@@ -447,7 +449,7 @@ export const Cell = {
                 ...ons
               }, [
                 h('i', {
-                  class: ['vxe-tree--node-btn', isLazyLoading ? (iconLoaded || getIcon().TABLE_TREE_LOADED) : (isAceived ? (iconOpen || getIcon().TABLE_TREE_OPEN) : (iconClose || getIcon().TABLE_TREE_CLOSE))]
+                  class: ['vxe-tree--node-btn', isLazyLoading ? (iconLoaded || getIcon().TABLE_TREE_LOADED) : (isActive ? (iconOpen || getIcon().TABLE_TREE_OPEN) : (iconClose || getIcon().TABLE_TREE_CLOSE))]
                 })
               ])
             ]
@@ -462,16 +464,16 @@ export const Cell = {
   /**
    * 序号
    */
-  renderSeqHeader (params: VxeTableDefines.CellRenderHeaderParams) {
+  renderSeqHeader (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
     const { slots } = column
     const headerSlot = slots ? slots.header : null
     return renderHeaderCellBaseVNs(params, renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : formatText(column.getTitle(), 1)))
   },
-  renderSeqCell (params: VxeTableDefines.CellRenderBodyParams) {
+  renderSeqCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
-    const { props } = $table
-    const { treeConfig } = props
+    const tableProps = $table.props
+    const { treeConfig } = tableProps
     const { computeSeqOpts } = $table.getComputeMaps()
     const seqOpts = computeSeqOpts.value
     const { slots } = column
@@ -485,14 +487,14 @@ export const Cell = {
       h('span', `${formatText(seqMethod ? seqMethod(params) : treeConfig ? seq : (seqOpts.startIndex || 0) + (seq as number), 1)}`)
     ])
   },
-  renderTreeIndexCell (params: VxeTableDefines.CellRenderBodyParams) {
+  renderTreeIndexCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return Cell.renderTreeIcon(params, Cell.renderSeqCell(params) as VNode[])
   },
 
   /**
    * 单选
    */
-  renderRadioHeader (params: VxeTableDefines.CellRenderHeaderParams) {
+  renderRadioHeader (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
     const { slots } = column
     const headerSlot = slots ? slots.header : null
@@ -507,11 +509,11 @@ export const Cell = {
           ])
     )
   },
-  renderRadioCell (params: VxeTableDefines.CellRenderBodyParams) {
+  renderRadioCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column, isHidden } = params
-    const { reactData } = $table
+    const tableReactData = $table.reactData
     const { computeRadioOpts } = $table.getComputeMaps()
-    const { selectRadioRow } = reactData
+    const { selectRadioRow } = tableReactData
     const radioOpts = computeRadioOpts.value
     const { slots } = column
     const { labelField, checkMethod, visibleMethod } = radioOpts
@@ -563,31 +565,29 @@ export const Cell = {
       }, radioVNs)
     ])
   },
-  renderTreeRadioCell (params: VxeTableDefines.CellRenderBodyParams) {
+  renderTreeRadioCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return Cell.renderTreeIcon(params, Cell.renderRadioCell(params))
   },
 
   /**
    * 多选
    */
-  renderCheckboxHeader (params: VxeTableDefines.CellRenderHeaderParams) {
+  renderCheckboxHeader (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column, isHidden } = params
-    const { reactData } = $table
+    const tableReactData = $table.reactData
     const { computeIsAllCheckboxDisabled, computeCheckboxOpts } = $table.getComputeMaps()
-    const { isAllSelected: isAllCheckboxSelected, isIndeterminate: isAllCheckboxIndeterminate } = reactData
+    const { isAllSelected: isAllCheckboxSelected, isIndeterminate: isAllCheckboxIndeterminate } = tableReactData
     const isAllCheckboxDisabled = computeIsAllCheckboxDisabled.value
     const { slots } = column
     const headerSlot = slots ? slots.header : null
     const titleSlot = slots ? slots.title : null
     const checkboxOpts = computeCheckboxOpts.value
     const headerTitle = column.getTitle()
-    let ons
+    const ons: Record<string, any> = {}
     if (!isHidden) {
-      ons = {
-        onClick (evnt: MouseEvent) {
-          if (!isAllCheckboxDisabled) {
-            $table.triggerCheckAllEvent(evnt, !isAllCheckboxSelected)
-          }
+      ons.onClick = (evnt: MouseEvent) => {
+        if (!isAllCheckboxDisabled) {
+          $table.triggerCheckAllEvent(evnt, !isAllCheckboxSelected)
         }
       }
     }
@@ -626,11 +626,12 @@ export const Cell = {
       ])
     )
   },
-  renderCheckboxCell (params: VxeTableDefines.CellRenderBodyParams) {
+  renderCheckboxCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, row, column, isHidden } = params
-    const { props, reactData } = $table
-    const { treeConfig } = props
-    const { selectCheckboxMaps, treeIndeterminateMaps } = reactData
+    const tableProps = $table.props
+    const tableReactData = $table.reactData
+    const { treeConfig } = tableProps
+    const { selectCheckboxMaps, treeIndeterminateMaps } = tableReactData
     const { computeCheckboxOpts } = $table.getComputeMaps()
     const checkboxOpts = computeCheckboxOpts.value
     const { labelField, checkMethod, visibleMethod } = checkboxOpts
@@ -641,15 +642,13 @@ export const Cell = {
     let isChecked = false
     const isVisible = !visibleMethod || visibleMethod({ row })
     let isDisabled = !!checkMethod
-    let ons
+    const ons: Record<string, any> = {}
     if (!isHidden) {
       const rowid = getRowid($table, row)
       isChecked = !!selectCheckboxMaps[rowid]
-      ons = {
-        onClick (evnt: MouseEvent) {
-          if (!isDisabled && isVisible) {
-            $table.triggerCheckRowEvent(evnt, params, !isChecked)
-          }
+      ons.onClick = (evnt: MouseEvent) => {
+        if (!isDisabled && isVisible) {
+          $table.triggerCheckRowEvent(evnt, params, !isChecked)
         }
       }
       if (checkMethod) {
@@ -690,14 +689,15 @@ export const Cell = {
       }, checkVNs)
     ])
   },
-  renderTreeSelectionCell (params: VxeTableDefines.CellRenderBodyParams) {
+  renderTreeSelectionCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return Cell.renderTreeIcon(params, Cell.renderCheckboxCell(params))
   },
-  renderCheckboxCellByProp (params: VxeTableDefines.CellRenderBodyParams) {
+  renderCheckboxCellByProp (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, row, column, isHidden } = params
-    const { props, reactData } = $table
-    const { treeConfig } = props
-    const { treeIndeterminateMaps } = reactData
+    const tableProps = $table.props
+    const tableReactData = $table.reactData
+    const { treeConfig } = tableProps
+    const { treeIndeterminateMaps } = tableReactData
     const { computeCheckboxOpts } = $table.getComputeMaps()
     const checkboxOpts = computeCheckboxOpts.value
     const { labelField, checkField, checkMethod, visibleMethod } = checkboxOpts
@@ -709,15 +709,13 @@ export const Cell = {
     let isChecked = false
     const isVisible = !visibleMethod || visibleMethod({ row })
     let isDisabled = !!checkMethod
-    let ons
+    const ons: Record<string, any> = {}
     if (!isHidden) {
       const rowid = getRowid($table, row)
       isChecked = XEUtils.get(row, checkField as string)
-      ons = {
-        onClick (evnt: MouseEvent) {
-          if (!isDisabled && isVisible) {
-            $table.triggerCheckRowEvent(evnt, params, !isChecked)
-          }
+      ons.onClick = (evnt: MouseEvent) => {
+        if (!isDisabled && isVisible) {
+          $table.triggerCheckRowEvent(evnt, params, !isChecked)
         }
       }
       if (checkMethod) {
@@ -758,31 +756,31 @@ export const Cell = {
       }, checkVNs)
     ])
   },
-  renderTreeSelectionCellByProp (params: VxeTableDefines.CellRenderBodyParams) {
+  renderTreeSelectionCellByProp (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return Cell.renderTreeIcon(params, Cell.renderCheckboxCellByProp(params))
   },
 
   /**
    * 展开行
    */
-  renderExpandCell (params: VxeTableDefines.CellRenderBodyParams) {
+  renderExpandCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, isHidden, row, column } = params
-    const { reactData } = $table
-    const { rowExpandedMaps, rowExpandLazyLoadedMaps } = reactData
+    const tableReactData = $table.reactData
+    const { rowExpandedMaps, rowExpandLazyLoadedMaps } = tableReactData
     const { computeExpandOpts } = $table.getComputeMaps()
     const expandOpts = computeExpandOpts.value
     const { lazy, labelField, iconLoaded, showIcon, iconOpen, iconClose, visibleMethod } = expandOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     const iconSlot = slots ? slots.icon : null
-    let isAceived = false
+    let isActive = false
     let isLazyLoading = false
     if (iconSlot) {
       return renderCellBaseVNs(params, $table.callSlot(iconSlot, params))
     }
     if (!isHidden) {
       const rowid = getRowid($table, row)
-      isAceived = !!rowExpandedMaps[rowid]
+      isActive = !!rowExpandedMaps[rowid]
       if (lazy) {
         isLazyLoading = !!rowExpandLazyLoadedMaps[rowid]
       }
@@ -791,14 +789,14 @@ export const Cell = {
       showIcon && (!visibleMethod || visibleMethod(params))
         ? h('span', {
           class: ['vxe-table--expanded', {
-            'is--active': isAceived
+            'is--active': isActive
           }],
           onClick (evnt: MouseEvent) {
             $table.triggerRowExpandEvent(evnt, params)
           }
         }, [
           h('i', {
-            class: ['vxe-table--expand-btn', isLazyLoading ? (iconLoaded || getIcon().TABLE_EXPAND_LOADED) : (isAceived ? (iconOpen || getIcon().TABLE_EXPAND_OPEN) : (iconClose || getIcon().TABLE_EXPAND_CLOSE))]
+            class: ['vxe-table--expand-btn', isLazyLoading ? (iconLoaded || getIcon().TABLE_EXPAND_LOADED) : (isActive ? (iconOpen || getIcon().TABLE_EXPAND_OPEN) : (iconClose || getIcon().TABLE_EXPAND_CLOSE))]
           })
         ])
         : renderEmptyElement($table),
@@ -809,7 +807,7 @@ export const Cell = {
         : renderEmptyElement($table)
     ])
   },
-  renderExpandData (params: VxeTableDefines.CellRenderDataParams) {
+  renderExpandData (params: VxeTableDefines.CellRenderDataParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
     const { slots, contentRender } = column
     const contentSlot = slots ? slots.content : null
@@ -831,7 +829,7 @@ export const Cell = {
   /**
    * HTML 标签
    */
-  renderHTMLCell (params: VxeTableDefines.CellRenderBodyParams) {
+  renderHTMLCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
@@ -845,14 +843,14 @@ export const Cell = {
       })
     ])
   },
-  renderTreeHTMLCell (params: VxeTableDefines.CellRenderBodyParams) {
+  renderTreeHTMLCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return Cell.renderTreeIcon(params, Cell.renderHTMLCell(params))
   },
 
   /**
    * 排序和筛选
    */
-  renderSortAndFilterHeader (params: VxeTableDefines.CellRenderHeaderParams) {
+  renderSortAndFilterHeader (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return renderHeaderCellBaseVNs(
       params,
       Cell.renderHeaderTitle(params).concat(Cell.renderSortIcon(params).concat(Cell.renderFilterIcon(params)))
@@ -862,13 +860,13 @@ export const Cell = {
   /**
    * 排序
    */
-  renderSortHeader (params: VxeTableDefines.CellRenderHeaderParams) {
+  renderSortHeader (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return renderHeaderCellBaseVNs(
       params,
       Cell.renderHeaderTitle(params).concat(Cell.renderSortIcon(params))
     )
   },
-  renderSortIcon (params: VxeTableDefines.CellRenderHeaderParams | VxeTableDefines.CellRenderHeaderParams) {
+  renderSortIcon (params: (VxeTableDefines.CellRenderHeaderParams | VxeTableDefines.CellRenderHeaderParams) & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
     const { computeSortOpts } = $table.getComputeMaps()
     const sortOpts = computeSortOpts.value
@@ -908,13 +906,13 @@ export const Cell = {
   /**
    * 筛选
    */
-  renderFilterHeader (params: VxeTableDefines.CellRenderHeaderParams) {
+  renderFilterHeader (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return renderHeaderCellBaseVNs(params, Cell.renderHeaderTitle(params).concat(Cell.renderFilterIcon(params)))
   },
-  renderFilterIcon (params: VxeTableDefines.CellRenderHeaderParams) {
+  renderFilterIcon (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column, hasFilter } = params
-    const { reactData } = $table
-    const { filterStore } = reactData
+    const tableReactData = $table.reactData
+    const { filterStore } = tableReactData
     const { computeFilterOpts } = $table.getComputeMaps()
     const filterOpts = computeFilterOpts.value
     const { showIcon, iconNone, iconMatch } = filterOpts
@@ -928,7 +926,7 @@ export const Cell = {
             h('i', {
               class: ['vxe-filter--btn', hasFilter ? (iconMatch || getIcon().TABLE_FILTER_MATCH) : (iconNone || getIcon().TABLE_FILTER_NONE)],
               title: getI18n('vxe.table.filter'),
-              onClick (evnt: Event) {
+              onClick (evnt) {
                 if ($table.triggerFilterEvent) {
                   $table.triggerFilterEvent(evnt, params.column, params)
                 }
@@ -942,11 +940,11 @@ export const Cell = {
   /**
    * 可编辑
    */
-  renderEditHeader (params: VxeTableDefines.CellRenderHeaderParams) {
+  renderEditHeader (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
-    const { props } = $table
+    const tableProps = $table.props
     const { computeEditOpts } = $table.getComputeMaps()
-    const { editConfig, editRules } = props
+    const { editConfig, editRules } = tableProps
     const editOpts = computeEditOpts.value
     const { sortable, filters, editRender } = column
     let isRequired = false
@@ -978,30 +976,30 @@ export const Cell = {
     )
   },
   // 行格编辑模式
-  renderRowEdit (params: VxeTableDefines.CellRenderBodyParams) {
+  renderRowEdit (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
-    const { reactData } = $table
-    const { editStore } = reactData
+    const tableReactData = $table.reactData
+    const { editStore } = tableReactData
     const { actived } = editStore
     const { editRender } = column
     return Cell.runRenderer(params, isEnableConf(editRender) && actived && actived.row === params.row)
   },
-  renderTreeRowEdit (params: VxeTableDefines.CellRenderBodyParams) {
+  renderTreeRowEdit (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return Cell.renderTreeIcon(params, Cell.renderRowEdit(params) as VNode[])
   },
   // 单元格编辑模式
-  renderCellEdit (params: VxeTableDefines.CellRenderBodyParams) {
+  renderCellEdit (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
-    const { reactData } = $table
-    const { editStore } = reactData
+    const tableReactData = $table.reactData
+    const { editStore } = tableReactData
     const { actived } = editStore
     const { editRender } = column
     return Cell.runRenderer(params, isEnableConf(editRender) && actived && actived.row === params.row && actived.column === params.column)
   },
-  renderTreeCellEdit (params: VxeTableDefines.CellRenderBodyParams) {
+  renderTreeCellEdit (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return Cell.renderTreeIcon(params, Cell.renderCellEdit(params) as VNode[])
   },
-  runRenderer (params: VxeTableDefines.CellRenderBodyParams, isEdit: boolean) {
+  runRenderer (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, isEdit: boolean) {
     const { $table, column } = params
     const { slots, editRender, formatter } = column
     const defaultSlot = slots ? slots.default : null
