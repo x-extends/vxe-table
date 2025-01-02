@@ -6484,6 +6484,10 @@ export default defineComponent({
         const isCustomVisible = isAllCustom || storageOpts.visible
         const isCustomFixed = isAllCustom || storageOpts.fixed
         const isCustomSort = isAllCustom || storageOpts.sort
+        if (type !== 'reset') {
+          // fix：修复拖动列宽，重置按钮无法点击的问题
+          reactData.isCustomStatus = true
+        }
         if ((customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
           if (!tableId) {
             errLog('vxe.error.reqProp', ['id'])
