@@ -5457,6 +5457,7 @@ const Methods = {
               oldRow: dragRow,
               newRow: prevDragRow,
               dragPos: prevDragPos as any,
+              dragToChild: !!prevDragToChild,
               offsetIndex: dragOffsetIndex
             })
             : true
@@ -5601,7 +5602,7 @@ const Methods = {
             oldRow: dragRow,
             newRow: prevDragRow,
             dragPos: prevDragPos,
-            dragToChild: isSelfToChildDrag,
+            dragToChild: !!prevDragToChild,
             offsetIndex: dragOffsetIndex,
             _index: {
               newIndex: nafIndex,
@@ -5739,6 +5740,7 @@ const Methods = {
               oldColumn,
               newColumn,
               dragPos: prevDragPos as any,
+              dragToChild: !!prevDragToChild,
               offsetIndex: dragOffsetIndex
             })
             : true
@@ -5872,7 +5874,7 @@ const Methods = {
             oldColumn,
             newColumn,
             dragPos: prevDragPos,
-            dragToChild: isSelfToChildDrag,
+            dragToChild: !!prevDragToChild,
             offsetIndex: dragOffsetIndex,
             _index: {
               newIndex: nafIndex,

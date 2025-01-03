@@ -1110,6 +1110,7 @@ export default {
                 oldColumn,
                 newColumn,
                 dragPos: prevDragPos as any,
+                dragToChild: !!prevDragToChild,
                 offsetIndex: dragOffsetIndex
               })
               : true

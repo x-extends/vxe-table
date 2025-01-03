@@ -1,8 +1,8 @@
 .vxe-grid {
   position: relative;
-  display: flex;
-  flex-direction: row;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
   &.is--loading {
     &:before {
       content: "";
@@ -51,13 +51,21 @@
   }
 }
 
-.vxe-grid--aside-left-wrapper,
-.vxe-grid--aside-right-wrapper {
-  flex-shrink: 0;
+.vxe-grid--layout-body-wrapper {
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+  flex-grow: 1;
+}
+.vxe-grid--layout-body-content-wrapper {
+  flex-grow: 1;
   overflow: auto;
 }
-.vxe-grid--body-content-wrapper {
-  flex-grow: 1;
+.vxe-grid--layout-header-wrapper,
+.vxe-grid--layout-footer-wrapper,
+.vxe-grid--layout-aside-left-wrapper,
+.vxe-grid--layout-aside-left-wrapper {
+  flex-shrink: 0;
   overflow: auto;
 }
 

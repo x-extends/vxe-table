@@ -10,12 +10,14 @@ import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
 import type { VxeFormComponent, VxePagerComponent, VxeComponentStyleType } from 'vxe-pc-ui'
-import type{ GridReactData } from '../../../types'
+import type{ GridReactData, VxeGridConstructor, VxeGridPropTypes } from '../../../types'
 
 const { getConfig, getI18n, commands, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 
 const methods: any = {}
 const propKeys = Object.keys(tableComponentProps)
+
+const defaultLayouts: VxeGridPropTypes.Layouts = [['Form'], ['Toolbar', 'Top', 'Table', 'Bottom', 'Pager']]
 
 function renderDefaultForm (h: CreateElement, $xeGrid: any) {
   const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
@@ -303,49 +305,81 @@ function renderPager (h: CreateElement, $xeGrid: any) {
   return renderEmptyElement($xeGrid)
 }
 
-const defaultLayouts = ['Form', 'Toolbar', 'Top', 'Table', 'Bottom', 'Pager']
-
-function renderLayout (h: CreateElement, _vm: any) {
-  const { layouts } = _vm
-  const vns: VNode[] = []
-  const currLayouts = (layouts && layouts.length ? layouts : (getConfig().grid.layouts || defaultLayouts))
-  currLayouts.forEach((name: any) => {
-    switch (name) {
+function renderChildLayout (h: CreateElement, $xeGrid: VxeGridConstructor, layoutKeys: VxeGridPropTypes.LayoutKey[]) {
+  const childVNs: VNode[] = []
+  layoutKeys.forEach(key => {
+    switch (key) {
       case 'Form':
-        vns.push(renderForm(h, _vm))
+        childVNs.push(renderForm(h, $xeGrid))
         break
       case 'Toolbar':
-        vns.push(renderToolbar(h, _vm))
+        childVNs.push(renderToolbar(h, $xeGrid))
         break
       case 'Top':
-        vns.push(renderTop(h, _vm))
+        childVNs.push(renderTop(h, $xeGrid))
         break
       case 'Table':
-        vns.push(
+        childVNs.push(
           h('div', {
             key: 'table',
             class: 'vxe-grid--table-container'
           }, [
-            renderTableLeft(h, _vm),
-            renderTable(h, _vm),
-            renderTableRight(h, _vm)
+            renderTableLeft(h, $xeGrid),
+            renderTable(h, $xeGrid),
+            renderTableRight(h, $xeGrid)
           ])
         )
         break
       case 'Bottom':
-        vns.push(renderBottom(h, _vm))
+        childVNs.push(renderBottom(h, $xeGrid))
         break
       case 'Pager':
-        vns.push(renderPager(h, _vm))
+        childVNs.push(renderPager(h, $xeGrid))
         break
       default:
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          errLog('vxe.error.notProp', [`layouts -> ${name}`])
-        }
+        errLog('vxe.error.notProp', [`layouts -> ${key}`])
         break
     }
   })
-  return vns
+  return childVNs
+}
+
+function renderLayout (h: CreateElement, $xeGrid: VxeGridConstructor) {
+  const slots = $xeGrid.$scopedSlots
+
+  const currLayoutConf = ($xeGrid as any).computeCurrLayoutConf as {
+    headKeys: VxeGridPropTypes.LayoutKey[]
+    bodyKeys: VxeGridPropTypes.LayoutKey[]
+    footKeys: VxeGridPropTypes.LayoutKey[]
+  }
+  const { headKeys, bodyKeys, footKeys } = currLayoutConf
+  const asideLeftSlot = slots.asideLeft || slots['aside-left']
+  const asideRightSlot = slots.asideRight || slots['aside-right']
+  return [
+    h('div', {
+      class: 'vxe-grid--layout-header-wrapper'
+    }, renderChildLayout(h, $xeGrid, headKeys)),
+    h('div', {
+      class: 'vxe-grid--layout-body-wrapper'
+    }, [
+      asideLeftSlot
+        ? h('div', {
+          class: 'vxe-grid--layout-aside-left-wrapper'
+        }, asideLeftSlot({}))
+        : renderEmptyElement($xeGrid),
+      h('div', {
+        class: 'vxe-grid--layout-body-content-wrapper'
+      }, renderChildLayout(h, $xeGrid, bodyKeys)),
+      asideRightSlot
+        ? h('div', {
+          class: 'vxe-grid--layout-aside-right-wrapper'
+        }, asideRightSlot({}))
+        : renderEmptyElement($xeGrid)
+    ]),
+    h('div', {
+      class: 'vxe-grid--layout-footer-wrapper'
+    }, renderChildLayout(h, $xeGrid, footKeys))
+  ]
 }
 
 Object.keys(VxeTableComponent.methods).forEach((name: any) => {
@@ -480,6 +514,35 @@ export default {
       }
       return tableProps
     },
+    computeCurrLayoutConf () {
+      const $xeGrid = this
+      const props = $xeGrid
+
+      const { layouts } = props
+      let confs: VxeGridPropTypes.Layouts = []
+      if (layouts && layouts.length) {
+        confs = layouts
+      } else {
+        confs = getConfig().grid.layouts || defaultLayouts
+      }
+      let headKeys: VxeGridPropTypes.LayoutKey[] = []
+      let bodyKeys: VxeGridPropTypes.LayoutKey[] = []
+      let footKeys: VxeGridPropTypes.LayoutKey[] = []
+      if (confs.length) {
+        if (XEUtils.isArray(confs[0])) {
+          headKeys = confs[0] as VxeGridPropTypes.LayoutKey[]
+          bodyKeys = (confs[1] || []) as VxeGridPropTypes.LayoutKey[]
+          footKeys = (confs[2] || []) as VxeGridPropTypes.LayoutKey[]
+        } else {
+          bodyKeys = confs as VxeGridPropTypes.LayoutKey[]
+        }
+      }
+      return {
+        headKeys,
+        bodyKeys,
+        footKeys
+      }
+    },
     computePageConfFlag () {
       const $xeGrid = this
 
@@ -565,12 +628,9 @@ export default {
     const $xeGrid = this
     const props = $xeGrid
     const reactData = $xeGrid as GridReactData
-    const slots = $xeGrid.$scopedSlots
 
     const vSize = $xeGrid.computeSize
     const styles = $xeGrid.computeStyles
-    const asideLeftSlot = slots.asideLeft || slots['aside-left']
-    const asideRightSlot = slots.asideRight || slots['aside-right']
     return h('div', {
       class: ['vxe-grid', {
         [`size--${vSize}`]: vSize,
@@ -580,21 +640,7 @@ export default {
         'is--loading': props.loading || reactData.tableLoading
       }],
       style: styles
-    }, [
-      asideLeftSlot
-        ? h('div', {
-          class: 'vxe-grid--aside-left-wrapper'
-        }, asideLeftSlot.call($xeGrid, {}))
-        : renderEmptyElement($xeGrid),
-      h('div', {
-        class: 'vxe-grid--body-content-wrapper'
-      }, renderLayout(h, $xeGrid)),
-      asideRightSlot
-        ? h('div', {
-          class: 'vxe-grid--aside-right-wrapper'
-        }, asideRightSlot.call($xeGrid, {}))
-        : renderEmptyElement($xeGrid)
-    ])
+    }, renderLayout(h, $xeGrid))
   },
   methods: {
     ...methods,
