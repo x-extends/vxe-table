@@ -75,7 +75,8 @@ export default {
       customCancel: 'ئەمەلدىن قالدۇرۇش',
       customRestore: 'ئەسلىگە قايتۇرۇش',
       maxFixedCol: 'توڭلىتىشقا بولىدىغان ئەڭ چوڭ قۇر سانى  {0} دانە',
-      dragTip: 'يۆتكەش：{0}'
+      dragTip: 'يۆتكەش：{0}',
+      resizeColTip: '{0} Pixels'
     },
     grid: {
       selectOneRecord: 'كەم بولغاندا بىر تال ئۇچۇر تاللاڭ',

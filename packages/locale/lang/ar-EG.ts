@@ -75,7 +75,8 @@ export default {
       customCancel: 'يلغي',
       customRestore: 'استعادة الافتراضي',
       maxFixedCol: 'لا يمكن أن يتجاوز الحد الأقصى لعدد الأعمدة المجمدة {0}',
-      dragTip: 'نقل: {0}'
+      dragTip: 'نقل: {0}',
+      resizeColTip: '{0} Pixels'
     },
     grid: {
       selectOneRecord: '请至少选择一条记录！',

@@ -6,7 +6,7 @@ import { hasClass, getOffsetPos, addClass, removeClass } from '../../ui/src/dom'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types'
 
-const { renderer, renderEmptyElement } = VxeUI
+const { getI18n, renderer, renderEmptyElement } = VxeUI
 
 const renderType = 'header'
 
@@ -43,7 +43,7 @@ export default defineComponent({
       headerColumn.value = isGroup ? convertHeaderColumnToRows(props.tableGroupColumn) : []
     }
 
-    const resizeMousedown = (evnt: MouseEvent, params: any) => {
+    const resizeMousedownEvent = (evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) => {
       const { column } = params
       const { fixedType } = props
       const { visibleColumn } = tableInternalData
@@ -57,13 +57,14 @@ export default defineComponent({
       const { clientX: dragClientX } = evnt
       const wrapperElem = refElem.value
       const dragBtnElem = evnt.target as HTMLDivElement
-      const cell = params.cell = dragBtnElem.parentNode as HTMLTableCellElement
+      const cell = dragBtnElem.parentNode as HTMLTableCellElement
+      const cellParams = Object.assign(params, { cell })
       let dragLeft = 0
       const tableBodyElem = tableBody.$el as HTMLDivElement
       const pos = getOffsetPos(dragBtnElem, wrapperElem)
       const dragBtnWidth = dragBtnElem.clientWidth
       const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
-      const minInterval = getColReMinWidth(params) - dragBtnOffsetWidth // 列之间的最小间距
+      const minInterval = getColReMinWidth(cellParams) - dragBtnOffsetWidth // 列之间的最小间距
       let dragMinLeft = pos.left - cell.clientWidth + dragBtnWidth + minInterval
       let dragPosLeft = pos.left + dragBtnOffsetWidth
       const domMousemove = document.onmousemove
@@ -124,7 +125,7 @@ export default defineComponent({
           }
           resizeTipElem.style.left = `${resizeTipLeft}px`
           resizeTipElem.style.top = `${Math.min(tableEl.clientHeight - resizeTipHeight, Math.max(0, evnt.clientY - wrapperRect.y - resizeTipHeight / 2))}px`
-          resizeTipElem.textContent = `${column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)}px`
+          resizeTipElem.textContent = getI18n('vxe.table.resizeColTip', [column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)])
         }
       }
 
@@ -187,7 +188,9 @@ export default defineComponent({
         const hasFilter = column.filters && column.filters.some((item) => item.checked)
         const columnIndex = $xeTable.getColumnIndex(column)
         const _columnIndex = $xeTable.getVTColumnIndex(column)
-        const params: VxeTableDefines.CellRenderHeaderParams = { $table: $xeTable, $grid: $xeTable.xegrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
+        const params: VxeTableDefines.CellRenderHeaderParams & {
+          $table: VxeTableConstructor & VxeTablePrivateMethods
+        } = { $table: $xeTable, $grid: $xeTable.xegrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
         const thAttrs: Record<string, string | number | null> = {
           colid,
           colspan: column.colSpan > 1 ? column.colSpan : null,
@@ -261,7 +264,8 @@ export default defineComponent({
               class: ['vxe-resizable', {
                 'is--line': !border || border === 'none'
               }],
-              onMousedown: (evnt: MouseEvent) => resizeMousedown(evnt, params)
+              onMousedown: (evnt: MouseEvent) => resizeMousedownEvent(evnt, params),
+              onDblclick: (evnt: MouseEvent) => $xeTable.handleResizeDblclickEvent(evnt, params)
             })
             : null
         ])

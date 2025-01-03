@@ -75,7 +75,8 @@ export default {
       customCancel: 'Cancel',
       customRestore: 'Restore',
       maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}',
-      dragTip: '移动：{0}'
+      dragTip: '移动：{0}',
+      resizeColTip: '{0} Pixels'
     },
     grid: {
       selectOneRecord: 'Por favor, selecione pelo menos um registro!',

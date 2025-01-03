@@ -75,7 +75,8 @@ export default {
       customCancel: '取消',
       customRestore: '恢復預設',
       maxFixedCol: '最大凍結列的數量不能超過 {0} 個',
-      dragTip: '移動：{0}'
+      dragTip: '移動：{0}',
+      resizeColTip: '{0} 像素'
     },
     grid: {
       selectOneRecord: '請至少選擇一筆記錄！',

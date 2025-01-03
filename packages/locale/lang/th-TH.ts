@@ -75,7 +75,8 @@ export default {
       customCancel: 'ยกเลิก',
       customRestore: 'คืนค่าเริ่มต้น',
       maxFixedCol: 'จำนวนคอลัมน์ที่ตรึงไว้สูงสุดต้องไม่เกิน {0}',
-      dragTip: 'ย้าย: {0}'
+      dragTip: 'ย้าย: {0}',
+      resizeColTip: '{0} Pixels'
     },
     grid: {
       selectOneRecord: 'โปรดเลือกอย่างน้อยหนึ่งรายการ!',

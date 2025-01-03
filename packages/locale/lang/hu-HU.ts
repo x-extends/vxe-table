@@ -75,7 +75,8 @@ export default {
       customCancel: 'Mégsem',
       customRestore: 'Alapértelmezés visszaállítása',
       maxFixedCol: 'A rögzített oszlopok maximális száma nem haladhatja meg a következőt: {0}',
-      dragTip: '移动：{0}'
+      dragTip: '移动：{0}',
+      resizeColTip: '{0} Pixels'
     },
     grid: {
       selectOneRecord: 'Kérjük, válasszon legalább egy rekordot!',

@@ -258,6 +258,8 @@ export default defineComponent({
 
       scrollVMLoading: false,
 
+      isCalcCellHeight: 0,
+
       isCustomStatus: false,
 
       isDragRowMove: false,
@@ -1224,6 +1226,36 @@ export default defineComponent({
       internalData.customMaxHeight = calcTableHeight('maxHeight')
     }
 
+    const calcColumnAutoWidth = (column: VxeTableDefines.ColumnInfo, wrapperEl: HTMLDivElement) => {
+      const cellElList = wrapperEl.querySelectorAll(`.vxe-header--column.${column.id}>.vxe-cell,.vxe-body--column.${column.id}>.vxe-cell,.vxe-footer--column.${column.id}>.vxe-cell`)
+      const firstCellEl = cellElList[0]
+      let paddingSize = 0
+      if (firstCellEl) {
+        const cellStyle = getComputedStyle(firstCellEl)
+        paddingSize = Math.floor(XEUtils.toNumber(cellStyle.paddingLeft) + XEUtils.toNumber(cellStyle.paddingRight)) + 2
+      }
+      let colWidth = column.renderAutoWidth - paddingSize
+      XEUtils.arrayEach(cellElList, (itemEl) => {
+        const cellEl = itemEl as HTMLElement
+        const thElem = cellEl.parentElement as HTMLElement
+        let titleWidth = 0
+        if (`${thElem.tagName}`.toLowerCase() === 'th') {
+          XEUtils.arrayEach(cellEl.children, (btnEl) => {
+            titleWidth += (btnEl as HTMLElement).offsetWidth + 1
+          })
+        } else {
+          const labelEl = cellEl.firstElementChild as HTMLElement
+          if (labelEl) {
+            titleWidth = labelEl.offsetWidth
+          }
+        }
+        if (titleWidth) {
+          colWidth = Math.max(colWidth, Math.ceil(titleWidth) + 4)
+        }
+      })
+      return colWidth + paddingSize
+    }
+
     const calcCellWidth = () => {
       const autoWidthColumnList = computeAutoWidthColumnList.value
       reactData.isCalcColumn = true
@@ -1234,38 +1266,13 @@ export default defineComponent({
           autoWidthColumnList.forEach(column => {
             const colid = column.id
             const colRest = fullColumnIdData[colid]
-            const cellElList = el.querySelectorAll(`.vxe-header--column.${column.id}>.vxe-cell,.vxe-body--column.${column.id}>.vxe-cell,.vxe-footer--column.${column.id}>.vxe-cell`)
-            const firstCellEl = cellElList[0]
-            let paddingSize = 0
-            if (firstCellEl) {
-              const cellStyle = getComputedStyle(firstCellEl)
-              paddingSize = Math.floor(XEUtils.toNumber(cellStyle.paddingLeft) + XEUtils.toNumber(cellStyle.paddingRight)) + 2
-            }
-            let colWidth = column.renderAutoWidth - paddingSize
-            XEUtils.arrayEach(cellElList, (itemEl) => {
-              const cellEl = itemEl as HTMLElement
-              const thElem = cellEl.parentElement as HTMLElement
-              let titleWidth = 0
-              if (`${thElem.tagName}`.toLowerCase() === 'th') {
-                XEUtils.arrayEach(cellEl.children, (btnEl) => {
-                  titleWidth += (btnEl as HTMLElement).offsetWidth + 1
-                })
-              } else {
-                const labelEl = cellEl.firstElementChild as HTMLElement
-                if (labelEl) {
-                  titleWidth = labelEl.offsetWidth
-                }
-              }
-              if (titleWidth) {
-                colWidth = Math.max(colWidth, Math.ceil(titleWidth) + 4)
-              }
-            })
+            const colWidth = calcColumnAutoWidth(column, el)
             if (colRest) {
               colRest.width = Math.max(colWidth, colRest.width)
             }
-            column.renderAutoWidth = colWidth + paddingSize
+            column.renderAutoWidth = colWidth
           })
-          tablePrivateMethods.analyColumnWidth()
+          $xeTable.analyColumnWidth()
         }
         reactData.isCalcColumn = false
       })
@@ -1465,6 +1472,7 @@ export default defineComponent({
             rowRest.height = scrollXLoad ? Math.max(rowRest.height, height) : height
           }
         })
+        reactData.isCalcCellHeight++
       }
       // updateCellOffset()
     }
@@ -1501,7 +1509,7 @@ export default defineComponent({
             if (rowRest) {
               rowRest._index = index
             } else {
-              const rest = { row, rowid, seq: '-1', index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0 }
+              const rest = { row, rowid, seq: '-1', index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0, oTop: 0 }
               fullAllDataRowIdData[rowid] = rest
               fullDataRowIdData[rowid] = rest
             }
@@ -1528,7 +1536,7 @@ export default defineComponent({
           if (rowRest) {
             rowRest.seq = seq
           } else {
-            const rest = { row, rowid, seq, index: -1, $index: -1, _index: -1, items: [], parent: null, level: 0, height: 0 }
+            const rest = { row, rowid, seq, index: -1, $index: -1, _index: -1, items: [], parent: null, level: 0, height: 0, oTop: 0 }
             fullAllDataRowIdData[rowid] = rest
             fullDataRowIdData[rowid] = rest
           }
@@ -1544,7 +1552,7 @@ export default defineComponent({
             rowRest.seq = seq
             rowRest._index = index
           } else {
-            const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0 }
+            const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0, oTop: 0 }
             fullAllDataRowIdData[rowid] = rest
             fullDataRowIdData[rowid] = rest
           }
@@ -3041,11 +3049,11 @@ export default defineComponent({
       const { mergeList } = reactData
       const { tableHeight, scrollYStore } = internalData
       const { startIndex, endIndex, offsetSize } = scrollYStore
-      const offsetYSize = showOverflow ? offsetSize : offsetSize + Math.min(8, Math.ceil(tableHeight / 200))
+      const autoOffsetYSize = showOverflow ? offsetSize : offsetSize + Math.min(8, Math.ceil(tableHeight / 200))
       const { toVisibleIndex, visibleSize } = handleVirtualYVisible()
       const offsetItem = {
-        startIndex: Math.max(0, toVisibleIndex - 1 - offsetYSize),
-        endIndex: toVisibleIndex + visibleSize + offsetYSize
+        startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
+        endIndex: toVisibleIndex + visibleSize + autoOffsetYSize
       }
       calculateMergerOffsetIndex(mergeList, offsetItem, 'row')
       const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
@@ -3097,7 +3105,7 @@ export default defineComponent({
         loadScrollXData()
       }
       internalData.lxTimeout = setTimeout(() => {
-        internalData.lxRunTime = undefined
+        internalData.lxTimeout = undefined
         internalData.lxRunTime = undefined
         loadScrollXData()
       }, fpsTime)
@@ -3204,6 +3212,7 @@ export default defineComponent({
         clearTimeout(lcsTimeout)
       }
       internalData.lcsTimeout = setTimeout(() => {
+        internalData.lcsRunTime = Date.now()
         internalData.lcsTimeout = undefined
         internalData.inVirtualScroll = false
         internalData.inBodyScroll = false
@@ -3398,7 +3407,7 @@ export default defineComponent({
           XEUtils.eachTree(rows, (childRow, index, items, path, parentItem, nodes) => {
             const rowid = getRowid($xeTable, childRow)
             const parentRow = parentItem || parentRest.row
-            const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent: parentRow, level: parentLevel + nodes.length, height: 0 }
+            const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent: parentRow, level: parentLevel + nodes.length, height: 0, oTop: 0 }
             fullDataRowIdData[rowid] = rest
             fullAllDataRowIdData[rowid] = rest
           }, { children: childrenField })
@@ -6406,7 +6415,7 @@ export default defineComponent({
           }
           let cacheItem = fullAllDataRowIdData[rowid]
           if (!cacheItem) {
-            cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, items, parent: parentRow, level, height: 0 }
+            cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, items, parent: parentRow, level, height: 0, oTop: 0 }
           }
           cacheItem.row = row
           cacheItem.items = items
@@ -6495,6 +6504,31 @@ export default defineComponent({
           }
         })
         Object.assign(reactData.columnStore, { resizeList, pxList, pxMinList, autoMinList, scaleList, scaleMinList, autoList, remainList })
+      },
+      handleResizeDblclickEvent (evnt, params) {
+        const resizableOpts = computeResizableOpts.value
+        const { isDblclickAutoWidth } = resizableOpts
+        const el = refElem.value
+        if (isDblclickAutoWidth && el) {
+          const { fullColumnIdData } = internalData
+          const { column } = params
+          const colid = column.id
+          const colRest = fullColumnIdData[colid]
+          let resizeWidth = calcColumnAutoWidth(column, el)
+          if (colRest) {
+            resizeWidth = Math.max(resizeWidth, colRest.width)
+          }
+          column.resizeWidth = resizeWidth
+          reactData._isResize = false
+          internalData._lastResizeTime = Date.now()
+          $xeTable.analyColumnWidth()
+          $xeTable.recalculate(true).then(() => {
+            $xeTable.saveCustomStore('update:visible')
+            $xeTable.updateCellAreas()
+            $xeTable.dispatchEvent('resizable-change', { ...params, resizeWidth }, evnt)
+            setTimeout(() => $xeTable.recalculate(true), 300)
+          })
+        }
       },
       saveCustomStore (type) {
         const { customConfig } = props
@@ -7495,6 +7529,7 @@ export default defineComponent({
                 oldRow: dragRow,
                 newRow: prevDragRow,
                 dragPos: prevDragPos as any,
+                dragToChild: isSelfToChildDrag,
                 offsetIndex: dragOffsetIndex,
                 _index: {
                   newIndex: nafIndex,
@@ -7746,6 +7781,7 @@ export default defineComponent({
                 oldColumn,
                 newColumn,
                 dragPos: prevDragPos,
+                dragToChild: isSelfToChildDrag,
                 offsetIndex: dragOffsetIndex,
                 _index: {
                   newIndex: nafIndex,
@@ -8054,7 +8090,9 @@ export default defineComponent({
           if (scrollXSpaceEl) {
             scrollXSpaceEl.style.width = `${tableWidth + scrollbarWidth}px`
           }
-          nextTick(updateStyle)
+          nextTick(() => {
+            updateStyle()
+          })
         }
       },
       // 更新纵向 Y 可视渲染上下剩余空间大小
@@ -8114,8 +8152,9 @@ export default defineComponent({
       },
       updateScrollXData () {
         const { showOverflow } = props
+        handleTableColumn()
+        calcCellHeight()
         return nextTick().then(() => {
-          handleTableColumn()
           calcCellHeight()
           tablePrivateMethods.updateScrollXSpace()
           if (!showOverflow) {
@@ -8124,8 +8163,9 @@ export default defineComponent({
         })
       },
       updateScrollYData () {
+        tablePrivateMethods.handleTableData()
+        calcCellHeight()
         return nextTick().then(() => {
-          tablePrivateMethods.handleTableData()
           calcCellHeight()
           tablePrivateMethods.updateScrollYSpace()
         })

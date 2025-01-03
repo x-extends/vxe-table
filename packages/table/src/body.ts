@@ -132,7 +132,7 @@ export default defineComponent({
     const renderColumn = (seq: number | string, rowid: string, fixedType: any, rowLevel: number, row: any, rowIndex: number, $rowIndex: number, _rowIndex: number, column: any, $columnIndex: number, columns: any, items: any[]) => {
       const { fullAllDataRowIdData } = tableInternalData
       const { columnKey, height, showOverflow: allColumnOverflow, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig } = tableProps
-      const { tableData, overflowX, currentColumn, scrollXLoad, scrollYLoad, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
+      const { tableData, overflowX, currentColumn, scrollXLoad, scrollYLoad, isCalcCellHeight, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
       const { afterFullData } = tableInternalData
       const cellOpts = computeCellOpts.value
       const validOpts = computeValidOpts.value
@@ -347,14 +347,15 @@ export default defineComponent({
         }
       }
       let cellHeight = ''
+      const vnHeight = isCalcCellHeight ? rest.height : 0
       if (hasEllipsis) {
         if (scrollYRHeight || rowHeight) {
           cellHeight = `${scrollYRHeight || rowHeight}px`
         } else if (!isAllOverflow) {
-          cellHeight = `${rest.height || 18}px`
+          cellHeight = `${vnHeight || rowHeight || 18}px`
         }
       } else {
-        cellHeight = `${rest.height || 18}px`
+        cellHeight = `${vnHeight || rowHeight || 18}px`
       }
 
       if (mouseConfig && mouseOpts.area && selectCellToRow) {

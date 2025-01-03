@@ -266,57 +266,86 @@ function getDefaultCellLabel (params: VxeTableDefines.CellRenderBodyParams) {
   return formatText($table.getCellLabel(row, column), 1)
 }
 
+function renderCellHandle (params: VxeTableDefines.CellRenderBodyParams & {
+  $table: VxeTableConstructor & VxeTablePrivateMethods;
+}) {
+  const { column, $table } = params
+  const tableProps = $table.props
+  const { editConfig } = tableProps
+  const { type, treeNode, editRender } = column
+  const { computeEditOpts, computeCheckboxOpts } = $table.getComputeMaps()
+  const checkboxOpts = computeCheckboxOpts.value
+  const editOpts = computeEditOpts.value
+  switch (type) {
+    case 'seq':
+      return treeNode ? Cell.renderTreeIndexCell(params) : Cell.renderSeqCell(params)
+    case 'radio':
+      return treeNode ? Cell.renderTreeRadioCell(params) : Cell.renderRadioCell(params)
+    case 'checkbox':
+      return checkboxOpts.checkField ? (treeNode ? Cell.renderTreeSelectionCellByProp(params) : Cell.renderCheckboxCellByProp(params)) : (treeNode ? Cell.renderTreeSelectionCell(params) : Cell.renderCheckboxCell(params))
+    case 'expand':
+      return Cell.renderExpandCell(params)
+    case 'html':
+      return treeNode ? Cell.renderTreeHTMLCell(params) : Cell.renderHTMLCell(params)
+  }
+  if (editConfig && editRender) {
+    return editOpts.mode === 'cell' ? (treeNode ? Cell.renderTreeCellEdit(params) : Cell.renderCellEdit(params)) : (treeNode ? Cell.renderTreeRowEdit(params) : Cell.renderRowEdit(params))
+  }
+  return treeNode ? Cell.renderTreeCell(params) : Cell.renderDefaultCell(params)
+}
+
+function renderHeaderHandle (params: VxeTableDefines.CellRenderHeaderParams & {
+  $table: VxeTableConstructor & VxeTablePrivateMethods;
+}) {
+  const { column, $table } = params
+  const tableProps = $table.props
+  const { editConfig } = tableProps
+  const { type, filters, sortable, editRender } = column
+  switch (type) {
+    case 'seq':
+      return Cell.renderSeqHeader(params)
+    case 'radio':
+      return Cell.renderRadioHeader(params)
+    case 'checkbox':
+      return Cell.renderCheckboxHeader(params)
+    case 'html':
+      if (filters && sortable) {
+        return Cell.renderSortAndFilterHeader(params)
+      } else if (sortable) {
+        return Cell.renderSortHeader(params)
+      } else if (filters) {
+        return Cell.renderFilterHeader(params)
+      }
+      break
+  }
+  if (editConfig && editRender) {
+    return Cell.renderEditHeader(params)
+  } else if (filters && sortable) {
+    return Cell.renderSortAndFilterHeader(params)
+  } else if (sortable) {
+    return Cell.renderSortHeader(params)
+  } else if (filters) {
+    return Cell.renderFilterHeader(params)
+  }
+  return Cell.renderDefaultHeader(params)
+}
+
+function renderFooterHandle (params: VxeTableDefines.CellRenderFooterParams & {
+  $table: VxeTableConstructor & VxeTablePrivateMethods;
+}) {
+  return Cell.renderDefaultFooter(params)
+}
+
 export const Cell = {
   createColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, columnOpts: VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo) {
-    const { type, sortable, filters, editRender, treeNode } = columnOpts
-    const { props } = $xeTable
-    const { editConfig } = props
-    const { computeEditOpts, computeCheckboxOpts } = $xeTable.getComputeMaps()
-    const checkboxOpts = computeCheckboxOpts.value
-    const editOpts = computeEditOpts.value
+    const { type } = columnOpts
     const renConfs: any = {
-      renderHeader: Cell.renderDefaultHeader,
-      renderCell: treeNode ? Cell.renderTreeCell : Cell.renderDefaultCell,
-      renderFooter: Cell.renderDefaultFooter
+      renderHeader: renderHeaderHandle,
+      renderCell: renderCellHandle,
+      renderFooter: renderFooterHandle
     }
-    switch (type) {
-      case 'seq':
-        renConfs.renderHeader = Cell.renderSeqHeader
-        renConfs.renderCell = treeNode ? Cell.renderTreeIndexCell : Cell.renderSeqCell
-        break
-      case 'radio':
-        renConfs.renderHeader = Cell.renderRadioHeader
-        renConfs.renderCell = treeNode ? Cell.renderTreeRadioCell : Cell.renderRadioCell
-        break
-      case 'checkbox':
-        renConfs.renderHeader = Cell.renderCheckboxHeader
-        renConfs.renderCell = checkboxOpts.checkField ? (treeNode ? Cell.renderTreeSelectionCellByProp : Cell.renderCheckboxCellByProp) : (treeNode ? Cell.renderTreeSelectionCell : Cell.renderCheckboxCell)
-        break
-      case 'expand':
-        renConfs.renderCell = Cell.renderExpandCell
-        renConfs.renderData = Cell.renderExpandData
-        break
-      case 'html':
-        renConfs.renderCell = treeNode ? Cell.renderTreeHTMLCell : Cell.renderHTMLCell
-        if (filters && sortable) {
-          renConfs.renderHeader = Cell.renderSortAndFilterHeader
-        } else if (sortable) {
-          renConfs.renderHeader = Cell.renderSortHeader
-        } else if (filters) {
-          renConfs.renderHeader = Cell.renderFilterHeader
-        }
-        break
-      default:
-        if (editConfig && editRender) {
-          renConfs.renderHeader = Cell.renderEditHeader
-          renConfs.renderCell = editOpts.mode === 'cell' ? (treeNode ? Cell.renderTreeCellEdit : Cell.renderCellEdit) : (treeNode ? Cell.renderTreeRowEdit : Cell.renderRowEdit)
-        } else if (filters && sortable) {
-          renConfs.renderHeader = Cell.renderSortAndFilterHeader
-        } else if (sortable) {
-          renConfs.renderHeader = Cell.renderSortHeader
-        } else if (filters) {
-          renConfs.renderHeader = Cell.renderFilterHeader
-        }
+    if (type === 'expand') {
+      renConfs.renderData = Cell.renderExpandData
     }
     return createColumn($xeTable, columnOpts, renConfs)
   },
