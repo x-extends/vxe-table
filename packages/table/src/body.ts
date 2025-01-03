@@ -66,6 +66,7 @@ function renderColumn (h: any, _vm: any, $xeTable: any, seq: any, rowid: any, fi
     sYOpts,
     scrollXLoad,
     scrollYLoad,
+    isCalcCellHeight,
     highlightCurrentRow,
     showOverflow: allColumnOverflow,
     isAllOverflow,
@@ -294,14 +295,15 @@ function renderColumn (h: any, _vm: any, $xeTable: any, seq: any, rowid: any, fi
     }
   }
   let cellHeight = ''
+  const vnHeight = isCalcCellHeight ? rest.height : 0
   if (hasEllipsis) {
     if (scrollYRHeight || rowHeight) {
       cellHeight = `${scrollYRHeight || rowHeight}px`
     } else if (!isAllOverflow) {
-      cellHeight = `${rest.height || 18}px`
+      cellHeight = `${vnHeight || rowHeight || 18}px`
     }
   } else {
-    cellHeight = `${rest.height || 18}px`
+    cellHeight = `${vnHeight || rowHeight || 18}px`
   }
 
   if (mouseConfig && mouseOpts.area && selectCellToRow) {

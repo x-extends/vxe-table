@@ -75,7 +75,8 @@ export default {
       customCancel: 'Kansellere',
       customRestore: 'Gjenopprett standard',
       maxFixedCol: 'Maksimalt antall frosne kolonner kan ikke overstige {0}',
-      dragTip: 'Flytt: {0}'
+      dragTip: 'Flytt: {0}',
+      resizeColTip: '{0} Pixels'
     },
     grid: {
       selectOneRecord: '请至少选择一条记录！',

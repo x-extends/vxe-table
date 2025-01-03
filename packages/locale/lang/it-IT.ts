@@ -75,7 +75,8 @@ export default {
       customCancel: 'Cancellare',
       customRestore: 'Ripristina impostazione predefinita',
       maxFixedCol: 'Il numero massimo di colonne bloccate non può superare {0}',
-      dragTip: 'Sposta: {0}'
+      dragTip: 'Sposta: {0}',
+      resizeColTip: '{0} Pixels'
     },
     grid: {
       selectOneRecord: 'Seleziona almeno un record!',

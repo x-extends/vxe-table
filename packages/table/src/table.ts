@@ -430,6 +430,8 @@ export default {
 
       scrollVMLoading: false,
 
+      isCalcCellHeight: 0,
+
       isCustomStatus: false,
 
       isDragRowMove: false,
@@ -700,7 +702,7 @@ export default {
     computeCustomOpts () {
       return Object.assign({}, getConfig().table.customConfig, this.customConfig)
     },
-    autoWidthColumnList () {
+    computeAutoWidthColumnList () {
       const { tableColumn, visibleColumn } = this
       return tableColumn.length || visibleColumn.length ? visibleColumn.filter((column: any) => column.width === 'auto' || column.minWidth === 'auto') : []
     },

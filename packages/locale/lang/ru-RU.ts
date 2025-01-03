@@ -75,7 +75,8 @@ export default {
       customCancel: 'Отмена',
       customRestore: 'Восстановить настройки по умолчанию',
       maxFixedCol: 'Максимальное количество замороженных столбцов не может превышать {0}.',
-      dragTip: 'Переместить: {0}'
+      dragTip: 'Переместить: {0}',
+      resizeColTip: '{0} Pixels'
     },
     grid: {
       selectOneRecord: 'Пожалуйста, выберите хотя бы одну запись!',

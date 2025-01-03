@@ -7,7 +7,7 @@ import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible,
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, TableInternalData } from '../../../types'
+import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, TableInternalData, VxeTablePrivateMethods } from '../../../types'
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent } = VxeUI
 
@@ -107,7 +107,128 @@ function handleVirtualXVisible ($xeTable: any) {
   return { toVisibleIndex: 0, visibleSize: 6 }
 }
 
-const computeRowHeight = ($xeTable: any) => {
+/**
+   * 更新数据列的 Map
+   * 牺牲数据组装的耗时，用来换取使用过程中的流畅
+   */
+function cacheColumnMap ($xeTable: VxeTableConstructor) {
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { tableFullColumn, collectColumn } = internalData
+  const fullColumnIdData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnIdData = {}
+  const fullColumnFieldData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnFieldData = {}
+  const mouseOpts = $xeTable.computeMouseOpts
+  const columnOpts = $xeTable.computeColumnOpts
+  const columnDragOpts = $xeTable.computeColumnDragOpts
+  const { isCrossDrag, isSelfToChildDrag } = columnDragOpts
+  const rowOpts = $xeTable.computeRowOpts
+  const isGroup = collectColumn.some(hasChildrenList)
+  let isAllOverflow = !!props.showOverflow
+  let expandColumn: VxeTableDefines.ColumnInfo | undefined
+  let treeNodeColumn: VxeTableDefines.ColumnInfo | undefined
+  let checkboxColumn: VxeTableDefines.ColumnInfo | undefined
+  let radioColumn: VxeTableDefines.ColumnInfo | undefined
+  let htmlColumn: VxeTableDefines.ColumnInfo | undefined
+  let hasFixed: VxeColumnPropTypes.Fixed | undefined
+  const handleFunc = (column: VxeTableDefines.ColumnInfo, index: number, items: VxeTableDefines.ColumnInfo[], path?: string[], parentColumn?: VxeTableDefines.ColumnInfo) => {
+    const { id: colid, field, fixed, type, treeNode } = column
+    const rest = { $index: -1, _index: -1, column, colid, index, items, parent: parentColumn || null, width: 0 }
+    if (field) {
+      if (fullColumnFieldData[field]) {
+        errLog('vxe.error.colRepet', ['field', field])
+      }
+      fullColumnFieldData[field] = rest
+    } else {
+      if (isCrossDrag || isSelfToChildDrag) {
+        errLog('vxe.error.emptyProp', ['column.field'])
+      }
+    }
+    if (!hasFixed && fixed) {
+      hasFixed = fixed
+    }
+    if (!htmlColumn && type === 'html') {
+      htmlColumn = column
+    }
+    if (treeNode) {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
+        if (treeNodeColumn) {
+          warnLog('vxe.error.colRepet', ['tree-node', treeNode])
+        }
+      }
+      if (!treeNodeColumn) {
+        treeNodeColumn = column
+      }
+    } else if (type === 'expand') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
+        if (expandColumn) {
+          warnLog('vxe.error.colRepet', ['type', type])
+        }
+      }
+      if (!expandColumn) {
+        expandColumn = column
+      }
+    }
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
+      if (type === 'checkbox') {
+        if (checkboxColumn) {
+          warnLog('vxe.error.colRepet', ['type', type])
+        }
+        if (!checkboxColumn) {
+          checkboxColumn = column
+        }
+      } else if (type === 'radio') {
+        if (radioColumn) {
+          warnLog('vxe.error.colRepet', ['type', type])
+        }
+        if (!radioColumn) {
+          radioColumn = column
+        }
+      }
+    }
+    if (isAllOverflow && column.showOverflow === false) {
+      isAllOverflow = false
+    }
+    if (fullColumnIdData[colid]) {
+      errLog('vxe.error.colRepet', ['colId', colid])
+    }
+    fullColumnIdData[colid] = rest
+  }
+
+  if (isGroup) {
+    XEUtils.eachTree(collectColumn, (column, index, items, path, parentColumn, nodes) => {
+      column.level = nodes.length
+      handleFunc(column, index, items, path, parentColumn)
+    })
+  } else {
+    tableFullColumn.forEach(handleFunc)
+  }
+
+  if (process.env.VUE_APP_VXE_ENV === 'development') {
+    if (expandColumn && mouseOpts.area) {
+      errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
+    }
+  }
+
+  if (process.env.VUE_APP_VXE_ENV === 'development') {
+    if (htmlColumn) {
+      if (!columnOpts.useKey) {
+        errLog('vxe.error.reqProp', ['column-config.useKey & column.type=html'])
+      }
+      if (!rowOpts.useKey) {
+        errLog('vxe.error.reqProp', ['row-config.useKey & column.type=html'])
+      }
+    }
+  }
+
+  reactData.isGroup = isGroup
+  reactData.treeNodeColumn = treeNodeColumn
+  reactData.expandColumn = expandColumn
+  reactData.isAllOverflow = isAllOverflow
+}
+
+function computeRowHeight ($xeTable: any) {
   const tableHeader = $xeTable.$refs.tableHeader
   const tableBody = $xeTable.$refs.tableBody
   const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
@@ -269,15 +390,18 @@ function clearAllSort (_vm: any) {
   })
 }
 
-function calcTableHeight (_vm: any, key: 'height' | 'minHeight' | 'maxHeight') {
-  const { parentHeight } = _vm
-  const val = _vm[key]
+function calcTableHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, key: 'height' | 'minHeight' | 'maxHeight') {
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+
+  const { parentHeight } = reactData
+  const val = props[key]
   let num = 0
   if (val) {
     if (val === '100%' || val === 'auto') {
       num = parentHeight
     } else {
-      const excludeHeight = _vm.getExcludeHeight()
+      const excludeHeight = $xeTable.getExcludeHeight()
       if (isScale(val)) {
         num = Math.floor((XEUtils.toInteger(val) || 1) / 100 * parentHeight)
       } else {
@@ -287,6 +411,155 @@ function calcTableHeight (_vm: any, key: 'height' | 'minHeight' | 'maxHeight') {
     }
   }
   return num
+}
+
+/**
+ * 列宽算法，计算单元格列宽，动态分配可用剩余空间
+ * 支持 px、%、固定 混合分配
+ * 支持动态列表调整分配
+ * 支持自动分配偏移量
+ * 支持 width=60 width=60px width=10% min-width=60 min-width=60px min-width=10%
+ */
+function autoCellWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const tableHeader = $xeTable.$refs.tableHeader
+  const tableBody = $xeTable.$refs.tableBody
+  const tableFooter = $xeTable.$refs.tableFooter
+  const bodyElem = tableBody ? (tableBody as any).$el as HTMLDivElement : null
+  const headerElem = tableHeader ? (tableHeader as any).$el as HTMLDivElement : null
+  const footerElem = tableFooter ? (tableFooter as any).$el as HTMLDivElement : null
+  if (!bodyElem) {
+    return
+  }
+  let tableWidth = 0
+  const minCellWidth = 40 // 列宽最少限制 40px
+  const bodyWidth = bodyElem.clientWidth - 1
+  let remainWidth = bodyWidth
+  let meanWidth = remainWidth / 100
+  const { fit } = props
+  const { columnStore } = reactData
+  const { resizeList, pxMinList, autoMinList, pxList, scaleList, scaleMinList, autoList, remainList } = columnStore
+  // 最小宽
+  pxMinList.forEach((column) => {
+    const minWidth = XEUtils.toInteger(column.minWidth)
+    tableWidth += minWidth
+    column.renderWidth = minWidth
+  })
+  // 最小自适应
+  autoMinList.forEach((column) => {
+    const scaleWidth = Math.max(60, XEUtils.toInteger(column.renderAutoWidth))
+    tableWidth += scaleWidth
+    column.renderWidth = scaleWidth
+  })
+  // 最小百分比
+  scaleMinList.forEach((column) => {
+    const scaleWidth = Math.floor(XEUtils.toInteger(column.minWidth) * meanWidth)
+    tableWidth += scaleWidth
+    column.renderWidth = scaleWidth
+  })
+  // 固定百分比
+  scaleList.forEach((column) => {
+    const scaleWidth = Math.floor(XEUtils.toInteger(column.width) * meanWidth)
+    tableWidth += scaleWidth
+    column.renderWidth = scaleWidth
+  })
+  // 固定宽
+  pxList.forEach((column) => {
+    const width = XEUtils.toInteger(column.width)
+    tableWidth += width
+    column.renderWidth = width
+  })
+  // 自适应宽
+  autoList.forEach((column) => {
+    const width = Math.max(60, XEUtils.toInteger(column.renderAutoWidth))
+    tableWidth += width
+    column.renderWidth = width
+  })
+  // 调整了列宽
+  resizeList.forEach((column) => {
+    const width = XEUtils.toInteger(column.resizeWidth)
+    tableWidth += width
+    column.renderWidth = width
+  })
+  remainWidth -= tableWidth
+  meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + autoMinList.length + remainList.length)) : 0
+  if (fit) {
+    if (remainWidth > 0) {
+      scaleMinList.concat(pxMinList).concat(autoMinList).forEach((column) => {
+        tableWidth += meanWidth
+        column.renderWidth += meanWidth
+      })
+    }
+  } else {
+    meanWidth = minCellWidth
+  }
+  // 剩余均分
+  remainList.forEach((column) => {
+    const width = Math.max(meanWidth, minCellWidth)
+    column.renderWidth = width
+    tableWidth += width
+  })
+  if (fit) {
+    /**
+     * 偏移量算法
+     * 如果所有列足够放的情况下，从最后动态列开始分配
+     */
+    const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(autoMinList).concat(remainList)
+    let dynamicSize = dynamicList.length - 1
+    if (dynamicSize > 0) {
+      let odiffer = bodyWidth - tableWidth
+      if (odiffer > 0) {
+        while (odiffer > 0 && dynamicSize >= 0) {
+          odiffer--
+          dynamicList[dynamicSize--].renderWidth++
+        }
+        tableWidth = bodyWidth
+      }
+    }
+  }
+  const tableHeight = bodyElem.offsetHeight
+  const overflowY = bodyElem.scrollHeight > bodyElem.clientHeight
+  let scrollbarWidth = 0
+  if (overflowY) {
+    scrollbarWidth = Math.max(bodyElem.offsetWidth - bodyElem.clientWidth, 0)
+  }
+  reactData.scrollbarWidth = scrollbarWidth
+  reactData.overflowY = overflowY
+  internalData.tableWidth = tableWidth
+  internalData.tableHeight = tableHeight
+  let headerHeight = 0
+  if (headerElem) {
+    headerHeight = headerElem.clientHeight
+    $xeTable.$nextTick(() => {
+      // 检测是否同步滚动
+      if (headerElem && bodyElem && headerElem.scrollLeft !== bodyElem.scrollLeft) {
+        headerElem.scrollLeft = bodyElem.scrollLeft
+      }
+    })
+  }
+  internalData.headerHeight = headerHeight
+  let overflowX = false
+  let footerHeight = 0
+  let scrollbarHeight = 0
+  if (footerElem) {
+    footerHeight = footerElem.offsetHeight
+    overflowX = tableWidth > footerElem.clientWidth
+    scrollbarHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
+  } else {
+    overflowX = tableWidth > bodyWidth
+    scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
+  }
+  internalData.footerHeight = footerHeight
+  reactData.overflowX = overflowX
+  reactData.scrollbarHeight = scrollbarHeight
+  updateHeight($xeTable)
+  reactData.parentHeight = Math.max(internalData.headerHeight + footerHeight + 20, $xeTable.getParentHeight())
+  if (overflowX) {
+    $xeTable.checkScrolling()
+  }
 }
 
 // const updateCellOffset = ($xeTable: VxeTableConstructor) => {
@@ -405,7 +678,7 @@ function updateRowDropOrigin ($xeTable: any, row: any) {
   }
 }
 
-const updateRowDropTipContent = ($xeTable: any, tdEl: HTMLElement) => {
+function updateRowDropTipContent ($xeTable: any, tdEl: HTMLElement) {
   const reactData = $xeTable
   const props = $xeTable
 
@@ -425,7 +698,7 @@ const updateRowDropTipContent = ($xeTable: any, tdEl: HTMLElement) => {
   reactData.dragTipText = tipContent
 }
 
-const updateColDropOrigin = ($xeTable: any, column: VxeTableDefines.ColumnInfo) => {
+function updateColDropOrigin ($xeTable: any, column: VxeTableDefines.ColumnInfo) {
   const el = $xeTable.$el as HTMLElement
   if (el) {
     const colQuerys: string[] = []
@@ -439,7 +712,7 @@ const updateColDropOrigin = ($xeTable: any, column: VxeTableDefines.ColumnInfo) 
   }
 }
 
-const clearColDropOrigin = ($xeTable: any) => {
+function clearColDropOrigin ($xeTable: any) {
   const el = $xeTable.$el as HTMLElement
   if (el) {
     const clss = 'col--drag-origin'
@@ -450,7 +723,7 @@ const clearColDropOrigin = ($xeTable: any) => {
   }
 }
 
-const updateColDropTipContent = ($xeTable: any, tdEl: HTMLElement) => {
+function updateColDropTipContent ($xeTable: any, tdEl: HTMLElement) {
   const reactData = $xeTable
 
   const { dragCol } = reactData
@@ -546,7 +819,7 @@ function showDropTip ($xeTable: any, evnt: DragEvent | MouseEvent, trEl: HTMLEle
   }
 }
 
-const hideDropTip = ($xeTable: any) => {
+function hideDropTip ($xeTable: any) {
   const rdTipEl = $xeTable.$refs.refDragTipElem as HTMLDivElement
   const rdLineEl = $xeTable.$refs.refDragRowLineElem as HTMLDivElement
   const cdLineEl = $xeTable.$refs.refDragColLineElem as HTMLDivElement
@@ -561,8 +834,8 @@ const hideDropTip = ($xeTable: any) => {
   }
 }
 
-const handleScrollToRowColumn = ($xeTable: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null, row?: any) => {
-  const internalData = $xeTable
+function handleScrollToRowColumn ($xeTable: VxeTableConstructor, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null, row?: any) {
+  const internalData = $xeTable as unknown as TableInternalData
 
   const { fullColumnIdData } = internalData
   const column = handleFieldOrColumn($xeTable, fieldOrColumn)
@@ -572,30 +845,129 @@ const handleScrollToRowColumn = ($xeTable: any, fieldOrColumn: string | VxeTable
   return $xeTable.$nextTick()
 }
 
-function handleRecalculateLayout ($xeTable: any, reFull: boolean) {
-  const internalData = $xeTable
+// 计算可视渲染相关数据
+function computeScrollLoad ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
 
-  const el = $xeTable.$refs.refElem
+  return $xeTable.$nextTick().then(() => {
+    const { scrollXLoad, scrollYLoad } = reactData
+    const { scrollXStore, scrollYStore } = internalData
+    const sYOpts = $xeTable.computeSYOpts
+    const sXOpts = $xeTable.computeSXOpts
+    // 计算 X 逻辑
+    if (scrollXLoad) {
+      const { visibleSize: visibleXSize } = handleVirtualXVisible($xeTable)
+      const offsetXSize = Math.max(0, sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : (browse.edge ? 5 : 0))
+      scrollXStore.offsetSize = offsetXSize
+      scrollXStore.visibleSize = visibleXSize
+      scrollXStore.endIndex = Math.max(scrollXStore.startIndex + scrollXStore.visibleSize + offsetXSize, scrollXStore.endIndex)
+      $xeTable.updateScrollXData().then(() => {
+        loadScrollXData($xeTable)
+      })
+    } else {
+      $xeTable.updateScrollXSpace()
+    }
+    calcCellHeight($xeTable)
+    // 计算 Y 逻辑
+    const rowHeight = computeRowHeight($xeTable)
+    scrollYStore.rowHeight = rowHeight
+    reactData.rowHeight = rowHeight
+    const { visibleSize: visibleYSize } = handleVirtualYVisible($xeTable)
+    if (scrollYLoad) {
+      const offsetYSize = Math.max(0, sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : (browse.edge ? 10 : 0))
+      scrollYStore.offsetSize = offsetYSize
+      scrollYStore.visibleSize = visibleYSize
+      scrollYStore.endIndex = Math.max(scrollYStore.startIndex + visibleYSize + offsetYSize, scrollYStore.endIndex)
+      $xeTable.updateScrollYData().then(() => {
+        loadScrollYData($xeTable)
+      })
+    } else {
+      $xeTable.updateScrollYSpace()
+    }
+    $xeTable.$nextTick(() => {
+      ($xeTable as any).updateStyle()
+    })
+  })
+}
+
+function handleRecalculateLayout ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, reFull: boolean) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const el = $xeTable.$refs.refElem as HTMLDivElement
   internalData.rceRunTime = Date.now()
   if (!el || !el.clientWidth) {
     return $xeTable.$nextTick()
   }
-  $xeTable.calcCellWidth()
-  $xeTable.autoCellWidth()
-  return $xeTable.computeScrollLoad().then(() => {
+  calcCellWidth($xeTable)
+  autoCellWidth($xeTable)
+  return computeScrollLoad($xeTable).then(() => {
     if (reFull === true) {
       // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
       calcCellHeight($xeTable)
-      $xeTable.calcCellWidth()
-      $xeTable.autoCellWidth()
-      return $xeTable.computeScrollLoad()
+      calcCellWidth($xeTable)
+      autoCellWidth($xeTable)
+      return computeScrollLoad($xeTable)
     }
   })
 }
 
-function checkLastSyncScroll ($xeTable: any, isRollX: boolean, isRollY: boolean) {
-  const reactData = $xeTable
-  const internalData = $xeTable
+function loadScrollXData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { mergeList, mergeFooterList } = reactData
+  const { scrollXStore } = internalData
+  const { startIndex, endIndex, offsetSize } = scrollXStore
+  const { toVisibleIndex, visibleSize } = handleVirtualXVisible($xeTable)
+  const offsetItem = {
+    startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
+    endIndex: toVisibleIndex + visibleSize + offsetSize
+  }
+  calculateMergerOffsetIndex(mergeList.concat(mergeFooterList), offsetItem, 'col')
+  const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
+  if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
+    if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
+      scrollXStore.startIndex = offsetStartIndex
+      scrollXStore.endIndex = offsetEndIndex
+      $xeTable.updateScrollXData()
+    }
+  }
+  $xeTable.closeTooltip()
+}
+
+/**
+ * 纵向 Y 可视渲染处理
+ */
+function loadScrollYData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { showOverflow } = props
+  const { mergeList } = reactData
+  const { tableHeight, scrollYStore } = internalData
+  const { startIndex, endIndex, offsetSize } = scrollYStore
+  const offsetYSize = showOverflow ? offsetSize : offsetSize + Math.min(8, Math.ceil(tableHeight / 200))
+  const { toVisibleIndex, visibleSize } = handleVirtualYVisible($xeTable)
+  const offsetItem = {
+    startIndex: Math.max(0, toVisibleIndex - 1 - offsetYSize),
+    endIndex: toVisibleIndex + visibleSize + offsetYSize
+  }
+  calculateMergerOffsetIndex(mergeList, offsetItem, 'row')
+  const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
+  if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
+    if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
+      scrollYStore.startIndex = offsetStartIndex
+      scrollYStore.endIndex = offsetEndIndex
+      $xeTable.updateScrollYData()
+    }
+  }
+}
+
+function checkLastSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, isRollX: boolean, isRollY: boolean) {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
 
   const { scrollXLoad, scrollYLoad } = reactData
   const { lcsTimeout } = internalData
@@ -610,16 +982,79 @@ function checkLastSyncScroll ($xeTable: any, isRollX: boolean, isRollY: boolean)
     internalData.inFooterScroll = false
     if (isRollX && scrollXLoad) {
       $xeTable.updateScrollXData().then(() => {
-        $xeTable.loadScrollXData()
+        loadScrollXData($xeTable)
       })
     }
     if (isRollY && scrollYLoad) {
       $xeTable.updateScrollYData().then(() => {
-        $xeTable.loadScrollYData()
+        loadScrollYData($xeTable)
       })
     }
     $xeTable.updateCellAreas()
   }, 200)
+}
+
+function updateHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  internalData.customHeight = calcTableHeight($xeTable, 'height')
+  internalData.customMinHeight = calcTableHeight($xeTable, 'minHeight')
+  internalData.customMaxHeight = calcTableHeight($xeTable, 'maxHeight')
+}
+
+function calcColumnAutoWidth (column: VxeTableDefines.ColumnInfo, wrapperEl: HTMLDivElement) {
+  const cellElList = wrapperEl.querySelectorAll(`.vxe-header--column.${column.id}>.vxe-cell,.vxe-body--column.${column.id}>.vxe-cell,.vxe-footer--column.${column.id}>.vxe-cell`)
+  const firstCellEl = cellElList[0]
+  let paddingSize = 0
+  if (firstCellEl) {
+    const cellStyle = getComputedStyle(firstCellEl)
+    paddingSize = Math.floor(XEUtils.toNumber(cellStyle.paddingLeft) + XEUtils.toNumber(cellStyle.paddingRight)) + 2
+  }
+  let colWidth = column.renderAutoWidth - paddingSize
+  XEUtils.arrayEach(cellElList, (itemEl) => {
+    const cellEl = itemEl as HTMLElement
+    const thElem = cellEl.parentElement as HTMLElement
+    let titleWidth = 0
+    if (`${thElem.tagName}`.toLowerCase() === 'th') {
+      XEUtils.arrayEach(cellEl.children, (btnEl) => {
+        titleWidth += (btnEl as HTMLElement).offsetWidth + 1
+      })
+    } else {
+      const labelEl = cellEl.firstElementChild as HTMLElement
+      if (labelEl) {
+        titleWidth = labelEl.offsetWidth
+      }
+    }
+    if (titleWidth) {
+      colWidth = Math.max(colWidth, Math.ceil(titleWidth) + 4)
+    }
+  })
+  return colWidth + paddingSize
+}
+
+function calcCellWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const autoWidthColumnList = $xeTable.computeAutoWidthColumnList
+  reactData.isCalcColumn = true
+  return $xeTable.$nextTick().then(() => {
+    const { fullColumnIdData } = internalData
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    if (el) {
+      autoWidthColumnList.forEach(column => {
+        const colid = column.id
+        const colRest = fullColumnIdData[colid]
+        const colWidth = calcColumnAutoWidth(column, el)
+        if (colRest) {
+          colRest.width = Math.max(colWidth, colRest.width)
+        }
+        column.renderAutoWidth = colWidth
+      })
+      $xeTable.analyColumnWidth()
+    }
+    reactData.isCalcColumn = false
+  })
 }
 
 const Methods = {
@@ -832,10 +1267,10 @@ const Methods = {
     this.handleTableData(true)
     this.updateFooter()
     return this.$nextTick().then(() => {
-      this.updateHeight()
+      updateHeight($xeTable)
       this.updateStyle()
     }).then(() => {
-      this.computeScrollLoad()
+      computeScrollLoad($xeTable)
     }).then(() => {
       // 是否启用了虚拟滚动
       if (sYLoad) {
@@ -980,10 +1415,10 @@ const Methods = {
       this.restoreCustomStorage()
     ).then(() => {
       this._isLoading = false
-      this.cacheColumnMap()
+      cacheColumnMap($xeTable)
       this.parseColumns(true).then(() => {
         if (this.scrollXLoad) {
-          this.loadScrollXData(true)
+          loadScrollXData($xeTable)
         }
       })
       this.clearMergeCells()
@@ -1033,7 +1468,7 @@ const Methods = {
       }
       let cacheItem = fullAllDataRowIdData[rowid]
       if (!cacheItem) {
-        cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, items, parent: parentRow, level, height: 0 }
+        cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, items, parent: parentRow, level, height: 0, oTop: 0 }
       }
       cacheItem.row = row
       cacheItem.items = items
@@ -1106,7 +1541,7 @@ const Methods = {
       XEUtils.eachTree(rows, (childRow, index, items, path, parentItem, nodes) => {
         const rowid = getRowid($xeTable, childRow)
         const parentRow = parentItem || parentRest.row
-        const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent: parentRow, level: parentLevel + nodes.length, height: 0 }
+        const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent: parentRow, level: parentLevel + nodes.length, height: 0, oTop: 0 }
         fullDataRowIdData[rowid] = rest
         fullAllDataRowIdData[rowid] = rest
       }, { children: childrenField })
@@ -1117,127 +1552,6 @@ const Methods = {
       this.updateAfterDataIndex()
       return rows
     })
-  },
-  /**
-   * 更新数据列的 Map
-   * 牺牲数据组装的耗时，用来换取使用过程中的流畅
-   */
-  cacheColumnMap () {
-    const $xeTable = this
-    const props = $xeTable
-    const reactData = $xeTable
-    const internalData = $xeTable
-
-    const { tableFullColumn, collectColumn } = internalData
-    const fullColumnIdData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnIdData = {}
-    const fullColumnFieldData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnFieldData = {}
-    const mouseOpts = $xeTable.computeMouseOpts
-    const columnOpts = $xeTable.computeColumnOpts
-    const columnDragOpts = $xeTable.computeColumnDragOpts
-    const { isCrossDrag, isSelfToChildDrag } = columnDragOpts
-    const rowOpts = $xeTable.computeRowOpts
-    const isGroup = collectColumn.some(hasChildrenList)
-    let isAllOverflow = !!props.showOverflow
-    let expandColumn: VxeTableDefines.ColumnInfo | undefined
-    let treeNodeColumn: VxeTableDefines.ColumnInfo | undefined
-    let checkboxColumn: VxeTableDefines.ColumnInfo | undefined
-    let radioColumn: VxeTableDefines.ColumnInfo | undefined
-    let htmlColumn: VxeTableDefines.ColumnInfo | undefined
-    let hasFixed: VxeColumnPropTypes.Fixed | undefined
-    const handleFunc = (column: VxeTableDefines.ColumnInfo, index: number, items: VxeTableDefines.ColumnInfo[], path?: string[], parentColumn?: VxeTableDefines.ColumnInfo) => {
-      const { id: colid, field, fixed, type, treeNode } = column
-      const rest = { $index: -1, _index: -1, column, colid, index, items, parent: parentColumn || null, width: 0 }
-      if (field) {
-        if (fullColumnFieldData[field]) {
-          errLog('vxe.error.colRepet', ['field', field])
-        }
-        fullColumnFieldData[field] = rest
-      } else {
-        if (isCrossDrag || isSelfToChildDrag) {
-          errLog('vxe.error.emptyProp', ['column.field'])
-        }
-      }
-      if (!hasFixed && fixed) {
-        hasFixed = fixed
-      }
-      if (!htmlColumn && type === 'html') {
-        htmlColumn = column
-      }
-      if (treeNode) {
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (treeNodeColumn) {
-            warnLog('vxe.error.colRepet', ['tree-node', treeNode])
-          }
-        }
-        if (!treeNodeColumn) {
-          treeNodeColumn = column
-        }
-      } else if (type === 'expand') {
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (expandColumn) {
-            warnLog('vxe.error.colRepet', ['type', type])
-          }
-        }
-        if (!expandColumn) {
-          expandColumn = column
-        }
-      }
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (type === 'checkbox') {
-          if (checkboxColumn) {
-            warnLog('vxe.error.colRepet', ['type', type])
-          }
-          if (!checkboxColumn) {
-            checkboxColumn = column
-          }
-        } else if (type === 'radio') {
-          if (radioColumn) {
-            warnLog('vxe.error.colRepet', ['type', type])
-          }
-          if (!radioColumn) {
-            radioColumn = column
-          }
-        }
-      }
-      if (isAllOverflow && column.showOverflow === false) {
-        isAllOverflow = false
-      }
-      if (fullColumnIdData[colid]) {
-        errLog('vxe.error.colRepet', ['colId', colid])
-      }
-      fullColumnIdData[colid] = rest
-    }
-
-    if (isGroup) {
-      XEUtils.eachTree(collectColumn, (column, index, items, path, parentColumn, nodes) => {
-        column.level = nodes.length
-        handleFunc(column, index, items, path, parentColumn)
-      })
-    } else {
-      tableFullColumn.forEach(handleFunc)
-    }
-
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      if (expandColumn && mouseOpts.area) {
-        errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
-      }
-    }
-
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      if (htmlColumn) {
-        if (!columnOpts.useKey) {
-          errLog('vxe.error.reqProp', ['column-config.useKey & column.type=html'])
-        }
-        if (!rowOpts.useKey) {
-          errLog('vxe.error.reqProp', ['row-config.useKey & column.type=html'])
-        }
-      }
-    }
-
-    reactData.isGroup = isGroup
-    reactData.treeNodeColumn = treeNodeColumn
-    reactData.expandColumn = expandColumn
-    reactData.isAllOverflow = isAllOverflow
   },
   /**
    * 根据 tr 元素获取对应的 row 信息
@@ -1955,7 +2269,7 @@ const Methods = {
           if (rowRest) {
             rowRest._index = index
           } else {
-            const rest = { row, rowid, seq: '-1', index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0 }
+            const rest = { row, rowid, seq: '-1', index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0, oTop: 0 }
             fullAllDataRowIdData[rowid] = rest
             fullDataRowIdData[rowid] = rest
           }
@@ -1986,7 +2300,7 @@ const Methods = {
           rowRest.seq = seq
           rowRest._index = index
         } else {
-          const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0 }
+          const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0, oTop: 0 }
           fullAllDataRowIdData[rowid] = rest
           fullDataRowIdData[rowid] = rest
         }
@@ -2002,7 +2316,7 @@ const Methods = {
           rowRest.seq = seq
           rowRest._index = index
         } else {
-          const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0 }
+          const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0, oTop: 0 }
           fullAllDataRowIdData[rowid] = rest
           fullDataRowIdData[rowid] = rest
         }
@@ -2707,6 +3021,35 @@ const Methods = {
     })
     Object.assign(this.columnStore, { resizeList, pxList, pxMinList, autoMinList, scaleList, scaleMinList, autoList, remainList })
   },
+  handleResizeDblclickEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const resizableOpts = $xeTable.computeResizableOpts
+    const { isDblclickAutoWidth } = resizableOpts
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    if (isDblclickAutoWidth && el) {
+      const { fullColumnIdData } = internalData
+      const { column } = params
+      const colid = column.id
+      const colRest = fullColumnIdData[colid]
+      let resizeWidth = calcColumnAutoWidth(column, el)
+      if (colRest) {
+        resizeWidth = Math.max(resizeWidth, colRest.width)
+      }
+      column.resizeWidth = resizeWidth
+      reactData._isResize = false
+      internalData._lastResizeTime = Date.now()
+      $xeTable.analyColumnWidth()
+      $xeTable.recalculate(true).then(() => {
+        $xeTable.saveCustomStore('update:visible')
+        $xeTable.updateCellAreas()
+        $xeTable.dispatchEvent('resizable-change', { ...params, resizeWidth }, evnt)
+        setTimeout(() => $xeTable.recalculate(true), 300)
+      })
+    }
+  },
   /**
    * 刷新滚动操作，手动同步滚动相关位置（对于某些特殊的操作，比如滚动条错位、固定列不同步）
    */
@@ -2749,7 +3092,7 @@ const Methods = {
       const refreshDelay = resizeOpts.refreshDelay || 20
       const el = $xeTable.$refs.refElem as HTMLElement
       if (el && el.clientWidth) {
-        $xeTable.autoCellWidth()
+        autoCellWidth($xeTable)
       }
       if (rceTimeout) {
         clearTimeout(rceTimeout)
@@ -2772,197 +3115,6 @@ const Methods = {
         handleRecalculateLayout($xeTable, !!reFull)
       }, refreshDelay)
     })
-  },
-  calcCellWidth () {
-    const $xeTable = this
-
-    const { autoWidthColumnList } = this
-    this.isCalcColumn = true
-    return this.$nextTick().then(() => {
-      const internalData = $xeTable
-
-      const { fullColumnIdData } = internalData
-      const el = this.$el
-      if (el) {
-        autoWidthColumnList.forEach((column: any) => {
-          const colid = column.id
-          const colRest = fullColumnIdData[colid]
-          const cellElList = el.querySelectorAll(`.vxe-header--column.${column.id}>.vxe-cell,.vxe-body--column.${column.id}>.vxe-cell,.vxe-footer--column.${column.id}>.vxe-cell`)
-          const firstCellEl = cellElList[0]
-          let paddingSize = 0
-          if (firstCellEl) {
-            const cellStyle = getComputedStyle(firstCellEl)
-            paddingSize = Math.floor(XEUtils.toNumber(cellStyle.paddingLeft) + XEUtils.toNumber(cellStyle.paddingRight)) + 2
-          }
-          let colWidth = column.renderAutoWidth - paddingSize
-          XEUtils.arrayEach(cellElList, (itemEl) => {
-            const cellEl = itemEl as HTMLElement
-            const thElem = cellEl.parentElement as HTMLElement
-            let titleWidth = 0
-            if (`${thElem.tagName}`.toLowerCase() === 'th') {
-              XEUtils.arrayEach(cellEl.children, (btnEl) => {
-                titleWidth += (btnEl as HTMLElement).offsetWidth + 1
-              })
-            } else {
-              const labelEl = cellEl.firstElementChild as HTMLElement
-              if (labelEl) {
-                titleWidth = labelEl.offsetWidth
-              }
-            }
-            if (titleWidth) {
-              colWidth = Math.max(colWidth, Math.ceil(titleWidth) + 4)
-            }
-          })
-          if (colRest) {
-            colRest.width = Math.max(colWidth, colRest.width)
-          }
-          column.renderAutoWidth = colWidth + paddingSize
-        })
-        this.analyColumnWidth()
-      }
-      this.isCalcColumn = false
-    })
-  },
-  /**
-   * 列宽算法，计算单元格列宽，动态分配可用剩余空间
-   * 支持 px、%、固定 混合分配
-   * 支持动态列表调整分配
-   * 支持自动分配偏移量
-   * 支持 width=60 width=60px width=10% min-width=60 min-width=60px min-width=10%
-   */
-  autoCellWidth () {
-    const { $refs } = this
-    const { tableBody, tableHeader, tableFooter } = $refs
-    const bodyElem = tableBody ? tableBody.$el : null
-    const headerElem = tableHeader ? tableHeader.$el : null
-    const footerElem = tableFooter ? tableFooter.$el : null
-
-    let tableWidth = 0
-    const minCellWidth = 40 // 列宽最少限制 40px
-    const bodyWidth = bodyElem.clientWidth - 1
-    let remainWidth = bodyWidth
-    let meanWidth = remainWidth / 100
-    const { fit, columnStore } = this
-    const { resizeList, pxMinList, pxList, autoMinList, scaleList, scaleMinList, autoList, remainList } = columnStore
-    // 最小宽
-    pxMinList.forEach((column: any) => {
-      const minWidth = parseInt(column.minWidth)
-      tableWidth += minWidth
-      column.renderWidth = minWidth
-    })
-    // 最小自适应
-    autoMinList.forEach((column: any) => {
-      const scaleWidth = Math.max(60, XEUtils.toInteger(column.renderAutoWidth))
-      tableWidth += scaleWidth
-      column.renderWidth = scaleWidth
-    })
-    // 最小百分比
-    scaleMinList.forEach((column: any) => {
-      const scaleWidth = Math.floor(parseInt(column.minWidth) * meanWidth)
-      tableWidth += scaleWidth
-      column.renderWidth = scaleWidth
-    })
-    // 固定百分比
-    scaleList.forEach((column: any) => {
-      const scaleWidth = Math.floor(parseInt(column.width) * meanWidth)
-      tableWidth += scaleWidth
-      column.renderWidth = scaleWidth
-    })
-    // 固定宽
-    pxList.forEach((column: any) => {
-      const width = parseInt(column.width)
-      tableWidth += width
-      column.renderWidth = width
-    })
-    // 自适应宽
-    autoList.forEach((column: any) => {
-      const width = Math.max(60, XEUtils.toInteger(column.renderAutoWidth))
-      tableWidth += width
-      column.renderWidth = width
-    })
-    // 调整了列宽
-    resizeList.forEach((column: any) => {
-      const width = parseInt(column.resizeWidth)
-      tableWidth += width
-      column.renderWidth = width
-    })
-    remainWidth -= tableWidth
-    meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + autoMinList.length + remainList.length)) : 0
-    if (fit) {
-      if (remainWidth > 0) {
-        scaleMinList.concat(pxMinList).concat(autoMinList).forEach((column: any) => {
-          tableWidth += meanWidth
-          column.renderWidth += meanWidth
-        })
-      }
-    } else {
-      meanWidth = minCellWidth
-    }
-    // 剩余均分
-    remainList.forEach((column: any) => {
-      const width = Math.max(meanWidth, minCellWidth)
-      column.renderWidth = width
-      tableWidth += width
-    })
-    if (fit) {
-      /**
-       * 偏移量算法
-       * 如果所有列足够放的情况下，从最后动态列开始分配
-       */
-      const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(autoMinList).concat(remainList)
-      let dynamicSize = dynamicList.length - 1
-      if (dynamicSize > 0) {
-        let odiffer = bodyWidth - tableWidth
-        if (odiffer > 0) {
-          while (odiffer > 0 && dynamicSize >= 0) {
-            odiffer--
-            dynamicList[dynamicSize--].renderWidth++
-          }
-          tableWidth = bodyWidth
-        }
-      }
-    }
-    const tableHeight = bodyElem.offsetHeight
-    const overflowY = bodyElem.scrollHeight > bodyElem.clientHeight
-    this.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyElem.clientWidth : 0
-    this.overflowY = overflowY
-    this.tableWidth = tableWidth
-    this.tableHeight = tableHeight
-    if (headerElem) {
-      this.headerHeight = headerElem.clientHeight
-      this.$nextTick(() => {
-        // 检测是否同步滚动
-        if (headerElem && bodyElem && headerElem.scrollLeft !== bodyElem.scrollLeft) {
-          headerElem.scrollLeft = bodyElem.scrollLeft
-        }
-      })
-    } else {
-      this.headerHeight = 0
-    }
-    let overflowX = false
-    let footerHeight = 0
-    let scrollbarHeight = 0
-    if (footerElem) {
-      footerHeight = footerElem.offsetHeight
-      overflowX = tableWidth > footerElem.clientWidth
-      scrollbarHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
-    } else {
-      overflowX = tableWidth > bodyWidth
-      scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
-    }
-    this.footerHeight = footerHeight
-    this.overflowX = tableWidth > bodyWidth
-    this.scrollbarHeight = scrollbarHeight
-    this.updateHeight()
-    this.parentHeight = Math.max(this.headerHeight + this.footerHeight + 20, this.getParentHeight())
-    if (overflowX) {
-      this.checkScrolling()
-    }
-  },
-  updateHeight () {
-    this.customHeight = calcTableHeight(this, 'height')
-    this.customMinHeight = calcTableHeight(this, 'minHeight')
-    this.customMaxHeight = calcTableHeight(this, 'maxHeight')
   },
   updateStyle () {
     const $xeTable = this
@@ -5448,7 +5600,8 @@ const Methods = {
           $xeTable.dispatchEvent('row-dragend', {
             oldRow: dragRow,
             newRow: prevDragRow,
-            dragPos: prevDragPos as any,
+            dragPos: prevDragPos,
+            dragToChild: isSelfToChildDrag,
             offsetIndex: dragOffsetIndex,
             _index: {
               newIndex: nafIndex,
@@ -5719,6 +5872,7 @@ const Methods = {
             oldColumn,
             newColumn,
             dragPos: prevDragPos,
+            dragToChild: isSelfToChildDrag,
             offsetIndex: dragOffsetIndex,
             _index: {
               newIndex: nafIndex,
@@ -5751,7 +5905,7 @@ const Methods = {
     setTimeout(() => {
       reactData.isDragColMove = false
       $xeTable.recalculate().then(() => {
-        $xeTable.loadScrollXData()
+        loadScrollXData($xeTable)
       })
     }, 500)
   },
@@ -6737,30 +6891,6 @@ const Methods = {
       scrollLeft: bodyElem.scrollLeft
     }
   },
-  loadScrollXData () {
-    const $xeTable = this
-    const reactData = $xeTable
-    const internalData = $xeTable
-
-    const { mergeList, mergeFooterList } = reactData
-    const { scrollXStore } = internalData
-    const { startIndex, endIndex, offsetSize } = scrollXStore
-    const { toVisibleIndex, visibleSize } = handleVirtualXVisible($xeTable)
-    const offsetItem = {
-      startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
-      endIndex: toVisibleIndex + visibleSize + offsetSize
-    }
-    calculateMergerOffsetIndex(mergeList.concat(mergeFooterList), offsetItem, 'col')
-    const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
-    if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
-      if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
-        scrollXStore.startIndex = offsetStartIndex
-        scrollXStore.endIndex = offsetEndIndex
-        $xeTable.updateScrollXData()
-      }
-    }
-    $xeTable.closeTooltip()
-  },
   handleScrollEvent (evnt: Event, isRollY: boolean, isRollX: boolean, scrollTop: number, scrollLeft: number, params: any) {
     const $xeTable = this
     const props = $xeTable
@@ -6862,8 +6992,8 @@ const Methods = {
     $xeTable.dispatchEvent('scroll', evntParams, evnt)
   },
   lazyScrollXData () {
-    const $xeTable = this
-    const internalData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
     const { lxTimeout, lxRunTime, scrollXStore } = internalData
     const { visibleSize } = scrollXStore
@@ -6873,17 +7003,17 @@ const Methods = {
     }
     if (!lxRunTime || lxRunTime + fpsTime < Date.now()) {
       internalData.lxRunTime = Date.now()
-      $xeTable.loadScrollXData()
+      loadScrollXData($xeTable)
     }
     internalData.lxTimeout = setTimeout(() => {
+      internalData.lxTimeout = undefined
       internalData.lxRunTime = undefined
-      internalData.lxRunTime = undefined
-      $xeTable.loadScrollXData()
+      loadScrollXData($xeTable)
     }, fpsTime)
   },
   lazyScrollYData () {
-    const $xeTable = this
-    const internalData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
     const { lyTimeout, lyRunTime, scrollYStore } = internalData
     const { visibleSize } = scrollYStore
@@ -6893,12 +7023,12 @@ const Methods = {
     }
     if (!lyRunTime || lyRunTime + fpsTime < Date.now()) {
       internalData.lyRunTime = Date.now()
-      $xeTable.loadScrollYData()
+      loadScrollYData($xeTable)
     }
     internalData.lyTimeout = setTimeout(() => {
       internalData.lyTimeout = undefined
       internalData.lyRunTime = undefined
-      $xeTable.loadScrollYData()
+      loadScrollYData($xeTable)
     }, fpsTime)
   },
   /**
@@ -6909,7 +7039,7 @@ const Methods = {
 
     const sXOpts = $xeTable.computeSXOpts
     if (sXOpts.immediate) {
-      $xeTable.loadScrollXData()
+      loadScrollXData($xeTable)
     } else {
       $xeTable.lazyScrollXData()
     }
@@ -6922,7 +7052,7 @@ const Methods = {
 
     const sYOpts = $xeTable.computeSYOpts
     if (sYOpts.immediate) {
-      $xeTable.loadScrollYData()
+      loadScrollYData($xeTable)
     } else {
       $xeTable.lazyScrollYData()
     }
@@ -7007,74 +7137,6 @@ const Methods = {
       fixed: ''
     })
   },
-  /**
-   * 纵向 Y 可视渲染处理
-   */
-  loadScrollYData () {
-    const $xeTable = this
-    const props = $xeTable
-    const reactData = $xeTable
-    const internalData = $xeTable
-
-    const { showOverflow } = props
-    const { mergeList } = reactData
-    const { tableHeight, scrollYStore } = internalData
-    const { startIndex, endIndex, offsetSize } = scrollYStore
-    const offsetYSize = showOverflow ? offsetSize : offsetSize + Math.min(8, Math.ceil(tableHeight / 200))
-    const { toVisibleIndex, visibleSize } = handleVirtualYVisible($xeTable)
-    const offsetItem = {
-      startIndex: Math.max(0, toVisibleIndex - 1 - offsetYSize),
-      endIndex: toVisibleIndex + visibleSize + offsetYSize
-    }
-    calculateMergerOffsetIndex(mergeList, offsetItem, 'row')
-    const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
-    if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
-      if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
-        scrollYStore.startIndex = offsetStartIndex
-        scrollYStore.endIndex = offsetEndIndex
-        $xeTable.updateScrollYData()
-      }
-    }
-  },
-  // 计算可视渲染相关数据
-  computeScrollLoad () {
-    const $xeTable = this
-
-    return this.$nextTick().then(() => {
-      const { sYOpts, sXOpts, scrollXLoad, scrollYLoad, scrollXStore, scrollYStore } = this
-      // 计算 X 逻辑
-      if (scrollXLoad) {
-        const { visibleSize: visibleXSize } = handleVirtualXVisible($xeTable)
-        const offsetXSize = Math.max(0, sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : (browse.edge ? 5 : 0))
-        scrollXStore.offsetSize = offsetXSize
-        scrollXStore.visibleSize = visibleXSize
-        scrollXStore.endIndex = Math.max(scrollXStore.startIndex + scrollXStore.visibleSize + offsetXSize, scrollXStore.endIndex)
-        $xeTable.updateScrollXData().then(() => {
-          $xeTable.loadScrollXData()
-        })
-      } else {
-        $xeTable.updateScrollXSpace()
-      }
-      calcCellHeight(this)
-      // 计算 Y 逻辑
-      const rowHeight = computeRowHeight(this)
-      scrollYStore.rowHeight = rowHeight
-      this.rowHeight = rowHeight
-      const { visibleSize: visibleYSize } = handleVirtualYVisible($xeTable)
-      if (scrollYLoad) {
-        const offsetYSize = Math.max(0, sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : (browse.edge ? 10 : 0))
-        scrollYStore.offsetSize = offsetYSize
-        scrollYStore.visibleSize = visibleYSize
-        scrollYStore.endIndex = Math.max(scrollYStore.startIndex + visibleYSize + offsetYSize, scrollYStore.endIndex)
-        $xeTable.updateScrollYData().then(() => {
-          $xeTable.loadScrollYData()
-        })
-      } else {
-        $xeTable.updateScrollYSpace()
-      }
-      $xeTable.$nextTick(this.updateStyle)
-    })
-  },
   handleTableColumn () {
     const { scrollXLoad, visibleColumn, scrollXStore, fullColumnIdData } = this
     const tableColumn: any[] = scrollXLoad ? visibleColumn.slice(scrollXStore.startIndex, scrollXStore.endIndex) : visibleColumn.slice(0)
@@ -7088,22 +7150,23 @@ const Methods = {
     this.tableColumn = tableColumn
   },
   handleUpdateColumn () {
-    const $xeTable = this
-    const internalData = $xeTable
+    const $xeTable = this as VxeTableConstructor
+    const internalData = $xeTable as unknown as TableInternalData
 
     const columnList = XEUtils.orderBy(internalData.collectColumn, 'renderSortNumber')
     internalData.collectColumn = columnList
     const tableFullColumn = getColumnList(columnList)
     internalData.tableFullColumn = tableFullColumn
-    $xeTable.cacheColumnMap()
+    cacheColumnMap($xeTable)
   },
   updateScrollXData () {
     const $xeTable = this
     const props = $xeTable
 
     const { showOverflow } = props
+    $xeTable.handleTableColumn()
+    calcCellHeight($xeTable)
     return $xeTable.$nextTick().then(() => {
-      $xeTable.handleTableColumn()
       calcCellHeight($xeTable)
       $xeTable.updateScrollXSpace()
       if (!showOverflow) {
@@ -7156,8 +7219,9 @@ const Methods = {
   updateScrollYData () {
     const $xeTable = this
 
+    $xeTable.handleTableData()
+    calcCellHeight($xeTable)
     return $xeTable.$nextTick().then(() => {
-      $xeTable.handleTableData()
       calcCellHeight($xeTable)
       $xeTable.updateScrollYSpace()
     })
