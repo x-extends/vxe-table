@@ -7385,6 +7385,7 @@ export default defineComponent({
                   oldRow: dragRow,
                   newRow: prevDragRow,
                   dragPos: prevDragPos as any,
+                  dragToChild: !!prevDragToChild,
                   offsetIndex: dragOffsetIndex
                 })
                 : true
@@ -7529,7 +7530,7 @@ export default defineComponent({
                 oldRow: dragRow,
                 newRow: prevDragRow,
                 dragPos: prevDragPos as any,
-                dragToChild: isSelfToChildDrag,
+                dragToChild: !!prevDragToChild,
                 offsetIndex: dragOffsetIndex,
                 _index: {
                   newIndex: nafIndex,
@@ -7648,6 +7649,7 @@ export default defineComponent({
                   oldColumn,
                   newColumn,
                   dragPos: prevDragPos as any,
+                  dragToChild: !!prevDragToChild,
                   offsetIndex: dragOffsetIndex
                 })
                 : true
@@ -7781,7 +7783,7 @@ export default defineComponent({
                 oldColumn,
                 newColumn,
                 dragPos: prevDragPos,
-                dragToChild: isSelfToChildDrag,
+                dragToChild: !!prevDragToChild,
                 offsetIndex: dragOffsetIndex,
                 _index: {
                   newIndex: nafIndex,

@@ -61,6 +61,8 @@ export default defineComponent({
     const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
     const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
 
+    const defaultLayouts: VxeGridPropTypes.Layouts = [['Form'], ['Toolbar', 'Top', 'Table', 'Bottom', 'Pager']]
+
     const { computeSize } = useFns.useSize(props)
 
     const reactData = reactive<GridReactData>({
@@ -198,12 +200,31 @@ export default defineComponent({
       return tableProps
     })
 
-    const computeCurrLayout = computed(() => {
+    const computeCurrLayoutConf = computed(() => {
       const { layouts } = props
+      let confs: VxeGridPropTypes.Layouts = []
       if (layouts && layouts.length) {
-        return layouts
+        confs = layouts
+      } else {
+        confs = getConfig().grid.layouts || defaultLayouts
       }
-      return getConfig().grid.layouts || ['Form', 'Toolbar', 'Top', 'Table', 'Bottom', 'Pager']
+      let headKeys: VxeGridPropTypes.LayoutKey[] = []
+      let bodyKeys: VxeGridPropTypes.LayoutKey[] = []
+      let footKeys: VxeGridPropTypes.LayoutKey[] = []
+      if (confs.length) {
+        if (XEUtils.isArray(confs[0])) {
+          headKeys = confs[0] as VxeGridPropTypes.LayoutKey[]
+          bodyKeys = (confs[1] || []) as VxeGridPropTypes.LayoutKey[]
+          footKeys = (confs[2] || []) as VxeGridPropTypes.LayoutKey[]
+        } else {
+          bodyKeys = confs as VxeGridPropTypes.LayoutKey[]
+        }
+      }
+      return {
+        headKeys,
+        bodyKeys,
+        footKeys
+      }
     })
 
     const computePageConfFlag = computed(() => {
@@ -675,22 +696,21 @@ export default defineComponent({
       return createCommentVNode()
     }
 
-    const renderLayout = () => {
-      const vns: VNode[] = []
-      const currLayouts = computeCurrLayout.value
-      currLayouts.forEach(name => {
-        switch (name) {
+    const renderChildLayout = (layoutKeys: VxeGridPropTypes.LayoutKey[]) => {
+      const childVNs: VNode[] = []
+      layoutKeys.forEach(key => {
+        switch (key) {
           case 'Form':
-            vns.push(renderForm())
+            childVNs.push(renderForm())
             break
           case 'Toolbar':
-            vns.push(renderToolbar())
+            childVNs.push(renderToolbar())
             break
           case 'Top':
-            vns.push(renderTop())
+            childVNs.push(renderTop())
             break
           case 'Table':
-            vns.push(
+            childVNs.push(
               h('div', {
                 key: 'table',
                 class: 'vxe-grid--table-container'
@@ -702,19 +722,49 @@ export default defineComponent({
             )
             break
           case 'Bottom':
-            vns.push(renderBottom())
+            childVNs.push(renderBottom())
             break
           case 'Pager':
-            vns.push(renderPager())
+            childVNs.push(renderPager())
             break
           default:
-            if (process.env.VUE_APP_VXE_ENV === 'development') {
-              errLog('vxe.error.notProp', [`layouts -> ${name}`])
-            }
+            errLog('vxe.error.notProp', [`layouts -> ${key}`])
             break
         }
       })
-      return vns
+      return childVNs
+    }
+
+    const renderLayout = () => {
+      const currLayoutConf = computeCurrLayoutConf.value
+      const { headKeys, bodyKeys, footKeys } = currLayoutConf
+      const asideLeftSlot = slots.asideLeft || slots['aside-left']
+      const asideRightSlot = slots.asideRight || slots['aside-right']
+      return [
+        h('div', {
+          class: 'vxe-grid--layout-header-wrapper'
+        }, renderChildLayout(headKeys)),
+        h('div', {
+          class: 'vxe-grid--layout-body-wrapper'
+        }, [
+          asideLeftSlot
+            ? h('div', {
+              class: 'vxe-grid--layout-aside-left-wrapper'
+            }, asideLeftSlot({}))
+            : renderEmptyElement($xeGrid),
+          h('div', {
+            class: 'vxe-grid--layout-body-content-wrapper'
+          }, renderChildLayout(bodyKeys)),
+          asideRightSlot
+            ? h('div', {
+              class: 'vxe-grid--layout-aside-right-wrapper'
+            }, asideRightSlot({}))
+            : renderEmptyElement($xeGrid)
+        ]),
+        h('div', {
+          class: 'vxe-grid--layout-footer-wrapper'
+        }, renderChildLayout(footKeys))
+      ]
     }
 
     const tableCompEvents: VxeTableEventProps = {}
@@ -1323,8 +1373,6 @@ export default defineComponent({
     const renderVN = () => {
       const vSize = computeSize.value
       const styles = computeStyles.value
-      const asideLeftSlot = slots.asideLeft || slots['aside-left']
-      const asideRightSlot = slots.asideRight || slots['aside-right']
       return h('div', {
         ref: refElem,
         class: ['vxe-grid', {
@@ -1335,21 +1383,7 @@ export default defineComponent({
           'is--loading': props.loading || reactData.tableLoading
         }],
         style: styles
-      }, [
-        asideLeftSlot
-          ? h('div', {
-            class: 'vxe-grid--aside-left-wrapper'
-          }, asideLeftSlot({}))
-          : renderEmptyElement($xeGrid),
-        h('div', {
-          class: 'vxe-grid--body-content-wrapper'
-        }, renderLayout()),
-        asideRightSlot
-          ? h('div', {
-            class: 'vxe-grid--aside-right-wrapper'
-          }, asideRightSlot({}))
-          : renderEmptyElement($xeGrid)
-      ])
+      }, renderLayout())
     }
 
     $xeGrid.renderVN = renderVN
