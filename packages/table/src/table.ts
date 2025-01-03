@@ -1423,12 +1423,10 @@ export default defineComponent({
     //   }
     //   if (!chRunTime || chRunTime + 10 < Date.now()) {
     //     internalData.chRunTime = Date.now()
-    //     console.log(22)
     //   }
     //   internalData.chTimeout = setTimeout(() => {
     //     internalData.chRunTime = undefined
     //     internalData.chTimeout = undefined
-    //     console.log(111)
     //   }, 80)
     // }
 

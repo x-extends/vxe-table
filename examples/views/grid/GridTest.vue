@@ -7,7 +7,8 @@
 
 <script lang="ts" setup>
 import { ref, reactive, nextTick } from 'vue'
-import { VxeUI, VxeGridProps, VxeColumnPropTypes } from '../../../types'
+import { VxeUI } from '../../../packages'
+import { VxeGridProps, VxeColumnPropTypes } from '../../../types'
 
 interface RowVO {
   id: number
