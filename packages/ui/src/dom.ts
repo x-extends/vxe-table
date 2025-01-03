@@ -73,6 +73,13 @@ export function addClass (elem: any, cls: string) {
   }
 }
 
+export function toCssUnit (val?: number | string, unit = 'px') {
+  if (XEUtils.isNumber(val) || /^\d+$/.test(`${val}`)) {
+    return `${val}${unit}`
+  }
+  return `${val || ''}`
+}
+
 export function getDomNode () {
   const documentElement = document.documentElement
   const bodyElem = document.body

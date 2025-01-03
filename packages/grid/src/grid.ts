@@ -1,7 +1,7 @@
 import { CreateElement, VNode } from 'vue'
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
-import { getOffsetHeight, getPaddingTopBottomSize, getDomNode } from '../../ui/src/dom'
+import { getOffsetHeight, getPaddingTopBottomSize, getDomNode, toCssUnit } from '../../ui/src/dom'
 import { VxeUI } from '../../ui'
 import VxeTableComponent from '../../table/src/table'
 import VxeToolbarComponent from '../../toolbar/src/toolbar'
@@ -9,7 +9,8 @@ import tableComponentProps from '../../table/src/props'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeFormComponent, VxePagerComponent } from 'vxe-pc-ui'
+import type { VxeFormComponent, VxePagerComponent, VxeComponentStyleType } from 'vxe-pc-ui'
+import type{ GridReactData } from '../../../types'
 
 const { getConfig, getI18n, commands, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 
@@ -430,8 +431,25 @@ export default {
     computeZoomOpts () {
       return Object.assign({}, getConfig().grid.zoomConfig, this.zoomConfig)
     },
-    renderStyle () {
-      return this.isZMax ? { zIndex: this.tZindex } : null
+    computeStyles () {
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid as GridReactData
+
+      const { height, maxHeight } = props
+      const { isZMax, tZindex } = reactData
+      const stys: VxeComponentStyleType = {}
+      if (isZMax) {
+        stys.zIndex = tZindex
+      } else {
+        if (height) {
+          stys.height = height === 'auto' || height === '100%' ? '100%' : toCssUnit(height)
+        }
+        if (maxHeight) {
+          stys.maxHeight = maxHeight === 'auto' || maxHeight === '100%' ? '100%' : toCssUnit(maxHeight)
+        }
+      }
+      return stys
     },
     tableExtendProps () {
       const rest: any = {}
@@ -544,18 +562,39 @@ export default {
     globalEvents.off(this, 'keydown')
   },
   render (this: any, h: CreateElement) {
-    const { computeSize, isZMax } = this
-    const vSize = computeSize
+    const $xeGrid = this
+    const props = $xeGrid
+    const reactData = $xeGrid as GridReactData
+    const slots = $xeGrid.$scopedSlots
+
+    const vSize = $xeGrid.computeSize
+    const styles = $xeGrid.computeStyles
+    const asideLeftSlot = slots.asideLeft || slots['aside-left']
+    const asideRightSlot = slots.asideRight || slots['aside-right']
     return h('div', {
       class: ['vxe-grid', {
         [`size--${vSize}`]: vSize,
         'is--animat': !!this.animat,
         'is--round': this.round,
-        'is--maximize': isZMax,
-        'is--loading': this.loading || this.tableLoading
+        'is--maximize': reactData.isZMax,
+        'is--loading': props.loading || reactData.tableLoading
       }],
-      style: this.renderStyle
-    }, renderLayout(h, this))
+      style: styles
+    }, [
+      asideLeftSlot
+        ? h('div', {
+          class: 'vxe-grid--aside-left-wrapper'
+        }, asideLeftSlot.call($xeGrid, {}))
+        : renderEmptyElement($xeGrid),
+      h('div', {
+        class: 'vxe-grid--body-content-wrapper'
+      }, renderLayout(h, $xeGrid)),
+      asideRightSlot
+        ? h('div', {
+          class: 'vxe-grid--aside-right-wrapper'
+        }, asideRightSlot.call($xeGrid, {}))
+        : renderEmptyElement($xeGrid)
+    ])
   },
   methods: {
     ...methods,

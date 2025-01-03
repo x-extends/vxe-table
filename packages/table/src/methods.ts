@@ -7,7 +7,7 @@ import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible,
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf } from '../../../types'
+import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, TableInternalData } from '../../../types'
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent } = VxeUI
 
@@ -289,16 +289,32 @@ function calcTableHeight (_vm: any, key: 'height' | 'minHeight' | 'maxHeight') {
   return num
 }
 
-const calcCellHeight = ($xeTable: any) => {
+// const updateCellOffset = ($xeTable: VxeTableConstructor) => {
+//   const internalData = $xeTable as unknown as TableInternalData
+
+//   const { chTimeout, chRunTime } = internalData
+//   if (chTimeout) {
+//     clearTimeout(chTimeout)
+//   }
+//   if (!chRunTime || chRunTime + 10 < Date.now()) {
+//     internalData.chRunTime = Date.now()
+//   }
+//   internalData.chTimeout = setTimeout(() => {
+//     internalData.chRunTime = undefined
+//     internalData.chTimeout = undefined
+//   }, 80)
+// }
+
+const calcCellHeight = ($xeTable: VxeTableConstructor) => {
   const props = $xeTable
-  const reactData = $xeTable
-  const internalData = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
 
   const { showOverflow } = props
-  const { tableData, scrollXLoad, scrollYLoad } = reactData
+  const { tableData, scrollXLoad } = reactData
   const { fullAllDataRowIdData } = internalData
   const el = $xeTable.$refs.refElem as HTMLDivElement
-  if (!showOverflow && (scrollXLoad || scrollYLoad) && el) {
+  if (!showOverflow && el) {
     let paddingTop = 0
     let paddingBottom = 0
     let calcPadding = false
@@ -329,6 +345,7 @@ const calcCellHeight = ($xeTable: any) => {
       }
     })
   }
+  // updateCellOffset($xeTable)
 }
 
 function getOrderField (_vm: any, column: any) {
@@ -559,7 +576,7 @@ function handleRecalculateLayout ($xeTable: any, reFull: boolean) {
   const internalData = $xeTable
 
   const el = $xeTable.$refs.refElem
-  internalData.reRunTime = Date.now()
+  internalData.rceRunTime = Date.now()
   if (!el || !el.clientWidth) {
     return $xeTable.$nextTick()
   }
@@ -592,10 +609,14 @@ function checkLastSyncScroll ($xeTable: any, isRollX: boolean, isRollY: boolean)
     internalData.bodyScrollType = ''
     internalData.inFooterScroll = false
     if (isRollX && scrollXLoad) {
-      $xeTable.updateScrollXData()
+      $xeTable.updateScrollXData().then(() => {
+        $xeTable.loadScrollXData()
+      })
     }
     if (isRollY && scrollYLoad) {
-      $xeTable.updateScrollYData()
+      $xeTable.updateScrollYData().then(() => {
+        $xeTable.loadScrollYData()
+      })
     }
     $xeTable.updateCellAreas()
   }, 200)
@@ -2456,6 +2477,7 @@ const Methods = {
   saveCustomStore (type: any) {
     const $xeTable = this
     const props = $xeTable
+    const reactData = $xeTable as TableReactData
 
     const { customConfig } = props
     const tableId = $xeTable.computeTableId
@@ -2467,6 +2489,9 @@ const Methods = {
     const isCustomVisible = isAllCustom || storageOpts.visible
     const isCustomFixed = isAllCustom || storageOpts.fixed
     const isCustomSort = isAllCustom || storageOpts.sort
+    if (type !== 'reset') {
+      reactData.isCustomStatus = true
+    }
     if ((customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
       if (!tableId) {
         errLog('vxe.error.reqProp', ['id'])
@@ -2719,7 +2744,7 @@ const Methods = {
     const internalData = $xeTable
 
     return new Promise<void>(resolve => {
-      const { rceTimeout, reRunTime } = internalData
+      const { rceTimeout, rceRunTime } = internalData
       const resizeOpts = $xeTable.computeResizeOpts
       const refreshDelay = resizeOpts.refreshDelay || 20
       const el = $xeTable.$refs.refElem as HTMLElement
@@ -2728,7 +2753,7 @@ const Methods = {
       }
       if (rceTimeout) {
         clearTimeout(rceTimeout)
-        if (reRunTime && reRunTime + (refreshDelay - 5) < Date.now()) {
+        if (rceRunTime && rceRunTime + (refreshDelay - 5) < Date.now()) {
           resolve(
             handleRecalculateLayout($xeTable, !!reFull)
           )
@@ -7024,7 +7049,9 @@ const Methods = {
         scrollXStore.offsetSize = offsetXSize
         scrollXStore.visibleSize = visibleXSize
         scrollXStore.endIndex = Math.max(scrollXStore.startIndex + scrollXStore.visibleSize + offsetXSize, scrollXStore.endIndex)
-        $xeTable.updateScrollXData()
+        $xeTable.updateScrollXData().then(() => {
+          $xeTable.loadScrollXData()
+        })
       } else {
         $xeTable.updateScrollXSpace()
       }
@@ -7039,7 +7066,9 @@ const Methods = {
         scrollYStore.offsetSize = offsetYSize
         scrollYStore.visibleSize = visibleYSize
         scrollYStore.endIndex = Math.max(scrollYStore.startIndex + visibleYSize + offsetYSize, scrollYStore.endIndex)
-        $xeTable.updateScrollYData()
+        $xeTable.updateScrollYData().then(() => {
+          $xeTable.loadScrollYData()
+        })
       } else {
         $xeTable.updateScrollYSpace()
       }

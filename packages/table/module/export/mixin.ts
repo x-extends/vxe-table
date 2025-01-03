@@ -1394,7 +1394,7 @@ export default {
           handleOptions.data = afterFullData
         }
       }
-      return handleExport($xeTable, opts)
+      return handleExport($xeTable, handleOptions)
     },
     _importByFile (file: any, options: any) {
       const opts = Object.assign({}, options)
