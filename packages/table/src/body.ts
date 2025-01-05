@@ -95,7 +95,7 @@ function renderColumn (h: any, _vm: any, $xeTable: any, seq: any, rowid: any, fi
     validErrorMaps
   } = $xeTable
   const rowDragOpts = $xeTable.computeRowDragOpts
-  const { disabledMethod: dragDisabledMethod } = rowDragOpts
+  const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = rowDragOpts
   const { selectCellToRow } = areaOpts
   const cellOpts = $xeTable.computeCellOpts
   const { type, cellRender, editRender, align, showOverflow, className, treeNode, slots } = column
@@ -334,7 +334,7 @@ function renderColumn (h: any, _vm: any, $xeTable: any, seq: any, rowid: any, fi
         'col--ellipsis': hasEllipsis,
         'fixed--width': !isAutoCellWidth,
         'fixed--hidden': fixedHiddenColumn,
-        'is--drag-cell': isRowDragCell,
+        'is--drag-cell': isRowDragCell && (isCrossDrag || isPeerDrag || !rowLevel),
         'is--drag-disabled': isDisabledDrag,
         'col--dirty': isDirty,
         'col--active': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),

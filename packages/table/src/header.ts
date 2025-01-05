@@ -5,7 +5,7 @@ import { getClass } from '../../ui/src/utils'
 import { getOffsetPos, hasClass, addClass, removeClass } from '../../ui/src/dom'
 import { convertHeaderColumnToRows, getColReMinWidth } from './util'
 
-import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
+import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes } from '../../../types'
 
 const { getI18n, renderer, renderEmptyElement } = VxeUI
 
@@ -19,9 +19,9 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
 
   const { resizable: allResizable, border, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, currentColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, mouseConfig, columnOpts } = $xeTable
   const columnDragOpts = $xeTable.computeColumnDragOpts
-  const { disabledMethod: dragDisabledMethod } = columnDragOpts
+  const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
   return cols.map((column: any, $columnIndex: any) => {
-    const { type, showHeaderOverflow, headerAlign, align, headerClassName, editRender, cellRender } = column
+    const { type, showHeaderOverflow, headerAlign, align, filters, headerClassName, editRender, cellRender } = column
     // const { enabled } = tooltipOpts
     const colid = column.id
     const renderOpts = editRender || cellRender
@@ -34,10 +34,15 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
     const showTitle = headOverflow === 'title'
     const showTooltip = headOverflow === true || headOverflow === 'tooltip'
     let hasEllipsis = showTitle || showTooltip || showEllipsis
-    const hasFilter = column.filters && column.filters.some((item: any) => item.checked)
+    let hasFilter = false
+    let firstFilterOption: VxeColumnPropTypes.FilterItem | null = null
+    if (filters) {
+      firstFilterOption = filters[0]
+      hasFilter = filters.some((item: VxeColumnPropTypes.FilterItem) => item.checked)
+    }
     const columnIndex = $xeTable.getColumnIndex(column)
     const _columnIndex = $xeTable.getVTColumnIndex(column)
-    const params = { $table: $xeTable, $grid: $xeGrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
+    const params = { $table: $xeTable, $grid: $xeGrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, firstFilterOption, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
     const thAttrs: Record<string, string | number | null> = {
       colid,
       colspan: column.colSpan > 1 ? column.colSpan : null,
@@ -82,9 +87,9 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
         'fixed--width': !isAutoCellWidth,
         'fixed--hidden': fixedHiddenColumn,
         'is--sortable': column.sortable,
-        'col--filter': !!column.filters,
+        'col--filter': !!filters,
         'is--filter-active': hasFilter,
-        'is--drag-active': !column.fixed && !isDisabledDrag,
+        'is--drag-active': !column.fixed && !isDisabledDrag && (isCrossDrag || isPeerDrag || !column.parentId),
         'is--drag-disabled': isDisabledDrag,
         'col--current': currentColumn === column
       }, getClass(headerClassName, params), getClass(headerCellClassName, params)],

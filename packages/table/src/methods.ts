@@ -3,7 +3,7 @@ import { browse, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEv
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
@@ -3034,11 +3034,15 @@ const Methods = {
       const { column } = params
       const colid = column.id
       const colRest = fullColumnIdData[colid]
+      const dragBtnElem = evnt.target as HTMLDivElement
+      const cell = dragBtnElem.parentNode as HTMLTableCellElement
+      const cellParams = Object.assign(params, { cell })
+      const colMinWidth = getColReMinWidth(cellParams)
       let resizeWidth = calcColumnAutoWidth(column, el)
       if (colRest) {
         resizeWidth = Math.max(resizeWidth, colRest.width)
       }
-      column.resizeWidth = resizeWidth
+      column.resizeWidth = Math.max(colMinWidth, resizeWidth)
       reactData._isResize = false
       internalData._lastResizeTime = Date.now()
       $xeTable.analyColumnWidth()
@@ -5355,16 +5359,17 @@ const Methods = {
     const mouseOpts = $xeTable.computeMouseOpts
     const columnOpts = $xeTable.computeColumnOpts
     const columnDragOpts = $xeTable.computeColumnDragOpts
-    const { trigger, disabledMethod } = columnDragOpts
+    const { trigger, isCrossDrag, isPeerDrag, disabledMethod } = columnDragOpts
     const cell = evnt.currentTarget
     const triggerInput = cell && cell.tagName && cell.tagName.toLowerCase() === 'input'
     const triggerCheckbox = getEventTargetNode(evnt, cell, 'vxe-cell--checkbox').flag
     const triggerSort = getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
     const triggerFilter = getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
     let triggerDrag = false
+    const isColDragCell = columnOpts.drag && trigger === 'cell'
     if (!(triggerInput || triggerCheckbox || triggerSort || triggerFilter)) {
       const { column } = params
-      if (columnOpts.drag && !column.fixed && trigger === 'cell' && !(disabledMethod && disabledMethod(params))) {
+      if (isColDragCell && !column.fixed && (isCrossDrag || isPeerDrag || !column.parentId) && !(disabledMethod && disabledMethod(params))) {
         triggerDrag = true
         $xeTable.handleHeaderCellDragMousedownEvent(evnt, params)
       }
@@ -5390,7 +5395,7 @@ const Methods = {
     const isExpandType = type === 'expand'
     const rowOpts = $xeTable.computeRowOpts
     const rowDragOpts = $xeTable.computeRowDragOpts
-    const { trigger, disabledMethod } = rowDragOpts
+    const { trigger, isCrossDrag, isPeerDrag, disabledMethod } = rowDragOpts
     const cell = evnt.currentTarget
     params.cell = cell
     const triggerInput = cell && cell.tagName && cell.tagName.toLowerCase() === 'input'
@@ -5404,7 +5409,7 @@ const Methods = {
     }
     let triggerDrag = false
     if (!(triggerInput || triggerRadio || triggerCheckbox || triggerTreeNode || triggerExpandNode)) {
-      if (isColDragCell && !(disabledMethod && disabledMethod(params))) {
+      if (isColDragCell && (isCrossDrag || isPeerDrag || !params.level) && !(disabledMethod && disabledMethod(params))) {
         triggerDrag = true
         $xeTable.handleCellDragMousedownEvent(evnt, params)
       }
@@ -5490,7 +5495,7 @@ const Methods = {
                 if (oldLevel && newLevel) {
                   // 子到子
 
-                  if (isPeerDrag) {
+                  if (isPeerDrag && !isCrossDrag) {
                     if (oldRest.row[parentField] !== newRest.row[parentField]) {
                       // 非同级
                       return
@@ -5762,7 +5767,7 @@ const Methods = {
           if (oldColumn.parentId && newColumn.parentId) {
             // 子到子
 
-            if (isPeerDrag) {
+            if (isPeerDrag && !isCrossDrag) {
               if (oldColumn.parentId !== newColumn.parentId) {
                 // 非同级
                 return
@@ -7170,6 +7175,7 @@ const Methods = {
     calcCellHeight($xeTable)
     return $xeTable.$nextTick().then(() => {
       calcCellHeight($xeTable)
+      $xeTable.handleTableColumn()
       $xeTable.updateScrollXSpace()
       if (!showOverflow) {
         $xeTable.updateScrollYSpace()
@@ -7225,6 +7231,7 @@ const Methods = {
     calcCellHeight($xeTable)
     return $xeTable.$nextTick().then(() => {
       calcCellHeight($xeTable)
+      $xeTable.handleTableData()
       $xeTable.updateScrollYSpace()
     })
   },

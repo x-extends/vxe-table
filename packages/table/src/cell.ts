@@ -883,43 +883,45 @@ export const Cell = {
   },
   renderSortIcon (h: CreateElement, params: (VxeTableDefines.CellRenderHeaderParams | VxeTableDefines.CellRenderHeaderParams) & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
-    const { showIcon, iconLayout, iconAsc, iconDesc } = $table.sortOpts
-    return showIcon
-      ? [
-          h('span', {
-            class: ['vxe-cell--sort', `vxe-cell--sort-${iconLayout}-layout`]
-          }, [
-            h('i', {
-              class: ['vxe-sort--asc-btn', iconAsc || getIcon().TABLE_SORT_ASC, {
-                'sort--active': column.order === 'asc'
-              }],
-              attrs: {
-                title: getI18n('vxe.table.sortAsc')
-              },
-              on: {
-                click (evnt: any) {
-                  evnt.stopPropagation()
-                  $table.triggerSortEvent(evnt, column, 'asc')
-                }
+    const sortOpts = $table.computeSortOpts
+    const { showIcon, iconLayout, iconAsc, iconDesc, iconVisibleMethod } = sortOpts
+    if (showIcon && (!iconVisibleMethod || iconVisibleMethod(params))) {
+      return [
+        h('span', {
+          class: ['vxe-cell--sort', `vxe-cell--sort-${iconLayout}-layout`]
+        }, [
+          h('i', {
+            class: ['vxe-sort--asc-btn', iconAsc || getIcon().TABLE_SORT_ASC, {
+              'sort--active': column.order === 'asc'
+            }],
+            attrs: {
+              title: getI18n('vxe.table.sortAsc')
+            },
+            on: {
+              click (evnt: any) {
+                evnt.stopPropagation()
+                $table.triggerSortEvent(evnt, column, 'asc')
               }
-            }),
-            h('i', {
-              class: ['vxe-sort--desc-btn', iconDesc || getIcon().TABLE_SORT_DESC, {
-                'sort--active': column.order === 'desc'
-              }],
-              attrs: {
-                title: getI18n('vxe.table.sortDesc')
-              },
-              on: {
-                click (evnt: any) {
-                  evnt.stopPropagation()
-                  $table.triggerSortEvent(evnt, column, 'desc')
-                }
+            }
+          }),
+          h('i', {
+            class: ['vxe-sort--desc-btn', iconDesc || getIcon().TABLE_SORT_DESC, {
+              'sort--active': column.order === 'desc'
+            }],
+            attrs: {
+              title: getI18n('vxe.table.sortDesc')
+            },
+            on: {
+              click (evnt: any) {
+                evnt.stopPropagation()
+                $table.triggerSortEvent(evnt, column, 'desc')
               }
-            })
-          ])
-        ]
-      : []
+            }
+          })
+        ])
+      ]
+    }
+    return []
   },
 
   /**
@@ -933,30 +935,31 @@ export const Cell = {
     const tableReactData = $table as unknown as TableReactData
     const { filterStore } = tableReactData
     const filterOpts = $table.computeFilterOpts
-    const { showIcon, iconNone, iconMatch } = filterOpts
-    return showIcon
-      ? [
-          h('span', {
-            class: ['vxe-cell--filter', {
-              'is--active': filterStore.visible && filterStore.column === column
-            }]
-          }, [
-            h('i', {
-              class: ['vxe-filter--btn', hasFilter ? (iconMatch || getIcon().TABLE_FILTER_MATCH) : (iconNone || getIcon().TABLE_FILTER_NONE)],
-              attrs: {
-                title: getI18n('vxe.table.filter')
-              },
-              on: {
-                click (evnt: MouseEvent) {
-                  if ($table.triggerFilterEvent) {
-                    $table.triggerFilterEvent(evnt, params.column, params)
-                  }
+    const { showIcon, iconNone, iconMatch, iconVisibleMethod } = filterOpts
+    if (showIcon && (!iconVisibleMethod || iconVisibleMethod(params))) {
+      return [
+        h('span', {
+          class: ['vxe-cell--filter', {
+            'is--active': filterStore.visible && filterStore.column === column
+          }]
+        }, [
+          h('i', {
+            class: ['vxe-filter--btn', hasFilter ? (iconMatch || getIcon().TABLE_FILTER_MATCH) : (iconNone || getIcon().TABLE_FILTER_NONE)],
+            attrs: {
+              title: getI18n('vxe.table.filter')
+            },
+            on: {
+              click (evnt: MouseEvent) {
+                if ($table.triggerFilterEvent) {
+                  $table.triggerFilterEvent(evnt, params.column, params)
                 }
               }
-            })
-          ])
-        ]
-      : []
+            }
+          })
+        ])
+      ]
+    }
+    return []
   },
 
   /**
