@@ -141,7 +141,7 @@ export default defineComponent({
       const tooltipOpts = computeTooltipOpts.value
       const rowOpts = computeRowOpts.value
       const rowDragOpts = computeRowDragOpts.value
-      const { disabledMethod: dragDisabledMethod } = rowDragOpts
+      const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = rowDragOpts
       const sYOpts = computeSYOpts.value
       const columnOpts = computeColumnOpts.value
       const mouseOpts = computeMouseOpts.value
@@ -386,7 +386,7 @@ export default defineComponent({
             'col--ellipsis': hasEllipsis,
             'fixed--width': !isAutoCellWidth,
             'fixed--hidden': fixedHiddenColumn,
-            'is--drag-cell': isRowDragCell,
+            'is--drag-cell': isRowDragCell && (isCrossDrag || isPeerDrag || !rowLevel),
             'is--drag-disabled': isDisabledDrag,
             'col--dirty': isDirty,
             'col--active': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),

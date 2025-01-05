@@ -9,7 +9,7 @@ import TableHeaderComponent from './header'
 import TableFooterComponent from './footer'
 import tableProps from './props'
 import tableEmits from './emits'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 import TableCustomPanelComponent from '../module/custom/panel'
@@ -6514,11 +6514,15 @@ export default defineComponent({
           const { column } = params
           const colid = column.id
           const colRest = fullColumnIdData[colid]
+          const dragBtnElem = evnt.target as HTMLDivElement
+          const cell = dragBtnElem.parentNode as HTMLTableCellElement
+          const cellParams = Object.assign(params, { cell })
+          const colMinWidth = getColReMinWidth(cellParams)
           let resizeWidth = calcColumnAutoWidth(column, el)
           if (colRest) {
             resizeWidth = Math.max(resizeWidth, colRest.width)
           }
-          column.resizeWidth = resizeWidth
+          column.resizeWidth = Math.max(colMinWidth, resizeWidth)
           reactData._isResize = false
           internalData._lastResizeTime = Date.now()
           $xeTable.analyColumnWidth()
@@ -7292,16 +7296,17 @@ export default defineComponent({
         const mouseOpts = computeMouseOpts.value
         const columnOpts = computeColumnOpts.value
         const columnDragOpts = computeColumnDragOpts.value
-        const { trigger, disabledMethod } = columnDragOpts
+        const { trigger, isCrossDrag, isPeerDrag, disabledMethod } = columnDragOpts
         const cell = evnt.currentTarget as HTMLDivElement
         const triggerInput = cell && cell.tagName && cell.tagName.toLowerCase() === 'input'
         const triggerCheckbox = getEventTargetNode(evnt, cell, 'vxe-cell--checkbox').flag
         const triggerSort = getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
         const triggerFilter = getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
         let triggerDrag = false
+        const isColDragCell = columnOpts.drag && trigger === 'cell'
         if (!(triggerInput || triggerCheckbox || triggerSort || triggerFilter)) {
           const { column } = params
-          if (columnOpts.drag && !column.fixed && trigger === 'cell' && !(disabledMethod && disabledMethod(params))) {
+          if (isColDragCell && !column.fixed && (isCrossDrag || isPeerDrag || !column.parentId) && !(disabledMethod && disabledMethod(params))) {
             triggerDrag = true
             $xeTable.handleHeaderCellDragMousedownEvent(evnt, params)
           }
@@ -7325,7 +7330,7 @@ export default defineComponent({
         const isExpandType = type === 'expand'
         const rowOpts = computeRowOpts.value
         const rowDragOpts = computeRowDragOpts.value
-        const { trigger, disabledMethod } = rowDragOpts
+        const { trigger, isCrossDrag, isPeerDrag, disabledMethod } = rowDragOpts
         const cell = evnt.currentTarget as HTMLElement
         params.cell = cell
         const triggerInput = cell && cell.tagName && cell.tagName.toLowerCase() === 'input'
@@ -7339,7 +7344,7 @@ export default defineComponent({
         }
         let triggerDrag = false
         if (!(triggerInput || triggerRadio || triggerCheckbox || triggerTreeNode || triggerExpandNode)) {
-          if (isColDragCell && !(disabledMethod && disabledMethod(params))) {
+          if (isColDragCell && (isCrossDrag || isPeerDrag || !params.level) && !(disabledMethod && disabledMethod(params))) {
             triggerDrag = true
             $xeTable.handleCellDragMousedownEvent(evnt, params)
           }
@@ -7418,7 +7423,7 @@ export default defineComponent({
                     if (oldLevel && newLevel) {
                       // 子到子
 
-                      if (isPeerDrag) {
+                      if (isPeerDrag && !isCrossDrag) {
                         if (oldRest.row[parentField] !== newRest.row[parentField]) {
                           // 非同级
                           return
@@ -7671,7 +7676,7 @@ export default defineComponent({
               if (oldColumn.parentId && newColumn.parentId) {
                 // 子到子
 
-                if (isPeerDrag) {
+                if (isPeerDrag && !isCrossDrag) {
                   if (oldColumn.parentId !== newColumn.parentId) {
                     // 非同级
                     return
@@ -8158,6 +8163,7 @@ export default defineComponent({
         calcCellHeight()
         return nextTick().then(() => {
           calcCellHeight()
+          handleTableColumn()
           tablePrivateMethods.updateScrollXSpace()
           if (!showOverflow) {
             tablePrivateMethods.updateScrollYSpace()
@@ -8169,6 +8175,7 @@ export default defineComponent({
         calcCellHeight()
         return nextTick().then(() => {
           calcCellHeight()
+          tablePrivateMethods.handleTableData()
           tablePrivateMethods.updateScrollYSpace()
         })
       },

@@ -899,9 +899,9 @@ export const Cell = {
     const { $table, column } = params
     const { computeSortOpts } = $table.getComputeMaps()
     const sortOpts = computeSortOpts.value
-    const { showIcon, iconLayout, iconAsc, iconDesc } = sortOpts
+    const { showIcon, iconLayout, iconAsc, iconDesc, iconVisibleMethod } = sortOpts
     const { order } = column
-    if (showIcon) {
+    if (showIcon && (!iconVisibleMethod || iconVisibleMethod(params))) {
       return [
         h('span', {
           class: ['vxe-cell--sort', `vxe-cell--sort-${iconLayout}-layout`]
@@ -944,26 +944,27 @@ export const Cell = {
     const { filterStore } = tableReactData
     const { computeFilterOpts } = $table.getComputeMaps()
     const filterOpts = computeFilterOpts.value
-    const { showIcon, iconNone, iconMatch } = filterOpts
-    return showIcon
-      ? [
-          h('span', {
-            class: ['vxe-cell--filter', {
-              'is--active': filterStore.visible && filterStore.column === column
-            }]
-          }, [
-            h('i', {
-              class: ['vxe-filter--btn', hasFilter ? (iconMatch || getIcon().TABLE_FILTER_MATCH) : (iconNone || getIcon().TABLE_FILTER_NONE)],
-              title: getI18n('vxe.table.filter'),
-              onClick (evnt) {
-                if ($table.triggerFilterEvent) {
-                  $table.triggerFilterEvent(evnt, params.column, params)
-                }
+    const { showIcon, iconNone, iconMatch, iconVisibleMethod } = filterOpts
+    if (showIcon && (!iconVisibleMethod || iconVisibleMethod(params))) {
+      return [
+        h('span', {
+          class: ['vxe-cell--filter', {
+            'is--active': filterStore.visible && filterStore.column === column
+          }]
+        }, [
+          h('i', {
+            class: ['vxe-filter--btn', hasFilter ? (iconMatch || getIcon().TABLE_FILTER_MATCH) : (iconNone || getIcon().TABLE_FILTER_NONE)],
+            title: getI18n('vxe.table.filter'),
+            onClick (evnt) {
+              if ($table.triggerFilterEvent) {
+                $table.triggerFilterEvent(evnt, params.column, params)
               }
-            })
-          ])
-        ]
-      : []
+            }
+          })
+        ])
+      ]
+    }
+    return []
   },
 
   /**

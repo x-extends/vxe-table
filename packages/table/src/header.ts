@@ -171,9 +171,9 @@ export default defineComponent({
       const { currentColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth } = tableReactData
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
-      const { disabledMethod: dragDisabledMethod } = columnDragOpts
+      const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
       return cols.map((column, $columnIndex) => {
-        const { type, showHeaderOverflow, headerAlign, align, headerClassName, editRender, cellRender } = column
+        const { type, showHeaderOverflow, headerAlign, align, filters, headerClassName, editRender, cellRender } = column
         const colid = column.id
         const renderOpts = editRender || cellRender
         const compConf = renderOpts ? renderer.get(renderOpts.name) : null
@@ -185,12 +185,17 @@ export default defineComponent({
         const showTitle = headOverflow === 'title'
         const showTooltip = headOverflow === true || headOverflow === 'tooltip'
         let hasEllipsis = showTitle || showTooltip || showEllipsis
-        const hasFilter = column.filters && column.filters.some((item) => item.checked)
+        let hasFilter = false
+        let firstFilterOption: VxeColumnPropTypes.FilterItem | null = null
+        if (filters) {
+          firstFilterOption = filters[0]
+          hasFilter = filters.some((item) => item.checked)
+        }
         const columnIndex = $xeTable.getColumnIndex(column)
         const _columnIndex = $xeTable.getVTColumnIndex(column)
         const params: VxeTableDefines.CellRenderHeaderParams & {
           $table: VxeTableConstructor & VxeTablePrivateMethods
-        } = { $table: $xeTable, $grid: $xeTable.xegrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
+        } = { $table: $xeTable, $grid: $xeTable.xegrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, firstFilterOption, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
         const thAttrs: Record<string, string | number | null> = {
           colid,
           colspan: column.colSpan > 1 ? column.colSpan : null,
@@ -235,9 +240,9 @@ export default defineComponent({
             'fixed--width': !isAutoCellWidth,
             'fixed--hidden': fixedHiddenColumn,
             'is--sortable': column.sortable,
-            'col--filter': !!column.filters,
+            'col--filter': !!filters,
             'is--filter-active': hasFilter,
-            'is--drag-active': !column.fixed && !isDisabledDrag,
+            'is--drag-active': !column.fixed && !isDisabledDrag && (isCrossDrag || isPeerDrag || !column.parentId),
             'is--drag-disabled': isDisabledDrag,
             'col--current': currentColumn === column
           },
