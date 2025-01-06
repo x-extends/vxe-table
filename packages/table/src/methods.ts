@@ -211,7 +211,7 @@ function cacheColumnMap ($xeTable: VxeTableConstructor) {
     }
   }
 
-  if (process.env.VUE_APP_VXE_ENV === 'development') {
+  if (process.env.VUE_APP_VXE_ENV === 'developmeznt') {
     if (htmlColumn) {
       if (!columnOpts.useKey) {
         errLog('vxe.error.reqProp', ['column-config.useKey & column.type=html'])
@@ -7329,6 +7329,11 @@ const Methods = {
       scrollYSpaceEl.style.height = ySpaceHeight
     }
     this.$nextTick(this.updateStyle)
+  },
+  updateScrollYStatus () {
+    const $xeTable = this
+
+    return updateScrollYStatus($xeTable)
   },
   /**
    * 如果有滚动条，则滚动到对应的位置
