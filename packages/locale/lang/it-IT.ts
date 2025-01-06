@@ -11,6 +11,7 @@ export default {
     },
     error: {
       downErr: 'Download non riuscito',
+      errLargeData: '当绑定的数据量过大时，应该请使用 {0}，否则可能会出现卡顿',
       groupFixed: 'Se si utilizzano intestazioni di gruppo, le colonne bloccate devono essere impostate per gruppo',
       groupMouseRange: "L'intestazione del gruppo e \"{0}\" non possono essere utilizzate contemporaneamente, il che potrebbe causare un errore.",
       groupTag: 'Le intestazioni delle colonne di raggruppamento devono utilizzare "{0}" anziché "{1}", il che potrebbe causare errori',

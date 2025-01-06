@@ -875,6 +875,7 @@ export default defineComponent({
     }
 
     const handleVirtualYVisible = () => {
+      const { showOverflow } = props
       const { scrollYStore, afterFullData, fullAllDataRowIdData } = internalData
       const tableBody = refTableBody.value
       const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
@@ -885,21 +886,26 @@ export default defineComponent({
         let toVisibleIndex = -1
         let offsetTop = 0
         let visibleSize = 0
-        for (let rIndex = 0, rLen = afterFullData.length; rIndex < rLen; rIndex++) {
-          const row = afterFullData[rIndex]
-          const rowid = getRowid($xeTable, row)
-          const rowRest = fullAllDataRowIdData[rowid]
-          if (!rowRest) {
-            break
-          }
-          offsetTop += rowRest.height || rowHeight
-          if (toVisibleIndex === -1 && scrollTop < offsetTop) {
-            toVisibleIndex = rIndex
-          }
-          if (toVisibleIndex >= 0) {
-            visibleSize++
-            if (offsetTop > endHeight) {
+        if (showOverflow) {
+          toVisibleIndex = Math.floor(scrollTop / rowHeight)
+          visibleSize = Math.ceil(clientHeight / rowHeight) + 1
+        } else {
+          for (let rIndex = 0, rLen = afterFullData.length; rIndex < rLen; rIndex++) {
+            const row = afterFullData[rIndex]
+            const rowid = getRowid($xeTable, row)
+            const rowRest = fullAllDataRowIdData[rowid]
+            if (!rowRest) {
               break
+            }
+            offsetTop += rowRest.height || rowHeight
+            if (toVisibleIndex === -1 && scrollTop < offsetTop) {
+              toVisibleIndex = rIndex
+            }
+            if (toVisibleIndex >= 0) {
+              visibleSize++
+              if (offsetTop > endHeight) {
+                break
+              }
             }
           }
         }
@@ -8719,22 +8725,24 @@ export default defineComponent({
     })
     watch(dataFlag, () => {
       const { initStatus } = internalData
-      loadTableData(props.data || []).then(() => {
+      const value = props.data || []
+      if (value && value.length >= 50000) {
+        warnLog('vxe.error.errLargeData', ['loadData(data), reloadData(data)'])
+      }
+      loadTableData(value).then(() => {
         const { scrollXLoad, scrollYLoad, expandColumn } = reactData
         internalData.inited = true
         internalData.initStatus = true
         if (!initStatus) {
           handleLoadDefaults()
         }
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          // const checkboxOpts = computeCheckboxOpts.value
-          // const checkboxColumn = internalData.tableFullColumn.find(column => column.type === 'checkbox')
-          // if (checkboxColumn && internalData.tableFullData.length > 300 && !checkboxOpts.checkField) {
-          //   warnLog('vxe.error.checkProp', ['checkbox-config.checkField'])
-          // }
-          if ((scrollXLoad || scrollYLoad) && expandColumn) {
-            warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
-          }
+        // const checkboxOpts = computeCheckboxOpts.value
+        // const checkboxColumn = internalData.tableFullColumn.find(column => column.type === 'checkbox')
+        // if (checkboxColumn && internalData.tableFullData.length > 300 && !checkboxOpts.checkField) {
+        //   warnLog('vxe.error.checkProp', ['checkbox-config.checkField'])
+        // }
+        if ((scrollXLoad || scrollYLoad) && expandColumn) {
+          warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
         }
         tableMethods.recalculate()
       })
