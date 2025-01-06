@@ -2439,25 +2439,28 @@ export default defineComponent({
         const { loadMethod } = expandOpts
         if (loadMethod) {
           const { fullAllDataRowIdData } = internalData
-          const { rowExpandLazyLoadedMaps } = reactData
+          const rExpandLazyLoadedMaps = { ...reactData.rowExpandLazyLoadedMaps }
           const rowid = getRowid($xeTable, row)
           const rowRest = fullAllDataRowIdData[rowid]
-          rowExpandLazyLoadedMaps[rowid] = row
+          rExpandLazyLoadedMaps[rowid] = row
+          reactData.rowExpandLazyLoadedMaps = rExpandLazyLoadedMaps
           loadMethod({ $table: $xeTable, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) }).then(() => {
-            const { rowExpandedMaps } = reactData
+            const rExpandedMaps = { ...reactData.rowExpandedMaps }
             if (rowRest) {
               rowRest.expandLoaded = true
             }
-            rowExpandedMaps[rowid] = row
+            rExpandedMaps[rowid] = row
+            reactData.rowExpandedMaps = rExpandedMaps
           }).catch(() => {
             if (rowRest) {
               rowRest.expandLoaded = false
             }
           }).finally(() => {
-            const { rowExpandLazyLoadedMaps } = reactData
-            if (rowExpandLazyLoadedMaps[rowid]) {
-              delete rowExpandLazyLoadedMaps[rowid]
+            const rExpandLazyLoadedMaps = { ...reactData.rowExpandLazyLoadedMaps }
+            if (rExpandLazyLoadedMaps[rowid]) {
+              delete rExpandLazyLoadedMaps[rowid]
             }
+            reactData.rowExpandLazyLoadedMaps = rExpandLazyLoadedMaps
             nextTick().then(() => tableMethods.recalculate()).then(() => resolve())
           })
         } else {
@@ -4796,7 +4799,7 @@ export default defineComponent({
         return rowRest && !!rowRest.expandLoaded
       },
       clearRowExpandLoaded (row) {
-        const { rowExpandLazyLoadedMaps } = reactData
+        const rExpandLazyLoadedMaps = { ...reactData.rowExpandLazyLoadedMaps }
         const { fullAllDataRowIdData } = internalData
         const expandOpts = computeExpandOpts.value
         const { lazy } = expandOpts
@@ -4804,8 +4807,9 @@ export default defineComponent({
         const rowRest = fullAllDataRowIdData[rowid]
         if (lazy && rowRest) {
           rowRest.expandLoaded = false
-          delete rowExpandLazyLoadedMaps[rowid]
+          delete rExpandLazyLoadedMaps[rowid]
         }
+        reactData.rowExpandLazyLoadedMaps = rExpandLazyLoadedMaps
         return nextTick()
       },
       /**
@@ -4974,7 +4978,7 @@ export default defineComponent({
         return rowRest && !!rowRest.treeLoaded
       },
       clearTreeExpandLoaded (rows: any) {
-        const { treeExpandedMaps } = reactData
+        const tExpandedMaps = { ...reactData.treeExpandedMaps }
         const { fullAllDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
         const { transform } = treeOpts
@@ -4987,12 +4991,13 @@ export default defineComponent({
             const rowRest = fullAllDataRowIdData[rowid]
             if (rowRest) {
               rowRest.treeLoaded = false
-              if (treeExpandedMaps[rowid]) {
-                delete treeExpandedMaps[rowid]
+              if (tExpandedMaps[rowid]) {
+                delete tExpandedMaps[rowid]
               }
             }
           })
         }
+        reactData.treeExpandedMaps = tExpandedMaps
         if (transform) {
           handleVirtualTreeToList()
           return tablePrivateMethods.handleTableData()
