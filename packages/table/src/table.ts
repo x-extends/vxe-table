@@ -2710,7 +2710,14 @@ export default defineComponent({
           colRest.$index = $index
         }
       })
-      reactData.tableColumn = tableColumn
+      if (reactData.tableColumn.length !== tableColumn.length) {
+        reactData.tableColumn = tableColumn
+      } else {
+        const columnIds = new Set(reactData.tableColumn.map(item => item.id))
+        if (!tableColumn.map(item => item.id).every(id => columnIds.has(id))) {
+          reactData.tableColumn = tableColumn
+        }
+      }
     }
 
     const handleUpdateColumn = () => {
@@ -6376,7 +6383,16 @@ export default defineComponent({
             rest.$index = $index
           }
         })
-        reactData.tableData = tableData
+        if (tableData.length !== reactData.tableData.length) {
+          reactData.tableData = tableData
+        } else {
+          const reactDataIds = new Set(reactData.tableData.map(row => getRowid($xeTable, row)))
+          if (
+            !tableData.map(row => getRowid($xeTable, row)).every(rowid => reactDataIds.has(rowid))
+          ) {
+            reactData.tableData = tableData
+          }
+        }
         return nextTick()
       },
       /**
