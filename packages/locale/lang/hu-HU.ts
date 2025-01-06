@@ -11,6 +11,7 @@ export default {
     },
     error: {
       downErr: 'Letöltés sikertelen',
+      errLargeData: '当绑定的数据量过大时，应该请使用 {0}，否则可能会出现卡顿',
       groupFixed: 'Csoportfejlécek használata esetén a rögzített oszlopokat csoportonként kell beállítani',
       groupMouseRange: 'A csoportfejléc és a „{0}” nem használhatók egyszerre, ami hibát okozhat.',
       groupTag: 'A csoportosító oszlopfejlécben a „{0}” értéket kell használni a „{1}” helyett, ami hibákat okozhat',

@@ -253,12 +253,14 @@ function computeRowHeight ($xeTable: any) {
   return Math.max(18, rowHeight)
 }
 
-function handleVirtualYVisible ($xeTable: any) {
-  const internalData = $xeTable
+function handleVirtualYVisible ($xeTable: VxeTableConstructor) {
+  const props = $xeTable
+  const internalData = $xeTable as unknown as TableInternalData
 
+  const { showOverflow } = props
   const { scrollYStore, afterFullData, fullAllDataRowIdData } = internalData
   const tableBody = $xeTable.$refs.tableBody
-  const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+  const tableBodyElem = tableBody ? (tableBody as any).$el as HTMLDivElement : null
   const { rowHeight } = scrollYStore
   if (tableBodyElem) {
     const { scrollTop, clientHeight } = tableBodyElem
@@ -266,21 +268,26 @@ function handleVirtualYVisible ($xeTable: any) {
     let toVisibleIndex = -1
     let offsetTop = 0
     let visibleSize = 0
-    for (let rIndex = 0, rLen = afterFullData.length; rIndex < rLen; rIndex++) {
-      const row = afterFullData[rIndex]
-      const rowid = getRowid($xeTable, row)
-      const rowRest = fullAllDataRowIdData[rowid]
-      if (!rowRest) {
-        break
-      }
-      offsetTop += rowRest.height || rowHeight
-      if (toVisibleIndex === -1 && scrollTop < offsetTop) {
-        toVisibleIndex = rIndex
-      }
-      if (toVisibleIndex >= 0) {
-        visibleSize++
-        if (offsetTop > endHeight) {
+    if (showOverflow) {
+      toVisibleIndex = Math.floor(scrollTop / rowHeight)
+      visibleSize = Math.ceil(clientHeight / rowHeight) + 1
+    } else {
+      for (let rIndex = 0, rLen = afterFullData.length; rIndex < rLen; rIndex++) {
+        const row = afterFullData[rIndex]
+        const rowid = getRowid($xeTable, row)
+        const rowRest = fullAllDataRowIdData[rowid]
+        if (!rowRest) {
           break
+        }
+        offsetTop += rowRest.height || rowHeight
+        if (toVisibleIndex === -1 && scrollTop < offsetTop) {
+          toVisibleIndex = rIndex
+        }
+        if (toVisibleIndex >= 0) {
+          visibleSize++
+          if (offsetTop > endHeight) {
+            break
+          }
         }
       }
     }

@@ -11,6 +11,7 @@ export default {
     },
     error: {
       downErr: '下载失败',
+      errLargeData: '当绑定的数据量过大时，应该请使用 {0}，否则可能会出现卡顿',
       groupFixed: 'If you use group headers, the freeze columns must be set by group.',
       groupMouseRange: 'Agrupar cabeçalhos e "{0}" não podem ser usados ao mesmo tempo, o que pode causar erros.',
       groupTag: 'O cabeçalho da coluna de agrupamento deve usar "{0}" em vez de "{1}", o que pode causar erros.',

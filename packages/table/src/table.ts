@@ -794,7 +794,10 @@ export default {
   watch: {
     data (value: any) {
       const { initStatus } = this
-      this.loadTableData(value).then(() => {
+      if (value && value.length >= 50000) {
+        warnLog('vxe.error.errLargeData', ['loadData(data), reloadData(data)'])
+      }
+      this.loadTableData(value || []).then(() => {
         this.inited = true
         this.initStatus = true
         if (!initStatus) {
