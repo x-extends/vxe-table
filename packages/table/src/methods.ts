@@ -228,6 +228,60 @@ function cacheColumnMap ($xeTable: VxeTableConstructor) {
   reactData.isAllOverflow = isAllOverflow
 }
 
+const updateScrollYStatus = ($xeTable: VxeTableConstructor, fullData?: any[]) => {
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { treeConfig } = props
+  const sYOpts = $xeTable.computeSYOpts
+  const treeOpts = $xeTable.computeTreeOpts
+  const { transform } = treeOpts
+  const allList = fullData || internalData.tableFullData
+  // 如果gt为0，则总是启用
+  const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt < allList.length)
+  reactData.scrollYLoad = scrollYLoad
+  return scrollYLoad
+}
+
+/**
+ * 如果为虚拟树，将树结构拍平
+ * @returns
+ */
+function handleVirtualTreeToList ($xeTable: VxeTableConstructor) {
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { treeConfig } = props
+  const { treeExpandedMaps } = reactData
+  const { fullAllDataRowIdData } = internalData
+  const treeOpts = $xeTable.computeTreeOpts
+  const childrenField = treeOpts.children || treeOpts.childrenField
+  if (treeConfig && treeOpts.transform) {
+    const fullData: any[] = []
+    const expandMaps: {
+      [key: string]: number
+    } = {}
+    XEUtils.eachTree(internalData.afterTreeFullData, (row, index, items, path, parentRow) => {
+      const rowid = getRowid($xeTable, row)
+      const parentRowid = getRowid($xeTable, parentRow)
+      if (!parentRow || (expandMaps[parentRowid] && treeExpandedMaps[parentRowid])) {
+        const rowRest = fullAllDataRowIdData[rowid]
+        if (rowRest) {
+          rowRest._index = fullData.length
+        }
+        expandMaps[rowid] = 1
+        fullData.push(row)
+      }
+    }, { children: childrenField })
+    internalData.afterFullData = fullData
+    updateScrollYStatus($xeTable, fullData)
+    return fullData
+  }
+  return internalData.afterFullData
+}
+
 function computeRowHeight ($xeTable: any) {
   const tableHeader = $xeTable.$refs.tableHeader
   const tableBody = $xeTable.$refs.tableBody
@@ -1146,6 +1200,8 @@ const Methods = {
     })
   },
   handleTableData (force: any) {
+    const $xeTable = this
+
     const { scrollYLoad, scrollYStore, fullDataRowIdData, afterFullData } = this
     let fullList = afterFullData
     // 是否进行数据处理
@@ -1153,7 +1209,7 @@ const Methods = {
       // 更新数据，处理筛选和排序
       this.updateAfterFullData()
       // 如果为虚拟树，将树结构拍平
-      fullList = this.handleVirtualTreeToList()
+      fullList = handleVirtualTreeToList($xeTable)
     }
     const tableData = scrollYLoad ? fullList.slice(scrollYStore.startIndex, scrollYStore.endIndex) : fullList.slice(0)
     tableData.forEach((row: any, $index: any) => {
@@ -1165,15 +1221,6 @@ const Methods = {
     })
     this.tableData = tableData
     return this.$nextTick()
-  },
-  updateScrollYStatus (fullData: any) {
-    const { treeConfig, treeOpts, sYOpts } = this
-    const { transform } = treeOpts
-    const allList = fullData || this.tableFullData
-    // 如果gt为0，则总是启用
-    const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt <= allList.length)
-    this.scrollYLoad = scrollYLoad
-    return scrollYLoad
   },
   /**
    * 加载表格数据
@@ -1230,7 +1277,7 @@ const Methods = {
     editStore.insertMaps = {}
     editStore.removeList = []
     editStore.removeMaps = {}
-    const sYLoad = this.updateScrollYStatus(fullData)
+    const sYLoad = updateScrollYStatus($xeTable, fullData)
     this.isDragRowMove = false
     // 全量数据
     this.tableFullData = fullData
@@ -2105,38 +2152,6 @@ const Methods = {
       })
     }
     return rowList
-  },
-  /**
-   * 如果为虚拟树，将树结构拍平
-   * @returns
-   */
-  handleVirtualTreeToList () {
-    const $xeTable = this
-    const internalData = $xeTable
-
-    const { fullAllDataRowIdData } = internalData
-    const { treeOpts, treeConfig, treeExpandedMaps, afterTreeFullData, afterFullData } = this
-    const childrenField = treeOpts.children || treeOpts.childrenField
-    if (treeConfig && treeOpts.transform) {
-      const fullData: any[] = []
-      const expandMaps: any = {}
-      XEUtils.eachTree(afterTreeFullData, (row, index, items, path, parentRow) => {
-        const rowid = getRowid(this, row)
-        const parentRowid = getRowid(this, parentRow)
-        if (!parentRow || (expandMaps[parentRowid] && treeExpandedMaps[parentRowid])) {
-          const rowRest = fullAllDataRowIdData[rowid]
-          if (rowRest) {
-            rowRest._index = fullData.length
-          }
-          expandMaps[rowid] = 1
-          fullData.push(row)
-        }
-      }, { children: childrenField })
-      this.afterFullData = fullData
-      this.updateScrollYStatus(fullData)
-      return fullData
-    }
-    return afterFullData
   },
   /**
    * 获取处理后全量的表格数据
@@ -5597,7 +5612,7 @@ const Methods = {
           reactData.isDragRowMove = true
           $xeTable.handleTableData(treeConfig && transform)
           $xeTable.cacheRowMap()
-          $xeTable.updateScrollYStatus()
+          updateScrollYStatus($xeTable)
           if (!(treeConfig && transform)) {
             $xeTable.updateAfterDataIndex()
           }
@@ -6286,21 +6301,22 @@ const Methods = {
     return rowRest && !!rowRest.expandLoaded
   },
   clearRowExpandLoaded (row: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { expandOpts, rowExpandLazyLoadedMaps, fullAllDataRowIdData } = this
+    const rExpandLazyLoadedMaps = { ...reactData.rowExpandLazyLoadedMaps }
+    const { fullAllDataRowIdData } = internalData
+    const expandOpts = $xeTable.computeExpandOpts
     const { lazy } = expandOpts
     const rowid = getRowid($xeTable, row)
     const rowRest = fullAllDataRowIdData[rowid]
     if (lazy && rowRest) {
       rowRest.expandLoaded = false
-      const rowTempExpandLazyLoadedMaps = { ...rowExpandLazyLoadedMaps }
-      if (rowTempExpandLazyLoadedMaps[rowid]) {
-        delete rowTempExpandLazyLoadedMaps[rowid]
-      }
-      this.rowExpandLazyLoadedMaps = rowTempExpandLazyLoadedMaps
+      delete rExpandLazyLoadedMaps[rowid]
     }
-    return this.$nextTick()
+    reactData.rowExpandLazyLoadedMaps = rExpandLazyLoadedMaps
+    return $xeTable.$nextTick()
   },
   /**
    * 重新懒加载展开行，并展开内容
@@ -6386,31 +6402,37 @@ const Methods = {
   },
   handleAsyncRowExpand (row: any) {
     const $xeTable = this
+    const reactData = $xeTable as TableReactData
+    const internalData = $xeTable as TableInternalData
 
     return new Promise<void>(resolve => {
       const { expandOpts } = this
       const { loadMethod } = expandOpts
       if (loadMethod) {
-        const { rowExpandLazyLoadedMaps, fullAllDataRowIdData } = this
+        const { fullAllDataRowIdData } = internalData
+        const rExpandLazyLoadedMaps = { ...reactData.rowExpandLazyLoadedMaps }
         const rowid = getRowid($xeTable, row)
         const rowRest = fullAllDataRowIdData[rowid]
-        rowExpandLazyLoadedMaps[rowid] = row
-        loadMethod({ $table: $xeTable, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) }).then(() => {
-          const { rowExpandedMaps } = this
+        rExpandLazyLoadedMaps[rowid] = row
+        reactData.rowExpandLazyLoadedMaps = rExpandLazyLoadedMaps
+        loadMethod({ $table: $xeTable, row, rowIndex: $xeTable.getRowIndex(row), $rowIndex: $xeTable.getVMRowIndex(row) }).then(() => {
+          const rExpandedMaps = { ...reactData.rowExpandedMaps }
           if (rowRest) {
             rowRest.expandLoaded = true
           }
-          rowExpandedMaps[rowid] = row
+          rExpandedMaps[rowid] = row
+          reactData.rowExpandedMaps = rExpandedMaps
         }).catch(() => {
           if (rowRest) {
             rowRest.expandLoaded = false
           }
         }).finally(() => {
-          const { rowExpandLazyLoadedMaps } = this
-          if (rowExpandLazyLoadedMaps[rowid]) {
-            delete rowExpandLazyLoadedMaps[rowid]
+          const rExpandLazyLoadedMaps = { ...reactData.rowExpandLazyLoadedMaps }
+          if (rExpandLazyLoadedMaps[rowid]) {
+            delete rExpandLazyLoadedMaps[rowid]
           }
-          this.$nextTick().then(() => this.recalculate()).then(() => resolve())
+          reactData.rowExpandLazyLoadedMaps = rExpandLazyLoadedMaps
+          $xeTable.$nextTick().then(() => $xeTable.recalculate()).then(() => resolve())
         })
       } else {
         resolve()
@@ -6559,9 +6581,13 @@ const Methods = {
     return rowRest && !!rowRest.treeLoaded
   },
   clearTreeExpandLoaded (rows: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { treeOpts, treeExpandedMaps, fullAllDataRowIdData } = this
+    const tExpandedMaps = { ...reactData.treeExpandedMaps }
+    const { fullAllDataRowIdData } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
     const { transform } = treeOpts
     if (rows) {
       if (!XEUtils.isArray(rows)) {
@@ -6572,23 +6598,26 @@ const Methods = {
         const rowRest = fullAllDataRowIdData[rowid]
         if (rowRest) {
           rowRest.treeLoaded = false
-          if (treeExpandedMaps[rowid]) {
-            delete treeExpandedMaps[rowid]
+          if (tExpandedMaps[rowid]) {
+            delete tExpandedMaps[rowid]
           }
         }
       })
     }
+    reactData.treeExpandedMaps = tExpandedMaps
     if (transform) {
-      this.handleVirtualTreeToList()
-      return this.handleTableData()
+      handleVirtualTreeToList($xeTable)
+      return $xeTable.handleTableData()
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   /**
    * 重新懒加载树节点，并展开该节点
    * @param {Row} row 行对象
    */
   reloadTreeExpand (row: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     const { treeOpts, treeExpandLazyLoadedMaps } = this
     const { transform, lazy } = treeOpts
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
@@ -6598,7 +6627,7 @@ const Methods = {
         return this.handleAsyncTreeExpandChilds(row)
       }).then(() => {
         if (transform) {
-          this.handleVirtualTreeToList()
+          handleVirtualTreeToList($xeTable)
           return this.handleTableData()
         }
       }).then(() => {
@@ -6809,8 +6838,10 @@ const Methods = {
    * @returns
    */
   handleVirtualTreeExpand (rows: any[], expanded: boolean) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     return this.handleBaseTreeExpand(rows, expanded).then(() => {
-      this.handleVirtualTreeToList()
+      handleVirtualTreeToList($xeTable)
       this.handleTableData()
       this.updateTreeDataIndex()
     }).then(() => {
@@ -6858,6 +6889,8 @@ const Methods = {
    * 手动清空树形节点的展开状态，数据会恢复成未展开的状态
    */
   clearTreeExpand () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     const { treeOpts, tableFullData } = this
     const { transform, reserve } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
@@ -6868,7 +6901,7 @@ const Methods = {
     }
     return this.handleTableData().then(() => {
       if (transform) {
-        this.handleVirtualTreeToList()
+        handleVirtualTreeToList($xeTable)
         return this.handleTableData()
       }
     }).then(() => {
