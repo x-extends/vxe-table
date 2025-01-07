@@ -123,6 +123,8 @@ function cacheColumnMap ($xeTable: VxeTableConstructor) {
   const columnOpts = $xeTable.computeColumnOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
   const { isCrossDrag, isSelfToChildDrag } = columnDragOpts
+  const customOpts = $xeTable.computeCustomOpts
+  const { storage } = customOpts
   const rowOpts = $xeTable.computeRowOpts
   const isGroup = collectColumn.some(hasChildrenList)
   let isAllOverflow = !!props.showOverflow
@@ -141,8 +143,8 @@ function cacheColumnMap ($xeTable: VxeTableConstructor) {
       }
       fullColumnFieldData[field] = rest
     } else {
-      if (isCrossDrag || isSelfToChildDrag) {
-        errLog('vxe.error.emptyProp', ['column.field'])
+      if (storage || isCrossDrag || isSelfToChildDrag) {
+        errLog('vxe.error.reqProp', [`${column.getTitle() || type || ''} -> column.field`])
       }
     }
     if (!hasFixed && fixed) {
@@ -5458,27 +5460,26 @@ const Methods = {
       evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
     }
   },
-  handleRowDragDragendEvent (evnt: DragEvent) {
-    const $xeTable = this
+  handleRowDragSwapEvent (evnt: DragEvent, isSyncRow: boolean | undefined, dragRow: any, prevDragRow: any, prevDragPos: '' | 'top' | 'bottom' | 'left' | 'right' | undefined, prevDragToChild: boolean | undefined) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
-    const reactData = $xeTable
-    const internalData = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
     const { treeConfig, dragConfig } = props
     const rowDragOpts = $xeTable.computeRowDragOpts
-    const { fullAllDataRowIdData, prevDragToChild } = internalData
+    const { fullAllDataRowIdData } = internalData
     const { isPeerDrag, isCrossDrag, isSelfToChildDrag, dragEndMethod } = rowDragOpts
     const treeOpts = $xeTable.computeTreeOpts
     const { transform, rowField, mapChildrenField, parentField } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
-    const { dragRow } = reactData
-    const { afterFullData, tableFullData, prevDragRow, prevDragPos } = internalData
+    const { afterFullData, tableFullData } = internalData
     const dEndMethod = dragEndMethod || (dragConfig ? dragConfig.dragEndMethod : null)
     const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
     if (prevDragRow && dragRow) {
       // 判断是否有拖动
       if (prevDragRow !== dragRow) {
-        Promise.resolve(
+        return Promise.resolve(
           dEndMethod
             ? dEndMethod({
               oldRow: dragRow,
@@ -5503,6 +5504,7 @@ const Methods = {
               const oldRest = fullAllDataRowIdData[oldRowid]
               const newRowid = getRowid($xeTable, prevDragRow)
               const newRest = fullAllDataRowIdData[newRowid]
+
               if (oldRest && newRest) {
                 const { level: oldLevel } = oldRest
                 const { level: newLevel } = newRest
@@ -5628,7 +5630,7 @@ const Methods = {
           $xeTable.dispatchEvent('row-dragend', {
             oldRow: dragRow,
             newRow: prevDragRow,
-            dragPos: prevDragPos,
+            dragPos: prevDragPos as any,
             dragToChild: !!prevDragToChild,
             offsetIndex: dragOffsetIndex,
             _index: {
@@ -5639,6 +5641,38 @@ const Methods = {
         }).catch(() => {
         })
       }
+    }
+    return Promise.resolve()
+  },
+  handleRowDragDragendEvent (evnt: DragEvent) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeConfig } = props
+    const { fullAllDataRowIdData, prevDragToChild } = internalData
+    const { dragRow } = reactData
+    const treeOpts = $xeTable.computeTreeOpts
+    const { lazy } = treeOpts
+    const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
+    const { prevDragRow, prevDragPos } = internalData
+
+    if (treeConfig && prevDragToChild) {
+      // 懒加载
+      if (lazy) {
+        const newRowid = getRowid($xeTable, prevDragRow)
+        const rowRest = fullAllDataRowIdData[newRowid]
+        if (prevDragRow[hasChildField]) {
+          if (rowRest && rowRest.treeLoaded) {
+            $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
+          }
+        } else {
+          $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
+        }
+      }
+    } else {
+      $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
     }
     hideDropTip($xeTable)
     clearRowDropOrigin($xeTable)
@@ -5659,7 +5693,8 @@ const Methods = {
     const { fullAllDataRowIdData } = internalData
     const { dragRow } = reactData
     const treeOpts = $xeTable.computeTreeOpts
-    const { transform, parentField } = treeOpts
+    const { lazy, transform, parentField } = treeOpts
+    const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowDragOpts = $xeTable.computeRowDragOpts
     const { isPeerDrag, isCrossDrag, isToChildDrag } = rowDragOpts
     if (!dragRow) {
@@ -5672,19 +5707,22 @@ const Methods = {
     const rest = fullAllDataRowIdData[rowid]
     if (rest) {
       const row = rest.row
+      const rowid = getRowid($xeTable, row)
+      const rowRest = fullAllDataRowIdData[rowid]
       evnt.preventDefault()
       const { dragRow } = reactData
       const offsetY = evnt.clientY - trEl.getBoundingClientRect().y
       const dragPos = offsetY < trEl.clientHeight / 2 ? 'top' : 'bottom'
+      internalData.prevDragToChild = !!(treeConfig && transform && isToChildDrag && hasCtrlKey)
+      internalData.prevDragRow = row
+      internalData.prevDragPos = dragPos
       if ($xeTable.eqRow(dragRow, row) ||
+        (hasCtrlKey && treeConfig && lazy && row[hasChildField] && rowRest && !rowRest.treeLoaded) ||
         (!isCrossDrag && treeConfig && transform && (isPeerDrag ? dragRow[parentField] !== row[parentField] : rest.level))
       ) {
         showDropTip($xeTable, evnt, trEl, null, false, dragPos)
         return
       }
-      internalData.prevDragToChild = !!(treeConfig && transform && isToChildDrag && hasCtrlKey)
-      internalData.prevDragRow = row
-      internalData.prevDragPos = dragPos
       showDropTip($xeTable, evnt, trEl, null, true, dragPos)
       $xeTable.dispatchEvent('row-dragover', {
         oldRow: dragRow,
@@ -5959,6 +5997,9 @@ const Methods = {
       const { clientX } = evnt
       const offsetX = clientX - thEl.getBoundingClientRect().x
       const dragPos = offsetX < thEl.clientWidth / 2 ? 'left' : 'right'
+      internalData.prevDragToChild = !!((isCrossDrag && isToChildDrag) && hasCtrlKey)
+      internalData.prevDragCol = column
+      internalData.prevDragPos = dragPos
       if (column.fixed ||
         (dragCol && dragCol.id === column.id) ||
         (!isCrossDrag && (isPeerDrag ? dragCol.parentId !== column.parentId : column.parentId))
@@ -5966,9 +6007,6 @@ const Methods = {
         showDropTip($xeTable, evnt, null, thEl, false, dragPos)
         return
       }
-      internalData.prevDragToChild = !!((isCrossDrag && isToChildDrag) && hasCtrlKey)
-      internalData.prevDragCol = column
-      internalData.prevDragPos = dragPos
       showDropTip($xeTable, evnt, null, thEl, true, dragPos)
       $xeTable.dispatchEvent('column-dragover', {
         oldColumn: dragCol,

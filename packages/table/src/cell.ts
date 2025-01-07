@@ -461,7 +461,7 @@ export const Cell = {
           paddingLeft: `${level * indent}px`
         }
       }, [
-        showIcon && (lazy ? (isLazyLoaded ? hasChild : hasLazyChilds) : hasChild)
+        showIcon && (lazy ? (isLazyLoaded ? hasChild : (hasChild || hasLazyChilds)) : hasChild)
           ? [
               h('div', {
                 class: 'vxe-tree--btn-wrapper',

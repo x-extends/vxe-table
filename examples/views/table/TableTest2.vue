@@ -72,14 +72,15 @@ export default Vue.extend({
         { label: 'current', value: 'current' }
       ],
       customConfig: {
-        immediate: true,
+        storage: true
+        // immediate: false,
         // storage: true,
-        checkMethod ({ column }: any) {
-          return column.type !== 'seq'
-        },
-        visibleMethod ({ column }: any) {
-          return column.field !== 'address'
-        }
+        // checkMethod ({ column }) {
+        //   return column.type !== 'seq'
+        // },
+        // visibleMethod ({ column }) {
+        //   return column.field !== 'address'
+        // }
       },
       demo1: {
         loading: false,

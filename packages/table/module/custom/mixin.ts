@@ -32,10 +32,10 @@ export default {
 
       const { customOpts, customColumnList } = this
       const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
-      XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
-        if (parent) {
+      XEUtils.eachTree(customColumnList, (column, index, items, path, parentColumn) => {
+        if (parentColumn) {
           // 更新子列信息
-          column.fixed = parent.fixed
+          column.fixed = parentColumn.fixed
         } else {
           if (allowSort) {
             const sortIndex = index + 1
