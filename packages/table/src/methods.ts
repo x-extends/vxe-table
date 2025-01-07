@@ -654,7 +654,7 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
     let paddingTop = 0
     let paddingBottom = 0
     let calcPadding = false
-    tableData.forEach((row: any) => {
+    tableData.forEach(row => {
       const rowid = getRowid($xeTable, row)
       const rowRest = fullAllDataRowIdData[rowid]
       const cellList = el.querySelectorAll(`.vxe-body--row[rowid="${rowid}"]>.vxe-body--column>.vxe-cell`)
@@ -680,8 +680,9 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
         rowRest.height = scrollXLoad ? Math.max(rowRest.height, height) : height
       }
     })
+    reactData.isCalcCellHeight++
   }
-  // updateCellOffset($xeTable)
+  // updateCellOffset()
 }
 
 function getOrderField (_vm: any, column: any) {
@@ -1011,11 +1012,11 @@ function loadScrollYData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   const { mergeList } = reactData
   const { tableHeight, scrollYStore } = internalData
   const { startIndex, endIndex, offsetSize } = scrollYStore
-  const offsetYSize = showOverflow ? offsetSize : offsetSize + Math.min(8, Math.ceil(tableHeight / 200))
+  const autoOffsetYSize = showOverflow ? offsetSize : offsetSize + Math.min(8, Math.ceil(tableHeight / 200))
   const { toVisibleIndex, visibleSize } = handleVirtualYVisible($xeTable)
   const offsetItem = {
-    startIndex: Math.max(0, toVisibleIndex - 1 - offsetYSize),
-    endIndex: toVisibleIndex + visibleSize + offsetYSize
+    startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
+    endIndex: toVisibleIndex + visibleSize + autoOffsetYSize
   }
   calculateMergerOffsetIndex(mergeList, offsetItem, 'row')
   const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
@@ -1038,11 +1039,12 @@ function checkLastSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     clearTimeout(lcsTimeout)
   }
   internalData.lcsTimeout = setTimeout(() => {
+    internalData.lcsRunTime = Date.now()
     internalData.lcsTimeout = undefined
     internalData.inVirtualScroll = false
     internalData.inBodyScroll = false
-    internalData.bodyScrollType = ''
     internalData.inFooterScroll = false
+    internalData.bodyScrollType = ''
     if (isRollX && scrollXLoad) {
       $xeTable.updateScrollXData().then(() => {
         loadScrollXData($xeTable)

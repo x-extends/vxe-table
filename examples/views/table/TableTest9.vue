@@ -1,22 +1,26 @@
 <template>
   <div>
-    <vxe-button @click="loadData(5000)">加载5k条</vxe-button>
-    <vxe-button @click="loadData(10000)">加载1w条</vxe-button>
+    <vxe-select v-model="rowSize" :options="dataOptions" @change="loadData()"></vxe-select>
     <vxe-table
       border
-      show-overflow
+      show-footer
       height="800"
       :loading="loading"
       :column-config="{resizable: true}"
-      :row-config="{drag: true}"
       :scroll-x="{enabled: true, gt: 0}"
       :scroll-y="{enabled: true, gt: 0}"
-      :checkbox-config="{labelField: 'name', highlight: true, range: true}"
-      :data="tableData">
-      <vxe-column type="checkbox" width="80" drag-sort></vxe-column>
-      <vxe-column field="col0" title="列0" width="100"></vxe-column>
-      <vxe-column field="imgUrl" title="列1" width="80" :cell-render="imgUrlCellRender"></vxe-column>
-      <vxe-column field="col2" title="列2" width="90"></vxe-column>
+      :data="tableData"
+      :footer-data="footerData">
+      <vxe-column field="checkbox" type="checkbox" width="60" fixed="left"></vxe-column>
+      <vxe-column field="col0" title="列0" width="100" fixed="left"></vxe-column>
+      <vxe-column field="imgUrl" title="列1" width="80" fixed="left" :cell-render="imgUrlCellRender"></vxe-column>
+      <vxe-column field="status" title="状态" width="100">
+        <template #default="{ row }">
+          <vxe-tag v-if="row.status === '2'" status="error">驳回</vxe-tag>
+          <vxe-tag v-else-if="row.status === '1'" status="primary">待处理</vxe-tag>
+          <vxe-tag v-else status="success">已完成</vxe-tag>
+        </template>
+      </vxe-column>
       <vxe-column field="col3" title="列3" width="200"></vxe-column>
       <vxe-column field="col4" title="列4" width="140"></vxe-column>
       <vxe-column field="col5" title="列5" width="300"></vxe-column>
@@ -101,9 +105,8 @@
       <vxe-column field="col84" title="列84" width="100"></vxe-column>
       <vxe-column field="col85" title="列85" width="150"></vxe-column>
       <vxe-column field="col86" title="列86" width="800"></vxe-column>
-      <vxe-column field="imgList1" title="列88" width="120"  :cell-render="imgList1CellRender"></vxe-column>
-      <vxe-column field="flag1" title="列89" width="100"  :cell-render="flag1CellRender"></vxe-column>
-      <vxe-column field="action" title="操作" width="120" >
+      <vxe-column field="imgList1" title="列88" width="120" fixed="right" :cell-render="imgList1CellRender"></vxe-column>
+      <vxe-column field="flag1" title="列89" width="100" fixed="right" :cell-render="flag1CellRender"></vxe-column><vxe-column field="action" title="操作" width="120" fixed="right">
         <template #default>
           <vxe-button mode="text" status="primary">编辑</vxe-button>
           <vxe-button mode="text" status="error">删除</vxe-button>
@@ -113,32 +116,37 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { VxeColumnPropTypes } from '../../../types'
-
-interface RowVO {
-  id: number
-  [key: string]: string | number | boolean | any[]
-}
-
-export default Vue.extend({
+<script>
+import { VxeUI } from '../../../packages'
+export default {
   data () {
-    const tableData: RowVO[] = []
-
-    const flag1CellRender: VxeColumnPropTypes.CellRender = {
+    const tableData = []
+    const footerData = [
+      { checkbox: '均值', col0: '45', col1: '56', col3: '67', col5: '78', col7: '94', col97: '37', imgList1: '83' },
+      { checkbox: '合计', col0: '222', col1: '333', col3: '444', col5: '888', col7: '555', col97: '444', imgList1: '777' }
+    ]
+    const rowSize = 100
+    const dataOptions = [
+      { label: '加载 3 行', value: 3 },
+      { label: '加载 20 行', value: 20 },
+      { label: '加载 100 行', value: 100 },
+      { label: '加载 500 行', value: 500 },
+      { label: '加载 1000 行', value: 1000 },
+      { label: '加载 5000 行', value: 5000 },
+      { label: '加载 10000 行', value: 10000 },
+      { label: '加载 30000 行', value: 30000 }
+    ]
+    const flag1CellRender = {
       name: 'VxeSwitch'
     }
-
-    const imgUrlCellRender: VxeColumnPropTypes.CellRender = {
+    const imgUrlCellRender = {
       name: 'VxeImage',
       props: {
         width: 36,
         height: 36
       }
     }
-
-    const imgList1CellRender: VxeColumnPropTypes.CellRender = {
+    const imgList1CellRender = {
       name: 'VxeUpload',
       props: {
         mode: 'image',
@@ -152,9 +160,11 @@ export default Vue.extend({
         }
       }
     }
-
     return {
+      rowSize,
+      dataOptions,
       tableData,
+      footerData,
       loading: false,
       flag1CellRender,
       imgUrlCellRender,
@@ -163,13 +173,14 @@ export default Vue.extend({
   },
   methods: {
     // 模拟行数据
-    loadData (rowSize: number) {
+    loadData () {
       this.loading = true
       setTimeout(() => {
-        const dataList: RowVO[] = []
-        for (let i = 0; i < rowSize; i++) {
-          const item: RowVO = {
+        const dataList = []
+        for (let i = 0; i < this.rowSize; i++) {
+          const item = {
             id: 10000 + i,
+            status: i % 3 === 0 ? '1' : (i % 2 === 0 ? '2' : '0'),
             imgUrl: i % 3 === 0 ? 'https://vxeui.com/resource/img/546.gif' : 'https://vxeui.com/resource/img/673.gif',
             imgList1: i % 4 === 0
               ? [
@@ -181,23 +192,39 @@ export default Vue.extend({
                 ],
             flag1: i % 5 === 0
           }
-          for (let j = 0; j < 120; j++) {
-            item[`col${j}`] = `值_${i}_${j}` + (i % 2 ? 'sdf sdf' : (i % 3 ? 'sddfgfdgfdgfdggfdgf sddfgfdgfdgfdggfdgf sdfgfdgfddf dsdfgfdggf sdfds dsf ' : 'ssdfdsdf sddffdf sdf sfsdfsd'))
+          for (let j = 0; j < 100; j++) {
+            if (i % 9 === 0) {
+              item[`col${j}`] = `值_${i}_${j} 内容9内容9 内容9内容9内容9 内容9内容9内容9内容9 内容9内容9内容9内容9 内容9内容9内容9 内容9内容9`
+            } else if (i % 8 === 0) {
+              item[`col${j}`] = `值_${i}_${j} 内容8内容8内容8内容8`
+            } else if (i % 7 === 0) {
+              item[`col${j}`] = `值_${i}_${j} 内容7内容7`
+            } else if (i % 6 === 0) {
+              item[`col${j}`] = `值_${i}_${j} 内容6内容6内容6内容6内容6内容6内容6内容6`
+            } else if (i % 5 === 0) {
+              item[`col${j}`] = `值_${i}_${j} 内容5内容5内容5内容5内容5`
+            } else if (i % 4 === 0) {
+              item[`col${j}`] = `值_${i}_${j} 内容4内容4内容4内容4内容4内容4内容4内容4内容4内容4内容4内容4`
+            } else {
+              item[`col${j}`] = `值_${i}_${j}`
+            }
           }
           dataList.push(item)
         }
-
         const startTime = Date.now()
         this.tableData = dataList
         this.loading = false
         this.$nextTick(() => {
-          console.log(`加载时间 ${Date.now() - startTime} 毫秒`)
+          VxeUI.modal.message({
+            content: `加载时间 ${Date.now() - startTime} 毫秒`,
+            status: 'success'
+          })
         })
-      }, 350)
+      }, 100)
     }
   },
   created () {
-    this.loadData(200)
+    this.loadData()
   }
-})
+}
 </script>
