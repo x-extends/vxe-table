@@ -462,6 +462,7 @@ export const Cell = {
         $table.triggerTreeExpandEvent(evnt, params)
       }
     }
+    console.log(row.name, hasChild)
     return [
       h('div', {
         class: ['vxe-cell--tree-node', {
@@ -471,7 +472,7 @@ export const Cell = {
           paddingLeft: `${level * indent}px`
         }
       }, [
-        showIcon && (lazy ? (isLazyLoaded ? hasChild : hasLazyChilds) : hasChild)
+        showIcon && (lazy ? (isLazyLoaded ? hasChild : (hasChild || hasLazyChilds)) : hasChild)
           ? [
               h('div', {
                 class: 'vxe-tree--btn-wrapper',

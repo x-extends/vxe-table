@@ -78,14 +78,15 @@ const exportModes = ref([
 ])
 
 const customConfig = reactive<VxeTablePropTypes.CustomConfig>({
-  immediate: false,
+  storage: true
+  // immediate: false,
   // storage: true,
-  checkMethod ({ column }) {
-    return column.type !== 'seq'
-  },
-  visibleMethod ({ column }) {
-    return column.field !== 'address'
-  }
+  // checkMethod ({ column }) {
+  //   return column.type !== 'seq'
+  // },
+  // visibleMethod ({ column }) {
+  //   return column.field !== 'address'
+  // }
 })
 
 const demo1 = reactive({

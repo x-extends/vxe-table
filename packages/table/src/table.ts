@@ -1122,6 +1122,8 @@ export default defineComponent({
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
       const { isCrossDrag, isSelfToChildDrag } = columnDragOpts
+      const customOpts = computeCustomOpts.value
+      const { storage } = customOpts
       const rowOpts = computeRowOpts.value
       const isGroup = collectColumn.some(hasChildrenList)
       let isAllOverflow = !!props.showOverflow
@@ -1140,8 +1142,8 @@ export default defineComponent({
           }
           fullColumnFieldData[field] = rest
         } else {
-          if (isCrossDrag || isSelfToChildDrag) {
-            errLog('vxe.error.emptyProp', ['column.field'])
+          if (storage || isCrossDrag || isSelfToChildDrag) {
+            errLog('vxe.error.reqProp', [`${column.getTitle() || type || ''} -> column.field`])
           }
         }
         if (!hasFixed && fixed) {
@@ -5424,7 +5426,7 @@ export default defineComponent({
         }
         let hasResizable = 0
         let hasSort = 0
-        let hasFixedt = 0
+        let hasFixed = 0
         let hasVisible = 0
         XEUtils.eachTree(collectColumn, (column, index, items, path, parentColumn) => {
           // 只支持一级
@@ -5439,7 +5441,7 @@ export default defineComponent({
             if (column.fixed !== column.defaultFixed) {
               const colKey = column.getKey()
               if (colKey) {
-                hasFixedt = 1
+                hasFixed = 1
                 fixedData[colKey] = column.fixed
               }
             }
@@ -5473,7 +5475,7 @@ export default defineComponent({
         if (hasSort) {
           storeData.sortData = sortData
         }
-        if (hasFixedt) {
+        if (hasFixed) {
           storeData.fixedData = fixedData
         }
         if (hasVisible) {
@@ -7380,22 +7382,21 @@ export default defineComponent({
           evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
         }
       },
-      handleRowDragDragendEvent (evnt) {
+      handleRowDragSwapEvent (evnt, isSyncRow, dragRow, prevDragRow, prevDragPos, prevDragToChild) {
         const { treeConfig, dragConfig } = props
         const rowDragOpts = computeRowDragOpts.value
-        const { fullAllDataRowIdData, prevDragToChild } = internalData
+        const { fullAllDataRowIdData } = internalData
         const { isPeerDrag, isCrossDrag, isSelfToChildDrag, dragEndMethod } = rowDragOpts
         const treeOpts = computeTreeOpts.value
         const { transform, rowField, mapChildrenField, parentField } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
-        const { dragRow } = reactData
-        const { afterFullData, tableFullData, prevDragRow, prevDragPos } = internalData
+        const { afterFullData, tableFullData } = internalData
         const dEndMethod = dragEndMethod || (dragConfig ? dragConfig.dragEndMethod : null)
         const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
         if (prevDragRow && dragRow) {
           // 判断是否有拖动
           if (prevDragRow !== dragRow) {
-            Promise.resolve(
+            return Promise.resolve(
               dEndMethod
                 ? dEndMethod({
                   oldRow: dragRow,
@@ -7420,6 +7421,7 @@ export default defineComponent({
                   const oldRest = fullAllDataRowIdData[oldRowid]
                   const newRowid = getRowid($xeTable, prevDragRow)
                   const newRest = fullAllDataRowIdData[newRowid]
+
                   if (oldRest && newRest) {
                     const { level: oldLevel } = oldRest
                     const { level: newLevel } = newRest
@@ -7557,6 +7559,32 @@ export default defineComponent({
             })
           }
         }
+        return Promise.resolve()
+      },
+      handleRowDragDragendEvent (evnt) {
+        const { treeConfig } = props
+        const { fullAllDataRowIdData, prevDragToChild } = internalData
+        const { dragRow } = reactData
+        const treeOpts = computeTreeOpts.value
+        const { lazy } = treeOpts
+        const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
+        const { prevDragRow, prevDragPos } = internalData
+        if (treeConfig && prevDragToChild) {
+          // 懒加载
+          if (lazy) {
+            const newRowid = getRowid($xeTable, prevDragRow)
+            const rowRest = fullAllDataRowIdData[newRowid]
+            if (prevDragRow[hasChildField]) {
+              if (rowRest && rowRest.treeLoaded) {
+                $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
+              }
+            } else {
+              $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
+            }
+          }
+        } else {
+          $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
+        }
         hideDropTip()
         clearRowDropOrigin()
         internalData.prevDragToChild = false
@@ -7571,7 +7599,8 @@ export default defineComponent({
         const { fullAllDataRowIdData } = internalData
         const { dragRow } = reactData
         const treeOpts = computeTreeOpts.value
-        const { transform, parentField } = treeOpts
+        const { lazy, transform, parentField } = treeOpts
+        const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
         const rowDragOpts = computeRowDragOpts.value
         const { isPeerDrag, isCrossDrag, isToChildDrag } = rowDragOpts
         if (!dragRow) {
@@ -7584,19 +7613,22 @@ export default defineComponent({
         const rest = fullAllDataRowIdData[rowid]
         if (rest) {
           const row = rest.row
+          const rowid = getRowid($xeTable, row)
+          const rowRest = fullAllDataRowIdData[rowid]
           evnt.preventDefault()
           const { dragRow } = reactData
           const offsetY = evnt.clientY - trEl.getBoundingClientRect().y
           const dragPos = offsetY < trEl.clientHeight / 2 ? 'top' : 'bottom'
+          internalData.prevDragToChild = !!(treeConfig && transform && (isCrossDrag && isToChildDrag) && hasCtrlKey)
+          internalData.prevDragRow = row
+          internalData.prevDragPos = dragPos
           if ($xeTable.eqRow(dragRow, row) ||
+            (hasCtrlKey && treeConfig && lazy && row[hasChildField] && rowRest && !rowRest.treeLoaded) ||
             (!isCrossDrag && treeConfig && transform && (isPeerDrag ? dragRow[parentField] !== row[parentField] : rest.level))
           ) {
             showDropTip(evnt, trEl, null, false, dragPos)
             return
           }
-          internalData.prevDragToChild = !!(treeConfig && transform && (isCrossDrag && isToChildDrag) && hasCtrlKey)
-          internalData.prevDragRow = row
-          internalData.prevDragPos = dragPos
           showDropTip(evnt, trEl, null, true, dragPos)
           dispatchEvent('row-dragover', {
             oldRow: dragRow,
@@ -7849,6 +7881,9 @@ export default defineComponent({
           const { clientX } = evnt
           const offsetX = clientX - thEl.getBoundingClientRect().x
           const dragPos = offsetX < thEl.clientWidth / 2 ? 'left' : 'right'
+          internalData.prevDragToChild = !!((isCrossDrag && isToChildDrag) && hasCtrlKey)
+          internalData.prevDragCol = column
+          internalData.prevDragPos = dragPos
           if (column.fixed ||
             (dragCol && dragCol.id === column.id) ||
             (!isCrossDrag && (isPeerDrag ? dragCol.parentId !== column.parentId : column.parentId))
@@ -7856,9 +7891,6 @@ export default defineComponent({
             showDropTip(evnt, null, thEl, false, dragPos)
             return
           }
-          internalData.prevDragToChild = !!((isCrossDrag && isToChildDrag) && hasCtrlKey)
-          internalData.prevDragCol = column
-          internalData.prevDragPos = dragPos
           showDropTip(evnt, null, thEl, true, dragPos)
           dispatchEvent('column-dragover', {
             oldColumn: dragCol,
