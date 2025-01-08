@@ -3072,7 +3072,7 @@ export default defineComponent({
         if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
           scrollYStore.startIndex = offsetStartIndex
           scrollYStore.endIndex = offsetEndIndex
-          tablePrivateMethods.updateScrollYData()
+          $xeTable.updateScrollYData()
         }
       }
     }
@@ -6769,7 +6769,7 @@ export default defineComponent({
             vLen++
           })
 
-        const isSelected = sLen >= vLen
+        const isSelected = rootList.length > 0 && sLen >= vLen
         const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
 
         reactData.isAllSelected = isSelected
