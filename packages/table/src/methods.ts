@@ -4741,7 +4741,7 @@ const Methods = {
         vLen++
       })
 
-    const isSelected = sLen >= vLen
+    const isSelected = rootList.length > 0 && sLen >= vLen
     const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
 
     reactData.isAllSelected = isSelected
