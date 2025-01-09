@@ -332,10 +332,7 @@ function handleVirtualYVisible ($xeTable: VxeTableConstructor) {
         const row = afterFullData[rIndex]
         const rowid = getRowid($xeTable, row)
         const rowRest = fullAllDataRowIdData[rowid]
-        if (!rowRest) {
-          break
-        }
-        offsetTop += rowRest.height || rowHeight
+        offsetTop += rowRest ? (rowRest.height || rowHeight) : rowHeight
         if (toVisibleIndex === -1 && scrollTop < offsetTop) {
           toVisibleIndex = rIndex
         }
@@ -7380,9 +7377,9 @@ const Methods = {
    * @param {Number} scrollLeft 左距离
    * @param {Number} scrollTop 上距离
    */
-  scrollTo (scrollLeft: any, scrollTop: any) {
-    const $xeTable = this
-    const internalData = $xeTable
+  scrollTo (scrollLeft: number | null, scrollTop?: number | null) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
     const { $refs } = this
     const { tableBody, tableHeader, leftBody, rightBody, tableFooter } = $refs
@@ -7429,9 +7426,13 @@ const Methods = {
    * @param {Row} row 行对象
    * @param {ColumnInfo} column 列配置
    */
-  scrollToRow (row: any, fieldOrColumn: any) {
-    const $xeTable = this
+  scrollToRow (row: any, fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
 
+    const { showOverflow } = props
+    const { scrollYLoad, scrollXLoad } = reactData
     const rest = []
     if (row) {
       if (this.treeConfig) {
@@ -7443,7 +7444,15 @@ const Methods = {
     if (fieldOrColumn) {
       rest.push(handleScrollToRowColumn($xeTable, fieldOrColumn, row))
     }
-    return Promise.all(rest)
+    return Promise.all(rest).then(() => {
+      if (row) {
+        if (!showOverflow && (scrollYLoad || scrollXLoad)) {
+          calcCellHeight($xeTable)
+          calcCellWidth($xeTable)
+        }
+        return $xeTable.$nextTick()
+      }
+    })
   },
   /**
    * 如果有滚动条，则滚动到对应的列
