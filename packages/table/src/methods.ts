@@ -2276,30 +2276,6 @@ const Methods = {
     this.afterTreeFullData = tableTree
     this.updateAfterDataIndex()
   },
-  updateTreeDataIndex () {
-    const $xeTable = this
-    const props = $xeTable
-    const internalData = $xeTable
-
-    const { treeConfig } = props
-    const { afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
-    const treeOpts = $xeTable.computeTreeOpts
-    if (treeConfig) {
-      if (treeOpts.transform) {
-        afterFullData.forEach((row: any, index: number) => {
-          const rowid = getRowid($xeTable, row)
-          const rowRest = fullAllDataRowIdData[rowid]
-          if (rowRest) {
-            rowRest._index = index
-          } else {
-            const rest = { row, rowid, seq: '-1', index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0, oTop: 0 }
-            fullAllDataRowIdData[rowid] = rest
-            fullDataRowIdData[rowid] = rest
-          }
-        })
-      }
-    }
-  },
   /**
    * 预编译
    * 对渲染中的数据提前解析序号及索引。牺牲提前编译耗时换取渲染中额外损耗，使运行时更加流畅
@@ -2329,7 +2305,6 @@ const Methods = {
         }
         fullMaps[rowid] = row
       }, { children: treeOpts.transform ? treeOpts.mapChildrenField : childrenField })
-      $xeTable.updateTreeDataIndex()
     } else {
       afterFullData.forEach((row: any, index: number) => {
         const rowid = getRowid($xeTable, row)
@@ -6766,7 +6741,7 @@ const Methods = {
               return this.$nextTick().then(() => {
                 if (transform) {
                   this.handleTableData()
-                  this.updateTreeDataIndex()
+                  this.updateAfterDataIndex()
                   return this.$nextTick()
                 }
               })
@@ -6880,7 +6855,7 @@ const Methods = {
     return this.handleBaseTreeExpand(rows, expanded).then(() => {
       handleVirtualTreeToList($xeTable)
       this.handleTableData()
-      this.updateTreeDataIndex()
+      this.updateAfterDataIndex()
     }).then(() => {
       return this.recalculate()
     }).then(() => {

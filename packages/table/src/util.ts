@@ -3,6 +3,8 @@ import { ColumnInfo } from './columnInfo'
 import { isScale, isPx } from '../../ui/src/dom'
 import { warnLog, errLog } from '../../ui/src/log'
 
+import type { VxeTableDefines, VxeTableConstructor, TableReactData } from '../../../types'
+
 const getAllConvertColumns = (columns: any, parentColumn?: any) => {
   const result: any[] = []
   columns.forEach((column: any) => {
@@ -64,12 +66,6 @@ export const convertHeaderColumnToRows = (originColumns: any) => {
   })
 
   return rows
-}
-
-const lineOffsetSizes: any = {
-  mini: 3,
-  small: 2,
-  medium: 1
 }
 
 export function restoreScrollLocation ($xeTable: any, scrollLeft: any, scrollTop: any) {
@@ -248,15 +244,22 @@ export function getColReMinWidth (params: any) {
   return mWidth
 }
 
-function countTreeExpand (prevRow: any, params: any) {
+const lineOffsetSizes: Record<string, any> = {
+  mini: 3,
+  small: 2,
+  medium: 1
+}
+
+function countTreeExpand (prevRow: any, params: VxeTableDefines.CellRenderBodyParams) {
   let count = 1
   if (!prevRow) {
     return count
   }
   const { $table } = params
-  const { treeOpts } = $table
+  const treeOpts = $table.computeTreeOpts
+  const { transform, mapChildrenField } = treeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
-  const rowChildren = prevRow[childrenField]
+  const rowChildren = prevRow[transform ? mapChildrenField : childrenField]
   if (rowChildren && $table.isTreeExpandByRow(prevRow)) {
     for (let index = 0; index < rowChildren.length; index++) {
       count += countTreeExpand(rowChildren[index], params)
@@ -265,18 +268,22 @@ function countTreeExpand (prevRow: any, params: any) {
   return count
 }
 
-export function getOffsetSize ($xetable: any) {
-  const vSize = $xetable.computeSize
-  return lineOffsetSizes[vSize] || 0
+export function getOffsetSize ($xeTable: VxeTableConstructor) {
+  const vSize = $xeTable.computeSize
+  if (vSize) {
+    return lineOffsetSizes[vSize] || 0
+  }
+  return 0
 }
 
-export function calcTreeLine (params: any, items: any, rIndex: any) {
+export function calcTreeLine (params: VxeTableDefines.CellRenderBodyParams, prevRow: any) {
   const { $table } = params
+  const tableReactData = $table as unknown as TableReactData
   let expandSize = 1
-  if (rIndex) {
-    expandSize = countTreeExpand(items[rIndex - 1], params)
+  if (prevRow) {
+    expandSize = countTreeExpand(prevRow, params)
   }
-  return $table.rowHeight * expandSize - (rIndex ? 1 : (12 - getOffsetSize($table)))
+  return tableReactData.rowHeight * expandSize - (prevRow ? 1 : (12 - getOffsetSize($table)))
 }
 
 export function mergeBodyMethod (mergeList: any, _rowIndex: any, _columnIndex: any) {

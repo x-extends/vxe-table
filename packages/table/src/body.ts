@@ -6,6 +6,8 @@ import { getOffsetSize, calcTreeLine, mergeBodyMethod, getRowid } from './util'
 import { updateCellTitle, setScrollTop, setScrollLeft } from '../../ui/src/dom'
 import { getSlotVNs } from '../../ui/src/vn'
 
+import type { VxeTableConstructor, TableInternalData, VxeTablePrivateMethods } from '../../../types'
+
 const { getI18n, renderer, renderEmptyElement } = VxeUI
 
 const renderType = 'body'
@@ -15,24 +17,28 @@ function isVMScrollProcess ($xetable: any) {
   return $xetable._isResize || ($xetable.lastScrollTime && Date.now() < $xetable.lastScrollTime + $xetable.delayHover)
 }
 
-function renderLine (h: CreateElement, _vm: any, $xetable: any, params: any) {
+function renderLine (h: CreateElement, _vm: any, $xeTable: VxeTableConstructor & VxeTablePrivateMethods, params: any) {
+  const tableProps = $xeTable
+  const tableInternalData = $xeTable as unknown as TableInternalData
+
   const { row, column } = params
-  const { afterFullData, treeOpts, treeConfig, fullAllDataRowIdData } = $xetable
+  const { afterFullData } = tableInternalData
+  const { treeConfig } = tableProps
+  const treeOpts = $xeTable.computeTreeOpts
   const { slots, treeNode } = column
-  const rowid = getRowid($xetable, row)
+  const { fullAllDataRowIdData } = tableInternalData
+  if (slots && slots.line) {
+    return $xeTable.callSlot(slots.line, params, h)
+  }
+  const rowid = getRowid($xeTable, row)
   const rest = fullAllDataRowIdData[rowid]
   let rLevel = 0
-  let rIndex = 0
-  let items = []
+  let prevRow = null
   if (rest) {
     rLevel = rest.level
-    rIndex = rest._index
-    items = rest.items
+    prevRow = rest.items[rest._index - 1]
   }
-  if (slots && slots.line) {
-    return $xetable.callSlot(slots.line, params, h)
-  }
-  const isFirstRow = $xetable.eqRow(afterFullData[0], row)
+  const isFirstRow = $xeTable.eqRow(afterFullData[0], row)
   if (treeConfig && treeNode && (treeOpts.showLine || treeOpts.line)) {
     return [
       h('div', {
@@ -41,8 +47,8 @@ function renderLine (h: CreateElement, _vm: any, $xetable: any, params: any) {
         h('div', {
           class: 'vxe-tree--line',
           style: {
-            height: `${isFirstRow ? 1 : calcTreeLine(params, items, rIndex)}px`,
-            left: `${(rLevel * treeOpts.indent) + (rLevel ? 2 - getOffsetSize($xetable) : 0) + 16}px`
+            height: `${isFirstRow ? 1 : calcTreeLine(params, prevRow)}px`,
+            left: `${(rLevel * treeOpts.indent) + (rLevel ? 2 - getOffsetSize($xeTable) : 0) + 16}px`
           }
         })
       ])
