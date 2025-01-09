@@ -1,22 +1,16 @@
-import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount, onMounted, onUnmounted } from 'vue'
+import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, onBeforeUnmount, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { mergeBodyMethod, getRowid, getRefElem } from './util'
+import { getOffsetSize, calcTreeLine, mergeBodyMethod, getRowid, getRefElem } from './util'
 import { updateCellTitle, getPropClass, setScrollTop, setScrollLeft } from '../../ui/src/dom'
 import { isEnableConf } from '../../ui/src/utils'
 import { getSlotVNs } from '../../ui/src/vn'
 
-import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeComponentSlotType, VxeComponentSizeType } from '../../../types'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeComponentSlotType } from '../../../types'
 
 const { getI18n, renderer, renderEmptyElement } = VxeUI
 
 const renderType = 'body'
-
-const lineOffsetSizes = {
-  mini: 3,
-  small: 2,
-  medium: 1
-}
 
 export default defineComponent({
   name: 'VxeTableBody',
@@ -32,8 +26,6 @@ export default defineComponent({
   setup (props) {
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
-    const xesize = inject('xesize', null as ComputedRef<VxeComponentSizeType> | null)
-
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
     const { refTableBody, refTableHeader, refTableFooter, refTableLeftBody, refTableRightBody, refScrollXHandleElem, refScrollYHandleElem } = $xeTable.getRefMaps()
     const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeSYOpts, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeColumnDragOpts } = $xeTable.getComputeMaps()
@@ -46,45 +38,11 @@ export default defineComponent({
     const refBodyYSpace = ref() as Ref<HTMLDivElement>
     const refBodyEmptyBlock = ref() as Ref<HTMLDivElement>
 
-    const getOffsetSize = () => {
-      if (xesize) {
-        const vSize = xesize.value
-        if (vSize) {
-          return lineOffsetSizes[vSize] || 0
-        }
-      }
-      return 0
-    }
-
     // 滚动、拖动过程中不需要触发
     const isVMScrollProcess = () => {
       const { delayHover } = tableProps
       const { lastScrollTime, _isResize } = tableReactData
       return !!(_isResize || (lastScrollTime && Date.now() < lastScrollTime + (delayHover as number)))
-    }
-
-    const countTreeExpand = (prevRow: any, params: any) => {
-      let count = 1
-      if (!prevRow) {
-        return count
-      }
-      const treeOpts = computeTreeOpts.value
-      const childrenField = treeOpts.children || treeOpts.childrenField
-      const rowChildren = prevRow[childrenField]
-      if (rowChildren && $xeTable.isTreeExpandByRow(prevRow)) {
-        for (let index = 0; index < rowChildren.length; index++) {
-          count += countTreeExpand(rowChildren[index], params)
-        }
-      }
-      return count
-    }
-
-    const calcTreeLine = (params: any, items: any[], rIndex: number) => {
-      let expandSize = 1
-      if (rIndex) {
-        expandSize = countTreeExpand(items[rIndex - 1], params)
-      }
-      return tableReactData.rowHeight * expandSize - (rIndex ? 1 : (12 - getOffsetSize()))
     }
 
     const renderLine = (params: any) => {
@@ -94,18 +52,16 @@ export default defineComponent({
       const treeOpts = computeTreeOpts.value
       const { slots, treeNode } = column
       const { fullAllDataRowIdData } = tableInternalData
+      if (slots && slots.line) {
+        return $xeTable.callSlot(slots.line, params)
+      }
       const rowid = getRowid($xeTable, row)
       const rest = fullAllDataRowIdData[rowid]
       let rLevel = 0
-      let rIndex = 0
-      let items: any[] = []
+      let prevRow = null
       if (rest) {
         rLevel = rest.level
-        rIndex = rest._index
-        items = rest.items
-      }
-      if (slots && slots.line) {
-        return $xeTable.callSlot(slots.line, params)
+        prevRow = rest.items[rest._index - 1]
       }
       const isFirstRow = $xeTable.eqRow(afterFullData[0], row)
       if (treeConfig && treeNode && (treeOpts.showLine || treeOpts.line)) {
@@ -116,8 +72,8 @@ export default defineComponent({
             h('div', {
               class: 'vxe-tree--line',
               style: {
-                height: `${isFirstRow ? 1 : calcTreeLine(params, items, rIndex)}px`,
-                left: `${(rLevel * treeOpts.indent) + (rLevel ? 2 - getOffsetSize() : 0) + 16}px`
+                height: `${isFirstRow ? 1 : calcTreeLine(params, prevRow)}px`,
+                left: `${(rLevel * treeOpts.indent) + (rLevel ? 2 - getOffsetSize($xeTable) : 0) + 16}px`
               }
             })
           ])

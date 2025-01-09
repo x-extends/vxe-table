@@ -474,7 +474,6 @@ export const Cell = {
         $table.triggerTreeExpandEvent(evnt, params)
       }
     }
-    console.log(row.name, hasChild)
     return [
       h('div', {
         class: ['vxe-cell--tree-node', {

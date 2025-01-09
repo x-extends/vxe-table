@@ -607,6 +607,8 @@ export default defineComponent({
       const tableOns = Object.assign({}, tableCompEvents)
       const emptySlot = slots.empty
       const loadingSlot = slots.loading
+      const rowDragIconSlot = slots.rowDragIcon || slots['row-drag-icon']
+      const columnDragIconSlot = slots.columnDragIcon || slots['column-drag-icon']
       if (proxyConfig && isEnableConf(proxyOpts)) {
         if (proxyOpts.sort) {
           tableOns.onSortChange = sortChangeEvent
@@ -618,12 +620,20 @@ export default defineComponent({
       const slotObj: {
         empty?(params: any): any
         loading?(params: any): any
+        rowDragIcon?(params: any): any
+        columnDragIcon?(params: any): any
       } = {}
       if (emptySlot) {
-        slotObj.empty = () => emptySlot({ $grid: $xeGrid })
+        slotObj.empty = emptySlot
       }
       if (loadingSlot) {
-        slotObj.loading = () => loadingSlot({ $grid: $xeGrid })
+        slotObj.loading = loadingSlot
+      }
+      if (rowDragIconSlot) {
+        slotObj.rowDragIcon = rowDragIconSlot
+      }
+      if (columnDragIconSlot) {
+        slotObj.columnDragIcon = columnDragIconSlot
       }
       return h('div', {
         class: 'vxe-grid--table-wrapper'

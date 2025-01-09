@@ -1502,27 +1502,6 @@ export default defineComponent({
       }
     }
 
-    const updateTreeDataIndex = () => {
-      const { treeConfig } = props
-      const { afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
-      const treeOpts = computeTreeOpts.value
-      if (treeConfig) {
-        if (treeOpts.transform) {
-          afterFullData.forEach((row, index) => {
-            const rowid = getRowid($xeTable, row)
-            const rowRest = fullAllDataRowIdData[rowid]
-            if (rowRest) {
-              rowRest._index = index
-            } else {
-              const rest = { row, rowid, seq: '-1', index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0, oTop: 0 }
-              fullAllDataRowIdData[rowid] = rest
-              fullDataRowIdData[rowid] = rest
-            }
-          })
-        }
-      }
-    }
-
     /**
      * 预编译
      * 对渲染中的数据提前解析序号及索引。牺牲提前编译耗时换取渲染中额外损耗，使运行时更加流畅
@@ -1540,6 +1519,7 @@ export default defineComponent({
           const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
           if (rowRest) {
             rowRest.seq = seq
+            rowRest._index = index
           } else {
             const rest = { row, rowid, seq, index: -1, $index: -1, _index: -1, items: [], parent: null, level: 0, height: 0, oTop: 0 }
             fullAllDataRowIdData[rowid] = rest
@@ -1547,7 +1527,6 @@ export default defineComponent({
           }
           fullMaps[rowid] = row
         }, { children: treeOpts.transform ? treeOpts.mapChildrenField : childrenField })
-        updateTreeDataIndex()
       } else {
         afterFullData.forEach((row, index) => {
           const rowid = getRowid($xeTable, row)
@@ -2396,7 +2375,7 @@ export default defineComponent({
                 return nextTick().then(() => {
                   if (transform) {
                     tablePrivateMethods.handleTableData()
-                    updateTreeDataIndex()
+                    updateAfterDataIndex()
                     return nextTick()
                   }
                 })
@@ -3027,7 +3006,7 @@ export default defineComponent({
       return handleBaseTreeExpand(rows, expanded).then(() => {
         handleVirtualTreeToList()
         tablePrivateMethods.handleTableData()
-        updateTreeDataIndex()
+        updateAfterDataIndex()
       }).then(() => {
         return tableMethods.recalculate()
       }).then(() => {

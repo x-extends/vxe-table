@@ -330,6 +330,50 @@ export function getRootColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   return column
 }
 
+const lineOffsetSizes = {
+  mini: 3,
+  small: 2,
+  medium: 1
+}
+
+const countTreeExpand = (prevRow: any, params: VxeTableDefines.CellRenderBodyParams) => {
+  let count = 1
+  if (!prevRow) {
+    return count
+  }
+  const { $table } = params
+  const { computeTreeOpts } = $table.getComputeMaps()
+  const treeOpts = computeTreeOpts.value
+  const { transform, mapChildrenField } = treeOpts
+  const childrenField = treeOpts.children || treeOpts.childrenField
+  const rowChildren = prevRow[transform ? mapChildrenField : childrenField]
+  if (rowChildren && $table.isTreeExpandByRow(prevRow)) {
+    for (let index = 0; index < rowChildren.length; index++) {
+      count += countTreeExpand(rowChildren[index], params)
+    }
+  }
+  return count
+}
+
+export const getOffsetSize = ($xeTable: VxeTableConstructor) => {
+  const { computeSize } = $xeTable.getComputeMaps()
+  const vSize = computeSize.value
+  if (vSize) {
+    return lineOffsetSizes[vSize] || 0
+  }
+  return 0
+}
+
+export function calcTreeLine (params: VxeTableDefines.CellRenderBodyParams, prevRow: any) {
+  const { $table } = params
+  const tableReactData = $table.reactData
+  let expandSize = 1
+  if (prevRow) {
+    expandSize = countTreeExpand(prevRow, params)
+  }
+  return tableReactData.rowHeight * expandSize - (prevRow ? 1 : (12 - getOffsetSize($table)))
+}
+
 export function mergeBodyMethod (mergeList: VxeTableDefines.MergeItem[], _rowIndex: number, _columnIndex: number) {
   for (let mIndex = 0; mIndex < mergeList.length; mIndex++) {
     const { row: mergeRowIndex, col: mergeColIndex, rowspan: mergeRowspan, colspan: mergeColspan } = mergeList[mIndex]
