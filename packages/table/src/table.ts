@@ -894,10 +894,7 @@ export default defineComponent({
             const row = afterFullData[rIndex]
             const rowid = getRowid($xeTable, row)
             const rowRest = fullAllDataRowIdData[rowid]
-            if (!rowRest) {
-              break
-            }
-            offsetTop += rowRest.height || rowHeight
+            offsetTop += rowRest ? (rowRest.height || rowHeight) : rowHeight
             if (toVisibleIndex === -1 && scrollTop < offsetTop) {
               toVisibleIndex = rIndex
             }
@@ -5146,7 +5143,7 @@ export default defineComponent({
        * @param {Number} scrollLeft 左距离
        * @param {Number} scrollTop 上距离
        */
-      scrollTo (scrollLeft: number, scrollTop?: number) {
+      scrollTo (scrollLeft, scrollTop) {
         const tableBody = refTableBody.value
         const tableHeader = refTableHeader.value
         const tableFooter = refTableFooter.value
@@ -5196,6 +5193,8 @@ export default defineComponent({
        * @param {ColumnInfo} fieldOrColumn 列配置
        */
       scrollToRow (row, fieldOrColumn) {
+        const { showOverflow } = props
+        const { scrollYLoad, scrollXLoad } = reactData
         const rest = []
         if (row) {
           if (props.treeConfig) {
@@ -5207,7 +5206,15 @@ export default defineComponent({
         if (fieldOrColumn) {
           rest.push(handleScrollToRowColumn(fieldOrColumn, row))
         }
-        return Promise.all(rest)
+        return Promise.all(rest).then(() => {
+          if (row) {
+            if (!showOverflow && (scrollYLoad || scrollXLoad)) {
+              calcCellHeight()
+              calcCellWidth()
+            }
+            return nextTick()
+          }
+        })
       },
       /**
        * 如果有滚动条，则滚动到对应的列

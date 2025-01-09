@@ -45,14 +45,18 @@ function renderTitleSuffixIcon (params: VxeTableDefines.CellRenderHeaderParams &
 }
 
 function renderCellDragIcon (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-  const { $table } = params
+  const { $table, column } = params
+  const { context } = $table
+  const tableSlots = context.slots
   const tableProps = $table.props
+  const { slots } = column
   const { dragConfig } = tableProps
   const { computeRowDragOpts } = $table.getComputeMaps()
   const rowDragOpts = computeRowDragOpts.value
   const { icon, trigger, disabledMethod } = rowDragOpts
   const rDisabledMethod = disabledMethod || (dragConfig ? dragConfig.rowDisabledMethod : null)
   const isDisabled = rDisabledMethod && rDisabledMethod(params)
+  const rowDragIconSlot = (slots ? slots.rowDragIcon || slots['row-drag-icon'] : null) || tableSlots.rowDragIcon || tableSlots['row-drag-icon']
   const ons: Record<string, any> = {}
   if (trigger !== 'cell') {
     ons.onMousedown = (evnt: MouseEvent) => {
@@ -68,11 +72,13 @@ function renderCellDragIcon (params: VxeTableDefines.CellRenderBodyParams & { $t
       'is--disabled': isDisabled
     }],
     ...ons
-  }, [
-    h('i', {
-      class: icon || (dragConfig ? dragConfig.rowIcon : '') || getIcon().TABLE_DRAG_ROW
-    })
-  ])
+  }, rowDragIconSlot
+    ? $table.callSlot(rowDragIconSlot, params)
+    : [
+        h('i', {
+          class: icon || (dragConfig ? dragConfig.rowIcon : '') || getIcon().TABLE_DRAG_ROW
+        })
+      ])
 }
 
 function renderCellBaseVNs (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, content: VxeComponentSlotType | VxeComponentSlotType[]) {
@@ -104,6 +110,9 @@ function renderCellBaseVNs (params: VxeTableDefines.CellRenderBodyParams & { $ta
 
 function renderHeaderCellDragIcon (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { $table, column } = params
+  const { context } = $table
+  const tableSlots = context.slots
+  const { slots } = column
   const { computeColumnOpts, computeColumnDragOpts } = $table.getComputeMaps()
   const columnOpts = computeColumnOpts.value
   const columnDragOpts = computeColumnDragOpts.value
@@ -111,6 +120,7 @@ function renderHeaderCellDragIcon (params: VxeTableDefines.CellRenderHeaderParam
   if (columnOpts.drag && showIcon && (!visibleMethod || visibleMethod(params))) {
     if (!column.fixed && (isPeerDrag || isCrossDrag || !column.parentId)) {
       const isDisabled = disabledMethod && disabledMethod(params)
+      const columnDragIconSlot = (slots ? slots.columnDragIcon || slots['column-drag-icon'] : null) || tableSlots.columnDragIcon || tableSlots['column-drag-icon']
       const ons: Record<string, any> = {}
       if (trigger !== 'cell') {
         ons.onMousedown = (evnt: MouseEvent) => {
@@ -126,11 +136,13 @@ function renderHeaderCellDragIcon (params: VxeTableDefines.CellRenderHeaderParam
           'is--disabled': isDisabled
         }],
         ...ons
-      }, [
-        h('i', {
-          class: icon || getIcon().TABLE_DRAG_COLUMN
-        })
-      ])
+      }, columnDragIconSlot
+        ? $table.callSlot(columnDragIconSlot, params)
+        : [
+            h('i', {
+              class: icon || getIcon().TABLE_DRAG_COLUMN
+            })
+          ])
     }
   }
   return renderEmptyElement($table)

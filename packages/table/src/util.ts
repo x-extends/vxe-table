@@ -385,6 +385,7 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const { refTableBody } = $xeTable.getRefMaps()
   const { columnStore, scrollYLoad } = reactData
   const { afterFullData, scrollYStore, fullAllDataRowIdData } = internalData
+  const { rowHeight } = scrollYStore
   const tableBody = refTableBody.value
   const { leftList, rightList } = columnStore
   const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
@@ -415,19 +416,19 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
       // 如果是虚拟渲染滚动
       if (scrollYLoad) {
         if (showOverflow) {
-          return $xeTable.scrollTo(null, ($xeTable.findRowIndexOf(afterFullData, row) - 1) * scrollYStore.rowHeight)
+          return $xeTable.scrollTo(null, ($xeTable.findRowIndexOf(afterFullData, row) - 1) * rowHeight)
         }
         let scrollTop = 0
-        const rest = fullAllDataRowIdData[rowid]
-        const rHeight = rest ? rest.height : 0
+        const rowRest = fullAllDataRowIdData[rowid]
+        const rHeight = rowRest ? (rowRest.height || rowHeight) : rowHeight
         for (let i = 0; i < afterFullData.length; i++) {
           const currRow = afterFullData[i]
           const currRowid = getRowid($xeTable, currRow)
           if (currRow === row || currRowid === rowid) {
             break
           }
-          const rest = fullAllDataRowIdData[currRowid]
-          scrollTop += rest ? rest.height : 0
+          const rowRest = fullAllDataRowIdData[currRowid]
+          scrollTop += rowRest ? (rowRest.height || rowHeight) : rowHeight
         }
         if (scrollTop < bodyScrollTop) {
           return $xeTable.scrollTo(null, scrollTop - offsetFixedLeft - 1)
