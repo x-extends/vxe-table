@@ -162,7 +162,13 @@ VxeUI.setConfig({
     areaConfig: {
       autoClear: true,
       selectCellByHeader: true,
-      selectCellByBody: true
+      selectCellByBody: true,
+      extendDirection: {
+        top: true,
+        left: true,
+        bottom: true,
+        right: true
+      }
     },
     clipConfig: {
       isCopy: true,
@@ -173,15 +179,19 @@ VxeUI.setConfig({
       isFind: true,
       isReplace: true
     },
-    scrollX: {
+    virtualXConfig: {
       // enabled: false,
       gt: 60
       // oSize: 0
     },
-    scrollY: {
+    virtualYConfig: {
       // enabled: false,
       gt: 100
       // oSize: 0
+    },
+    scrollbarConfig: {
+      width: 10,
+      height: 10
     }
   },
   // export: {

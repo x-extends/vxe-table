@@ -77,10 +77,13 @@ export function restoreScrollLocation ($xeTable: any, scrollLeft: any, scrollTop
       internalData.lastScrollLeft = 0
       internalData.lastScrollTop = 0
 
+      internalData.intoRunScroll = false
       internalData.inVirtualScroll = false
+      internalData.inWheelScroll = false
+      internalData.inHeaderScroll = false
       internalData.inBodyScroll = false
       internalData.inFooterScroll = false
-      internalData.bodyScrollType = ''
+      internalData.scrollRenderType = ''
       // 还原滚动状态
       return $xeTable.scrollTo(scrollLeft, scrollTop)
     }
@@ -229,8 +232,8 @@ export function getColReMinWidth (params: any) {
   }
   // 如果设置最小宽
   if (colMinWidth) {
-    const { tableBody } = $table.$refs
-    const bodyElem = tableBody ? tableBody.$el : null
+    const { refTableBody } = $table.$refs
+    const bodyElem = refTableBody ? refTableBody.$el : null
     if (bodyElem) {
       if (isScale(colMinWidth)) {
         const bodyWidth = bodyElem.clientWidth - 1
@@ -308,6 +311,13 @@ export function setCellValue (row: any, column:any, value: any) {
   return XEUtils.set(row, column.field, value)
 }
 
+export function getRefElem (refEl: any) {
+  if (refEl) {
+    return (refEl.$el || refEl) as HTMLElement
+  }
+  return null
+}
+
 export function clearTableDefaultStatus (_vm: any) {
   _vm.initStatus = false
   _vm.clearSort()
@@ -353,12 +363,12 @@ export function rowToVisible ($xeTable: any, row: any) {
   const internalData = $xeTable
   const tableProps = $xeTable
   const { showOverflow } = tableProps
-  const tableBody: any = $xeTable.$refs.tableBody
+  const refTableBody: any = $xeTable.$refs.refTableBody
   const { columnStore, scrollYLoad } = reactData
   const { afterFullData, scrollYStore, fullAllDataRowIdData } = internalData
   const { rowHeight } = scrollYStore
   const { leftList, rightList } = columnStore
-  const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+  const bodyElem = refTableBody ? refTableBody.$el as HTMLDivElement : null
   const rowid = getRowid($xeTable, row)
   let offsetFixedLeft = 0
   leftList.forEach((item: any) => {
@@ -412,9 +422,9 @@ export function rowToVisible ($xeTable: any, row: any) {
 
 export function colToVisible ($xeTable: any, column: any, row?: any) {
   const { columnStore, scrollXLoad, visibleColumn } = $xeTable
-  const tableBody: any = $xeTable.$refs.tableBody
+  const refTableBody: any = $xeTable.$refs.refTableBody
   const { leftList, rightList } = columnStore
-  const bodyElem = tableBody ? tableBody.$el : null
+  const bodyElem = refTableBody ? refTableBody.$el : null
   if (column.fixed) {
     return Promise.resolve()
   }

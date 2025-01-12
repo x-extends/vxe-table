@@ -59,7 +59,7 @@ export default {
       const { selected } = editStore
       const layoutList = ['header', 'body', 'footer']
       if (isEnableConf(menuConfig) || contextMenu) {
-        if (ctxMenuStore.visible && $refs.ctxWrapper && getEventTargetNode(evnt, $refs.ctxWrapper.$el).flag) {
+        if (ctxMenuStore.visible && $refs.refTableMenu && getEventTargetNode(evnt, $refs.refTableMenu.$el).flag) {
           evnt.preventDefault()
           return
         }
@@ -165,7 +165,7 @@ export default {
                   }
                 })
                 this.$nextTick(() => {
-                  const ctxElem = this.$refs.ctxWrapper.$el
+                  const ctxElem = this.$refs.refTableMenu.$el
                   const clientHeight = ctxElem.clientHeight
                   const clientWidth = ctxElem.clientWidth
                   const { boundingTop, boundingLeft } = getAbsolutePos(ctxElem)

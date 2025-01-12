@@ -388,7 +388,7 @@ export default {
     },
     _clearValidate  (rows: any, fieldOrColumn: any) {
       const { validOpts, validErrorMaps } = this
-      const validTip = this.$refs.validTip
+      const validTip = this.$refs.refValidTooltip
       const rowList = XEUtils.isArray(rows) ? rows : (rows ? [rows] : [])
       const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : [])).map(column => handleFieldOrColumn(this, column))
       let validErrMaps: any = {}
@@ -466,7 +466,7 @@ export default {
     showValidTooltip (params: any) {
       const { $refs, height, validStore, validErrorMaps, tableData, validOpts } = this
       const { rule, row, column, cell } = params
-      const validTip = $refs.validTip
+      const validTip = $refs.refValidTooltip
       const content = rule.content
       validStore.visible = true
       if (validOpts.msgMode === 'single') {

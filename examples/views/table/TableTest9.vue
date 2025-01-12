@@ -1,16 +1,18 @@
 <template>
   <div>
-    <vxe-select v-model="rowSize" :options="dataOptions" @change="loadData()"></vxe-select>
+    <vxe-button @click="loadData(5000)">加载5k条</vxe-button>
+    <vxe-button @click="loadData(10000)">加载1w条</vxe-button>
+    <vxe-button @click="loadData(30000)">加载3w条</vxe-button>
     <vxe-table
       border
-      show-footer
+      show-overflow
       height="800"
       :loading="loading"
-      :column-config="{resizable: true}"
+      :column-config="{resizable: true,drag: true}"
+      :row-config="{drag: true}"
       :scroll-x="{enabled: true, gt: 0}"
       :scroll-y="{enabled: true, gt: 0}"
-      :data="tableData"
-      :footer-data="footerData">
+      :data="tableData">
       <vxe-column field="checkbox" type="checkbox" width="60" fixed="left"></vxe-column>
       <vxe-column field="col0" title="列0" width="100" fixed="left"></vxe-column>
       <vxe-column field="imgUrl" title="列1" width="80" fixed="left" :cell-render="imgUrlCellRender"></vxe-column>

@@ -1,23 +1,29 @@
-import { CreateElement } from 'vue'
+import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getClass } from '../../ui/src/utils'
 import { getOffsetPos, hasClass, addClass, removeClass } from '../../ui/src/dom'
 import { convertHeaderColumnToRows, getColReMinWidth } from './util'
 
-import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes } from '../../../types'
+import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes, TableReactData, TableInternalData, VxeComponentStyleType } from '../../../types'
 
 const { getI18n, renderer, renderEmptyElement } = VxeUI
 
 const cellType = 'header'
 
-const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo[], $rowIndex: number) => {
-  const $xeTable = _vm.$parent
+const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode: boolean, cols: VxeTableDefines.ColumnInfo[], $rowIndex: number) => {
+  const props = _vm
+  const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const $xeGrid = $xeTable.xegrid
+  const tableProps = $xeTable
+  const tableReactData = $xeTable as unknown as TableReactData
+  const tableInternalData = $xeTable as unknown as TableInternalData
 
-  const { fixedType } = _vm
-
-  const { resizable: allResizable, border, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, currentColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, mouseConfig, columnOpts } = $xeTable
+  const { fixedType } = props
+  const { resizable: allResizable, border, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
+  const { currentColumn, scrollXLoad, scrollYLoad, overflowX } = tableReactData
+  const { scrollXStore } = tableInternalData
+  const columnOpts = $xeTable.computeColumnOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
   const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
   return cols.map((column: any, $columnIndex: any) => {
@@ -76,6 +82,11 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
     }
     const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
+    let isPreLoadStatus = false
+    if (scrollXLoad && !isGroup && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex || _columnIndex > scrollXStore.visibleEndIndex)) {
+      isPreLoadStatus = true
+    }
+
     return h('th', {
       class: ['vxe-header--column', colid, {
         [`col--${headAlign}`]: headAlign,
@@ -94,7 +105,7 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
         'col--current': currentColumn === column
       }, getClass(headerClassName, params), getClass(headerCellClassName, params)],
       attrs: thAttrs,
-      style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
+      style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) as VxeComponentStyleType : undefined,
       on: thOns,
       key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex
     }, [
@@ -104,7 +115,7 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
           'c--tooltip': showTooltip,
           'c--ellipsis': showEllipsis
         }]
-      }, column.renderHeader(h, params)),
+      }, isPreLoadStatus || (isOptimizeMode && fixedHiddenColumn) ? [] : column.renderHeader(h, params)),
       /**
      * 列宽拖动
      */
@@ -120,27 +131,22 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
         })
         : null
     ])
-  }).concat(scrollbarWidth
-    ? [
-        h('th', {
-          key: `gr${$rowIndex}`,
-          class: 'vxe-header--gutter col--gutter'
-        })
-      ]
-    : [])
+  })
 }
 
-function renderHeads (h: CreateElement, _vm: any, headerGroups: any[]) {
-  const $xeTable = _vm.$parent
+function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode: boolean, headerGroups: any[]) {
+  const props = _vm
+  const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
+  const tableReactData = $xeTable as unknown as TableReactData
 
-  const { fixedType } = _vm
+  const { fixedType } = props
 
   const columnOpts = $xeTable.computeColumnOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
 
   const { headerRowClassName, headerRowStyle } = tableProps
-  const { isDragColMove } = $xeTable
+  const { isDragColMove } = tableReactData
 
   return headerGroups.map((cols: any, $rowIndex: any) => {
     const params = { $table: $xeTable, $rowIndex, fixed: fixedType, type: cellType }
@@ -157,7 +163,7 @@ function renderHeads (h: CreateElement, _vm: any, headerGroups: any[]) {
           ],
           style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) : null
         }
-      }, renderRows(h, _vm, cols, $rowIndex))
+      }, renderRows(h, _vm, isGroup, isOptimizeMode, cols, $rowIndex))
     }
     return h('tr', {
       key: $rowIndex,
@@ -165,20 +171,22 @@ function renderHeads (h: CreateElement, _vm: any, headerGroups: any[]) {
         'vxe-header--row',
         headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName : ''
       ],
-      style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) : null
-    }, renderRows(h, _vm, cols, $rowIndex))
+      style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) as VxeComponentStyleType : undefined
+    }, renderRows(h, _vm, isGroup, isOptimizeMode, cols, $rowIndex))
   })
 }
 
 export default {
   name: 'VxeTableHeader',
   props: {
-    tableData: Array,
-    tableColumn: Array,
-    tableGroupColumn: Array,
-    fixedColumn: Array,
-    size: String,
-    fixedType: String
+    tableData: Array as PropType<any[]>,
+    tableColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
+    tableGroupColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
+    fixedColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
+    fixedType: {
+      type: String as PropType<'right' | 'left' | ''>,
+      default: null
+    }
   },
   data () {
     return {
@@ -194,21 +202,32 @@ export default {
     this.uploadColumn()
   },
   mounted () {
-    const { $parent: $xetable, $el, $refs, fixedType } = this
-    const { elemStore } = $xetable
+    const _vm = this
+    const props = _vm
+    const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { fixedType } = props
+    const { elemStore } = internalData
     const prefix = `${fixedType || 'main'}-header-`
-    elemStore[`${prefix}wrapper`] = $el
-    elemStore[`${prefix}table`] = $refs.table
-    elemStore[`${prefix}colgroup`] = $refs.colgroup
-    elemStore[`${prefix}list`] = $refs.thead
-    elemStore[`${prefix}xSpace`] = $refs.xSpace
-    elemStore[`${prefix}repair`] = $refs.repair
+    elemStore[`${prefix}wrapper`] = _vm.$refs.refElem
+    elemStore[`${prefix}scroll`] = _vm.$refs.refHeaderScroll
+    elemStore[`${prefix}table`] = _vm.$refs.refHeaderTable
+    elemStore[`${prefix}colgroup`] = _vm.$refs.refHeaderColgroup
+    elemStore[`${prefix}list`] = _vm.$refs.refHeaderTHead
+    elemStore[`${prefix}xSpace`] = _vm.$refs.refHeaderXSpace
+    elemStore[`${prefix}repair`] = _vm.$refs.refHeaderBorderRepair
   },
   destroyed () {
-    const { $parent: $xetable, fixedType } = this
-    const { elemStore } = $xetable
+    const props = this
+    const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { fixedType } = props
+    const { elemStore } = internalData
     const prefix = `${fixedType || 'main'}-header-`
     elemStore[`${prefix}wrapper`] = null
+    elemStore[`${prefix}scroll`] = null
     elemStore[`${prefix}table`] = null
     elemStore[`${prefix}colgroup`] = null
     elemStore[`${prefix}list`] = null
@@ -217,36 +236,40 @@ export default {
   },
   render (h: CreateElement) {
     const props = this
-    const $xeTable = this.$parent
+    const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const tableProps = $xeTable
-    const tableReactData = $xeTable
-    const tableInternalData = $xeTable
+    const tableReactData = $xeTable as unknown as TableReactData
+    const tableInternalData = $xeTable as unknown as TableInternalData
 
-    const { tId } = $xeTable
+    const { xID } = $xeTable
     const { fixedType, fixedColumn, tableColumn } = props
     const { headerColumn } = this
 
     const { showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
-    const { isGroup, scrollXLoad, scrollYLoad, scrollbarWidth, dragCol } = tableReactData
+    const { isGroup, scrollXLoad, scrollYLoad, dragCol } = tableReactData
     const { visibleColumn, fullColumnIdData } = tableInternalData
 
-    let renderHeaderList: VxeTableDefines.ColumnInfo[][] = headerColumn
-    let renderColumnList: VxeTableDefines.ColumnInfo[] = tableColumn
+    let renderHeaderList = headerColumn as VxeTableDefines.ColumnInfo[][]
+    let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
+    let isOptimizeMode = false
 
     if (isGroup) {
       renderColumnList = visibleColumn
     } else {
-      if (fixedType) {
-        // 如果是使用优化模式
-        if (scrollXLoad || scrollYLoad || allColumnHeaderOverflow) {
+      // 如果是使用优化模式
+      if (scrollXLoad || scrollYLoad || allColumnHeaderOverflow) {
+        if (spanMethod || footerSpanMethod) {
           // 如果不支持优化模式
-          if (spanMethod || footerSpanMethod) {
-            renderColumnList = visibleColumn
-          } else {
-            renderColumnList = fixedColumn || []
-          }
         } else {
-          renderColumnList = visibleColumn
+          isOptimizeMode = true
+        }
+      }
+
+      if (fixedType) {
+        renderColumnList = visibleColumn
+        // 如果是使用优化模式
+        if (isOptimizeMode) {
+          renderColumnList = fixedColumn || []
         }
       }
       renderHeaderList = [renderColumnList]
@@ -266,7 +289,6 @@ export default {
             if (firstColRest && lastColRest) {
               const fcIndex = firstColRest._index
               const lcIndex = lastColRest._index
-              console.log(dragCol.id, dcIndex, fcIndex, lcIndex, renderColumnList.length)
               if (dcIndex < fcIndex) {
                 renderColumnList = [dragCol].concat(renderColumnList)
                 renderHeaderList = [[dragCol].concat(renderHeaderList[0])].concat(renderHeaderList.slice(1))
@@ -274,7 +296,6 @@ export default {
                 renderColumnList = renderColumnList.concat([dragCol])
                 renderHeaderList = [renderHeaderList[0].concat([dragCol])].concat(renderHeaderList.slice(1))
               }
-              console.log(renderColumnList.length)
             }
           }
         }
@@ -282,62 +303,65 @@ export default {
     }
 
     return h('div', {
+      ref: 'refElem',
       class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
       attrs: {
-        xid: tId
+        xid: xID
       }
     }, [
-      fixedType
-        ? renderEmptyElement($xeTable)
-        : h('div', {
-          class: 'vxe-body--x-space',
-          ref: 'xSpace'
-        }),
-      h('table', {
-        class: 'vxe-table--header',
-        attrs: {
-          xid: tId,
-          cellspacing: 0,
-          cellpadding: 0,
-          border: 0
-        },
-        ref: 'table'
+      h('div', {
+        ref: 'refHeaderScroll',
+        class: 'vxe-table--header-inner-wrapper',
+        on: {
+          scroll (evnt: Event) {
+            $xeTable.triggerHeaderScrollEvent(evnt, fixedType)
+          }
+        }
       }, [
+        fixedType
+          ? renderEmptyElement($xeTable)
+          : h('div', {
+            ref: 'refHeaderXSpace',
+            class: 'vxe-body--x-space'
+          }),
+        h('table', {
+          ref: 'refHeaderTable',
+          class: 'vxe-table--header',
+          attrs: {
+            xid: xID,
+            cellspacing: 0,
+            cellpadding: 0,
+            border: 0
+          }
+        }, [
         /**
          * 列宽
          */
-        h('colgroup', {
-          ref: 'colgroup'
-        }, renderColumnList.map((column: any, $columnIndex: any) => {
-          return h('col', {
-            attrs: {
-              name: column.id
-            },
-            key: $columnIndex
-          })
-        }).concat(scrollbarWidth
-          ? [
-              h('col', {
-                attrs: {
-                  name: 'col_gutter'
-                }
-              })
-            ]
-          : [])),
+          h('colgroup', {
+            ref: 'refHeaderColgroup'
+          }, renderColumnList.map((column, $columnIndex) => {
+            return h('col', {
+              attrs: {
+                name: column.id
+              },
+              key: $columnIndex
+            })
+          })),
+          /**
+           * 头部
+           */
+          h('thead', {
+            ref: 'refHeaderTHead'
+          }, renderHeads(h, this, isGroup, isOptimizeMode, renderHeaderList))
+        ]),
         /**
-         * 头部
+         * 其他
          */
-        h('thead', {
-          ref: 'thead'
-        }, renderHeads(h, this, renderHeaderList))
-      ]),
-      /**
-       * 其他
-       */
-      h('div', {
-        class: 'vxe-table--header-border-line',
-        ref: 'repair'
-      })
+        h('div', {
+          ref: 'refHeaderBorderRepair',
+          class: 'vxe-table--header-border-line'
+        })
+      ])
     ])
   },
   methods: {
@@ -352,9 +376,9 @@ export default {
       const { column } = params
       const { $parent: $xetable, fixedType } = this
       const { visibleColumn } = tableInternalData
-      const { tableBody, leftContainer, rightContainer } = $xetable.$refs
+      const { refTableBody, refLeftContainer, refRightContainer } = $xetable.$refs
       const tableEl = $xeTable.$el as HTMLDivElement
-      const resizeBarElem = $xetable.$refs.resizeBar as HTMLDivElement
+      const resizeBarElem = $xetable.$refs.refCellResizeBar as HTMLDivElement
       const resizeTipElem = $xetable.$refs.refCellResizeTip as HTMLDivElement
       const wrapperElem = this.$el as HTMLDivElement
       const { clientX: dragClientX } = evnt
@@ -363,7 +387,7 @@ export default {
       const cellParams = Object.assign(params, { cell })
       const resizableOpts = $xeTable.computeResizableOpts
       let dragLeft = 0
-      const tableBodyElem = tableBody.$el
+      const tableBodyElem = refTableBody.$el
       const pos = getOffsetPos(dragBtnElem, tableEl)
       const dragBtnWidth = dragBtnElem.clientWidth
       const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
@@ -388,8 +412,8 @@ export default {
           }
           tempCellElem = tempCellElem[siblingProp] as HTMLTableCellElement
         }
-        if (isRightFixed && rightContainer) {
-          dragPosLeft = rightContainer.offsetLeft + fixedOffsetWidth
+        if (isRightFixed && refRightContainer) {
+          dragPosLeft = refRightContainer.offsetLeft + fixedOffsetWidth
         }
       }
 
@@ -402,10 +426,10 @@ export default {
         const scrollLeft = fixedType ? 0 : tableBodyElem.scrollLeft
         if (isLeftFixed) {
           // 左固定列（不允许超过右侧固定列、不允许超过右边距）
-          left = Math.min(left, (rightContainer ? rightContainer.offsetLeft : tableBodyElem.clientWidth) - fixedOffsetWidth - minInterval)
+          left = Math.min(left, (refRightContainer ? refRightContainer.offsetLeft : tableBodyElem.clientWidth) - fixedOffsetWidth - minInterval)
         } else if (isRightFixed) {
           // 右侧固定列（不允许超过左侧固定列、不允许超过左边距）
-          dragMinLeft = (leftContainer ? leftContainer.clientWidth : 0) + fixedOffsetWidth + minInterval
+          dragMinLeft = (refLeftContainer ? refLeftContainer.clientWidth : 0) + fixedOffsetWidth + minInterval
           left = Math.min(left, dragPosLeft + cell.clientWidth - minInterval)
         } else {
           dragMinLeft = Math.max(tableBodyElem.scrollLeft, dragMinLeft)

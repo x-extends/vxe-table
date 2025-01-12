@@ -92,9 +92,9 @@ export default {
         this.initStore.filter = true
         this.$nextTick(() => {
           const { $refs } = this
-          const { tableHeader, tableBody, filterWrapper } = $refs
-          const bodyElem = tableBody.$el
-          const headerElem = tableHeader ? tableHeader.$el : null
+          const { refTableHeader, refTableBody, filterWrapper } = $refs
+          const bodyElem = refTableBody.$el
+          const headerElem = refTableHeader ? refTableHeader.$el : null
           if (!bodyElem) {
             return
           }

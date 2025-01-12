@@ -31,8 +31,8 @@ function getCheckboxRangeRows ($xeTable: any, evnt: MouseEvent, params: any, tar
   let rangeRows: any[] = []
   let moveSize = 0
   const isDown = moveRange > 0
-  const { scrollYLoad } = reactData
-  const { afterFullData, scrollYStore } = internalData
+  const { scrollYLoad, rowHeight } = reactData
+  const { afterFullData } = internalData
   if (scrollYLoad) {
     if (isDown) {
       moveSize = offsetClientTop + moveRange
@@ -41,9 +41,9 @@ function getCheckboxRangeRows ($xeTable: any, evnt: MouseEvent, params: any, tar
     }
     const _rowIndex = $xeTable.getVTRowIndex(params.row)
     if (isDown) {
-      rangeRows = afterFullData.slice(_rowIndex, _rowIndex + Math.ceil(moveSize / scrollYStore.rowHeight))
+      rangeRows = afterFullData.slice(_rowIndex, _rowIndex + Math.ceil(moveSize / rowHeight))
     } else {
-      rangeRows = afterFullData.slice(_rowIndex - Math.floor(moveSize / scrollYStore.rowHeight), _rowIndex + 1)
+      rangeRows = afterFullData.slice(_rowIndex - Math.floor(moveSize / rowHeight), _rowIndex + 1)
     }
   } else {
     if (isDown) {

@@ -1238,7 +1238,12 @@ export default {
           this.tZindex = nextZIndex()
         }
       }
-      return this.$nextTick().then(() => this.recalculate(true)).then(() => this.isZMax)
+      return this.$nextTick()
+        .then(() => this.recalculate(true))
+        .then(() => {
+          setTimeout(() => this.recalculate(true), 15)
+          return this.isZMax
+        })
     },
     getProxyInfo () {
       const { $refs, sortData, proxyConfig } = this
