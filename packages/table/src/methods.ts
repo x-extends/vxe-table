@@ -3010,15 +3010,21 @@ const Methods = {
     const { tableFullData, tableFullTreeData } = internalData
     if (treeConfig) {
       const treeOpts = $xeTable.computeTreeOpts
-      const { transform, mapChildrenField } = treeOpts
+      const { transform, mapChildrenField, rowField, parentField } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       if (transform) {
         return XEUtils.toArrayTree(
           XEUtils.toTreeArray(tableFullTreeData, {
+            key: rowField,
+            parentKey: parentField,
             children: mapChildrenField
           }),
-          { children: childrenField }
-        )
+          {
+            key: rowField,
+            parentKey: parentField,
+            children: childrenField,
+            mapChildren: mapChildrenField
+          }
       }
       return tableFullTreeData.slice(0)
     }
@@ -5715,7 +5721,7 @@ const Methods = {
                   // 根到根
                 }
 
-                const fullList = XEUtils.toTreeArray(internalData.afterTreeFullData, { children: childrenField })
+                const fullList = XEUtils.toTreeArray(internalData.afterTreeFullData, { key: rowField, parentKey: parentField, children: childrenField })
 
                 // 移出
                 const otfIndex = $xeTable.findRowIndexOf(fullList, dragRow)
