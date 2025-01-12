@@ -1,7 +1,11 @@
 <template>
   <div>
+    <vxe-button @click="loadData(0)">加载0条</vxe-button>
+    <vxe-button @click="loadData(5)">加载5条</vxe-button>
+    <vxe-button @click="loadData(50)">加载50条</vxe-button>
     <vxe-button @click="loadData(5000)">加载5k条</vxe-button>
     <vxe-button @click="loadData(10000)">加载1w条</vxe-button>
+    <vxe-button @click="loadData(30000)">加载3w条</vxe-button>
     <vxe-table
       border
       show-overflow
@@ -12,8 +16,8 @@
       :scroll-x="{enabled: true, gt: 0}"
       :scroll-y="{enabled: true, gt: 0}"
       :data="tableData">
-      <vxe-column type="checkbox" width="80" drag-sort></vxe-column>
-      <vxe-column field="col0" title="列0" width="100"></vxe-column>
+      <vxe-column type="checkbox" width="80" fixed="left" drag-sort></vxe-column>
+      <vxe-column field="col0" title="列0" fixed="left" width="100"></vxe-column>
       <vxe-column field="imgUrl" title="列1" width="80" :cell-render="imgUrlCellRender"></vxe-column>
       <vxe-column field="col2" title="列2" width="90"></vxe-column>
       <vxe-column field="col3" title="列3" width="200"></vxe-column>
@@ -102,7 +106,7 @@
       <vxe-column field="col86" title="列86" width="800"></vxe-column>
       <vxe-column field="imgList1" title="列88" width="120"  :cell-render="imgList1CellRender"></vxe-column>
       <vxe-column field="flag1" title="列89" width="100"  :cell-render="flag1CellRender"></vxe-column>
-      <vxe-column field="action" title="操作" width="120" >
+      <vxe-column field="action" title="操作" width="120" fixed="right" >
         <template #default>
           <vxe-button mode="text" status="primary">编辑</vxe-button>
           <vxe-button mode="text" status="error">删除</vxe-button>
@@ -185,5 +189,5 @@ const loadData = (rowSize: number) => {
   }, 350)
 }
 
-loadData(200)
+loadData(16)
 </script>

@@ -18,7 +18,7 @@ export default defineComponent({
     tableGroupColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
     fixedColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
     fixedType: {
-      type: String as PropType<VxeColumnPropTypes.Fixed>,
+      type: String as PropType<'right' | 'left' | ''>,
       default: null
     }
   },
@@ -32,6 +32,7 @@ export default defineComponent({
     const headerColumn = ref([] as VxeTableDefines.ColumnInfo[][])
 
     const refElem = ref() as Ref<HTMLDivElement>
+    const refHeaderScroll = ref() as Ref<HTMLDivElement>
     const refHeaderTable = ref() as Ref<HTMLTableElement>
     const refHeaderColgroup = ref() as Ref<HTMLTableColElement>
     const refHeaderTHead = ref() as Ref<HTMLTableSectionElement>
@@ -165,10 +166,11 @@ export default defineComponent({
       }
     }
 
-    const renderRows = (cols: VxeTableDefines.ColumnInfo[], $rowIndex: number) => {
+    const renderRows = (isGroup: boolean, isOptimizeMode: boolean, cols: VxeTableDefines.ColumnInfo[], $rowIndex: number) => {
       const { fixedType } = props
       const { resizable: allResizable, border, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
-      const { currentColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth } = tableReactData
+      const { currentColumn, scrollXLoad, scrollYLoad, overflowX } = tableReactData
+      const { scrollXStore } = tableInternalData
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
       const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
@@ -229,6 +231,11 @@ export default defineComponent({
         }
         const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
+        let isPreLoadStatus = false
+        if (scrollXLoad && !isGroup && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex || _columnIndex > scrollXStore.visibleEndIndex)) {
+          isPreLoadStatus = true
+        }
+
         return h('th', {
           class: ['vxe-header--column', colid, {
             [`col--${headAlign}`]: headAlign,
@@ -260,7 +267,7 @@ export default defineComponent({
               'c--tooltip': showTooltip,
               'c--ellipsis': showEllipsis
             }]
-          }, column.renderHeader(params)),
+          }, isPreLoadStatus || (isOptimizeMode && fixedHiddenColumn) ? [] : column.renderHeader(params)),
           /**
            * 列宽拖动
            */
@@ -274,17 +281,10 @@ export default defineComponent({
             })
             : null
         ])
-      }).concat(scrollbarWidth
-        ? [
-            h('th', {
-              key: `gr${$rowIndex}`,
-              class: 'vxe-header--gutter col--gutter'
-            })
-          ]
-        : [])
+      })
     }
 
-    const renderHeads = (headerGroups: VxeTableDefines.ColumnInfo[][]) => {
+    const renderHeads = (isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][]) => {
       const { fixedType } = props
       const { headerRowClassName, headerRowStyle } = tableProps
       const { isDragColMove } = tableReactData
@@ -305,7 +305,7 @@ export default defineComponent({
             ],
             style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) : null
           }, {
-            default: () => renderRows(cols, $rowIndex)
+            default: () => renderRows(isGroup, isOptimizeMode, cols, $rowIndex)
           })
         }
         return h('tr', {
@@ -315,32 +315,37 @@ export default defineComponent({
             headerRowClassName ? (XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName) : ''
           ],
           style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) : null
-        }, renderRows(cols, $rowIndex))
+        }, renderRows(isGroup, isOptimizeMode, cols, $rowIndex))
       })
     }
 
     const renderVN = () => {
       const { fixedType, fixedColumn, tableColumn } = props
       const { showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
-      const { isGroup, scrollXLoad, scrollYLoad, scrollbarWidth, dragCol } = tableReactData
+      const { isGroup, scrollXLoad, scrollYLoad, dragCol } = tableReactData
       const { visibleColumn, fullColumnIdData } = tableInternalData
 
       let renderHeaderList = headerColumn.value
       let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
+      let isOptimizeMode = false
 
       if (isGroup) {
         renderColumnList = visibleColumn
       } else {
+        // 如果是使用优化模式
+        if (scrollXLoad || scrollYLoad || allColumnHeaderOverflow) {
+          if (spanMethod || footerSpanMethod) {
+            // 如果不支持优化模式
+          } else {
+            isOptimizeMode = true
+          }
+        }
+
         if (fixedType) {
           renderColumnList = visibleColumn
           // 如果是使用优化模式
-          if (scrollXLoad || scrollYLoad || allColumnHeaderOverflow) {
-            // 如果不支持优化模式
-            if (spanMethod || footerSpanMethod) {
-              renderColumnList = visibleColumn
-            } else {
-              renderColumnList = fixedColumn || []
-            }
+          if (isOptimizeMode) {
+            renderColumnList = fixedColumn || []
           }
         }
         renderHeaderList = [renderColumnList]
@@ -378,43 +383,45 @@ export default defineComponent({
         class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
         xid: xID
       }, [
-        fixedType
-          ? renderEmptyElement($xeTable)
-          : h('div', {
-            ref: refHeaderXSpace,
-            class: 'vxe-body--x-space'
-          }),
-        h('table', {
-          ref: refHeaderTable,
-          class: 'vxe-table--header',
-          xid: xID,
-          cellspacing: 0,
-          cellpadding: 0,
-          border: 0
+        h('div', {
+          ref: refHeaderScroll,
+          class: 'vxe-table--header-inner-wrapper',
+          onScroll (evnt) {
+            $xeTable.triggerHeaderScrollEvent(evnt, fixedType)
+          }
         }, [
+          fixedType
+            ? renderEmptyElement($xeTable)
+            : h('div', {
+              ref: refHeaderXSpace,
+              class: 'vxe-body--x-space'
+            }),
+          h('table', {
+            ref: refHeaderTable,
+            class: 'vxe-table--header',
+            xid: xID,
+            cellspacing: 0,
+            cellpadding: 0,
+            border: 0
+          }, [
           /**
            * 列宽
            */
-          h('colgroup', {
-            ref: refHeaderColgroup
-          }, renderColumnList.map((column, $columnIndex) => {
-            return h('col', {
-              name: column.id,
-              key: $columnIndex
-            })
-          }).concat(scrollbarWidth
-            ? [
-                h('col', {
-                  name: 'col_gutter'
-                })
-              ]
-            : [])),
-          /**
+            h('colgroup', {
+              ref: refHeaderColgroup
+            }, renderColumnList.map((column, $columnIndex) => {
+              return h('col', {
+                name: column.id,
+                key: $columnIndex
+              })
+            })),
+            /**
            * 头部
            */
-          h('thead', {
-            ref: refHeaderTHead
-          }, renderHeads(renderHeaderList))
+            h('thead', {
+              ref: refHeaderTHead
+            }, renderHeads(isGroup, isOptimizeMode, renderHeaderList))
+          ])
         ]),
         /**
          * 其他
@@ -435,6 +442,7 @@ export default defineComponent({
         const { elemStore } = internalData
         const prefix = `${fixedType || 'main'}-header-`
         elemStore[`${prefix}wrapper`] = refElem
+        elemStore[`${prefix}scroll`] = refHeaderScroll
         elemStore[`${prefix}table`] = refHeaderTable
         elemStore[`${prefix}colgroup`] = refHeaderColgroup
         elemStore[`${prefix}list`] = refHeaderTHead
@@ -450,6 +458,7 @@ export default defineComponent({
       const { elemStore } = internalData
       const prefix = `${fixedType || 'main'}-header-`
       elemStore[`${prefix}wrapper`] = null
+      elemStore[`${prefix}scroll`] = null
       elemStore[`${prefix}table`] = null
       elemStore[`${prefix}colgroup`] = null
       elemStore[`${prefix}list`] = null

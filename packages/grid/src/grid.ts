@@ -442,7 +442,12 @@ export default defineComponent({
           reactData.tZindex = nextZIndex()
         }
       }
-      return nextTick().then(() => gridExtendTableMethods.recalculate(true)).then(() => reactData.isZMax)
+      return nextTick()
+        .then(() => gridExtendTableMethods.recalculate(true))
+        .then(() => {
+          setTimeout(() => gridExtendTableMethods.recalculate(true), 15)
+          return reactData.isZMax
+        })
     }
 
     const getFuncSlot = (optSlots: any, slotKey: string) => {

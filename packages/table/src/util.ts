@@ -77,10 +77,13 @@ export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft
       internalData.lastScrollLeft = 0
       internalData.lastScrollTop = 0
 
+      internalData.intoRunScroll = false
       internalData.inVirtualScroll = false
+      internalData.inWheelScroll = false
+      internalData.inHeaderScroll = false
       internalData.inBodyScroll = false
       internalData.inFooterScroll = false
-      internalData.bodyScrollType = ''
+      internalData.scrollRenderType = ''
       // 还原滚动状态
       return $xeTable.scrollTo(scrollLeft, scrollTop)
     }
@@ -427,9 +430,8 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const tableProps = $xeTable.props
   const { showOverflow } = tableProps
   const { refTableBody } = $xeTable.getRefMaps()
-  const { columnStore, scrollYLoad } = reactData
-  const { afterFullData, scrollYStore, fullAllDataRowIdData } = internalData
-  const { rowHeight } = scrollYStore
+  const { columnStore, scrollYLoad, rowHeight } = reactData
+  const { afterFullData, fullAllDataRowIdData } = internalData
   const tableBody = refTableBody.value
   const { leftList, rightList } = columnStore
   const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null

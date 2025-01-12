@@ -241,10 +241,16 @@ export default {
   emptyRender: Object as PropType<VxeTablePropTypes.EmptyRender>,
   // 自定义列配置项
   customConfig: Object as PropType<VxeTablePropTypes.CustomConfig>,
-  // 横向虚拟滚动配置项
+  // （即将废弃）横向虚拟滚动配置项
   scrollX: Object as PropType<VxeTablePropTypes.ScrollX>,
-  // 纵向虚拟滚动配置项
+  // （即将废弃）纵向虚拟滚动配置项
   scrollY: Object as PropType<VxeTablePropTypes.ScrollY>,
+  // 横向虚拟滚动配置项
+  virtualXConfig: Object as PropType<VxeTablePropTypes.VirtualXConfig>,
+  // 纵向虚拟滚动配置项
+  virtualYConfig: Object as PropType<VxeTablePropTypes.VirtualYConfig>,
+  // 滚动条配置项
+  scrollbarConfig: Object as PropType<VxeTablePropTypes.ScrollbarConfig>,
   // （即将废弃）优化相关
   animat: {
     type: Boolean as PropType<VxeTablePropTypes.Animat>,

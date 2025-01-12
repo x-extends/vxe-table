@@ -1235,9 +1235,9 @@ hooks.add('tableExportModule', {
           if (mode === 'selected') {
             const selectRecords = $xeTable.getCheckboxRecords()
             if (['html', 'pdf'].indexOf(type) > -1 && treeConfig) {
-              opts.data = XEUtils.searchTree($xeTable.getTableData().fullData, item => $xeTable.findRowIndexOf(selectRecords, item) > -1, Object.assign({}, treeOpts, { data: '_row' }))
+              handleOptions.data = XEUtils.searchTree($xeTable.getTableData().fullData, item => $xeTable.findRowIndexOf(selectRecords, item) > -1, Object.assign({}, treeOpts, { data: '_row' }))
             } else {
-              opts.data = selectRecords
+              handleOptions.data = selectRecords
             }
           } else if (mode === 'all') {
             if (process.env.VUE_APP_VXE_ENV === 'development') {

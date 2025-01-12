@@ -1,9 +1,9 @@
 import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { updateCellTitle, getPropClass, setScrollLeft } from '../../ui/src/dom'
+import { updateCellTitle, getPropClass } from '../../ui/src/dom'
 
-import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../types'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines } from '../../../types'
 
 const { renderer, renderEmptyElement } = VxeUI
 
@@ -39,7 +39,7 @@ export default defineComponent({
       default: () => []
     },
     fixedType: {
-      type: String as PropType<VxeColumnPropTypes.Fixed>,
+      type: String as PropType<'right' | 'left' | ''>,
       default: null
     }
   },
@@ -47,60 +47,20 @@ export default defineComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { refTableHeader, refTableBody, refScrollXHandleElem } = $xeTable.getRefMaps()
     const { computeTooltipOpts, computeColumnOpts, computeColumnDragOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
+    const refFooterScroll = ref() as Ref<HTMLDivElement>
     const refFooterTable = ref() as Ref<HTMLTableElement>
     const refFooterColgroup = ref() as Ref<HTMLTableColElement>
     const refFooterTFoot = ref() as Ref<HTMLTableSectionElement>
     const refFooterXSpace = ref() as Ref<HTMLDivElement>
 
-    /**
-     * 滚动处理
-     * 如果存在列固定左侧，同步更新滚动状态
-     * 如果存在列固定右侧，同步更新滚动状态
-     */
-    const scrollEvent = (evnt: Event) => {
-      const { inVirtualScroll, inBodyScroll } = tableInternalData
-      if (inVirtualScroll) {
-        return
-      }
-      if (inBodyScroll) {
-        return
-      }
-      const { fixedType } = props
-      const tableHeader = refTableHeader.value
-      const tableBody = refTableBody.value
-      const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
-      const footerElem = refElem.value
-      if (!footerElem) {
-        return
-      }
-      const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
-      if (!bodyElem) {
-        return
-      }
-      const xHandleEl = refScrollXHandleElem.value
-      const scrollLeft = footerElem.scrollLeft
-      const isRollX = true
-      const isRollY = false
-      const scrollTop = bodyElem.scrollTop
-      tableInternalData.inFooterScroll = true
-      setScrollLeft(xHandleEl, scrollLeft)
-      setScrollLeft(headerElem, scrollLeft)
-      setScrollLeft(bodyElem, scrollLeft)
-      $xeTable.triggerScrollXEvent(evnt)
-      $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
-        type: renderType,
-        fixed: fixedType
-      })
-    }
-
     const renderRows = (tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) => {
       const { fixedType } = props
       const { footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
-      const { scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, currentColumn, mergeFooterList } = tableReactData
+      const { scrollXLoad, scrollYLoad, overflowX, currentColumn, mergeFooterList } = tableReactData
+      const { scrollXStore } = tableInternalData
       const tooltipOpts = computeTooltipOpts.value
       const columnOpts = computeColumnOpts.value
 
@@ -195,6 +155,11 @@ export default defineComponent({
         }
         const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
+        let isPreLoadStatus = false
+        if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex || _columnIndex > scrollXStore.visibleEndIndex)) {
+          isPreLoadStatus = true
+        }
+
         return h('td', {
           class: ['vxe-footer--column', column.id, {
             [`col--${footAlign}`]: footAlign,
@@ -216,16 +181,9 @@ export default defineComponent({
               'c--tooltip': showTooltip,
               'c--ellipsis': showEllipsis
             }]
-          }, column.renderFooter(cellParams))
+          }, isPreLoadStatus ? [] : column.renderFooter(cellParams))
         ])
-      }).concat(scrollbarWidth
-        ? [
-            h('td', {
-              key: `gr${$rowIndex}`,
-              class: 'vxe-footer--gutter col--gutter'
-            })
-          ]
-        : [])
+      })
     }
 
     const renderHeads = (renderColumnList: VxeTableDefines.ColumnInfo[]) => {
@@ -268,20 +226,23 @@ export default defineComponent({
       const { fixedType, fixedColumn, tableColumn } = props
       const { spanMethod, footerSpanMethod, showFooterOverflow: allColumnFooterOverflow } = tableProps
       const { visibleColumn, fullColumnIdData } = tableInternalData
-      const { isGroup, scrollXLoad, scrollYLoad, scrollbarWidth, dragCol } = tableReactData
+      const { isGroup, scrollXLoad, scrollYLoad, dragCol } = tableReactData
 
       let renderColumnList = tableColumn
+      let isOptimizeMode = false
+      // 如果是使用优化模式
+      if (scrollXLoad || scrollYLoad || allColumnFooterOverflow) {
+        if (spanMethod || footerSpanMethod) {
+          // 如果不支持优化模式
+        } else {
+          isOptimizeMode = true
+        }
+      }
 
       if (fixedType) {
         renderColumnList = visibleColumn
-        // 如果是使用优化模式
-        if (scrollXLoad || scrollYLoad || allColumnFooterOverflow) {
-          // 如果不支持优化模式
-          if (spanMethod || footerSpanMethod) {
-            renderColumnList = visibleColumn
-          } else {
-            renderColumnList = fixedColumn || []
-          }
+        if (isOptimizeMode) {
+          renderColumnList = fixedColumn || []
         }
       }
 
@@ -310,54 +271,50 @@ export default defineComponent({
         }
       }
 
-      const ons: Record<string, any> = {}
-      if (!fixedType) {
-        ons.onScroll = scrollEvent
-      }
-
       return h('div', {
         ref: refElem,
         class: ['vxe-table--footer-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
-        xid: xID,
-        ...ons
+        xid: xID
       }, [
-        fixedType
-          ? renderEmptyElement($xeTable)
-          : h('div', {
-            ref: refFooterXSpace,
-            class: 'vxe-body--x-space'
-          }),
-        h('table', {
-          ref: refFooterTable,
-          class: 'vxe-table--footer',
-          xid: xID,
-          cellspacing: 0,
-          cellpadding: 0,
-          border: 0
+        h('div', {
+          ref: refFooterScroll,
+          class: 'vxe-table--footer-inner-wrapper',
+          onScroll (evnt) {
+            $xeTable.triggerFooterScrollEvent(evnt, fixedType)
+          }
         }, [
-          /**
-           * 列宽
-           */
-          h('colgroup', {
-            ref: refFooterColgroup
-          }, renderColumnList.map((column, $columnIndex) => {
-            return h('col', {
-              name: column.id,
-              key: $columnIndex
-            })
-          }).concat(scrollbarWidth
-            ? [
-                h('col', {
-                  name: 'col_gutter'
-                })
-              ]
-            : [])),
-          /**
-           * 底部
-           */
-          h('tfoot', {
-            ref: refFooterTFoot
-          }, renderHeads(renderColumnList))
+          fixedType
+            ? renderEmptyElement($xeTable)
+            : h('div', {
+              ref: refFooterXSpace,
+              class: 'vxe-body--x-space'
+            }),
+          h('table', {
+            ref: refFooterTable,
+            class: 'vxe-table--footer',
+            xid: xID,
+            cellspacing: 0,
+            cellpadding: 0,
+            border: 0
+          }, [
+            /**
+         * 列宽
+         */
+            h('colgroup', {
+              ref: refFooterColgroup
+            }, renderColumnList.map((column, $columnIndex) => {
+              return h('col', {
+                name: column.id,
+                key: $columnIndex
+              })
+            })),
+            /**
+         * 底部
+         */
+            h('tfoot', {
+              ref: refFooterTFoot
+            }, renderHeads(renderColumnList))
+          ])
         ])
       ])
     }
@@ -368,6 +325,7 @@ export default defineComponent({
         const { elemStore } = tableInternalData
         const prefix = `${fixedType || 'main'}-footer-`
         elemStore[`${prefix}wrapper`] = refElem
+        elemStore[`${prefix}scroll`] = refFooterScroll
         elemStore[`${prefix}table`] = refFooterTable
         elemStore[`${prefix}colgroup`] = refFooterColgroup
         elemStore[`${prefix}list`] = refFooterTFoot
@@ -380,6 +338,7 @@ export default defineComponent({
       const { elemStore } = tableInternalData
       const prefix = `${fixedType || 'main'}-footer-`
       elemStore[`${prefix}wrapper`] = null
+      elemStore[`${prefix}scroll`] = null
       elemStore[`${prefix}table`] = null
       elemStore[`${prefix}colgroup`] = null
       elemStore[`${prefix}list`] = null
