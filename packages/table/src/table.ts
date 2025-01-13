@@ -4030,14 +4030,19 @@ export default defineComponent({
         const { tableFullData, tableFullTreeData } = internalData
         if (treeConfig) {
           const treeOpts = computeTreeOpts.value
-          const { transform, mapChildrenField } = treeOpts
+          const { transform, mapChildrenField, rowField, parentField } = treeOpts
           const childrenField = treeOpts.children || treeOpts.childrenField
           if (transform) {
             return XEUtils.toArrayTree(
               XEUtils.toTreeArray(tableFullTreeData, {
                 children: mapChildrenField
               }),
-              { children: childrenField }
+              {
+                key: rowField,
+                parentKey: parentField,
+                children: childrenField,
+                mapChildren: mapChildrenField
+              }
             )
           }
           return tableFullTreeData.slice(0)
