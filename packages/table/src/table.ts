@@ -1192,7 +1192,7 @@ export default defineComponent({
           }
           fullColumnFieldData[field] = rest
         } else {
-          if (storage || (columnOpts.drag && (isCrossDrag || isSelfToChildDrag))) {
+          if ((storage && !type) || (columnOpts.drag && (isCrossDrag || isSelfToChildDrag))) {
             errLog('vxe.error.reqProp', [`${column.getTitle() || type || ''} -> column.field`])
           }
         }
@@ -6616,17 +6616,23 @@ export default defineComponent({
         if (isDblclickAutoWidth && el) {
           const { fullColumnIdData } = internalData
           const { column } = params
-          const colid = column.id
+          let resizeColumn = column
+          if (column.children && column.children.length) {
+            XEUtils.eachTree(column.children, childColumn => {
+              resizeColumn = childColumn
+            })
+          }
+          const colid = resizeColumn.id
           const colRest = fullColumnIdData[colid]
           const dragBtnElem = evnt.target as HTMLDivElement
           const cell = dragBtnElem.parentNode as HTMLTableCellElement
           const cellParams = Object.assign(params, { cell })
           const colMinWidth = getColReMinWidth(cellParams)
-          let resizeWidth = calcColumnAutoWidth(column, el)
+          let resizeWidth = calcColumnAutoWidth(resizeColumn, el)
           if (colRest) {
             resizeWidth = Math.max(resizeWidth, colRest.width)
           }
-          column.resizeWidth = Math.max(colMinWidth, resizeWidth)
+          resizeColumn.resizeWidth = Math.max(colMinWidth, resizeWidth)
           reactData._isResize = false
           internalData._lastResizeTime = Date.now()
           $xeTable.analyColumnWidth()
@@ -6860,7 +6866,7 @@ export default defineComponent({
             vLen++
           })
 
-        const isSelected = rootList.length > 0 && sLen >= vLen
+        const isSelected = vLen > 0 ? sLen >= vLen : sLen >= rootList.length
         const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
 
         reactData.isAllSelected = isSelected

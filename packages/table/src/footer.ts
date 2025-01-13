@@ -153,6 +153,7 @@ export default defineComponent({
             attrs.colspan = colspan
           }
         }
+        const isLastColumn = $columnIndex === tableColumn.length - 1
         const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
         let isPreLoadStatus = false
@@ -164,7 +165,7 @@ export default defineComponent({
           class: ['vxe-footer--column', column.id, {
             [`col--${footAlign}`]: footAlign,
             [`col--${type}`]: type,
-            'col--last': $columnIndex === tableColumn.length - 1,
+            'col--last': isLastColumn,
             'fixed--width': !isAutoCellWidth,
             'fixed--hidden': fixedHiddenColumn,
             'col--ellipsis': hasEllipsis,

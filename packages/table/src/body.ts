@@ -339,6 +339,7 @@ export default defineComponent({
           )
         }
       }
+      const isLastColumn = $columnIndex === columns.length - 1
       const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
       let isPreLoadStatus = false
@@ -356,7 +357,7 @@ export default defineComponent({
             [`col--${cellAlign}`]: cellAlign,
             [`col--vertical-${verticalAlign}`]: verticalAlign,
             [`col--${type}`]: type,
-            'col--last': $columnIndex === columns.length - 1,
+            'col--last': isLastColumn,
             'col--tree-node': treeNode,
             'col--edit': isEdit,
             'col--ellipsis': hasEllipsis,

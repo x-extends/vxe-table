@@ -1,7 +1,7 @@
 import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { convertHeaderColumnToRows, getColReMinWidth } from './util'
+import { convertHeaderColumnToRows, getColReMinWidth, getRefElem } from './util'
 import { hasClass, getOffsetPos, addClass, removeClass } from '../../ui/src/dom'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types'
@@ -26,7 +26,7 @@ export default defineComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { refElem: tableRefElem, refTableBody, refLeftContainer, refRightContainer, refCellResizeBar, refCellResizeTip } = $xeTable.getRefMaps()
+    const { refElem: tableRefElem, refLeftContainer, refRightContainer, refCellResizeBar, refCellResizeTip } = $xeTable.getRefMaps()
     const { computeColumnOpts, computeColumnDragOpts, computeResizableOpts } = $xeTable.getComputeMaps()
 
     const headerColumn = ref([] as VxeTableDefines.ColumnInfo[][])
@@ -47,9 +47,8 @@ export default defineComponent({
     const resizeMousedownEvent = (evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) => {
       const { column } = params
       const { fixedType } = props
-      const { visibleColumn } = tableInternalData
+      const { elemStore, visibleColumn } = tableInternalData
       const resizableOpts = computeResizableOpts.value
-      const tableBody = refTableBody.value
       const tableEl = tableRefElem.value
       const leftContainerElem = refLeftContainer.value
       const rightContainerElem = refRightContainer.value
@@ -58,10 +57,19 @@ export default defineComponent({
       const { clientX: dragClientX } = evnt
       const wrapperElem = refElem.value
       const dragBtnElem = evnt.target as HTMLDivElement
+      let resizeColumn = column
+      if (column.children && column.children.length) {
+        XEUtils.eachTree(column.children, childColumn => {
+          resizeColumn = childColumn
+        })
+      }
       const cell = dragBtnElem.parentNode as HTMLTableCellElement
       const cellParams = Object.assign(params, { cell })
       let dragLeft = 0
-      const tableBodyElem = tableBody.$el as HTMLDivElement
+      const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+      if (!bodyScrollElem) {
+        return
+      }
       const pos = getOffsetPos(dragBtnElem, wrapperElem)
       const dragBtnWidth = dragBtnElem.clientWidth
       const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
@@ -92,25 +100,25 @@ export default defineComponent({
       }
 
       // 处理拖动事件
-      const updateEvent = function (evnt: MouseEvent) {
+      const updateEvent = (evnt: MouseEvent) => {
         evnt.stopPropagation()
         evnt.preventDefault()
         const offsetX = evnt.clientX - dragClientX
         let left = dragPosLeft + offsetX
-        const scrollLeft = fixedType ? 0 : tableBodyElem.scrollLeft
+        const scrollLeft = fixedType ? 0 : bodyScrollElem.scrollLeft
         if (isLeftFixed) {
           // 左固定列（不允许超过右侧固定列、不允许超过右边距）
-          left = Math.min(left, (rightContainerElem ? rightContainerElem.offsetLeft : tableBodyElem.clientWidth) - fixedOffsetWidth - minInterval)
+          left = Math.min(left, (rightContainerElem ? rightContainerElem.offsetLeft : bodyScrollElem.clientWidth) - fixedOffsetWidth - minInterval)
         } else if (isRightFixed) {
           // 右侧固定列（不允许超过左侧固定列、不允许超过左边距）
           dragMinLeft = (leftContainerElem ? leftContainerElem.clientWidth : 0) + fixedOffsetWidth + minInterval
           left = Math.min(left, dragPosLeft + cell.clientWidth - minInterval)
         } else {
-          dragMinLeft = Math.max(tableBodyElem.scrollLeft, dragMinLeft)
-          // left = Math.min(left, tableBodyElem.clientWidth + tableBodyElem.scrollLeft - 40)
+          dragMinLeft = Math.max(bodyScrollElem.scrollLeft, dragMinLeft)
+          // left = Math.min(left, bodyScrollElem.clientWidth + bodyScrollElem.scrollLeft - 40)
         }
         dragLeft = Math.max(left, dragMinLeft)
-        const resizeBarLeft = dragLeft - scrollLeft
+        const resizeBarLeft = Math.max(1, dragLeft - scrollLeft)
         resizeBarElem.style.left = `${resizeBarLeft}px`
         if (resizableOpts.showDragTip && resizeTipElem) {
           const tableWidth = tableEl.clientWidth
@@ -120,13 +128,13 @@ export default defineComponent({
           const resizeTipHeight = resizeTipElem.clientHeight
           let resizeTipLeft = -resizeTipWidth
           if (resizeBarLeft < resizeTipWidth + resizeBarWidth) {
-            resizeTipLeft = resizeTipWidth + resizeBarWidth - resizeBarLeft
+            resizeTipLeft = 0
           } else if (resizeBarLeft > tableWidth) {
             resizeTipLeft += tableWidth - resizeBarLeft
           }
           resizeTipElem.style.left = `${resizeTipLeft}px`
           resizeTipElem.style.top = `${Math.min(tableEl.clientHeight - resizeTipHeight, Math.max(0, evnt.clientY - wrapperRect.y - resizeTipHeight / 2))}px`
-          resizeTipElem.textContent = getI18n('vxe.table.resizeColTip', [column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)])
+          resizeTipElem.textContent = getI18n('vxe.table.resizeColTip', [resizeColumn.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)])
         }
       }
 
@@ -137,11 +145,11 @@ export default defineComponent({
       document.onmouseup = function (evnt) {
         document.onmousemove = domMousemove
         document.onmouseup = domMouseup
-        const resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
-        column.resizeWidth = resizeWidth
+        const resizeWidth = resizeColumn.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
+        resizeColumn.resizeWidth = resizeWidth
         if (resizableOpts.dragMode === 'fixed') {
           visibleColumn.forEach(item => {
-            if (item.id !== column.id) {
+            if (item.id !== resizeColumn.id) {
               if (!item.resizeWidth) {
                 item.resizeWidth = item.renderWidth
               }
@@ -229,6 +237,8 @@ export default defineComponent({
             thOns.onMouseup = $xeTable.handleHeaderCellDragMouseupEvent
           }
         }
+        const isLastColumn = $columnIndex === cols.length - 1
+        const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
         const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
         let isPreLoadStatus = false
@@ -240,7 +250,7 @@ export default defineComponent({
           class: ['vxe-header--column', colid, {
             [`col--${headAlign}`]: headAlign,
             [`col--${type}`]: type,
-            'col--last': $columnIndex === cols.length - 1,
+            'col--last': isLastColumn,
             'col--fixed': column.fixed,
             'col--group': isColGroup,
             'col--ellipsis': hasEllipsis,
@@ -271,7 +281,7 @@ export default defineComponent({
           /**
            * 列宽拖动
            */
-          !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
+          !fixedHiddenColumn && showResizable
             ? h('div', {
               class: ['vxe-resizable', {
                 'is--line': !border || border === 'none'
@@ -279,7 +289,7 @@ export default defineComponent({
               onMousedown: (evnt: MouseEvent) => resizeMousedownEvent(evnt, params),
               onDblclick: (evnt: MouseEvent) => $xeTable.handleResizeDblclickEvent(evnt, params)
             })
-            : null
+            : renderEmptyElement($xeTable)
         ])
       })
     }
