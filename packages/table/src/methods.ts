@@ -2944,13 +2944,18 @@ const Methods = {
    * 只对 tree-config 有效，获取行的父级
    */
   getTreeParentRow (rowOrRowid: any) {
-    const { treeConfig, fullDataRowIdData } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeConfig } = props
+    const { fullDataRowIdData } = internalData
     if (rowOrRowid && treeConfig) {
       let rowid
       if (XEUtils.isString(rowOrRowid)) {
         rowid = rowOrRowid
       } else {
-        rowid = getRowid(this, rowOrRowid)
+        rowid = getRowid($xeTable, rowOrRowid)
       }
       if (rowid) {
         const rest = fullDataRowIdData[rowid]
@@ -2960,7 +2965,7 @@ const Methods = {
     return null
   },
   getParentRow (rowOrRowid: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     warnLog('vxe.error.delFunc', ['getParentRow', 'getTreeParentRow'])
     return $xeTable.getTreeParentRow(rowOrRowid)
@@ -2978,11 +2983,13 @@ const Methods = {
    * 根据行获取行的唯一主键
    * @param {Row} row 行对象
    */
-  getRowid (row: any) {
-    const $xeTable = this
+  getRowid (cellValue: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const rowid = XEUtils.get(row, getRowkey($xeTable))
-    return XEUtils.eqNull(rowid) ? '' : encodeURIComponent(rowid)
+    const { fullDataRowIdData } = internalData
+    const rowid = XEUtils.eqNull(cellValue) ? '' : encodeURIComponent(cellValue || '')
+    return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].row : null
   },
   /**
    * 获取处理后的表格数据
@@ -3002,9 +3009,9 @@ const Methods = {
    * 获取表格的全量数据，如果是 tree-config 则返回带层级的树结构
    */
   getFullData () {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
-    const internalData = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
 
     const { treeConfig } = props
     const { tableFullData, tableFullTreeData } = internalData
@@ -3015,8 +3022,6 @@ const Methods = {
       if (transform) {
         return XEUtils.toArrayTree(
           XEUtils.toTreeArray(tableFullTreeData, {
-            key: rowField,
-            parentKey: parentField,
             children: mapChildrenField
           }),
           {
@@ -3025,6 +3030,7 @@ const Methods = {
             children: childrenField,
             mapChildren: mapChildrenField
           }
+        )
       }
       return tableFullTreeData.slice(0)
     }
@@ -5721,7 +5727,7 @@ const Methods = {
                   // 根到根
                 }
 
-                const fullList = XEUtils.toTreeArray(internalData.afterTreeFullData, { key: rowField, parentKey: parentField, children: childrenField })
+                const fullList = XEUtils.toTreeArray(internalData.afterTreeFullData, { children: childrenField })
 
                 // 移出
                 const otfIndex = $xeTable.findRowIndexOf(fullList, dragRow)
