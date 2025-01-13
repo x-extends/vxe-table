@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getClass } from '../../ui/src/utils'
 import { getOffsetPos, hasClass, addClass, removeClass } from '../../ui/src/dom'
-import { convertHeaderColumnToRows, getColReMinWidth } from './util'
+import { convertHeaderColumnToRows, getColReMinWidth, getRefElem } from './util'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes, TableReactData, TableInternalData, VxeComponentStyleType } from '../../../types'
 
@@ -80,6 +80,8 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
         thOns.mouseup = $xeTable.handleHeaderCellDragMouseupEvent
       }
     }
+    const isLastColumn = $columnIndex === cols.length - 1
+    const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
     const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
     let isPreLoadStatus = false
@@ -91,7 +93,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
       class: ['vxe-header--column', colid, {
         [`col--${headAlign}`]: headAlign,
         [`col--${type}`]: type,
-        'col--last': $columnIndex === cols.length - 1,
+        'col--last': isLastColumn,
         'col--fixed': column.fixed,
         'col--group': isColGroup,
         'col--ellipsis': hasEllipsis,
@@ -119,7 +121,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
       /**
      * 列宽拖动
      */
-      !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
+      !fixedHiddenColumn && showResizable
         ? h('div', {
           class: ['vxe-resizable', {
             'is--line': !border || border === 'none'
@@ -129,7 +131,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
             dblclick: (evnt: MouseEvent) => $xeTable.handleResizeDblclickEvent(evnt, params)
           }
         })
-        : null
+        : renderEmptyElement($xeTable)
     ])
   })
 }
@@ -375,19 +377,28 @@ export default {
 
       const { column } = params
       const { $parent: $xetable, fixedType } = this
-      const { visibleColumn } = tableInternalData
-      const { refTableBody, refLeftContainer, refRightContainer } = $xetable.$refs
+      const { elemStore, visibleColumn } = tableInternalData
+      const { refLeftContainer, refRightContainer } = $xetable.$refs
       const tableEl = $xeTable.$el as HTMLDivElement
       const resizeBarElem = $xetable.$refs.refCellResizeBar as HTMLDivElement
       const resizeTipElem = $xetable.$refs.refCellResizeTip as HTMLDivElement
       const wrapperElem = this.$el as HTMLDivElement
       const { clientX: dragClientX } = evnt
       const dragBtnElem = evnt.target as HTMLDivElement
+      let resizeColumn = column
+      if (column.children && column.children.length) {
+        XEUtils.eachTree(column.children, childColumn => {
+          resizeColumn = childColumn
+        })
+      }
       const cell = dragBtnElem.parentNode as HTMLTableCellElement
       const cellParams = Object.assign(params, { cell })
       const resizableOpts = $xeTable.computeResizableOpts
       let dragLeft = 0
-      const tableBodyElem = refTableBody.$el
+      const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+      if (!bodyScrollElem) {
+        return
+      }
       const pos = getOffsetPos(dragBtnElem, tableEl)
       const dragBtnWidth = dragBtnElem.clientWidth
       const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
@@ -423,20 +434,20 @@ export default {
         evnt.preventDefault()
         const offsetX = evnt.clientX - dragClientX
         let left = dragPosLeft + offsetX
-        const scrollLeft = fixedType ? 0 : tableBodyElem.scrollLeft
+        const scrollLeft = fixedType ? 0 : bodyScrollElem.scrollLeft
         if (isLeftFixed) {
           // 左固定列（不允许超过右侧固定列、不允许超过右边距）
-          left = Math.min(left, (refRightContainer ? refRightContainer.offsetLeft : tableBodyElem.clientWidth) - fixedOffsetWidth - minInterval)
+          left = Math.min(left, (refRightContainer ? refRightContainer.offsetLeft : bodyScrollElem.clientWidth) - fixedOffsetWidth - minInterval)
         } else if (isRightFixed) {
           // 右侧固定列（不允许超过左侧固定列、不允许超过左边距）
           dragMinLeft = (refLeftContainer ? refLeftContainer.clientWidth : 0) + fixedOffsetWidth + minInterval
           left = Math.min(left, dragPosLeft + cell.clientWidth - minInterval)
         } else {
-          dragMinLeft = Math.max(tableBodyElem.scrollLeft, dragMinLeft)
-          // left = Math.min(left, tableBodyElem.clientWidth + tableBodyElem.scrollLeft - 40)
+          dragMinLeft = Math.max(bodyScrollElem.scrollLeft, dragMinLeft)
+          // left = Math.min(left, bodyScrollElem.clientWidth + bodyScrollElem.scrollLeft - 40)
         }
         dragLeft = Math.max(left, dragMinLeft)
-        const resizeBarLeft = dragLeft - scrollLeft
+        const resizeBarLeft = Math.max(1, dragLeft - scrollLeft)
         resizeBarElem.style.left = `${resizeBarLeft}px`
         if (resizableOpts.showDragTip && resizeTipElem) {
           const tableWidth = tableEl.clientWidth
@@ -446,13 +457,13 @@ export default {
           const resizeTipHeight = resizeTipElem.clientHeight
           let resizeTipLeft = -resizeTipWidth
           if (resizeBarLeft < resizeTipWidth + resizeBarWidth) {
-            resizeTipLeft = resizeTipWidth + resizeBarWidth - resizeBarLeft
+            resizeTipLeft = 0
           } else if (resizeBarLeft > tableWidth) {
             resizeTipLeft += tableWidth - resizeBarLeft
           }
           resizeTipElem.style.left = `${resizeTipLeft}px`
           resizeTipElem.style.top = `${Math.min(tableEl.clientHeight - resizeTipHeight, Math.max(0, evnt.clientY - wrapperRect.y - resizeTipHeight / 2))}px`
-          resizeTipElem.textContent = getI18n('vxe.table.resizeColTip', [column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)])
+          resizeTipElem.textContent = getI18n('vxe.table.resizeColTip', [resizeColumn.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)])
         }
       }
 
@@ -463,11 +474,11 @@ export default {
       document.onmouseup = function (evnt) {
         document.onmousemove = domMousemove
         document.onmouseup = domMouseup
-        const resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
-        column.resizeWidth = resizeWidth
+        const resizeWidth = resizeColumn.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
+        resizeColumn.resizeWidth = resizeWidth
         if (resizableOpts.dragMode === 'fixed') {
           visibleColumn.forEach((item: any) => {
-            if (item.id !== column.id) {
+            if (item.id !== resizeColumn.id) {
               if (!item.resizeWidth) {
                 item.resizeWidth = item.renderWidth
               }

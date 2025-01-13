@@ -51,19 +51,21 @@
   scrollbar-width: none;
 }
 .vxe-table--header-inner-wrapper,
+.vxe-table--body-inner-wrapper,
 .vxe-table--footer-inner-wrapper {
+  position: relative;
   width: 100%;
-  height: 100% ;
-  overflow-y: hidden;
-  overflow-x: scroll;
+  height: 100%;
   scrollbar-width: none;
 }
+.vxe-table--header-inner-wrapper,
+.vxe-table--footer-inner-wrapper {
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
 .vxe-table--body-inner-wrapper {
-  width: 100% ;
-  height: 100% ;
   overflow-y: scroll;
   overflow-x: scroll;
-  scrollbar-width: none;
 }
 
 .vxe-loading--custom-wrapper {
