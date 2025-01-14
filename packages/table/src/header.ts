@@ -84,9 +84,9 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
     const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
-    let isPreLoadStatus = false
-    if (scrollXLoad && !isGroup && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex || _columnIndex > scrollXStore.visibleEndIndex)) {
-      isPreLoadStatus = true
+    let isVNPreEmptyStatus = false
+    if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+      isVNPreEmptyStatus = true
     }
 
     return h('th', {
@@ -117,7 +117,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
           'c--tooltip': showTooltip,
           'c--ellipsis': showEllipsis
         }]
-      }, isPreLoadStatus || (isOptimizeMode && fixedHiddenColumn) ? [] : column.renderHeader(h, params)),
+      }, isVNPreEmptyStatus || (isOptimizeMode && fixedHiddenColumn) ? [] : column.renderHeader(h, params)),
       /**
      * 列宽拖动
      */
@@ -372,18 +372,26 @@ export default {
       this.headerColumn = $xetable.isGroup ? convertHeaderColumnToRows(this.tableGroupColumn) : []
     },
     resizeMousedownEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-      const $xeTable = this.$parent
-      const tableInternalData = $xeTable
+      const _vm = this
+      const props = _vm
+
+      const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+      const tableReactData = $xeTable as unknown as TableReactData
+      const tableInternalData = $xeTable as unknown as TableInternalData
 
       const { column } = params
-      const { $parent: $xetable, fixedType } = this
+      const { fixedType } = props
+      const { scrollbarHeight } = tableReactData
       const { elemStore, visibleColumn } = tableInternalData
-      const { refLeftContainer, refRightContainer } = $xetable.$refs
-      const tableEl = $xeTable.$el as HTMLDivElement
-      const resizeBarElem = $xetable.$refs.refCellResizeBar as HTMLDivElement
-      const resizeTipElem = $xetable.$refs.refCellResizeTip as HTMLDivElement
-      const wrapperElem = this.$el as HTMLDivElement
+      const resizableOpts = $xeTable.computeResizableOpts
+      const tableEl = $xeTable.$refs.refElem as HTMLDivElement
+      const leftContainerElem = $xeTable.$refs.refLeftContainer as HTMLDivElement
+      const rightContainerElem = $xeTable.$refs.refRightContainer as HTMLDivElement
+      const resizeBarElem = $xeTable.$refs.refCellResizeBar as HTMLDivElement
+      const resizeTipElem = $xeTable.$refs.refCellResizeTip as HTMLDivElement
+      const scrollbarXToTop = $xeTable.computeScrollbarXToTop
       const { clientX: dragClientX } = evnt
+      const wrapperElem = _vm.$el
       const dragBtnElem = evnt.target as HTMLDivElement
       let resizeColumn = column
       if (column.children && column.children.length) {
@@ -393,7 +401,6 @@ export default {
       }
       const cell = dragBtnElem.parentNode as HTMLTableCellElement
       const cellParams = Object.assign(params, { cell })
-      const resizableOpts = $xeTable.computeResizableOpts
       let dragLeft = 0
       const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
       if (!bodyScrollElem) {
@@ -423,8 +430,8 @@ export default {
           }
           tempCellElem = tempCellElem[siblingProp] as HTMLTableCellElement
         }
-        if (isRightFixed && refRightContainer) {
-          dragPosLeft = refRightContainer.offsetLeft + fixedOffsetWidth
+        if (isRightFixed && rightContainerElem) {
+          dragPosLeft = rightContainerElem.offsetLeft + fixedOffsetWidth
         }
       }
 
@@ -432,15 +439,16 @@ export default {
       const updateEvent = function (evnt: any) {
         evnt.stopPropagation()
         evnt.preventDefault()
+        const tableHeight = tableEl.clientHeight
         const offsetX = evnt.clientX - dragClientX
         let left = dragPosLeft + offsetX
         const scrollLeft = fixedType ? 0 : bodyScrollElem.scrollLeft
         if (isLeftFixed) {
           // 左固定列（不允许超过右侧固定列、不允许超过右边距）
-          left = Math.min(left, (refRightContainer ? refRightContainer.offsetLeft : bodyScrollElem.clientWidth) - fixedOffsetWidth - minInterval)
+          left = Math.min(left, (rightContainerElem ? rightContainerElem.offsetLeft : bodyScrollElem.clientWidth) - fixedOffsetWidth - minInterval)
         } else if (isRightFixed) {
           // 右侧固定列（不允许超过左侧固定列、不允许超过左边距）
-          dragMinLeft = (refLeftContainer ? refLeftContainer.clientWidth : 0) + fixedOffsetWidth + minInterval
+          dragMinLeft = (leftContainerElem ? leftContainerElem.clientWidth : 0) + fixedOffsetWidth + minInterval
           left = Math.min(left, dragPosLeft + cell.clientWidth - minInterval)
         } else {
           dragMinLeft = Math.max(bodyScrollElem.scrollLeft, dragMinLeft)
@@ -449,6 +457,8 @@ export default {
         dragLeft = Math.max(left, dragMinLeft)
         const resizeBarLeft = Math.max(1, dragLeft - scrollLeft)
         resizeBarElem.style.left = `${resizeBarLeft}px`
+        resizeBarElem.style.top = `${scrollbarXToTop ? scrollbarHeight : 0}px`
+        resizeBarElem.style.height = `${scrollbarXToTop ? tableHeight - scrollbarHeight : tableHeight}px`
         if (resizableOpts.showDragTip && resizeTipElem) {
           const tableWidth = tableEl.clientWidth
           const wrapperRect = wrapperElem.getBoundingClientRect()
@@ -462,13 +472,13 @@ export default {
             resizeTipLeft += tableWidth - resizeBarLeft
           }
           resizeTipElem.style.left = `${resizeTipLeft}px`
-          resizeTipElem.style.top = `${Math.min(tableEl.clientHeight - resizeTipHeight, Math.max(0, evnt.clientY - wrapperRect.y - resizeTipHeight / 2))}px`
+          resizeTipElem.style.top = `${Math.min(tableHeight - resizeTipHeight, Math.max(0, evnt.clientY - wrapperRect.y - resizeTipHeight / 2))}px`
           resizeTipElem.textContent = getI18n('vxe.table.resizeColTip', [resizeColumn.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)])
         }
       }
 
-      $xetable._isResize = true
-      addClass($xetable.$el, 'drag--resize')
+      tableReactData._isResize = true
+      addClass(tableEl, 'drag--resize')
       resizeBarElem.style.display = 'block'
       document.onmousemove = updateEvent
       document.onmouseup = function (evnt) {
@@ -486,19 +496,19 @@ export default {
           })
         }
         resizeBarElem.style.display = 'none'
-        $xetable._isResize = false
-        $xetable._lastResizeTime = Date.now()
-        $xetable.analyColumnWidth()
-        $xetable.recalculate(true).then(() => {
-          $xetable.saveCustomStore('update:visible')
-          $xetable.updateCellAreas()
-          $xetable.emitEvent('resizable-change', { ...params, resizeWidth }, evnt)
-          setTimeout(() => $xetable.recalculate(true), 300)
+        tableReactData._isResize = false
+        tableInternalData._lastResizeTime = Date.now()
+        $xeTable.analyColumnWidth()
+        $xeTable.recalculate(true).then(() => {
+          $xeTable.saveCustomStore('update:visible')
+          $xeTable.updateCellAreas()
+          $xeTable.dispatchEvent('resizable-change', { ...params, resizeWidth }, evnt)
+          setTimeout(() => $xeTable.recalculate(true), 300)
         })
-        removeClass($xetable.$el, 'drag--resize')
+        removeClass(tableEl, 'drag--resize')
       }
       updateEvent(evnt)
-      $xetable.closeMenu()
+      $xeTable.closeMenu()
     }
   } as any
 } as any

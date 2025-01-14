@@ -42,7 +42,7 @@ function renderLine (h: CreateElement, _vm: any, params: VxeTableDefines.CellRen
   let prevRow = null
   if (rest) {
     rLevel = rest.level
-    prevRow = rest.items[rest._index - 1]
+    prevRow = rest.items[rest.treeIndex - 1]
   }
   const isFirstRow = $xeTable.eqRow(afterFullData[0], row)
   if (treeConfig && treeNode && (treeOpts.showLine || treeOpts.line)) {
@@ -245,6 +245,29 @@ function renderTdColumn (
   if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && (editOpts.showStatus || editOpts.showUpdateStatus)) {
     isDirty = $xeTable.isUpdateByRow(row, column.field)
   }
+
+  const isVNAutoHeight = scrollYLoad && !hasEllipsis
+  let cellHeight = 0
+  const vnHeight = isCalcCellHeight ? rest.height : 0
+  if (hasEllipsis) {
+    if (customRHeight) {
+      cellHeight = customRHeight
+    } else if (!isAllOverflow) {
+      cellHeight = vnHeight || defaultRowHeight || 18
+    }
+  } else {
+    cellHeight = vnHeight || defaultRowHeight || 18
+  }
+
+  const tcStyle: Record<string, string> = {}
+  if (cellHeight) {
+    if (hasEllipsis) {
+      tcStyle.maxHeight = `${cellHeight}px`
+    } else if (isVNAutoHeight) {
+      tcStyle.height = `${cellHeight}px`
+    }
+  }
+
   const tdVNs = []
   if (fixedHiddenColumn && (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
     tdVNs.push(
@@ -254,9 +277,7 @@ function renderTdColumn (
           'c--tooltip': showTooltip,
           'c--ellipsis': showEllipsis
         }],
-        style: {
-          maxHeight: hasEllipsis && (customRHeight || defaultRowHeight) ? `${customRHeight || defaultRowHeight}px` : ''
-        }
+        style: tcStyle
       })
     )
   } else {
@@ -269,13 +290,17 @@ function renderTdColumn (
           'c--tooltip': showTooltip,
           'c--ellipsis': showEllipsis
         }],
-        style: {
-          maxHeight: hasEllipsis && (customRHeight || defaultRowHeight) ? `${customRHeight || defaultRowHeight}px` : ''
-        },
+        style: tcStyle,
         attrs: {
           title: showTitle ? $xeTable.getCellLabel(row, column) : null
         }
-      }, column.renderCell(h, params))
+      }, isVNAutoHeight
+        ? [
+            h('div', {
+              class: 'vxe-cell--auto-wrapper'
+            }, column.renderCell(h, params))
+          ]
+        : column.renderCell(h, params))
     )
     if (showValidTip && errorValidItem) {
       const errRule = errorValidItem.rule
@@ -305,17 +330,6 @@ function renderTdColumn (
       )
     }
   }
-  let cellHeight = ''
-  const vnHeight = isCalcCellHeight ? rest.height : 0
-  if (hasEllipsis) {
-    if (customRHeight) {
-      cellHeight = `${customRHeight}px`
-    } else if (!isAllOverflow) {
-      cellHeight = `${vnHeight || defaultRowHeight || 18}px`
-    }
-  } else {
-    cellHeight = `${vnHeight || defaultRowHeight || 18}px`
-  }
 
   if (mouseConfig && mouseOpts.area && selectCellToRow) {
     if (
@@ -332,11 +346,11 @@ function renderTdColumn (
   const isLastColumn = $columnIndex === columns.length - 1
   const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
-  let isPreLoadStatus = false
-  if (scrollYLoad && (_rowIndex < scrollYStore.visibleStartIndex || _rowIndex > scrollYStore.visibleEndIndex)) {
-    isPreLoadStatus = true
-  } else if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex || _columnIndex > scrollXStore.visibleEndIndex)) {
-    isPreLoadStatus = true
+  let isVNPreEmptyStatus = false
+  if (scrollYLoad && (_rowIndex < scrollYStore.visibleStartIndex - scrollYStore.preloadSize || _rowIndex > scrollYStore.visibleEndIndex + scrollYStore.preloadSize)) {
+    isVNPreEmptyStatus = true
+  } else if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+    isVNPreEmptyStatus = true
   }
 
   return h('td', {
@@ -351,6 +365,7 @@ function renderTdColumn (
         'col--tree-node': treeNode,
         'col--edit': isEdit,
         'col--ellipsis': hasEllipsis,
+        'col--auto-height': isVNAutoHeight,
         'fixed--width': !isAutoCellWidth,
         'fixed--hidden': fixedHiddenColumn,
         'is--drag-cell': isRowDragCell && (isCrossDrag || isPeerDrag || !rowLevel),
@@ -367,10 +382,10 @@ function renderTdColumn (
     key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || rowOpts.useKey || columnOpts.drag ? column.id : $columnIndex,
     attrs,
     style: Object.assign({
-      height: cellHeight
+      height: cellHeight ? `${cellHeight}px` : ''
     }, XEUtils.isFunction(compCellStyle) ? compCellStyle(params) : compCellStyle, XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle),
     on: tdOns
-  }, isPreLoadStatus || (isOptimizeMode && fixedHiddenColumn) ? [] : tdVNs)
+  }, isVNPreEmptyStatus || (isOptimizeMode && fixedHiddenColumn) ? [] : tdVNs)
 }
 
 function renderRows (h: CreateElement, _vm: any, fixedType: VxeColumnPropTypes.Fixed, isOptimizeMode: boolean, tableData: any[], tableColumn: VxeTableDefines.ColumnInfo[]) {

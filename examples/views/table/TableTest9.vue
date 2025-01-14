@@ -1,10 +1,14 @@
 <template>
   <div>
-    <vxe-button @click="loadData(5000)">加载5k条</vxe-button>
-    <vxe-button @click="loadData(10000)">加载1w条</vxe-button>
-    <vxe-button @click="loadData(30000)">加载3w条</vxe-button>
+    <p>
+      <vxe-button @click="loadData(5000)">加载5k条</vxe-button>
+      <vxe-button @click="loadData(10000)">加载1w条</vxe-button>
+      <vxe-button @click="loadData(30000)">加载3w条</vxe-button>
+    </p>
+
     <vxe-table
       border
+      show-footer
       show-overflow
       height="800"
       :loading="loading"
@@ -12,8 +16,10 @@
       :row-config="{drag: true}"
       :scroll-x="{enabled: true, gt: 0}"
       :scroll-y="{enabled: true, gt: 0}"
-      :data="tableData">
-      <vxe-column field="checkbox" type="checkbox" width="60" fixed="left"></vxe-column>
+      :scrollbar-config="{x:{position:'top'},y:{position:'left'}}"
+      :data="tableData"
+      :footer-data="footerData">
+      <vxe-column field="checkbox" type="checkbox" width="80" fixed="left" drag-sort></vxe-column>
       <vxe-column field="col0" title="列0" width="100" fixed="left"></vxe-column>
       <vxe-column field="imgUrl" title="列1" width="80" fixed="left" :cell-render="imgUrlCellRender"></vxe-column>
       <vxe-column field="status" title="状态" width="100">
@@ -124,10 +130,8 @@ export default {
   data () {
     const tableData = []
     const footerData = [
-      { checkbox: '均值', col0: '45', col1: '56', col3: '67', col5: '78', col7: '94', col97: '37', imgList1: '83' },
-      { checkbox: '合计', col0: '222', col1: '333', col3: '444', col5: '888', col7: '555', col97: '444', imgList1: '777' }
+      { col2: '456', col3: '324', col4: '98', col6: '11', col74: '546', col75: '78', col83: '45', col86: '444' }
     ]
-    const rowSize = 100
     const dataOptions = [
       { label: '加载 3 行', value: 3 },
       { label: '加载 20 行', value: 20 },
@@ -163,7 +167,6 @@ export default {
       }
     }
     return {
-      rowSize,
       dataOptions,
       tableData,
       footerData,
@@ -175,11 +178,11 @@ export default {
   },
   methods: {
     // 模拟行数据
-    loadData () {
+    loadData (rowSize) {
       this.loading = true
       setTimeout(() => {
         const dataList = []
-        for (let i = 0; i < this.rowSize; i++) {
+        for (let i = 0; i < rowSize; i++) {
           const item = {
             id: 10000 + i,
             status: i % 3 === 0 ? '1' : (i % 2 === 0 ? '2' : '0'),
@@ -226,7 +229,7 @@ export default {
     }
   },
   created () {
-    this.loadData()
+    this.loadData(16)
   }
 }
 </script>

@@ -185,6 +185,148 @@ function handleUupdateResize (_vm: any) {
   }
 }
 
+function renderScrollX (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  return h('div', {
+    key: 'vsx',
+    ref: 'refScrollXVirtualElem',
+    class: 'vxe-table--scroll-x-virtual'
+  }, [
+    h('div', {
+      ref: 'refScrollXLeftCornerElem',
+      class: 'vxe-table--scroll-x-left-corner'
+    }),
+    h('div', {
+      ref: 'refScrollXWrapperElem',
+      class: 'vxe-table--scroll-x-wrapper'
+    }, [
+      h('div', {
+        ref: 'refScrollXHandleElem',
+        class: 'vxe-table--scroll-x-handle',
+        on: {
+          scroll: $xeTable.triggerVirtualScrollXEvent
+        }
+      }, [
+        h('div', {
+          ref: 'refScrollXSpaceElem',
+          class: 'vxe-table--scroll-x-space'
+        })
+      ])
+    ]),
+    h('div', {
+      ref: 'refScrollXRightCornerElem',
+      class: 'vxe-table--scroll-x-right-corner'
+    })
+  ])
+}
+
+function renderScrollY (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  return h('div', {
+    ref: 'refScrollYVirtualElem',
+    class: 'vxe-table--scroll-y-virtual'
+  }, [
+    h('div', {
+      ref: 'refScrollYTopCornerElem',
+      class: 'vxe-table--scroll-y-top-corner'
+    }),
+    h('div', {
+      ref: 'refScrollYWrapperElem',
+      class: 'vxe-table--scroll-y-wrapper'
+    }, [
+      h('div', {
+        ref: 'refScrollYHandleElem',
+        class: 'vxe-table--scroll-y-handle',
+        on: {
+          scroll: $xeTable.triggerVirtualScrollYEvent
+        }
+      }, [
+        h('div', {
+          ref: 'refScrollYSpaceElem',
+          class: 'vxe-table--scroll-y-space'
+        })
+      ])
+    ]),
+    h('div', {
+      ref: 'refScrollYBottomCornerElem',
+      class: 'vxe-table--scroll-y-bottom-corner'
+    })
+  ])
+}
+
+function renderViewport (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+
+  const { showHeader, showFooter } = props
+  const { overflowX, tableData, tableColumn, tableGroupColumn, footerTableData, columnStore } = reactData
+  const { leftList, rightList } = columnStore
+
+  return h('div', {
+    ref: 'refTableViewportElem',
+    class: 'vxe-table--viewport-wrapper'
+  }, [
+    h('div', {
+      class: 'vxe-table--main-wrapper'
+    }, [
+      /**
+         * 表头
+         */
+      showHeader
+        ? h(TableHeaderComponent, {
+          ref: 'refTableHeader',
+          props: {
+            tableData,
+            tableColumn,
+            tableGroupColumn
+          }
+        })
+        : renderEmptyElement($xeTable),
+      /**
+         * 表体
+         */
+      h(TableBodyComponent, {
+        ref: 'refTableBody',
+        props: {
+          tableData,
+          tableColumn
+        }
+      }),
+      /**
+         * 表尾
+         */
+      showFooter
+        ? h(TableFooterComponent, {
+          ref: 'refTableFooter',
+          props: {
+            footerTableData,
+            tableColumn
+          }
+        })
+        : renderEmptyElement($xeTable)
+    ]),
+    h('div', {
+      class: 'vxe-table--fixed-wrapper'
+    }, [
+      leftList && leftList.length && overflowX ? renderFixed(h, $xeTable, 'left') : renderEmptyElement($xeTable),
+      rightList && rightList.length && overflowX ? renderFixed(h, $xeTable, 'right') : renderEmptyElement($xeTable)
+    ])
+  ])
+}
+
+function renderBody (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
+  return h('div', {
+    class: 'vxe-table--layout-wrapper'
+  }, scrollbarYToLeft
+    ? [
+        renderScrollY(h, $xeTable),
+        renderViewport(h, $xeTable)
+      ]
+    : [
+        renderViewport(h, $xeTable),
+        renderScrollY(h, $xeTable)
+      ])
+}
+
 export default {
   name: 'VxeTable',
   mixins: [
@@ -445,7 +587,11 @@ export default {
       dragTipText: '',
 
       _isResize: false,
-      isLoading: false
+      isLoading: false,
+
+      reScrollFlag: 0,
+      reLayoutFlag: 0,
+      footFlag: 0
     }
   },
   computed: {
@@ -510,6 +656,18 @@ export default {
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.scrollbarConfig, props.scrollbarConfig)
+    },
+    computeScrollbarXToTop () {
+      const $xeTable = this
+
+      const scrollbarOpts = $xeTable.computeScrollbarOpts
+      return !!(scrollbarOpts.x && scrollbarOpts.x.position === 'top')
+    },
+    computeScrollbarYToLeft () {
+      const $xeTable = this
+
+      const scrollbarOpts = $xeTable.computeScrollbarOpts
+      return !!(scrollbarOpts.y && scrollbarOpts.y.position === 'left')
     },
     computeScrollYThreshold () {
       const $xeTable = this
@@ -880,27 +1038,51 @@ export default {
     reColumnFlag () {
       this.$nextTick().then(() => this.refreshColumn())
     },
+
+    computeSize () {
+      this.reScrollFlag++
+    },
     showHeader () {
-      this.$nextTick(() => {
-        this.recalculate(true).then(() => this.refreshScroll())
-      })
+      this.reScrollFlag++
     },
     showFooter () {
-      this.$nextTick(() => {
-        this.recalculate(true).then(() => this.refreshScroll())
+      this.reScrollFlag++
+    },
+    reScrollFlag () {
+      const $xeTable = this
+
+      $xeTable.$nextTick(() => {
+        $xeTable.recalculate(true).then(() => $xeTable.refreshScroll())
       })
     },
+
     height () {
-      this.$nextTick(() => this.recalculate(true))
+      this.reLayoutFlag++
     },
     maxHeight () {
-      this.$nextTick(() => this.recalculate(true))
+      this.reLayoutFlag++
     },
-    computeSize () {
-      this.$nextTick(() => {
-        this.recalculate(true).then(() => this.refreshScroll())
-      })
+    computeScrollbarXToTop () {
+      this.reLayoutFlag++
     },
+    computeScrollbarYToLeft () {
+      this.reLayoutFlag++
+    },
+    reLayoutFlag () {
+      const $xeTable = this
+
+      $xeTable.$nextTick(() => $xeTable.recalculate(true))
+    },
+
+    footerData () {
+      this.footFlag++
+    },
+    footFlag () {
+      const $xeTable = this
+
+      $xeTable.updateFooter()
+    },
+
     syncResize (value: any) {
       if (value) {
         handleUupdateResize(this)
@@ -1276,7 +1458,7 @@ export default {
     const { xID } = $xeTable
 
     const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
-    const { isCalcColumn, isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
+    const { isCalcColumn, isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
     const { leftList, rightList } = columnStore
     const loadingSlot = slots.loading
     const tooltipOpts = $xeTable.computeTooltipOpts
@@ -1295,9 +1477,11 @@ export default {
     const resizableOpts = $xeTable.computeResizableOpts
     const isArea = mouseConfig && mouseOpts.area
     const columnDragOpts = $xeTable.computeColumnDragOpts
+    const scrollbarXToTop = $xeTable.computeScrollbarXToTop
+    const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
     return h('div', {
       ref: 'refElem',
-      class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, {
+      class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`, `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`, {
         [`size--${vSize}`]: vSize,
         [`valid-msg--${validOpts.msgMode}`]: !!editRules,
         'vxe-editable': !!editConfig,
@@ -1346,108 +1530,15 @@ export default {
       h('div', {
         key: 'tw',
         class: 'vxe-table--render-wrapper'
-      }, [
-        h('div', {
-          ref: 'refTableViewportElem',
-          class: 'vxe-table--viewport-wrapper'
-        }, [
-          h('div', {
-            class: 'vxe-table--main-wrapper'
-          }, [
-          /**
-           * 表头
-           */
-            showHeader
-              ? h(TableHeaderComponent, {
-                ref: 'refTableHeader',
-                props: {
-                  tableData,
-                  tableColumn,
-                  tableGroupColumn,
-                  size: vSize
-                }
-              })
-              : renderEmptyElement($xeTable),
-            /**
-           * 表体
-           */
-            h(TableBodyComponent, {
-              ref: 'refTableBody',
-              props: {
-                tableData,
-                tableColumn,
-                size: vSize
-              }
-            }),
-            /**
-           * 表尾
-           */
-            showFooter
-              ? h(TableFooterComponent, {
-                ref: 'refTableFooter',
-                props: {
-                  footerTableData,
-                  tableColumn,
-                  size: vSize
-                }
-              })
-              : renderEmptyElement($xeTable)
+      }, scrollbarXToTop
+        ? [
+            renderScrollX(h, $xeTable),
+            renderBody(h, $xeTable)
+          ]
+        : [
+            renderBody(h, $xeTable),
+            renderScrollX(h, $xeTable)
           ]),
-          h('div', {
-            class: 'vxe-table--fixed-wrapper'
-          }, [
-            leftList && leftList.length && overflowX ? renderFixed(h, this, 'left') : renderEmptyElement($xeTable),
-            rightList && rightList.length && overflowX ? renderFixed(h, this, 'right') : renderEmptyElement($xeTable)
-          ])
-        ]),
-        h('div', {
-          ref: 'refScrollYVirtualElem',
-          class: 'vxe-table--scroll-y-virtual'
-        }, [
-          h('div', {
-            ref: 'refScrollYTopCornerElem',
-            class: 'vxe-table--scroll-y-top-corner'
-          }),
-          h('div', {
-            ref: 'refScrollYHandleElem',
-            class: 'vxe-table--scroll-y-handle',
-            on: {
-              scroll: this.scrollYEvent
-            }
-          }, [
-            h('div', {
-              ref: 'refScrollYSpaceElem',
-              class: 'vxe-table--scroll-y-space'
-            })
-          ]),
-          h('div', {
-            ref: 'refScrollYBottomCornerElem',
-            class: 'vxe-table--scroll-y-bottom-corner'
-          })
-        ])
-      ]),
-      h('div', {
-        key: 'vx',
-        ref: 'refScrollXVirtualElem',
-        class: 'vxe-table--scroll-x-virtual'
-      }, [
-        h('div', {
-          ref: 'refScrollXHandleElem',
-          class: 'vxe-table--scroll-x-handle',
-          on: {
-            scroll: this.scrollXEvent
-          }
-        }, [
-          h('div', {
-            ref: 'refScrollXSpaceElem',
-            class: 'vxe-table--scroll-x-space'
-          })
-        ]),
-        h('div', {
-          ref: 'refScrollXRightCornerElem',
-          class: 'vxe-table--scroll-x-right-corner'
-        })
-      ]),
       /**
        * 空数据
        */
@@ -1473,12 +1564,7 @@ export default {
       h('div', {
         key: 'cl',
         ref: 'refCellResizeBar',
-        class: 'vxe-table--resizable-bar',
-        style: overflowX
-          ? {
-              'padding-bottom': `${scrollbarHeight}px`
-            }
-          : undefined
+        class: 'vxe-table--resizable-bar'
       }, resizableOpts.showDragTip
         ? [
             h('div', {
