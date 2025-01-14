@@ -13,7 +13,7 @@
       :scroll-y="{enabled: true, gt: 0}"
       :data="tableData"
       :footer-data="footerData">
-      <vxe-column type="checkbox" width="80" fixed="left" drag-sort></vxe-column>
+      <vxe-column field="checkbox" type="checkbox" width="80" fixed="left" drag-sort></vxe-column>
       <vxe-column field="col0" title="列0" width="100" fixed="left"></vxe-column>
       <vxe-column field="imgUrl" title="列1" width="80" fixed="left" :cell-render="imgUrlCellRender"></vxe-column>
       <vxe-column field="col2" title="列2" width="90"></vxe-column>
@@ -189,5 +189,5 @@ const loadData = (rowSize: number) => {
   }, 350)
 }
 
-loadData(200)
+loadData(20)
 </script>

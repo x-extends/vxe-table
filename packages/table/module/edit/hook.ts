@@ -86,7 +86,7 @@ hooks.add('tableEditModule', {
           }
           parentChilds[funcName](item)
           mapChilds[funcName](item)
-          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1, height: 0, oTop: 0 }
+          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1, height: 0, oTop: 0 }
           fullDataRowIdData[rowid] = rest
           fullAllDataRowIdData[rowid] = rest
         } else {
@@ -97,7 +97,7 @@ hooks.add('tableEditModule', {
           }
           afterFullData[funcName](item)
           tableFullTreeData[funcName](item)
-          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: tableFullTreeData, parent: null, level: 0, height: 0, oTop: 0 }
+          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, items: tableFullTreeData, parent: null, level: 0, height: 0, oTop: 0 }
           fullDataRowIdData[rowid] = rest
           fullAllDataRowIdData[rowid] = rest
         }
@@ -122,7 +122,7 @@ hooks.add('tableEditModule', {
         } else {
           newRecords.forEach(item => {
             const rowid = getRowid($xeTable, item)
-            const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: afterFullData, parent: null, level: 0, height: 0, oTop: 0 }
+            const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, items: afterFullData, parent: null, level: 0, height: 0, oTop: 0 }
             fullDataRowIdData[rowid] = rest
             fullAllDataRowIdData[rowid] = rest
             afterFullData.unshift(item)
@@ -144,7 +144,7 @@ hooks.add('tableEditModule', {
           } else {
             newRecords.forEach(item => {
               const rowid = getRowid($xeTable, item)
-              const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: afterFullData, parent: null, level: 0, height: 0, oTop: 0 }
+              const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, treeIndex: -1, $index: -1, items: afterFullData, parent: null, level: 0, height: 0, oTop: 0 }
               fullDataRowIdData[rowid] = rest
               fullAllDataRowIdData[rowid] = rest
               afterFullData.push(item)
@@ -184,7 +184,7 @@ hooks.add('tableEditModule', {
                   targetIndex = targetIndex + 1
                 }
                 parentMapChilds.splice(targetIndex, 0, item)
-                const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentMapChilds, parent: parentRow, level: parentLevel + 1, height: 0, oTop: 0 }
+                const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, items: parentMapChilds, parent: parentRow, level: parentLevel + 1, height: 0, oTop: 0 }
                 fullDataRowIdData[rowid] = rest
                 fullAllDataRowIdData[rowid] = rest
               })

@@ -1,6 +1,6 @@
-import { defineComponent, h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef, onMounted } from 'vue'
+import { defineComponent, h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
-import { browse, initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, isNodeElement } from '../../ui/src/dom'
+import { browse, initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
@@ -269,7 +269,7 @@ export default defineComponent({
       dragTipText: '',
 
       _isResize: false,
-      _isLoading: false
+      isLoading: false
     })
 
     const internalData: TableInternalData = {
@@ -277,16 +277,21 @@ export default defineComponent({
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
       scrollXStore: {
+        preloadSize: 0,
         offsetSize: 0,
         visibleSize: 0,
+        visibleStartIndex: 0,
+        visibleEndIndex: 0,
         startIndex: 0,
         endIndex: 0
       },
       // 存放纵向 Y 虚拟滚动相关信息
       scrollYStore: {
-        rowHeight: 0,
+        preloadSize: 0,
         offsetSize: 0,
         visibleSize: 0,
+        visibleStartIndex: 0,
+        visibleEndIndex: 0,
         startIndex: 0,
         endIndex: 0
       },
@@ -362,6 +367,7 @@ export default defineComponent({
     const refTableFilter = ref() as Ref<ComponentPublicInstance>
     const refTableCustom = ref() as Ref<ComponentPublicInstance>
 
+    const refTableViewportElem = ref<HTMLDivElement>()
     const refTableHeader = ref() as Ref<ComponentPublicInstance>
     const refTableBody = ref() as Ref<ComponentPublicInstance>
     const refTableFooter = ref() as Ref<ComponentPublicInstance>
@@ -385,7 +391,13 @@ export default defineComponent({
     const refScrollXVirtualElem = ref<HTMLDivElement>()
     const refScrollYVirtualElem = ref<HTMLDivElement>()
     const refScrollXHandleElem = ref<HTMLDivElement>()
+    const refScrollXLeftCornerElem = ref<HTMLDivElement>()
+    const refScrollXRightCornerElem = ref<HTMLDivElement>()
     const refScrollYHandleElem = ref<HTMLDivElement>()
+    const refScrollYTopCornerElem = ref<HTMLDivElement>()
+    const refScrollXWrapperElem = ref<HTMLDivElement>()
+    const refScrollYWrapperElem = ref<HTMLDivElement>()
+    const refScrollYBottomCornerElem = ref<HTMLDivElement>()
     const refScrollXSpaceElem = ref<HTMLDivElement>()
     const refScrollYSpaceElem = ref<HTMLDivElement>()
 
@@ -407,8 +419,12 @@ export default defineComponent({
       return Object.assign({}, getConfig().table.validConfig, props.validConfig) as VxeTablePropTypes.ValidOpts
     })
 
+    /**
+     * @deprecated
+     */
     const computeSXOpts = computed(() => {
-      return Object.assign({}, getConfig().table.scrollX, props.scrollX) as VxeTablePropTypes.SXOpts
+      const virtualXOpts = computeVirtualXOpts.value
+      return virtualXOpts as VxeTablePropTypes.SXOpts
     })
 
     const computeScrollXThreshold = computed(() => {
@@ -420,8 +436,34 @@ export default defineComponent({
       return 0
     })
 
+    /**
+     * @deprecated
+     */
     const computeSYOpts = computed(() => {
-      return Object.assign({}, getConfig().table.scrollY, props.scrollY) as VxeTablePropTypes.SYOpts
+      const virtualYOpts = computeVirtualYOpts.value
+      return virtualYOpts as VxeTablePropTypes.SYOpts
+    })
+
+    const computeVirtualXOpts = computed(() => {
+      return Object.assign({}, getConfig().table.scrollX, getConfig().table.virtualXConfig, props.scrollX, props.virtualXConfig) as VxeTablePropTypes.VirtualXConfig
+    })
+
+    const computeVirtualYOpts = computed(() => {
+      return Object.assign({}, getConfig().table.scrollY, getConfig().table.virtualYConfig, props.scrollY, props.virtualYConfig) as VxeTablePropTypes.VirtualYConfig
+    })
+
+    const computeScrollbarOpts = computed(() => {
+      return Object.assign({}, getConfig().table.scrollbarConfig, props.scrollbarConfig)
+    })
+
+    const computeScrollbarXToTop = computed(() => {
+      const scrollbarOpts = computeScrollbarOpts.value
+      return !!(scrollbarOpts.x && scrollbarOpts.x.position === 'top')
+    })
+
+    const computeScrollbarYToLeft = computed(() => {
+      const scrollbarOpts = computeScrollbarOpts.value
+      return !!(scrollbarOpts.y && scrollbarOpts.y.position === 'left')
     })
 
     const computeScrollYThreshold = computed(() => {
@@ -440,6 +482,12 @@ export default defineComponent({
         small: 40,
         mini: 36
       }
+    })
+
+    const computeDefaultRowHeight = computed(() => {
+      const vSize = computeSize.value
+      const rowHeightMaps = computeRowHeightMaps.value
+      return rowHeightMaps[vSize || 'default']
     })
 
     const computeColumnOpts = computed(() => {
@@ -482,22 +530,8 @@ export default defineComponent({
       return Object.assign({}, getConfig().table.checkboxConfig, props.checkboxConfig) as VxeTablePropTypes.CheckboxOpts
     })
 
-    let computeTooltipOpts = ref() as ComputedRef<VxeTablePropTypes.TooltipOpts>
-
-    computeTooltipOpts = computed(() => {
+    const computeTooltipOpts = computed(() => {
       return Object.assign({}, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
-    })
-
-    const computeTipConfig = computed(() => {
-      const tooltipOpts = computeTooltipOpts.value
-      return {
-        ...tooltipOpts
-      }
-    })
-
-    const computeValidTipOpts = computed(() => {
-      const tooltipOpts = computeTooltipOpts.value
-      return Object.assign({ isArrow: false }, tooltipOpts)
     })
 
     const computeEditOpts = computed(() => {
@@ -534,6 +568,28 @@ export default defineComponent({
 
     const computeMenuOpts = computed(() => {
       return Object.assign({}, getConfig().table.menuConfig, props.menuConfig) as VxeTablePropTypes.MenuOpts
+    })
+
+    const computeLeftFixedWidth = computed(() => {
+      const { columnStore } = reactData
+      const { leftList } = columnStore
+      let leftWidth = 0
+      for (let i = 0; i < leftList.length; i++) {
+        const column = leftList[i]
+        leftWidth += column.renderWidth
+      }
+      return leftWidth
+    })
+
+    const computeRightFixedWidth = computed(() => {
+      const { columnStore } = reactData
+      const { rightList } = columnStore
+      let leftWidth = 0
+      for (let i = 0; i < rightList.length; i++) {
+        const column = rightList[i]
+        leftWidth += column.renderWidth
+      }
+      return leftWidth
     })
 
     const computeHeaderMenu = computed(() => {
@@ -713,9 +769,15 @@ export default defineComponent({
       computeSize,
       computeTableId,
       computeValidOpts,
-      computeSXOpts,
-      computeSYOpts,
+      computeVirtualXOpts,
+      computeVirtualYOpts,
+      computeScrollbarOpts,
+      computeScrollbarXToTop,
+      computeScrollbarYToLeft,
       computeColumnOpts,
+      computeScrollXThreshold,
+      computeScrollYThreshold,
+      computeDefaultRowHeight,
       computeCellOpts,
       computeRowOpts,
       computeRowDragOpts,
@@ -746,11 +808,17 @@ export default defineComponent({
       computeTreeOpts,
       computeEmptyOpts,
       computeLoadingOpts,
+      computeCellOffsetWidth,
       computeCustomOpts,
+      computeLeftFixedWidth,
+      computeRightFixedWidth,
       computeFixedColumnSize,
       computeIsMaxFixedColumn,
       computeIsAllCheckboxDisabled,
-      computeVirtualScrollBars
+      computeVirtualScrollBars,
+
+      computeSXOpts,
+      computeSYOpts
     }
 
     const $xeTable = {
@@ -823,18 +891,20 @@ export default defineComponent({
     }
 
     const handleVirtualXVisible = () => {
-      const { visibleColumn } = internalData
-      const tableBody = refTableBody.value
-      const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
-      if (tableBodyElem) {
-        const { scrollLeft, clientWidth } = tableBodyElem
-        const endWidth = scrollLeft + clientWidth
+      const { elemStore, visibleColumn } = internalData
+      const leftFixedWidth = computeLeftFixedWidth.value
+      const rightFixedWidth = computeRightFixedWidth.value
+      const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+      if (bodyScrollElem) {
+        const { scrollLeft, clientWidth } = bodyScrollElem
+        const startWidth = scrollLeft + leftFixedWidth
+        const endWidth = scrollLeft + clientWidth - rightFixedWidth
         let toVisibleIndex = -1
         let cWidth = 0
         let visibleSize = 0
         for (let colIndex = 0, colLen = visibleColumn.length; colIndex < colLen; colIndex++) {
           cWidth += visibleColumn[colIndex].renderWidth
-          if (toVisibleIndex === -1 && scrollLeft < cWidth) {
+          if (toVisibleIndex === -1 && startWidth < cWidth) {
             toVisibleIndex = colIndex
           }
           if (toVisibleIndex >= 0) {
@@ -844,44 +914,48 @@ export default defineComponent({
             }
           }
         }
-        return { toVisibleIndex: Math.max(0, toVisibleIndex), visibleSize: Math.max(6, visibleSize) }
+        return { toVisibleIndex: Math.max(0, toVisibleIndex), visibleSize: Math.max(1, visibleSize) }
       }
       return { toVisibleIndex: 0, visibleSize: 6 }
     }
 
     const computeRowHeight = () => {
+      const { showOverflow } = props
       const tableHeader = refTableHeader.value
       const tableBody = refTableBody.value
       const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
-      const vSize = computeSize.value
-      const rowHeightMaps = computeRowHeightMaps.value
+      const defaultRowHeight = computeDefaultRowHeight.value
       let rowHeight = 0
-      if (tableBodyElem) {
-        const tableHeaderElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
-        let firstTrElem
-        firstTrElem = tableBodyElem.querySelector('tr')
-        if (!firstTrElem && tableHeaderElem) {
-          firstTrElem = tableHeaderElem.querySelector('tr')
+      if (showOverflow) {
+        if (tableBodyElem) {
+          const tableHeaderElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
+          let firstTrElem
+          firstTrElem = tableBodyElem.querySelector('tr')
+          if (!firstTrElem && tableHeaderElem) {
+            firstTrElem = tableHeaderElem.querySelector('tr')
+          }
+          if (firstTrElem) {
+            rowHeight = firstTrElem.clientHeight
+          }
         }
-        if (firstTrElem) {
-          rowHeight = firstTrElem.clientHeight
+        if (!rowHeight) {
+          rowHeight = defaultRowHeight
         }
-      }
-      if (!rowHeight) {
-        rowHeight = rowHeightMaps[vSize || 'default']
+      } else {
+        rowHeight = defaultRowHeight
       }
       // 最低支持 18px 行高
       return Math.max(18, rowHeight)
     }
 
-    const handleVirtualYVisible = () => {
+    const handleVirtualYVisible = (currScrollTop?: number) => {
       const { showOverflow } = props
-      const { scrollYStore, afterFullData, fullAllDataRowIdData } = internalData
-      const tableBody = refTableBody.value
-      const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
-      const { rowHeight } = scrollYStore
-      if (tableBodyElem) {
-        const { scrollTop, clientHeight } = tableBodyElem
+      const { rowHeight } = reactData
+      const { elemStore, afterFullData, fullAllDataRowIdData } = internalData
+      const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+      if (bodyScrollElem) {
+        const clientHeight = bodyScrollElem.clientHeight
+        const scrollTop = XEUtils.isNumber(currScrollTop) ? currScrollTop : bodyScrollElem.scrollTop
         const endHeight = scrollTop + clientHeight
         let toVisibleIndex = -1
         let offsetTop = 0
@@ -906,9 +980,9 @@ export default defineComponent({
             }
           }
         }
-        return { toVisibleIndex: Math.max(0, toVisibleIndex), visibleSize: Math.max(8, visibleSize) }
+        return { toVisibleIndex: Math.max(0, toVisibleIndex), visibleSize: Math.max(6, visibleSize) }
       }
-      return { toVisibleIndex: 0, visibleSize: 8 }
+      return { toVisibleIndex: 0, visibleSize: 6 }
     }
 
     const calculateMergerOffsetIndex = (list: any[], offsetItem: any, type: 'row' | 'col') => {
@@ -1139,7 +1213,7 @@ export default defineComponent({
           }
           fullColumnFieldData[field] = rest
         } else {
-          if (storage || isCrossDrag || isSelfToChildDrag) {
+          if ((storage && !type) || (columnOpts.drag && (isCrossDrag || isSelfToChildDrag))) {
             errLog('vxe.error.reqProp', [`${column.getTitle() || type || ''} -> column.field`])
           }
         }
@@ -1291,18 +1365,24 @@ export default defineComponent({
      * 支持 width=60 width=60px width=10% min-width=60 min-width=60px min-width=10%
      */
     const autoCellWidth = () => {
-      const tableHeader = refTableHeader.value
+      const { elemStore } = internalData
+      const scrollbarOpts = computeScrollbarOpts.value
       const tableBody = refTableBody.value
-      const tableFooter = refTableFooter.value
       const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
-      const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
-      const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
       if (!bodyElem) {
+        return
+      }
+      const yHandleEl = refScrollYHandleElem.value
+      if (!yHandleEl) {
+        return
+      }
+      const xHandleEl = refScrollXHandleElem.value
+      if (!xHandleEl) {
         return
       }
       let tableWidth = 0
       const minCellWidth = 40 // 列宽最少限制 40px
-      const bodyWidth = bodyElem.clientWidth - 1
+      const bodyWidth = bodyElem.clientWidth
       let remainWidth = bodyWidth
       let meanWidth = remainWidth / 100
       const { fit } = props
@@ -1376,10 +1456,10 @@ export default defineComponent({
         const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(autoMinList).concat(remainList)
         let dynamicSize = dynamicList.length - 1
         if (dynamicSize > 0) {
-          let odiffer = bodyWidth - tableWidth
-          if (odiffer > 0) {
-            while (odiffer > 0 && dynamicSize >= 0) {
-              odiffer--
+          let i = bodyWidth - tableWidth
+          if (i > 0) {
+            while (i > 0 && dynamicSize >= 0) {
+              i--
               dynamicList[dynamicSize--].renderWidth++
             }
             tableWidth = bodyWidth
@@ -1387,44 +1467,25 @@ export default defineComponent({
         }
       }
       const tableHeight = bodyElem.offsetHeight
-      const overflowY = bodyElem.scrollHeight > bodyElem.clientHeight
-      let scrollbarWidth = 0
-      if (overflowY) {
-        scrollbarWidth = Math.max(bodyElem.offsetWidth - bodyElem.clientWidth, 0)
-      }
-      reactData.scrollbarWidth = scrollbarWidth
+      const overflowY = yHandleEl.scrollHeight > yHandleEl.clientHeight
+      reactData.scrollbarWidth = overflowY ? Math.max(scrollbarOpts.width || 0, yHandleEl.offsetWidth - yHandleEl.clientWidth) : 0
       reactData.overflowY = overflowY
       internalData.tableWidth = tableWidth
       internalData.tableHeight = tableHeight
-      let headerHeight = 0
-      if (headerElem) {
-        headerHeight = headerElem.clientHeight
-        nextTick(() => {
-          // 检测是否同步滚动
-          if (headerElem && bodyElem && headerElem.scrollLeft !== bodyElem.scrollLeft) {
-            headerElem.scrollLeft = bodyElem.scrollLeft
-          }
-        })
-      }
+
+      const headerTableElem = getRefElem(elemStore['main-header-table'])
+      const footerTableElem = getRefElem(elemStore['main-footer-table'])
+      const headerHeight = headerTableElem ? headerTableElem.clientHeight : 0
+      const overflowX = tableWidth > bodyWidth
+      const footerHeight = footerTableElem ? footerTableElem.clientHeight : 0
+      reactData.scrollbarHeight = overflowX ? Math.max(scrollbarOpts.height || 0, xHandleEl.offsetHeight - xHandleEl.clientHeight) : 0
       internalData.headerHeight = headerHeight
-      let overflowX = false
-      let footerHeight = 0
-      let scrollbarHeight = 0
-      if (footerElem) {
-        footerHeight = footerElem.offsetHeight
-        overflowX = tableWidth > footerElem.clientWidth
-        scrollbarHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
-      } else {
-        overflowX = tableWidth > bodyWidth
-        scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
-      }
       internalData.footerHeight = footerHeight
       reactData.overflowX = overflowX
-      reactData.scrollbarHeight = scrollbarHeight
       updateHeight()
-      reactData.parentHeight = Math.max(internalData.headerHeight + footerHeight + 20, tablePrivateMethods.getParentHeight())
+      reactData.parentHeight = Math.max(internalData.headerHeight + footerHeight + 20, $xeTable.getParentHeight())
       if (overflowX) {
-        tablePrivateMethods.checkScrolling()
+        $xeTable.checkScrolling()
       }
     }
 
@@ -1454,7 +1515,7 @@ export default defineComponent({
         tableData.forEach(row => {
           const rowid = getRowid($xeTable, row)
           const rowRest = fullAllDataRowIdData[rowid]
-          const cellList = el.querySelectorAll(`.vxe-body--row[rowid="${rowid}"]>.vxe-body--column>.vxe-cell`)
+          const cellList = el.querySelectorAll(`.vxe-body--row[rowid="${rowid}"]>.vxe-body--column>.vxe-cell>.vxe-cell--auto-wrapper`)
           if (rowRest && cellList.length) {
             let height = 0
             for (let i = 0; i < cellList.length; i++) {
@@ -1502,14 +1563,35 @@ export default defineComponent({
       }
     }
 
+    const updateAfterListIndex = () => {
+      const { afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+      const fullMaps: Record<string, any> = {}
+      afterFullData.forEach((row, index) => {
+        const rowid = getRowid($xeTable, row)
+        const rowRest = fullAllDataRowIdData[rowid]
+        const seq = index + 1
+        if (rowRest) {
+          rowRest.seq = seq
+          rowRest._index = index
+        } else {
+          const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, treeIndex: -1, items: [], parent: null, level: 0, height: 0, oTop: 0 }
+          fullAllDataRowIdData[rowid] = rest
+          fullDataRowIdData[rowid] = rest
+        }
+        fullMaps[rowid] = row
+      })
+      internalData.afterFullRowMaps = fullMaps
+    }
+
     /**
      * 预编译
      * 对渲染中的数据提前解析序号及索引。牺牲提前编译耗时换取渲染中额外损耗，使运行时更加流畅
      */
     const updateAfterDataIndex = () => {
       const { treeConfig } = props
-      const { afterFullData, fullDataRowIdData, fullAllDataRowIdData, afterTreeFullData } = internalData
+      const { fullDataRowIdData, fullAllDataRowIdData, afterTreeFullData } = internalData
       const treeOpts = computeTreeOpts.value
+      const { transform } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       const fullMaps: Record<string, any> = {}
       if (treeConfig) {
@@ -1519,31 +1601,19 @@ export default defineComponent({
           const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
           if (rowRest) {
             rowRest.seq = seq
-            rowRest._index = index
+            rowRest.treeIndex = index
           } else {
-            const rest = { row, rowid, seq, index: -1, $index: -1, _index: -1, items: [], parent: null, level: 0, height: 0, oTop: 0 }
+            const rest = { row, rowid, seq, index: -1, $index: -1, _index: -1, treeIndex: -1, items: [], parent: null, level: 0, height: 0, oTop: 0 }
             fullAllDataRowIdData[rowid] = rest
             fullDataRowIdData[rowid] = rest
           }
           fullMaps[rowid] = row
-        }, { children: treeOpts.transform ? treeOpts.mapChildrenField : childrenField })
+        }, { children: transform ? treeOpts.mapChildrenField : childrenField })
+        internalData.afterFullRowMaps = fullMaps
+        updateAfterListIndex()
       } else {
-        afterFullData.forEach((row, index) => {
-          const rowid = getRowid($xeTable, row)
-          const rowRest = fullAllDataRowIdData[rowid]
-          const seq = index + 1
-          if (rowRest) {
-            rowRest.seq = seq
-            rowRest._index = index
-          } else {
-            const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0, oTop: 0 }
-            fullAllDataRowIdData[rowid] = rest
-            fullDataRowIdData[rowid] = rest
-          }
-          fullMaps[rowid] = row
-        })
+        updateAfterListIndex()
       }
-      internalData.afterFullRowMaps = fullMaps
     }
 
     /**
@@ -1722,48 +1792,88 @@ export default defineComponent({
     }
 
     const updateStyle = () => {
-      const { border, showFooter, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
-      const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, scrollbarHeight, columnStore, editStore, isAllOverflow, expandColumn } = reactData
-      let { visibleColumn, fullColumnIdData, tableHeight, tableWidth, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
+      const { border, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
+      const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, scrollbarWidth, scrollbarHeight, columnStore, editStore, isAllOverflow, expandColumn } = reactData
+      const { visibleColumn, fullColumnIdData, tableHeight, tableWidth, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
+      const el = refElem.value
+      if (!el) {
+        return
+      }
       const containerList = ['main', 'left', 'right']
       const emptyPlaceholderElem = refEmptyPlaceholder.value
       const cellOffsetWidth = computeCellOffsetWidth.value
       const mouseOpts = computeMouseOpts.value
       const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
+      const bodyTableElem = getRefElem(elemStore['main-body-table'])
       if (emptyPlaceholderElem) {
         emptyPlaceholderElem.style.top = `${headerHeight}px`
         emptyPlaceholderElem.style.height = bodyWrapperElem ? `${bodyWrapperElem.offsetHeight - scrollbarHeight}px` : ''
       }
-      if (customHeight > 0) {
-        if (showFooter) {
-          customHeight += scrollbarHeight
+
+      let bodyHeight = 0
+      let bodyMaxHeight = 0
+      const bodyMinHeight = customMinHeight - headerHeight - footerHeight - scrollbarHeight
+      if (customMaxHeight) {
+        bodyMaxHeight = Math.max(bodyMinHeight, customMaxHeight - headerHeight - footerHeight - scrollbarHeight)
+      }
+      if (customHeight) {
+        bodyHeight = customHeight - headerHeight - footerHeight - scrollbarHeight
+      }
+      if (!bodyHeight) {
+        if (bodyTableElem) {
+          bodyHeight = bodyTableElem.clientHeight
         }
       }
+      if (bodyHeight) {
+        if (bodyMaxHeight) {
+          bodyHeight = Math.min(bodyMaxHeight, bodyHeight)
+        }
+        bodyHeight = Math.max(bodyMinHeight, bodyHeight)
+      }
 
+      const xLeftCornerEl = refScrollXLeftCornerElem.value
+      const xRightCornerEl = refScrollXRightCornerElem.value
+      const scrollbarXToTop = computeScrollbarXToTop.value
       const scrollXVirtualEl = refScrollXVirtualElem.value
       if (scrollXVirtualEl) {
         scrollXVirtualEl.style.height = `${scrollbarHeight}px`
+        scrollXVirtualEl.style.visibility = scrollbarHeight ? 'visible' : 'hidden'
+      }
+      const xWrapperEl = refScrollXWrapperElem.value
+      if (xWrapperEl) {
+        xWrapperEl.style.left = scrollbarXToTop ? `${scrollbarWidth}px` : ''
+        xWrapperEl.style.width = `${el.clientWidth - scrollbarWidth}px`
+      }
+      if (xLeftCornerEl) {
+        xLeftCornerEl.style.width = scrollbarXToTop ? `${scrollbarWidth}px` : ''
+        xLeftCornerEl.style.display = scrollbarXToTop ? (scrollbarWidth && scrollbarHeight ? 'block' : '') : ''
+      }
+      if (xRightCornerEl) {
+        xRightCornerEl.style.width = scrollbarXToTop ? '' : `${scrollbarWidth}px`
+        xRightCornerEl.style.display = scrollbarXToTop ? '' : (scrollbarWidth && scrollbarHeight ? 'block' : '')
       }
 
       const scrollYVirtualEl = refScrollYVirtualElem.value
       if (scrollYVirtualEl) {
-        let bodyHeight = 0
-        let bodyMaxHeight = 0
-        const bodyMinHeight = customMinHeight - headerHeight - footerHeight
-        if (customMaxHeight) {
-          bodyMaxHeight = customMaxHeight - headerHeight - footerHeight
-          bodyMaxHeight = Math.max(bodyMinHeight, bodyMaxHeight)
-        }
-        if (customHeight) {
-          bodyHeight = customHeight - headerHeight - footerHeight
-          if (bodyMaxHeight) {
-            bodyHeight = Math.min(bodyMaxHeight, bodyHeight)
-          }
-          bodyHeight = Math.max(bodyMinHeight, bodyHeight)
-        }
-        scrollYVirtualEl.style.top = `${headerHeight}px`
         scrollYVirtualEl.style.width = `${scrollbarWidth}px`
-        scrollYVirtualEl.style.height = `${bodyHeight + (overflowX ? -Math.max(1, scrollbarHeight) : 0)}px`
+        scrollYVirtualEl.style.height = `${bodyHeight + headerHeight + footerHeight}px`
+        scrollYVirtualEl.style.visibility = scrollbarWidth ? 'visible' : 'hidden'
+      }
+      const yTopCornerEl = refScrollYTopCornerElem.value
+      if (yTopCornerEl) {
+        yTopCornerEl.style.height = `${headerHeight}px`
+        yTopCornerEl.style.display = headerHeight ? 'block' : ''
+      }
+      const yWrapperEl = refScrollYWrapperElem.value
+      if (yWrapperEl) {
+        yWrapperEl.style.height = `${bodyHeight}px`
+        yWrapperEl.style.top = `${headerHeight}px`
+      }
+      const yBottomCornerEl = refScrollYBottomCornerElem.value
+      if (yBottomCornerEl) {
+        yBottomCornerEl.style.height = `${footerHeight}px`
+        yBottomCornerEl.style.top = `${headerHeight + bodyHeight}px`
+        yBottomCornerEl.style.display = footerHeight ? 'block' : ''
       }
 
       containerList.forEach((name, index) => {
@@ -1778,25 +1888,43 @@ export default defineComponent({
         }
         layoutList.forEach(layout => {
           const wrapperElem = getRefElem(elemStore[`${name}-${layout}-wrapper`])
+          const currScrollElem = getRefElem(elemStore[`${name}-${layout}-scroll`])
           const tableElem = getRefElem(elemStore[`${name}-${layout}-table`])
           if (layout === 'header') {
             // 表头体样式处理
             // 横向滚动渲染
             let tWidth = tableWidth
             let renderColumnList = tableColumn
+            let isOptimizeMode = false
 
             if (isGroup) {
               renderColumnList = visibleColumn
+
+              if (fixedType) {
+                if (wrapperElem) {
+                  wrapperElem.style.width = tWidth ? `${tWidth}px` : ''
+                }
+              }
             } else {
+              // 如果是使用优化模式
+              if (scrollXLoad || scrollYLoad || allColumnHeaderOverflow) {
+                if (spanMethod || footerSpanMethod) {
+                  // 如果不支持优化模式
+                } else {
+                  isOptimizeMode = true
+                }
+              }
+
               if (fixedType) {
                 renderColumnList = visibleColumn
                 // 如果是使用优化模式
-                if (scrollXLoad || scrollYLoad || allColumnHeaderOverflow) {
-                  // 如果不支持优化模式
-                  if (spanMethod || footerSpanMethod) {
-                    renderColumnList = visibleColumn
-                  } else {
-                    renderColumnList = fixedColumn || []
+                if (isOptimizeMode) {
+                  renderColumnList = fixedColumn || []
+                }
+
+                if (!isOptimizeMode) {
+                  if (wrapperElem) {
+                    wrapperElem.style.width = tWidth ? `${tWidth}px` : ''
                   }
                 }
               }
@@ -1804,8 +1932,12 @@ export default defineComponent({
 
             tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
 
+            if (currScrollElem) {
+              currScrollElem.style.height = `${headerHeight}px`
+            }
+
             if (tableElem) {
-              tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
+              tableElem.style.width = tWidth ? `${tWidth}px` : ''
             }
 
             const repairElem = getRefElem(elemStore[`${name}-${layout}-repair`])
@@ -1816,7 +1948,7 @@ export default defineComponent({
             const listElem = getRefElem(elemStore[`${name}-${layout}-list`])
             if (isGroup && listElem) {
               XEUtils.arrayEach(listElem.querySelectorAll('.col--group'), (thElem: any) => {
-                const colNode = tableMethods.getColumnNode(thElem)
+                const colNode = $xeTable.getColumnNode(thElem)
                 if (colNode) {
                   const column = colNode.item
                   const { showHeaderOverflow } = column
@@ -1840,56 +1972,43 @@ export default defineComponent({
               })
             }
           } else if (layout === 'body') {
-            const emptyBlockElem = getRefElem(elemStore[`${name}-${layout}-emptyBlock`])
-            if (isNodeElement(wrapperElem)) {
-              let bodyMaxHeight = 0
-              const bodyMinHeight = customMinHeight - headerHeight - footerHeight
-              if (customMaxHeight) {
-                bodyMaxHeight = customMaxHeight - headerHeight - footerHeight
-                // 如果是固定列
-                if (fixedType) {
-                  bodyMaxHeight -= (showFooter ? 0 : scrollbarHeight)
-                }
-                bodyMaxHeight = Math.max(bodyMinHeight, bodyMaxHeight)
-                wrapperElem.style.maxHeight = `${bodyMaxHeight}px`
-              }
-              if (customHeight) {
-                let bodyHeight = customHeight - headerHeight - footerHeight
-                // 如果是固定列
-                if (fixedType) {
-                  bodyHeight -= (showFooter ? 0 : scrollbarHeight)
-                }
-                if (bodyMaxHeight) {
-                  bodyHeight = Math.min(bodyMaxHeight, bodyHeight)
-                }
-                wrapperElem.style.height = `${Math.max(bodyMinHeight, bodyHeight)}px`
-              } else {
-                wrapperElem.style.height = ''
-              }
-              wrapperElem.style.minHeight = `${bodyMinHeight}px`
+            if (currScrollElem) {
+              currScrollElem.style.maxHeight = customMaxHeight ? `${bodyMaxHeight}px` : ''
+              currScrollElem.style.height = customHeight ? `${bodyHeight}px` : ''
+              currScrollElem.style.minHeight = `${bodyMinHeight}px`
             }
 
             // 如果是固定列
             if (fixedWrapperElem) {
-              if (isNodeElement(wrapperElem)) {
+              if (wrapperElem) {
                 wrapperElem.style.top = `${headerHeight}px`
               }
-              fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`
-              fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isFixedLeft ? 0 : scrollbarWidth)}px`
+              fixedWrapperElem.style.height = `${customHeight > 0 ? customHeight : (tableHeight + headerHeight + footerHeight + scrollbarHeight)}px`
+              fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, 0)}px`
             }
 
             let tWidth = tableWidth
             let renderColumnList = tableColumn
 
+            let isOptimizeMode = false
+            // 如果是使用优化模式
+            if (scrollXLoad || scrollYLoad || (allColumnOverflow && isAllOverflow)) {
+              if (expandColumn || spanMethod || footerSpanMethod) {
+                // 如果不支持优化模式
+              } else {
+                isOptimizeMode = true
+              }
+            }
+
             if (fixedType) {
               renderColumnList = visibleColumn
-              // 如果是使用优化模式
-              if (scrollXLoad || scrollYLoad || (allColumnOverflow && isAllOverflow)) {
-                // 如果不支持优化模式
-                if (expandColumn || spanMethod || footerSpanMethod) {
-                  renderColumnList = visibleColumn
-                } else {
-                  renderColumnList = fixedColumn || []
+              if (isOptimizeMode) {
+                renderColumnList = fixedColumn || []
+              }
+
+              if (!isOptimizeMode) {
+                if (wrapperElem) {
+                  wrapperElem.style.width = tWidth ? `${tWidth}px` : ''
                 }
               }
             }
@@ -1901,6 +2020,7 @@ export default defineComponent({
               // 兼容性处理
               tableElem.style.paddingRight = scrollbarWidth && fixedType && (browse['-moz'] || browse.safari) ? `${scrollbarWidth}px` : ''
             }
+            const emptyBlockElem = getRefElem(elemStore[`${name}-${layout}-emptyBlock`])
             if (emptyBlockElem) {
               emptyBlockElem.style.width = tWidth ? `${tWidth}px` : ''
             }
@@ -1908,40 +2028,48 @@ export default defineComponent({
             let tWidth = tableWidth
 
             let renderColumnList = tableColumn
+            let isOptimizeMode = false
+            // 如果是使用优化模式
+            if (scrollXLoad || scrollYLoad || allColumnFooterOverflow) {
+              if (spanMethod || footerSpanMethod) {
+                // 如果不支持优化模式
+              } else {
+                isOptimizeMode = true
+              }
+            }
 
             if (fixedType) {
               renderColumnList = visibleColumn
-              // 如果是使用优化模式
-              if (scrollXLoad || scrollYLoad || allColumnFooterOverflow) {
-                // 如果不支持优化模式
-                if (spanMethod || footerSpanMethod) {
-                  renderColumnList = visibleColumn
-                } else {
-                  renderColumnList = fixedColumn || []
+              if (isOptimizeMode) {
+                renderColumnList = fixedColumn || []
+              }
+
+              if (!isOptimizeMode) {
+                if (wrapperElem) {
+                  wrapperElem.style.width = tWidth ? `${tWidth}px` : ''
                 }
               }
             }
 
             tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
 
-            if (isNodeElement(wrapperElem)) {
+            if (currScrollElem) {
+              currScrollElem.style.height = `${footerHeight}px`
               // 如果是固定列
               if (fixedWrapperElem) {
-                wrapperElem.style.top = `${customHeight > 0 ? customHeight - footerHeight : tableHeight + headerHeight}px`
+                if (wrapperElem) {
+                  wrapperElem.style.top = `${customHeight > 0 ? customHeight - footerHeight - scrollbarHeight : tableHeight + headerHeight}px`
+                }
               }
-              wrapperElem.style.marginTop = `${-Math.max(1, scrollbarHeight)}px`
             }
             if (tableElem) {
-              tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
+              tableElem.style.width = tWidth ? `${tWidth}px` : ''
             }
           }
           const colgroupElem = getRefElem(elemStore[`${name}-${layout}-colgroup`])
           if (colgroupElem) {
             XEUtils.arrayEach(colgroupElem.children, (colElem: any) => {
               const colid = colElem.getAttribute('name')
-              if (colid === 'col_gutter') {
-                colElem.style.width = `${scrollbarWidth}px`
-              }
               if (fullColumnIdData[colid]) {
                 const colRest = fullColumnIdData[colid]
                 const column = colRest.column
@@ -1971,9 +2099,9 @@ export default defineComponent({
                     let colWidth = column.renderWidth
                     if (cellElem) {
                       if (colspan > 1) {
-                        const columnIndex = tableMethods.getColumnIndex(column)
+                        const columnIndex = $xeTable.getColumnIndex(column)
                         for (let index = 1; index < colspan; index++) {
-                          const nextColumn = tableMethods.getColumns(columnIndex + index)
+                          const nextColumn = $xeTable.getColumns(columnIndex + index)
                           if (nextColumn) {
                             colWidth += nextColumn.renderWidth
                           }
@@ -1989,7 +2117,7 @@ export default defineComponent({
         })
       })
       if (currentRow) {
-        tableMethods.setCurrentRow(currentRow)
+        $xeTable.setCurrentRow(currentRow)
       }
       if (mouseConfig && mouseOpts.selected && editStore.selected.row && editStore.selected.column) {
         $xeTable.addCellSelectedClass()
@@ -2479,39 +2607,46 @@ export default defineComponent({
       return nextTick().then(() => {
         const { scrollXLoad, scrollYLoad } = reactData
         const { scrollXStore, scrollYStore } = internalData
-        const sYOpts = computeSYOpts.value
-        const sXOpts = computeSXOpts.value
+        const virtualYOpts = computeVirtualYOpts.value
+        const virtualXOpts = computeVirtualXOpts.value
         // 计算 X 逻辑
         if (scrollXLoad) {
-          const { visibleSize: visibleXSize } = handleVirtualXVisible()
-          const offsetXSize = Math.max(0, sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : (browse.edge ? 5 : 0))
+          const { toVisibleIndex: toXVisibleIndex, visibleSize: visibleXSize } = handleVirtualXVisible()
+          const offsetXSize = Math.max(0, virtualXOpts.oSize ? XEUtils.toNumber(virtualXOpts.oSize) : 0)
+          scrollXStore.preloadSize = XEUtils.toNumber(virtualXOpts.preSize)
           scrollXStore.offsetSize = offsetXSize
           scrollXStore.visibleSize = visibleXSize
           scrollXStore.endIndex = Math.max(scrollXStore.startIndex + scrollXStore.visibleSize + offsetXSize, scrollXStore.endIndex)
-          tablePrivateMethods.updateScrollXData().then(() => {
+          scrollXStore.visibleStartIndex = Math.max(scrollXStore.startIndex, toXVisibleIndex)
+          scrollXStore.visibleEndIndex = Math.min(scrollXStore.endIndex, toXVisibleIndex + visibleXSize)
+          $xeTable.updateScrollXData().then(() => {
             loadScrollXData()
           })
         } else {
-          tablePrivateMethods.updateScrollXSpace()
+          $xeTable.updateScrollXSpace()
         }
-        calcCellHeight()
         // 计算 Y 逻辑
         const rowHeight = computeRowHeight()
-        scrollYStore.rowHeight = rowHeight
+        ;(scrollYStore as any).rowHeight = rowHeight
         reactData.rowHeight = rowHeight
-        const { visibleSize: visibleYSize } = handleVirtualYVisible()
+        const { toVisibleIndex: toYVisibleIndex, visibleSize: visibleYSize } = handleVirtualYVisible()
         if (scrollYLoad) {
-          const offsetYSize = Math.max(0, sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : (browse.edge ? 10 : 0))
+          const offsetYSize = Math.max(0, virtualYOpts.oSize ? XEUtils.toNumber(virtualYOpts.oSize) : 0)
+          scrollYStore.preloadSize = XEUtils.toNumber(virtualYOpts.preSize)
           scrollYStore.offsetSize = offsetYSize
           scrollYStore.visibleSize = visibleYSize
           scrollYStore.endIndex = Math.max(scrollYStore.startIndex + visibleYSize + offsetYSize, scrollYStore.endIndex)
-          tablePrivateMethods.updateScrollYData().then(() => {
+          scrollYStore.visibleStartIndex = Math.max(scrollYStore.startIndex, toYVisibleIndex)
+          scrollYStore.visibleEndIndex = Math.min(scrollYStore.endIndex, toYVisibleIndex + visibleYSize)
+          $xeTable.updateScrollYData().then(() => {
             loadScrollYData()
           })
         } else {
-          tablePrivateMethods.updateScrollYSpace()
+          $xeTable.updateScrollYSpace()
         }
-        nextTick(updateStyle)
+        nextTick(() => {
+          updateStyle()
+        })
       })
     }
 
@@ -2523,12 +2658,13 @@ export default defineComponent({
       }
       calcCellWidth()
       autoCellWidth()
+      updateStyle()
       return computeScrollLoad().then(() => {
         if (reFull === true) {
           // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
-          calcCellHeight()
           calcCellWidth()
           autoCellWidth()
+          updateStyle()
           return computeScrollLoad()
         }
       })
@@ -2646,7 +2782,7 @@ export default defineComponent({
         }
         handleReserveStatus()
         tablePrivateMethods.checkSelectionStatus()
-        return new Promise(resolve => {
+        return new Promise<void>(resolve => {
           nextTick()
             .then(() => tableMethods.recalculate())
             .then(() => {
@@ -2661,11 +2797,20 @@ export default defineComponent({
               if (sYOpts.scrollToTopOnChange) {
                 targetScrollTop = 0
               }
+              calcCellHeight()
               // 是否变更虚拟滚动
               if (oldScrollYLoad === sYLoad) {
-                restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop).then(resolve)
+                restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
+                  .then(() => {
+                    resolve()
+                  })
               } else {
-                setTimeout(() => restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop).then(resolve))
+                setTimeout(() => {
+                  restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
+                    .then(() => {
+                      resolve()
+                    })
+                })
               }
             })
         })
@@ -2719,22 +2864,24 @@ export default defineComponent({
     const loadScrollXData = () => {
       const { mergeList, mergeFooterList } = reactData
       const { scrollXStore } = internalData
-      const { startIndex, endIndex, offsetSize } = scrollXStore
+      const { preloadSize, startIndex, endIndex, offsetSize } = scrollXStore
       const { toVisibleIndex, visibleSize } = handleVirtualXVisible()
       const offsetItem = {
-        startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
-        endIndex: toVisibleIndex + visibleSize + offsetSize
+        startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize - preloadSize),
+        endIndex: toVisibleIndex + visibleSize + offsetSize + preloadSize
       }
+      scrollXStore.visibleStartIndex = toVisibleIndex
+      scrollXStore.visibleEndIndex = toVisibleIndex + visibleSize
       calculateMergerOffsetIndex(mergeList.concat(mergeFooterList), offsetItem, 'col')
       const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
       if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
         if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
           scrollXStore.startIndex = offsetStartIndex
           scrollXStore.endIndex = offsetEndIndex
-          tablePrivateMethods.updateScrollXData()
+          $xeTable.updateScrollXData()
         }
       }
-      tableMethods.closeTooltip()
+      $xeTable.closeTooltip()
     }
 
     // 获取所有的列，排除分组
@@ -2840,13 +2987,15 @@ export default defineComponent({
           scrollXStore.startIndex = 0
           scrollXStore.endIndex = visibleSize
           scrollXStore.visibleSize = visibleSize
+          scrollXStore.visibleStartIndex = 0
+          scrollXStore.visibleEndIndex = visibleSize
         }
       }
       // 如果列被显示/隐藏，则清除合并状态
       // 如果列被设置为固定，则清除合并状态
       if (visibleColumn.length !== internalData.visibleColumn.length || !internalData.visibleColumn.every((column, index) => column === visibleColumn[index])) {
-        tableMethods.clearMergeCells()
-        tableMethods.clearMergeFooterItems()
+        $xeTable.clearMergeCells()
+        $xeTable.clearMergeFooterItems()
       }
       reactData.scrollXLoad = scrollXLoad
       visibleColumn.forEach((column, index) => {
@@ -2859,14 +3008,14 @@ export default defineComponent({
       internalData.visibleColumn = visibleColumn
       handleTableColumn()
       if (isReset) {
-        return tableMethods.updateFooter().then(() => {
-          return tableMethods.recalculate()
+        return $xeTable.updateFooter().then(() => {
+          return $xeTable.recalculate()
         }).then(() => {
-          tableMethods.updateCellAreas()
-          return tableMethods.recalculate()
+          $xeTable.updateCellAreas()
+          return $xeTable.recalculate()
         })
       }
-      return tableMethods.updateFooter()
+      return $xeTable.updateFooter()
     }
 
     const initColumnSort = () => {
@@ -2882,22 +3031,22 @@ export default defineComponent({
       internalData.collectColumn = collectColumn
       const tableFullColumn = getColumnList(collectColumn)
       internalData.tableFullColumn = tableFullColumn
-      reactData._isLoading = true
+      reactData.isLoading = true
       reactData.isDragColMove = false
       initColumnSort()
       return Promise.resolve(
         restoreCustomStorage()
       ).then(() => {
-        reactData._isLoading = false
+        reactData.isLoading = false
         cacheColumnMap()
         parseColumns(true).then(() => {
           if (reactData.scrollXLoad) {
             loadScrollXData()
           }
         })
-        tableMethods.clearMergeCells()
-        tableMethods.clearMergeFooterItems()
-        tablePrivateMethods.handleTableData(true)
+        $xeTable.clearMergeCells()
+        $xeTable.clearMergeFooterItems()
+        $xeTable.handleTableData(true)
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if ((reactData.scrollXLoad || reactData.scrollYLoad) && reactData.expandColumn) {
             warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
@@ -2913,7 +3062,7 @@ export default defineComponent({
           if ($xeTable.handleUpdateCustomColumn) {
             $xeTable.handleUpdateCustomColumn()
           }
-          return tableMethods.recalculate()
+          return $xeTable.recalculate()
         })
       })
     }
@@ -3007,8 +3156,9 @@ export default defineComponent({
         handleVirtualTreeToList()
         tablePrivateMethods.handleTableData()
         updateAfterDataIndex()
+        return nextTick()
       }).then(() => {
-        return tableMethods.recalculate()
+        return tableMethods.recalculate(true)
       }).then(() => {
         setTimeout(() => {
           tableMethods.updateCellAreas()
@@ -3031,17 +3181,19 @@ export default defineComponent({
     /**
      * 纵向 Y 可视渲染处理
      */
-    const loadScrollYData = () => {
+    const loadScrollYData = (scrollTop?: number) => {
       const { showOverflow } = props
       const { mergeList } = reactData
-      const { tableHeight, scrollYStore } = internalData
-      const { startIndex, endIndex, offsetSize } = scrollYStore
-      const autoOffsetYSize = showOverflow ? offsetSize : offsetSize + Math.min(8, Math.ceil(tableHeight / 200))
-      const { toVisibleIndex, visibleSize } = handleVirtualYVisible()
+      const { scrollYStore } = internalData
+      const { preloadSize, startIndex, endIndex, offsetSize } = scrollYStore
+      const autoOffsetYSize = showOverflow ? offsetSize : offsetSize + 1
+      const { toVisibleIndex, visibleSize } = handleVirtualYVisible(scrollTop)
       const offsetItem = {
-        startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
-        endIndex: toVisibleIndex + visibleSize + autoOffsetYSize
+        startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize - preloadSize),
+        endIndex: toVisibleIndex + visibleSize + autoOffsetYSize + preloadSize
       }
+      scrollYStore.visibleStartIndex = toVisibleIndex
+      scrollYStore.visibleEndIndex = toVisibleIndex + visibleSize
       calculateMergerOffsetIndex(mergeList, offsetItem, 'row')
       const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
       if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
@@ -3083,7 +3235,7 @@ export default defineComponent({
     const lazyScrollXData = () => {
       const { lxTimeout, lxRunTime, scrollXStore } = internalData
       const { visibleSize } = scrollXStore
-      const fpsTime = Math.min(80, Math.floor(visibleSize * 3))
+      const fpsTime = Math.max(5, Math.min(80, Math.floor(visibleSize * 3)))
       if (lxTimeout) {
         clearTimeout(lxTimeout)
       }
@@ -3099,9 +3251,8 @@ export default defineComponent({
     }
 
     const lazyScrollYData = () => {
-      const { lyTimeout, lyRunTime, scrollYStore } = internalData
-      const { visibleSize } = scrollYStore
-      const fpsTime = Math.min(80, Math.floor(visibleSize))
+      const { lyTimeout, lyRunTime } = internalData
+      const fpsTime = Math.floor(Math.max(4, Math.min(10, 20 / 3)))
       if (lyTimeout) {
         clearTimeout(lyTimeout)
       }
@@ -3116,82 +3267,6 @@ export default defineComponent({
       }, fpsTime)
     }
 
-    const scrollXEvent = (evnt: Event) => {
-      const { intoRunScroll, inFooterScroll, inBodyScroll, lastScrollTop } = internalData
-      if (!intoRunScroll) {
-        if (inFooterScroll) {
-          return
-        }
-        if (inBodyScroll) {
-          return
-        }
-      }
-      const tableHeader = refTableHeader.value
-      const tableBody = refTableBody.value
-      const tableFooter = refTableFooter.value
-      const bodyElem = tableBody.$el as HTMLDivElement
-      const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
-      const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
-      const yHandleEl = refScrollYHandleElem.value
-      const wrapperEl = evnt.currentTarget as HTMLDivElement
-      const { scrollLeft } = wrapperEl
-      const yBodyEl = yHandleEl || bodyElem
-      let scrollTop = 0
-      if (yBodyEl) {
-        scrollTop = yBodyEl.scrollTop
-      }
-      const isRollX = true
-      const isRollY = scrollTop !== lastScrollTop
-
-      internalData.inVirtualScroll = true
-      setScrollLeft(bodyElem, scrollLeft)
-      setScrollLeft(headerElem, scrollLeft)
-      setScrollLeft(footerElem, scrollLeft)
-      $xeTable.triggerScrollXEvent(evnt)
-      $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
-        type: 'table',
-        fixed: ''
-      })
-    }
-
-    const scrollYEvent = (evnt: Event) => {
-      const { intoRunScroll, inFooterScroll, inBodyScroll, lastScrollLeft } = internalData
-      if (!intoRunScroll) {
-        if (inFooterScroll) {
-          return
-        }
-        if (inBodyScroll) {
-          return
-        }
-      }
-      const tableBody = refTableBody.value
-      const leftBody = refTableLeftBody.value
-      const rightBody = refTableRightBody.value
-      const bodyElem = tableBody.$el as HTMLDivElement
-      const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
-      const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
-      const xHandleEl = refScrollXHandleElem.value
-      const wrapperEl = evnt.currentTarget as HTMLDivElement
-      const { scrollTop } = wrapperEl
-      const xBodyEl = xHandleEl || bodyElem
-      let scrollLeft = 0
-      if (xBodyEl) {
-        scrollLeft = xBodyEl.scrollLeft
-      }
-      const isRollX = scrollLeft !== lastScrollLeft
-      const isRollY = true
-
-      internalData.inVirtualScroll = true
-      setScrollTop(bodyElem, scrollTop)
-      setScrollTop(leftElem, scrollTop)
-      setScrollTop(rightElem, scrollTop)
-      $xeTable.triggerScrollYEvent(evnt)
-      $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
-        type: 'table',
-        fixed: ''
-      })
-    }
-
     const checkLastSyncScroll = (isRollX: boolean, isRollY: boolean) => {
       const { scrollXLoad, scrollYLoad } = reactData
       const { lcsTimeout } = internalData
@@ -3202,24 +3277,24 @@ export default defineComponent({
         internalData.lcsRunTime = Date.now()
         internalData.lcsTimeout = undefined
         internalData.inVirtualScroll = false
+        internalData.inWheelScroll = false
+        internalData.inHeaderScroll = false
         internalData.inBodyScroll = false
         internalData.inFooterScroll = false
-        internalData.bodyScrollType = ''
+        internalData.scrollRenderType = ''
+        calcCellHeight()
         if (isRollX && scrollXLoad) {
-          tablePrivateMethods.updateScrollXData().then(() => {
-            loadScrollXData()
-          })
+          $xeTable.updateScrollXData()
         }
         if (isRollY && scrollYLoad) {
-          tablePrivateMethods.updateScrollYData().then(() => {
-            loadScrollYData()
+          $xeTable.updateScrollYData().then(() => {
+            calcCellHeight()
+            $xeTable.updateScrollYSpace()
           })
         }
-        tableMethods.updateCellAreas()
+        $xeTable.updateCellAreas()
       }, 200)
     }
-
-    let keyCtxTimeout: any
 
     const dispatchEvent = (type: ValueOf<VxeTableEmits>, params: Record<string, any>, evnt: Event | null) => {
       emit(type, createEvent(evnt, { $table: $xeTable, $grid: $xeGrid }, params))
@@ -3232,6 +3307,13 @@ export default defineComponent({
         return colToVisible($xeTable, column, row)
       }
       return nextTick()
+    }
+
+    function handleUupdateResize () {
+      const el = refElem.value
+      if (el && el.clientWidth && el.clientHeight) {
+        tableMethods.recalculate()
+      }
     }
 
     tableMethods = {
@@ -3305,8 +3387,7 @@ export default defineComponent({
             internalData.inited = true
             internalData.initStatus = true
             return loadTableData(datas)
-          })
-          .then(() => {
+          }).then(() => {
             handleLoadDefaults()
             return tableMethods.recalculate()
           })
@@ -3394,7 +3475,7 @@ export default defineComponent({
           XEUtils.eachTree(rows, (childRow, index, items, path, parentItem, nodes) => {
             const rowid = getRowid($xeTable, childRow)
             const parentRow = parentItem || parentRest.row
-            const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent: parentRow, level: parentLevel + nodes.length, height: 0, oTop: 0 }
+            const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, treeIndex: -1, items, parent: parentRow, level: parentLevel + nodes.length, height: 0, oTop: 0 }
             fullDataRowIdData[rowid] = rest
             fullAllDataRowIdData[rowid] = rest
           }, { children: childrenField })
@@ -3925,14 +4006,19 @@ export default defineComponent({
         const { tableFullData, tableFullTreeData } = internalData
         if (treeConfig) {
           const treeOpts = computeTreeOpts.value
-          const { transform, mapChildrenField } = treeOpts
+          const { transform, mapChildrenField, rowField, parentField } = treeOpts
           const childrenField = treeOpts.children || treeOpts.childrenField
           if (transform) {
             return XEUtils.toArrayTree(
               XEUtils.toTreeArray(tableFullTreeData, {
                 children: mapChildrenField
               }),
-              { children: childrenField }
+              {
+                key: rowField,
+                parentKey: parentField,
+                children: childrenField,
+                mapChildren: mapChildrenField
+              }
             )
           }
           return tableFullTreeData.slice(0)
@@ -4100,30 +4186,38 @@ export default defineComponent({
        * 刷新滚动操作，手动同步滚动相关位置（对于某些特殊的操作，比如滚动条错位、固定列不同步）
        */
       refreshScroll () {
-        const { lastScrollLeft, lastScrollTop } = internalData
-        const tableBody = refTableBody.value
-        const tableFooter = refTableFooter.value
-        const leftBody = refTableLeftBody.value
-        const rightBody = refTableRightBody.value
-        const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
-        const leftBodyElem = leftBody ? leftBody.$el as HTMLDivElement : null
-        const rightBodyElem = rightBody ? rightBody.$el as HTMLDivElement : null
-        const tableFooterElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
-        return new Promise(resolve => {
+        const { elemStore, lastScrollLeft, lastScrollTop } = internalData
+        const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
+        const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+        const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
+        const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
+        const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
+        const xHandleEl = refScrollXHandleElem.value
+        const yHandleEl = refScrollYHandleElem.value
+        return new Promise<void>(resolve => {
           // 还原滚动条位置
           if (lastScrollLeft || lastScrollTop) {
             return restoreScrollLocation($xeTable, lastScrollLeft, lastScrollTop).then().then(() => {
               // 存在滚动行为未结束情况
-              setTimeout(resolve, 30)
+              setTimeout(resolve, 10)
             })
           }
+          internalData.intoRunScroll = true
           // 重置
-          setScrollTop(tableBodyElem, lastScrollTop)
-          setScrollTop(leftBodyElem, lastScrollTop)
-          setScrollTop(rightBodyElem, lastScrollTop)
-          setScrollLeft(tableFooterElem, lastScrollLeft)
+          setScrollTop(yHandleEl, lastScrollTop)
+          setScrollTop(bodyScrollElem, lastScrollTop)
+          setScrollTop(leftScrollElem, lastScrollTop)
+          setScrollTop(rightScrollElem, lastScrollTop)
+
+          setScrollLeft(xHandleEl, lastScrollLeft)
+          setScrollLeft(bodyScrollElem, lastScrollLeft)
+          setScrollLeft(headerScrollElem, lastScrollLeft)
+          setScrollLeft(footerScrollElem, lastScrollLeft)
           // 存在滚动行为未结束情况
-          setTimeout(resolve, 30)
+          setTimeout(() => {
+            internalData.intoRunScroll = false
+            resolve()
+          }, 10)
         })
       },
       /**
@@ -5123,36 +5217,28 @@ export default defineComponent({
        * @param {Number} scrollTop 上距离
        */
       scrollTo (scrollLeft, scrollTop) {
-        const tableBody = refTableBody.value
-        const tableHeader = refTableHeader.value
-        const tableFooter = refTableFooter.value
-        const leftBody = refTableLeftBody.value
-        const rightBody = refTableRightBody.value
-        const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
-        const leftBodyElem = leftBody ? leftBody.$el as HTMLDivElement : null
-        const rightBodyElem = rightBody ? rightBody.$el as HTMLDivElement : null
-        const tableHeaderElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
-        const tableFooterElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
+        const { elemStore } = internalData
+        const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
+        const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+        const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
+        const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
+        const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
+        const xHandleEl = refScrollXHandleElem.value
+        const yHandleEl = refScrollYHandleElem.value
+
         internalData.intoRunScroll = true
+
         if (XEUtils.isNumber(scrollLeft)) {
-          const xHandleEl = refScrollXHandleElem.value
-          if (xHandleEl) {
-            setScrollLeft(xHandleEl, scrollLeft)
-          } else {
-            setScrollLeft(tableBodyElem, scrollLeft)
-            setScrollLeft(tableHeaderElem, scrollLeft)
-            setScrollLeft(tableFooterElem, scrollLeft)
-          }
+          setScrollLeft(xHandleEl, scrollLeft)
+          setScrollLeft(bodyScrollElem, scrollLeft)
+          setScrollLeft(headerScrollElem, scrollLeft)
+          setScrollLeft(footerScrollElem, scrollLeft)
         }
         if (XEUtils.isNumber(scrollTop)) {
-          const yHandleEl = refScrollYHandleElem.value
-          if (yHandleEl) {
-            setScrollTop(yHandleEl, scrollTop)
-          } else {
-            setScrollTop(tableBodyElem, scrollTop)
-            setScrollTop(leftBodyElem, scrollTop)
-            setScrollTop(rightBodyElem, scrollTop)
-          }
+          setScrollTop(yHandleEl, scrollTop)
+          setScrollTop(bodyScrollElem, scrollTop)
+          setScrollTop(leftScrollElem, scrollTop)
+          setScrollTop(rightScrollElem, scrollTop)
         }
         if (reactData.scrollXLoad || reactData.scrollYLoad) {
           return new Promise<void>(resolve => {
@@ -5210,45 +5296,37 @@ export default defineComponent({
        * 手动清除滚动相关信息，还原到初始状态
        */
       clearScroll () {
-        const { scrollXStore, scrollYStore } = internalData
-        const tableBody = refTableBody.value
-        const tableHeader = refTableHeader.value
-        const tableFooter = refTableFooter.value
-        const leftBody = refTableLeftBody.value
-        const rightBody = refTableRightBody.value
-        const leftBodyElem = leftBody ? leftBody.$el as HTMLDivElement : null
-        const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
-        const rightBodyElem = rightBody ? rightBody.$el as HTMLDivElement : null
-        const tableHeaderElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
-        const tableFooterElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
+        const { elemStore, scrollXStore, scrollYStore } = internalData
+        const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
+        const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+        const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
+        const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
+        const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
         const xHandleEl = refScrollXHandleElem.value
-        if (xHandleEl) {
-          setScrollLeft(xHandleEl, 0)
-        } else {
-          setScrollLeft(tableBodyElem, 0)
-          setScrollLeft(tableHeaderElem, 0)
-          setScrollLeft(tableFooterElem, 0)
-        }
         const yHandleEl = refScrollYHandleElem.value
-        if (yHandleEl) {
-          setScrollTop(yHandleEl, 0)
-        } else {
-          setScrollTop(tableBodyElem, 0)
-          setScrollTop(leftBodyElem, 0)
-          setScrollTop(rightBodyElem, 0)
-        }
-        scrollXStore.startIndex = 0
-        scrollXStore.endIndex = scrollXStore.visibleSize
-        scrollYStore.startIndex = 0
-        scrollYStore.endIndex = scrollYStore.visibleSize
-        return nextTick().then(() => {
-          setScrollLeft(tableBodyElem, 0)
-          setScrollLeft(tableHeaderElem, 0)
-          setScrollLeft(tableFooterElem, 0)
 
-          setScrollTop(tableBodyElem, 0)
-          setScrollTop(leftBodyElem, 0)
-          setScrollTop(rightBodyElem, 0)
+        internalData.intoRunScroll = true
+
+        setScrollLeft(xHandleEl, 0)
+        setScrollLeft(bodyScrollElem, 0)
+        setScrollLeft(headerScrollElem, 0)
+        setScrollLeft(footerScrollElem, 0)
+
+        setScrollTop(yHandleEl, 0)
+        setScrollTop(bodyScrollElem, 0)
+        setScrollTop(leftScrollElem, 0)
+        setScrollTop(rightScrollElem, 0)
+
+        scrollXStore.startIndex = 0
+        scrollXStore.visibleStartIndex = 0
+        scrollXStore.endIndex = scrollXStore.visibleSize
+        scrollXStore.visibleEndIndex = scrollXStore.visibleSize
+        scrollYStore.startIndex = 0
+        scrollYStore.visibleStartIndex = 0
+        scrollYStore.endIndex = scrollYStore.visibleSize
+        scrollYStore.visibleEndIndex = scrollYStore.visibleSize
+        return nextTick().then(() => {
+          internalData.intoRunScroll = false
         })
       },
       /**
@@ -5774,8 +5852,8 @@ export default defineComponent({
           } else if (isContextMenu) {
             // 如果按下上下文键
             internalData._keyCtx = selected.row && selected.column && bodyMenu.length
-            clearTimeout(keyCtxTimeout)
-            keyCtxTimeout = setTimeout(() => {
+            clearTimeout(internalData.keyCtxTimeout)
+            internalData.keyCtxTimeout = setTimeout(() => {
               internalData._keyCtx = false
             }, 1000)
           } else if (isEnter && !isAltKey && keyboardConfig && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
@@ -6156,6 +6234,7 @@ export default defineComponent({
         const rdLineEl = refDragRowLineElem.value
         if (rdLineEl) {
           if (showLine) {
+            const scrollbarYToLeft = computeScrollbarYToLeft.value
             const trRect = trEl.getBoundingClientRect()
             let trHeight = trEl.clientHeight
             const offsetTop = Math.max(1, trRect.y - wrapperRect.y)
@@ -6163,6 +6242,7 @@ export default defineComponent({
               trHeight = tableHeight - offsetTop - scrollbarHeight
             }
             rdLineEl.style.display = 'block'
+            rdLineEl.style.left = `${scrollbarYToLeft ? scrollbarWidth : 0}px`
             rdLineEl.style.top = `${offsetTop}px`
             rdLineEl.style.height = `${trHeight}px`
             rdLineEl.style.width = `${tableWidth - scrollbarWidth}px`
@@ -6176,6 +6256,7 @@ export default defineComponent({
         const cdLineEl = refDragColLineElem.value
         if (cdLineEl) {
           if (showLine) {
+            const scrollbarXToTop = computeScrollbarXToTop.value
             const leftContainerElem = refLeftContainer.value
             const leftContainerWidth = leftContainerElem ? leftContainerElem.clientWidth : 0
             const rightContainerElem = refRightContainer.value
@@ -6200,7 +6281,7 @@ export default defineComponent({
             if (prevDragToChild) {
               cdLineEl.style.height = `${thRect.height}px`
             } else {
-              cdLineEl.style.height = `${tableHeight - offsetTop - scrollbarHeight}px`
+              cdLineEl.style.height = `${tableHeight - offsetTop - (scrollbarXToTop ? 0 : scrollbarHeight)}px`
             }
             cdLineEl.setAttribute('drag-pos', dragPos)
             cdLineEl.setAttribute('drag-to-child', prevDragToChild ? 'y' : 'n')
@@ -6239,6 +6320,9 @@ export default defineComponent({
      * @param {Row} row 行对象
      */
     const handleTooltip = (evnt: MouseEvent, cell: HTMLTableCellElement, overflowElem: HTMLElement, tipElem: HTMLElement | null, params: any) => {
+      if (!overflowElem) {
+        return nextTick()
+      }
       params.cell = cell
       const { tooltipStore } = reactData
       const tooltipOpts = computeTooltipOpts.value
@@ -6414,7 +6498,7 @@ export default defineComponent({
           }
           let cacheItem = fullAllDataRowIdData[rowid]
           if (!cacheItem) {
-            cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, items, parent: parentRow, level, height: 0, oTop: 0 }
+            cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, items, parent: parentRow, level, height: 0, oTop: 0 }
           }
           cacheItem.row = row
           cacheItem.items = items
@@ -6511,17 +6595,23 @@ export default defineComponent({
         if (isDblclickAutoWidth && el) {
           const { fullColumnIdData } = internalData
           const { column } = params
-          const colid = column.id
+          let resizeColumn = column
+          if (column.children && column.children.length) {
+            XEUtils.eachTree(column.children, childColumn => {
+              resizeColumn = childColumn
+            })
+          }
+          const colid = resizeColumn.id
           const colRest = fullColumnIdData[colid]
           const dragBtnElem = evnt.target as HTMLDivElement
           const cell = dragBtnElem.parentNode as HTMLTableCellElement
           const cellParams = Object.assign(params, { cell })
           const colMinWidth = getColReMinWidth(cellParams)
-          let resizeWidth = calcColumnAutoWidth(column, el)
+          let resizeWidth = calcColumnAutoWidth(resizeColumn, el)
           if (colRest) {
             resizeWidth = Math.max(resizeWidth, colRest.width)
           }
-          column.resizeWidth = Math.max(colMinWidth, resizeWidth)
+          resizeColumn.resizeWidth = Math.max(colMinWidth, resizeWidth)
           reactData._isResize = false
           internalData._lastResizeTime = Date.now()
           $xeTable.analyColumnWidth()
@@ -6755,7 +6845,7 @@ export default defineComponent({
             vLen++
           })
 
-        const isSelected = rootList.length > 0 && sLen >= vLen
+        const isSelected = vLen > 0 ? sLen >= vLen : sLen >= rootList.length
         const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
 
         reactData.isAllSelected = isSelected
@@ -7948,15 +8038,18 @@ export default defineComponent({
       handleScrollEvent (evnt, isRollY, isRollX, scrollTop, scrollLeft, params) {
         const { highlightHoverRow } = props
         const { lastScrollLeft, lastScrollTop } = internalData
-        const tableBody = refTableBody.value
-        const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+        const xHandleEl = refScrollXHandleElem.value
+        const yHandleEl = refScrollYHandleElem.value
+        if (!xHandleEl || !yHandleEl) {
+          return
+        }
         const rowOpts = computeRowOpts.value
         const validTip = refValidTooltip.value
         const tooltip = refTooltip.value
-        const bodyHeight = bodyElem ? bodyElem.clientHeight : 0
-        const bodyWidth = bodyElem ? bodyElem.clientWidth : 0
-        const scrollHeight = bodyElem ? bodyElem.scrollHeight : 0
-        const scrollWidth = bodyElem ? bodyElem.scrollWidth : 0
+        const bodyHeight = yHandleEl.clientHeight
+        const bodyWidth = xHandleEl.clientWidth
+        const scrollHeight = yHandleEl.scrollHeight
+        const scrollWidth = xHandleEl.scrollWidth
         let isTop = false
         let isBottom = false
         let isLeft = false
@@ -7983,7 +8076,7 @@ export default defineComponent({
               isLeftBoundary = true
             }
           }
-          tablePrivateMethods.checkScrolling()
+          $xeTable.checkScrolling()
           internalData.lastScrollLeft = scrollLeft
         }
         if (isRollY) {
@@ -8061,6 +8154,291 @@ export default defineComponent({
           lazyScrollYData()
         }
       },
+      triggerBodyScrollEvent (evnt, fixedType) {
+        const { elemStore, lastScrollTop, lastScrollLeft, inWheelScroll, inVirtualScroll, inHeaderScroll, inBodyScroll, scrollRenderType, inFooterScroll } = internalData
+        const xHandleEl = refScrollXHandleElem.value
+        const yHandleEl = refScrollYHandleElem.value
+        const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
+        const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+        const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
+        const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
+        const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
+        if (inWheelScroll || inVirtualScroll || inHeaderScroll || inFooterScroll) {
+          return
+        }
+        if (!bodyScrollElem) {
+          return
+        }
+        if (!xHandleEl) {
+          return
+        }
+        if (!yHandleEl) {
+          return
+        }
+        if (inBodyScroll) {
+          if (scrollRenderType !== fixedType) {
+            return
+          }
+        }
+        let scrollTop = yHandleEl.scrollTop
+        let scrollLeft = xHandleEl.scrollLeft
+        if (leftScrollElem && fixedType === 'left') {
+          scrollTop = leftScrollElem.scrollTop
+        } else if (rightScrollElem && fixedType === 'right') {
+          scrollTop = rightScrollElem.scrollTop
+        } else {
+          scrollTop = bodyScrollElem.scrollTop
+          scrollLeft = bodyScrollElem.scrollLeft
+        }
+        const isRollX = scrollLeft !== lastScrollLeft
+        const isRollY = scrollTop !== lastScrollTop
+        internalData.inBodyScroll = true
+        internalData.scrollRenderType = fixedType
+        if (isRollY) {
+          if (fixedType === 'left') {
+            setScrollTop(bodyScrollElem, scrollTop)
+            setScrollTop(rightScrollElem, scrollTop)
+          } else if (fixedType === 'right') {
+            setScrollTop(bodyScrollElem, scrollTop)
+            setScrollTop(leftScrollElem, scrollTop)
+          } else {
+            setScrollTop(leftScrollElem, scrollTop)
+            setScrollTop(rightScrollElem, scrollTop)
+          }
+          setScrollTop(yHandleEl, scrollTop)
+          $xeTable.triggerScrollYEvent(evnt)
+        }
+        if (isRollX) {
+          setScrollLeft(xHandleEl, scrollLeft)
+          setScrollLeft(headerScrollElem, scrollLeft)
+          setScrollLeft(footerScrollElem, scrollLeft)
+          $xeTable.triggerScrollXEvent(evnt)
+        }
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
+          type: 'body',
+          fixed: fixedType
+        })
+      },
+      triggerHeaderScrollEvent (evnt, fixedType) {
+        const { elemStore, inWheelScroll, inVirtualScroll, inBodyScroll, inFooterScroll } = internalData
+        const yHandleEl = refScrollYHandleElem.value
+        const xHandleEl = refScrollXHandleElem.value
+        const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+        const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
+        const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
+        if (inWheelScroll) {
+          return
+        }
+        if (inVirtualScroll) {
+          return
+        }
+        if (inBodyScroll) {
+          return
+        }
+        if (inFooterScroll) {
+          return
+        }
+        if (!headerScrollElem) {
+          return
+        }
+        if (!xHandleEl) {
+          return
+        }
+        if (!yHandleEl) {
+          return
+        }
+        const scrollTop = yHandleEl.scrollTop
+        const scrollLeft = headerScrollElem.scrollLeft
+        const isRollX = true
+        const isRollY = false
+        internalData.inHeaderScroll = true
+        setScrollLeft(xHandleEl, scrollLeft)
+        setScrollLeft(footerScrollElem, scrollLeft)
+        setScrollLeft(bodyScrollElem, scrollLeft)
+        $xeTable.triggerScrollXEvent(evnt)
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
+          type: 'header',
+          fixed: fixedType
+        })
+      },
+      triggerFooterScrollEvent (evnt, fixedType) {
+        const { elemStore, inWheelScroll, inVirtualScroll, inHeaderScroll, inBodyScroll } = internalData
+        const yHandleEl = refScrollYHandleElem.value
+        const xHandleEl = refScrollXHandleElem.value
+        const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+        const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
+        const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
+        if (inWheelScroll) {
+          return
+        }
+        if (inVirtualScroll) {
+          return
+        }
+        if (inHeaderScroll) {
+          return
+        }
+        if (inBodyScroll) {
+          return
+        }
+        if (!footerScrollElem) {
+          return
+        }
+        if (!xHandleEl) {
+          return
+        }
+        if (!yHandleEl) {
+          return
+        }
+        const scrollTop = yHandleEl.scrollTop
+        const scrollLeft = footerScrollElem.scrollLeft
+        const isRollX = true
+        const isRollY = false
+        internalData.inFooterScroll = true
+        setScrollLeft(xHandleEl, scrollLeft)
+        setScrollLeft(headerScrollElem, scrollLeft)
+        setScrollLeft(bodyScrollElem, scrollLeft)
+        $xeTable.triggerScrollXEvent(evnt)
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
+          type: 'footer',
+          fixed: fixedType
+        })
+      },
+      triggerBodyWheelEvent (evnt) {
+        const { deltaY, deltaX } = evnt
+        const { highlightHoverRow } = tableProps
+        const { elemStore, lastScrollTop, lastScrollLeft } = internalData
+        const rowOpts = computeRowOpts.value
+        const xHandleEl = refScrollXHandleElem.value
+        const yHandleEl = refScrollYHandleElem.value
+        const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
+        const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+        const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
+
+        if (!xHandleEl) {
+          return
+        }
+        if (!yHandleEl) {
+          return
+        }
+        if (!bodyScrollElem) {
+          return
+        }
+
+        let multiple = 1
+
+        if (reactData.lastScrollTime + 25 > Date.now()) {
+          multiple = 1.18
+        } else if (reactData.lastScrollTime + 30 > Date.now()) {
+          multiple = 1.15
+        } else if (reactData.lastScrollTime + 40 > Date.now()) {
+          multiple = 1.12
+        } else if (reactData.lastScrollTime + 55 > Date.now()) {
+          multiple = 1.09
+        } else if (reactData.lastScrollTime + 75 > Date.now()) {
+          multiple = 1.06
+        } else if (reactData.lastScrollTime + 100 > Date.now()) {
+          multiple = 1.03
+        }
+
+        const deltaTop = deltaY * multiple
+        const deltaLeft = deltaX * multiple
+
+        const isTopWheel = deltaTop < 0
+        const currScrollTop = yHandleEl.scrollTop
+        // 如果滚动位置已经是顶部或底部，则不需要触发
+        if (isTopWheel ? currScrollTop <= 0 : currScrollTop >= yHandleEl.scrollHeight - yHandleEl.clientHeight) {
+          return
+        }
+
+        const scrollTop = bodyScrollElem.scrollTop + deltaTop
+        const scrollLeft = bodyScrollElem.scrollLeft + deltaLeft
+        const isRollX = scrollLeft !== lastScrollLeft
+        const isRollY = scrollTop !== lastScrollTop
+
+        // 用于鼠标纵向滚轮处理
+        if (isRollY) {
+          evnt.preventDefault()
+          if (rowOpts.isHover || highlightHoverRow) {
+            $xeTable.clearHoverRow()
+          }
+
+          internalData.inWheelScroll = true
+          setScrollTop(yHandleEl, scrollTop)
+          setScrollTop(bodyScrollElem, scrollTop)
+          setScrollTop(leftScrollElem, scrollTop)
+          setScrollTop(rightScrollElem, scrollTop)
+
+          loadScrollYData(scrollTop)
+          $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
+            type: 'table',
+            fixed: ''
+          })
+        }
+      },
+      triggerVirtualScrollXEvent (evnt) {
+        const { elemStore, inWheelScroll, lastScrollTop, inHeaderScroll, inBodyScroll, inFooterScroll } = internalData
+        if (inHeaderScroll || inBodyScroll || inFooterScroll) {
+          return
+        }
+        if (inWheelScroll) {
+          return
+        }
+        const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
+        const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+        const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
+        const yHandleEl = refScrollYHandleElem.value
+        const wrapperEl = evnt.currentTarget as HTMLDivElement
+        const { scrollLeft } = wrapperEl
+        const yBodyEl = yHandleEl || bodyScrollElem
+        let scrollTop = 0
+        if (yBodyEl) {
+          scrollTop = yBodyEl.scrollTop
+        }
+        const isRollX = true
+        const isRollY = scrollTop !== lastScrollTop
+
+        internalData.inVirtualScroll = true
+        setScrollLeft(bodyScrollElem, scrollLeft)
+        setScrollLeft(headerScrollElem, scrollLeft)
+        setScrollLeft(footerScrollElem, scrollLeft)
+        $xeTable.triggerScrollXEvent(evnt)
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
+          type: 'table',
+          fixed: ''
+        })
+      },
+      triggerVirtualScrollYEvent (evnt) {
+        const { elemStore, inWheelScroll, lastScrollLeft, inHeaderScroll, inBodyScroll, inFooterScroll } = internalData
+        if (inHeaderScroll || inBodyScroll || inFooterScroll) {
+          return
+        }
+        if (inWheelScroll) {
+          return
+        }
+        const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
+        const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+        const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
+        const xHandleEl = refScrollXHandleElem.value
+        const wrapperEl = evnt.currentTarget as HTMLDivElement
+        const { scrollTop } = wrapperEl
+        const xBodyEl = xHandleEl || bodyScrollElem
+        let scrollLeft = 0
+        if (xBodyEl) {
+          scrollLeft = xBodyEl.scrollLeft
+        }
+        const isRollX = scrollLeft !== lastScrollLeft
+        const isRollY = true
+
+        internalData.inVirtualScroll = true
+        setScrollTop(bodyScrollElem, scrollTop)
+        setScrollTop(leftScrollElem, scrollTop)
+        setScrollTop(rightScrollElem, scrollTop)
+        $xeTable.triggerScrollYEvent(evnt)
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
+          type: 'table',
+          fixed: ''
+        })
+      },
       /**
        * 对于树形结构中，可以直接滚动到指定深层节点中
        * 对于某些特定的场景可能会用到，比如定位到某一节点
@@ -8088,7 +8466,7 @@ export default defineComponent({
       updateScrollYStatus,
       // 更新横向 X 可视渲染上下剩余空间大小
       updateScrollXSpace () {
-        const { isGroup, scrollXLoad, scrollbarWidth } = reactData
+        const { isGroup, scrollXLoad } = reactData
         const { visibleColumn, scrollXStore, elemStore, tableWidth } = internalData
         const tableHeader = refTableHeader.value
         const tableBody = refTableBody.value
@@ -8118,13 +8496,13 @@ export default defineComponent({
             layoutList.forEach(layout => {
               const xSpaceElem = getRefElem(elemStore[`${name}-${layout}-xSpace`])
               if (xSpaceElem) {
-                xSpaceElem.style.width = scrollXLoad ? `${tableWidth + (layout === 'header' ? scrollbarWidth : 0)}px` : ''
+                xSpaceElem.style.width = scrollXLoad ? `${tableWidth}px` : ''
               }
             })
           })
           const scrollXSpaceEl = refScrollXSpaceElem.value
           if (scrollXSpaceEl) {
-            scrollXSpaceEl.style.width = `${tableWidth + scrollbarWidth}px`
+            scrollXSpaceEl.style.width = `${tableWidth}px`
           }
           nextTick(() => {
             updateStyle()
@@ -8134,17 +8512,16 @@ export default defineComponent({
       // 更新纵向 Y 可视渲染上下剩余空间大小
       updateScrollYSpace () {
         const { showOverflow } = props
-        const { scrollYLoad } = reactData
+        const { scrollYLoad, rowHeight } = reactData
         const { scrollYStore, elemStore, afterFullData, fullAllDataRowIdData } = internalData
-        const { startIndex, rowHeight } = scrollYStore
-        let bodyHeight = 0
-        let topSpaceHeight = 0
+        const { startIndex } = scrollYStore
+        const bodyTableElem = getRefElem(elemStore['main-body-table'])
         const containerList = ['main', 'left', 'right']
-        let marginTop = ''
-        let ySpaceHeight = ''
+        let topSpaceHeight = 0
+        let ySpaceHeight = 0
         if (scrollYLoad) {
           if (showOverflow) {
-            bodyHeight = afterFullData.length * rowHeight
+            ySpaceHeight = afterFullData.length * rowHeight
             topSpaceHeight = Math.max(0, startIndex * rowHeight)
           } else {
             for (let i = 0; i < afterFullData.length; i++) {
@@ -8152,7 +8529,7 @@ export default defineComponent({
               const rowid = getRowid($xeTable, row)
               const rowRest = fullAllDataRowIdData[rowid]
               if (rowRest) {
-                bodyHeight += rowRest.height || rowHeight
+                ySpaceHeight += rowRest.height || rowHeight
               }
             }
             for (let i = 0; i < startIndex; i++) {
@@ -8164,60 +8541,60 @@ export default defineComponent({
               }
             }
           }
-          marginTop = `${topSpaceHeight}px`
-          ySpaceHeight = `${bodyHeight}px`
+        } else {
+          if (bodyTableElem) {
+            ySpaceHeight = bodyTableElem.clientHeight
+          }
         }
         containerList.forEach(name => {
           const layoutList = ['header', 'body', 'footer']
           const tableElem = getRefElem(elemStore[`${name}-body-table`])
           if (tableElem) {
-            tableElem.style.marginTop = marginTop
+            tableElem.style.marginTop = topSpaceHeight ? `${topSpaceHeight}px` : ''
           }
           layoutList.forEach(layout => {
             const ySpaceElem = getRefElem(elemStore[`${name}-${layout}-ySpace`])
             if (ySpaceElem) {
-              ySpaceElem.style.height = ySpaceHeight
+              ySpaceElem.style.height = ySpaceHeight ? `${ySpaceHeight}px` : ''
             }
           })
         })
         const scrollYSpaceEl = refScrollYSpaceElem.value
         if (scrollYSpaceEl) {
-          scrollYSpaceEl.style.height = ySpaceHeight
+          scrollYSpaceEl.style.height = ySpaceHeight ? `${ySpaceHeight}px` : ''
         }
-        nextTick(updateStyle)
+        nextTick(() => {
+          updateStyle()
+        })
       },
       updateScrollXData () {
         const { showOverflow } = props
         handleTableColumn()
-        calcCellHeight()
         return nextTick().then(() => {
-          calcCellHeight()
           handleTableColumn()
-          tablePrivateMethods.updateScrollXSpace()
+          $xeTable.updateScrollXSpace()
           if (!showOverflow) {
-            tablePrivateMethods.updateScrollYSpace()
+            $xeTable.updateScrollYSpace()
           }
         })
       },
       updateScrollYData () {
-        tablePrivateMethods.handleTableData()
-        calcCellHeight()
+        $xeTable.handleTableData()
         return nextTick().then(() => {
-          calcCellHeight()
-          tablePrivateMethods.handleTableData()
-          tablePrivateMethods.updateScrollYSpace()
+          $xeTable.handleTableData()
+          $xeTable.updateScrollYSpace()
         })
       },
       /**
        * 处理固定列的显示状态
        */
       checkScrolling () {
+        const { elemStore } = internalData
+        const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
         const leftContainerElem = refLeftContainer.value
         const rightContainerElem = refRightContainer.value
-        const tableBody = refTableBody.value
-        const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
         const xHandleEl = refScrollXHandleElem.value
-        const bodtTargetEl = xHandleEl || bodyElem
+        const bodtTargetEl = xHandleEl || bodyScrollElem
         if (bodtTargetEl) {
           if (leftContainerElem) {
             if (bodtTargetEl.scrollLeft > 0) {
@@ -8433,19 +8810,140 @@ export default defineComponent({
       return renderEmptyElement($xeTable)
     }
 
-    function handleUupdateResize () {
-      const el = refElem.value
-      if (el && el.clientWidth && el.clientHeight) {
-        tableMethods.recalculate()
-      }
+    const renderScrollX = () => {
+      return h('div', {
+        key: 'vsx',
+        ref: refScrollXVirtualElem,
+        class: 'vxe-table--scroll-x-virtual'
+      }, [
+        h('div', {
+          ref: refScrollXLeftCornerElem,
+          class: 'vxe-table--scroll-x-left-corner'
+        }),
+        h('div', {
+          ref: refScrollXWrapperElem,
+          class: 'vxe-table--scroll-x-wrapper'
+        }, [
+          h('div', {
+            ref: refScrollXHandleElem,
+            class: 'vxe-table--scroll-x-handle',
+            onScroll: $xeTable.triggerVirtualScrollXEvent
+          }, [
+            h('div', {
+              ref: refScrollXSpaceElem,
+              class: 'vxe-table--scroll-x-space'
+            })
+          ])
+        ]),
+        h('div', {
+          ref: refScrollXRightCornerElem,
+          class: 'vxe-table--scroll-x-right-corner'
+        })
+      ])
+    }
+
+    const renderScrollY = () => {
+      return h('div', {
+        ref: refScrollYVirtualElem,
+        class: 'vxe-table--scroll-y-virtual'
+      }, [
+        h('div', {
+          ref: refScrollYTopCornerElem,
+          class: 'vxe-table--scroll-y-top-corner'
+        }),
+        h('div', {
+          ref: refScrollYWrapperElem,
+          class: 'vxe-table--scroll-y-wrapper'
+        }, [
+          h('div', {
+            ref: refScrollYHandleElem,
+            class: 'vxe-table--scroll-y-handle',
+            onScroll: $xeTable.triggerVirtualScrollYEvent
+          }, [
+            h('div', {
+              ref: refScrollYSpaceElem,
+              class: 'vxe-table--scroll-y-space'
+            })
+          ])
+        ]),
+        h('div', {
+          ref: refScrollYBottomCornerElem,
+          class: 'vxe-table--scroll-y-bottom-corner'
+        })
+      ])
+    }
+
+    const renderViewport = () => {
+      const { showHeader, showFooter } = props
+      const { overflowX, tableData, tableColumn, tableGroupColumn, footerTableData, columnStore } = reactData
+      const { leftList, rightList } = columnStore
+      return h('div', {
+        ref: refTableViewportElem,
+        class: 'vxe-table--viewport-wrapper'
+      }, [
+        h('div', {
+          class: 'vxe-table--main-wrapper'
+        }, [
+          /**
+           * 表头
+           */
+          showHeader
+            ? h(TableHeaderComponent, {
+              ref: refTableHeader,
+              tableData,
+              tableColumn,
+              tableGroupColumn
+            })
+            : renderEmptyElement($xeTable),
+          /**
+           * 表体
+           */
+          h(TableBodyComponent, {
+            ref: refTableBody,
+            tableData,
+            tableColumn
+          }),
+          /**
+           * 表尾
+           */
+          showFooter
+            ? h(TableFooterComponent, {
+              ref: refTableFooter,
+              footerTableData,
+              tableColumn
+            })
+            : renderEmptyElement($xeTable)
+        ]),
+        h('div', {
+          class: 'vxe-table--fixed-wrapper'
+        }, [
+          leftList && leftList.length && overflowX ? renderFixed('left') : renderEmptyElement($xeTable),
+          rightList && rightList.length && overflowX ? renderFixed('right') : renderEmptyElement($xeTable)
+        ])
+      ])
+    }
+
+    const renderBody = () => {
+      const scrollbarYToLeft = computeScrollbarYToLeft.value
+      return h('div', {
+        class: 'vxe-table--layout-wrapper'
+      }, scrollbarYToLeft
+        ? [
+            renderScrollY(),
+            renderViewport()
+          ]
+        : [
+            renderViewport(),
+            renderScrollY()
+          ])
     }
 
     const renderVN = () => {
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
-      const { isCalcColumn, isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
+      const { isCalcColumn, isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
       const { leftList, rightList } = columnStore
       const loadingSlot = slots.loading
-      const tipConfig = computeTipConfig.value
+      const tooltipOpts = computeTooltipOpts.value
       const validOpts = computeValidOpts.value
       const checkboxOpts = computeCheckboxOpts.value
       const treeOpts = computeTreeOpts.value
@@ -8455,17 +8953,17 @@ export default defineComponent({
       const tableBorder = computeTableBorder.value
       const mouseOpts = computeMouseOpts.value
       const areaOpts = computeAreaOpts.value
-      const validTipOpts = computeValidTipOpts.value
       const loadingOpts = computeLoadingOpts.value
       const isMenu = computeIsMenu.value
-      const currLoading = reactData._isLoading || loading
-      const virtualScrollBars = computeVirtualScrollBars.value
+      const currLoading = reactData.isLoading || loading
       const resizableOpts = computeResizableOpts.value
       const isArea = mouseConfig && mouseOpts.area
       const columnDragOpts = computeColumnDragOpts.value
+      const scrollbarXToTop = computeScrollbarXToTop.value
+      const scrollbarYToLeft = computeScrollbarYToLeft.value
       return h('div', {
         ref: refElem,
-        class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, {
+        class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`, `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`, {
           [`size--${vSize}`]: vSize,
           [`valid-msg--${validOpts.msgMode}`]: !!editRules,
           'vxe-editable': !!editConfig,
@@ -8509,83 +9007,15 @@ export default defineComponent({
         h('div', {
           key: 'tw',
           class: 'vxe-table--render-wrapper'
-        }, [
-          h('div', {
-            class: 'vxe-table--main-wrapper'
-          }, [
-            /**
-             * 表头
-             */
-            showHeader
-              ? h(TableHeaderComponent, {
-                ref: refTableHeader,
-                tableData,
-                tableColumn,
-                tableGroupColumn
-              })
-              : renderEmptyElement($xeTable),
-            /**
-             * 表体
-             */
-            h(TableBodyComponent, {
-              ref: refTableBody,
-              tableData,
-              tableColumn
-            }),
-            /**
-             * 表尾
-             */
-            showFooter
-              ? h(TableFooterComponent, {
-                ref: refTableFooter,
-                footerTableData,
-                tableColumn
-              })
-              : renderEmptyElement($xeTable)
-          ]),
-          h('div', {
-            class: 'vxe-table--fixed-wrapper'
-          }, [
-            leftList && leftList.length && overflowX ? renderFixed('left') : renderEmptyElement($xeTable),
-            rightList && rightList.length && overflowX ? renderFixed('right') : renderEmptyElement($xeTable)
-          ])
-        ]),
-        virtualScrollBars.x
-          ? h('div', {
-            key: 'vx',
-            ref: refScrollXVirtualElem,
-            class: 'vxe-table--scroll-x-virtual'
-          }, [
-            h('div', {
-              ref: refScrollXHandleElem,
-              class: 'vxe-table--scroll-x-handle',
-              onScroll: scrollXEvent
-            }, [
-              h('div', {
-                ref: refScrollXSpaceElem,
-                class: 'vxe-table--scroll-x-space'
-              })
-            ])
-          ])
-          : renderEmptyElement($xeTable),
-        virtualScrollBars.y
-          ? h('div', {
-            key: 'vy',
-            ref: refScrollYVirtualElem,
-            class: 'vxe-table--scroll-y-virtual'
-          }, [
-            h('div', {
-              ref: refScrollYHandleElem,
-              class: 'vxe-table--scroll-y-handle',
-              onScroll: scrollYEvent
-            }, [
-              h('div', {
-                ref: refScrollYSpaceElem,
-                class: 'vxe-table--scroll-y-space'
-              })
-            ])
-          ])
-          : renderEmptyElement($xeTable),
+        }, scrollbarXToTop
+          ? [
+              renderScrollX(),
+              renderBody()
+            ]
+          : [
+              renderBody(),
+              renderScrollX()
+            ]),
         /**
          * 空数据
          */
@@ -8611,18 +9041,13 @@ export default defineComponent({
         h('div', {
           key: 'cl',
           ref: refCellResizeBar,
-          class: 'vxe-table--resizable-bar',
-          style: overflowX
-            ? {
-                'padding-bottom': `${scrollbarHeight}px`
-              }
-            : null
+          class: 'vxe-table--resizable-bar'
         }, resizableOpts.showDragTip
           ? [
               h('div', {
                 ref: refCellResizeTip,
                 class: 'vxe-table--resizable-number-tip'
-              }, '23432px')
+              })
             ]
           : []),
         /**
@@ -8720,7 +9145,7 @@ export default defineComponent({
             h(VxeUITooltipComponent, Object.assign({
               key: 'btp',
               ref: refTooltip
-            }, tipConfig, tooltipStore.currOpts)),
+            }, tooltipOpts, tooltipStore.currOpts)),
             /**
               * 校验提示
               */
@@ -8731,7 +9156,7 @@ export default defineComponent({
                 class: [{
                   'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete'
                 }, 'vxe-table--valid-error'],
-                ...(validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : {}) as any
+                ...(validOpts.message === 'tooltip' || tableData.length === 1 ? Object.assign({ isArrow: false }, tooltipOpts) : {}) as any
               })
               : renderEmptyElement($xeTable)
           ])
@@ -8767,7 +9192,7 @@ export default defineComponent({
         if ((scrollXLoad || scrollYLoad) && expandColumn) {
           warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
         }
-        tableMethods.recalculate()
+        return tableMethods.recalculate()
       })
     })
 
@@ -8805,16 +9230,37 @@ export default defineComponent({
       })
     })
 
+    const reScrollFlag = ref(0)
+    watch(computeSize, () => {
+      reScrollFlag.value++
+    })
     watch(() => props.showHeader, () => {
+      reScrollFlag.value++
+    })
+    watch(() => props.showFooter, () => {
+      reScrollFlag.value++
+    })
+    watch(reScrollFlag, () => {
       nextTick(() => {
         tableMethods.recalculate(true).then(() => tableMethods.refreshScroll())
       })
     })
 
-    watch(() => props.showFooter, () => {
-      nextTick(() => {
-        tableMethods.recalculate(true).then(() => tableMethods.refreshScroll())
-      })
+    const reLayoutFlag = ref(0)
+    watch(() => props.height, () => {
+      reLayoutFlag.value++
+    })
+    watch(() => props.maxHeight, () => {
+      reLayoutFlag.value++
+    })
+    watch(computeScrollbarXToTop, () => {
+      reLayoutFlag.value++
+    })
+    watch(computeScrollbarYToLeft, () => {
+      reLayoutFlag.value++
+    })
+    watch(reLayoutFlag, () => {
+      nextTick(() => tableMethods.recalculate(true))
     })
 
     const footFlag = ref(0)
@@ -8826,20 +9272,6 @@ export default defineComponent({
     })
     watch(footFlag, () => {
       tableMethods.updateFooter()
-    })
-
-    watch(() => props.height, () => {
-      nextTick(() => tableMethods.recalculate(true))
-    })
-
-    watch(() => props.maxHeight, () => {
-      nextTick(() => tableMethods.recalculate(true))
-    })
-
-    watch(computeSize, () => {
-      nextTick(() => {
-        tableMethods.recalculate(true).then(() => tableMethods.refreshScroll())
-      })
     })
 
     watch(() => props.syncResize, (value) => {

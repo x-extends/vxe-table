@@ -1,5 +1,9 @@
 <template>
   <div>
+    <vxe-button @click="loadData(0)">加载0条</vxe-button>
+    <vxe-button @click="loadData(5)">加载5条</vxe-button>
+    <vxe-button @click="loadData(20)">加载20条</vxe-button>
+    <vxe-button @click="loadData(1000)">加载1000条</vxe-button>
     <vxe-button @click="loadData(5000)">加载5k条</vxe-button>
     <vxe-button @click="loadData(10000)">加载1w条</vxe-button>
     <vxe-button @click="loadData(50000)">加载5w条</vxe-button>
@@ -213,6 +217,6 @@ const loadData = (rowSize) => {
     })
   }, 100)
 }
-loadData(200)
+loadData(100)
 
 </script>
