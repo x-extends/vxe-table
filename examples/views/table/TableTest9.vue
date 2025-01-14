@@ -1,13 +1,17 @@
 <template>
   <div>
-    <vxe-button @click="loadData(0)">加载0条</vxe-button>
-    <vxe-button @click="loadData(5)">加载5条</vxe-button>
-    <vxe-button @click="loadData(50)">加载50条</vxe-button>
-    <vxe-button @click="loadData(5000)">加载5k条</vxe-button>
-    <vxe-button @click="loadData(10000)">加载1w条</vxe-button>
-    <vxe-button @click="loadData(30000)">加载3w条</vxe-button>
+    <p>
+      <vxe-button @click="loadData(0)">加载0条</vxe-button>
+      <vxe-button @click="loadData(5)">加载5条</vxe-button>
+      <vxe-button @click="loadData(50)">加载50条</vxe-button>
+      <vxe-button @click="loadData(5000)">加载5k条</vxe-button>
+      <vxe-button @click="loadData(10000)">加载1w条</vxe-button>
+      <vxe-button @click="loadData(30000)">加载3w条</vxe-button>
+    </p>
+
     <vxe-table
       border
+      show-footer
       show-overflow
       height="800"
       :loading="loading"
@@ -15,8 +19,10 @@
       :row-config="{drag: true}"
       :scroll-x="{enabled: true, gt: 0}"
       :scroll-y="{enabled: true, gt: 0}"
-      :data="tableData">
-      <vxe-column type="checkbox" width="80" fixed="left" drag-sort></vxe-column>
+      :scrollbar-config="{x:{position:'top'},y:{position:'left'}}"
+      :data="tableData"
+      :footer-data="footerData">
+      <vxe-column field="checkbox" type="checkbox" width="80" fixed="left" drag-sort></vxe-column>
       <vxe-column field="col0" title="列0" fixed="left" width="100"></vxe-column>
       <vxe-column field="imgUrl" title="列1" width="80" :cell-render="imgUrlCellRender"></vxe-column>
       <vxe-column field="col2" title="列2" width="90"></vxe-column>
@@ -127,6 +133,10 @@ interface RowVO {
 
 const tableData = ref<RowVO[]>([])
 const loading = ref(false)
+
+const footerData = ref([
+  { col2: '456', col3: '324', col4: '98', col6: '11', col74: '546', col75: '78', col83: '45', col86: '444' }
+])
 
 const flag1CellRender = reactive<VxeColumnPropTypes.CellRender>({
   name: 'VxeSwitch'

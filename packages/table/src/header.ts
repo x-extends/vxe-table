@@ -27,7 +27,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
     const { refElem: tableRefElem, refLeftContainer, refRightContainer, refCellResizeBar, refCellResizeTip } = $xeTable.getRefMaps()
-    const { computeColumnOpts, computeColumnDragOpts, computeResizableOpts } = $xeTable.getComputeMaps()
+    const { computeColumnOpts, computeColumnDragOpts, computeResizableOpts, computeScrollbarXToTop } = $xeTable.getComputeMaps()
 
     const headerColumn = ref([] as VxeTableDefines.ColumnInfo[][])
 
@@ -47,6 +47,7 @@ export default defineComponent({
     const resizeMousedownEvent = (evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) => {
       const { column } = params
       const { fixedType } = props
+      const { scrollbarHeight } = tableReactData
       const { elemStore, visibleColumn } = tableInternalData
       const resizableOpts = computeResizableOpts.value
       const tableEl = tableRefElem.value
@@ -54,6 +55,7 @@ export default defineComponent({
       const rightContainerElem = refRightContainer.value
       const resizeBarElem = refCellResizeBar.value
       const resizeTipElem = refCellResizeTip.value
+      const scrollbarXToTop = computeScrollbarXToTop.value
       const { clientX: dragClientX } = evnt
       const wrapperElem = refElem.value
       const dragBtnElem = evnt.target as HTMLDivElement
@@ -103,6 +105,7 @@ export default defineComponent({
       const updateEvent = (evnt: MouseEvent) => {
         evnt.stopPropagation()
         evnt.preventDefault()
+        const tableHeight = tableEl.clientHeight
         const offsetX = evnt.clientX - dragClientX
         let left = dragPosLeft + offsetX
         const scrollLeft = fixedType ? 0 : bodyScrollElem.scrollLeft
@@ -120,6 +123,8 @@ export default defineComponent({
         dragLeft = Math.max(left, dragMinLeft)
         const resizeBarLeft = Math.max(1, dragLeft - scrollLeft)
         resizeBarElem.style.left = `${resizeBarLeft}px`
+        resizeBarElem.style.top = `${scrollbarXToTop ? scrollbarHeight : 0}px`
+        resizeBarElem.style.height = `${scrollbarXToTop ? tableHeight - scrollbarHeight : tableHeight}px`
         if (resizableOpts.showDragTip && resizeTipElem) {
           const tableWidth = tableEl.clientWidth
           const wrapperRect = wrapperElem.getBoundingClientRect()
@@ -133,7 +138,7 @@ export default defineComponent({
             resizeTipLeft += tableWidth - resizeBarLeft
           }
           resizeTipElem.style.left = `${resizeTipLeft}px`
-          resizeTipElem.style.top = `${Math.min(tableEl.clientHeight - resizeTipHeight, Math.max(0, evnt.clientY - wrapperRect.y - resizeTipHeight / 2))}px`
+          resizeTipElem.style.top = `${Math.min(tableHeight - resizeTipHeight, Math.max(0, evnt.clientY - wrapperRect.y - resizeTipHeight / 2))}px`
           resizeTipElem.textContent = getI18n('vxe.table.resizeColTip', [resizeColumn.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)])
         }
       }
@@ -241,9 +246,9 @@ export default defineComponent({
         const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
         const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
-        let isPreLoadStatus = false
-        if (scrollXLoad && !isGroup && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex || _columnIndex > scrollXStore.visibleEndIndex)) {
-          isPreLoadStatus = true
+        let isVNPreEmptyStatus = false
+        if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+          isVNPreEmptyStatus = true
         }
 
         return h('th', {
@@ -277,7 +282,7 @@ export default defineComponent({
               'c--tooltip': showTooltip,
               'c--ellipsis': showEllipsis
             }]
-          }, isPreLoadStatus || (isOptimizeMode && fixedHiddenColumn) ? [] : column.renderHeader(params)),
+          }, isVNPreEmptyStatus || (isOptimizeMode && fixedHiddenColumn) ? [] : column.renderHeader(params)),
           /**
            * 列宽拖动
            */

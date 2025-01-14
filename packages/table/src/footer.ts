@@ -156,9 +156,9 @@ export default defineComponent({
         const isLastColumn = $columnIndex === tableColumn.length - 1
         const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
-        let isPreLoadStatus = false
-        if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex || _columnIndex > scrollXStore.visibleEndIndex)) {
-          isPreLoadStatus = true
+        let isVNPreEmptyStatus = false
+        if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+          isVNPreEmptyStatus = true
         }
 
         return h('td', {
@@ -182,7 +182,7 @@ export default defineComponent({
               'c--tooltip': showTooltip,
               'c--ellipsis': showEllipsis
             }]
-          }, isPreLoadStatus ? [] : column.renderFooter(cellParams))
+          }, isVNPreEmptyStatus ? [] : column.renderFooter(cellParams))
         ])
       })
     }
