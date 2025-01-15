@@ -3,8 +3,8 @@ export default {
     base: {
       pleaseInput: 'Пожалуйста, введите',
       pleaseSelect: 'Пожалуйста, выберите',
-      comma: '，',
-      fullStop: '。'
+      comma: ',',
+      fullStop: '.'
     },
     loading: {
       text: 'загрузка...'

@@ -1,693 +1,693 @@
 export default {
   vxe: {
-    base: {
-      pleaseInput: '请输入',
-      pleaseSelect: '请选择',
-      comma: '，',
-      fullStop: '。'
+    "base": {
+      "pleaseInput": "Будь ласка, введіть",
+      "pleaseSelect": "Будь ласка, виберіть",
+      "comma": ",",
+      "fullStop": "."
     },
-    loading: {
-      text: '加载中...'
+    "loading": {
+      "text": "Завантаження..."
     },
-    error: {
-      downErr: '下载失败',
-      errLargeData: '当绑定的数据量过大时，应该请使用 {0}，否则可能会出现卡顿',
-      groupFixed: '如果使用分组表头，冻结列必须按组设置',
-      groupMouseRange: '分组表头与 "{0}" 不能同时使用，这可能会出现错误',
-      groupTag: '分组列头应该使用 "{0}" 而不是 "{1}"，这可能会出现错误',
-      scrollErrProp: '启用虚拟滚动后不支持该参数 "{0}"',
-      errConflicts: '参数 "{0}" 与 "{1}" 有冲突',
-      unableInsert: '无法插入到指定位置，请检查参数是否正确',
-      useErr: '安装 "{0}" 模块时发生错误，可能顺序不正确，依赖的模块需要在 Table 之前安装',
-      barUnableLink: '工具栏无法关联表格',
-      expandContent: '展开行的插槽应该是 "content"，请检查是否正确',
-      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useGlobal',
-      reqModule: '缺少 "{0}" 模块',
-      reqProp: '缺少必要的 "{0}" 参数，这可能会导致出现错误',
-      emptyProp: '参数 "{0}" 不允许为空',
-      errProp: '不支持的参数 "{0}"，可能为 "{1}"',
-      colRepet: 'column.{0}="{1}" 重复了，这可能会导致某些功能无法使用',
-      notFunc: '方法 "{0}" 不存在',
-      errFunc: '参数 "{0}" 不是一个方法',
-      notValidators: '全局校验 "{0}" 不存在',
-      notFormats: '全局格式化 "{0}" 不存在',
-      notCommands: '全局指令 "{0}" 不存在',
-      notSlot: '插槽 "{0}" 不存在',
-      noTree: '树结构不支持 "{0}"',
-      notProp: '不支持的参数 "{0}"',
-      checkProp: '当数据量过大时可能会导致复选框卡顿，建议设置参数 "{0}" 提升渲染速度',
-      coverProp: '"{0}" 的参数 "{1}" 重复定义，这可能会出现错误',
-      repeatKey: '主键重复 {0}="{1}"，这可能会出现错误',
-      uniField: '字段名 "{0}" 重复定义，这可能会出现错误',
-      delFunc: '方法 "{0}" 已废弃，请使用 "{1}"',
-      delProp: '参数 "{0}" 已废弃，请使用 "{1}"',
-      delEvent: '事件 "{0}" 已废弃，请使用 "{1}"',
-      removeProp: '参数 "{0}" 已废弃，不建议使用，这可能会导致出现错误',
-      errFormat: '全局的格式化内容应该使用 "VXETable.formats" 定义，挂载 "formatter={0}" 的方式已不建议使用',
-      notType: '不支持的文件类型 "{0}"',
-      notExp: '该浏览器不支持导入/导出功能',
-      impFields: '导入失败，请检查字段名和数据格式是否正确',
-      treeNotImp: '树表格不支持导入',
-      treeCrossDrag: '只能拖拽第一层级',
-      treeDragChild: '父级不能拖拽到自己的子级中',
-      reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
+    "error": {
+      "downErr": "Не вдалося завантажити",
+      "errLargeData": "При великому обсязі даних рекомендується використовувати {0}, інакше може виникнути зависання",
+      "groupFixed": "Якщо використовуються груповані заголовки, стовпці з фіксацією повинні бути налаштовані по групах",
+      "groupMouseRange": "Груповані заголовки та \"{0}\" не можуть бути використані одночасно, це може спричинити помилки",
+      "groupTag": "Груповані заголовки повинні використовувати \"{0}\", а не \"{1}\", це може спричинити помилки",
+      "scrollErrProp": "Параметр \"{0}\" не підтримується після включення віртуального скролінгу",
+      "errConflicts": "Параметри \"{0}\" та \"{1}\" конфліктують",
+      "unableInsert": "Неможливо вставити в задане місце, перевірте правильність параметрів",
+      "useErr": "Сталася помилка під час встановлення модуля \"{0}\", можливо, порядок неправильний, залежні модулі повинні бути встановлені до таблиці",
+      "barUnableLink": "Панель інструментів не може бути пов'язана з таблицею",
+      "expandContent": "Вставка для розширеного рядка повинна бути \"content\", будь ласка, перевірте правильність",
+      "reqComp": "Відсутній компонент \"{0}\", будь ласка, перевірте правильність установки. https://vxeui.com/#/start/useGlobal",
+      "reqModule": "Відсутній модуль \"{0}\"",
+      "reqProp": "Відсутній необхідний параметр \"{0}\", це може спричинити помилки",
+      "emptyProp": "Параметр \"{0}\" не може бути порожнім",
+      "errProp": "Непідтримуваний параметр \"{0}\", можливо, \"{1}\"",
+      "colRepet": "column.{0}=\"{1}\" дублюється, це може призвести до проблем у деяких функціях",
+      "notFunc": "Метод \"{0}\" не існує",
+      "errFunc": "Параметр \"{0}\" не є методом",
+      "notValidators": "Глобальний валідатор \"{0}\" не існує",
+      "notFormats": "Глобальний формат \"{0}\" не існує",
+      "notCommands": "Глобальна команда \"{0}\" не існує",
+      "notSlot": "Слот \"{0}\" не існує",
+      "noTree": "Деревовидна структура не підтримує \"{0}\"",
+      "notProp": "Непідтримуваний параметр \"{0}\"",
+      "checkProp": "При великому обсязі даних може виникнути зависання при використанні чекбоксів, рекомендується встановити параметр \"{0}\" для прискорення рендерингу",
+      "coverProp": "\"{0}\" параметр \"{1}\" повторно визначено, це може спричинити помилки",
+      "repeatKey": "Повторюваний основний ключ {0}=\"{1}\", це може спричинити помилки",
+      "uniField": "Поле \"{0}\" повторно визначено, це може спричинити помилки",
+      "delFunc": "Метод \"{0}\" застарів, використовуйте \"{1}\"",
+      "delProp": "Параметр \"{0}\" застарів, використовуйте \"{1}\"",
+      "delEvent": "Подія \"{0}\" застаріла, використовуйте \"{1}\"",
+      "removeProp": "Параметр \"{0}\" застарів і не рекомендується до використання, це може спричинити помилки",
+      "errFormat": "Глобальне форматування має бути визначене в \"VXETable.formats\", спосіб використання \"formatter={0}\" більше не рекомендується",
+      "notType": "Непідтримуваний тип файлу \"{0}\"",
+      "notExp": "Цей браузер не підтримує імпорт/експорт",
+      "impFields": "Імпорт не вдався, перевірте назви полів та формат даних",
+      "treeNotImp": "Деревовидна таблиця не підтримує імпорт",
+      "treeCrossDrag": "Можна перетягувати тільки на першому рівні",
+      "treeDragChild": "Батьківський елемент не можна перетягнути в свій дочірній елемент",
+      "reqPlugin": "Опційний розширений плагін \"{1}\" https://vxeui.com/other{0}/#/{1}/install"
     },
-    table: {
-      emptyText: '暂无数据',
-      allTitle: '全选/取消',
-      seqTitle: '序号',
-      actionTitle: '操作',
-      confirmFilter: '筛选',
-      resetFilter: '重置',
-      allFilter: '全部',
-      sortAsc: '升序：最低到最高',
-      sortDesc: '降序：最高到最低',
-      filter: '对所选的列启用筛选',
-      impSuccess: '成功导入 {0} 条记录',
-      expLoading: '正在导出中',
-      expSuccess: '导出成功',
-      expError: '导出失败',
-      expFilename: '导出_{0}',
-      expOriginFilename: '导出_源_{0}',
-      customTitle: '列设置',
-      customAll: '全部',
-      customConfirm: '确认',
-      customClose: '关闭',
-      customCancel: '取消',
-      customRestore: '恢复默认',
-      maxFixedCol: '最大冻结列的数量不能超过 {0} 个',
-      dragTip: '移动：{0}',
-      resizeColTip: '{0} 像素'
+    "table": {
+      "emptyText": "Немає даних",
+      "allTitle": "Вибрати все/скасувати вибір",
+      "seqTitle": "№",
+      "actionTitle": "Дії",
+      "confirmFilter": "Фільтрувати",
+      "resetFilter": "Скинути",
+      "allFilter": "Всі",
+      "sortAsc": "За зростанням: від мінімуму до максимуму",
+      "sortDesc": "За спаданням: від максимуму до мінімуму",
+      "filter": "Увімкнути фільтр для вибраних стовпців",
+      "impSuccess": "Успішно імпортовано {0} записів",
+      "expLoading": "Триває експорт",
+      "expSuccess": "Експорт успішний",
+      "expError": "Помилка експорту",
+      "expFilename": "Експорт_{0}",
+      "expOriginFilename": "Експорт_оригінал_{0}",
+      "customTitle": "Налаштування стовпців",
+      "customAll": "Все",
+      "customConfirm": "Підтвердити",
+      "customClose": "Закрити",
+      "customCancel": "Скасувати",
+      "customRestore": "Відновити за замовчуванням",
+      "maxFixedCol": "Максимальна кількість зафіксованих стовпців не повинна перевищувати {0}",
+      "dragTip": "Переміщення: {0}",
+      "resizeColTip": "{0} пікселів"
     },
-    grid: {
-      selectOneRecord: '请至少选择一条记录！',
-      deleteSelectRecord: '您确定要删除所选记录吗？',
-      removeSelectRecord: '您确定要移除所选记录吗？',
-      dataUnchanged: '数据未改动！',
-      delSuccess: '成功删除所选记录！',
-      saveSuccess: '保存成功！',
-      operError: '发生错误，操作失败！'
+    "grid": {
+      "selectOneRecord": "Будь ласка, виберіть хоча б один запис!",
+      "deleteSelectRecord": "Ви впевнені, що хочете видалити вибрані записи?",
+      "removeSelectRecord": "Ви впевнені, що хочете видалити вибрані записи?",
+      "dataUnchanged": "Дані не змінено!",
+      "delSuccess": "Записи успішно видалено!",
+      "saveSuccess": "Збережено успішно!",
+      "operError": "Сталася помилка, операція не вдалася!"
     },
-    select: {
-      search: '搜索',
-      loadingText: '加载中',
-      emptyText: '暂无数据'
+    "select": {
+      "search": "Пошук",
+      "loadingText": "Завантаження",
+      "emptyText": "Немає даних"
     },
-    pager: {
-      goto: '前往',
-      gotoTitle: '页数',
-      pagesize: '{0}条/页',
-      total: '共 {0} 条记录',
-      pageClassifier: '页',
-      homePage: '首页',
-      homePageTitle: '首页',
-      prevPage: '上一页',
-      prevPageTitle: '上一页',
-      nextPage: '下一页',
-      nextPageTitle: '下一页',
-      prevJump: '向上跳页',
-      prevJumpTitle: '向上跳页',
-      nextJump: '向下跳页',
-      nextJumpTitle: '向下跳页',
-      endPage: '末页',
-      endPageTitle: '末页'
+    "pager": {
+      "goto": "Перейти",
+      "gotoTitle": "Номер сторінки",
+      "pagesize": "{0} записів/сторінка",
+      "total": "Загалом {0} записів",
+      "pageClassifier": "Сторінка",
+      "homePage": "Головна",
+      "homePageTitle": "Головна сторінка",
+      "prevPage": "Попередня сторінка",
+      "prevPageTitle": "Попередня сторінка",
+      "nextPage": "Наступна сторінка",
+      "nextPageTitle": "Наступна сторінка",
+      "prevJump": "Перейти на попередню сторінку",
+      "prevJumpTitle": "Перейти на попередню сторінку",
+      "nextJump": "Перейти на наступну сторінку",
+      "nextJumpTitle": "Перейти на наступну сторінку",
+      "endPage": "Остання сторінка",
+      "endPageTitle": "Остання сторінка"
     },
-    alert: {
-      title: '系统提示'
+    "alert": {
+      "title": "Системне повідомлення"
     },
-    button: {
-      confirm: '确认',
-      cancel: '取消'
+    "button": {
+      "confirm": "Підтвердити",
+      "cancel": "Скасувати"
     },
-    filter: {
-      search: '搜索'
+    "filter": {
+      "search": "Пошук"
     },
-    custom: {
-      cstmTitle: '列设置',
-      cstmRestore: '恢复默认',
-      cstmCancel: '取消',
-      cstmConfirm: '确定',
-      cstmConfirmRestore: '请确认是否恢复成默认列配置？',
-      cstmDragTarget: '移动：{0}',
-      setting: {
-        colSort: '排序',
-        sortHelpTip: '点击并拖动图标可以调整列的排序',
-        colTitle: '列标题',
-        colResizable: '列宽（像素）',
-        colVisible: '是否显示',
-        colFixed: '冻结列',
-        colFixedMax: '冻结列（最多 {0} 列）',
-        fixedLeft: '左侧',
-        fixedUnset: '不设置',
-        fixedRight: '右侧'
+    "custom": {
+      "cstmTitle": "Налаштування стовпців",
+      "cstmRestore": "Відновити за замовчуванням",
+      "cstmCancel": "Скасувати",
+      "cstmConfirm": "Підтвердити",
+      "cstmConfirmRestore": "Будь ласка, підтвердіть, чи хочете ви відновити стандартні налаштування стовпців?",
+      "cstmDragTarget": "Переміщення: {0}",
+      "setting": {
+        "colSort": "Сортування",
+        "sortHelpTip": "Натискайте та перетягуйте іконки, щоб змінити порядок стовпців",
+        "colTitle": "Заголовок стовпця",
+        "colResizable": "Розмір стовпця (пікселі)",
+        "colVisible": "Показати стовпець",
+        "colFixed": "Зафіксувати стовпець",
+        "colFixedMax": "Максимальна кількість зафіксованих стовпців ({0})",
+        "fixedLeft": "Ліва сторона",
+        "fixedUnset": "Не налаштовано",
+        "fixedRight": "Права сторона"
       }
     },
-    import: {
-      modes: {
-        covering: '覆盖方式（直接覆盖表格数据）',
-        insert: '底部追加（在表格的底部追加新数据）',
-        insertTop: '顶部追加（在表格的顶部追加新数据）',
-        insertBottom: '底部追加（在表格的底部追加新数据）'
+    "import": {
+      "modes": {
+        "covering": "Перезапис (безпосередньо перезаписує дані таблиці)",
+        "insert": "Додавання знизу (додає нові дані в кінець таблиці)",
+        "insertTop": "Додавання згори (додає нові дані на початок таблиці)",
+        "insertBottom": "Додавання знизу (додає нові дані в кінець таблиці)"
       },
-      impTitle: '导入数据',
-      impFile: '文件名',
-      impSelect: '选择文件',
-      impType: '文件类型',
-      impOpts: '参数设置',
-      impMode: '导入模式',
-      impConfirm: '导入',
-      impCancel: '取消'
+      "impTitle": "Імпорт даних",
+      "impFile": "Назва файлу",
+      "impSelect": "Вибрати файл",
+      "impType": "Тип файлу",
+      "impOpts": "Налаштування параметрів",
+      "impMode": "Режим імпорту",
+      "impConfirm": "Імпортувати",
+      "impCancel": "Скасувати"
     },
-    export: {
-      types: {
-        csv: 'CSV (逗号分隔)(*.csv)',
-        html: '网页(*.html)',
-        xml: 'XML 数据(*.xml)',
-        txt: '文本文件(制表符分隔)(*.txt)',
-        xls: 'Excel 97-2003 工作簿(*.xls)',
-        xlsx: 'Excel 工作簿(*.xlsx)',
-        pdf: 'PDF (*.pdf)'
+    "export": {
+      "types": {
+        "csv": "CSV (розділювач комами)(*.csv)",
+        "html": "Веб-сторінка (*.html)",
+        "xml": "XML дані (*.xml)",
+        "txt": "Текстовий файл (табуляція як розділювач)(*.txt)",
+        "xls": "Excel 97-2003 робоча книга (*.xls)",
+        "xlsx": "Excel робоча книга (*.xlsx)",
+        "pdf": "PDF (*.pdf)"
       },
-      modes: {
-        current: '当前数据（当前页的数据）',
-        selected: '选中数据（当前页选中的数据）',
-        all: '全量数据（包括所有分页的数据）'
+      "modes": {
+        "current": "Поточні дані (дані поточної сторінки)",
+        "selected": "Вибрані дані (дані, вибрані на поточній сторінці)",
+        "all": "Всі дані (включаючи дані з усіх сторінок)"
       },
-      printTitle: '打印数据',
-      expTitle: '导出数据',
-      expName: '文件名',
-      expNamePlaceholder: '请输入文件名',
-      expSheetName: '标题',
-      expSheetNamePlaceholder: '请输入标题',
-      expType: '保存类型',
-      expMode: '选择数据',
-      expCurrentColumn: '全部字段',
-      expColumn: '选择字段',
-      expOpts: '参数设置',
-      expOptHeader: '表头',
-      expHeaderTitle: '是否需要表头',
-      expOptFooter: '表尾',
-      expFooterTitle: '是否需要表尾',
-      expOptColgroup: '分组表头',
-      expColgroupTitle: '如果存在，则支持带有分组结构的表头',
-      expOptMerge: '合并',
-      expMergeTitle: '如果存在，则支持带有合并结构的单元格',
-      expOptAllExpand: '展开层级',
-      expAllExpandTitle: '如果存在，则支持将带有层级结构的数据全部展开',
-      expOptUseStyle: '样式',
-      expUseStyleTitle: '如果存在，则支持带样式的单元格',
-      expOptOriginal: '源数据',
-      expOriginalTitle: '如果为源数据，则支持导入到表格中',
-      expPrint: '打印',
-      expConfirm: '导出',
-      expCancel: '取消'
+      "printTitle": "Друк даних",
+      "expTitle": "Експорт даних",
+      "expName": "Назва файлу",
+      "expNamePlaceholder": "Введіть назву файлу",
+      "expSheetName": "Заголовок",
+      "expSheetNamePlaceholder": "Введіть заголовок",
+      "expType": "Тип збереження",
+      "expMode": "Вибір даних",
+      "expCurrentColumn": "Усі поля",
+      "expColumn": "Вибір полів",
+      "expOpts": "Налаштування параметрів",
+      "expOptHeader": "Заголовок таблиці",
+      "expHeaderTitle": "Чи потрібен заголовок таблиці",
+      "expOptFooter": "Нижній колонтитул",
+      "expFooterTitle": "Чи потрібен нижній колонтитул",
+      "expOptColgroup": "Групування заголовків",
+      "expColgroupTitle": "Якщо є, підтримується групування заголовків",
+      "expOptMerge": "Злиття",
+      "expMergeTitle": "Якщо є, підтримується злиття клітинок",
+      "expOptAllExpand": "Розгорнути рівні",
+      "expAllExpandTitle": "Якщо є, підтримується розгортання даних з рівневими структурами",
+      "expOptUseStyle": "Стилі",
+      "expUseStyleTitle": "Якщо є, підтримується використання стилів у клітинках",
+      "expOptOriginal": "Оригінальні дані",
+      "expOriginalTitle": "Якщо вибрано оригінальні дані, вони можуть бути імпортовані назад у таблицю",
+      "expPrint": "Друк",
+      "expConfirm": "Експортувати",
+      "expCancel": "Скасувати"
     },
-    modal: {
-      errTitle: '错误提示',
-      zoomMin: '最小化',
-      zoomIn: '最大化',
-      zoomOut: '还原',
-      close: '关闭',
-      miniMaxSize: '最小化窗口的数量不能超过 {0} 个',
-      footPropErr: 'show-footer 仅用于启用表尾，需配合 show-confirm-button | show-cancel-button | 插槽使用'
+    "modal": {
+      "errTitle": "Помилка",
+      "zoomMin": "Мінімізувати",
+      "zoomIn": "Розгорнути на весь екран",
+      "zoomOut": "Відновити",
+      "close": "Закрити",
+      "miniMaxSize": "Кількість мінімізованих вікон не повинна перевищувати {0}",
+      "footPropErr": "show-footer використовується лише для включення нижнього колонтитула і повинно поєднуватися з show-confirm-button | show-cancel-button | слотами"
     },
-    drawer: {
-      close: '关闭'
+    "drawer": {
+      "close": "Закрити"
     },
-    form: {
-      folding: '收起',
-      unfolding: '展开'
+    "form": {
+      "folding": "Згорнути",
+      "unfolding": "Розгорнути"
     },
-    toolbar: {
-      import: '导入',
-      export: '导出',
-      print: '打印',
-      refresh: '刷新',
-      zoomIn: '全屏',
-      zoomOut: '还原',
-      custom: '列设置',
-      customAll: '全部',
-      customConfirm: '确认',
-      customRestore: '重置',
-      fixedLeft: '冻结在左侧',
-      fixedRight: '冻结在右侧',
-      cancelFixed: '取消冻结列'
+    "toolbar": {
+      "import": "Імпорт",
+      "export": "Експорт",
+      "print": "Друк",
+      "refresh": "Оновити",
+      "zoomIn": "На весь екран",
+      "zoomOut": "Відновити",
+      "custom": "Налаштування стовпців",
+      "customAll": "Всі",
+      "customConfirm": "Підтвердити",
+      "customRestore": "Відновити за замовчуванням",
+      "fixedLeft": "Зафіксувати ліворуч",
+      "fixedRight": "Зафіксувати праворуч",
+      "cancelFixed": "Скасувати фіксацію стовпця"
     },
-    input: {
-      date: {
-        m1: '01 月',
-        m2: '02 月',
-        m3: '03 月',
-        m4: '04 月',
-        m5: '05 月',
-        m6: '06 月',
-        m7: '07 月',
-        m8: '08 月',
-        m9: '09 月',
-        m10: '10 月',
-        m11: '11 月',
-        m12: '12 月',
-        quarterLabel: '{0} 年',
-        monthLabel: '{0} 年',
-        dayLabel: '{0} 年 {1}',
-        labelFormat: {
-          date: 'yyyy-MM-dd',
-          time: 'HH:mm:ss',
-          datetime: 'yyyy-MM-dd HH:mm:ss',
-          week: 'yyyy 年第 WW 周',
-          month: 'yyyy-MM',
-          quarter: 'yyyy 年第 q 季度',
-          year: 'yyyy'
+    "input": {
+      "date": {
+        "m1": "01 місяць",
+        "m2": "02 місяць",
+        "m3": "03 місяць",
+        "m4": "04 місяць",
+        "m5": "05 місяць",
+        "m6": "06 місяць",
+        "m7": "07 місяць",
+        "m8": "08 місяць",
+        "m9": "09 місяць",
+        "m10": "10 місяць",
+        "m11": "11 місяць",
+        "m12": "12 місяць",
+        "quarterLabel": "{0} рік",
+        "monthLabel": "{0} рік",
+        "dayLabel": "{0} рік {1}",
+        "labelFormat": {
+          "date": "yyyy-MM-dd",
+          "time": "HH:mm:ss",
+          "datetime": "yyyy-MM-dd HH:mm:ss",
+          "week": "yyyy рік, тиждень WW",
+          "month": "yyyy-MM",
+          "quarter": "yyyy рік, квартал q",
+          "year": "yyyy"
         },
-        weeks: {
-          w: '周',
-          w0: '周日',
-          w1: '周一',
-          w2: '周二',
-          w3: '周三',
-          w4: '周四',
-          w5: '周五',
-          w6: '周六'
+        "weeks": {
+          "w": "тиждень",
+          "w0": "Неділя",
+          "w1": "Понеділок",
+          "w2": "Вівторок",
+          "w3": "Середа",
+          "w4": "Четвер",
+          "w5": "П'ятниця",
+          "w6": "Субота"
         },
-        months: {
-          m0: '一月',
-          m1: '二月',
-          m2: '三月',
-          m3: '四月',
-          m4: '五月',
-          m5: '六月',
-          m6: '七月',
-          m7: '八月',
-          m8: '九月',
-          m9: '十月',
-          m10: '十一月',
-          m11: '十二月'
+        "months": {
+          "m0": "Січень",
+          "m1": "Лютий",
+          "m2": "Березень",
+          "m3": "Квітень",
+          "m4": "Травень",
+          "m5": "Червень",
+          "m6": "Липень",
+          "m7": "Серпень",
+          "m8": "Вересень",
+          "m9": "Жовтень",
+          "m10": "Листопад",
+          "m11": "Грудень"
         },
-        quarters: {
-          q1: '第一季度',
-          q2: '第二季度',
-          q3: '第三季度',
-          q4: '第四季度'
+        "quarters": {
+          "q1": "Перший квартал",
+          "q2": "Другий квартал",
+          "q3": "Третій квартал",
+          "q4": "Четвертий квартал"
         }
       }
     },
-    numberInput: {
-      currencySymbol: '$'
+    "numberInput": {
+      "currencySymbol": "$"
     },
-    imagePreview: {
-      popupTitle: '预览',
-      operBtn: {
-        zoomOut: '缩小',
-        zoomIn: '放大',
-        pctFull: '等比例缩放',
-        pct11: '显示原始尺寸',
-        rotateLeft: '向左旋转',
-        rotateRight: '向右旋转',
-        print: '点击打印图片',
-        download: '点击下载图片'
+    "imagePreview": {
+      "popupTitle": "Попередній перегляд",
+      "operBtn": {
+        "zoomOut": "Зменшити",
+        "zoomIn": "Збільшити",
+        "pctFull": "Пропорційне масштабування",
+        "pct11": "Показати оригінальний розмір",
+        "rotateLeft": "Повернути ліворуч",
+        "rotateRight": "Повернути праворуч",
+        "print": "Натисніть для друку зображення",
+        "download": "Натисніть для завантаження зображення"
       }
     },
-    upload: {
-      fileBtnText: '点击或拖拽上传',
-      imgBtnText: '点击或拖拽上传',
-      dragPlaceholder: '请把文件拖放到这个区域即可上传',
-      imgSizeHint: '单张{0}',
-      imgCountHint: '最多{0}张',
-      fileTypeHint: '支持 {0} 文件类型',
-      fileSizeHint: '单个文件大小不超过{0}',
-      fileCountHint: '最多可上传{0}个文件',
-      uploadTypeErr: '文件类型不匹配！',
-      overCountErr: '最多只能选择{0}个文件！',
-      overCountExtraErr: '已超出最大数量{0}个，超出的{1}个文件将被忽略！',
-      overSizeErr: '文件大小最大不能超过{0}！',
-      reUpload: '重新上传',
-      uploadProgress: '上传中 {0}%',
-      uploadErr: '上传失败',
-      uploadSuccess: '上传成功',
-      moreBtnText: '更多（{0}）',
-      viewItemTitle: '点击查看',
-      morePopup: {
-        readTitle: '查看列表',
-        imageTitle: '上传图片',
-        fileTitle: '上传文件'
+    "upload": {
+      "fileBtnText": "Натисніть або перетягніть для завантаження",
+      "imgBtnText": "Натисніть або перетягніть для завантаження",
+      "dragPlaceholder": "Перетягніть файл у цю зону для завантаження",
+      "imgSizeHint": "Один файл {0}",
+      "imgCountHint": "Максимум {0} файлів",
+      "fileTypeHint": "Підтримуються файли типу {0}",
+      "fileSizeHint": "Розмір одного файлу не більше {0}",
+      "fileCountHint": "Максимум можна завантажити {0} файлів",
+      "uploadTypeErr": "Невідповідність типу файлу!",
+      "overCountErr": "Можна вибрати не більше {0} файлів!",
+      "overCountExtraErr": "Перевищено максимальну кількість {0} файлів, {1} файлів буде проігноровано!",
+      "overSizeErr": "Максимальний розмір файлу не може перевищувати {0}!",
+      "reUpload": "Перезавантажити",
+      "uploadProgress": "Завантаження {0}%",
+      "uploadErr": "Завантаження не вдалося",
+      "uploadSuccess": "Завантаження успішне",
+      "moreBtnText": "Більше ({0})",
+      "viewItemTitle": "Натисніть для перегляду",
+      "morePopup": {
+        "readTitle": "Перегляд списку",
+        "imageTitle": "Завантажити зображення",
+        "fileTitle": "Завантажити файл"
       }
     },
-    empty: {
-      defText: '暂无数据'
+    "empty": {
+      "defText": "Немає даних"
     },
-    colorPicker: {
-      clear: '清除',
-      confirm: '确认',
-      copySuccess: '已复制到剪贴板：{0}'
+    "colorPicker": {
+      "clear": "Очистити",
+      "confirm": "Підтвердити",
+      "copySuccess": "Скопійовано в буфер обміну: {0}"
     },
-    formDesign: {
-      formName: '表单名称',
-      defFormTitle: '未命名的表单',
-      widgetPropTab: '控件属性',
-      widgetFormTab: '表单属性',
-      error: {
-        wdFormUni: '该类型的控件在表单中只允许添加一个',
-        wdSubUni: '该类型的控件在子表中只允许添加一个'
+    "formDesign": {
+      "formName": "Назва форми",
+      "defFormTitle": "Без назви",
+      "widgetPropTab": "Властивості елементів керування",
+      "widgetFormTab": "Властивості форми",
+      "error": {
+        "wdFormUni": "Цей тип елемента керування можна додавати до форми лише один раз",
+        "wdSubUni": "Цей тип елемента керування можна додавати до підтаблиці лише один раз"
       },
-      styleSetting: {
-        btn: '样式设置',
-        title: '表单的样式设置',
-        layoutTitle: '控件布局',
-        verticalLayout: '上下布局',
-        horizontalLayout: '横向布局',
-        styleTitle: '标题样式',
-        boldTitle: '标题加粗',
-        fontBold: '加粗',
-        fontNormal: '常规',
-        colonTitle: '显示冒号',
-        colonVisible: '显示',
-        colonHidden: '隐藏',
-        alignTitle: '对齐方式',
-        widthTitle: '标题宽度',
-        alignLeft: '居左',
-        alignRight: '居右',
-        unitPx: '像素',
-        unitPct: '百分比'
+      "styleSetting": {
+        "btn": "Налаштування стилю",
+        "title": "Налаштування стилю форми",
+        "layoutTitle": "Розташування елементів керування",
+        "verticalLayout": "Вертикальне розташування",
+        "horizontalLayout": "Горизонтальне розташування",
+        "styleTitle": "Стиль заголовка",
+        "boldTitle": "Жирний заголовок",
+        "fontBold": "Жирний",
+        "fontNormal": "Звичайний",
+        "colonTitle": "Показати двокрапку",
+        "colonVisible": "Показати",
+        "colonHidden": "Сховати",
+        "alignTitle": "Вирівнювання",
+        "widthTitle": "Ширина заголовка",
+        "alignLeft": "По лівому краю",
+        "alignRight": "По правому краю",
+        "unitPx": "Пікселі",
+        "unitPct": "Відсотки"
       },
-      widget: {
-        group: {
-          base: '基础控件',
-          layout: '布局控件',
-          system: '系统控件',
-          module: '模块控件',
-          chart: '图表控件',
-          advanced: '高级控件'
+      "widget": {
+        "group": {
+          "base": "Базові елементи керування",
+          "layout": "Елементи керування макетом",
+          "system": "Системні елементи керування",
+          "module": "Модульні елементи керування",
+          "chart": "Елементи керування діаграмою",
+          "advanced": "Розширені елементи керування"
         },
-        copyTitle: '副本_{0}',
-        component: {
-          input: '输入框',
-          textarea: '文本域',
-          select: '下拉选择',
-          row: '一行多列',
-          title: '标题',
-          text: '文本',
-          subtable: '子表',
-          VxeSwitch: '是/否',
-          VxeInput: '输入框',
-          VxeNumberInput: '数字',
-          VxeDatePicker: '日期',
-          VxeTextarea: '文本域',
-          VxeSelect: '下拉选择',
-          VxeTreeSelect: '树形选择',
-          VxeRadioGroup: '单选框',
-          VxeCheckboxGroup: '复选框',
-          VxeUploadFile: '文件',
-          VxeUploadImage: '图片',
-          VxeRate: '评分',
-          VxeSlider: '滑块'
+        "copyTitle": "Копія_{0}",
+        "component": {
+          "input": "Поле вводу",
+          "textarea": "Текстове поле",
+          "select": "Випадаючий список",
+          "row": "Один рядок з кількома колонками",
+          "title": "Заголовок",
+          "text": "Текст",
+          "subtable": "Підтаблиця",
+          "VxeSwitch": "Так/Ні",
+          "VxeInput": "Поле вводу",
+          "VxeNumberInput": "Число",
+          "VxeDatePicker": "Календар",
+          "VxeTextarea": "Текстове поле",
+          "VxeSelect": "Випадаючий список",
+          "VxeTreeSelect": "Вибір з дерева",
+          "VxeRadioGroup": "Група радіокнопок",
+          "VxeCheckboxGroup": "Група прапорців",
+          "VxeUploadFile": "Файл",
+          "VxeUploadImage": "Зображення",
+          "VxeRate": "Оцінка",
+          "VxeSlider": "Слайдер"
         }
       },
-      widgetProp: {
-        name: '控件名称',
-        placeholder: '提示语',
-        required: '必填校验',
-        multiple: '允许多选',
-        displaySetting: {
-          name: '显示设置',
-          pc: '电脑端',
-          mobile: '手机端',
-          visible: '显示',
-          hidden: '隐藏'
+      "widgetProp": {
+        "name": "Назва елемента керування",
+        "placeholder": "Підказка",
+        "required": "Перевірка на обов'язковість",
+        "multiple": "Дозволити вибір кількох елементів",
+        "displaySetting": {
+          "name": "Налаштування відображення",
+          "pc": "ПК",
+          "mobile": "Мобільний телефон",
+          "visible": "Показати",
+          "hidden": "Сховати"
         },
-        dataSource: {
-          name: '数据源',
-          defValue: '选项{0}',
-          addOption: '添加选项',
-          batchEditOption: '批量编辑',
-          batchEditTip: '每行对应一个选项，支持从表格、Excel、WPS 中直接复制粘贴。',
-          batchEditSubTip: '每行对应一个选项，如果是分组，子项可以是空格或制表键开头，支持从表格、Excel、WPS 中直接复制粘贴。',
-          buildOption: '生成选项'
+        "dataSource": {
+          "name": "Джерело даних",
+          "defValue": "Опція {0}",
+          "addOption": "Додати опцію",
+          "batchEditOption": "Пакетне редагування",
+          "batchEditTip": "Кожен рядок — це одна опція, підтримується копіювання з таблиць, Excel, WPS.",
+          "batchEditSubTip": "Кожен рядок — це одна опція, для групи підпункти можуть починатися пробілами або табуляцією, підтримується копіювання з таблиць, Excel, WPS.",
+          "buildOption": "Створити опції"
         },
-        rowProp: {
-          colSize: '列数',
-          col2: '两列',
-          col3: '三列',
-          col4: '四列',
-          col6: '六列',
-          layout: '布局'
+        "rowProp": {
+          "colSize": "Кількість колонок",
+          "col2": "Дві колонки",
+          "col3": "Три колонки",
+          "col4": "Чотири колонки",
+          "col6": "Шість колонок",
+          "layout": "Макет"
         },
-        textProp: {
-          name: '内容',
-          alignTitle: '对齐方式',
-          alignLeft: '居左',
-          alignCenter: '居中',
-          alignRight: '居右',
-          colorTitle: '字体颜色',
-          sizeTitle: '字体大小',
-          boldTitle: '字体加粗',
-          fontNormal: '常规',
-          fontBold: '加粗'
+        "textProp": {
+          "name": "Вміст",
+          "alignTitle": "Вирівнювання",
+          "alignLeft": "По лівому краю",
+          "alignCenter": "По центру",
+          "alignRight": "По правому краю",
+          "colorTitle": "Колір шрифту",
+          "sizeTitle": "Розмір шрифту",
+          "boldTitle": "Жирний шрифт",
+          "fontNormal": "Звичайний",
+          "fontBold": "Жирний"
         },
-        subtableProp: {
-          seqTitle: '序号',
-          showSeq: '显示序号',
-          showCheckbox: '允许多选',
-          errSubDrag: '子表不支持该控件，请使用其他控件',
-          colPlace: '将控件拖拽进来'
+        "subtableProp": {
+          "seqTitle": "Порядковий номер",
+          "showSeq": "Показати порядковий номер",
+          "showCheckbox": "Дозволити вибір кількох елементів",
+          "errSubDrag": "Підтаблиця не підтримує цей елемент керування, використовуйте інший елемент",
+          "colPlace": "Перетягніть елемент керування сюди"
         },
-        uploadProp: {
-          limitFileCount: '文件数量限制',
-          limitFileSize: '文件大小限制',
-          multiFile: '允许上传多个文件',
-          limitImgCount: '图片数量限制',
-          limitImgSize: '图片大小限制',
-          multiImg: '允许上传多张图片'
+        "uploadProp": {
+          "limitFileCount": "Обмеження на кількість файлів",
+          "limitFileSize": "Обмеження на розмір файлів",
+          "multiFile": "Дозволити завантаження кількох файлів",
+          "limitImgCount": "Обмеження на кількість зображень",
+          "limitImgSize": "Обмеження на розмір зображень",
+          "multiImg": "Дозволити завантаження кількох зображень"
         }
       }
     },
-    listDesign: {
-      fieldSettingTab: '字段设置',
-      listSettingTab: '参数设置',
-      searchTitle: '查询条件',
-      listTitle: '列表字段',
-      searchField: '查询字段',
-      listField: '列表字段',
-      activeBtn: {
-        ActionButtonUpdate: '编辑',
-        ActionButtonDelete: '删除'
+    "listDesign": {
+      "fieldSettingTab": "Налаштування полів",
+      "listSettingTab": "Налаштування параметрів",
+      "searchTitle": "Умови пошуку",
+      "listTitle": "Поля списку",
+      "searchField": "Поля пошуку",
+      "listField": "Поля списку",
+      "activeBtn": {
+        "ActionButtonUpdate": "Редагувати",
+        "ActionButtonDelete": "Видалити"
       },
-      search: {
-        addBtn: '编辑',
-        emptyText: '未配置查询条件',
-        editPopupTitle: '编辑查询字段'
+      "search": {
+        "addBtn": "Редагувати",
+        "emptyText": "Умови пошуку не налаштовані",
+        "editPopupTitle": "Редагувати поля пошуку"
       },
-      searchPopup: {
-        colTitle: '标题',
-        saveBtn: '保存'
+      "searchPopup": {
+        "colTitle": "Заголовок",
+        "saveBtn": "Зберегти"
       }
     },
-    text: {
-      copySuccess: '已复制到剪贴板',
-      copyError: '当前环境不支持该操作'
+    "text": {
+      "copySuccess": "Скопійовано в буфер обміну",
+      "copyError": "Поточне середовище не підтримує цю операцію"
     },
-    countdown: {
-      formats: {
-        yyyy: '年',
-        MM: '月',
-        dd: '天',
-        HH: '时',
-        mm: '分',
-        ss: '秒'
+    "countdown": {
+      "formats": {
+        "yyyy": "Рік",
+        "MM": "Місяць",
+        "dd": "День",
+        "HH": "Година",
+        "mm": "Хвилина",
+        "ss": "Секунда"
       }
     },
-    plugins: {
-      extendCellArea: {
-        area: {
-          mergeErr: '无法对合并单元格进行该操作',
-          multiErr: '无法对多重选择区域进行该操作',
-          selectErr: '无法操作指定区域的单元格',
-          extendErr: '如果延伸的区域包含被合并的单元格，所有合并的单元格需大小相同',
-          pasteMultiErr: '无法粘贴，需要相同大小的复制的区域和粘贴的区域才能执行此操作',
-          cpInvalidErr: '该操作无法进行，您选择的区域中存在被禁止的列（{0}）'
+    "plugins": {
+      "extendCellArea": {
+        "area": {
+          "mergeErr": "Цю операцію неможливо виконати для об'єднаних клітинок",
+          "multiErr": "Цю операцію неможливо виконати для множинних вибраних областей",
+          "selectErr": "Цю операцію неможливо виконати для зазначених клітинок",
+          "extendErr": "Якщо область містить об'єднані клітинки, всі об'єднані клітинки повинні мати однакові розміри",
+          "pasteMultiErr": "Неможливо вставити, для виконання цієї операції копійована область повинна мати такий самий розмір, як і область вставки",
+          "cpInvalidErr": "Цю операцію неможливо виконати, оскільки обрана область містить заборонені стовпці ({0})"
         },
-        fnr: {
-          title: '查找和替换',
-          findLabel: '查找',
-          replaceLabel: '替换',
-          findTitle: '查找内容：',
-          replaceTitle: '替换为：',
-          tabs: {
-            find: '查找',
-            replace: '替换'
+        "fnr": {
+          "title": "Пошук і заміна",
+          "findLabel": "Знайти",
+          "replaceLabel": "Замінити",
+          "findTitle": "Текст для пошуку:",
+          "replaceTitle": "Замінити на:",
+          "tabs": {
+            "find": "Пошук",
+            "replace": "Замінити"
           },
-          filter: {
-            re: '正则表达式',
-            whole: '全词匹配',
-            sensitive: '区分大小写'
+          "filter": {
+            "re": "Регулярний вираз",
+            "whole": "Точний збіг",
+            "sensitive": "Чутливий до регістру"
           },
-          btns: {
-            findNext: '查找下一个',
-            findAll: '查找全部',
-            replace: '替换',
-            replaceAll: '替换全部',
-            cancel: '取消'
+          "btns": {
+            "findNext": "Знайти наступний",
+            "findAll": "Знайти всі",
+            "replace": "Замінити",
+            "replaceAll": "Замінити всі",
+            "cancel": "Скасувати"
           },
-          header: {
-            seq: '#',
-            cell: '单元格',
-            value: '值'
+          "header": {
+            "seq": "#",
+            "cell": "Клітинка",
+            "value": "Значення"
           },
-          body: {
-            row: '行：{0}',
-            col: '列：{0}'
+          "body": {
+            "row": "Рядок: {0}",
+            "col": "Стовпець: {0}"
           },
-          empty: '(空值)',
-          reError: '无效的正则表达式',
-          recordCount: '已找到 {0} 个单元格',
-          notCell: '找不到匹配的单元格',
-          replaceSuccess: '成功替换 {0} 个单元格'
+          "empty": "(порожнє значення)",
+          "reError": "Невірний регулярний вираз",
+          "recordCount": "Знайдено {0} клітинок",
+          "notCell": "Не знайдено відповідних клітинок",
+          "replaceSuccess": "Успішно замінено {0} клітинок"
         }
       },
-      filterComplexInput: {
-        menus: {
-          fixedColumn: '冻结列',
-          fixedGroup: '冻结分组',
-          cancelFixed: '取消冻结',
-          fixedLeft: '冻结左侧',
-          fixedRight: '冻结右侧'
+      "filterComplexInput": {
+        "menus": {
+          "fixedColumn": "Закріпити стовпець",
+          "fixedGroup": "Закріпити групу",
+          "cancelFixed": "Скасувати фіксацію",
+          "fixedLeft": "Закріпити ліворуч",
+          "fixedRight": "Закріпити праворуч"
         },
-        cases: {
-          equal: '等于',
-          gt: '大于',
-          lt: '小于',
-          begin: '开头是',
-          endin: '结尾是',
-          include: '包含',
-          isSensitive: '区分大小写'
+        "cases": {
+          "equal": "Рівно",
+          "gt": "Більше",
+          "lt": "Менше",
+          "begin": "Починається з",
+          "endin": "Закінчується на",
+          "include": "Включає",
+          "isSensitive": "Чутливий до регістру"
         }
       },
-      filterCombination: {
-        menus: {
-          clearSort: '清除排序',
-          sortAsc: '升序',
-          sortDesc: '降序',
-          fixedColumn: '冻结列',
-          fixedGroup: '冻结分组',
-          cancelFixed: '取消冻结',
-          fixedLeft: '冻结左侧',
-          fixedRight: '冻结右侧',
-          clearFilter: '清除筛选',
-          textOption: '文本筛选',
-          numberOption: '数值筛选'
+      "filterCombination": {
+        "menus": {
+          "clearSort": "Очистити сортування",
+          "sortAsc": "По зростанню",
+          "sortDesc": "По спаданню",
+          "fixedColumn": "Закріпити стовпець",
+          "fixedGroup": "Закріпити групу",
+          "cancelFixed": "Скасувати фіксацію",
+          "fixedLeft": "Закріпити ліворуч",
+          "fixedRight": "Закріпити праворуч",
+          "clearFilter": "Очистити фільтр",
+          "textOption": "Текстовий фільтр",
+          "numberOption": "Числовий фільтр"
         },
-        popup: {
-          title: '自定义筛选的方式',
-          currColumnTitle: '当前列：',
-          and: '与',
-          or: '或',
-          describeHtml: '可用 ? 代表单个字符<br/>用 * 代表任意多个字符'
+        "popup": {
+          "title": "Налаштування користувацького фільтру",
+          "currColumnTitle": "Поточний стовпець:",
+          "and": "І",
+          "or": "Або",
+          "describeHtml": "Використовуйте ? для одного символу<br/> і * для кількох символів"
         },
-        cases: {
-          equal: '等于',
-          unequal: '不等于',
-          gt: '大于',
-          ge: '大于或等于',
-          lt: '小于',
-          le: '小于或等于',
-          begin: '开头是',
-          notbegin: '开头不是',
-          endin: '结尾是',
-          notendin: '结尾不是',
-          include: '包含',
-          exclude: '不包含',
-          between: '介于',
-          custom: '自定义筛选',
-          insensitive: '不区分大小写',
-          isSensitive: '区分大小写'
+        "cases": {
+          "equal": "Рівно",
+          "unequal": "Не рівно",
+          "gt": "Більше",
+          "ge": "Більше або рівно",
+          "lt": "Менше",
+          "le": "Менше або рівно",
+          "begin": "Починається з",
+          "notbegin": "Не починається з",
+          "endin": "Закінчується на",
+          "notendin": "Не закінчується на",
+          "include": "Включає",
+          "exclude": "Не включає",
+          "between": "Між",
+          "custom": "Користувацький фільтр",
+          "insensitive": "Не чутливий до регістру",
+          "isSensitive": "Чутливий до регістру"
         },
-        empty: '(空白)',
-        notData: '无匹配项'
+        "empty": "(порожнє)",
+        "notData": "Не знайдено відповідностей"
       }
     },
-    pro: {
-      area: {
-        mergeErr: '无法对合并单元格进行该操作',
-        multiErr: '无法对多重选择区域进行该操作',
-        extendErr: '如果延伸的区域包含被合并的单元格，所有合并的单元格需大小相同',
-        pasteMultiErr: '无法粘贴，需要相同大小的复制的区域和粘贴的区域才能执行此操作'
+    "pro": {
+      "area": {
+        "mergeErr": "Цю операцію неможливо виконати для об'єднаних клітинок",
+        "multiErr": "Цю операцію неможливо виконати для множинних вибраних областей",
+        "extendErr": "Якщо область містить об'єднані клітинки, всі об'єднані клітинки повинні мати однакові розміри",
+        "pasteMultiErr": "Неможливо вставити, для виконання цієї операції копійована область повинна мати такий самий розмір, як і область вставки"
       },
-      fnr: {
-        title: '查找和替换',
-        findLabel: '查找',
-        replaceLabel: '替换',
-        findTitle: '查找内容：',
-        replaceTitle: '替换为：',
-        tabs: {
-          find: '查找',
-          replace: '替换'
+      "fnr": {
+        "title": "Пошук і заміна",
+        "findLabel": "Знайти",
+        "replaceLabel": "Замінити",
+        "findTitle": "Текст для пошуку:",
+        "replaceTitle": "Замінити на:",
+        "tabs": {
+          "find": "Пошук",
+          "replace": "Замінити"
         },
-        filter: {
-          re: '正则表达式',
-          whole: '全词匹配',
-          sensitive: '区分大小写'
+        "filter": {
+          "re": "Регулярний вираз",
+          "whole": "Точний збіг",
+          "sensitive": "Чутливий до регістру"
         },
-        btns: {
-          findNext: '查找下一个',
-          findAll: '查找全部',
-          replace: '替换',
-          replaceAll: '替换全部',
-          cancel: '取消'
+        "btns": {
+          "findNext": "Знайти наступний",
+          "findAll": "Знайти всі",
+          "replace": "Замінити",
+          "replaceAll": "Замінити всі",
+          "cancel": "Скасувати"
         },
-        header: {
-          seq: '#',
-          cell: '单元格',
-          value: '值'
+        "header": {
+          "seq": "#",
+          "cell": "Клітинка",
+          "value": "Значення"
         },
-        empty: '(空值)',
-        reError: '无效的正则表达式',
-        recordCount: '已找到 {0} 个单元格',
-        notCell: '找不到匹配的单元格',
-        replaceSuccess: '成功替换 {0} 个单元格'
+        "empty": "(порожнє значення)",
+        "reError": "Невірний регулярний вираз",
+        "recordCount": "Знайдено {0} клітинок",
+        "notCell": "Не знайдено відповідних клітинок",
+        "replaceSuccess": "Успішно замінено {0} клітинок"
       }
     },
-    renderer: {
-      search: '搜索',
-      cases: {
-        equal: '等于',
-        unequal: '不等于',
-        gt: '大于',
-        ge: '大于或等于',
-        lt: '小于',
-        le: '小于或等于',
-        begin: '开头是',
-        notbegin: '开头不是',
-        endin: '结尾是',
-        notendin: '结尾不是',
-        include: '包含',
-        exclude: '不包含',
-        between: '介于',
-        custom: '自定义筛选',
-        insensitive: '不区分大小写',
-        isSensitive: '区分大小写'
+    "renderer": {
+      "search": "Пошук",
+      "cases": {
+        "equal": "Рівно",
+        "unequal": "Не рівно",
+        "gt": "Більше",
+        "ge": "Більше або рівно",
+        "lt": "Менше",
+        "le": "Менше або рівно",
+        "begin": "Починається з",
+        "notbegin": "Не починається з",
+        "endin": "Закінчується на",
+        "notendin": "Не закінчується на",
+        "include": "Включає",
+        "exclude": "Не включає",
+        "between": "Між",
+        "custom": "Користувацький фільтр",
+        "insensitive": "Не чутливий до регістру",
+        "isSensitive": "Чутливий до регістру"
       },
-      combination: {
-        menus: {
-          clearSort: '清除排序',
-          sortAsc: '升序',
-          sortDesc: '降序',
-          fixedColumn: '冻结列',
-          fixedGroup: '冻结分组',
-          cancelFixed: '取消冻结',
-          fixedLeft: '冻结到左侧',
-          fixedRight: '冻结到右侧',
-          clearFilter: '清除筛选',
-          textOption: '文本筛选',
-          numberOption: '数值筛选'
+      "combination": {
+        "menus": {
+          "clearSort": "Очистити сортування",
+          "sortAsc": "По зростанню",
+          "sortDesc": "По спаданню",
+          "fixedColumn": "Закріпити стовпець",
+          "fixedGroup": "Закріпити групу",
+          "cancelFixed": "Скасувати фіксацію",
+          "fixedLeft": "Закріпити ліворуч",
+          "fixedRight": "Закріпити праворуч",
+          "clearFilter": "Очистити фільтр",
+          "textOption": "Текстовий фільтр",
+          "numberOption": "Числовий фільтр"
         },
-        popup: {
-          title: '自定义筛选的方式',
-          currColumnTitle: '当前列：',
-          and: '与',
-          or: '或',
-          describeHtml: '可用 ? 代表单个字符<br/>用 * 代表任意多个字符'
+        "popup": {
+          "title": "Налаштування користувацького фільтру",
+          "currColumnTitle": "Поточний стовпець:",
+          "and": "І",
+          "or": "Або",
+          "describeHtml": "Використовуйте ? для одного символу<br/> і * для кількох символів"
         },
-        empty: '(空白)',
-        notData: '无匹配项'
+        "empty": "(порожнє)",
+        "notData": "Не знайдено відповідностей"
       }
     }
   }
