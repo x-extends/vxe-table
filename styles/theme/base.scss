@@ -36,18 +36,16 @@
   --vxe-ui-table-row-height-mini: 36px;
   --vxe-ui-table-row-line-height: 22px;
 
-  --vxe-ui-table-column-padding-default: 13px 0;
-  --vxe-ui-table-column-padding-medium: 11px 0;
-  --vxe-ui-table-column-padding-small: 9px 0;
-  --vxe-ui-table-column-padding-mini: 7px 0;
   --vxe-ui-table-column-hover-background-color: #d7effb;
   --vxe-ui-table-column-current-background-color: #e6f7ff;
   --vxe-ui-table-column-icon-border-color: #c0c4cc;
   --vxe-ui-table-column-icon-border-hover-color: #515A6E;
 
+  --vxe-ui-table-cell-padding-default: 10px;
+  --vxe-ui-table-cell-padding-medium: 8px;
+  --vxe-ui-table-cell-padding-small: 6px;
+  --vxe-ui-table-cell-padding-mini: 4px;
   --vxe-ui-table-cell-placeholder-color: #C0C4CC;
-  --vxe-ui-table-cell-padding-left: 10px;
-  --vxe-ui-table-cell-padding-right: 10px;
   --vxe-ui-table-cell-input-height-default: var(--vxe-ui-table-row-height-default) - 6;
   --vxe-ui-table-cell-input-height-medium: var(--vxe-ui-table-row-height-medium) - 6;
   --vxe-ui-table-cell-input-height-small: var(--vxe-ui-table-row-height-small) - 6;

@@ -77,7 +77,8 @@ export default {
       customRestore: 'Alapértelmezés visszaállítása',
       maxFixedCol: 'A rögzített oszlopok maximális száma nem haladhatja meg a következőt: {0}',
       dragTip: '移动：{0}',
-      resizeColTip: '{0} Pixels'
+      resizeColTip: '宽：{0} 像素',
+      resizeRowTip: '高：{0} 像素'
     },
     grid: {
       selectOneRecord: 'Kérjük, válasszon legalább egy rekordot!',

@@ -36,7 +36,11 @@ export default [
   'filter-change',
   'filter-visible',
   'clear-filter',
-  'resizable-change',
+
+  'resizable-change', // 废弃
+
+  'column-resizable-change',
+  'row-resizable-change',
   'toggle-row-expand',
   'toggle-tree-expand',
   'menu-click',

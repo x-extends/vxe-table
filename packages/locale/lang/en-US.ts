@@ -77,7 +77,8 @@ export default {
       customRestore: 'Restore default',
       maxFixedCol: 'The maximum number of frozen columns cannot exceed {0}',
       dragTip: 'Move: {0}',
-      resizeColTip: '{0} Pixels'
+      resizeColTip: 'Width: {0} Pixels',
+      resizeRowTip: 'Height: {0} Pixels'
     },
     grid: {
       selectOneRecord: 'Please select at least one record!',

@@ -77,7 +77,8 @@ export default {
       customRestore: 'คืนค่าเริ่มต้น',
       maxFixedCol: 'จำนวนคอลัมน์ที่ตรึงไว้สูงสุดต้องไม่เกิน {0}',
       dragTip: 'ย้าย: {0}',
-      resizeColTip: '{0} Pixels'
+      resizeColTip: '宽：{0} 像素',
+      resizeRowTip: '高：{0} 像素'
     },
     grid: {
       selectOneRecord: 'โปรดเลือกอย่างน้อยหนึ่งรายการ!',

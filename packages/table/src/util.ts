@@ -118,7 +118,7 @@ export interface XEColumnInstance {
 
 export const handleFieldOrColumn = ($xeTable: VxeTableConstructor, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null) => {
   if (fieldOrColumn) {
-    return XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
+    return XEUtils.isString(fieldOrColumn) || XEUtils.isNumber(fieldOrColumn) ? $xeTable.getColumnByField(`${fieldOrColumn}`) : fieldOrColumn
   }
   return null
 }
@@ -368,13 +368,33 @@ export const getOffsetSize = ($xeTable: VxeTableConstructor) => {
 }
 
 export function calcTreeLine (params: VxeTableDefines.CellRenderBodyParams, prevRow: any) {
-  const { $table } = params
+  const { $table, row } = params
+  const tableProps = $table.props
   const tableReactData = $table.reactData
+  const tableInternalData = $table.internalData
+
+  const { showOverflow } = tableProps
+  const { scrollYLoad } = tableReactData
+  const { fullAllDataRowIdData } = tableInternalData
+  const { computeRowOpts, computeCellOpts, computeDefaultRowHeight } = $table.getComputeMaps()
+  const rowOpts = computeRowOpts.value
+  const cellOpts = computeCellOpts.value
+  const defaultRowHeight = computeDefaultRowHeight.value
+  const rowid = getRowid($table, row)
+  const rowRest = fullAllDataRowIdData[rowid]
+  const currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight
   let expandSize = 1
   if (prevRow) {
     expandSize = countTreeExpand(prevRow, params)
   }
-  return tableReactData.rowHeight * expandSize - (prevRow ? 1 : (12 - getOffsetSize($table)))
+  let cellHeight = currCellHeight
+  const vnHeight = rowRest.height
+  if (scrollYLoad) {
+    if (!showOverflow) {
+      cellHeight = vnHeight || currCellHeight
+    }
+  }
+  return cellHeight * expandSize - (prevRow ? 1 : (12 - getOffsetSize($table)))
 }
 
 export function mergeBodyMethod (mergeList: VxeTableDefines.MergeItem[], _rowIndex: number, _columnIndex: number) {

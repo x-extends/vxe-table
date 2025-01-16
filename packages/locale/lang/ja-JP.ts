@@ -77,7 +77,8 @@ export default {
       customRestore: 'リセット',
       maxFixedCol: '最大固定列数が {0} です。',
       dragTip: '移动：{0}',
-      resizeColTip: '{0} Pixels'
+      resizeColTip: '宽：{0} 像素',
+      resizeRowTip: '高：{0} 像素'
     },
     grid: {
       selectOneRecord: '1つ以上のレコードを選択してください',

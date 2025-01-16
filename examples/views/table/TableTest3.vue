@@ -10,7 +10,7 @@
       height="400"
       ref="tableRef"
       id="aaaa"
-      :row-config="{useKey: true}"
+      :row-config="rowConfig"
       :column-config="{useKey: true}"
       :column-drag-config="{isCrossDrag:true,isToChildDrag:true,isSelfToChildDrag:true}"
       :print-config="{}"
@@ -21,7 +21,7 @@
       :expand-config="{iconOpen: 'vxe-icon-question-circle-fill', iconClose: 'vxe-icon-question-circle-fill'}"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
       :data="demo1.tableData">
-      <vxe-column field="seq" type="seq" width="60"></vxe-column>
+      <vxe-column field="seq" type="seq" width="60" row-resize></vxe-column>
       <vxe-column field="checkbox" type="checkbox" title="ID" width="140"></vxe-column>
       <vxe-colgroup title="分组1" field="g1">
         <vxe-column type="expand" field="role" title="Role">
@@ -47,7 +47,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, reactive, nextTick } from 'vue'
-import { VxeColumnPropTypes, VxeTableInstance, VxeToolbarInstance } from '../../../types'
+import { VxeColumnPropTypes, VxeTableInstance, VxeToolbarInstance, VxeTablePropTypes } from '../../../types'
 
 interface RowVO {
   [key: string]: any
@@ -55,6 +55,11 @@ interface RowVO {
 
 const tableRef = ref<VxeTableInstance<RowVO>>()
 const toolbarRef = ref<VxeToolbarInstance>()
+
+const rowConfig = reactive<VxeTablePropTypes.RowConfig>({
+  useKey: true,
+  resizable: true
+})
 
 const demo1 = reactive({
   loading: false,

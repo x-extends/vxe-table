@@ -77,7 +77,8 @@ export default {
       customRestore: 'ئەسلىگە قايتۇرۇش',
       maxFixedCol: 'توڭلىتىشقا بولىدىغان ئەڭ چوڭ قۇر سانى  {0} دانە',
       dragTip: 'يۆتكەش：{0}',
-      resizeColTip: '{0} Pixels'
+      resizeColTip: '宽：{0} 像素',
+      resizeRowTip: '高：{0} 像素'
     },
     grid: {
       selectOneRecord: 'كەم بولغاندا بىر تال ئۇچۇر تاللاڭ',

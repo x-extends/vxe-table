@@ -9,6 +9,7 @@
       resizable
       show-footer
       highlight-hover-row
+      size="mini"
       height="400"
       ref="tableRef"
       id="bbbbb"
@@ -31,12 +32,12 @@
       <vxe-column field="checkbox" type="checkbox" title="ID" width="140" drag-sort></vxe-column>
       <vxe-colgroup field="group1" title="分组1">
         <vxe-colgroup field="group2" title="分组2">
-          <vxe-column type="expand" field="role" title="Role" drag-sort>
+          <vxe-column type="expand" field="role" title="Role"  drag-sort>
             <template #content="{ row }">
               <div>{{ row.name }}</div>
             </template>
           </vxe-column>
-          <vxe-column field="name" title="Name" drag-sort sortable></vxe-column>
+          <vxe-column field="name" title="Name" width="100" drag-sort sortable></vxe-column>
         </vxe-colgroup>
       </vxe-colgroup>
       <vxe-column field="sex11" title="<span style='color:red;'>Sex222</span>" type="html" drag-sort></vxe-column>
@@ -143,7 +144,7 @@ onMounted(() => {
       { id: 10007, name: 'Test7', role: 'Test', sex: '0', age: 29, address: 'test abc' },
       { id: 10008, name: 'Test8', role: 'Develop', sex: '0', age: 35, address: 'test abc' },
       { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 21, address: 'test abc' },
-      { id: 10010, name: 'Test10', role: 'Develop', sex: '0', age: 28, address: 'test abc' },
+      { id: 10010, name: 'Test10 Test10 Test10 Test10 Test10 Test10', role: 'Develop', sex: '0', age: 28, address: 'test abc' },
       { id: 10011, name: 'Test11', role: 'Test', sex: '0', age: 29, address: 'test abc' },
       { id: 10012, name: 'Test12', role: 'Develop', sex: '1', age: 27, address: 'test abc' },
       { id: 10013, name: 'Test13', role: 'Test', sex: '0', age: 24, address: 'test abc' },

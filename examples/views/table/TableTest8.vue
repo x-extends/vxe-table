@@ -189,5 +189,5 @@ const loadData = (rowSize: number) => {
   }, 350)
 }
 
-loadData(20)
+loadData(18)
 </script>

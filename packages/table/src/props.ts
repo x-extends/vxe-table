@@ -34,10 +34,10 @@ export default {
     type: [Boolean, String] as PropType<VxeTablePropTypes.Border>,
     default: () => getConfig().table.border
   },
-  // 单元格是否有边距
+  // 已废弃，被 cell-config.padding 替换
   padding: {
     type: Boolean as PropType<VxeTablePropTypes.Padding>,
-    default: () => getConfig().table.padding
+    default: null
   },
   // 是否圆角边框
   round: {
@@ -185,6 +185,10 @@ export default {
   columnConfig: Object as PropType<VxeTablePropTypes.ColumnConfig>,
   // 单元格配置信息
   cellConfig: Object as PropType<VxeTablePropTypes.CellConfig>,
+  // 表头单元格配置信息
+  headerCellConfig: Object as PropType<VxeTablePropTypes.HeaderCellConfig>,
+  // 表尾单元格配置信息
+  footerCellConfig: Object as PropType<VxeTablePropTypes.FooterCellConfig>,
   // 行配置信息
   rowConfig: Object as PropType<VxeTablePropTypes.RowConfig>,
   // 已废弃，被 rowDragConfig 替换

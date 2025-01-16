@@ -47,7 +47,7 @@ export default defineComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeTooltipOpts, computeColumnOpts, computeColumnDragOpts } = $xeTable.getComputeMaps()
+    const { computeTooltipOpts, computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeFooterCellOpts, computeDefaultRowHeight } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refFooterScroll = ref() as Ref<HTMLDivElement>
@@ -63,21 +63,27 @@ export default defineComponent({
       const { scrollXStore } = tableInternalData
       const tooltipOpts = computeTooltipOpts.value
       const columnOpts = computeColumnOpts.value
+      const defaultRowHeight = computeDefaultRowHeight.value
+      const cellOpts = computeCellOpts.value
+      const footerCellOpts = computeFooterCellOpts.value
+      const currCellHeight = footerCellOpts.height || cellOpts.height || defaultRowHeight
 
       return tableColumn.map((column, $columnIndex) => {
         const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
+        const colid = column.id
         const renderOpts = editRender || cellRender
         const compConf = renderOpts ? renderer.get(renderOpts.name) : null
         const showAllTip = tooltipOpts.showAll
         const isColGroup = column.children && column.children.length
         const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
+        const isPadding = XEUtils.isBoolean(footerCellOpts.padding) ? footerCellOpts.padding : cellOpts.padding
         const footOverflow = XEUtils.eqNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
         const footAlign = footerAlign || (compConf ? compConf.tableFooterCellAlign : '') || allFooterAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
         let showEllipsis = footOverflow === 'ellipsis'
         const showTitle = footOverflow === 'title'
         const showTooltip = footOverflow === true || footOverflow === 'tooltip'
         let hasEllipsis = showTitle || showTooltip || showEllipsis
-        const attrs: any = { colid: column.id }
+        const attrs: any = { colid }
         const tfOns: any = {}
         const columnIndex = $xeTable.getColumnIndex(column)
         const _columnIndex = $xeTable.getVTColumnIndex(column)
@@ -161,6 +167,13 @@ export default defineComponent({
           isVNPreEmptyStatus = true
         }
 
+        const tcStyle: Record<string, string> = {}
+        if (hasEllipsis) {
+          tcStyle.height = `${currCellHeight}px`
+        } else {
+          tcStyle.minHeight = `${currCellHeight}px`
+        }
+
         return h('td', {
           class: ['vxe-footer--column', column.id, {
             [`col--${footAlign}`]: footAlign,
@@ -168,6 +181,7 @@ export default defineComponent({
             'col--last': isLastColumn,
             'fixed--width': !isAutoCellWidth,
             'fixed--hidden': fixedHiddenColumn,
+            'is--padding': isPadding,
             'col--ellipsis': hasEllipsis,
             'col--current': currentColumn === column
           }, getPropClass(footerClassName, cellParams), getPropClass(footerCellClassName, cellParams)],
@@ -181,8 +195,16 @@ export default defineComponent({
               'c--title': showTitle,
               'c--tooltip': showTooltip,
               'c--ellipsis': showEllipsis
-            }]
-          }, isVNPreEmptyStatus ? [] : column.renderFooter(cellParams))
+            }],
+            style: tcStyle
+          }, isVNPreEmptyStatus
+            ? []
+            : [
+                h('div', {
+                  colid,
+                  class: 'vxe-cell--wrapper'
+                }, column.renderFooter(cellParams))
+              ])
         ])
       })
     }

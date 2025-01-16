@@ -83,8 +83,10 @@ export const columnProps = {
   filterRender: Object as PropType<VxeColumnPropTypes.FilterRender>,
   // 设置为树节点
   treeNode: Boolean as PropType<VxeColumnPropTypes.TreeNode>,
-  // 指定为树节点
+  // 设置为拖拽排序
   dragSort: Boolean as PropType<VxeColumnPropTypes.DragSort>,
+  // 设置为行高拖拽
+  rowResize: Boolean as PropType<VxeColumnPropTypes.RowResize>,
   // 是否可视
   visible: {
     type: Boolean as PropType<VxeColumnPropTypes.Visible>,
