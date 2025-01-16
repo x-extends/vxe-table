@@ -3,8 +3,8 @@ export default {
     base: {
       pleaseInput: 'Пожалуйста, введите',
       pleaseSelect: 'Пожалуйста, выберите',
-      comma: '，',
-      fullStop: '。'
+      comma: ',',
+      fullStop: '.'
     },
     loading: {
       text: 'загрузка...'
@@ -77,7 +77,8 @@ export default {
       customRestore: 'Восстановить настройки по умолчанию',
       maxFixedCol: 'Максимальное количество замороженных столбцов не может превышать {0}.',
       dragTip: 'Переместить: {0}',
-      resizeColTip: '{0} Pixels'
+      resizeColTip: '宽：{0} 像素',
+      resizeRowTip: '高：{0} 像素'
     },
     grid: {
       selectOneRecord: 'Пожалуйста, выберите хотя бы одну запись!',

@@ -170,7 +170,7 @@ function renderTitleContent (h: CreateElement, params: VxeTableDefines.CellRende
   const ons: Record<string, any> = {}
   if (showTitle || showTooltip || showAllTip) {
     ons.mouseenter = (evnt: MouseEvent) => {
-      if (tableReactData._isResize) {
+      if (tableReactData.isDragResize) {
         return
       }
       if (showTitle) {
@@ -182,7 +182,7 @@ function renderTitleContent (h: CreateElement, params: VxeTableDefines.CellRende
   }
   if (showTooltip || showAllTip) {
     ons.mouseleave = (evnt: any) => {
-      if (tableReactData._isResize) {
+      if (tableReactData.isDragResize) {
         return
       }
       if (showTooltip || showAllTip) {
@@ -413,11 +413,7 @@ export const Cell = {
     return Cell.renderTreeIcon(h, params, Cell.renderDefaultCell.call(this, h, params))
   },
   renderDefaultFooter (h: CreateElement, params: VxeTableDefines.CellRenderFooterParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-    return [
-      h('span', {
-        class: 'vxe-cell--item'
-      }, getFooterContent(h, params))
-    ]
+    return getFooterContent(h, params)
   },
 
   /**

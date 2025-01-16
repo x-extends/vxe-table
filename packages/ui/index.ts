@@ -41,7 +41,8 @@ VxeUI.setConfig({
     },
     resizableConfig: {
       dragMode: 'auto',
-      showDragTip: true
+      showDragTip: true,
+      minHeight: 18
     },
     radioConfig: {
       // trigger: 'default'
@@ -74,6 +75,13 @@ VxeUI.setConfig({
     },
     columnConfig: {
       maxFixedSize: 4
+    },
+    cellConfig: {
+      padding: true
+    },
+    headerCellConfig: {
+    },
+    footerCellConfig: {
     },
     // menuConfig: {
     //   visibleMethod () {}
@@ -180,13 +188,13 @@ VxeUI.setConfig({
       isReplace: true
     },
     virtualXConfig: {
-      // enabled: false,
+      enabled: true,
       gt: 60,
       preSize: 0,
       oSize: 1
     },
     virtualYConfig: {
-      // enabled: false,
+      enabled: true,
       gt: 100,
       preSize: 1,
       oSize: 2

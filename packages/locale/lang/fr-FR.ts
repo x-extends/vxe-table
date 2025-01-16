@@ -77,7 +77,8 @@ export default {
       customRestore: 'Restaurer les valeurs par défaut',
       maxFixedCol: 'Le nombre maximum de colonnes gelées ne peut pas dépasser {0}',
       dragTip: 'Déplacer : {0}',
-      resizeColTip: '{0} Pixels'
+      resizeColTip: '宽：{0} 像素',
+      resizeRowTip: '高：{0} 像素'
     },
     grid: {
       selectOneRecord: '请至少选择一条记录！',

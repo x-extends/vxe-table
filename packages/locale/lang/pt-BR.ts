@@ -77,7 +77,8 @@ export default {
       customRestore: 'Restore',
       maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}',
       dragTip: '移动：{0}',
-      resizeColTip: '{0} Pixels'
+      resizeColTip: '宽：{0} 像素',
+      resizeRowTip: '高：{0} 像素'
     },
     grid: {
       selectOneRecord: 'Por favor, selecione pelo menos um registro!',

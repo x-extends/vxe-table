@@ -2,12 +2,11 @@ import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getClass } from '../../ui/src/utils'
-import { getOffsetPos, hasClass, addClass, removeClass } from '../../ui/src/dom'
-import { convertHeaderColumnToRows, getColReMinWidth, getRefElem } from './util'
+import { convertHeaderColumnToRows } from './util'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes, TableReactData, TableInternalData, VxeComponentStyleType } from '../../../types'
 
-const { getI18n, renderer, renderEmptyElement } = VxeUI
+const { renderer, renderEmptyElement } = VxeUI
 
 const cellType = 'header'
 
@@ -25,6 +24,10 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
   const { scrollXStore } = tableInternalData
   const columnOpts = $xeTable.computeColumnOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
+  const cellOpts = $xeTable.computeCellOpts
+  const defaultRowHeight = $xeTable.computeDefaultRowHeight
+  const headerCellOpts = $xeTable.computeHeaderCellOpts
+  const currCellHeight = headerCellOpts.height || cellOpts.height || defaultRowHeight
   const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
   return cols.map((column: any, $columnIndex: any) => {
     const { type, showHeaderOverflow, headerAlign, align, filters, headerClassName, editRender, cellRender } = column
@@ -34,6 +37,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     const compConf = renderOpts ? renderer.get(renderOpts.name) : null
     const isColGroup = column.children && column.children.length
     const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
+    const isPadding = XEUtils.isBoolean(headerCellOpts.padding) ? headerCellOpts.padding : cellOpts.padding
     const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
     const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
     let showEllipsis = headOverflow === 'ellipsis'
@@ -48,15 +52,15 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     }
     const columnIndex = $xeTable.getColumnIndex(column)
     const _columnIndex = $xeTable.getVTColumnIndex(column)
-    const params = { $table: $xeTable, $grid: $xeGrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, firstFilterOption, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
+    const cellParams = { $table: $xeTable, $grid: $xeGrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, firstFilterOption, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
     const thAttrs: Record<string, string | number | null> = {
       colid,
       colspan: column.colSpan > 1 ? column.colSpan : null,
       rowspan: column.rowSpan > 1 ? column.rowSpan : null
     }
     const thOns: any = {
-      click: (evnt: MouseEvent) => $xeTable.triggerHeaderCellClickEvent(evnt, params),
-      dblclick: (evnt: MouseEvent) => $xeTable.triggerHeaderCellDblclickEvent(evnt, params)
+      click: (evnt: MouseEvent) => $xeTable.triggerHeaderCellClickEvent(evnt, cellParams),
+      dblclick: (evnt: MouseEvent) => $xeTable.triggerHeaderCellDblclickEvent(evnt, cellParams)
     }
     // 虚拟滚动不支持动态高度
     if (scrollXLoad && !hasEllipsis) {
@@ -65,11 +69,11 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     const isColDragCell = columnOpts.drag && columnDragOpts.trigger === 'cell'
     let isDisabledDrag = false
     if (isColDragCell) {
-      isDisabledDrag = !!(dragDisabledMethod && dragDisabledMethod(params))
+      isDisabledDrag = !!(dragDisabledMethod && dragDisabledMethod(cellParams))
     }
     // 按下事件处理
     if (mouseConfig || isColDragCell) {
-      thOns.mousedown = (evnt: any) => $xeTable.triggerHeaderCellMousedownEvent(evnt, params)
+      thOns.mousedown = (evnt: any) => $xeTable.triggerHeaderCellMousedownEvent(evnt, cellParams)
     }
     // 拖拽列事件
     if (columnOpts.drag) {
@@ -89,6 +93,13 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
       isVNPreEmptyStatus = true
     }
 
+    const tcStyle: Record<string, string> = {}
+    if (hasEllipsis) {
+      tcStyle.height = `${currCellHeight}px`
+    } else {
+      tcStyle.minHeight = `${currCellHeight}px`
+    }
+
     return h('th', {
       class: ['vxe-header--column', colid, {
         [`col--${headAlign}`]: headAlign,
@@ -99,15 +110,16 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
         'col--ellipsis': hasEllipsis,
         'fixed--width': !isAutoCellWidth,
         'fixed--hidden': fixedHiddenColumn,
+        'is--padding': isPadding,
         'is--sortable': column.sortable,
         'col--filter': !!filters,
         'is--filter-active': hasFilter,
         'is--drag-active': !column.fixed && !isDisabledDrag && (isCrossDrag || isPeerDrag || !column.parentId),
         'is--drag-disabled': isDisabledDrag,
         'col--current': currentColumn === column
-      }, getClass(headerClassName, params), getClass(headerCellClassName, params)],
+      }, getClass(headerClassName, cellParams), getClass(headerCellClassName, cellParams)],
       attrs: thAttrs,
-      style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) as VxeComponentStyleType : undefined,
+      style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(cellParams) : headerCellStyle) as VxeComponentStyleType : undefined,
       on: thOns,
       key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex
     }, [
@@ -116,19 +128,29 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
           'c--title': showTitle,
           'c--tooltip': showTooltip,
           'c--ellipsis': showEllipsis
-        }]
-      }, isVNPreEmptyStatus || (isOptimizeMode && fixedHiddenColumn) ? [] : column.renderHeader(h, params)),
+        }],
+        style: tcStyle
+      }, isVNPreEmptyStatus || (isOptimizeMode && fixedHiddenColumn)
+        ? []
+        : [
+            h('div', {
+              attrs: {
+                colid
+              },
+              class: 'vxe-cell--wrapper'
+            }, column.renderHeader(h, cellParams))
+          ]),
       /**
      * 列宽拖动
      */
       !fixedHiddenColumn && showResizable
         ? h('div', {
-          class: ['vxe-resizable', {
+          class: ['vxe-cell--col-resizable', {
             'is--line': !border || border === 'none'
           }],
           on: {
-            mousedown: (evnt: MouseEvent) => _vm.resizeMousedownEvent(evnt, params),
-            dblclick: (evnt: MouseEvent) => $xeTable.handleResizeDblclickEvent(evnt, params)
+            mousedown: (evnt: MouseEvent) => $xeTable.handleColResizeMousedownEvent(evnt, fixedType, cellParams),
+            dblclick: (evnt: MouseEvent) => $xeTable.handleColResizeDblclickEvent(evnt, cellParams)
           }
         })
         : renderEmptyElement($xeTable)
@@ -370,145 +392,6 @@ export default {
     uploadColumn () {
       const { $parent: $xetable } = this
       this.headerColumn = $xetable.isGroup ? convertHeaderColumnToRows(this.tableGroupColumn) : []
-    },
-    resizeMousedownEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-      const _vm = this
-      const props = _vm
-
-      const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
-      const tableReactData = $xeTable as unknown as TableReactData
-      const tableInternalData = $xeTable as unknown as TableInternalData
-
-      const { column } = params
-      const { fixedType } = props
-      const { scrollbarHeight } = tableReactData
-      const { elemStore, visibleColumn } = tableInternalData
-      const resizableOpts = $xeTable.computeResizableOpts
-      const tableEl = $xeTable.$refs.refElem as HTMLDivElement
-      const leftContainerElem = $xeTable.$refs.refLeftContainer as HTMLDivElement
-      const rightContainerElem = $xeTable.$refs.refRightContainer as HTMLDivElement
-      const resizeBarElem = $xeTable.$refs.refCellResizeBar as HTMLDivElement
-      const resizeTipElem = $xeTable.$refs.refCellResizeTip as HTMLDivElement
-      const scrollbarXToTop = $xeTable.computeScrollbarXToTop
-      const { clientX: dragClientX } = evnt
-      const wrapperElem = _vm.$el
-      const dragBtnElem = evnt.target as HTMLDivElement
-      let resizeColumn = column
-      if (column.children && column.children.length) {
-        XEUtils.eachTree(column.children, childColumn => {
-          resizeColumn = childColumn
-        })
-      }
-      const cell = dragBtnElem.parentNode as HTMLTableCellElement
-      const cellParams = Object.assign(params, { cell })
-      let dragLeft = 0
-      const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
-      if (!bodyScrollElem) {
-        return
-      }
-      const pos = getOffsetPos(dragBtnElem, tableEl)
-      const dragBtnWidth = dragBtnElem.clientWidth
-      const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
-      const minInterval = getColReMinWidth(cellParams) - dragBtnOffsetWidth // 列之间的最小间距
-      let dragMinLeft = pos.left - cell.clientWidth + dragBtnWidth + minInterval
-      let dragPosLeft = pos.left + dragBtnOffsetWidth
-      const domMousemove = document.onmousemove
-      const domMouseup = document.onmouseup
-      const isLeftFixed = fixedType === 'left'
-      const isRightFixed = fixedType === 'right'
-
-      // 计算左右侧固定列偏移量
-      let fixedOffsetWidth = 0
-      if (isLeftFixed || isRightFixed) {
-        const siblingProp = isLeftFixed ? 'nextElementSibling' : 'previousElementSibling'
-        let tempCellElem = cell[siblingProp] as HTMLTableCellElement
-        while (tempCellElem) {
-          if (hasClass(tempCellElem, 'fixed--hidden')) {
-            break
-          } else if (!hasClass(tempCellElem, 'col--group')) {
-            fixedOffsetWidth += tempCellElem.offsetWidth
-          }
-          tempCellElem = tempCellElem[siblingProp] as HTMLTableCellElement
-        }
-        if (isRightFixed && rightContainerElem) {
-          dragPosLeft = rightContainerElem.offsetLeft + fixedOffsetWidth
-        }
-      }
-
-      // 处理拖动事件
-      const updateEvent = function (evnt: any) {
-        evnt.stopPropagation()
-        evnt.preventDefault()
-        const tableHeight = tableEl.clientHeight
-        const offsetX = evnt.clientX - dragClientX
-        let left = dragPosLeft + offsetX
-        const scrollLeft = fixedType ? 0 : bodyScrollElem.scrollLeft
-        if (isLeftFixed) {
-          // 左固定列（不允许超过右侧固定列、不允许超过右边距）
-          left = Math.min(left, (rightContainerElem ? rightContainerElem.offsetLeft : bodyScrollElem.clientWidth) - fixedOffsetWidth - minInterval)
-        } else if (isRightFixed) {
-          // 右侧固定列（不允许超过左侧固定列、不允许超过左边距）
-          dragMinLeft = (leftContainerElem ? leftContainerElem.clientWidth : 0) + fixedOffsetWidth + minInterval
-          left = Math.min(left, dragPosLeft + cell.clientWidth - minInterval)
-        } else {
-          dragMinLeft = Math.max(bodyScrollElem.scrollLeft, dragMinLeft)
-          // left = Math.min(left, bodyScrollElem.clientWidth + bodyScrollElem.scrollLeft - 40)
-        }
-        dragLeft = Math.max(left, dragMinLeft)
-        const resizeBarLeft = Math.max(1, dragLeft - scrollLeft)
-        resizeBarElem.style.left = `${resizeBarLeft}px`
-        resizeBarElem.style.top = `${scrollbarXToTop ? scrollbarHeight : 0}px`
-        resizeBarElem.style.height = `${scrollbarXToTop ? tableHeight - scrollbarHeight : tableHeight}px`
-        if (resizableOpts.showDragTip && resizeTipElem) {
-          const tableWidth = tableEl.clientWidth
-          const wrapperRect = wrapperElem.getBoundingClientRect()
-          const resizeBarWidth = resizeBarElem.clientWidth
-          const resizeTipWidth = resizeTipElem.clientWidth
-          const resizeTipHeight = resizeTipElem.clientHeight
-          let resizeTipLeft = -resizeTipWidth
-          if (resizeBarLeft < resizeTipWidth + resizeBarWidth) {
-            resizeTipLeft = 0
-          } else if (resizeBarLeft > tableWidth) {
-            resizeTipLeft += tableWidth - resizeBarLeft
-          }
-          resizeTipElem.style.left = `${resizeTipLeft}px`
-          resizeTipElem.style.top = `${Math.min(tableHeight - resizeTipHeight, Math.max(0, evnt.clientY - wrapperRect.y - resizeTipHeight / 2))}px`
-          resizeTipElem.textContent = getI18n('vxe.table.resizeColTip', [resizeColumn.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)])
-        }
-      }
-
-      tableReactData._isResize = true
-      addClass(tableEl, 'drag--resize')
-      resizeBarElem.style.display = 'block'
-      document.onmousemove = updateEvent
-      document.onmouseup = function (evnt) {
-        document.onmousemove = domMousemove
-        document.onmouseup = domMouseup
-        const resizeWidth = resizeColumn.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
-        resizeColumn.resizeWidth = resizeWidth
-        if (resizableOpts.dragMode === 'fixed') {
-          visibleColumn.forEach((item: any) => {
-            if (item.id !== resizeColumn.id) {
-              if (!item.resizeWidth) {
-                item.resizeWidth = item.renderWidth
-              }
-            }
-          })
-        }
-        resizeBarElem.style.display = 'none'
-        tableReactData._isResize = false
-        tableInternalData._lastResizeTime = Date.now()
-        $xeTable.analyColumnWidth()
-        $xeTable.recalculate(true).then(() => {
-          $xeTable.saveCustomStore('update:visible')
-          $xeTable.updateCellAreas()
-          $xeTable.dispatchEvent('resizable-change', { ...params, resizeWidth }, evnt)
-          setTimeout(() => $xeTable.recalculate(true), 300)
-        })
-        removeClass(tableEl, 'drag--resize')
-      }
-      updateEvent(evnt)
-      $xeTable.closeMenu()
     }
   } as any
 } as any

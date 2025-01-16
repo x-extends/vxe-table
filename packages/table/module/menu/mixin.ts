@@ -55,6 +55,9 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt: any) {
+      const $xeTable = this
+      const internalData = $xeTable
+
       const { $refs, tId, editStore, menuConfig, contextMenu, ctxMenuStore, ctxMenuOpts, mouseConfig, mouseOpts } = this
       const { selected } = editStore
       const layoutList = ['header', 'body', 'footer']
@@ -63,7 +66,7 @@ export default {
           evnt.preventDefault()
           return
         }
-        if (this._keyCtx) {
+        if (internalData._keyCtx) {
           const type = 'body'
           const params: any = { type, $grid: this.$xegrid, $table: this, keyboard: true, columns: this.visibleColumn.slice(0), $event: evnt }
           // 如果开启单元格区域

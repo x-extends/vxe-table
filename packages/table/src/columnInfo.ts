@@ -91,6 +91,7 @@ export class ColumnInfo {
       filterRender: _vm.filterRender,
       treeNode: _vm.treeNode,
       dragSort: _vm.dragSort,
+      rowResize: _vm.rowResize,
       cellType: _vm.cellType,
       cellRender: _vm.cellRender,
       editRender: _vm.editRender,

@@ -78,7 +78,8 @@ export default
       customRestore: 'Standard wiederherstellen',
       maxFixedCol: 'Die maximale Anzahl eingefrorener Spalten darf {0} nicht überschreiten.',
       dragTip: 'Umzug: {0}',
-      resizeColTip: '{0} Pixels'
+      resizeColTip: '宽：{0} 像素',
+      resizeRowTip: '高：{0} 像素'
     },
     grid: {
       selectOneRecord: 'Bitte wählen Sie mindestens einen Datensatz aus!',

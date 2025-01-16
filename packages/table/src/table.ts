@@ -362,8 +362,7 @@ export default {
     const xID = XEUtils.uniqueId()
     return {
       xID,
-      tId: `${XEUtils.uniqueId()}`,
-      isCalcColumn: false,
+      tId: xID,
       // 低性能的静态列
       staticColumns: [],
       // 渲染的列分组
@@ -576,7 +575,8 @@ export default {
 
       scrollVMLoading: false,
 
-      isCalcCellHeight: 0,
+      calcCellHeightFlag: 0,
+      resizeHeightFlag: 0,
 
       isCustomStatus: false,
 
@@ -586,7 +586,7 @@ export default {
       dragCol: null,
       dragTipText: '',
 
-      _isResize: false,
+      isDragResize: false,
       isLoading: false,
 
       reScrollFlag: 0,
@@ -695,7 +695,7 @@ export default {
 
       const vSize = $xeTable.computeSize
       const rowHeightMaps = $xeTable.computeRowHeightMaps
-      return rowHeightMaps[vSize || 'default']
+      return rowHeightMaps[vSize || 'default'] || 18
     },
     columnOpts () {
       return this.computeColumnOpts
@@ -704,7 +704,22 @@ export default {
       return Object.assign({}, getConfig().table.columnConfig, this.columnConfig)
     },
     computeCellOpts () {
-      return Object.assign({}, getConfig().table.cellConfig, this.cellConfig)
+      const $xeTable = this
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.cellConfig, props.cellConfig)
+    },
+    computeHeaderCellOpts () {
+      const $xeTable = this
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.headerCellConfig, props.headerCellConfig)
+    },
+    computeFooterCellOpts () {
+      const $xeTable = this
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.footerCellConfig, props.footerCellConfig)
     },
     rowOpts () {
       return this.computeRowOpts
@@ -809,24 +824,59 @@ export default {
       return Object.assign({}, getConfig().table.fnrConfig, this.fnrConfig)
     },
     headerCtxMenu () {
-      const headerOpts = this.ctxMenuOpts.header
+      return this.computeHeaderMenu
+    },
+    computeHeaderMenu () {
+      const $xeTable = this
+
+      const menuOpts = $xeTable.computeMenuOpts
+      const headerOpts = menuOpts.header
       return headerOpts && headerOpts.options ? headerOpts.options : []
     },
     bodyCtxMenu () {
-      const bodyOpts = this.ctxMenuOpts.body
+      return this.computeBodyMenu
+    },
+    computeBodyMenu () {
+      const $xeTable = this
+
+      const menuOpts = $xeTable.computeMenuOpts
+      const bodyOpts = menuOpts.body
       return bodyOpts && bodyOpts.options ? bodyOpts.options : []
     },
     footerCtxMenu () {
-      const footerOpts = this.ctxMenuOpts.footer
+      return this.computeFooterMenu
+    },
+    computeFooterMenu () {
+      const $xeTable = this
+
+      const menuOpts = $xeTable.computeMenuOpts
+      const footerOpts = menuOpts.footer
       return footerOpts && footerOpts.options ? footerOpts.options : []
     },
     isCtxMenu () {
-      return !!((this.contextMenu || this.menuConfig) && isEnableConf(this.ctxMenuOpts) && (this.headerCtxMenu.length || this.bodyCtxMenu.length || this.footerCtxMenu.length))
+      return this.computeIsMenu
+    },
+    computeIsMenu () {
+      const $xeTable = this
+      const props = $xeTable
+
+      const menuOpts = $xeTable.computeMenuOpts
+      const headerMenu = $xeTable.computeHeaderMenu
+      const bodyMenu = $xeTable.computeBodyMenu
+      const footerMenu = $xeTable.computeFooterMenu
+      return !!((props.contextMenu || props.menuConfig) && isEnableConf(menuOpts) && (headerMenu.length || bodyMenu.length || footerMenu.length))
     },
     ctxMenuList () {
+      return this.computeMenuList
+    },
+    computeMenuList () {
+      const $xeTable = this
+      const reactData = $xeTable as TableReactData
+
+      const { ctxMenuStore } = reactData
       const rest: any[] = []
-      this.ctxMenuStore.list.forEach((list: any[]) => {
-        list.forEach(item => {
+      ctxMenuStore.list.forEach((list) => {
+        list.forEach((item) => {
           rest.push(item)
         })
       })
@@ -1458,7 +1508,7 @@ export default {
     const { xID } = $xeTable
 
     const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
-    const { isCalcColumn, isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
+    const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
     const { leftList, rightList } = columnStore
     const loadingSlot = slots.loading
     const tooltipOpts = $xeTable.computeTooltipOpts
@@ -1494,7 +1544,6 @@ export default {
         'row--highlight': rowOpts.isHover || highlightHoverRow,
         'column--highlight': columnOpts.isHover || highlightHoverColumn,
         'checkbox--range': checkboxOpts.range,
-        'column--calc': isCalcColumn,
         'col--drag-cell': columnOpts.drag && columnDragOpts.trigger === 'cell',
         'is--header': showHeader,
         'is--footer': showFooter,
@@ -1503,7 +1552,6 @@ export default {
         'is--fixed-left': leftList.length,
         'is--fixed-right': rightList.length,
         'is--animat': !!props.animat,
-        'is--padding': props.padding,
         'is--round': props.round,
         'is--stripe': !treeConfig && stripe,
         'is--loading': currLoading,
@@ -1562,13 +1610,27 @@ export default {
        * 列宽线
        */
       h('div', {
-        key: 'cl',
-        ref: 'refCellResizeBar',
-        class: 'vxe-table--resizable-bar'
+        key: 'tcl',
+        ref: 'refColResizeBar',
+        class: 'vxe-table--resizable-col-bar'
       }, resizableOpts.showDragTip
         ? [
             h('div', {
-              ref: 'refCellResizeTip',
+              ref: 'refColResizeTip',
+              class: 'vxe-table--resizable-number-tip'
+            })
+          ]
+        : []),
+      /**
+       * 行高线
+       */
+      h('div', {
+        key: 'trl',
+        ref: 'refRowResizeBar',
+        class: 'vxe-table--resizable-row-bar'
+      }, resizableOpts.showDragTip
+        ? [
+            h('div', {
               class: 'vxe-table--resizable-number-tip'
             })
           ]

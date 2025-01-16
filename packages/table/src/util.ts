@@ -3,7 +3,7 @@ import { ColumnInfo } from './columnInfo'
 import { isScale, isPx } from '../../ui/src/dom'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeTableDefines, VxeTableConstructor, TableReactData } from '../../../types'
+import type { VxeTableDefines, VxeTableConstructor, TableReactData, TableInternalData } from '../../../types'
 
 const getAllConvertColumns = (columns: any, parentColumn?: any) => {
   const result: any[] = []
@@ -134,7 +134,7 @@ function getElementMarginWidth (elem: any) {
 
 export function handleFieldOrColumn (_vm: any, fieldOrColumn: any) {
   if (fieldOrColumn) {
-    return XEUtils.isString(fieldOrColumn) ? _vm.getColumnByField(fieldOrColumn) : fieldOrColumn
+    return XEUtils.isString(fieldOrColumn) || XEUtils.isNumber(fieldOrColumn) ? _vm.getColumnByField(`${fieldOrColumn}`) : fieldOrColumn
   }
   return null
 }
@@ -280,13 +280,32 @@ export function getOffsetSize ($xeTable: VxeTableConstructor) {
 }
 
 export function calcTreeLine (params: VxeTableDefines.CellRenderBodyParams, prevRow: any) {
-  const { $table } = params
+  const { $table, row } = params
+  const tableProps = $table
   const tableReactData = $table as unknown as TableReactData
+  const tableInternalData = $table as unknown as TableInternalData
+
+  const { showOverflow } = tableProps
+  const { scrollYLoad } = tableReactData
+  const { fullAllDataRowIdData } = tableInternalData
+  const rowOpts = $table.computeRowOpts
+  const cellOpts = $table.computeCellOpts
+  const defaultRowHeight = $table.computeDefaultRowHeight
+  const rowid = getRowid($table, row)
+  const rowRest = fullAllDataRowIdData[rowid]
+  const currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight
   let expandSize = 1
   if (prevRow) {
     expandSize = countTreeExpand(prevRow, params)
   }
-  return tableReactData.rowHeight * expandSize - (prevRow ? 1 : (12 - getOffsetSize($table)))
+  let cellHeight = currCellHeight
+  const vnHeight = rowRest.height
+  if (scrollYLoad) {
+    if (!showOverflow) {
+      cellHeight = vnHeight || currCellHeight
+    }
+  }
+  return cellHeight * expandSize - (prevRow ? 1 : (12 - getOffsetSize($table)))
 }
 
 export function mergeBodyMethod (mergeList: any, _rowIndex: any, _columnIndex: any) {

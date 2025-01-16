@@ -77,7 +77,8 @@ export default {
       customRestore: '恢复默认',
       maxFixedCol: '最大冻结列的数量不能超过 {0} 个',
       dragTip: '移动：{0}',
-      resizeColTip: '{0} Pixels'
+      resizeColTip: '宽：{0} 像素',
+      resizeRowTip: '高：{0} 像素'
     },
     grid: {
       selectOneRecord: '请至少选择一条记录！',

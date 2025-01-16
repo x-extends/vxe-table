@@ -37,14 +37,20 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
   const { scrollXStore } = tableInternalData
   const tooltipOpts = $xeTable.computeTooltipOpts
   const columnOpts = $xeTable.computeColumnOpts
+  const defaultRowHeight = $xeTable.computeDefaultRowHeight
+  const cellOpts = $xeTable.computeCellOpts
+  const footerCellOpts = $xeTable.computeFooterCellOpts
+  const currCellHeight = footerCellOpts.height || cellOpts.height || defaultRowHeight
 
   return tableColumn.map((column: any, $columnIndex: any) => {
     const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
+    const colid = column.id
     const renderOpts = editRender || cellRender
     const compConf = renderOpts ? renderer.get(renderOpts.name) : null
     const showAllTip = tooltipOpts.showAll
     const isColGroup = column.children && column.children.length
     const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
+    const isPadding = XEUtils.isBoolean(footerCellOpts.padding) ? footerCellOpts.padding : cellOpts.padding
     const footOverflow = XEUtils.eqNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
     const footAlign = footerAlign || (compConf ? compConf.tableFooterCellAlign : '') || allFooterAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
     let showEllipsis = footOverflow === 'ellipsis'
@@ -135,6 +141,13 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
       isVNPreEmptyStatus = true
     }
 
+    const tcStyle: Record<string, string> = {}
+    if (hasEllipsis) {
+      tcStyle.height = `${currCellHeight}px`
+    } else {
+      tcStyle.minHeight = `${currCellHeight}px`
+    }
+
     return h('td', {
       class: ['vxe-footer--column', column.id, {
         [`col--${footAlign}`]: footAlign,
@@ -142,6 +155,7 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
         'col--last': isLastColumn,
         'fixed--width': !isAutoCellWidth,
         'fixed--hidden': fixedHiddenColumn,
+        'is--padding': isPadding,
         'col--ellipsis': hasEllipsis,
         'col--current': currentColumn === column
       }, getClass(footerClassName, cellParams), getClass(footerCellClassName, cellParams)],
@@ -155,8 +169,18 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
           'c--title': showTitle,
           'c--tooltip': showTooltip,
           'c--ellipsis': showEllipsis
-        }]
-      }, isVNPreEmptyStatus ? [] : column.renderFooter(h, cellParams))
+        }],
+        style: tcStyle
+      }, isVNPreEmptyStatus
+        ? []
+        : [
+            h('div', {
+              attrs: {
+                colid
+              },
+              class: 'vxe-cell--wrapper'
+            }, column.renderFooter(h, cellParams))
+          ])
     ])
   })
 }

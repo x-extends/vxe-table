@@ -1,6 +1,9 @@
+import { PropType } from 'vue'
 import Cell from './cell'
 import { defineVxeComponent } from '../../ui/src/comp'
 import { assembleColumn, destroyColumn } from './util'
+
+import type { VxeColumnPropTypes } from '../../../types'
 
 export const columnProps = {
   // 列唯一主键
@@ -66,9 +69,11 @@ export const columnProps = {
   // 筛选模板配置项
   filterRender: Object,
   // 设置为树节点
-  treeNode: Boolean,
+  treeNode: Boolean as PropType<VxeColumnPropTypes.TreeNode>,
   // 设置为拖拽排序
-  dragSort: Boolean,
+  dragSort: Boolean as PropType<VxeColumnPropTypes.DragSort>,
+  // 设置为行高拖拽
+  rowResize: Boolean as PropType<VxeColumnPropTypes.RowResize>,
   // 是否可视
   visible: { type: Boolean, default: null },
   // 表头单元格数据导出方法
