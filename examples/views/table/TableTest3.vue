@@ -13,6 +13,7 @@
       :row-config="rowConfig"
       :column-config="{useKey: true}"
       :column-drag-config="{isCrossDrag:true,isToChildDrag:true,isSelfToChildDrag:true}"
+      :resizable-config="resizableConfig"
       :print-config="{}"
       :import-config="{}"
       :export-config="{}"
@@ -59,6 +60,10 @@ const toolbarRef = ref<VxeToolbarInstance>()
 const rowConfig = reactive<VxeTablePropTypes.RowConfig>({
   useKey: true,
   resizable: true
+})
+
+const resizableConfig = reactive<VxeTablePropTypes.ResizableConfig>({
+  isDblclickAutoHeight: true
 })
 
 const demo1 = reactive({

@@ -251,7 +251,7 @@ hooks.add('tableEditModule', {
         const rowid = getRowid($xeTable, newRow)
         insertMaps[rowid] = newRow
       })
-      $xeTable.cacheRowMap()
+      $xeTable.cacheRowMap(false)
       $xeTable.updateScrollYStatus()
       $xeTable.handleTableData(treeConfig && transform)
       if (!(treeConfig && transform)) {
@@ -469,7 +469,7 @@ hooks.add('tableEditModule', {
         editStore.insertMaps = insertDataRowMaps
         reactData.pendingRowMaps = pendingDataRowMaps
         $xeTable.updateFooter()
-        $xeTable.cacheRowMap()
+        $xeTable.cacheRowMap(false)
         $xeTable.handleTableData(treeConfig && transform)
         if (!(treeConfig && transform)) {
           $xeTable.updateAfterDataIndex()
