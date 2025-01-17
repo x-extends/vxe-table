@@ -3,7 +3,7 @@ import { ColumnInfo } from './columnInfo'
 import { isScale, isPx } from '../../ui/src/dom'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeTableDefines, VxeTableConstructor, TableReactData, TableInternalData } from '../../../types'
+import type { VxeTableDefines, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePrivateMethods } from '../../../types'
 
 const getAllConvertColumns = (columns: any, parentColumn?: any) => {
   const result: any[] = []
@@ -200,6 +200,7 @@ export function toFilters (filters: any) {
 
 export function getColReMinWidth (params: any) {
   const { $table, column, cell } = params
+  const internalData = $table
   const { showHeaderOverflow: allColumnHeaderOverflow, resizableOpts } = $table
   const { minWidth } = resizableOpts
   // 如果自定义调整宽度逻辑
@@ -209,6 +210,7 @@ export function getColReMinWidth (params: any) {
       return Math.max(1, XEUtils.toNumber(customMinWidth))
     }
   }
+  const { elemStore } = internalData
   const { showHeaderOverflow, minWidth: colMinWidth } = column
   const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
   const showEllipsis = headOverflow === 'ellipsis'
@@ -232,11 +234,10 @@ export function getColReMinWidth (params: any) {
   }
   // 如果设置最小宽
   if (colMinWidth) {
-    const { refTableBody } = $table.$refs
-    const bodyElem = refTableBody ? refTableBody.$el : null
-    if (bodyElem) {
+    const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+    if (bodyScrollElem) {
       if (isScale(colMinWidth)) {
-        const bodyWidth = bodyElem.clientWidth - 1
+        const bodyWidth = bodyScrollElem.clientWidth - 1
         const meanWidth = bodyWidth / 100
         return Math.max(mWidth, Math.floor(XEUtils.toInteger(colMinWidth) * meanWidth))
       } else if (isPx(colMinWidth)) {
@@ -373,34 +374,29 @@ export function isColumnInfo (column: any) {
   return column instanceof ColumnInfo
 }
 
-export function createColumn ($xeTable: any, options: any, renderOptions: any): any {
+export function createColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, options: any, renderOptions: any): any {
   return isColumnInfo(options) ? options : new ColumnInfo($xeTable, options, renderOptions)
 }
 
-export function rowToVisible ($xeTable: any, row: any) {
-  const reactData = $xeTable
-  const internalData = $xeTable
+export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any) {
   const tableProps = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
   const { showOverflow } = tableProps
-  const refTableBody: any = $xeTable.$refs.refTableBody
-  const { columnStore, scrollYLoad } = reactData
-  const { afterFullData, scrollYStore, fullAllDataRowIdData } = internalData
-  const { rowHeight } = scrollYStore
-  const { leftList, rightList } = columnStore
-  const bodyElem = refTableBody ? refTableBody.$el as HTMLDivElement : null
+  const { scrollYLoad } = reactData
+  const { elemStore, afterFullData, fullAllDataRowIdData, isResizeCellHeight } = internalData
+  const rowOpts = $xeTable.computeRowOpts
+  const cellOpts = $xeTable.computeCellOpts
+  const defaultRowHeight = $xeTable.computeDefaultRowHeight
+  const leftFixedWidth = $xeTable.computeLeftFixedWidth
+  const rightFixedWidth = $xeTable.computeRightFixedWidth
+  const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
   const rowid = getRowid($xeTable, row)
-  let offsetFixedLeft = 0
-  leftList.forEach((item: any) => {
-    offsetFixedLeft += item.renderWidth
-  })
-  let offsetFixedRight = 0
-  rightList.forEach((item: any) => {
-    offsetFixedRight += item.renderWidth
-  })
-  if (bodyElem) {
-    const bodyHeight = bodyElem.clientHeight
-    const bodyScrollTop = bodyElem.scrollTop
-    const trElem: HTMLTableRowElement | null = bodyElem.querySelector(`[rowid="${rowid}"]`)
+  if (bodyScrollElem) {
+    const bodyHeight = bodyScrollElem.clientHeight
+    const bodyScrollTop = bodyScrollElem.scrollTop
+    const trElem: HTMLTableRowElement | null = bodyScrollElem.querySelector(`[rowid="${rowid}"]`)
     if (trElem) {
       const trOffsetParent = trElem.offsetParent as HTMLElement
       const trOffsetTop = trElem.offsetTop + (trOffsetParent ? trOffsetParent.offsetTop : 0)
@@ -414,12 +410,13 @@ export function rowToVisible ($xeTable: any, row: any) {
     } else {
       // 如果是虚拟渲染滚动
       if (scrollYLoad) {
-        if (showOverflow) {
-          return $xeTable.scrollTo(null, ($xeTable.findRowIndexOf(afterFullData, row) - 1) * rowHeight)
+        const isCustomCellHeight = isResizeCellHeight || cellOpts.height || rowOpts.height
+        if (!isCustomCellHeight && showOverflow) {
+          return $xeTable.scrollTo(null, ($xeTable.findRowIndexOf(afterFullData, row) - 1) * defaultRowHeight)
         }
         let scrollTop = 0
         const rowRest = fullAllDataRowIdData[rowid]
-        const rHeight = rowRest ? (rowRest.height || rowHeight) : rowHeight
+        const rHeight = rowRest ? (rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight) : defaultRowHeight
         for (let i = 0; i < afterFullData.length; i++) {
           const currRow = afterFullData[i]
           const currRowid = getRowid($xeTable, currRow)
@@ -427,54 +424,50 @@ export function rowToVisible ($xeTable: any, row: any) {
             break
           }
           const rowRest = fullAllDataRowIdData[currRowid]
-          scrollTop += rowRest ? (rowRest.height || rowHeight) : rowHeight
+          scrollTop += rowRest ? (rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight) : defaultRowHeight
         }
         if (scrollTop < bodyScrollTop) {
-          return $xeTable.scrollTo(null, scrollTop - offsetFixedLeft - 1)
+          return $xeTable.scrollTo(null, scrollTop - leftFixedWidth - 1)
         }
-        return $xeTable.scrollTo(null, (scrollTop + rHeight) - (bodyHeight - offsetFixedRight - 1))
+        return $xeTable.scrollTo(null, (scrollTop + rHeight) - (bodyHeight - rightFixedWidth - 1))
       }
     }
   }
   return Promise.resolve()
 }
 
-export function colToVisible ($xeTable: any, column: any, row?: any) {
-  const { columnStore, scrollXLoad, visibleColumn } = $xeTable
-  const refTableBody: any = $xeTable.$refs.refTableBody
-  const { leftList, rightList } = columnStore
-  const bodyElem = refTableBody ? refTableBody.$el : null
+export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: VxeTableDefines.ColumnInfo, row?: any) {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { scrollXLoad } = reactData
+  const { elemStore, visibleColumn } = internalData
+  const leftFixedWidth = $xeTable.computeLeftFixedWidth
+  const rightFixedWidth = $xeTable.computeRightFixedWidth
+  const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
   if (column.fixed) {
     return Promise.resolve()
   }
-  let offsetFixedLeft = 0
-  leftList.forEach((item: any) => {
-    offsetFixedLeft += item.renderWidth
-  })
-  let offsetFixedRight = 0
-  rightList.forEach((item: any) => {
-    offsetFixedRight += item.renderWidth
-  })
-  if (bodyElem) {
-    const bodyWidth = bodyElem.clientWidth
-    const bodyScrollLeft = bodyElem.scrollLeft
+  if (bodyScrollElem) {
+    const bodyWidth = bodyScrollElem.clientWidth
+    const bodyScrollLeft = bodyScrollElem.scrollLeft
     let tdElem: HTMLTableCellElement | null = null
     if (row) {
       const rowid = getRowid($xeTable, row)
-      tdElem = bodyElem.querySelector(`[rowid="${rowid}"] .${column.id}`)
+      tdElem = bodyScrollElem.querySelector(`[rowid="${rowid}"] .${column.id}`)
     }
     if (!tdElem) {
-      tdElem = bodyElem.querySelector(`.${column.id}`)
+      tdElem = bodyScrollElem.querySelector(`.${column.id}`)
     }
     if (tdElem) {
       const tdOffsetParent = tdElem.offsetParent as HTMLElement
       const tdOffsetLeft = tdElem.offsetLeft + (tdOffsetParent ? tdOffsetParent.offsetLeft : 0)
       const cellWidth = tdElem.clientWidth
       // 检测是否在可视区中
-      if (tdOffsetLeft < (bodyScrollLeft + offsetFixedLeft)) {
-        return $xeTable.scrollTo(tdOffsetLeft - offsetFixedLeft - 1)
-      } else if ((tdOffsetLeft + cellWidth - bodyScrollLeft) > (bodyWidth - offsetFixedRight)) {
-        return $xeTable.scrollTo((tdOffsetLeft + cellWidth) - (bodyWidth - offsetFixedRight - 1))
+      if (tdOffsetLeft < (bodyScrollLeft + leftFixedWidth)) {
+        return $xeTable.scrollTo(tdOffsetLeft - leftFixedWidth - 1)
+      } else if ((tdOffsetLeft + cellWidth - bodyScrollLeft) > (bodyWidth - rightFixedWidth)) {
+        return $xeTable.scrollTo((tdOffsetLeft + cellWidth) - (bodyWidth - rightFixedWidth - 1))
       }
     } else {
       // 检测是否在虚拟渲染可视区中
@@ -482,15 +475,16 @@ export function colToVisible ($xeTable: any, column: any, row?: any) {
         let scrollLeft = 0
         const cellWidth = column.renderWidth
         for (let i = 0; i < visibleColumn.length; i++) {
-          if (visibleColumn[i] === column) {
+          const currCol = visibleColumn[i]
+          if (currCol === column || currCol.id === column.id) {
             break
           }
-          scrollLeft += visibleColumn[i].renderWidth
+          scrollLeft += currCol.renderWidth
         }
         if (scrollLeft < bodyScrollLeft) {
-          return $xeTable.scrollTo(scrollLeft - offsetFixedLeft - 1)
+          return $xeTable.scrollTo(scrollLeft - leftFixedWidth - 1)
         }
-        return $xeTable.scrollTo((scrollLeft + cellWidth) - (bodyWidth - offsetFixedRight - 1))
+        return $xeTable.scrollTo((scrollLeft + cellWidth) - (bodyWidth - rightFixedWidth - 1))
       }
     }
   }

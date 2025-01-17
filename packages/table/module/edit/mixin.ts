@@ -199,7 +199,7 @@ function handleInsertRowAt ($xeTable: any, records: any[], targetRow: any, isIns
     const rowid = getRowid($xeTable, newRow)
     insertMaps[rowid] = newRow
   })
-  $xeTable.cacheRowMap()
+  $xeTable.cacheRowMap(false)
   $xeTable.updateScrollYStatus()
   $xeTable.handleTableData(treeConfig && transform)
   if (!(treeConfig && transform)) {
@@ -376,7 +376,7 @@ export default {
         }
       })
       $xeTable.updateFooter()
-      $xeTable.cacheRowMap()
+      $xeTable.cacheRowMap(false)
       $xeTable.handleTableData(treeConfig && transform)
       if (!(treeConfig && transform)) {
         $xeTable.updateAfterDataIndex()

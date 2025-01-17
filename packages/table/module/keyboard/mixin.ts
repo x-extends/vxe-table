@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils'
+import { getRefElem } from '../../src/util'
 import { browse, hasClass, getAbsolutePos, addClass, removeClass } from '../../../ui/src/dom'
 
 function getTargetOffset (target: any, container: any) {
@@ -24,33 +25,62 @@ function getTargetOffset (target: any, container: any) {
 }
 
 function getCheckboxRangeRows ($xeTable: any, evnt: MouseEvent, params: any, targetTrElem: HTMLElement, trRect: DOMRect, offsetClientTop: number, moveRange: number) {
+  const props = $xeTable
   const reactData = $xeTable
   const internalData = $xeTable
 
+  const { showOverflow } = props
+  const { fullAllDataRowIdData, isResizeCellHeight } = internalData
+  const rowOpts = $xeTable.computeRowOpts
+  const cellOpts = $xeTable.computeCellOpts
+  const defaultRowHeight = $xeTable.computeDefaultRowHeight
+  const { row } = params
   let countHeight = 0
   let rangeRows: any[] = []
   let moveSize = 0
   const isDown = moveRange > 0
-  const { scrollYLoad, rowHeight } = reactData
+  const { scrollYLoad } = reactData
   const { afterFullData } = internalData
+  if (isDown) {
+    moveSize = offsetClientTop + moveRange
+  } else {
+    moveSize = (trRect.height - offsetClientTop) + Math.abs(moveRange)
+  }
   if (scrollYLoad) {
-    if (isDown) {
-      moveSize = offsetClientTop + moveRange
+    const _rowIndex = $xeTable.getVTRowIndex(row)
+    const isCustomCellHeight = isResizeCellHeight || cellOpts.height || rowOpts.height
+    if (!isCustomCellHeight && showOverflow) {
+      if (isDown) {
+        rangeRows = afterFullData.slice(_rowIndex, _rowIndex + Math.ceil(moveSize / defaultRowHeight))
+      } else {
+        rangeRows = afterFullData.slice(_rowIndex - Math.floor(moveSize / defaultRowHeight), _rowIndex + 1)
+      }
     } else {
-      moveSize = (trRect.height - offsetClientTop) + Math.abs(moveRange)
-    }
-    const _rowIndex = $xeTable.getVTRowIndex(params.row)
-    if (isDown) {
-      rangeRows = afterFullData.slice(_rowIndex, _rowIndex + Math.ceil(moveSize / rowHeight))
-    } else {
-      rangeRows = afterFullData.slice(_rowIndex - Math.floor(moveSize / rowHeight), _rowIndex + 1)
+      if (isDown) {
+        for (let i = _rowIndex; i < afterFullData.length; i++) {
+          const item = afterFullData[i]
+          const rowid = $xeTable.getRowid(item)
+          const rowRest = fullAllDataRowIdData[rowid] || {}
+          countHeight += rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight
+          rangeRows.push(item)
+          if (countHeight > moveSize) {
+            return rangeRows
+          }
+        }
+      } else {
+        for (let len = _rowIndex; len >= 0; len--) {
+          const item = afterFullData[len]
+          const rowid = $xeTable.getRowid(item)
+          const rowRest = fullAllDataRowIdData[rowid] || {}
+          countHeight += rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight
+          rangeRows.push(item)
+          if (countHeight > moveSize) {
+            return rangeRows
+          }
+        }
+      }
     }
   } else {
-    if (isDown) {
-      moveSize = evnt.clientY - trRect.y
-    } else {
-      moveSize = trRect.y - evnt.clientY + trRect.height
-    }
     const siblingProp = isDown ? 'next' : 'previous'
     while (targetTrElem && countHeight < moveSize) {
       const rowNodeRest = $xeTable.getRowNode(targetTrElem)
@@ -203,16 +233,27 @@ export default {
     },
     handleCheckboxRangeEvent (evnt: any, params: any) {
       const $xeTable = this
+      const internalData = $xeTable
 
+      const { elemStore } = internalData
+      const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+      const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
+      const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
       const { column, cell } = params
       if (column.type === 'checkbox') {
-        const { $el, elemStore } = this
+        let bodyWrapperElem = bodyScrollElem as HTMLElement
+        if (leftScrollElem && column.fixed === 'left') {
+          bodyWrapperElem = leftScrollElem
+        } else if (rightScrollElem && column.fixed === 'right') {
+          bodyWrapperElem = rightScrollElem
+        }
+        if (!bodyWrapperElem) {
+          return
+        }
+        const el = $xeTable.$refs.refElem as HTMLDivElement
         const disX = evnt.clientX
         const disY = evnt.clientY
-        const bodyWrapperElem = elemStore[`${column.fixed || 'main'}-body-wrapper`] || elemStore['main-body-wrapper']
-        const checkboxRangeElem = bodyWrapperElem.querySelector('.vxe-table--checkbox-range')
-        const domMousemove = document.onmousemove
-        const domMouseup = document.onmouseup
+        const checkboxRangeElem = bodyWrapperElem.querySelector('.vxe-table--checkbox-range') as HTMLElement
         const trElem = cell.parentNode
         const selectRecords = this.getCheckboxRecords()
         let lastRangeRows = []
@@ -312,7 +353,7 @@ export default {
             }
           }, 50)
         }
-        addClass($el, 'drag--range')
+        addClass(el, 'drag--range')
         document.onmousemove = evnt => {
           evnt.preventDefault()
           evnt.stopPropagation()
@@ -338,10 +379,10 @@ export default {
         }
         document.onmouseup = (evnt) => {
           stopMouseScroll()
-          removeClass($el, 'drag--range')
+          removeClass(el, 'drag--range')
           checkboxRangeElem.removeAttribute('style')
-          document.onmousemove = domMousemove
-          document.onmouseup = domMouseup
+          document.onmousemove = null
+          document.onmouseup = null
           triggerEvent('end', evnt)
         }
         triggerEvent('start', evnt)

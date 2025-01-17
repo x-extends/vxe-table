@@ -178,7 +178,7 @@ const renderDragTip = (h: CreateElement, $xeTable: any) => {
   return renderEmptyElement($xeTable)
 }
 
-function handleUupdateResize (_vm: any) {
+function handleUpdateResize (_vm: any) {
   const { $el } = _vm
   if ($el && $el.clientWidth && $el.clientHeight) {
     _vm.recalculate()
@@ -772,6 +772,20 @@ export default {
     tipConfig () {
       return { ...this.tooltipOpts }
     },
+    computeTableTipConfig () {
+      const $xeTable = this
+      const reactData = $xeTable
+
+      const { tooltipStore } = reactData
+      const tooltipOpts = $xeTable.computeTooltipOpts
+      return Object.assign({}, tooltipOpts, tooltipStore.currOpts)
+    },
+    computeValidTipConfig () {
+      const $xeTable = this
+
+      const tooltipOpts = $xeTable.computeTooltipOpts
+      return Object.assign({}, tooltipOpts)
+    },
     validTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipOpts)
     },
@@ -1060,7 +1074,7 @@ export default {
       if (value && value.length >= 50000) {
         warnLog('vxe.error.errLargeData', ['loadData(data), reloadData(data)'])
       }
-      this.loadTableData(value || []).then(() => {
+      this.loadTableData(value || [], false).then(() => {
         this.inited = true
         this.initStatus = true
         if (!initStatus) {
@@ -1135,10 +1149,10 @@ export default {
 
     syncResize (value: any) {
       if (value) {
-        handleUupdateResize(this)
+        handleUpdateResize(this)
         this.$nextTick(() => {
-          handleUupdateResize(this)
-          setTimeout(() => handleUupdateResize(this))
+          handleUpdateResize(this)
+          setTimeout(() => handleUpdateResize(this))
         })
       }
     },
@@ -1242,11 +1256,14 @@ export default {
       if (treeConfig && (treeOpts.showLine || treeOpts.line) && (!(this.rowKey || rowOpts.useKey) || !showOverflow)) {
         warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
       }
+      if (treeConfig && !treeOpts.transform && this.stripe) {
+        warnLog('vxe.error.noTree', ['stripe'])
+      }
       if (this.showFooter && !(this.footerMethod || this.footerData)) {
         warnLog('vxe.error.reqProp', ['footer-data | footer-method'])
       }
-      if (treeConfig && !treeOpts.transform && this.stripe) {
-        warnLog('vxe.error.noTree', ['stripe'])
+      if (rowOpts.height) {
+        warnLog('vxe.error.delProp', ['row-config.height', 'cell-config.height'])
       }
       if (this.tooltipOpts.enabled) {
         warnLog('vxe.error.delProp', ['tooltip-config.enabled', 'tooltip-config.showAll'])
@@ -1392,7 +1409,7 @@ export default {
       endIndex: 1,
       visibleSize: 0
     })
-    this.loadTableData(data).then(() => {
+    this.loadTableData(data, true).then(() => {
       if (data && data.length) {
         this.inited = true
         this.initStatus = true
@@ -1508,10 +1525,11 @@ export default {
     const { xID } = $xeTable
 
     const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
-    const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
+    const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, columnStore, filterStore, customStore } = reactData
     const { leftList, rightList } = columnStore
     const loadingSlot = slots.loading
-    const tooltipOpts = $xeTable.computeTooltipOpts
+    const tableTipConfig = $xeTable.computeTableTipConfig
+    const validTipConfig = $xeTable.computeValidTipConfig
     const validOpts = $xeTable.computeValidOpts
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const treeOpts = $xeTable.computeTreeOpts
@@ -1746,7 +1764,12 @@ export default {
           ? h(VxeUITooltipComponent, {
             key: 'btp',
             ref: 'tooltip',
-            props: Object.assign({}, tooltipOpts, tooltipStore.currOpts)
+            props: {
+              theme: tableTipConfig.theme,
+              enterable: tableTipConfig.enterable,
+              enterDelay: tableTipConfig.enterDelay,
+              leaveDelay: tableTipConfig.leaveDelay
+            }
           })
           : renderEmptyElement($xeTable),
         /**
@@ -1759,7 +1782,12 @@ export default {
             class: [{
               'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete'
             }, 'vxe-table--valid-error'],
-            props: validOpts.message === 'tooltip' || tableData.length === 1 ? Object.assign({ isArrow: false }, tooltipOpts) : {}
+            props: {
+              theme: validTipConfig.theme,
+              enterable: validTipConfig.enterable,
+              enterDelay: validTipConfig.enterDelay,
+              leaveDelay: validTipConfig.leaveDelay
+            }
           })
           : renderEmptyElement($xeTable)
       ])

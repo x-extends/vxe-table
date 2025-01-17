@@ -42,6 +42,8 @@ VxeUI.setConfig({
     resizableConfig: {
       dragMode: 'auto',
       showDragTip: true,
+      isSyncAutoHeight: true,
+      isSyncAutoWidth: true,
       minHeight: 18
     },
     radioConfig: {

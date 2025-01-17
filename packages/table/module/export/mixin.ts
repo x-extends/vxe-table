@@ -984,6 +984,45 @@ export function readLocalFile (options: any = {}) {
   })
 }
 
+function handleFilterColumns (exportOpts: VxeTablePropTypes.ExportConfig, column: VxeTableDefines.ColumnInfo, columns: VxeTableDefines.ColumnInfo[] | VxeTablePropTypes.ExportOrPrintColumnOption[]) {
+  return columns.some((item: any) => {
+    if (isColumnInfo(item)) {
+      return column.id === (item as any).id
+    } else if (XEUtils.isString(item)) {
+      return column.field === item
+    } else {
+      const colid = item.id || item.colId
+      const type = item.type
+      const field = item.field
+      if (colid) {
+        return column.id === colid
+      } else if (field && type) {
+        return column.field === field && column.type === type
+      } else if (field) {
+        return column.field === field
+      } else if (type) {
+        return column.type === type
+      }
+    }
+    return false
+  })
+}
+
+function handleFilterFields (exportOpts: VxeTablePropTypes.ExportConfig, column: VxeTableDefines.ColumnInfo, includeFields: string[] | undefined, excludeFields: string[] | undefined) {
+  if (excludeFields) {
+    if (XEUtils.includes(excludeFields, column.field)) {
+      return false
+    }
+  }
+  if (includeFields) {
+    if (XEUtils.includes(includeFields, column.field)) {
+      return true
+    }
+    return false
+  }
+  return exportOpts.original ? column.field : defaultFilterExportColumn(column)
+}
+
 function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTablePropTypes.ExportOpts | VxeTablePropTypes.ExportConfig, isPrint?: any) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
@@ -1014,7 +1053,7 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
   const modes = defOpts.modes || []
   const checkMethod = customOpts.checkMethod
   const exportColumns = collectColumn.slice(0)
-  const { columns } = defOpts
+  const { columns, excludeFields, includeFields } = defOpts
   // 处理类型
   const typeList = types.map((value) => {
     return {
@@ -1037,33 +1076,17 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
   // 默认选中
   XEUtils.eachTree(exportColumns, (column, index, items, path, parent) => {
     const isColGroup = column.children && column.children.length
-    if (isColGroup || defaultFilterExportColumn(column)) {
-      column.checked = columns
-        ? columns.some((item: any) => {
-          if (isColumnInfo(item)) {
-            return column.id === (item as any).id
-          } else if (XEUtils.isString(item)) {
-            return column.field === item
-          } else {
-            const colid = item.id || item.colId
-            const type = item.type
-            const field = item.field
-            if (colid) {
-              return column.id === colid
-            } else if (field && type) {
-              return column.field === field && column.type === type
-            } else if (field) {
-              return column.field === field
-            } else if (type) {
-              return column.type === type
-            }
-          }
-          return false
-        })
-        : column.visible
-      column.halfChecked = false
-      column.disabled = (parent && parent.disabled) || (checkMethod ? !checkMethod({ column }) : false)
+    let isChecked = false
+    if (columns && columns.length) {
+      isChecked = handleFilterColumns(defOpts, column, columns)
+    } else if (excludeFields || includeFields) {
+      isChecked = handleFilterFields(defOpts, column, includeFields, excludeFields)
+    } else {
+      isChecked = column.visible && (isColGroup || defaultFilterExportColumn(column))
     }
+    column.checked = isChecked
+    column.halfChecked = false
+    column.disabled = (parent && parent.disabled) || (checkMethod ? !checkMethod({ column }) : false)
   })
   // 更新条件
   Object.assign(exportStore, {
