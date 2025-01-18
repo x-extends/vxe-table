@@ -201,8 +201,8 @@ VxeUI.setConfig({
       oSize: 2
     },
     scrollbarConfig: {
-      width: 10,
-      height: 10
+      // width: 0,
+      // height: 0
     }
   },
   // export: {
