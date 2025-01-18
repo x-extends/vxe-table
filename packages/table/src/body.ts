@@ -735,7 +735,7 @@ export default {
         $xeTable.triggerBodyScrollEvent(evnt, fixedType)
       }
     }
-    if (scrollYLoad || leftFixedWidth || rightFixedWidth) {
+    if (leftFixedWidth || rightFixedWidth) {
       ons.wheel = $xeTable.triggerBodyWheelEvent
     }
 

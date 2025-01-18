@@ -418,13 +418,15 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { border, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
-  const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, scrollbarWidth, scrollbarHeight, columnStore, editStore, isAllOverflow, expandColumn } = reactData
+  const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, columnStore, editStore, isAllOverflow, expandColumn } = reactData
   const { visibleColumn, fullColumnIdData, tableHeight, tableWidth, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
   const el = $xeTable.$refs.refElem as HTMLDivElement
   if (!el) {
     return
   }
   const containerList = ['main', 'left', 'right']
+  const osbWidth = overflowY ? scrollbarWidth : 0
+  const osbHeight = overflowX ? scrollbarHeight : 0
   const emptyPlaceholderElem = $xeTable.$refs.refEmptyPlaceholder as HTMLDivElement
   const cellOffsetWidth = $xeTable.computeCellOffsetWidth
   const mouseOpts = $xeTable.computeMouseOpts
@@ -432,17 +434,17 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const bodyTableElem = getRefElem(elemStore['main-body-table'])
   if (emptyPlaceholderElem) {
     emptyPlaceholderElem.style.top = `${headerHeight}px`
-    emptyPlaceholderElem.style.height = bodyWrapperElem ? `${bodyWrapperElem.offsetHeight - scrollbarHeight}px` : ''
+    emptyPlaceholderElem.style.height = bodyWrapperElem ? `${bodyWrapperElem.offsetHeight - osbHeight}px` : ''
   }
 
   let bodyHeight = 0
   let bodyMaxHeight = 0
-  const bodyMinHeight = customMinHeight - headerHeight - footerHeight - scrollbarHeight
+  const bodyMinHeight = customMinHeight - headerHeight - footerHeight - osbHeight
   if (customMaxHeight) {
-    bodyMaxHeight = Math.max(bodyMinHeight, customMaxHeight - headerHeight - footerHeight - scrollbarHeight)
+    bodyMaxHeight = Math.max(bodyMinHeight, customMaxHeight - headerHeight - footerHeight - osbHeight)
   }
   if (customHeight) {
-    bodyHeight = customHeight - headerHeight - footerHeight - scrollbarHeight
+    bodyHeight = customHeight - headerHeight - footerHeight - osbHeight
   }
   if (!bodyHeight) {
     if (bodyTableElem) {
@@ -461,28 +463,28 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const scrollbarXToTop = $xeTable.computeScrollbarXToTop
   const scrollXVirtualEl = $xeTable.$refs.refScrollXVirtualElem as HTMLDivElement
   if (scrollXVirtualEl) {
-    scrollXVirtualEl.style.height = `${scrollbarHeight}px`
-    scrollXVirtualEl.style.visibility = scrollbarHeight ? 'visible' : 'hidden'
+    scrollXVirtualEl.style.height = `${osbHeight}px`
+    scrollXVirtualEl.style.visibility = overflowX ? 'visible' : 'hidden'
   }
   const xWrapperEl = $xeTable.$refs.refScrollXWrapperElem as HTMLDivElement
   if (xWrapperEl) {
-    xWrapperEl.style.left = scrollbarXToTop ? `${scrollbarWidth}px` : ''
-    xWrapperEl.style.width = `${el.clientWidth - scrollbarWidth}px`
+    xWrapperEl.style.left = scrollbarXToTop ? `${osbWidth}px` : ''
+    xWrapperEl.style.width = `${el.clientWidth - osbWidth}px`
   }
   if (xLeftCornerEl) {
-    xLeftCornerEl.style.width = scrollbarXToTop ? `${scrollbarWidth}px` : ''
-    xLeftCornerEl.style.display = scrollbarXToTop ? (scrollbarWidth && scrollbarHeight ? 'block' : '') : ''
+    xLeftCornerEl.style.width = scrollbarXToTop ? `${osbWidth}px` : ''
+    xLeftCornerEl.style.display = scrollbarXToTop ? (osbWidth && osbHeight ? 'block' : '') : ''
   }
   if (xRightCornerEl) {
-    xRightCornerEl.style.width = scrollbarXToTop ? '' : `${scrollbarWidth}px`
-    xRightCornerEl.style.display = scrollbarXToTop ? '' : (scrollbarWidth && scrollbarHeight ? 'block' : '')
+    xRightCornerEl.style.width = scrollbarXToTop ? '' : `${osbWidth}px`
+    xRightCornerEl.style.display = scrollbarXToTop ? '' : (osbWidth && osbHeight ? 'block' : '')
   }
 
   const scrollYVirtualEl = $xeTable.$refs.refScrollYVirtualElem as HTMLDivElement
   if (scrollYVirtualEl) {
-    scrollYVirtualEl.style.width = `${scrollbarWidth}px`
+    scrollYVirtualEl.style.width = `${osbWidth}px`
     scrollYVirtualEl.style.height = `${bodyHeight + headerHeight + footerHeight}px`
-    scrollYVirtualEl.style.visibility = scrollbarWidth ? 'visible' : 'hidden'
+    scrollYVirtualEl.style.visibility = overflowY ? 'visible' : 'hidden'
   }
   const yTopCornerEl = $xeTable.$refs.refScrollYTopCornerElem as HTMLDivElement
   if (yTopCornerEl) {
@@ -608,7 +610,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
           if (wrapperElem) {
             wrapperElem.style.top = `${headerHeight}px`
           }
-          fixedWrapperElem.style.height = `${customHeight > 0 ? customHeight : (tableHeight + headerHeight + footerHeight + scrollbarHeight)}px`
+          fixedWrapperElem.style.height = `${customHeight > 0 ? customHeight : (tableHeight + headerHeight + footerHeight + osbHeight)}px`
           fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, 0)}px`
         }
 
@@ -643,7 +645,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
         if (tableElem) {
           tableElem.style.width = tWidth ? `${tWidth}px` : ''
           // 兼容性处理
-          tableElem.style.paddingRight = scrollbarWidth && fixedType && (browse['-moz'] || browse.safari) ? `${scrollbarWidth}px` : ''
+          tableElem.style.paddingRight = osbWidth && fixedType && (browse['-moz'] || browse.safari) ? `${osbWidth}px` : ''
         }
         const emptyBlockElem = getRefElem(elemStore[`${name}-${layout}-emptyBlock`])
         if (emptyBlockElem) {
@@ -683,7 +685,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
           // 如果是固定列
           if (fixedWrapperElem) {
             if (wrapperElem) {
-              wrapperElem.style.top = `${customHeight > 0 ? customHeight - footerHeight - scrollbarHeight : tableHeight + headerHeight}px`
+              wrapperElem.style.top = `${customHeight > 0 ? customHeight - footerHeight - osbHeight : tableHeight + headerHeight}px`
             }
           }
         }
@@ -1063,7 +1065,7 @@ function autoCellWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
   }
   const tableHeight = bodyElem.offsetHeight
   const overflowY = yHandleEl.scrollHeight > yHandleEl.clientHeight
-  reactData.scrollbarWidth = overflowY ? Math.max(scrollbarOpts.width || 0, yHandleEl.offsetWidth - yHandleEl.clientWidth) : 0
+  reactData.scrollbarWidth = Math.max(scrollbarOpts.width || 0, yHandleEl.offsetWidth - yHandleEl.clientWidth)
   reactData.overflowY = overflowY
   internalData.tableWidth = tableWidth
   internalData.tableHeight = tableHeight
@@ -1073,7 +1075,7 @@ function autoCellWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
   const headerHeight = headerTableElem ? headerTableElem.clientHeight : 0
   const overflowX = tableWidth > bodyWidth
   const footerHeight = footerTableElem ? footerTableElem.clientHeight : 0
-  reactData.scrollbarHeight = overflowX ? Math.max(scrollbarOpts.height || 0, xHandleEl.offsetHeight - xHandleEl.clientHeight) : 0
+  reactData.scrollbarHeight = Math.max(scrollbarOpts.height || 0, xHandleEl.offsetHeight - xHandleEl.clientHeight)
   internalData.headerHeight = headerHeight
   internalData.footerHeight = footerHeight
   reactData.overflowX = overflowX
@@ -1265,9 +1267,11 @@ function showDropTip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, ev
   if (!el) {
     return
   }
-  const { scrollbarWidth, scrollbarHeight } = reactData
+  const { overflowX, scrollbarWidth, overflowY, scrollbarHeight } = reactData
   const { prevDragToChild } = internalData
   const wrapperRect = el.getBoundingClientRect()
+  const osbWidth = overflowY ? scrollbarWidth : 0
+  const osbHeight = overflowX ? scrollbarHeight : 0
   const tableWidth = el.clientWidth
   const tableHeight = el.clientHeight
   if (trEl) {
@@ -1278,14 +1282,14 @@ function showDropTip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, ev
         const trRect = trEl.getBoundingClientRect()
         let trHeight = trEl.clientHeight
         const offsetTop = Math.max(1, trRect.y - wrapperRect.y)
-        if (offsetTop + trHeight > tableHeight - scrollbarHeight) {
-          trHeight = tableHeight - offsetTop - scrollbarHeight
+        if (offsetTop + trHeight > tableHeight - osbHeight) {
+          trHeight = tableHeight - offsetTop - osbHeight
         }
         rdLineEl.style.display = 'block'
-        rdLineEl.style.left = `${scrollbarYToLeft ? scrollbarWidth : 0}px`
+        rdLineEl.style.left = `${scrollbarYToLeft ? osbWidth : 0}px`
         rdLineEl.style.top = `${offsetTop}px`
         rdLineEl.style.height = `${trHeight}px`
-        rdLineEl.style.width = `${tableWidth - scrollbarWidth}px`
+        rdLineEl.style.width = `${tableWidth - osbWidth}px`
         rdLineEl.setAttribute('drag-pos', dragPos)
         rdLineEl.setAttribute('drag-to-child', prevDragToChild ? 'y' : 'n')
       } else {
@@ -1310,7 +1314,7 @@ function showDropTip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, ev
           thWidth -= startX - offsetLeft
           offsetLeft = startX
         }
-        const endX = tableWidth - rightContainerWidth - (rightContainerWidth ? 0 : scrollbarWidth)
+        const endX = tableWidth - rightContainerWidth - (rightContainerWidth ? 0 : osbWidth)
         if (offsetLeft + thWidth > endX) {
           thWidth = endX - offsetLeft
         }
@@ -1321,7 +1325,7 @@ function showDropTip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, ev
         if (prevDragToChild) {
           cdLineEl.style.height = `${thRect.height}px`
         } else {
-          cdLineEl.style.height = `${tableHeight - offsetTop - (scrollbarXToTop ? 0 : scrollbarHeight)}px`
+          cdLineEl.style.height = `${tableHeight - offsetTop - (scrollbarXToTop ? 0 : osbHeight)}px`
         }
         cdLineEl.setAttribute('drag-pos', dragPos)
         cdLineEl.setAttribute('drag-to-child', prevDragToChild ? 'y' : 'n')
@@ -1362,6 +1366,9 @@ function hideDropTip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
 function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: MouseEvent, tdEl: HTMLTableCellElement, overflowElem: HTMLElement, tipElem: HTMLElement | null, params: any) {
   const reactData = $xeTable as unknown as TableReactData
 
+  if (!overflowElem) {
+    return $xeTable.$nextTick()
+  }
   params.cell = tdEl
   const { tooltipStore } = reactData
   const tooltipOpts = $xeTable.computeTooltipOpts
@@ -1750,6 +1757,46 @@ function loadScrollYData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   }
 }
 
+function lazyScrollXData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { lxTimeout, lxRunTime, scrollXStore } = internalData
+  const { visibleSize } = scrollXStore
+  const fpsTime = Math.max(5, Math.min(10, Math.floor(visibleSize / 3)))
+  if (lxTimeout) {
+    clearTimeout(lxTimeout)
+  }
+  if (!lxRunTime || lxRunTime + fpsTime < Date.now()) {
+    internalData.lxRunTime = Date.now()
+    loadScrollXData($xeTable)
+  }
+  internalData.lxTimeout = setTimeout(() => {
+    internalData.lxTimeout = undefined
+    internalData.lxRunTime = undefined
+    loadScrollXData($xeTable)
+  }, fpsTime)
+}
+
+function lazyScrollYData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { lyTimeout, lyRunTime, scrollYStore } = internalData
+  const { visibleSize } = scrollYStore
+  const fpsTime = Math.floor(Math.max(4, Math.min(10, visibleSize / 3)))
+  if (lyTimeout) {
+    clearTimeout(lyTimeout)
+  }
+  if (!lyRunTime || lyRunTime + fpsTime < Date.now()) {
+    internalData.lyRunTime = Date.now()
+    loadScrollYData($xeTable)
+  }
+  internalData.lyTimeout = setTimeout(() => {
+    internalData.lyTimeout = undefined
+    internalData.lyRunTime = undefined
+    loadScrollYData($xeTable)
+  }, fpsTime)
+}
+
 function checkLastSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, isRollX: boolean, isRollY: boolean) {
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -1781,6 +1828,45 @@ function checkLastSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     }
     $xeTable.updateCellAreas()
   }, 200)
+}
+
+const getWheelSpeed = (lastScrollTime: number) => {
+  let multiple = 1
+  const currTime = Date.now()
+  if (lastScrollTime + 25 > currTime) {
+    multiple = 1.18
+  } else if (lastScrollTime + 30 > currTime) {
+    multiple = 1.15
+  } else if (lastScrollTime + 40 > currTime) {
+    multiple = 1.12
+  } else if (lastScrollTime + 55 > currTime) {
+    multiple = 1.09
+  } else if (lastScrollTime + 75 > currTime) {
+    multiple = 1.06
+  } else if (lastScrollTime + 100 > currTime) {
+    multiple = 1.03
+  }
+  return multiple
+}
+
+const wheelScrollTo = (diffNum: number, cb: (progress: number) => void) => {
+  const duration = Math.abs(diffNum)
+  const startTime = performance.now()
+  let countTop = 0
+  const step = (timestamp: number) => {
+    let progress = (timestamp - startTime) / duration
+    if (progress > 1) {
+      progress = 1
+    }
+    const easedProgress = Math.pow(progress, 2)
+    const offsetTop = Math.floor((diffNum * easedProgress)) - countTop
+    countTop += offsetTop
+    cb(offsetTop)
+    if (progress < 1) {
+      requestAnimationFrame(step)
+    }
+  }
+  requestAnimationFrame(step)
 }
 
 function updateHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
@@ -3610,9 +3696,10 @@ const Methods = {
     evnt.stopPropagation()
     evnt.preventDefault()
     const { column } = params
-    const { scrollbarHeight } = reactData
+    const { overflowX, scrollbarHeight } = reactData
     const { elemStore, visibleColumn } = internalData
     const resizableOpts = $xeTable.computeResizableOpts
+    const osbHeight = overflowX ? scrollbarHeight : 0
     const tableEl = $xeTable.$refs.refElem as HTMLDivElement
     const leftContainerElem = $xeTable.$refs.refLeftContainer as HTMLDivElement
     const rightContainerElem = $xeTable.$refs.refRightContainer as HTMLDivElement
@@ -3687,8 +3774,8 @@ const Methods = {
       dragLeft = Math.max(left, dragMinLeft)
       const resizeBarLeft = Math.max(1, dragLeft - scrollLeft)
       resizeBarElem.style.left = `${resizeBarLeft}px`
-      resizeBarElem.style.top = `${scrollbarXToTop ? scrollbarHeight : 0}px`
-      resizeBarElem.style.height = `${scrollbarXToTop ? tableHeight - scrollbarHeight : tableHeight}px`
+      resizeBarElem.style.top = `${scrollbarXToTop ? osbHeight : 0}px`
+      resizeBarElem.style.height = `${scrollbarXToTop ? tableHeight - osbHeight : tableHeight}px`
       if (resizableOpts.showDragTip && resizeTipElem) {
         resizeTipElem.textContent = getI18n('vxe.table.resizeColTip', [resizeColumn.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)])
         const tableWidth = tableEl.clientWidth
@@ -3794,8 +3881,10 @@ const Methods = {
     evnt.stopPropagation()
     evnt.preventDefault()
     const { row } = params
-    const { scrollbarWidth, scrollbarHeight } = reactData
+    const { overflowX, scrollbarWidth, overflowY, scrollbarHeight } = reactData
     const { elemStore, fullAllDataRowIdData } = internalData
+    const osbWidth = overflowY ? scrollbarWidth : 0
+    const osbHeight = overflowX ? scrollbarHeight : 0
     const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
     const resizableOpts = $xeTable.computeResizableOpts
     const rowOpts = $xeTable.computeRowOpts
@@ -3836,15 +3925,15 @@ const Methods = {
     const updateEvent = (evnt: MouseEvent) => {
       evnt.stopPropagation()
       evnt.preventDefault()
-      const tableWidth = tableEl.clientWidth - scrollbarWidth
-      const tableHeight = tableEl.clientHeight - scrollbarHeight
+      const tableWidth = tableEl.clientWidth - osbWidth
+      const tableHeight = tableEl.clientHeight - osbHeight
       let dragTop = evnt.clientY - tableRect.y - targetOffsetY
       if (dragTop < minTop) {
         dragTop = minTop
       } else {
         resizeHeight = Math.max(cellMinHeight, currCellHeight + evnt.clientY - dragClientY)
       }
-      resizeBarElem.style.left = `${scrollbarYToLeft ? scrollbarWidth : 0}px`
+      resizeBarElem.style.left = `${scrollbarYToLeft ? osbWidth : 0}px`
       resizeBarElem.style.top = `${dragTop}px`
       resizeBarElem.style.width = `${tableWidth}px`
       if (resizableOpts.showDragTip && resizeTipElem) {
@@ -7701,48 +7790,6 @@ const Methods = {
     }
     $xeTable.dispatchEvent('scroll', evntParams, evnt)
   },
-  lazyScrollXData () {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const internalData = $xeTable as unknown as TableInternalData
-
-    const { lxTimeout, lxRunTime, scrollXStore } = internalData
-    const { visibleSize } = scrollXStore
-    const fpsTime = Math.max(5, Math.min(80, Math.floor(visibleSize * 3)))
-    if (lxTimeout) {
-      clearTimeout(lxTimeout)
-    }
-    if (!lxRunTime || lxRunTime + fpsTime < Date.now()) {
-      internalData.lxRunTime = Date.now()
-      loadScrollXData($xeTable)
-    }
-    internalData.lxTimeout = setTimeout(() => {
-      internalData.lxTimeout = undefined
-      internalData.lxRunTime = undefined
-      loadScrollXData($xeTable)
-    }, fpsTime)
-  },
-  lazyScrollYData () {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const props = $xeTable
-    const internalData = $xeTable as unknown as TableInternalData
-
-    const { showOverflow } = props
-    const { lyTimeout, lyRunTime, scrollYStore } = internalData
-    const { visibleSize } = scrollYStore
-    const fpsTime = showOverflow ? 5 : Math.max(5, Math.min(80, Math.floor(visibleSize / 2)))
-    if (lyTimeout) {
-      clearTimeout(lyTimeout)
-    }
-    if (!lyRunTime || lyRunTime + fpsTime < Date.now()) {
-      internalData.lyRunTime = Date.now()
-      loadScrollYData($xeTable)
-    }
-    internalData.lyTimeout = setTimeout(() => {
-      internalData.lyTimeout = undefined
-      internalData.lyRunTime = undefined
-      loadScrollYData($xeTable)
-    }, fpsTime)
-  },
   /**
    * 横向 X 可视渲染事件处理
    */
@@ -7753,7 +7800,7 @@ const Methods = {
     if (sXOpts.immediate) {
       loadScrollXData($xeTable)
     } else {
-      $xeTable.lazyScrollXData()
+      lazyScrollXData($xeTable)
     }
   },
   /**
@@ -7766,7 +7813,7 @@ const Methods = {
     if (sYOpts.immediate) {
       loadScrollYData($xeTable)
     } else {
-      $xeTable.lazyScrollYData()
+      lazyScrollYData($xeTable)
     }
   },
   triggerBodyScrollEvent (evnt: Event, fixedType: '' | 'left' | 'right') {
@@ -7944,24 +7991,9 @@ const Methods = {
       return
     }
 
-    let multiple = 1
-
-    if (reactData.lastScrollTime + 25 > Date.now()) {
-      multiple = 1.18
-    } else if (reactData.lastScrollTime + 30 > Date.now()) {
-      multiple = 1.15
-    } else if (reactData.lastScrollTime + 40 > Date.now()) {
-      multiple = 1.12
-    } else if (reactData.lastScrollTime + 55 > Date.now()) {
-      multiple = 1.09
-    } else if (reactData.lastScrollTime + 75 > Date.now()) {
-      multiple = 1.06
-    } else if (reactData.lastScrollTime + 100 > Date.now()) {
-      multiple = 1.03
-    }
-
-    const deltaTop = deltaY * multiple
-    const deltaLeft = deltaX * multiple
+    const wheelSpeed = getWheelSpeed(reactData.lastScrollTime)
+    const deltaTop = deltaY * wheelSpeed
+    const deltaLeft = deltaX * wheelSpeed
 
     const isTopWheel = deltaTop < 0
     const currScrollTop = bodyScrollElem.scrollTop
@@ -7982,17 +8014,31 @@ const Methods = {
         $xeTable.clearHoverRow()
       }
 
-      internalData.inWheelScroll = true
-      setScrollTop(yHandleEl, scrollTop)
-      setScrollTop(bodyScrollElem, scrollTop)
-      setScrollTop(leftScrollElem, scrollTop)
-      setScrollTop(rightScrollElem, scrollTop)
-
-      loadScrollYData($xeTable, scrollTop)
-      $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
-        type: 'footer',
-        fixed: ''
+      wheelScrollTo(scrollTop - bodyScrollElem.scrollTop, (offsetTop: number) => {
+        const currTopNum = bodyScrollElem.scrollTop + offsetTop
+        internalData.inWheelScroll = true
+        setScrollTop(yHandleEl, currTopNum)
+        setScrollTop(bodyScrollElem, currTopNum)
+        setScrollTop(leftScrollElem, currTopNum)
+        setScrollTop(rightScrollElem, currTopNum)
+        $xeTable.triggerScrollYEvent(evnt)
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, currTopNum, scrollLeft, {
+          type: 'table',
+          fixed: ''
+        })
       })
+
+      // internalData.inWheelScroll = true
+      // setScrollTop(yHandleEl, scrollTop)
+      // setScrollTop(bodyScrollElem, scrollTop)
+      // setScrollTop(leftScrollElem, scrollTop)
+      // setScrollTop(rightScrollElem, scrollTop)
+
+      // loadScrollYData($xeTable, scrollTop)
+      // $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
+      //   type: 'footer',
+      //   fixed: ''
+      // })
     }
   },
   triggerVirtualScrollXEvent (evnt: Event) {

@@ -457,26 +457,6 @@
 
 /*scroll*/
 .vxe-table {
-  &.is--scroll-x {
-    &:hover {
-      & > .vxe-table--scroll-x-virtual {
-        .vxe-table--scroll-x-handle {
-          overflow-x: scroll;
-        }
-      }
-    }
-  }
-  &.is--scroll-y {
-    &:hover {
-      & > .vxe-table--layout-wrapper {
-        & > .vxe-table--scroll-y-virtual {
-          .vxe-table--scroll-y-handle {
-            overflow-y: scroll;
-          }
-        }
-      }
-    }
-  }
   &.is--loading {
     & > .vxe-table--scroll-x-virtual {
       visibility: hidden;
@@ -518,7 +498,7 @@
   }
   .vxe-table--scroll-x-handle {
     overflow-y: hidden;
-    overflow-x: auto;
+    overflow-x: scroll;
     height: 18px;
   }
   .vxe-table--scroll-x-wrapper {
@@ -532,7 +512,7 @@
     top: 0;
   }
   .vxe-table--scroll-y-handle {
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
     width: 18px;
     height: 100%;
