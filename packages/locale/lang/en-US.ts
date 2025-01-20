@@ -55,7 +55,7 @@ export default {
     table: {
       emptyText: 'No data yet',
       allTitle: 'Select all/Cancel',
-      seqTitle: 'serial number',
+      seqTitle: 'Serial number',
       actionTitle: 'operate',
       confirmFilter: 'filter',
       resetFilter: 'reset',
