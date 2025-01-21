@@ -4861,9 +4861,12 @@ const Methods = {
    * 关闭 tooltip
    */
   closeTooltip () {
-    const { $refs, tooltipStore } = this
-    const tooltip = $refs.tooltip
-    const commTip = $refs.refCommTooltip
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+
+    const { tooltipStore } = reactData
+    const tooltip = $xeTable.$refs.refTooltip as VxeTooltipInstance
+    const commTip = $xeTable.$refs.refCommTooltip as VxeTooltipInstance
     if (tooltipStore.visible) {
       Object.assign(tooltipStore, {
         row: null,
@@ -6319,7 +6322,11 @@ const Methods = {
                   // 根到根
                 }
 
-                const fullList = XEUtils.toTreeArray(internalData.afterTreeFullData, { children: childrenField })
+                const fullList = XEUtils.toTreeArray(internalData.afterTreeFullData, {
+                  key: rowField,
+                  parentKey: parentField,
+                  children: mapChildrenField
+                })
 
                 // 移出
                 const otfIndex = $xeTable.findRowIndexOf(fullList, dragRow)
@@ -6339,10 +6346,10 @@ const Methods = {
                 dragRow[parentField] = isDragToChildFlag ? prevDragRow[rowField] : prevDragRow[parentField]
 
                 internalData.tableFullTreeData = XEUtils.toArrayTree(fullList, {
-                  key: treeOpts.rowField,
-                  parentKey: treeOpts.parentField,
+                  key: rowField,
+                  parentKey: parentField,
                   children: childrenField,
-                  mapChildren: treeOpts.mapChildrenField
+                  mapChildren: mapChildrenField
                 })
               }
             }

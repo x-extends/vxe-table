@@ -1542,6 +1542,8 @@
         }
       }
     }
+    &.col--cs-height,
+    &.col--rs-height,
     &.col--auto-height {
       overflow: hidden;
       & > .vxe-cell {
