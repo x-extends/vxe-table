@@ -132,6 +132,13 @@ function getElementMarginWidth (elem: any) {
   return 0
 }
 
+export function getCellHeight (height: number | 'unset' | undefined | null) {
+  if (height === 'unset') {
+    return 0
+  }
+  return height || 0
+}
+
 export function handleFieldOrColumn (_vm: any, fieldOrColumn: any) {
   if (fieldOrColumn) {
     return XEUtils.isString(fieldOrColumn) || XEUtils.isNumber(fieldOrColumn) ? _vm.getColumnByField(`${fieldOrColumn}`) : fieldOrColumn

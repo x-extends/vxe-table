@@ -2,7 +2,7 @@ import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getClass } from '../../ui/src/utils'
-import { convertHeaderColumnToRows } from './util'
+import { getCellHeight, convertHeaderColumnToRows } from './util'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes, TableReactData, TableInternalData, VxeComponentStyleType } from '../../../types'
 
@@ -27,7 +27,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
   const cellOpts = $xeTable.computeCellOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const headerCellOpts = $xeTable.computeHeaderCellOpts
-  const currCellHeight = headerCellOpts.height || cellOpts.height || defaultRowHeight
+  const currCellHeight = getCellHeight(headerCellOpts.height || cellOpts.height) || defaultRowHeight
   const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
   return cols.map((column: any, $columnIndex: any) => {
     const { type, showHeaderOverflow, headerAlign, align, filters, headerClassName, editRender, cellRender } = column
@@ -269,10 +269,11 @@ export default {
     const { fixedType, fixedColumn, tableColumn } = props
     const { headerColumn } = this
 
-    const { showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
+    const { mouseConfig, showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
     const { isGroup, scrollXLoad, scrollYLoad, dragCol } = tableReactData
     const { visibleColumn, fullColumnIdData } = tableInternalData
 
+    const mouseOpts = $xeTable.computeMouseOpts
     let renderHeaderList = headerColumn as VxeTableDefines.ColumnInfo[][]
     let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
     let isOptimizeMode = false
@@ -376,15 +377,32 @@ export default {
            */
           h('thead', {
             ref: 'refHeaderTHead'
-          }, renderHeads(h, this, isGroup, isOptimizeMode, renderHeaderList))
-        ]),
-        /**
-         * 其他
-         */
-        h('div', {
-          ref: 'refHeaderBorderRepair',
-          class: 'vxe-table--header-border-line'
-        })
+          }, renderHeads(h, this, isGroup, isOptimizeMode, renderHeaderList)),
+          mouseConfig && mouseOpts.area
+            ? h('div', {
+              class: 'vxe-table--cell-area'
+            }, [
+              h('span', {
+                class: 'vxe-table--cell-main-area'
+              }),
+              h('span', {
+                class: 'vxe-table--cell-copy-area'
+              }),
+              h('span', {
+                class: 'vxe-table--cell-extend-area'
+              }),
+              h('span', {
+                class: 'vxe-table--cell-multi-area'
+              }),
+              h('span', {
+                class: 'vxe-table--cell-active-area'
+              }),
+              h('span', {
+                class: 'vxe-table--cell-col-status-area'
+              })
+            ])
+            : renderEmptyElement($xeTable)
+        ])
       ])
     ])
   },

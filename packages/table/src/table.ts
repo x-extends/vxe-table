@@ -1074,7 +1074,7 @@ export default {
       if (value && value.length >= 50000) {
         warnLog('vxe.error.errLargeData', ['loadData(data), reloadData(data)'])
       }
-      this.loadTableData(value || [], false).then(() => {
+      this.loadTableData(value || [], true).then(() => {
         this.inited = true
         this.initStatus = true
         if (!initStatus) {
@@ -1763,7 +1763,7 @@ export default {
         VxeUITooltipComponent
           ? h(VxeUITooltipComponent, {
             key: 'btp',
-            ref: 'tooltip',
+            ref: 'refTooltip',
             props: {
               theme: tableTipConfig.theme,
               enterable: tableTipConfig.enterable,

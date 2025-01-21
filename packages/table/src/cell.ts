@@ -6,7 +6,7 @@ import { updateCellTitle } from '../../ui/src/dom'
 import { createColumn, getRowid } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 
-import type { VxeTableDefines, VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeComponentSlotType, TableReactData, TableInternalData } from '../../../types'
+import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeComponentSlotType, TableReactData, TableInternalData } from '../../../types'
 
 const { getI18n, getIcon, renderer, formats, renderEmptyElement } = VxeUI
 
@@ -206,25 +206,6 @@ function renderTitleContent (h: CreateElement, params: VxeTableDefines.CellRende
   ]
 }
 
-function formatFooterLabel (footerFormatter: VxeColumnPropTypes.FooterFormatter, params: {
-  itemValue: any
-  column: VxeTableDefines.ColumnInfo
-  row: any
-  items: any[]
-  _columnIndex: number
-}) {
-  if (XEUtils.isFunction(footerFormatter)) {
-    return `${footerFormatter(params)}`
-  }
-  const isArr = XEUtils.isArray(footerFormatter)
-  const gFormatOpts = isArr ? formats.get(footerFormatter[0]) : formats.get(footerFormatter)
-  const footerFormatMethod = gFormatOpts ? gFormatOpts.tableFooterCellFormatMethod : null
-  if (footerFormatMethod) {
-    return `${isArr ? footerFormatMethod(params, ...footerFormatter.slice(1)) : footerFormatMethod(params)}`
-  }
-  return ''
-}
-
 function getFooterContent (h: CreateElement, params: VxeTableDefines.CellRenderFooterParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { $table, column, _columnIndex, row, items } = params
   const { slots, editRender, cellRender, footerFormatter } = column
@@ -232,40 +213,37 @@ function getFooterContent (h: CreateElement, params: VxeTableDefines.CellRenderF
   if (slots && slots.footer) {
     return $table.callSlot(slots.footer, params, h)
   }
-  if (renderOpts) {
-    const compConf = renderer.get(renderOpts.name)
-    const rtFooter = compConf ? (compConf.renderTableFooter || compConf.renderFooter) : null
-    if (rtFooter) {
-      return getSlotVNs(rtFooter.call($table, h, renderOpts, params))
-    }
-  }
   let itemValue = ''
   // 兼容老模式
   if (XEUtils.isArray(items)) {
     itemValue = items[_columnIndex]
-    return [
-      footerFormatter
-        ? formatFooterLabel(footerFormatter, {
-          itemValue,
-          column,
-          row,
-          items,
-          _columnIndex
-        })
-        : formatText(itemValue, 1)
-    ]
+  } else {
+    itemValue = XEUtils.get(row, column.field)
   }
-  itemValue = XEUtils.get(row, column.field)
+  const footParams = Object.assign(params, {
+    itemValue
+  })
+  if (footerFormatter) {
+    if (XEUtils.isFunction(footerFormatter)) {
+      return `${footerFormatter(footParams)}`
+    }
+    const isArr = XEUtils.isArray(footerFormatter)
+    const gFormatOpts = isArr ? formats.get(footerFormatter[0]) : formats.get(footerFormatter)
+    const footerFormatMethod = gFormatOpts ? gFormatOpts.tableFooterCellFormatMethod : null
+    if (footerFormatMethod) {
+      return `${isArr ? footerFormatMethod(footParams, ...footerFormatter.slice(1)) : footerFormatMethod(footParams)}`
+    }
+    return ''
+  }
+  if (renderOpts) {
+    const compConf = renderer.get(renderOpts.name)
+    const rtFooter = compConf ? (compConf.renderTableFooter || compConf.renderFooter) : null
+    if (rtFooter) {
+      return getSlotVNs(rtFooter.call($table, h, renderOpts, footParams))
+    }
+  }
   return [
-    footerFormatter
-      ? formatFooterLabel(footerFormatter, {
-        itemValue,
-        column,
-        row,
-        items,
-        _columnIndex
-      })
-      : formatText(itemValue, 1)
+    formatText(itemValue, 1)
   ]
 }
 

@@ -21,7 +21,10 @@ export const columnProps = {
   // 列最大宽度
   maxWidth: [Number, String],
   // 是否允许拖动列宽调整大小
-  resizable: { type: Boolean, default: null },
+  resizable: {
+    type: Boolean,
+    default: null
+  },
   // 将列固定在左侧或者右侧
   fixed: String,
   // 列对其方式
@@ -31,11 +34,20 @@ export const columnProps = {
   // 表尾列的对齐方式
   footerAlign: String,
   // 当内容过长时显示为省略号
-  showOverflow: { type: [Boolean, String], default: null },
+  showOverflow: {
+    type: [Boolean, String],
+    default: null
+  },
   // 当表头内容过长时显示为省略号
-  showHeaderOverflow: { type: [Boolean, String], default: null },
+  showHeaderOverflow: {
+    type: [Boolean, String],
+    default: null
+  },
   // 当表尾内容过长时显示为省略号
-  showFooterOverflow: { type: [Boolean, String], default: null },
+  showFooterOverflow: {
+    type: [Boolean, String],
+    default: null
+  },
   // 给单元格附加 className
   className: [String, Function],
   // 给表头单元格附加 className
@@ -46,10 +58,23 @@ export const columnProps = {
   formatter: [Function, Array, String],
   // 格式化表尾显示内容
   footerFormatter: [Function, Array, String],
+  // 是否显示间距
+  padding: {
+    type: Boolean as PropType<VxeColumnPropTypes.Padding>,
+    default: null
+  },
+  // 垂直对齐方式
+  verticalAlign: {
+    type: String as PropType<VxeColumnPropTypes.VerticalAlign>,
+    default: null
+  },
   // 是否允许排序
   sortable: Boolean,
   // 在 v3 中废弃
-  remoteSort: { type: Boolean, default: null },
+  remoteSort: {
+    type: Boolean,
+    default: null
+  },
   // 在 v3 中只支持字符串类型
   sortBy: [String, Function],
   // 排序的字段类型，比如字符串转数值等
@@ -57,9 +82,15 @@ export const columnProps = {
   // 在 v3 中废弃
   sortMethod: Function,
   // 配置筛选条件数组
-  filters: { type: Array, default: null },
+  filters: {
+    type: Array,
+    default: null
+  },
   // 筛选是否允许多选
-  filterMultiple: { type: Boolean, default: true },
+  filterMultiple: {
+    type: Boolean,
+    default: true
+  },
   // 自定义筛选方法
   filterMethod: Function,
   // 筛选重置方法
@@ -75,7 +106,9 @@ export const columnProps = {
   // 设置为行高拖拽
   rowResize: Boolean as PropType<VxeColumnPropTypes.RowResize>,
   // 是否可视
-  visible: { type: Boolean, default: null },
+  visible: {
+    type: Boolean, default: null
+  },
   // 表头单元格数据导出方法
   headerExportMethod: Function,
   // 单元格数据导出方法

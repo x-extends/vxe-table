@@ -3,6 +3,7 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getClass } from '../../ui/src/utils'
 import { updateCellTitle } from '../../ui/src/dom'
+import { getCellHeight } from './util'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, TableReactData, TableInternalData, VxeComponentStyleType } from '../../../types'
 
@@ -40,7 +41,7 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const cellOpts = $xeTable.computeCellOpts
   const footerCellOpts = $xeTable.computeFooterCellOpts
-  const currCellHeight = footerCellOpts.height || cellOpts.height || defaultRowHeight
+  const currCellHeight = getCellHeight(footerCellOpts.height || cellOpts.height) || defaultRowHeight
 
   return tableColumn.map((column: any, $columnIndex: any) => {
     const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column

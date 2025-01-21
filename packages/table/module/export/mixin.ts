@@ -5,7 +5,7 @@ import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
-import type { VxeTablePropTypes, VxeGridConstructor, VxeTableDefines, TableReactData, TableInternalData, GridReactData, VxeColumnPropTypes, VxeTableConstructor } from '../../../../types'
+import type { VxeTablePropTypes, VxeGridConstructor, VxeTableDefines, TableReactData, VxeTablePrivateMethods, TableInternalData, GridReactData, VxeColumnPropTypes, VxeTableConstructor } from '../../../../types'
 
 const { getI18n, renderer } = VxeUI
 
@@ -643,7 +643,7 @@ function handleExport ($xeTable: any, opts: VxeTablePropTypes.ExportHandleOption
 }
 
 function getElementsByTagName (elem: any, qualifiedName: any) {
-  return elem.getElementsByTagName(qualifiedName)
+  return elem.getElementsByTagName(qualifiedName) as HTMLElement[]
 }
 
 function getTxtCellKey (now: any) {
@@ -659,32 +659,50 @@ function getTxtCellValue (val: any, vMaps: any) {
   return rest.replace(/^"+$/g, (qVal: any) => '"'.repeat(Math.ceil(qVal.length / 2)))
 }
 
-function parseCsvAndTxt (columns: any, content: any, cellSeparator: any) {
+function toExportField (tableConf: {
+  fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
+  titleMaps: Record<string, VxeTableDefines.ColumnInfo>
+}, field: string) {
+  const { fieldMaps, titleMaps } = tableConf
+  // title 转 field
+  if (!fieldMaps[field]) {
+    const teCol = titleMaps[field]
+    if (teCol && teCol.field) {
+      field = teCol.field
+    }
+  }
+  return field
+}
+
+function parseCsvAndTxt (tableConf: {
+  fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
+  titleMaps: Record<string, VxeTableDefines.ColumnInfo>
+}, content: string, cellSeparator: string) {
   const list = content.split(enterSymbol)
   const rows: any[] = []
-  let fields : any[] = []
+  let fields: string[] = []
   if (list.length) {
     const vMaps: any = {}
     const now = Date.now()
-    list.forEach((rVal: any) => {
+    list.forEach((rVal) => {
       if (rVal) {
         const item: any = {}
-        rVal = rVal.replace(/("")|(\n)/g, (text: any, dVal: any) => {
+        rVal = rVal.replace(/("")|(\n)/g, (text: string, dVal: string) => {
           const key = getTxtCellKey(now)
           vMaps[key] = dVal ? '"' : '\n'
           return key
-        }).replace(/"(.*?)"/g, (text: any, cVal: any) => {
+        }).replace(/"(.*?)"/g, (text: string, cVal: string) => {
           const key = getTxtCellKey(now)
           vMaps[key] = replaceTxtCell(cVal, vMaps)
           return key
         })
-        const cells = rVal.split(cellSeparator)
+        const cells: string[] = rVal.split(cellSeparator)
         if (!fields.length) {
-          fields = cells.map((val: any) => getTxtCellValue(val.trim(), vMaps))
+          fields = cells.map((val: string) => toExportField(tableConf, getTxtCellValue(val.trim(), vMaps)))
         } else {
-          cells.forEach((val: any, colIndex: any) => {
+          cells.forEach((val, colIndex) => {
             if (colIndex < fields.length) {
-              item[fields[colIndex]] = getTxtCellValue(val, vMaps)
+              item[fields[colIndex]] = getTxtCellValue(val.trim(), vMaps)
             }
           })
           rows.push(item)
@@ -695,35 +713,44 @@ function parseCsvAndTxt (columns: any, content: any, cellSeparator: any) {
   return { fields, rows }
 }
 
-function parseCsv (columns: any, content: any) {
-  return parseCsvAndTxt(columns, content, ',')
+function parseCsv (tableConf: {
+  fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
+  titleMaps: Record<string, VxeTableDefines.ColumnInfo>
+}, content: string) {
+  return parseCsvAndTxt(tableConf, content, ',')
 }
 
-function parseTxt (columns: any, content: any) {
-  return parseCsvAndTxt(columns, content, '\t')
+function parseTxt (tableConf: {
+  fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
+  titleMaps: Record<string, VxeTableDefines.ColumnInfo>
+}, content: string) {
+  return parseCsvAndTxt(tableConf, content, '\t')
 }
 
-function parseHTML (columns: any, content: any) {
+function parseHTML (tableConf: {
+  fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
+  titleMaps: Record<string, VxeTableDefines.ColumnInfo>
+}, content: string) {
   const domParser = new DOMParser()
   const xmlDoc = domParser.parseFromString(content, 'text/html')
   const bodyNodes = getElementsByTagName(xmlDoc, 'body')
-  const rows : any[] = []
-  const fields: any[] = []
+  const rows: any[] = []
+  const fields: string[] = []
   if (bodyNodes.length) {
     const tableNodes = getElementsByTagName(bodyNodes[0], 'table')
     if (tableNodes.length) {
       const theadNodes = getElementsByTagName(tableNodes[0], 'thead')
       if (theadNodes.length) {
-        XEUtils.arrayEach(getElementsByTagName(theadNodes[0], 'tr'), (rowNode: any) => {
-          XEUtils.arrayEach(getElementsByTagName(rowNode, 'th'), (cellNode: any) => {
-            fields.push(cellNode.textContent)
+        XEUtils.arrayEach(getElementsByTagName(theadNodes[0], 'tr'), rowNode => {
+          XEUtils.arrayEach(getElementsByTagName(rowNode, 'th'), cellNode => {
+            fields.push(toExportField(tableConf, cellNode.textContent || ''))
           })
         })
         const tbodyNodes = getElementsByTagName(tableNodes[0], 'tbody')
         if (tbodyNodes.length) {
           XEUtils.arrayEach(getElementsByTagName(tbodyNodes[0], 'tr'), rowNode => {
-            const item : any = {}
-            XEUtils.arrayEach(getElementsByTagName(rowNode, 'td'), (cellNode: any, colIndex) => {
+            const item: any = {}
+            XEUtils.arrayEach(getElementsByTagName(rowNode, 'td'), (cellNode, colIndex) => {
               if (fields[colIndex]) {
                 item[fields[colIndex]] = cellNode.textContent || ''
               }
@@ -737,25 +764,28 @@ function parseHTML (columns: any, content: any) {
   return { fields, rows }
 }
 
-function parseXML (columns: any, content: any) {
+function parseXML (tableConf: {
+  fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
+  titleMaps: Record<string, VxeTableDefines.ColumnInfo>
+}, content: string) {
   const domParser = new DOMParser()
   const xmlDoc = domParser.parseFromString(content, 'application/xml')
   const sheetNodes = getElementsByTagName(xmlDoc, 'Worksheet')
   const rows: any[] = []
-  const fields : any[] = []
+  const fields: string[] = []
   if (sheetNodes.length) {
     const tableNodes = getElementsByTagName(sheetNodes[0], 'Table')
     if (tableNodes.length) {
       const rowNodes = getElementsByTagName(tableNodes[0], 'Row')
       if (rowNodes.length) {
-        XEUtils.arrayEach(getElementsByTagName(rowNodes[0], 'Cell'), (cellNode: any) => {
-          fields.push(cellNode.textContent)
+        XEUtils.arrayEach(getElementsByTagName(rowNodes[0], 'Cell'), cellNode => {
+          fields.push(toExportField(tableConf, cellNode.textContent || ''))
         })
         XEUtils.arrayEach(rowNodes, (rowNode, index) => {
           if (index) {
-            const item : any = {}
+            const item: any = {}
             const cellNodes = getElementsByTagName(rowNode, 'Cell')
-            XEUtils.arrayEach(cellNodes, (cellNode: any, colIndex: any) => {
+            XEUtils.arrayEach(cellNodes, (cellNode, colIndex) => {
               if (fields[colIndex]) {
                 item[fields[colIndex]] = cellNode.textContent
               }
@@ -769,51 +799,56 @@ function parseXML (columns: any, content: any) {
   return { fields, rows }
 }
 
-/**
- * 检查导入的列是否完整
- * @param {Array} fields 字段名列表
- * @param {Array} rows 数据列表
- */
-function checkImportData (columns: any[], fields: any[]) {
-  const tableFields: any[] = []
-  columns.forEach((column) => {
+function handleImport ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, content: any, opts: any) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { tableFullColumn, _importResolve, _importReject } = internalData
+  let rest: {
+    fields: string[];
+    rows: any[];
+  } = { fields: [], rows: [] }
+  const tableFieldMaps: Record<string, VxeTableDefines.ColumnInfo> = {}
+  const tableTitleMaps: Record<string, VxeTableDefines.ColumnInfo> = {}
+  tableFullColumn.forEach((column) => {
     const field = column.field
+    const title = column.getTitle()
     if (field) {
-      tableFields.push(field)
+      tableFieldMaps[field] = column
+    }
+    if (title) {
+      tableTitleMaps[column.getTitle()] = column
     }
   })
-  return fields.some(field => tableFields.indexOf(field) > -1)
-}
-
-function handleImport ($xetable: any, content: any, opts: any) {
-  const { tableFullColumn, _importResolve, _importReject } = $xetable
-  let rest: any = { fields: [], rows: [] }
+  const tableConf = {
+    fieldMaps: tableFieldMaps,
+    titleMaps: tableTitleMaps
+  }
   switch (opts.type) {
     case 'csv':
-      rest = parseCsv(tableFullColumn, content)
+      rest = parseCsv(tableConf, content)
       break
     case 'txt':
-      rest = parseTxt(tableFullColumn, content)
+      rest = parseTxt(tableConf, content)
       break
     case 'html':
-      rest = parseHTML(tableFullColumn, content)
+      rest = parseHTML(tableConf, content)
       break
     case 'xml':
-      rest = parseXML(tableFullColumn, content)
+      rest = parseXML(tableConf, content)
       break
   }
   const { fields, rows } = rest
-  const status = checkImportData(tableFullColumn, fields)
+  const status = fields.some(field => tableFieldMaps[field] || tableTitleMaps[field])
   if (status) {
-    $xetable.createData(rows)
+    $xeTable.createData(rows)
       .then((data: any) => {
         let loadRest
         if (opts.mode === 'insert' || opts.mode === 'insertBottom') {
-          loadRest = $xetable.insertAt(data, -1)
+          loadRest = $xeTable.insertAt(data, -1)
         } if (opts.mode === 'insertTop') {
-          loadRest = $xetable.insert(data)
+          loadRest = $xeTable.insert(data)
         } else {
-          loadRest = $xetable.reloadData(data)
+          loadRest = $xeTable.reloadData(data)
         }
         if (opts.message !== false) {
           // 检测弹窗模块
