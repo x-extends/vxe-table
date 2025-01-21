@@ -81,8 +81,10 @@ VxeUI.setConfig({
       padding: true
     },
     headerCellConfig: {
+      height: 'unset'
     },
     footerCellConfig: {
+      height: 'unset'
     },
     // menuConfig: {
     //   visibleMethod () {}

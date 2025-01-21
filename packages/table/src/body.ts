@@ -114,7 +114,8 @@ export default defineComponent({
       const rowOpts = computeRowOpts.value
       const rowDragOpts = computeRowDragOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
-      const currCellHeight = cellOpts.height || rowOpts.height || defaultRowHeight
+      const customCellHeight = cellOpts.height || rowOpts.height
+      const currCellHeight = customCellHeight || defaultRowHeight
       const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = rowDragOpts
       const columnOpts = computeColumnOpts.value
       const mouseOpts = computeMouseOpts.value
@@ -141,6 +142,7 @@ export default defineComponent({
       const showTitle = cellOverflow === 'title'
       const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
       const hasEllipsis = isAllOverflow || showTitle || showTooltip || showEllipsis
+      const isCsHeight = !!customCellHeight
       const isRsHeight = resizeHeight > 0
       let isDirty
       const tdOns: any = {}
@@ -289,7 +291,7 @@ export default defineComponent({
       }
 
       const tcStyle: Record<string, string> = {}
-      if (scrollYLoad || hasEllipsis || isRsHeight) {
+      if (scrollYLoad || hasEllipsis || isCsHeight || isRsHeight) {
         tcStyle.height = `${cellHeight}px`
       } else {
         tcStyle.minHeight = `${cellHeight}px`
@@ -394,6 +396,7 @@ export default defineComponent({
             'col--tree-node': treeNode,
             'col--edit': isEdit,
             'col--ellipsis': hasEllipsis,
+            'col--cs-height': isCsHeight,
             'col--rs-height': isRsHeight,
             'col--to-row': showAreaRowStatus,
             'col--auto-height': isVNAutoHeight,

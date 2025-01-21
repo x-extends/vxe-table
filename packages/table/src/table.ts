@@ -8005,7 +8005,11 @@ export default defineComponent({
                       // 根到根
                     }
 
-                    const fullList = XEUtils.toTreeArray(internalData.afterTreeFullData, { children: childrenField })
+                    const fullList = XEUtils.toTreeArray(internalData.afterTreeFullData, {
+                      key: rowField,
+                      parentKey: parentField,
+                      children: mapChildrenField
+                    })
 
                     // 移出
                     const otfIndex = $xeTable.findRowIndexOf(fullList, dragRow)
@@ -8025,10 +8029,10 @@ export default defineComponent({
                     dragRow[parentField] = isDragToChildFlag ? prevDragRow[rowField] : prevDragRow[parentField]
 
                     internalData.tableFullTreeData = XEUtils.toArrayTree(fullList, {
-                      key: treeOpts.rowField,
-                      parentKey: treeOpts.parentField,
+                      key: rowField,
+                      parentKey: parentField,
                       children: childrenField,
-                      mapChildren: treeOpts.mapChildrenField
+                      mapChildren: mapChildrenField
                     })
                   }
                 }
