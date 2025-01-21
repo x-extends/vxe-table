@@ -178,6 +178,13 @@ export function getRefElem (refEl: any) {
   return null
 }
 
+export function getCellHeight (height: number | 'unset' | undefined | null) {
+  if (height === 'unset') {
+    return 0
+  }
+  return height || 0
+}
+
 /**
  * 列宽拖动最大宽度
  * @param params
@@ -483,7 +490,7 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
           return $xeTable.scrollTo(null, ($xeTable.findRowIndexOf(afterFullData, row) - 1) * defaultRowHeight)
         }
         let scrollTop = 0
-        const rowRest = fullAllDataRowIdData[rowid]
+        const rowRest = fullAllDataRowIdData[rowid] || {}
         const rHeight = rowRest ? (rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight) : defaultRowHeight
         for (let i = 0; i < afterFullData.length; i++) {
           const currRow = afterFullData[i]
@@ -491,8 +498,8 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
           if (currRow === row || currRowid === rowid) {
             break
           }
-          const rowRest = fullAllDataRowIdData[currRowid]
-          scrollTop += rowRest ? (rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight) : defaultRowHeight
+          const currRowRest = fullAllDataRowIdData[currRowid] || {}
+          scrollTop += currRowRest.resizeHeight || currRowRest.height || cellOpts.height || rowOpts.height || defaultRowHeight
         }
         if (scrollTop < bodyScrollTop) {
           return $xeTable.scrollTo(null, scrollTop - leftFixedWidth - 1)

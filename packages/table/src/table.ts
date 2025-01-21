@@ -344,10 +344,6 @@ export default defineComponent({
       fullDataRowIdData: {},
       fullColumnIdData: {},
       fullColumnFieldData: {},
-      // 列选取状态
-      columnStatusMaps: {},
-      // 行选取状态
-      rowStatusMaps: {},
       // prevDragRow: null,
 
       inited: false,
@@ -941,13 +937,13 @@ export default defineComponent({
     }
 
     const computeRowHeight = () => {
-      const { showOverflow } = props
+      const { isAllOverflow } = reactData
       const tableHeader = refTableHeader.value
       const tableBody = refTableBody.value
       const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
       const defaultRowHeight = computeDefaultRowHeight.value
       let rowHeight = 0
-      if (showOverflow) {
+      if (isAllOverflow) {
         if (tableBodyElem) {
           const tableHeaderElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
           let firstTrElem
@@ -970,7 +966,7 @@ export default defineComponent({
     }
 
     const handleVirtualYVisible = (currScrollTop?: number) => {
-      const { showOverflow } = props
+      const { isAllOverflow } = reactData
       const { elemStore, isResizeCellHeight, afterFullData, fullAllDataRowIdData } = internalData
       const rowOpts = computeRowOpts.value
       const cellOpts = computeCellOpts.value
@@ -984,15 +980,15 @@ export default defineComponent({
         let offsetTop = 0
         let visibleSize = 0
         const isCustomCellHeight = isResizeCellHeight || cellOpts.height || rowOpts.height
-        if (!isCustomCellHeight && showOverflow) {
+        if (!isCustomCellHeight && isAllOverflow) {
           toVisibleIndex = Math.floor(scrollTop / defaultRowHeight)
           visibleSize = Math.ceil(clientHeight / defaultRowHeight) + 1
         } else {
           for (let rIndex = 0, rLen = afterFullData.length; rIndex < rLen; rIndex++) {
             const row = afterFullData[rIndex]
             const rowid = getRowid($xeTable, row)
-            const rowRest = fullAllDataRowIdData[rowid]
-            offsetTop += rowRest ? (rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight) : defaultRowHeight
+            const rowRest = fullAllDataRowIdData[rowid] || {}
+            offsetTop += rowRest.resizeHeight || rowRest.height || cellOpts.height || rowOpts.height || defaultRowHeight
             if (toVisibleIndex === -1 && scrollTop < offsetTop) {
               toVisibleIndex = rIndex
             }
@@ -1499,35 +1495,32 @@ export default defineComponent({
 
     const calcCellAutoHeight = (rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
       const cellElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`)
-      let topBottomPadding = 0
-      const firstCellEl = cellElemList[0]
-      if (firstCellEl && firstCellEl.parentElement) {
-        const cellStyle = getComputedStyle(firstCellEl.parentElement)
-        topBottomPadding = Math.ceil(XEUtils.toNumber(cellStyle.paddingTop) + XEUtils.toNumber(cellStyle.paddingBottom))
-      }
-      let colHeight = rowRest.height - topBottomPadding
+      let colHeight = rowRest.height
       for (let i = 0; i < cellElemList.length; i++) {
         const cellElem = cellElemList[i] as HTMLElement
+        const tdEl = cellElem.parentElement as HTMLTableCellElement
+        const topBottomPadding = Math.ceil(XEUtils.toNumber(tdEl.style.paddingTop) + XEUtils.toNumber(tdEl.style.paddingBottom))
         const cellHeight = cellElem ? cellElem.clientHeight : 0
-        colHeight = Math.max(colHeight, Math.ceil(cellHeight))
+        colHeight = Math.max(colHeight - topBottomPadding, Math.ceil(cellHeight))
       }
-      return colHeight + topBottomPadding
+      return colHeight
     }
 
     const calcCellHeight = () => {
-      const { showOverflow } = props
-      const { tableData, scrollYLoad, scrollXLoad } = reactData
+      const { tableData, isAllOverflow, scrollYLoad, scrollXLoad } = reactData
       const { fullAllDataRowIdData } = internalData
       const defaultRowHeight = computeDefaultRowHeight.value
       const el = refElem.value
-      if (!showOverflow && scrollYLoad && el) {
+      if (!isAllOverflow && scrollYLoad && el) {
+        el.setAttribute('data-calc-row', 'Y')
         tableData.forEach(row => {
           const rowid = getRowid($xeTable, row)
           const rowRest = fullAllDataRowIdData[rowid]
           if (rowRest) {
-            const height = calcCellAutoHeight(rowRest, el)
-            rowRest.height = Math.max(defaultRowHeight, scrollXLoad ? Math.max(rowRest.height, height) : height)
+            const reHeight = calcCellAutoHeight(rowRest, el)
+            rowRest.height = Math.max(defaultRowHeight, scrollXLoad ? Math.max(rowRest.height, reHeight) : reHeight)
           }
+          el.removeAttribute('data-calc-row')
         })
         reactData.calcCellHeightFlag++
       }
@@ -1782,7 +1775,7 @@ export default defineComponent({
     }
 
     const updateStyle = () => {
-      const { border, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
+      const { border, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
       const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, columnStore, editStore, isAllOverflow, expandColumn } = reactData
       const { visibleColumn, fullColumnIdData, tableHeight, tableWidth, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
       const el = refElem.value
@@ -1984,7 +1977,7 @@ export default defineComponent({
 
             let isOptimizeMode = false
             // 如果是使用优化模式
-            if (scrollXLoad || scrollYLoad || (allColumnOverflow && isAllOverflow)) {
+            if (scrollXLoad || scrollYLoad || isAllOverflow) {
               if (expandColumn || spanMethod || footerSpanMethod) {
                 // 如果不支持优化模式
               } else {
@@ -2073,7 +2066,7 @@ export default defineComponent({
                 } else if (layout === 'footer') {
                   cellOverflow = XEUtils.isUndefined(showFooterOverflow) || XEUtils.isNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
                 } else {
-                  cellOverflow = XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow) ? allColumnOverflow : showOverflow
+                  cellOverflow = XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow) ? isAllOverflow : showOverflow
                 }
                 const showEllipsis = cellOverflow === 'ellipsis'
                 const showTitle = cellOverflow === 'title'
@@ -2667,11 +2660,10 @@ export default defineComponent({
      * @param {Array} datas 数据
      */
     const loadTableData = (datas: any[], isReset: boolean) => {
-      const { keepSource, treeConfig, showOverflow } = props
+      const { keepSource, treeConfig } = props
       const { editStore, scrollYLoad: oldScrollYLoad } = reactData
       const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
       const treeOpts = computeTreeOpts.value
-      const rowOpts = computeRowOpts.value
       const { transform } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       let treeData = []
@@ -2730,32 +2722,14 @@ export default defineComponent({
       internalData.tableSynchData = datas
       if (isReset) {
         internalData.isResizeCellHeight = false
+        reactData.rowExpandedMaps = {}
+        reactData.rowExpandLazyLoadedMaps = {}
+        reactData.treeExpandedMaps = {}
+        reactData.treeExpandLazyLoadedMaps = {}
       }
       // 克隆原数据，用于显示编辑状态，与编辑值做对比
       if (keepSource) {
         tablePrivateMethods.cacheSourceMap(fullData)
-      }
-      if (sYLoad) {
-        if (showOverflow) {
-          if (!rowOpts.height) {
-            const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
-            if (errColumn) {
-              errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
-            }
-          }
-        }
-
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (!(props.height || props.maxHeight)) {
-            errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
-          }
-          // if (!props.showOverflow) {
-          //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
-          // }
-          if (props.spanMethod) {
-            warnLog('vxe.error.scrollErrProp', ['table.span-method'])
-          }
-        }
       }
       if ($xeTable.clearCellAreas && props.mouseConfig) {
         $xeTable.clearCellAreas()
@@ -2775,6 +2749,30 @@ export default defineComponent({
         if (sYLoad) {
           scrollYStore.endIndex = scrollYStore.visibleSize
         }
+
+        if (sYLoad) {
+          // if (showOverflow) {
+          //   if (!rowOpts.height) {
+          //     const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
+          //     if (errColumn) {
+          //       errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+          //     }
+          //   }
+          // }
+
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
+            if (!(props.height || props.maxHeight)) {
+              errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+            }
+            // if (!props.showOverflow) {
+            //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
+            // }
+            if (props.spanMethod) {
+              warnLog('vxe.error.scrollErrProp', ['table.span-method'])
+            }
+          }
+        }
+
         handleReserveStatus()
         tablePrivateMethods.checkSelectionStatus()
         return new Promise<void>(resolve => {
@@ -3177,11 +3175,10 @@ export default defineComponent({
      * 纵向 Y 可视渲染处理
      */
     const loadScrollYData = (scrollTop?: number) => {
-      const { showOverflow } = props
-      const { mergeList } = reactData
+      const { mergeList, isAllOverflow } = reactData
       const { scrollYStore } = internalData
       const { preloadSize, startIndex, endIndex, offsetSize } = scrollYStore
-      const autoOffsetYSize = showOverflow ? offsetSize : offsetSize + 1
+      const autoOffsetYSize = isAllOverflow ? offsetSize : offsetSize + 1
       const { toVisibleIndex, visibleSize } = handleVirtualYVisible(scrollTop)
       const offsetItem = {
         startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize - preloadSize),
@@ -4283,7 +4280,7 @@ export default defineComponent({
           if (rowRest) {
             const resizeHeight = rowRest.resizeHeight
             if (resizeHeight || isFull) {
-              const currCellHeight = resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight
+              const currCellHeight = resizeHeight || rowRest.height || cellOpts.height || rowOpts.height || defaultRowHeight
               rest[rowid] = currCellHeight
             }
           }
@@ -4328,8 +4325,10 @@ export default defineComponent({
         const defaultRowHeight = computeDefaultRowHeight.value
         const rowid = XEUtils.isString(rowOrId) || XEUtils.isNumber(rowOrId) ? rowOrId : getRowid($xeTable, rowOrId)
         const rowRest = fullAllDataRowIdData[rowid]
-        const currCellHeight = rowRest ? rowRest.resizeHeight : (cellOpts.height || rowOpts.height || defaultRowHeight)
-        return currCellHeight
+        if (rowRest) {
+          return rowRest.resizeHeight || rowRest.height || cellOpts.height || rowOpts.height || defaultRowHeight
+        }
+        return 0
       },
       /**
        * 刷新滚动操作，手动同步滚动相关位置（对于某些特殊的操作，比如滚动条错位、固定列不同步）
@@ -5407,8 +5406,7 @@ export default defineComponent({
        * @param {ColumnInfo} fieldOrColumn 列配置
        */
       scrollToRow (row, fieldOrColumn) {
-        const { showOverflow } = props
-        const { scrollYLoad, scrollXLoad } = reactData
+        const { isAllOverflow, scrollYLoad, scrollXLoad } = reactData
         const rest = []
         if (row) {
           if (props.treeConfig) {
@@ -5422,7 +5420,7 @@ export default defineComponent({
         }
         return Promise.all(rest).then(() => {
           if (row) {
-            if (!showOverflow && (scrollYLoad || scrollXLoad)) {
+            if (!isAllOverflow && (scrollYLoad || scrollXLoad)) {
               calcCellHeight()
               calcCellWidth()
             }
@@ -6838,6 +6836,7 @@ export default defineComponent({
             resizeTipElem.style.left = `${resizeTipLeft}px`
             resizeTipElem.style.top = `${Math.min(tableHeight - resizeTipHeight, Math.max(0, evnt.clientY - wrapperRect.y - resizeTipHeight / 2))}px`
           }
+          reactData.isDragResize = true
         }
 
         reactData.isDragResize = true
@@ -6848,8 +6847,11 @@ export default defineComponent({
           document.onmousemove = null
           document.onmouseup = null
           resizeBarElem.style.display = 'none'
-          reactData.isDragResize = false
           internalData._lastResizeTime = Date.now()
+
+          setTimeout(() => {
+            reactData.isDragResize = false
+          }, 50)
 
           const resizeWidth = resizeColumn.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
           const resizeParams = { ...params, resizeWidth, resizeColumn }
@@ -6881,6 +6883,8 @@ export default defineComponent({
         const { isDblclickAutoWidth } = resizableOpts
         const el = refElem.value
         if (isDblclickAutoWidth && el) {
+          evnt.stopPropagation()
+          evnt.preventDefault()
           const { fullColumnIdData } = internalData
           const { column } = params
           let resizeColumn = column
@@ -6947,7 +6951,7 @@ export default defineComponent({
           return
         }
         const defaultRowHeight = computeDefaultRowHeight.value
-        const currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight
+        const currCellHeight = rowRest.resizeHeight || rowRest.height || cellOpts.height || rowOpts.height || defaultRowHeight
         const tableRect = tableEl.getBoundingClientRect()
         const trRect = trEl.getBoundingClientRect()
         const targetOffsetY = dragClientY - trRect.y - trEl.clientHeight
@@ -6989,6 +6993,7 @@ export default defineComponent({
             resizeTipElem.style.left = `${resizeBarLeft}px`
             resizeTipElem.style.top = `${resizeBarTop}px`
           }
+          reactData.isDragResize = true
         }
 
         reactData.isDragResize = true
@@ -6999,8 +7004,12 @@ export default defineComponent({
           document.onmousemove = null
           document.onmouseup = null
           resizeBarElem.style.display = 'none'
-          reactData.isDragResize = false
           internalData._lastResizeTime = Date.now()
+
+          setTimeout(() => {
+            reactData.isDragResize = false
+          }, 50)
+
           if (resizeHeight !== currCellHeight) {
             const resizeParams = { ...params, resizeHeight, resizeRow: row }
             internalData.isResizeCellHeight = true
@@ -7020,22 +7029,35 @@ export default defineComponent({
         const { isDblclickAutoHeight } = resizableOpts
         const el = refElem.value
         if (isDblclickAutoHeight && el) {
+          evnt.stopPropagation()
+          evnt.preventDefault()
+          const { editStore } = reactData
           const { fullAllDataRowIdData } = internalData
+          const { actived } = editStore
           const { row } = params
           const rowid = getRowid($xeTable, row)
           const rowRest = fullAllDataRowIdData[rowid]
           if (!rowRest) {
             return
           }
-          const resizeHeight = calcCellAutoHeight(rowRest, el)
-          const resizeParams = { ...params, resizeHeight, resizeRow: row }
-          reactData.isDragResize = false
-          internalData._lastResizeTime = Date.now()
-          if ($xeTable.handleRowResizeDblclickCellAreaEvent) {
-            $xeTable.handleRowResizeDblclickCellAreaEvent(evnt, resizeParams)
+          const handleRsHeight = () => {
+            el.setAttribute('data-calc-row', 'Y')
+            const resizeHeight = calcCellAutoHeight(rowRest, el)
+            el.removeAttribute('data-calc-row')
+            const resizeParams = { ...params, resizeHeight, resizeRow: row }
+            reactData.isDragResize = false
+            internalData._lastResizeTime = Date.now()
+            if ($xeTable.handleRowResizeDblclickCellAreaEvent) {
+              $xeTable.handleRowResizeDblclickCellAreaEvent(evnt, resizeParams)
+            } else {
+              rowRest.resizeHeight = resizeHeight
+              handleUpdateRowResize(evnt, resizeParams)
+            }
+          }
+          if (actived.row || actived.column) {
+            $xeTable.clearEdit().then(handleRsHeight)
           } else {
-            rowRest.resizeHeight = resizeHeight
-            handleUpdateRowResize(evnt, resizeParams)
+            handleRsHeight()
           }
         }
       },
@@ -7449,11 +7471,11 @@ export default defineComponent({
           internalData.tooltipTimeout = setTimeout(() => {
             $tooltip = refTooltip.value
             if ($tooltip && $tooltip.isActived && !$tooltip.isActived()) {
-              tableMethods.closeTooltip()
+              $xeTable.closeTooltip()
             }
           }, tooltipOpts.leaveDelay)
         } else {
-          tableMethods.closeTooltip()
+          $xeTable.closeTooltip()
         }
       },
       triggerHeaderCellClickEvent (evnt, params) {
@@ -7483,7 +7505,10 @@ export default defineComponent({
        */
       triggerCellClickEvent (evnt, params) {
         const { highlightCurrentRow, editConfig } = props
-        const { editStore } = reactData
+        const { editStore, isDragResize } = reactData
+        if (isDragResize) {
+          return
+        }
         const expandOpts = computeExpandOpts.value
         const editOpts = computeEditOpts.value
         const treeOpts = computeTreeOpts.value
@@ -7575,7 +7600,10 @@ export default defineComponent({
        */
       triggerCellDblclickEvent (evnt, params) {
         const { editConfig } = props
-        const { editStore } = reactData
+        const { editStore, isDragResize } = reactData
+        if (isDragResize) {
+          return
+        }
         const editOpts = computeEditOpts.value
         const { actived } = editStore
         const cell = evnt.currentTarget as HTMLDivElement
@@ -7879,7 +7907,7 @@ export default defineComponent({
         const { treeConfig, dragConfig } = props
         const rowDragOpts = computeRowDragOpts.value
         const { fullAllDataRowIdData } = internalData
-        const { isPeerDrag, isCrossDrag, isSelfToChildDrag, dragEndMethod } = rowDragOpts
+        const { isPeerDrag, isCrossDrag, isSelfToChildDrag, dragEndMethod, dragToChildMethod } = rowDragOpts
         const treeOpts = computeTreeOpts.value
         const { transform, rowField, mapChildrenField, parentField } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
@@ -7889,17 +7917,15 @@ export default defineComponent({
         if (prevDragRow && dragRow) {
           // 判断是否有拖动
           if (prevDragRow !== dragRow) {
-            return Promise.resolve(
-              dEndMethod
-                ? dEndMethod({
-                  oldRow: dragRow,
-                  newRow: prevDragRow,
-                  dragPos: prevDragPos as any,
-                  dragToChild: !!prevDragToChild,
-                  offsetIndex: dragOffsetIndex
-                })
-                : true
-            ).then((status) => {
+            const dragParams = {
+              oldRow: dragRow,
+              newRow: prevDragRow,
+              dragPos: prevDragPos as 'top' | 'bottom',
+              dragToChild: !!prevDragToChild,
+              offsetIndex: dragOffsetIndex as 0 | 1
+            }
+            const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
+            return Promise.resolve(dEndMethod ? dEndMethod(dragParams) : true).then((status) => {
               if (!status) {
                 return
               }
@@ -7996,7 +8022,7 @@ export default defineComponent({
                         childRow[parentField] = dragRow[parentField]
                       })
                     }
-                    dragRow[parentField] = prevDragToChild ? prevDragRow[rowField] : prevDragRow[parentField]
+                    dragRow[parentField] = isDragToChildFlag ? prevDragRow[rowField] : prevDragRow[parentField]
 
                     internalData.tableFullTreeData = XEUtils.toArrayTree(fullList, {
                       key: treeOpts.rowField,
@@ -8041,7 +8067,7 @@ export default defineComponent({
                 oldRow: dragRow,
                 newRow: prevDragRow,
                 dragPos: prevDragPos as any,
-                dragToChild: !!prevDragToChild,
+                dragToChild: isDragToChildFlag,
                 offsetIndex: dragOffsetIndex,
                 _index: {
                   newIndex: nafIndex,
@@ -8174,7 +8200,7 @@ export default defineComponent({
       handleColDragSwapEvent (evnt, isSyncColumn, dragCol, prevDragCol, prevDragPos, prevDragToChild) {
         const { mouseConfig } = props
         const columnDragOpts = computeColumnDragOpts.value
-        const { isPeerDrag, isCrossDrag, isSelfToChildDrag, isToChildDrag, dragEndMethod } = columnDragOpts
+        const { isPeerDrag, isCrossDrag, isSelfToChildDrag, isToChildDrag, dragEndMethod, dragToChildMethod } = columnDragOpts
         const { collectColumn } = internalData
         const dragOffsetIndex = prevDragPos === 'right' ? 1 : 0
         if (prevDragCol && dragCol) {
@@ -8182,17 +8208,15 @@ export default defineComponent({
           if (prevDragCol !== dragCol) {
             const oldColumn = dragCol
             const newColumn = prevDragCol
-            return Promise.resolve(
-              dragEndMethod
-                ? dragEndMethod({
-                  oldColumn,
-                  newColumn,
-                  dragPos: prevDragPos as any,
-                  dragToChild: !!prevDragToChild,
-                  offsetIndex: dragOffsetIndex
-                })
-                : true
-            ).then((status) => {
+            const dragParams = {
+              oldColumn,
+              newColumn,
+              dragPos: prevDragPos as 'left' | 'right',
+              dragToChild: !!prevDragToChild,
+              offsetIndex: dragOffsetIndex as 0 | 1
+            }
+            const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
+            return Promise.resolve(dragEndMethod ? dragEndMethod(dragParams) : true).then((status) => {
               if (!status) {
                 return
               }
@@ -8288,7 +8312,7 @@ export default defineComponent({
               if (newMatchRest) {
                 const { items: nCols, index: nIndex, parent: nParent } = newMatchRest
                 // 转子级
-                if ((isCrossDrag && isToChildDrag) && prevDragToChild) {
+                if ((isCrossDrag && isToChildDrag) && isDragToChildFlag) {
                   oldColumn.parentId = newColumn.id
                   newColumn.children = (newColumn.children || []).concat([oldColumn])
                 } else {
@@ -8322,7 +8346,7 @@ export default defineComponent({
                 oldColumn,
                 newColumn,
                 dragPos: prevDragPos,
-                dragToChild: !!prevDragToChild,
+                dragToChild: isDragToChildFlag,
                 offsetIndex: dragOffsetIndex,
                 _index: {
                   newIndex: nafIndex,
@@ -8710,7 +8734,10 @@ export default defineComponent({
         })
       },
       triggerBodyWheelEvent (evnt) {
-        const { deltaY, deltaX } = evnt
+        const { target, deltaY, deltaX } = evnt
+        if (target && /^textarea$/i.test((target as HTMLElement).tagName)) {
+          return
+        }
         const { highlightHoverRow } = tableProps
         const { elemStore, lastScrollTop, lastScrollLeft } = internalData
         const rowOpts = computeRowOpts.value
@@ -8729,7 +8756,6 @@ export default defineComponent({
         if (!bodyScrollElem) {
           return
         }
-
         const wheelSpeed = getWheelSpeed(reactData.lastScrollTime)
         const deltaTop = deltaY * wheelSpeed
         const deltaLeft = deltaX * wheelSpeed
@@ -8916,8 +8942,7 @@ export default defineComponent({
       },
       // 更新纵向 Y 可视渲染上下剩余空间大小
       updateScrollYSpace () {
-        const { showOverflow } = props
-        const { scrollYLoad } = reactData
+        const { isAllOverflow, scrollYLoad } = reactData
         const { scrollYStore, elemStore, isResizeCellHeight, afterFullData, fullAllDataRowIdData } = internalData
         const { startIndex } = scrollYStore
         const rowOpts = computeRowOpts.value
@@ -8930,21 +8955,21 @@ export default defineComponent({
 
         if (scrollYLoad) {
           const isCustomCellHeight = isResizeCellHeight || cellOpts.height || rowOpts.height
-          if (!isCustomCellHeight && showOverflow) {
+          if (!isCustomCellHeight && isAllOverflow) {
             ySpaceHeight = afterFullData.length * defaultRowHeight
             topSpaceHeight = Math.max(0, startIndex * defaultRowHeight)
           } else {
             for (let i = 0; i < afterFullData.length; i++) {
               const row = afterFullData[i]
               const rowid = getRowid($xeTable, row)
-              const rowRest = fullAllDataRowIdData[rowid]
-              ySpaceHeight += rowRest ? (rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight) : defaultRowHeight
+              const rowRest = fullAllDataRowIdData[rowid] || {}
+              ySpaceHeight += rowRest.resizeHeight || rowRest.height || cellOpts.height || rowOpts.height || defaultRowHeight
             }
             for (let i = 0; i < startIndex; i++) {
               const row = afterFullData[i]
               const rowid = getRowid($xeTable, row)
-              const rowRest = fullAllDataRowIdData[rowid]
-              topSpaceHeight += rowRest ? (rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight) : defaultRowHeight
+              const rowRest = fullAllDataRowIdData[rowid] || {}
+              topSpaceHeight += rowRest.resizeHeight || rowRest.height || cellOpts.height || rowOpts.height || defaultRowHeight
             }
           }
         } else {
@@ -8974,12 +8999,12 @@ export default defineComponent({
         })
       },
       updateScrollXData () {
-        const { showOverflow } = props
+        const { isAllOverflow } = reactData
         handleTableColumn()
         return nextTick().then(() => {
           handleTableColumn()
           $xeTable.updateScrollXSpace()
-          if (!showOverflow) {
+          if (!isAllOverflow) {
             $xeTable.updateScrollYSpace()
           }
         })
@@ -9602,7 +9627,7 @@ export default defineComponent({
       if (value && value.length >= 50000) {
         warnLog('vxe.error.errLargeData', ['loadData(data), reloadData(data)'])
       }
-      loadTableData(value, false).then(() => {
+      loadTableData(value, true).then(() => {
         const { scrollXLoad, scrollYLoad, expandColumn } = reactData
         internalData.inited = true
         internalData.initStatus = true

@@ -12,6 +12,7 @@
       :scroll-x="{enabled: true, gt: 0}"
       :scroll-y="{enabled: true, gt: 0}"
       :checkbox-config="{ highlight: true, range: true}"
+      :resizable-config="resizableConfig"
       :data="tableData"
       :footer-data="footerData">
       <vxe-column field="checkbox" type="checkbox" width="80" fixed="left" drag-sort row-resize></vxe-column>
@@ -116,7 +117,7 @@
 
 <script lang="ts" setup>
 import { ref, reactive, nextTick } from 'vue'
-import { VxeColumnPropTypes } from '../../../types'
+import { VxeColumnPropTypes, VxeTablePropTypes } from '../../../types'
 
 interface RowVO {
   id: number
@@ -128,6 +129,11 @@ const footerData = ref([
   { col2: '456', col3: '324', col4: '98', col6: '11', col74: '546', col75: '78', col83: '45', col86: '444' }
 ])
 const loading = ref(false)
+
+const resizableConfig = reactive<VxeTablePropTypes.ResizableConfig>({
+  isDblclickAutoHeight: true,
+  isDblclickAutoWidth: true
+})
 
 const flag1CellRender = reactive<VxeColumnPropTypes.CellRender>({
   name: 'VxeSwitch'

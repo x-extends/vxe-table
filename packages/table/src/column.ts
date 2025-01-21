@@ -57,6 +57,16 @@ export const columnProps = {
   formatter: [Function, Array, String] as PropType<VxeColumnPropTypes.Formatter<any>>,
   // 格式化表尾显示内容
   footerFormatter: [Function, Array, String] as PropType<VxeColumnPropTypes.FooterFormatter>,
+  // 是否显示间距
+  padding: {
+    type: Boolean as PropType<VxeColumnPropTypes.Padding>,
+    default: null
+  },
+  // 垂直对齐方式
+  verticalAlign: {
+    type: String as PropType<VxeColumnPropTypes.VerticalAlign>,
+    default: null
+  },
   // 是否允许排序
   sortable: Boolean as PropType<VxeColumnPropTypes.Sortable>,
   // 自定义排序的属性

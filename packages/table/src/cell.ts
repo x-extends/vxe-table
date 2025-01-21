@@ -6,7 +6,7 @@ import { updateCellTitle } from '../../ui/src/dom'
 import { createColumn, getRowid } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 
-import type { VxeTableConstructor, VxeTableDefines, VxeColumnPropTypes, VxeTablePrivateMethods, VxeComponentSlotType } from '../../../types'
+import type { VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, VxeComponentSlotType } from '../../../types'
 
 const { getI18n, getIcon, renderer, formats, renderEmptyElement } = VxeUI
 
@@ -207,25 +207,6 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams & { 
   ]
 }
 
-function formatFooterLabel (footerFormatter: VxeColumnPropTypes.FooterFormatter, params: {
-  itemValue: any
-  column: VxeTableDefines.ColumnInfo
-  row: any
-  items: any[]
-  _columnIndex: number
-}) {
-  if (XEUtils.isFunction(footerFormatter)) {
-    return `${footerFormatter(params)}`
-  }
-  const isArr = XEUtils.isArray(footerFormatter)
-  const gFormatOpts = isArr ? formats.get(footerFormatter[0]) : formats.get(footerFormatter)
-  const footerFormatMethod = gFormatOpts ? gFormatOpts.tableFooterCellFormatMethod : null
-  if (footerFormatMethod) {
-    return `${isArr ? footerFormatMethod(params, ...footerFormatter.slice(1)) : footerFormatMethod(params)}`
-  }
-  return ''
-}
-
 function getFooterContent (params: VxeTableDefines.CellRenderFooterParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { $table, column, _columnIndex, items, row } = params
   const { slots, editRender, cellRender, footerFormatter } = column
@@ -234,42 +215,39 @@ function getFooterContent (params: VxeTableDefines.CellRenderFooterParams & { $t
   if (footerSlot) {
     return $table.callSlot(footerSlot, params)
   }
+  let itemValue = ''
+  // 兼容老模式
+  if (XEUtils.isArray(items)) {
+    itemValue = items[_columnIndex]
+  } else {
+    itemValue = XEUtils.get(row, column.field)
+  }
+  const footParams = Object.assign(params, {
+    itemValue
+  })
+  if (footerFormatter) {
+    if (XEUtils.isFunction(footerFormatter)) {
+      return `${footerFormatter(footParams)}`
+    }
+    const isArr = XEUtils.isArray(footerFormatter)
+    const gFormatOpts = isArr ? formats.get(footerFormatter[0]) : formats.get(footerFormatter)
+    const footerFormatMethod = gFormatOpts ? gFormatOpts.tableFooterCellFormatMethod : null
+    if (footerFormatMethod) {
+      return `${isArr ? footerFormatMethod(footParams, ...footerFormatter.slice(1)) : footerFormatMethod(footParams)}`
+    }
+    return ''
+  }
   if (renderOpts) {
     const compConf = renderer.get(renderOpts.name)
     if (compConf) {
       const rtFooter = compConf.renderTableFooter || compConf.renderFooter
       if (rtFooter) {
-        return getSlotVNs(rtFooter(renderOpts, params))
+        return getSlotVNs(rtFooter(renderOpts, footParams))
       }
     }
   }
-  let itemValue = ''
-  // 兼容老模式
-  if (XEUtils.isArray(items)) {
-    itemValue = items[_columnIndex]
-    return [
-      footerFormatter
-        ? formatFooterLabel(footerFormatter, {
-          itemValue,
-          column,
-          row,
-          items,
-          _columnIndex
-        })
-        : formatText(itemValue, 1)
-    ]
-  }
-  itemValue = XEUtils.get(row, column.field)
   return [
-    footerFormatter
-      ? formatFooterLabel(footerFormatter, {
-        itemValue,
-        column,
-        row,
-        items,
-        _columnIndex
-      })
-      : formatText(itemValue, 1)
+    formatText(itemValue, 1)
   ]
 }
 

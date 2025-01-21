@@ -74,6 +74,8 @@ export class ColumnInfo {
       footerClassName: _vm.footerClassName,
       formatter: formatter,
       footerFormatter: _vm.footerFormatter,
+      padding: _vm.padding,
+      verticalAlign: _vm.verticalAlign,
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
       sortType: _vm.sortType,

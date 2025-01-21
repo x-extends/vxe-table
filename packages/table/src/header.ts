@@ -1,7 +1,7 @@
 import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { convertHeaderColumnToRows } from './util'
+import { getCellHeight, convertHeaderColumnToRows } from './util'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types'
 
@@ -25,7 +25,7 @@ export default defineComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeHeaderCellOpts, computeDefaultRowHeight } = $xeTable.getComputeMaps()
+    const { computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeMouseOpts, computeHeaderCellOpts, computeDefaultRowHeight } = $xeTable.getComputeMaps()
 
     const headerColumn = ref([] as VxeTableDefines.ColumnInfo[][])
 
@@ -52,7 +52,7 @@ export default defineComponent({
       const cellOpts = computeCellOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
       const headerCellOpts = computeHeaderCellOpts.value
-      const currCellHeight = headerCellOpts.height || cellOpts.height || defaultRowHeight
+      const currCellHeight = getCellHeight(headerCellOpts.height || cellOpts.height) || defaultRowHeight
       const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
       return cols.map((column, $columnIndex) => {
         const { type, showHeaderOverflow, headerAlign, align, filters, headerClassName, editRender, cellRender } = column
@@ -220,10 +220,11 @@ export default defineComponent({
 
     const renderVN = () => {
       const { fixedType, fixedColumn, tableColumn } = props
-      const { showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
+      const { mouseConfig, showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
       const { isGroup, scrollXLoad, scrollYLoad, dragCol } = tableReactData
       const { visibleColumn, fullColumnIdData } = tableInternalData
 
+      const mouseOpts = computeMouseOpts.value
       let renderHeaderList = headerColumn.value
       let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
       let isOptimizeMode = false
@@ -320,15 +321,32 @@ export default defineComponent({
             h('thead', {
               ref: refHeaderTHead
             }, renderHeads(isGroup, isOptimizeMode, renderHeaderList))
-          ])
-        ]),
-        /**
-         * 其他
-         */
-        h('div', {
-          ref: refHeaderBorderRepair,
-          class: 'vxe-table--header-border-line'
-        })
+          ]),
+          mouseConfig && mouseOpts.area
+            ? h('div', {
+              class: 'vxe-table--cell-area'
+            }, [
+              h('span', {
+                class: 'vxe-table--cell-main-area'
+              }),
+              h('span', {
+                class: 'vxe-table--cell-copy-area'
+              }),
+              h('span', {
+                class: 'vxe-table--cell-extend-area'
+              }),
+              h('span', {
+                class: 'vxe-table--cell-multi-area'
+              }),
+              h('span', {
+                class: 'vxe-table--cell-active-area'
+              }),
+              h('span', {
+                class: 'vxe-table--cell-col-status-area'
+              })
+            ])
+            : renderEmptyElement($xeTable)
+        ])
       ])
     }
 

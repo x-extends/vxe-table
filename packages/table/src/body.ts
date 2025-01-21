@@ -103,7 +103,7 @@ export default defineComponent({
       items: any[]
     ) => {
       const { fullAllDataRowIdData } = tableInternalData
-      const { columnKey, height, showOverflow: allColumnOverflow, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
+      const { columnKey, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
       const { tableData, overflowX, currentColumn, scrollXLoad, scrollYLoad, calcCellHeightFlag, resizeHeightFlag, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
       const { afterFullData, scrollXStore, scrollYStore } = tableInternalData
       const cellOpts = computeCellOpts.value
@@ -120,8 +120,8 @@ export default defineComponent({
       const mouseOpts = computeMouseOpts.value
       const areaOpts = computeAreaOpts.value
       const { selectCellToRow } = areaOpts
-      const { type, cellRender, editRender, align, showOverflow, className, treeNode, rowResize, slots } = column
-      const { verticalAlign } = cellOpts
+      const { type, cellRender, editRender, align, showOverflow, className, treeNode, rowResize, padding, verticalAlign, slots } = column
+      const { verticalAlign: allVerticalAlign } = cellOpts
       const { actived } = editStore
       const rowRest = fullAllDataRowIdData[rowid]
       const colid = column.id
@@ -135,16 +135,17 @@ export default defineComponent({
       const isEdit = isEnableConf(editRender)
       const resizeHeight = resizeHeightFlag ? rowRest.resizeHeight : 0
       let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
-      const isPadding = allPadding === null ? cellOpts.padding : allPadding
-      const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+      const isCellPadding = XEUtils.eqNull(padding) ? (allPadding === null ? cellOpts.padding : allPadding) : padding
+      const cellOverflow = XEUtils.eqNull(showOverflow) ? isAllOverflow : showOverflow
       const showEllipsis = cellOverflow === 'ellipsis'
       const showTitle = cellOverflow === 'title'
       const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-      // 如果表格加上 showOverflow 则不再支持列单独设置
-      const hasEllipsis = allColumnOverflow || showTitle || showTooltip || showEllipsis || resizeHeight > 0
+      const hasEllipsis = isAllOverflow || showTitle || showTooltip || showEllipsis
+      const isRsHeight = resizeHeight > 0
       let isDirty
       const tdOns: any = {}
       const cellAlign = align || (compConf ? compConf.tableCellAlign : '') || allAlign
+      const cellVerticalAlign = XEUtils.eqNull(verticalAlign) ? allVerticalAlign : verticalAlign
       const errorValidItem = validErrorMaps[`${rowid}:${colid}`]
       const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
       const tdAttrs: any = { colid }
@@ -288,14 +289,14 @@ export default defineComponent({
       }
 
       const tcStyle: Record<string, string> = {}
-      if (hasEllipsis) {
+      if (scrollYLoad || hasEllipsis || isRsHeight) {
         tcStyle.height = `${cellHeight}px`
       } else {
         tcStyle.minHeight = `${cellHeight}px`
       }
 
       const tdVNs: any[] = []
-      if (fixedHiddenColumn && (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
+      if (fixedHiddenColumn && isAllOverflow) {
         tdVNs.push(
           h('div', {
             key: 'tc',
@@ -360,17 +361,13 @@ export default defineComponent({
         }
       }
 
+      let showAreaRowStatus = false
       if (mouseConfig && mouseOpts.area && selectCellToRow) {
         if (
-          (!$columnIndex && selectCellToRow === true) ||
+          (!_columnIndex && selectCellToRow === true) ||
           (selectCellToRow === column.field)
         ) {
-          tdVNs.push(
-            h('div', {
-              key: 'tca',
-              class: 'vxe-cell--area-status'
-            })
-          )
+          showAreaRowStatus = true
         }
       }
 
@@ -389,18 +386,20 @@ export default defineComponent({
         class: [
           'vxe-body--column',
           colid,
+          cellVerticalAlign ? `col--vertical-${cellVerticalAlign}` : '',
+          cellAlign ? `col--${cellAlign}` : '',
+          type ? `col--${type}` : '',
           {
-            [`col--${cellAlign}`]: cellAlign,
-            [`col--vertical-${verticalAlign}`]: verticalAlign,
-            [`col--${type}`]: type,
             'col--last': isLastColumn,
             'col--tree-node': treeNode,
             'col--edit': isEdit,
             'col--ellipsis': hasEllipsis,
+            'col--rs-height': isRsHeight,
+            'col--to-row': showAreaRowStatus,
             'col--auto-height': isVNAutoHeight,
             'fixed--width': !isAutoCellWidth,
             'fixed--hidden': fixedHiddenColumn,
-            'is--padding': isPadding,
+            'is--padding': isCellPadding,
             'is--drag-cell': isRowDragCell && (isCrossDrag || isPeerDrag || !rowLevel),
             'is--drag-disabled': isDisabledDrag,
             'col--dirty': isDirty,
@@ -420,8 +419,8 @@ export default defineComponent({
     }
 
     const renderRows = (fixedType: VxeColumnPropTypes.Fixed, isOptimizeMode: boolean, tableData: any[], tableColumn: VxeTableDefines.ColumnInfo[]) => {
-      const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, editConfig, treeConfig } = tableProps
-      const { hasFixedColumn, treeExpandedMaps, scrollXLoad, scrollYLoad, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, isDragColMove } = tableReactData
+      const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
+      const { hasFixedColumn, treeExpandedMaps, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, isDragColMove } = tableReactData
       const { fullAllDataRowIdData } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
@@ -538,7 +537,7 @@ export default defineComponent({
             cellStyle.paddingLeft = `${(rowLevel * treeOpts.indent) + 30}px`
           }
           const { showOverflow } = expandColumn
-          const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+          const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? isAllOverflow : showOverflow
           const expandParams = { $table: $xeTable, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
           rows.push(
             h('tr', {
@@ -612,7 +611,7 @@ export default defineComponent({
       const { slots } = tableContext
 
       const { fixedColumn, fixedType, tableColumn } = props
-      const { showOverflow: allColumnOverflow, spanMethod, footerSpanMethod, mouseConfig } = tableProps
+      const { spanMethod, footerSpanMethod, mouseConfig } = tableProps
       const { isGroup, tableData, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn, dragRow, dragCol } = tableReactData
       const { visibleColumn, fullAllDataRowIdData, fullColumnIdData } = tableInternalData
       const rowOpts = computeRowOpts.value
@@ -626,7 +625,7 @@ export default defineComponent({
       let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
       let isOptimizeMode = false
       // 如果是使用优化模式
-      if (scrollXLoad || scrollYLoad || (allColumnOverflow && isAllOverflow)) {
+      if (scrollXLoad || scrollYLoad || isAllOverflow) {
         if (expandColumn || spanMethod || footerSpanMethod) {
           // 如果不支持优化模式
         } else {
@@ -708,7 +707,7 @@ export default defineComponent({
           $xeTable.triggerBodyScrollEvent(evnt, fixedType)
         }
       }
-      if (leftFixedWidth || rightFixedWidth) {
+      if (scrollYLoad || leftFixedWidth || rightFixedWidth) {
         ons.onWheel = $xeTable.triggerBodyWheelEvent
       }
 
@@ -798,6 +797,9 @@ export default defineComponent({
               }),
               h('span', {
                 class: 'vxe-table--cell-active-area'
+              }),
+              h('span', {
+                class: 'vxe-table--cell-row-status-area'
               })
             ])
             : renderEmptyElement($xeTable),

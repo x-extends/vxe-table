@@ -2,6 +2,7 @@ import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTi
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { updateCellTitle, getPropClass } from '../../ui/src/dom'
+import { getCellHeight } from './util'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines } from '../../../types'
 
@@ -66,7 +67,7 @@ export default defineComponent({
       const defaultRowHeight = computeDefaultRowHeight.value
       const cellOpts = computeCellOpts.value
       const footerCellOpts = computeFooterCellOpts.value
-      const currCellHeight = footerCellOpts.height || cellOpts.height || defaultRowHeight
+      const currCellHeight = getCellHeight(footerCellOpts.height || cellOpts.height) || defaultRowHeight
 
       return tableColumn.map((column, $columnIndex) => {
         const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
