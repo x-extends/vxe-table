@@ -885,7 +885,7 @@ export const Cell = {
     const { $table, column } = params
     const { computeSortOpts } = $table.getComputeMaps()
     const sortOpts = computeSortOpts.value
-    const { showIcon, iconLayout, iconAsc, iconDesc, iconVisibleMethod } = sortOpts
+    const { showIcon, allowBtn, iconLayout, iconAsc, iconDesc, iconVisibleMethod } = sortOpts
     const { order } = column
     if (showIcon && (!iconVisibleMethod || iconVisibleMethod(params))) {
       return [
@@ -897,20 +897,24 @@ export const Cell = {
               'sort--active': order === 'asc'
             }],
             title: getI18n('vxe.table.sortAsc'),
-            onClick (evnt: Event) {
-              evnt.stopPropagation()
-              $table.triggerSortEvent(evnt, column, 'asc')
-            }
+            onClick: allowBtn
+              ? (evnt: Event) => {
+                  evnt.stopPropagation()
+                  $table.triggerSortEvent(evnt, column, 'asc')
+                }
+              : undefined
           }),
           h('i', {
             class: ['vxe-sort--desc-btn', iconDesc || getIcon().TABLE_SORT_DESC, {
               'sort--active': order === 'desc'
             }],
             title: getI18n('vxe.table.sortDesc'),
-            onClick (evnt: Event) {
-              evnt.stopPropagation()
-              $table.triggerSortEvent(evnt, column, 'desc')
-            }
+            onClick: allowBtn
+              ? (evnt: Event) => {
+                  evnt.stopPropagation()
+                  $table.triggerSortEvent(evnt, column, 'desc')
+                }
+              : undefined
           })
         ])
       ]

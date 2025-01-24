@@ -7812,10 +7812,13 @@ export default defineComponent({
        */
       triggerSortEvent (evnt, column, order) {
         const sortOpts = computeSortOpts.value
+        const { multiple, allowClear } = sortOpts
         const { field, sortable } = column
         if (sortable) {
           if (!order || column.order === order) {
-            tableMethods.clearSort(sortOpts.multiple ? column : null)
+            if (allowClear) {
+              tableMethods.clearSort(multiple ? column : null)
+            }
           } else {
             tableMethods.sort({ field, order })
           }
