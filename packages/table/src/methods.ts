@@ -809,7 +809,7 @@ function handleVirtualYVisible ($xeTable: VxeTableConstructor, currScrollTop?: n
         const row = afterFullData[rIndex]
         const rowid = getRowid($xeTable, row)
         const rowRest = fullAllDataRowIdData[rowid] || {}
-        offsetTop += rowRest.resizeHeight || rowRest.height || cellOpts.height || rowOpts.height || defaultRowHeight
+        offsetTop += rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
         if (toVisibleIndex === -1 && scrollTop < offsetTop) {
           toVisibleIndex = rIndex
         }
@@ -3916,7 +3916,7 @@ const Methods = {
       return
     }
     const defaultRowHeight = $xeTable.computeDefaultRowHeight
-    const currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight
+    const currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
     const tableRect = tableEl.getBoundingClientRect()
     const trRect = trEl.getBoundingClientRect()
     const targetOffsetY = dragClientY - trRect.y - trEl.clientHeight
@@ -4072,7 +4072,7 @@ const Methods = {
       if (rowRest) {
         const resizeHeight = rowRest.resizeHeight
         if (resizeHeight || isFull) {
-          const currCellHeight = resizeHeight || rowRest.height || cellOpts.height || rowOpts.height || defaultRowHeight
+          const currCellHeight = resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
           rest[rowid] = currCellHeight
         }
       }
@@ -4123,7 +4123,7 @@ const Methods = {
     const rowid = XEUtils.isString(rowOrId) || XEUtils.isNumber(rowOrId) ? rowOrId : getRowid($xeTable, rowOrId)
     const rowRest = fullAllDataRowIdData[rowid]
     if (rowRest) {
-      return rowRest.resizeHeight || rowRest.height || cellOpts.height || rowOpts.height || defaultRowHeight
+      return rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
     }
     return 0
   },
@@ -8274,13 +8274,13 @@ const Methods = {
           const row = afterFullData[i]
           const rowid = getRowid($xeTable, row)
           const rowRest = fullAllDataRowIdData[rowid] || {}
-          ySpaceHeight += rowRest.resizeHeight || rowRest.height || cellOpts.height || rowOpts.height || defaultRowHeight
+          ySpaceHeight += rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
         }
         for (let i = 0; i < startIndex; i++) {
           const row = afterFullData[i]
           const rowid = getRowid($xeTable, row)
           const rowRest = fullAllDataRowIdData[rowid] || {}
-          topSpaceHeight += rowRest.resizeHeight || rowRest.height || cellOpts.height || rowOpts.height || defaultRowHeight
+          topSpaceHeight += rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
         }
       }
     } else {

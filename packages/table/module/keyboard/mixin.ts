@@ -61,7 +61,7 @@ function getCheckboxRangeRows ($xeTable: any, evnt: MouseEvent, params: any, tar
           const item = afterFullData[i]
           const rowid = $xeTable.getRowid(item)
           const rowRest = fullAllDataRowIdData[rowid] || {}
-          countHeight += rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight
+          countHeight += rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
           rangeRows.push(item)
           if (countHeight > moveSize) {
             return rangeRows
@@ -72,7 +72,7 @@ function getCheckboxRangeRows ($xeTable: any, evnt: MouseEvent, params: any, tar
           const item = afterFullData[len]
           const rowid = $xeTable.getRowid(item)
           const rowRest = fullAllDataRowIdData[rowid] || {}
-          countHeight += rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight
+          countHeight += rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
           rangeRows.push(item)
           if (countHeight > moveSize) {
             return rangeRows
