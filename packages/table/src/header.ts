@@ -186,14 +186,14 @@ export default defineComponent({
     const renderHeads = (isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][]) => {
       const { fixedType } = props
       const { headerRowClassName, headerRowStyle } = tableProps
-      const { isDragColMove } = tableReactData
+      const { isColLoading, isDragColMove } = tableReactData
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
 
       return headerGroups.map((cols, $rowIndex) => {
         const params = { $table: $xeTable, $rowIndex, fixed: fixedType, type: renderType }
 
-        if (columnOpts.drag && columnDragOpts.animation) {
+        if (!isColLoading && columnOpts.drag && columnDragOpts.animation) {
           return h(TransitionGroup, {
             key: $rowIndex,
             name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,

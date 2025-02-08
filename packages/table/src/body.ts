@@ -6,7 +6,7 @@ import { updateCellTitle, getPropClass } from '../../ui/src/dom'
 import { isEnableConf } from '../../ui/src/utils'
 import { getSlotVNs } from '../../ui/src/vn'
 
-import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeComponentSlotType, VxeColumnPropTypes } from '../../../types'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeComponentSlotType } from '../../../types'
 
 const { getI18n, renderer, renderEmptyElement } = VxeUI
 
@@ -27,7 +27,7 @@ export default defineComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeDefaultRowHeight, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeColumnDragOpts, computeLeftFixedWidth, computeRightFixedWidth } = $xeTable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeDefaultRowHeight, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeColumnDragOpts, computeLeftFixedWidth, computeRightFixedWidth, computeResizableOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refBodyScroll = ref() as Ref<HTMLDivElement>
@@ -90,7 +90,7 @@ export default defineComponent({
     const renderTdColumn = (
       seq: number | string,
       rowid: string,
-      fixedType: VxeColumnPropTypes.Fixed,
+      fixedType: 'left' | 'right' | '',
       isOptimizeMode: boolean,
       rowLevel: number,
       row: any,
@@ -103,7 +103,7 @@ export default defineComponent({
       items: any[]
     ) => {
       const { fullAllDataRowIdData } = tableInternalData
-      const { columnKey, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
+      const { columnKey, resizable: allResizable, border, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
       const { tableData, overflowX, currentColumn, scrollXLoad, scrollYLoad, calcCellHeightFlag, resizeHeightFlag, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
       const { afterFullData, scrollXStore, scrollYStore } = tableInternalData
       const cellOpts = computeCellOpts.value
@@ -111,6 +111,8 @@ export default defineComponent({
       const checkboxOpts = computeCheckboxOpts.value
       const editOpts = computeEditOpts.value
       const tooltipOpts = computeTooltipOpts.value
+      const resizableOpts = computeResizableOpts.value
+      const { isAllColumnDrag, isAllRowDrag } = resizableOpts
       const rowOpts = computeRowOpts.value
       const rowDragOpts = computeRowDragOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
@@ -142,6 +144,7 @@ export default defineComponent({
       const showTitle = cellOverflow === 'title'
       const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
       const hasEllipsis = isAllOverflow || showTitle || showTooltip || showEllipsis
+      const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
       const isCsHeight = !!customCellHeight
       const isRsHeight = resizeHeight > 0
       let isDirty
@@ -373,7 +376,20 @@ export default defineComponent({
         }
       }
 
-      if (rowResize && rowOpts.resizable) {
+      if (!fixedHiddenColumn && showResizable && isAllColumnDrag) {
+        tdVNs.push(
+          h('div', {
+            key: 'tcc',
+            class: ['vxe-cell--col-resizable', {
+              'is--line': !border || border === 'none'
+            }],
+            onMousedown: (evnt: MouseEvent) => $xeTable.handleColResizeMousedownEvent(evnt, fixedType, cellParams),
+            onDblclick: (evnt: MouseEvent) => $xeTable.handleColResizeDblclickEvent(evnt, cellParams)
+          })
+        )
+      }
+
+      if ((rowResize || isAllRowDrag) && rowOpts.resizable) {
         tdVNs.push(
           h('div', {
             key: 'tcr',
@@ -421,9 +437,9 @@ export default defineComponent({
       }, isOptimizeMode && fixedHiddenColumn ? [] : tdVNs)
     }
 
-    const renderRows = (fixedType: VxeColumnPropTypes.Fixed, isOptimizeMode: boolean, tableData: any[], tableColumn: VxeTableDefines.ColumnInfo[]) => {
+    const renderRows = (fixedType: 'left' | 'right' | '', isOptimizeMode: boolean, tableData: any[], tableColumn: VxeTableDefines.ColumnInfo[]) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
-      const { hasFixedColumn, treeExpandedMaps, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, isDragColMove } = tableReactData
+      const { hasFixedColumn, treeExpandedMaps, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, isDragColMove } = tableReactData
       const { fullAllDataRowIdData } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
@@ -508,7 +524,7 @@ export default defineComponent({
           return renderTdColumn(seq, rowid, fixedType, isOptimizeMode, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
         })
         rows.push(
-          columnOpts.drag && columnDragOpts.animation
+          !isColLoading && (columnOpts.drag && columnDragOpts.animation)
             ? h(TransitionGroup, {
               name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
               tag: 'tr',
@@ -615,7 +631,7 @@ export default defineComponent({
 
       const { fixedColumn, fixedType, tableColumn } = props
       const { spanMethod, footerSpanMethod, mouseConfig } = tableProps
-      const { isGroup, tableData, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn, dragRow, dragCol } = tableReactData
+      const { isGroup, tableData, isRowLoading, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn, dragRow, dragCol } = tableReactData
       const { visibleColumn, fullAllDataRowIdData, fullColumnIdData } = tableInternalData
       const rowOpts = computeRowOpts.value
       const emptyOpts = computeEmptyOpts.value
@@ -742,21 +758,21 @@ export default defineComponent({
             cellpadding: 0,
             border: 0
           }, [
-          /**
-           * 列宽
-           */
+            /**
+             * 列宽
+             */
             h('colgroup', {
               ref: refBodyColgroup
-            }, (renderColumnList as any[]).map((column, $columnIndex) => {
+            }, renderColumnList.map((column, $columnIndex) => {
               return h('col', {
                 name: column.id,
                 key: $columnIndex
               })
             })),
             /**
-           * 内容
-           */
-            rowOpts.drag && rowDragOpts.animation
+             * 内容
+             */
+            !(isRowLoading || isColLoading) && (rowOpts.drag && rowDragOpts.animation)
               ? h(TransitionGroup, {
                 ref: refBodyTBody,
                 name: `vxe-body--row-list${isDragRowMove ? '' : '-disabled'}`,

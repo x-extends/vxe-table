@@ -269,7 +269,8 @@ export default defineComponent({
       dragTipText: '',
 
       isDragResize: false,
-      isLoading: false
+      isRowLoading: false,
+      isColLoading: false
     })
 
     const internalData: TableInternalData = {
@@ -2708,16 +2709,18 @@ export default defineComponent({
       scrollYStore.endIndex = 1
       scrollXStore.startIndex = 0
       scrollXStore.endIndex = 1
+      reactData.isRowLoading = true
       reactData.scrollVMLoading = false
       editStore.insertMaps = {}
       editStore.removeMaps = {}
       const sYLoad = updateScrollYStatus(fullData)
+      reactData.isDragColMove = false
       reactData.isDragRowMove = false
       // 全量数据
       internalData.tableFullData = fullData
       internalData.tableFullTreeData = treeData
       // 缓存数据
-      tablePrivateMethods.cacheRowMap(true, isReset)
+      $xeTable.cacheRowMap(true, isReset)
       // 原始数据
       internalData.tableSynchData = datas
       if (isReset) {
@@ -2729,7 +2732,7 @@ export default defineComponent({
       }
       // 克隆原数据，用于显示编辑状态，与编辑值做对比
       if (keepSource) {
-        tablePrivateMethods.cacheSourceMap(fullData)
+        $xeTable.cacheSourceMap(fullData)
       }
       if ($xeTable.clearCellAreas && props.mouseConfig) {
         $xeTable.clearCellAreas()
@@ -2790,6 +2793,7 @@ export default defineComponent({
               if (sYOpts.scrollToTopOnChange) {
                 targetScrollTop = 0
               }
+              reactData.isRowLoading = false
               calcCellHeight()
               // 是否变更虚拟滚动
               if (oldScrollYLoad === sYLoad) {
@@ -3024,13 +3028,12 @@ export default defineComponent({
       internalData.collectColumn = collectColumn
       const tableFullColumn = getColumnList(collectColumn)
       internalData.tableFullColumn = tableFullColumn
-      reactData.isLoading = true
+      reactData.isColLoading = true
       reactData.isDragColMove = false
       initColumnSort()
       return Promise.resolve(
         restoreCustomStorage()
       ).then(() => {
-        reactData.isLoading = false
         cacheColumnMap()
         parseColumns(true).then(() => {
           if (reactData.scrollXLoad) {
@@ -3055,6 +3058,7 @@ export default defineComponent({
           if ($xeTable.handleUpdateCustomColumn) {
             $xeTable.handleUpdateCustomColumn()
           }
+          reactData.isColLoading = false
           return $xeTable.recalculate()
         })
       })
@@ -9394,7 +9398,7 @@ export default defineComponent({
       const areaOpts = computeAreaOpts.value
       const loadingOpts = computeLoadingOpts.value
       const isMenu = computeIsMenu.value
-      const currLoading = reactData.isLoading || loading
+      const currLoading = reactData.isColLoading || reactData.isRowLoading || loading
       const resizableOpts = computeResizableOpts.value
       const isArea = mouseConfig && mouseOpts.area
       const columnDragOpts = computeColumnDragOpts.value

@@ -63,6 +63,8 @@ const rowConfig = reactive<VxeTablePropTypes.RowConfig>({
 })
 
 const resizableConfig = reactive<VxeTablePropTypes.ResizableConfig>({
+  isAllColumnDrag: true,
+  isAllRowDrag: true,
   isDblclickAutoHeight: true
 })
 

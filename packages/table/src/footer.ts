@@ -48,7 +48,7 @@ export default defineComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeTooltipOpts, computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeFooterCellOpts, computeDefaultRowHeight } = $xeTable.getComputeMaps()
+    const { computeTooltipOpts, computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeFooterCellOpts, computeDefaultRowHeight, computeResizableOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refFooterScroll = ref() as Ref<HTMLDivElement>
@@ -59,10 +59,12 @@ export default defineComponent({
 
     const renderRows = (tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) => {
       const { fixedType } = props
-      const { footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
+      const { resizable: allResizable, border, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
       const { scrollXLoad, scrollYLoad, overflowX, currentColumn, mergeFooterList } = tableReactData
       const { scrollXStore } = tableInternalData
       const tooltipOpts = computeTooltipOpts.value
+      const resizableOpts = computeResizableOpts.value
+      const { isAllColumnDrag } = resizableOpts
       const columnOpts = computeColumnOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
       const cellOpts = computeCellOpts.value
@@ -84,12 +86,15 @@ export default defineComponent({
         const showTitle = footOverflow === 'title'
         const showTooltip = footOverflow === true || footOverflow === 'tooltip'
         let hasEllipsis = showTitle || showTooltip || showEllipsis
+        const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
         const attrs: any = { colid }
         const tfOns: any = {}
         const columnIndex = $xeTable.getColumnIndex(column)
         const _columnIndex = $xeTable.getVTColumnIndex(column)
         const itemIndex = _columnIndex
-        const cellParams: VxeTableDefines.CellRenderFooterParams = {
+        const cellParams: VxeTableDefines.CellRenderFooterParams & {
+          $table: VxeTableConstructor<any> & VxeTablePrivateMethods
+        } = {
           $table: $xeTable,
           $grid: $xeTable.xegrid,
           row,
@@ -205,7 +210,19 @@ export default defineComponent({
                   colid,
                   class: 'vxe-cell--wrapper'
                 }, column.renderFooter(cellParams))
-              ])
+              ]),
+          /**
+           * 列宽拖动
+           */
+          !fixedHiddenColumn && showResizable && isAllColumnDrag
+            ? h('div', {
+              class: ['vxe-cell--col-resizable', {
+                'is--line': !border || border === 'none'
+              }],
+              onMousedown: (evnt: MouseEvent) => $xeTable.handleColResizeMousedownEvent(evnt, fixedType, cellParams),
+              onDblclick: (evnt: MouseEvent) => $xeTable.handleColResizeDblclickEvent(evnt, cellParams)
+            })
+            : renderEmptyElement($xeTable)
         ])
       })
     }
@@ -213,7 +230,7 @@ export default defineComponent({
     const renderHeads = (renderColumnList: VxeTableDefines.ColumnInfo[]) => {
       const { fixedType, footerTableData } = props
       const { footerRowClassName, footerRowStyle } = tableProps
-      const { isDragColMove } = tableReactData
+      const { isColLoading, isDragColMove } = tableReactData
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
 
@@ -221,7 +238,7 @@ export default defineComponent({
         const _rowIndex = $rowIndex
         const rowParams = { $table: $xeTable, row, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
 
-        if (columnOpts.drag && columnDragOpts.animation) {
+        if (!isColLoading && columnOpts.drag && columnDragOpts.animation) {
           return h(TransitionGroup, {
             key: $rowIndex,
             name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
