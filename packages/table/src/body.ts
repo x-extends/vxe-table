@@ -116,8 +116,7 @@ export default defineComponent({
       const rowOpts = computeRowOpts.value
       const rowDragOpts = computeRowDragOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
-      const customCellHeight = cellOpts.height || rowOpts.height
-      const currCellHeight = customCellHeight || defaultRowHeight
+      const customCellHeight = calcCellHeightFlag ? (cellOpts.height || rowOpts.height) : 0
       const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = rowDragOpts
       const columnOpts = computeColumnOpts.value
       const mouseOpts = computeMouseOpts.value
@@ -271,17 +270,7 @@ export default defineComponent({
       }
 
       const isVNAutoHeight = scrollYLoad && !hasEllipsis
-      let cellHeight = currCellHeight
-      const vnHeight = calcCellHeightFlag ? rowRest.height : 0
-      if (resizeHeight) {
-        cellHeight = resizeHeight
-      } else {
-        if (scrollYLoad) {
-          if (!hasEllipsis) {
-            cellHeight = vnHeight || currCellHeight
-          }
-        }
-      }
+      const cellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
 
       const isLastColumn = $columnIndex === columns.length - 1
       const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')

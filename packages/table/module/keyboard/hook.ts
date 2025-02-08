@@ -68,7 +68,7 @@ hooks.add('tableKeyboardModule', {
               const item = afterFullData[i]
               const rowid = $xeTable.getRowid(item)
               const rowRest = fullAllDataRowIdData[rowid] || {}
-              countHeight += rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight
+              countHeight += rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
               rangeRows.push(item)
               if (countHeight > moveSize) {
                 return rangeRows
@@ -79,7 +79,7 @@ hooks.add('tableKeyboardModule', {
               const item = afterFullData[len]
               const rowid = $xeTable.getRowid(item)
               const rowRest = fullAllDataRowIdData[rowid] || {}
-              countHeight += rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight
+              countHeight += rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
               rangeRows.push(item)
               if (countHeight > moveSize) {
                 return rangeRows

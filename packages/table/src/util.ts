@@ -389,7 +389,7 @@ export function calcTreeLine (params: VxeTableDefines.CellRenderBodyParams, prev
   const defaultRowHeight = computeDefaultRowHeight.value
   const rowid = getRowid($table, row)
   const rowRest = fullAllDataRowIdData[rowid]
-  const currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight
+  const currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
   let expandSize = 1
   if (prevRow) {
     expandSize = countTreeExpand(prevRow, params)
@@ -491,7 +491,7 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
         }
         let scrollTop = 0
         const rowRest = fullAllDataRowIdData[rowid] || {}
-        const rHeight = rowRest ? (rowRest.resizeHeight || cellOpts.height || rowOpts.height || defaultRowHeight) : defaultRowHeight
+        const rHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
         for (let i = 0; i < afterFullData.length; i++) {
           const currRow = afterFullData[i]
           const currRowid = getRowid($xeTable, currRow)
@@ -499,7 +499,7 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
             break
           }
           const currRowRest = fullAllDataRowIdData[currRowid] || {}
-          scrollTop += currRowRest.resizeHeight || currRowRest.height || cellOpts.height || rowOpts.height || defaultRowHeight
+          scrollTop += currRowRest.resizeHeight || cellOpts.height || rowOpts.height || currRowRest.height || defaultRowHeight
         }
         if (scrollTop < bodyScrollTop) {
           return $xeTable.scrollTo(null, scrollTop - leftFixedWidth - 1)
