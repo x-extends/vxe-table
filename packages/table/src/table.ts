@@ -587,7 +587,8 @@ export default {
       dragTipText: '',
 
       isDragResize: false,
-      isLoading: false,
+      isRowLoading: false,
+      isColLoading: false,
 
       reScrollFlag: 0,
       reLayoutFlag: 0,
@@ -1541,7 +1542,7 @@ export default {
     const areaOpts = $xeTable.computeAreaOpts
     const loadingOpts = $xeTable.computeLoadingOpts
     const isMenu = $xeTable.computeIsMenu
-    const currLoading = reactData.isLoading || loading
+    const currLoading = reactData.isColLoading || reactData.isRowLoading || loading
     const resizableOpts = $xeTable.computeResizableOpts
     const isArea = mouseConfig && mouseOpts.area
     const columnDragOpts = $xeTable.computeColumnDragOpts

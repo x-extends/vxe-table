@@ -6,7 +6,7 @@ import { getOffsetSize, calcTreeLine, mergeBodyMethod, getRowid } from './util'
 import { updateCellTitle } from '../../ui/src/dom'
 import { getSlotVNs } from '../../ui/src/vn'
 
-import type { VxeTableConstructor, VxeTableDefines, TableInternalData, VxeTablePrivateMethods, TableReactData, VxeColumnPropTypes, VxeComponentStyleType } from '../../../types'
+import type { VxeTableConstructor, VxeTableDefines, TableInternalData, VxeTablePrivateMethods, TableReactData, VxeComponentStyleType } from '../../../types'
 
 const { getI18n, renderer, renderEmptyElement } = VxeUI
 
@@ -73,7 +73,7 @@ function renderTdColumn (
   _vm: any,
   seq: number | string,
   rowid: string,
-  fixedType: VxeColumnPropTypes.Fixed,
+  fixedType: 'left' | 'right' | '',
   isOptimizeMode: boolean,
   rowLevel: number,
   row: any,
@@ -91,7 +91,7 @@ function renderTdColumn (
   const tableInternalData = $xeTable as unknown as TableInternalData
 
   const { fullAllDataRowIdData } = tableInternalData
-  const { columnKey, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
+  const { columnKey, resizable: allResizable, border, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
   const { tableData, overflowX, currentColumn, scrollXLoad, scrollYLoad, calcCellHeightFlag, resizeHeightFlag, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
   const { afterFullData, scrollXStore, scrollYStore } = tableInternalData
   const cellOpts = $xeTable.computeCellOpts
@@ -99,6 +99,7 @@ function renderTdColumn (
   const checkboxOpts = $xeTable.computeCheckboxOpts
   const editOpts = $xeTable.computeEditOpts
   const tooltipOpts = $xeTable.computeTooltipOpts
+  const { isAllColumnDrag, isAllRowDrag } = $xeTable.resizableOpts
   const rowOpts = $xeTable.computeRowOpts
   const rowDragOpts = $xeTable.computeRowDragOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
@@ -130,6 +131,7 @@ function renderTdColumn (
   const showTitle = cellOverflow === 'title'
   const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
   const hasEllipsis = isAllOverflow || showTitle || showTooltip || showEllipsis
+  const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
   const isCsHeight = !!customCellHeight
   const isRsHeight = resizeHeight > 0
   let isDirty
@@ -365,7 +367,22 @@ function renderTdColumn (
     }
   }
 
-  if (rowResize && rowOpts.resizable) {
+  if (!fixedHiddenColumn && showResizable && isAllColumnDrag) {
+    tdVNs.push(
+      h('div', {
+        key: 'tcc',
+        class: ['vxe-cell--col-resizable', {
+          'is--line': !border || border === 'none'
+        }],
+        on: {
+          mousedown: (evnt: MouseEvent) => $xeTable.handleColResizeMousedownEvent(evnt, fixedType, cellParams),
+          dblclick: (evnt: MouseEvent) => $xeTable.handleColResizeDblclickEvent(evnt, cellParams)
+        }
+      })
+    )
+  }
+
+  if ((rowResize || isAllRowDrag) && rowOpts.resizable) {
     tdVNs.push(
       h('div', {
         key: 'tcr',
@@ -415,14 +432,14 @@ function renderTdColumn (
   }, isOptimizeMode && fixedHiddenColumn ? [] : tdVNs)
 }
 
-function renderRows (h: CreateElement, _vm: any, fixedType: VxeColumnPropTypes.Fixed, isOptimizeMode: boolean, tableData: any[], tableColumn: VxeTableDefines.ColumnInfo[]) {
+function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '', isOptimizeMode: boolean, tableData: any[], tableColumn: VxeTableDefines.ColumnInfo[]) {
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
   const tableReactData = $xeTable as unknown as TableReactData
   const tableInternalData = $xeTable as unknown as TableInternalData
 
   const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
-  const { hasFixedColumn, treeExpandedMaps, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, isDragColMove } = tableReactData
+  const { hasFixedColumn, treeExpandedMaps, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, isDragColMove } = tableReactData
   const { fullAllDataRowIdData } = tableInternalData
   const checkboxOpts = $xeTable.computeCheckboxOpts
   const radioOpts = $xeTable.computeRadioOpts
@@ -508,7 +525,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: VxeColumnPropTypes.F
       return renderTdColumn(h, _vm, seq, rowid, fixedType, isOptimizeMode, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
     })
     rows.push(
-      columnOpts.drag && columnDragOpts.animation
+      !isColLoading && (columnOpts.drag && columnDragOpts.animation)
         ? h('transition-group', {
           props: {
             tag: 'tr',
@@ -643,7 +660,7 @@ export default {
     const { fixedColumn, fixedType, tableColumn } = props
 
     const { spanMethod, footerSpanMethod, mouseConfig } = tableProps
-    const { isGroup, tableData, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn, dragRow, dragCol } = tableReactData
+    const { isGroup, tableData, isRowLoading, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn, dragRow, dragCol } = tableReactData
     const { visibleColumn, fullAllDataRowIdData, fullColumnIdData } = tableInternalData
     const rowOpts = $xeTable.computeRowOpts
     const emptyOpts = $xeTable.computeEmptyOpts
@@ -787,9 +804,9 @@ export default {
             })
           })),
           /**
-         * 内容
-         */
-          rowOpts.drag && rowDragOpts.animation
+           * 内容
+           */
+          !(isRowLoading || isColLoading) && (rowOpts.drag && rowDragOpts.animation)
             ? h('transition-group', {
               ref: 'refBodyTBody',
               props: {

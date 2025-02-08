@@ -33,10 +33,11 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
   const tableInternalData = $xeTable as unknown as TableInternalData
 
   const { fixedType } = props
-  const { footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
+  const { resizable: allResizable, border, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
   const { scrollXLoad, scrollYLoad, overflowX, currentColumn, mergeFooterList } = tableReactData
   const { scrollXStore } = tableInternalData
   const tooltipOpts = $xeTable.computeTooltipOpts
+  const { isAllColumnDrag } = $xeTable.resizableOpts
   const columnOpts = $xeTable.computeColumnOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const cellOpts = $xeTable.computeCellOpts
@@ -58,12 +59,15 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
     const showTitle = footOverflow === 'title'
     const showTooltip = footOverflow === true || footOverflow === 'tooltip'
     let hasEllipsis = showTitle || showTooltip || showEllipsis
-    const attrs: any = { colid: column.id }
+    const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
+    const attrs: any = { colid }
     const tfOns: any = {}
     const columnIndex = $xeTable.getColumnIndex(column)
     const _columnIndex = $xeTable.getVTColumnIndex(column)
     const itemIndex = _columnIndex
-    const cellParams: VxeTableDefines.CellRenderFooterParams = {
+    const cellParams: VxeTableDefines.CellRenderFooterParams & {
+      $table: VxeTableConstructor<any> & VxeTablePrivateMethods
+    } = {
       $table: $xeTable,
       $grid: $xeTable.xegrid,
       row,
@@ -181,7 +185,21 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
               },
               class: 'vxe-cell--wrapper'
             }, column.renderFooter(h, cellParams))
-          ])
+          ]),
+      /**
+       * 列宽拖动
+       */
+      !fixedHiddenColumn && showResizable && isAllColumnDrag
+        ? h('div', {
+          class: ['vxe-cell--col-resizable', {
+            'is--line': !border || border === 'none'
+          }],
+          on: {
+            mousedown: (evnt: MouseEvent) => $xeTable.handleColResizeMousedownEvent(evnt, fixedType, cellParams),
+            dblclick: (evnt: MouseEvent) => $xeTable.handleColResizeDblclickEvent(evnt, cellParams)
+          }
+        })
+        : renderEmptyElement($xeTable)
     ])
   })
 }
@@ -195,7 +213,7 @@ function renderHeads (h: CreateElement, _vm: any, renderColumnList: VxeTableDefi
   const { fixedType, footerTableData } = props
 
   const { footerRowClassName, footerRowStyle } = tableProps
-  const { isDragColMove } = tableReactData
+  const { isColLoading, isDragColMove } = tableReactData
   const columnOpts = $xeTable.computeColumnOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
 
@@ -203,7 +221,7 @@ function renderHeads (h: CreateElement, _vm: any, renderColumnList: VxeTableDefi
     const _rowIndex = $rowIndex
     const rowParams = { $table: $xeTable, row, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
 
-    if (columnOpts.drag && columnDragOpts.animation) {
+    if (!isColLoading && columnOpts.drag && columnDragOpts.animation) {
       return h('transition-group', {
         key: $rowIndex,
         props: {

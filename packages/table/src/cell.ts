@@ -867,7 +867,7 @@ export const Cell = {
   renderSortIcon (h: CreateElement, params: (VxeTableDefines.CellRenderHeaderParams | VxeTableDefines.CellRenderHeaderParams) & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
     const sortOpts = $table.computeSortOpts
-    const { showIcon, iconLayout, iconAsc, iconDesc, iconVisibleMethod } = sortOpts
+    const { showIcon, allowBtn, iconLayout, iconAsc, iconDesc, iconVisibleMethod } = sortOpts
     if (showIcon && (!iconVisibleMethod || iconVisibleMethod(params))) {
       return [
         h('span', {
@@ -880,12 +880,14 @@ export const Cell = {
             attrs: {
               title: getI18n('vxe.table.sortAsc')
             },
-            on: {
-              click (evnt: any) {
-                evnt.stopPropagation()
-                $table.triggerSortEvent(evnt, column, 'asc')
-              }
-            }
+            on: allowBtn
+              ? {
+                  click (evnt: any) {
+                    evnt.stopPropagation()
+                    $table.triggerSortEvent(evnt, column, 'asc')
+                  }
+                }
+              : undefined
           }),
           h('i', {
             class: ['vxe-sort--desc-btn', iconDesc || getIcon().TABLE_SORT_DESC, {
@@ -894,12 +896,14 @@ export const Cell = {
             attrs: {
               title: getI18n('vxe.table.sortDesc')
             },
-            on: {
-              click (evnt: any) {
-                evnt.stopPropagation()
-                $table.triggerSortEvent(evnt, column, 'desc')
-              }
-            }
+            on: allowBtn
+              ? {
+                  click (evnt: any) {
+                    evnt.stopPropagation()
+                    $table.triggerSortEvent(evnt, column, 'desc')
+                  }
+                }
+              : undefined
           })
         ])
       ]

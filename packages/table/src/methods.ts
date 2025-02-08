@@ -1684,13 +1684,12 @@ function handleColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
   internalData.collectColumn = collectColumn
   const tableFullColumn = getColumnList(collectColumn)
   internalData.tableFullColumn = tableFullColumn
-  reactData.isLoading = true
+  reactData.isColLoading = true
   reactData.isDragColMove = false
   initColumnSort($xeTable)
   return Promise.resolve(
     restoreCustomStorage($xeTable)
   ).then(() => {
-    reactData.isLoading = false
     cacheColumnMap($xeTable)
     parseColumns($xeTable, true).then(() => {
       if (reactData.scrollXLoad) {
@@ -1715,6 +1714,7 @@ function handleColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
       if ($xeTable.handleUpdateCustomColumn) {
         $xeTable.handleUpdateCustomColumn()
       }
+      reactData.isColLoading = false
       return $xeTable.recalculate()
     })
   })
@@ -2087,18 +2087,20 @@ const Methods = {
     scrollYStore.endIndex = 1
     scrollXStore.startIndex = 0
     scrollXStore.endIndex = 1
+    reactData.isRowLoading = true
+    reactData.scrollVMLoading = false
     editStore.insertMaps = {}
-    editStore.removeList = []
     editStore.removeMaps = {}
     const sYLoad = updateScrollYStatus($xeTable, fullData)
-    this.isDragRowMove = false
+    reactData.isDragColMove = false
+    reactData.isDragRowMove = false
     // 全量数据
-    this.tableFullData = fullData
-    this.tableFullTreeData = treeData
+    internalData.tableFullData = fullData
+    internalData.tableFullTreeData = treeData
     // 缓存数据
-    this.cacheRowMap(isReset, true)
+    $xeTable.cacheRowMap(true, isReset)
     // 原始数据
-    this.tableSynchData = datas
+    internalData.tableSynchData = datas
     if (isReset) {
       internalData.isResizeCellHeight = false
       reactData.rowExpandedMaps = {}
@@ -2108,7 +2110,7 @@ const Methods = {
     }
     // 克隆原数据，用于显示编辑状态，与编辑值做对比
     if (keepSource) {
-      this.cacheSourceMap(fullData)
+      $xeTable.cacheSourceMap(fullData)
     }
     if (this.clearCellAreas && this.mouseConfig) {
       this.clearCellAreas()
@@ -2167,6 +2169,7 @@ const Methods = {
             if (sYOpts.scrollToTopOnChange) {
               targetScrollTop = 0
             }
+            reactData.isRowLoading = false
             calcCellHeight($xeTable)
             // 是否变更虚拟滚动
             if (oldScrollYLoad === sYLoad) {
@@ -5871,21 +5874,26 @@ const Methods = {
     }
     this.hoverRow = null
   },
-  triggerHeaderCellClickEvent (evnt: any, params: any) {
-    const { _lastResizeTime, sortOpts } = this
+  triggerHeaderCellClickEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { _lastResizeTime } = internalData
+    const sortOpts = $xeTable.computeSortOpts
+    const columnOpts = $xeTable.computeColumnOpts
     const { column } = params
     const cell = evnt.currentTarget
     const triggerResizable = _lastResizeTime && _lastResizeTime > Date.now() - 300
     const triggerSort = getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
     const triggerFilter = getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
     if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
-      this.triggerSortEvent(evnt, column, getNextSortOrder(this, column))
+      $xeTable.triggerSortEvent(evnt, column, getNextSortOrder($xeTable, column))
     }
-    this.emitEvent('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell }, params), evnt)
-    if (this.columnOpts.isCurrent || this.highlightCurrentColumn) {
-      this.triggerCurrentColumnEvent(evnt, params)
+    $xeTable.dispatchEvent('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell }, params), evnt)
+    if (columnOpts.isCurrent || $xeTable.highlightCurrentColumn) {
+      $xeTable.triggerCurrentColumnEvent(evnt, params)
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   triggerHeaderCellDblclickEvent (evnt: any, params: any) {
     this.emitEvent('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
@@ -6117,10 +6125,13 @@ const Methods = {
     const $xeTable = this
 
     const sortOpts = $xeTable.computeSortOpts
+    const { multiple, allowClear } = sortOpts
     const { field, sortable, remoteSort } = column
     if (sortable || remoteSort) {
       if (!order || column.order === order) {
-        $xeTable.clearSort(sortOpts.multiple ? column : null)
+        if (allowClear) {
+          $xeTable.clearSort(multiple ? column : null)
+        }
       } else {
         $xeTable.sort({ field, order })
       }

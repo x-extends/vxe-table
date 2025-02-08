@@ -12,6 +12,7 @@
       id="aaaa"
       :row-config="rowConfig"
       :column-config="{useKey: true}"
+      :resizable-config="resizableConfig"
       :column-drag-config="{isCrossDrag:true,isToChildDrag:true,isSelfToChildDrag:true}"
       :print-config="{}"
       :import-config="{}"
@@ -55,6 +56,11 @@ export default Vue.extend({
       rowConfig: {
         useKey: true,
         resizable: true
+      },
+      resizableConfig: {
+        isAllColumnDrag: true,
+        isAllRowDrag: true,
+        isDblclickAutoHeight: true
       },
       demo1: {
         loading: false,

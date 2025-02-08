@@ -86,14 +86,20 @@ export default {
     type: Boolean,
     default: () => getConfig().table.highlightHoverRow
   },
-  // 已废弃，被 column-config.isCurrent 替换
+  /**
+   * （即将废弃）是否要高亮当前选中列
+   * @deprecated
+   */
   highlightCurrentColumn: {
-    type: Boolean,
+    type: Boolean as PropType<VxeTablePropTypes.HighlightCurrentColumn>,
     default: () => getConfig().table.highlightCurrentColumn
   },
-  // 已废弃，被 column-config.isHover 替换
+  /**
+   * （即将废弃）鼠标移到列是否要高亮显示
+   * @deprecated
+   */
   highlightHoverColumn: {
-    type: Boolean,
+    type: Boolean as PropType<VxeTablePropTypes.HighlightHoverColumn>,
     default: () => getConfig().table.highlightHoverColumn
   },
   // 已废弃，直接删除

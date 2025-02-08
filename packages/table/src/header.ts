@@ -170,12 +170,12 @@ function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMo
   const columnDragOpts = $xeTable.computeColumnDragOpts
 
   const { headerRowClassName, headerRowStyle } = tableProps
-  const { isDragColMove } = tableReactData
+  const { isColLoading, isDragColMove } = tableReactData
 
   return headerGroups.map((cols: any, $rowIndex: any) => {
     const params = { $table: $xeTable, $rowIndex, fixed: fixedType, type: cellType }
 
-    if (columnOpts.drag && columnDragOpts.animation) {
+    if (!isColLoading && columnOpts.drag && columnDragOpts.animation) {
       return h('transition-group', {
         key: $rowIndex,
         props: {

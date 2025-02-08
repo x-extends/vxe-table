@@ -120,6 +120,8 @@ VxeUI.setConfig({
       // orders: ['asc', 'desc', null],
       // sortMethod: null,
       showIcon: true,
+      allowClear: true,
+      allowBtn: true,
       iconLayout: 'vertical'
     },
     filterConfig: {
