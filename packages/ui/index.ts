@@ -53,12 +53,14 @@ VxeUI.setConfig({
     rowDragConfig: {
       showIcon: true,
       animation: true,
-      showGuidesStatus: true
+      showGuidesStatus: true,
+      showDragTip: true
     },
     columnDragConfig: {
       showIcon: true,
       animation: true,
-      showGuidesStatus: true
+      showGuidesStatus: true,
+      showDragTip: true
     },
     checkboxConfig: {
       // trigger: 'default',
