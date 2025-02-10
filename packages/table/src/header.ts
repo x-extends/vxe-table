@@ -89,8 +89,10 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
     let isVNPreEmptyStatus = false
-    if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
-      isVNPreEmptyStatus = true
+    if (!isGroup) {
+      if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+        isVNPreEmptyStatus = true
+      }
     }
 
     const tcStyle: Record<string, string> = {}

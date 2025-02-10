@@ -575,6 +575,13 @@ export default {
         isFooter: false
       },
 
+      rowHeightStore: {
+        default: 48,
+        medium: 44,
+        small: 40,
+        mini: 36
+      },
+
       scrollVMLoading: false,
 
       calcCellHeightFlag: 0,
@@ -686,12 +693,10 @@ export default {
       return this.computeRowHeightMaps
     },
     computeRowHeightMaps () {
-      return {
-        default: 48,
-        medium: 44,
-        small: 40,
-        mini: 36
-      }
+      const $xeTable = this
+      const reactData = $xeTable as TableReactData
+
+      return reactData.rowHeightStore
     },
     computeDefaultRowHeight () {
       const $xeTable = this
@@ -1435,10 +1440,29 @@ export default {
   mounted () {
     const $xeTable = this
     const props = $xeTable
+    const reactData = $xeTable
 
+    const { rowHeightStore } = reactData
+    const varEl = $xeTable.$refs.refVarElem
     const columnOpts = $xeTable.computeColumnOpts
     const rowOpts = $xeTable.computeRowOpts
     const customOpts = $xeTable.computeCustomOpts
+
+    if (varEl) {
+      const [defEl, mediumEl, smallEl, miniEl] = varEl.children
+      if (defEl) {
+        rowHeightStore.default = defEl.clientHeight
+      }
+      if (mediumEl) {
+        rowHeightStore.medium = mediumEl.clientHeight
+      }
+      if (smallEl) {
+        rowHeightStore.small = smallEl.clientHeight
+      }
+      if (miniEl) {
+        rowHeightStore.mini = miniEl.clientHeight
+      }
+    }
 
     if (columnOpts.drag || rowOpts.drag || customOpts.allowSort) {
       initTpImg()
@@ -1596,6 +1620,23 @@ export default {
         class: 'vxe-table-slots',
         ref: 'hideColumn'
       }, this.$slots.default),
+      h('div', {
+        ref: 'refVarElem',
+        class: 'vxe-table-vars'
+      }, [
+        h('div', {
+          class: 'vxe-table-var-default'
+        }),
+        h('div', {
+          class: 'vxe-table-var-medium'
+        }),
+        h('div', {
+          class: 'vxe-table-var-small'
+        }),
+        h('div', {
+          class: 'vxe-table-var-mini'
+        })
+      ]),
       h('div', {
         key: 'tw',
         class: 'vxe-table--render-wrapper'

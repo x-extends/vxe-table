@@ -643,11 +643,6 @@ export default {
       }
       focused.row = null
       focused.column = null
-      $xeTable.$nextTick(() => {
-        if (mouseConfig && mouseOpts.area && $xeTable.handleRecalculateCellAreas) {
-          return $xeTable.handleRecalculateCellAreas()
-        }
-      })
       if (validOpts.autoClear) {
         if (validOpts.msgMode !== 'full' || getConfig().cellVaildMode === 'obsolete') {
           if ($xeTable.clearValidate) {
@@ -655,7 +650,11 @@ export default {
           }
         }
       }
-      return $xeTable.$nextTick()
+      return $xeTable.$nextTick().then(() => {
+        if (mouseConfig && mouseOpts.area && $xeTable.handleRecalculateCellAreas) {
+          return $xeTable.handleRecalculateCellAreas()
+        }
+      })
     },
     _getActiveRecord () {
       if (process.env.VUE_APP_VXE_ENV === 'development') {

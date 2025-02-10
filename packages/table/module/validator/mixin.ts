@@ -5,7 +5,7 @@ import { scrollToView } from '../../../ui/src/dom'
 import { handleFieldOrColumn, getRowid } from '../../src/util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
-import type { VxeTableDefines } from '../../../../types'
+import type { VxeTableDefines, TableReactData, TableInternalData } from '../../../../types'
 
 const { getConfig, validators } = VxeUI
 
@@ -154,8 +154,16 @@ export default {
      * 返回 Promise 对象，或者使用回调方式
      */
     beginValidate (rows: any, cols: VxeTableDefines.ColumnInfo[] | null, cb: any, isFull: any) {
+      const $xeTable = this
+      const props = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
       const validRest: any = {}
-      const { editRules, afterFullData, treeConfig, treeOpts } = this
+      const { editRules, treeConfig } = props
+      const { pendingRowMaps } = reactData
+      const { afterFullData } = internalData
+      const treeOpts = $xeTable.computeTreeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       let validList
       if (rows === true) {
@@ -178,6 +186,11 @@ export default {
       if (editRules) {
         const columns = cols && cols.length ? cols : this.getColumns()
         const handleVaild = (row: any) => {
+          const rowid = getRowid($xeTable, row)
+          // 是否标记删除
+          if (pendingRowMaps[rowid]) {
+            return
+          }
           if (isFull || !this.validRuleErr) {
             const colVailds: any[] = []
             columns.forEach((column: any) => {

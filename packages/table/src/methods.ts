@@ -7,7 +7,7 @@ import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible,
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, VxeToolbarConstructor, TableInternalData, VxeTablePrivateMethods, VxeTooltipInstance } from '../../../types'
+import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, VxeToolbarConstructor, TableInternalData, VxeTablePrivateMethods, VxeTooltipInstance, VxeTablePropTypes } from '../../../types'
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent } = VxeUI
 
@@ -6121,13 +6121,13 @@ const Methods = {
   /**
    * 点击排序事件
    */
-  triggerSortEvent (evnt: any, column: any, order: any) {
+  triggerSortEvent (evnt: Event, column: VxeTableDefines.ColumnInfo, order: VxeTablePropTypes.SortOrder) {
     const $xeTable = this
 
     const sortOpts = $xeTable.computeSortOpts
     const { multiple, allowClear } = sortOpts
-    const { field, sortable, remoteSort } = column
-    if (sortable || remoteSort) {
+    const { field, sortable } = column
+    if (sortable || (column as any).remoteSort) {
       if (!order || column.order === order) {
         if (allowClear) {
           $xeTable.clearSort(multiple ? column : null)
@@ -6137,6 +6137,38 @@ const Methods = {
       }
       $xeTable.handleColumnSortEvent(evnt, column)
     }
+  },
+  handleCellRuleUpdateStatus (type: 'change' | 'blur', cellParams: {
+    row: any
+    column: VxeTableDefines.ColumnInfo
+  }, cellValue?: any) {
+    const $xeTable = this
+    const reactData = $xeTable as unknown as TableReactData
+
+    const { validStore } = reactData
+    const { row, column } = cellParams
+    if ($xeTable.hasCellRules) {
+      if ($xeTable.hasCellRules(type, row, column)) {
+        const cell = $xeTable.getCellElement(row, column)
+        if (cell) {
+          const customVal = !XEUtils.isUndefined(cellValue)
+          return $xeTable.validCellRules(type, row, column, cellValue)
+            .then(() => {
+              if (customVal && validStore.visible) {
+                setCellValue(row, column, cellValue)
+              }
+              $xeTable.clearValidate(row, column)
+            })
+            .catch(({ rule }: any) => {
+              if (customVal) {
+                setCellValue(row, column, cellValue)
+              }
+              $xeTable.showValidTooltip({ rule, row, column, cell })
+            })
+        }
+      }
+    }
+    return $xeTable.$nextTick()
   },
   /**
    * 表头单元格按下事件
@@ -8485,33 +8517,13 @@ const Methods = {
    * 如果单元格配置了校验规则，则会进行校验
    */
   updateStatus (slotParams: any, cellValue: any) {
-    const customVal = !XEUtils.isUndefined(cellValue)
+    const $xeTable = this
+    const props = $xeTable
+
     return this.$nextTick().then(() => {
-      const { $refs, editRules, validStore } = this
-      const refTableBody = $refs.refTableBody
-      if (slotParams && refTableBody && editRules) {
-        const { row, column } = slotParams
-        const type = 'change'
-        if (this.hasCellRules) {
-          if (this.hasCellRules(type, row, column)) {
-            const cell = this.getCellElement(row, column)
-            if (cell) {
-              return this.validCellRules(type, row, column, cellValue)
-                .then(() => {
-                  if (customVal && validStore.visible) {
-                    setCellValue(row, column, cellValue)
-                  }
-                  this.clearValidate(row, column)
-                })
-                .catch(({ rule }: any) => {
-                  if (customVal) {
-                    setCellValue(row, column, cellValue)
-                  }
-                  this.showValidTooltip({ rule, row, column, cell })
-                })
-            }
-          }
-        }
+      const { editRules } = props
+      if (slotParams && editRules) {
+        return $xeTable.handleCellRuleUpdateStatus('change', slotParams, cellValue)
       }
     })
   },
