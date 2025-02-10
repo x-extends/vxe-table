@@ -9200,7 +9200,7 @@ export default defineComponent({
     }
 
     const renderDragTip = () => {
-      const { dragRow } = reactData
+      const { dragRow, dragCol } = reactData
       const rowOpts = computeRowOpts.value
       const columnOpts = computeColumnOpts.value
       const rowDragOpts = computeRowDragOpts.value
@@ -9222,31 +9222,33 @@ export default defineComponent({
               'is--guides': columnDragOpts.showGuidesStatus
             }]
           }),
-          h('div', {
-            ref: refDragTipElem,
-            class: 'vxe-table--drag-sort-tip'
-          }, [
-            h('div', {
-              class: 'vxe-table--drag-sort-tip-wrapper'
+          (dragRow && rowDragOpts.showDragTip) || (dragCol && columnDragOpts.showDragTip)
+            ? h('div', {
+              ref: refDragTipElem,
+              class: 'vxe-table--drag-sort-tip'
             }, [
               h('div', {
-                class: 'vxe-table--drag-sort-tip-status'
+                class: 'vxe-table--drag-sort-tip-wrapper'
               }, [
-                h('span', {
-                  class: ['vxe-table--drag-sort-tip-normal-status', dragRow ? getIcon().TABLE_DRAG_STATUS_ROW : getIcon().TABLE_DRAG_STATUS_COLUMN]
-                }),
-                h('span', {
-                  class: ['vxe-table--drag-sort-tip-sub-status', getIcon().TABLE_DRAG_STATUS_SUB_ROW]
-                }),
-                h('span', {
-                  class: ['vxe-table--drag-sort-tip-disabled-status', getIcon().TABLE_DRAG_DISABLED]
-                })
-              ]),
-              h('div', {
-                class: 'vxe-table--drag-sort-tip-content'
-              }, renderDragTipContents())
+                h('div', {
+                  class: 'vxe-table--drag-sort-tip-status'
+                }, [
+                  h('span', {
+                    class: ['vxe-table--drag-sort-tip-normal-status', dragRow ? getIcon().TABLE_DRAG_STATUS_ROW : getIcon().TABLE_DRAG_STATUS_COLUMN]
+                  }),
+                  h('span', {
+                    class: ['vxe-table--drag-sort-tip-sub-status', getIcon().TABLE_DRAG_STATUS_SUB_ROW]
+                  }),
+                  h('span', {
+                    class: ['vxe-table--drag-sort-tip-disabled-status', getIcon().TABLE_DRAG_DISABLED]
+                  })
+                ]),
+                h('div', {
+                  class: 'vxe-table--drag-sort-tip-content'
+                }, renderDragTipContents())
+              ])
             ])
-          ])
+            : renderEmptyElement($xeTable)
         ])
       }
       return renderEmptyElement($xeTable)
