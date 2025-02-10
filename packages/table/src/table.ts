@@ -255,6 +255,13 @@ export default defineComponent({
         isFooter: false
       },
 
+      rowHeightStore: {
+        default: 48,
+        medium: 44,
+        small: 40,
+        mini: 36
+      },
+
       scrollVMLoading: false,
 
       calcCellHeightFlag: 1,
@@ -357,6 +364,7 @@ export default defineComponent({
     let tablePrivateMethods = {} as TablePrivateMethods
 
     const refElem = ref() as Ref<HTMLDivElement>
+    const refVarElem = ref() as Ref<HTMLDivElement>
     const refTooltip = ref() as Ref<VxeTooltipInstance>
     const refCommTooltip = ref() as Ref<VxeTooltipInstance>
     const refValidTooltip = ref() as Ref<VxeTooltipInstance>
@@ -473,12 +481,7 @@ export default defineComponent({
     })
 
     const computeRowHeightMaps = computed(() => {
-      return {
-        default: 48,
-        medium: 44,
-        small: 40,
-        mini: 36
-      }
+      return reactData.rowHeightStore
     })
 
     const computeDefaultRowHeight = computed(() => {
@@ -9448,6 +9451,23 @@ export default defineComponent({
           class: 'vxe-table-slots'
         }, slots.default ? slots.default({}) : []),
         h('div', {
+          ref: refVarElem,
+          class: 'vxe-table-vars'
+        }, [
+          h('div', {
+            class: 'vxe-table-var-default'
+          }),
+          h('div', {
+            class: 'vxe-table-var-medium'
+          }),
+          h('div', {
+            class: 'vxe-table-var-small'
+          }),
+          h('div', {
+            class: 'vxe-table-var-mini'
+          })
+        ]),
+        h('div', {
           key: 'tw',
           class: 'vxe-table--render-wrapper'
         }, scrollbarXToTop
@@ -9810,9 +9830,27 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      const { rowHeightStore } = reactData
+      const varEl = refVarElem.value
       const columnOpts = computeColumnOpts.value
       const rowOpts = computeRowOpts.value
       const customOpts = computeCustomOpts.value
+
+      if (varEl) {
+        const [defEl, mediumEl, smallEl, miniEl] = varEl.children
+        if (defEl) {
+          rowHeightStore.default = defEl.clientHeight
+        }
+        if (mediumEl) {
+          rowHeightStore.medium = mediumEl.clientHeight
+        }
+        if (smallEl) {
+          rowHeightStore.small = smallEl.clientHeight
+        }
+        if (miniEl) {
+          rowHeightStore.mini = miniEl.clientHeight
+        }
+      }
 
       if (columnOpts.drag || rowOpts.drag || customOpts.allowSort) {
         initTpImg()

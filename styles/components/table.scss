@@ -7,6 +7,27 @@
   display: none;
 }
 
+.vxe-table-vars {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+  overflow: hidden;
+  user-select: none;
+  pointer-events: none;
+  .vxe-table-var-default {
+    height: var(--vxe-ui-table-row-height-default);
+  }
+  .vxe-table-var-medium {
+    height: var(--vxe-ui-table-row-height-medium);
+  }
+  .vxe-table-var-small {
+    height: var(--vxe-ui-table-row-height-small);
+  }
+  .vxe-table-var-mini {
+    height: var(--vxe-ui-table-row-height-mini);
+  }
+}
+
 .vxe-table--print-frame {
   position: fixed;
   bottom: -100%;
