@@ -516,7 +516,6 @@ export default {
           column: null
         },
         insertMaps: {},
-        removeList: [],
         removeMaps: {}
       },
       // 存放 tooltip 相关信息

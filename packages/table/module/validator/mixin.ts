@@ -161,8 +161,9 @@ export default {
 
       const validRest: any = {}
       const { editRules, treeConfig } = props
-      const { pendingRowMaps } = reactData
+      const { editStore, pendingRowMaps } = reactData
       const { afterFullData } = internalData
+      const { removeMaps } = editStore
       const treeOpts = $xeTable.computeTreeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       let validList
@@ -187,6 +188,10 @@ export default {
         const columns = cols && cols.length ? cols : this.getColumns()
         const handleVaild = (row: any) => {
           const rowid = getRowid($xeTable, row)
+          // 是否删除
+          if (removeMaps[rowid]) {
+            return
+          }
           // 是否标记删除
           if (pendingRowMaps[rowid]) {
             return

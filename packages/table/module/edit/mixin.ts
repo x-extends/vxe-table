@@ -5,7 +5,19 @@ import { getCellValue, setCellValue, getRowid } from '../../src/util'
 import { browse, removeClass, addClass } from '../../../ui/src/dom'
 import { warnLog, errLog } from '../../../ui/src/log'
 
+import type { VxeTableConstructor, TableReactData } from '../../../../types'
+
 const { getConfig, renderer, getI18n } = VxeUI
+
+function removeCellSelectedClass ($xeTable: VxeTableConstructor) {
+  const el = $xeTable.$refs.refElem as HTMLDivElement
+  if (el) {
+    const cell = el.querySelector('.col--selected')
+    if (cell) {
+      removeClass(cell, 'col--selected')
+    }
+  }
+}
 
 function insertTreeRow (_vm: any, newRecords: any[], isAppend: any) {
   const { tableFullTreeData, afterFullData, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = _vm
@@ -291,7 +303,7 @@ export default {
       const treeOpts = $xeTable.computeTreeOpts
       const { transform, mapChildrenField } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
-      const { actived, removeList, insertMaps } = editStore
+      const { actived, removeMaps, insertMaps } = editStore
       const { checkField } = checkboxOpts
       let delList: any[] = []
       if (!rows) {
@@ -302,7 +314,8 @@ export default {
       // 如果是新增，则保存记录
       rows.forEach(row => {
         if (!$xeTable.isInsertByRow(row)) {
-          removeList.push(row)
+          const rowid = getRowid($xeTable, row)
+          removeMaps[rowid] = row
         }
       })
       // 如果绑定了多选属性，则更新状态
@@ -462,7 +475,16 @@ export default {
      * 获取已删除的数据
      */
     _getRemoveRecords () {
-      return this.editStore.removeList
+      const $xeTable = this
+      const reactData = $xeTable
+
+      const { editStore } = reactData
+      const { removeMaps } = editStore
+      const removeRecords: any[] = []
+      XEUtils.each(removeMaps, (row) => {
+        removeRecords.push(row)
+      })
+      return removeRecords
     },
     /**
      * 获取更新数据
@@ -819,7 +841,7 @@ export default {
             selected.row = row
             selected.column = column
             if (isMouseSelected) {
-              this.addColSdCls()
+              this.addCellSelectedClass()
             }
             this.focus()
             if (evnt) {
@@ -845,11 +867,13 @@ export default {
      * 清除所选中源状态
      */
     _clearSelected () {
+      const $xeTable = this
+
       const { selected } = this.editStore
       selected.row = null
       selected.column = null
       this.reColTitleSdCls()
-      this.reColSdCls()
+      removeCellSelectedClass($xeTable)
       return this.$nextTick()
     },
     reColTitleSdCls () {
@@ -858,18 +882,16 @@ export default {
         XEUtils.arrayEach(headerElem.querySelectorAll('.col--title-selected'), elem => removeClass(elem, 'col--title-selected'))
       }
     },
-    reColSdCls () {
-      const cell = this.$el.querySelector('.col--selected')
-      if (cell) {
-        removeClass(cell, 'col--selected')
-      }
-    },
-    addColSdCls () {
-      const { selected } = this.editStore
+    addCellSelectedClass () {
+      const $xeTable = this
+      const reactData = $xeTable as TableReactData
+
+      const { editStore } = reactData
+      const { selected } = editStore
       const { row, column } = selected
-      this.reColSdCls()
+      removeCellSelectedClass($xeTable)
       if (row && column) {
-        const cell = this.getCellElement(row, column)
+        const cell = $xeTable.getCellElement(row, column)
         if (cell) {
           addClass(cell, 'col--selected')
         }

@@ -1120,14 +1120,14 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
   }
 }
 
-function getOrderField (_vm: any, column: any) {
+function getOrderField ($xeTable: VxeTableConstructor, column: VxeTableDefines.ColumnInfo) {
   const { sortBy, sortType } = column
   return (row: any) => {
     let cellValue
     if (sortBy) {
       cellValue = XEUtils.isFunction(sortBy) ? sortBy({ row, column }) : XEUtils.get(row, sortBy)
     } else {
-      cellValue = _vm.getCellLabel(row, column)
+      cellValue = $xeTable.getCellLabel(row, column)
     }
     if (!sortType || sortType === 'auto') {
       return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
@@ -2968,74 +2968,148 @@ const Methods = {
    * 如果存在筛选条件，继续处理
    */
   updateAfterFullData () {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { tableFullColumn, tableFullData, filterOpts, sortOpts, treeConfig, treeOpts, tableFullTreeData } = this
+    const { treeConfig } = props
+    const { tableFullColumn, tableFullData, tableFullTreeData } = internalData
+    const filterOpts = $xeTable.computeFilterOpts
+    const sortOpts = $xeTable.computeSortOpts
+    const treeOpts = $xeTable.computeTreeOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
+    const { transform, rowField, parentField, mapChildrenField } = treeOpts
     const { remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
     const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple, chronological } = sortOpts
-    const { transform } = treeOpts
-    const childrenField = treeOpts.children || treeOpts.childrenField
     let tableData: any[] = []
     let tableTree: any[] = []
-    const filterColumns: any[] = []
-    let orderColumns: any[] = []
-    tableFullColumn.forEach((column: any) => {
-      const { field, sortable, order, filters } = column
-      if (!allRemoteFilter && filters && filters.length) {
-        const valueList: any[] = []
-        const itemList: any[] = []
-        filters.forEach((item: any) => {
-          if (item.checked) {
-            itemList.push(item)
-            valueList.push(item.value)
+
+    // 处理数据
+    if (!allRemoteFilter || !allRemoteSort) {
+      const filterColumns: {
+        column: VxeTableDefines.ColumnInfo
+        valueList: any[]
+        itemList: VxeTableDefines.FilterOption[]
+      }[] = []
+      let orderColumns: VxeTableDefines.SortCheckedParams[] = []
+      tableFullColumn.forEach((column) => {
+        const { field, sortable, order, filters } = column
+        if (!allRemoteFilter && filters && filters.length) {
+          const valueList: any[] = []
+          const itemList: VxeTableDefines.FilterOption[] = []
+          filters.forEach((item) => {
+            if (item.checked) {
+              itemList.push(item as VxeTableDefines.FilterOption)
+              valueList.push(item.value)
+            }
+          })
+          if (itemList.length) {
+            filterColumns.push({ column, valueList, itemList })
           }
-        })
-        if (itemList.length) {
-          filterColumns.push({ column, valueList, itemList })
         }
+        if (!allRemoteSort && sortable && order) {
+          orderColumns.push({ column, field, property: field, order: order, sortTime: column.sortTime })
+        }
+      })
+      if (sortMultiple && chronological && orderColumns.length > 1) {
+        orderColumns = XEUtils.orderBy(orderColumns, 'sortTime')
       }
-      if (!allRemoteSort && sortable && order) {
-        orderColumns.push({ column, field, property: field, order, sortTime: column.sortTime })
-      }
-    })
-    if (sortMultiple && chronological && orderColumns.length > 1) {
-      orderColumns = XEUtils.orderBy(orderColumns, 'sortTime')
-    }
-    if (filterColumns.length) {
-      const handleFilter = (row: any) => {
-        return filterColumns.every(({ column, valueList, itemList }) => {
-          if (valueList.length && !allRemoteFilter) {
-            const { filterMethod, filterRender, field } = column
+
+      // 处理筛选
+      // 支持单列、多列、组合筛选
+      if (!allRemoteFilter && filterColumns.length) {
+        const handleFilter = (row: any) => {
+          return filterColumns.every(({ column, valueList, itemList }) => {
+            const { filterMethod, filterRender } = column
             const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
             const compFilterMethod = compConf ? (compConf.tableFilterMethod || compConf.filterMethod) : null
             const tdFilterMethod = compConf ? (compConf.tableFilterDefaultMethod || compConf.defaultTableFilterMethod || compConf.defaultFilterMethod) : null
             const cellValue = getCellValue(row, column)
             if (filterMethod) {
-              return itemList.some((item: any) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: this }))
+              return itemList.some((item) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xeTable }))
             } else if (compFilterMethod) {
-              return itemList.some((item: any) => compFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: this }))
+              return itemList.some((item) => compFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xeTable }))
             } else if (allFilterMethod) {
               return allFilterMethod({ options: itemList, values: valueList, cellValue, row, column })
             } else if (tdFilterMethod) {
-              return itemList.some((item: any) => tdFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: this }))
+              return itemList.some((item) => tdFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xeTable }))
             }
-            return valueList.indexOf(XEUtils.get(row, field)) > -1
-          }
-          return true
-        })
-      }
-      if (treeConfig && transform) {
-        // 筛选虚拟树
-        tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, {
-          original: true,
-          isEvery: true,
-          children: treeOpts.mapChildrenField,
-          mapChildren: childrenField
-        })
-        tableData = tableTree
+            return valueList.indexOf(XEUtils.get(row, column.field)) > -1
+          })
+        }
+        if (treeConfig && transform) {
+          // 筛选虚拟树
+          tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, {
+            original: true,
+            isEvery: true,
+            children: mapChildrenField,
+            mapChildren: childrenField
+          })
+          tableData = tableTree
+        } else {
+          tableData = treeConfig ? tableFullTreeData.filter(handleFilter) : tableFullData.filter(handleFilter)
+          tableTree = tableData
+        }
       } else {
-        tableData = treeConfig ? tableFullTreeData.filter(handleFilter) : tableFullData.filter(handleFilter)
-        tableTree = tableData
+        if (treeConfig && transform) {
+          // 还原虚拟树
+          tableTree = XEUtils.searchTree(tableFullTreeData, () => true, {
+            original: true,
+            isEvery: true,
+            children: mapChildrenField,
+            mapChildren: childrenField
+          })
+          tableData = tableTree
+        } else {
+          tableData = treeConfig ? tableFullTreeData.slice(0) : tableFullData.slice(0)
+          tableTree = tableData
+        }
+      }
+
+      // 处理排序（不能用于树形结构）
+      // 支持单列、多列、组合排序
+      if (!allRemoteSort && orderColumns.length) {
+        if (treeConfig && transform) {
+          // 虚拟树和列表一样，只能排序根级节点
+          if (allSortMethod) {
+            const sortRests = allSortMethod({ data: tableTree, sortList: orderColumns, $table: $xeTable })
+            tableTree = XEUtils.isArray(sortRests) ? sortRests : tableTree
+          } else {
+            const treeList = XEUtils.toTreeArray(tableTree, {
+              children: mapChildrenField
+            })
+            tableTree = XEUtils.toArrayTree(
+              XEUtils.orderBy(treeList, orderColumns.map(({ column, order }) => [getOrderField($xeTable, column), order])),
+              {
+                key: rowField,
+                parentKey: parentField,
+                children: childrenField,
+                mapChildren: mapChildrenField
+              }
+            )
+          }
+          tableData = tableTree
+        } else {
+          if (allSortMethod) {
+            const sortRests = allSortMethod({ data: tableData, sortList: orderColumns, $table: $xeTable })
+            tableData = XEUtils.isArray(sortRests) ? sortRests : tableData
+          } else {
+            // 兼容 v4
+            if (sortMultiple) {
+              tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, order }) => [getOrderField(this, column), order]))
+            } else {
+              const firstOrderColumn = orderColumns[0]
+              let sortByConfs
+              // 已废弃，兼容 v2，在 v4 中废弃， sortBy 不能为数组
+              if (XEUtils.isArray((firstOrderColumn as any).sortBy)) {
+                sortByConfs = (firstOrderColumn as any).sortBy.map((item: any) => [item, firstOrderColumn.order])
+              }
+              tableData = XEUtils.orderBy(tableData, sortByConfs || [firstOrderColumn].map(({ column, order }) => [getOrderField(this, column), order]))
+            }
+            tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, order }) => [getOrderField($xeTable, column), order]))
+          }
+          tableTree = tableData
+        }
       }
     } else {
       if (treeConfig && transform) {
@@ -3052,39 +3126,8 @@ const Methods = {
         tableTree = tableData
       }
     }
-    const firstOrderColumn = orderColumns[0]
-    if (!allRemoteSort && firstOrderColumn) {
-      if (treeConfig && transform) {
-        // 虚拟树和列表一样，只能排序根级节点
-        if (allSortMethod) {
-          const sortRests = allSortMethod({ data: tableTree, sortList: orderColumns, $table: this })
-          tableTree = XEUtils.isArray(sortRests) ? sortRests : tableTree
-        } else {
-          tableTree = XEUtils.orderBy(tableTree, orderColumns.map(({ column, order }) => [getOrderField(this, column), order]))
-        }
-        tableData = tableTree
-      } else {
-        if (allSortMethod) {
-          const sortRests = allSortMethod({ data: tableData, column: firstOrderColumn.column, property: firstOrderColumn.field, field: firstOrderColumn.field, order: firstOrderColumn.order, sortList: orderColumns, $table: this })
-          tableData = XEUtils.isArray(sortRests) ? sortRests : tableData
-        } else {
-          // 兼容 v4
-          if (sortMultiple) {
-            tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, order }) => [getOrderField(this, column), order]))
-          } else {
-            // 兼容 v2，在 v4 中废弃， sortBy 不能为数组
-            let sortByConfs
-            if (XEUtils.isArray(firstOrderColumn.sortBy)) {
-              sortByConfs = firstOrderColumn.sortBy.map((item: any) => [item, firstOrderColumn.order])
-            }
-            tableData = XEUtils.orderBy(tableData, sortByConfs || [firstOrderColumn].map(({ column, order }) => [getOrderField(this, column), order]))
-          }
-        }
-        tableTree = tableData
-      }
-    }
-    this.afterFullData = tableData
-    this.afterTreeFullData = tableTree
+    internalData.afterFullData = tableData
+    internalData.afterTreeFullData = tableTree
     updateAfterDataIndex($xeTable)
   },
   /**

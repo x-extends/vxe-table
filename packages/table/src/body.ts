@@ -403,6 +403,7 @@ function renderTdColumn (
         'fixed--width': !isAutoCellWidth,
         'fixed--hidden': fixedHiddenColumn,
         'is--padding': isCellPadding,
+        'is--progress': (fixedHiddenColumn && isAllOverflow) || isVNPreEmptyStatus,
         'is--drag-cell': isRowDragCell && (isCrossDrag || isPeerDrag || !rowLevel),
         'is--drag-disabled': isDisabledDrag,
         'col--dirty': isDirty,
