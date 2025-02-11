@@ -1648,13 +1648,13 @@ export default defineComponent({
       const sortOpts = computeSortOpts.value
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
-      const { transform } = treeOpts
+      const { transform, rowField, parentField, mapChildrenField } = treeOpts
       const { remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
       const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple, chronological } = sortOpts
       let tableData: any[] = []
       let tableTree: any[] = []
 
-      // 处理列
+      // 处理数据
       if (!allRemoteFilter || !allRemoteSort) {
         const filterColumns: {
           column: VxeTableDefines.ColumnInfo
@@ -1712,7 +1712,7 @@ export default defineComponent({
             tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, {
               original: true,
               isEvery: true,
-              children: treeOpts.mapChildrenField,
+              children: mapChildrenField,
               mapChildren: childrenField
             })
             tableData = tableTree
@@ -1726,7 +1726,7 @@ export default defineComponent({
             tableTree = XEUtils.searchTree(tableFullTreeData, () => true, {
               original: true,
               isEvery: true,
-              children: treeOpts.mapChildrenField,
+              children: mapChildrenField,
               mapChildren: childrenField
             })
             tableData = tableTree
@@ -1745,7 +1745,18 @@ export default defineComponent({
               const sortRests = allSortMethod({ data: tableTree, sortList: orderColumns, $table: $xeTable })
               tableTree = XEUtils.isArray(sortRests) ? sortRests : tableTree
             } else {
-              tableTree = XEUtils.orderBy(tableTree, orderColumns.map(({ column, order }) => [getOrderField(column), order]))
+              const treeList = XEUtils.toTreeArray(tableTree, {
+                children: mapChildrenField
+              })
+              tableTree = XEUtils.toArrayTree(
+                XEUtils.orderBy(treeList, orderColumns.map(({ column, order }) => [getOrderField(column), order])),
+                {
+                  key: rowField,
+                  parentKey: parentField,
+                  children: childrenField,
+                  mapChildren: mapChildrenField
+                }
+              )
             }
             tableData = tableTree
           } else {

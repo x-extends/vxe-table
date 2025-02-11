@@ -3,6 +3,7 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { isColumnInfo, mergeBodyMethod, getCellValue } from '../../src/util'
 import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
+import { hasClass } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
@@ -406,7 +407,7 @@ hooks.add('tableExportModule', {
                         cellValue = htmlCellElem.innerText.trim()
                       } else {
                         const cell = $xeTable.getCellElement(row, column)
-                        if (cell) {
+                        if (cell && !hasClass(cell, 'is--progress')) {
                           cellValue = cell.innerText.trim()
                         }
                       }
@@ -464,7 +465,7 @@ hooks.add('tableExportModule', {
                     cellValue = htmlCellElem.innerText.trim()
                   } else {
                     const cell = $xeTable.getCellElement(row, column)
-                    if (cell) {
+                    if (cell && !hasClass(cell, 'is--progress')) {
                       cellValue = cell.innerText.trim()
                     }
                   }
