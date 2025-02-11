@@ -7,7 +7,7 @@ import { getOnName, getModelEvent, getChangeEvent } from '../../ui/src/vn'
 import { errLog } from '../../ui/src/log'
 
 import type { VxeButtonComponent } from 'vxe-pc-ui'
-import type { VxeGlobalRendererHandles, VxeColumnPropTypes } from '../../../types'
+import type { VxeGlobalRendererHandles, VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
 const { getConfig, renderer, getI18n } = VxeUI
 
@@ -114,10 +114,15 @@ function getCellLabelVNs (renderOpts: any, params: any, cellLabel: any) {
  * @param modelFunc
  * @param changeFunc
  */
-function getNativeElementOns (renderOpts: any, params: any, modelFunc?: any, changeFunc?: any) {
+function getNativeElementOns (renderOpts: any, params: any, eFns?: {
+  model: (evnt: Event) => void
+  change?: (evnt: Event) => void
+  blur?: (evnt: Event) => void
+}) {
   const { events } = renderOpts
   const modelEvent = getModelEvent(renderOpts)
   const changeEvent = getChangeEvent(renderOpts)
+  const { model: modelFunc, change: changeFunc, blur: blurFunc } = eFns || {}
   const isSameEvent = changeEvent === modelEvent
   const ons: any = {}
   if (events) {
@@ -139,15 +144,25 @@ function getNativeElementOns (renderOpts: any, params: any, modelFunc?: any, cha
     }
   }
   if (!isSameEvent && changeFunc) {
-    ons[getOnName(changeEvent)] = function (...args: any[]) {
-      changeFunc(...args)
+    ons[getOnName(changeEvent)] = function (evnt: Event) {
+      changeFunc(evnt)
       if (events && events[changeEvent]) {
-        events[changeEvent](params, ...args)
+        events[changeEvent](params, evnt)
+      }
+    }
+  }
+  if (blurFunc) {
+    ons[getOnName(blurEvent)] = function (evnt: Event) {
+      blurFunc(evnt)
+      if (events && events[blurEvent]) {
+        events[blurEvent](params, evnt)
       }
     }
   }
   return ons
 }
+
+const blurEvent = 'blur'
 
 /**
  * 组件事件处理
@@ -156,10 +171,15 @@ function getNativeElementOns (renderOpts: any, params: any, modelFunc?: any, cha
  * @param modelFunc
  * @param changeFunc
  */
-function getComponentOns (renderOpts: any, params: any, modelFunc?: any, changeFunc?: any) {
+function getComponentOns (renderOpts: any, params: any, eFns?: {
+  model: (cellValue: any) => void
+  change?: (...args: any[]) => void
+  blur?: (...args: any[]) => void
+}) {
   const { events } = renderOpts
   const modelEvent = getModelEvent(renderOpts)
   const changeEvent = getChangeEvent(renderOpts)
+  const { model: modelFunc, change: changeFunc, blur: blurFunc } = eFns || {}
   const ons: any = {}
   XEUtils.objectEach(events, (func, key: any) => {
     ons[getOnName(key)] = function (...args: any[]) {
@@ -187,68 +207,117 @@ function getComponentOns (renderOpts: any, params: any, modelFunc?: any, changeF
       }
     }
   }
+  if (blurFunc) {
+    ons[getOnName(blurEvent)] = function (...args: any[]) {
+      blurFunc(...args)
+      if (events && events[blurEvent]) {
+        events[blurEvent](params, ...args)
+      }
+    }
+  }
   return ons
 }
 
-function getEditOns (renderOpts: any, params: any) {
+function getEditOns (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderTableEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { $table, row, column } = params
   const { name } = renderOpts
   const { model } = column
   const isImmediate = isImmediateCell(renderOpts, params)
-  return getComponentOns(renderOpts, params, (cellValue: any) => {
-    // 处理 model 值双向绑定
-    model.update = true
-    model.value = cellValue
-    if (isImmediate) {
-      setCellValue(row, column, cellValue)
-    }
-  }, (eventParams: any) => {
-    // 处理 change 事件相关逻辑
-    if (!isImmediate && (['VxeInput', 'VxeNumberInput', 'VxeTextarea', '$input', '$textarea'].includes(name))) {
-      const cellValue = eventParams.value
+  return getComponentOns(renderOpts, params, {
+    model (cellValue) {
+      // 处理 model 值双向绑定
       model.update = true
       model.value = cellValue
-      $table.updateStatus(params, cellValue)
-    } else {
-      $table.updateStatus(params)
+      if (isImmediate) {
+        setCellValue(row, column, cellValue)
+      }
+    },
+    change (eventParams) {
+      // 处理 change 事件相关逻辑
+      if (!isImmediate && name && (['VxeInput', 'VxeNumberInput', 'VxeTextarea', '$input', '$textarea'].includes(name))) {
+        const cellValue = eventParams.value
+        model.update = true
+        model.value = cellValue
+        $table.updateStatus(params, cellValue)
+      } else {
+        $table.updateStatus(params)
+      }
+    },
+    blur () {
+      if (isImmediate) {
+        $table.handleCellRuleUpdateStatus('blur', params)
+      } else {
+        $table.handleCellRuleUpdateStatus('blur', params, model.value)
+      }
     }
   })
 }
 
 function getFilterOns (renderOpts: any, params: any, option: any) {
-  return getComponentOns(renderOpts, params, (value: any) => {
-    // 处理 model 值双向绑定
-    option.data = value
-  }, () => {
-    handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
+  return getComponentOns(renderOpts, params, {
+    model (value: any) {
+      // 处理 model 值双向绑定
+      option.data = value
+    },
+    change () {
+      handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
+    },
+    blur () {
+      handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
+    }
   })
 }
 
 function getNativeEditOns (renderOpts: any, params: any) {
   const { $table, row, column } = params
   const { model } = column
-  return getNativeElementOns(renderOpts, params, (evnt: any) => {
-    // 处理 model 值双向绑定
-    const cellValue = evnt.target.value
-    if (isImmediateCell(renderOpts, params)) {
-      setCellValue(row, column, cellValue)
-    } else {
-      model.update = true
-      model.value = cellValue
+  return getNativeElementOns(renderOpts, params, {
+    model (evnt) {
+      // 处理 model 值双向绑定
+      const targetEl = evnt.target as HTMLInputElement
+      if (targetEl) {
+        const cellValue = targetEl.value
+        if (isImmediateCell(renderOpts, params)) {
+          setCellValue(row, column, cellValue)
+        } else {
+          model.update = true
+          model.value = cellValue
+        }
+      }
+    },
+    change (evnt) {
+      // 处理 change 事件相关逻辑
+      const targetEl = evnt.target as HTMLInputElement
+      if (targetEl) {
+        const cellValue = targetEl.value
+        $table.updateStatus(params, cellValue)
+      }
+    },
+    blur (evnt) {
+      const targetEl = evnt.target as HTMLInputElement
+      if (targetEl) {
+        const cellValue = targetEl.value
+        $table.updateStatus(params, cellValue)
+      }
     }
-  }, (evnt: any) => {
-    // 处理 change 事件相关逻辑
-    const cellValue = evnt.target.value
-    $table.updateStatus(params, cellValue)
   })
 }
 
 function getNativeFilterOns (renderOpts: any, params: any, option: any) {
-  return getNativeElementOns(renderOpts, params, (evnt: any) => {
-    // 处理 model 值双向绑定
-    option.data = evnt.target.value
-  }, () => {
-    handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
+  return getNativeElementOns(renderOpts, params, {
+    model (evnt) {
+      // 处理 model 值双向绑定
+      const targetEl = evnt.target as HTMLInputElement
+      if (targetEl) {
+        option.data = targetEl.value
+      }
+    },
+    change () {
+      handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
+    },
+    blur () {
+      handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
+    }
   })
 }
 
@@ -279,7 +348,7 @@ function buttonCellRender (renderOpts: any, params: any) {
   ]
 }
 
-function defaultEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
+function defaultEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { row, column } = params
   const cellValue = getCellValue(row, column)
   return [
@@ -290,7 +359,7 @@ function defaultEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEdit
   ]
 }
 
-function radioAndCheckboxEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
+function radioAndCheckboxEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { options } = renderOpts
   const { row, column } = params
   const cellValue = getCellValue(row, column)
@@ -307,7 +376,7 @@ function radioAndCheckboxEditRender (renderOpts: VxeGlobalRendererHandles.Render
  * 已废弃
  * @deprecated
  */
-function oldEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
+function oldEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { row, column } = params
   const cellValue = getCellValue(row, column)
   return [
@@ -768,7 +837,7 @@ renderer.mixin({
   },
   VxeColorPicker: {
     tableAutoFocus: 'input',
-    renderTableEdit (renderOpts: any, params: any) {
+    renderTableEdit (renderOpts, params: VxeGlobalRendererHandles.RenderTableEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
       const { row, column } = params
       const { options } = renderOpts
       const cellValue = getCellValue(row, column)
@@ -796,7 +865,7 @@ renderer.mixin({
   },
   VxeIconPicker: {
     tableAutoFocus: 'input',
-    renderTableEdit (renderOpts: any, params: any) {
+    renderTableEdit (renderOpts, params: VxeGlobalRendererHandles.RenderTableEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
       const { row, column } = params
       const { options } = renderOpts
       const cellValue = getCellValue(row, column)
@@ -832,7 +901,7 @@ renderer.mixin({
     renderTableDefault: defaultEditRender
   },
   VxeImage: {
-    renderTableDefault (renderOpts, params) {
+    renderTableDefault (renderOpts, params: VxeGlobalRendererHandles.RenderTableDefaultParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
       const { row, column } = params
       const { props } = renderOpts
       const cellValue = getCellValue(row, column)
@@ -846,7 +915,7 @@ renderer.mixin({
     }
   },
   VxeImageGroup: {
-    renderTableDefault (renderOpts, params) {
+    renderTableDefault (renderOpts, params: VxeGlobalRendererHandles.RenderTableDefaultParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
       const { row, column } = params
       const { props } = renderOpts
       const cellValue = getCellValue(row, column)
@@ -860,7 +929,7 @@ renderer.mixin({
     }
   },
   VxeTextEllipsis: {
-    renderTableDefault (renderOpts, params) {
+    renderTableDefault (renderOpts, params: VxeGlobalRendererHandles.RenderTableDefaultParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
       const { row, column } = params
       const { props } = renderOpts
       const cellValue = getCellValue(row, column)

@@ -313,11 +313,8 @@ hooks.add('tableEditModule', {
           $columnIndex: $xeTable.getVMColumnIndex(column)
         }, evnt || null)
       }
-      nextTick(() => {
-        if (mouseConfig && mouseOpts.area && $xeTable.handleRecalculateCellAreas) {
-          return $xeTable.handleRecalculateCellAreas()
-        }
-      })
+      focused.row = null
+      focused.column = null
       if (validOpts.autoClear) {
         if (validOpts.msgMode !== 'full' || getConfig().cellVaildMode === 'obsolete') {
           if ($xeTable.clearValidate) {
@@ -325,9 +322,11 @@ hooks.add('tableEditModule', {
           }
         }
       }
-      focused.row = null
-      focused.column = null
-      return nextTick()
+      return nextTick().then(() => {
+        if (mouseConfig && mouseOpts.area && $xeTable.handleRecalculateCellAreas) {
+          return $xeTable.handleRecalculateCellAreas()
+        }
+      })
     }
 
     editMethods = {

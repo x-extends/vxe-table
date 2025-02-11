@@ -5504,34 +5504,10 @@ export default defineComponent({
        * 如果单元格配置了校验规则，则会进行校验
        */
       updateStatus (slotParams, cellValue) {
-        const customVal = !XEUtils.isUndefined(cellValue)
         return nextTick().then(() => {
           const { editRules } = props
-          const { validStore } = reactData
-          const tableBody = refTableBody.value
-          if (slotParams && tableBody && editRules) {
-            const { row, column } = slotParams
-            const type = 'change'
-            if ($xeTable.hasCellRules) {
-              if ($xeTable.hasCellRules(type, row, column)) {
-                const cell = tableMethods.getCellElement(row, column)
-                if (cell) {
-                  return $xeTable.validCellRules(type, row, column, cellValue)
-                    .then(() => {
-                      if (customVal && validStore.visible) {
-                        setCellValue(row, column, cellValue)
-                      }
-                      $xeTable.clearValidate(row, column)
-                    })
-                    .catch(({ rule }) => {
-                      if (customVal) {
-                        setCellValue(row, column, cellValue)
-                      }
-                      $xeTable.showValidTooltip({ rule, row, column, cell })
-                    })
-                }
-              }
-            }
+          if (slotParams && editRules) {
+            return $xeTable.handleCellRuleUpdateStatus('change', slotParams, cellValue)
           }
         })
       },
@@ -7831,6 +7807,32 @@ export default defineComponent({
           }
           $xeTable.handleColumnSortEvent(evnt, column)
         }
+      },
+      handleCellRuleUpdateStatus (type, cellParams, cellValue) {
+        const { validStore } = reactData
+        const { row, column } = cellParams
+        if ($xeTable.hasCellRules) {
+          if ($xeTable.hasCellRules(type, row, column)) {
+            const cell = $xeTable.getCellElement(row, column)
+            if (cell) {
+              const customVal = !XEUtils.isUndefined(cellValue)
+              return $xeTable.validCellRules(type, row, column, cellValue)
+                .then(() => {
+                  if (customVal && validStore.visible) {
+                    setCellValue(row, column, cellValue)
+                  }
+                  $xeTable.clearValidate(row, column)
+                })
+                .catch(({ rule }: any) => {
+                  if (customVal) {
+                    setCellValue(row, column, cellValue)
+                  }
+                  $xeTable.showValidTooltip({ rule, row, column, cell })
+                })
+            }
+          }
+        }
+        return nextTick()
       },
       /**
        * 表头单元格按下事件
