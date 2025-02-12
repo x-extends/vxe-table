@@ -6,7 +6,7 @@ import { getCellValue, setCellValue, getRowid } from '../../src/util'
 import { browse, removeClass, addClass } from '../../../ui/src/dom'
 import { warnLog, errLog } from '../../../ui/src/log'
 
-import type { TableEditMethods, TableEditPrivateMethods } from '../../../../types'
+import type { TableEditMethods, TableEditPrivateMethods, VxeTableDefines } from '../../../../types'
 
 const { getConfig, renderer, hooks, getI18n } = VxeUI
 
@@ -21,7 +21,7 @@ hooks.add('tableEditModule', {
     let editMethods = {} as TableEditMethods
     let editPrivateMethods = {} as TableEditPrivateMethods
 
-    const getEditColumnModel = (row: any, column: any) => {
+    const getEditColumnModel = (row: any, column: VxeTableDefines.ColumnInfo) => {
       const { model, editRender } = column
       if (editRender) {
         model.value = getCellValue(row, column)
@@ -29,7 +29,7 @@ hooks.add('tableEditModule', {
       }
     }
 
-    const setEditColumnModel = (row: any, column: any) => {
+    const setEditColumnModel = (row: any, column: VxeTableDefines.ColumnInfo) => {
       const { model, editRender } = column
       if (editRender && model.update) {
         setCellValue(row, column, model.value)
@@ -48,21 +48,21 @@ hooks.add('tableEditModule', {
       }
     }
 
-    function syncActivedCell () {
+    const syncActivedCell = () => {
       const { editStore, tableColumn } = reactData
       const editOpts = computeEditOpts.value
       const { actived } = editStore
       const { row, column } = actived
       if (row || column) {
         if (editOpts.mode === 'row') {
-          tableColumn.forEach((column: any) => setEditColumnModel(row, column))
+          tableColumn.forEach((column) => setEditColumnModel(row, column))
         } else {
           setEditColumnModel(row, column)
         }
       }
     }
 
-    function insertTreeRow (newRecords: any[], isAppend: boolean) {
+    const insertTreeRow = (newRecords: any[], isAppend: boolean) => {
       const { tableFullTreeData, afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
       const treeOpts = computeTreeOpts.value
       const { rowField, parentField, mapChildrenField } = treeOpts
@@ -327,6 +327,133 @@ hooks.add('tableEditModule', {
           return $xeTable.handleRecalculateCellAreas()
         }
       })
+    }
+
+    const handleEditActive = (params: any, evnt: Event | null, isFocus: boolean) => {
+      const { editConfig, mouseConfig } = props
+      const { editStore, tableColumn } = reactData
+      const editOpts = computeEditOpts.value
+      const { mode } = editOpts
+      const { actived, focused } = editStore
+      const { row, column } = params
+      const { editRender } = column
+      const cell = (params.cell || $xeTable.getCellElement(row, column))
+      const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
+      params.cell = cell
+      if (cell && isEnableConf(editConfig) && isEnableConf(editRender)) {
+        // 激活编辑
+        if (!$xeTable.isPendingByRow(row)) {
+          if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
+            // 判断是否禁用编辑
+            let type: 'edit-disabled' | 'edit-activated' = 'edit-disabled'
+            if (!beforeEditMethod || beforeEditMethod({ ...params, $table: $xeTable, $grid: $xeTable.xegrid })) {
+              if (mouseConfig) {
+                $xeTable.clearSelected()
+                if ($xeTable.clearCellAreas) {
+                  $xeTable.clearCellAreas()
+                  $xeTable.clearCopyCellArea()
+                }
+              }
+              $xeTable.closeTooltip()
+              if (actived.column) {
+                handleClearEdit(evnt)
+              }
+              type = 'edit-activated'
+              column.renderHeight = cell.offsetHeight
+              actived.args = params
+              actived.row = row
+              actived.column = column
+              if (mode === 'row') {
+                tableColumn.forEach((column: any) => getEditColumnModel(row, column))
+              } else {
+                getEditColumnModel(row, column)
+              }
+              const afterEditMethod = editOpts.afterEditMethod
+              nextTick(() => {
+                if (isFocus) {
+                  $xeTable.handleFocus(params, evnt)
+                }
+                if (afterEditMethod) {
+                  afterEditMethod({ ...params, $table: $xeTable, $grid: $xeTable.xegrid })
+                }
+              })
+            }
+            $xeTable.dispatchEvent(type, {
+              row,
+              rowIndex: $xeTable.getRowIndex(row),
+              $rowIndex: $xeTable.getVMRowIndex(row),
+              column,
+              columnIndex: $xeTable.getColumnIndex(column),
+              $columnIndex: $xeTable.getVMColumnIndex(column)
+            }, evnt)
+
+            // v4已废弃
+            if (type === 'edit-activated') {
+              $xeTable.dispatchEvent('edit-actived', {
+                row,
+                rowIndex: $xeTable.getRowIndex(row),
+                $rowIndex: $xeTable.getVMRowIndex(row),
+                column,
+                columnIndex: $xeTable.getColumnIndex(column),
+                $columnIndex: $xeTable.getVMColumnIndex(column)
+              }, evnt)
+            }
+          } else {
+            const { column: oldColumn } = actived
+            if (mouseConfig) {
+              $xeTable.clearSelected()
+              if ($xeTable.clearCellAreas) {
+                $xeTable.clearCellAreas()
+                $xeTable.clearCopyCellArea()
+              }
+            }
+            if (oldColumn !== column) {
+              const { model: oldModel } = oldColumn
+              if (oldModel.update) {
+                setCellValue(row, oldColumn, oldModel.value)
+              }
+              if ($xeTable.clearValidate) {
+                $xeTable.clearValidate(row, column)
+              }
+            }
+            column.renderHeight = cell.offsetHeight
+            actived.args = params
+            actived.column = column
+            if (isFocus) {
+              setTimeout(() => {
+                $xeTable.handleFocus(params, evnt)
+              })
+            }
+          }
+          focused.column = null
+          focused.row = null
+          $xeTable.focus()
+        }
+      }
+      return nextTick()
+    }
+
+    const handleEditCell = (row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo, isPos: boolean) => {
+      const { editConfig } = props
+      const column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
+      if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender)) {
+        return Promise.resolve(isPos ? $xeTable.scrollToRow(row, column) : null).then(() => {
+          const cell = $xeTable.getCellElement(row, column)
+          if (cell) {
+            handleEditActive({
+              row,
+              rowIndex: $xeTable.getRowIndex(row),
+              column,
+              columnIndex: $xeTable.getColumnIndex(column),
+              cell,
+              $table: $xeTable
+            }, null, false)
+            internalData._lastCallTime = Date.now()
+          }
+          return nextTick()
+        })
+      }
+      return nextTick()
     }
 
     editMethods = {
@@ -658,7 +785,7 @@ hooks.add('tableEditModule', {
         if (fieldOrColumn) {
           column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
         }
-        return $xeTable.setEditCell(row, column)
+        return handleEditCell(row, column, false)
       },
       setActiveCell (row, fieldOrColumn) {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
@@ -671,26 +798,7 @@ hooks.add('tableEditModule', {
        * 激活单元格编辑
        */
       setEditCell (row, fieldOrColumn) {
-        const { editConfig } = props
-        const column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
-        if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender)) {
-          return $xeTable.scrollToRow(row, column).then(() => {
-            const cell = $xeTable.getCellElement(row, column)
-            if (cell) {
-              editPrivateMethods.handleEdit({
-                row,
-                rowIndex: $xeTable.getRowIndex(row),
-                column,
-                columnIndex: $xeTable.getColumnIndex(column),
-                cell,
-                $table: $xeTable
-              })
-              internalData._lastCallTime = Date.now()
-            }
-            return nextTick()
-          })
-        }
-        return nextTick()
+        return handleEditCell(row, fieldOrColumn, true)
       },
       /**
        * 只对 trigger=dblclick 有效，选中单元格
@@ -722,103 +830,7 @@ hooks.add('tableEditModule', {
        * 处理激活编辑
        */
       handleEdit (params, evnt) {
-        const { editConfig, mouseConfig } = props
-        const { editStore, tableColumn } = reactData
-        const editOpts = computeEditOpts.value
-        const { mode } = editOpts
-        const { actived, focused } = editStore
-        const { row, column } = params
-        const { editRender } = column
-        const cell = (params.cell || $xeTable.getCellElement(row, column))
-        const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
-        params.cell = cell
-        if (cell && isEnableConf(editConfig) && isEnableConf(editRender)) {
-          // 激活编辑
-          if (!$xeTable.isPendingByRow(row)) {
-            if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
-              // 判断是否禁用编辑
-              let type: 'edit-disabled' | 'edit-activated' = 'edit-disabled'
-              if (!beforeEditMethod || beforeEditMethod({ ...params, $table: $xeTable, $grid: $xeTable.xegrid })) {
-                if (mouseConfig) {
-                  editMethods.clearSelected()
-                  if ($xeTable.clearCellAreas) {
-                    $xeTable.clearCellAreas()
-                    $xeTable.clearCopyCellArea()
-                  }
-                }
-                $xeTable.closeTooltip()
-                if (actived.column) {
-                  handleClearEdit(evnt)
-                }
-                type = 'edit-activated'
-                column.renderHeight = cell.offsetHeight
-                actived.args = params
-                actived.row = row
-                actived.column = column
-                if (mode === 'row') {
-                  tableColumn.forEach((column: any) => getEditColumnModel(row, column))
-                } else {
-                  getEditColumnModel(row, column)
-                }
-                const afterEditMethod = editOpts.afterEditMethod
-                nextTick(() => {
-                  editPrivateMethods.handleFocus(params, evnt)
-                  if (afterEditMethod) {
-                    afterEditMethod({ ...params, $table: $xeTable, $grid: $xeTable.xegrid })
-                  }
-                })
-              }
-              $xeTable.dispatchEvent(type, {
-                row,
-                rowIndex: $xeTable.getRowIndex(row),
-                $rowIndex: $xeTable.getVMRowIndex(row),
-                column,
-                columnIndex: $xeTable.getColumnIndex(column),
-                $columnIndex: $xeTable.getVMColumnIndex(column)
-              }, evnt)
-
-              // v4已废弃
-              if (type === 'edit-activated') {
-                $xeTable.dispatchEvent('edit-actived', {
-                  row,
-                  rowIndex: $xeTable.getRowIndex(row),
-                  $rowIndex: $xeTable.getVMRowIndex(row),
-                  column,
-                  columnIndex: $xeTable.getColumnIndex(column),
-                  $columnIndex: $xeTable.getVMColumnIndex(column)
-                }, evnt)
-              }
-            } else {
-              const { column: oldColumn } = actived
-              if (mouseConfig) {
-                editMethods.clearSelected()
-                if ($xeTable.clearCellAreas) {
-                  $xeTable.clearCellAreas()
-                  $xeTable.clearCopyCellArea()
-                }
-              }
-              if (oldColumn !== column) {
-                const { model: oldModel } = oldColumn
-                if (oldModel.update) {
-                  setCellValue(row, oldColumn, oldModel.value)
-                }
-                if ($xeTable.clearValidate) {
-                  $xeTable.clearValidate(row, column)
-                }
-              }
-              column.renderHeight = cell.offsetHeight
-              actived.args = params
-              actived.column = column
-              setTimeout(() => {
-                editPrivateMethods.handleFocus(params, evnt)
-              })
-            }
-            focused.column = null
-            focused.row = null
-            $xeTable.focus()
-          }
-        }
-        return nextTick()
+        return handleEditActive(params, evnt, true)
       },
       /**
        * @deprecated

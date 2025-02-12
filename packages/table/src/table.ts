@@ -8621,6 +8621,7 @@ export default defineComponent({
         }
       },
       triggerBodyScrollEvent (evnt, fixedType) {
+        const { scrollYLoad, scrollXLoad } = reactData
         const { elemStore, intoRunScroll, lastScrollTop, lastScrollLeft, inWheelScroll, inVirtualScroll, inHeaderScroll, inBodyScroll, scrollRenderType, inFooterScroll } = internalData
         const xHandleEl = refScrollXHandleElem.value
         const yHandleEl = refScrollYHandleElem.value
@@ -8675,13 +8676,17 @@ export default defineComponent({
             setScrollTop(rightScrollElem, scrollTop)
           }
           setScrollTop(yHandleEl, scrollTop)
-          $xeTable.triggerScrollYEvent(evnt)
+          if (scrollYLoad) {
+            $xeTable.triggerScrollYEvent(evnt)
+          }
         }
         if (isRollX) {
           setScrollLeft(xHandleEl, scrollLeft)
           setScrollLeft(headerScrollElem, scrollLeft)
           setScrollLeft(footerScrollElem, scrollLeft)
-          $xeTable.triggerScrollXEvent(evnt)
+          if (scrollXLoad) {
+            $xeTable.triggerScrollXEvent(evnt)
+          }
         }
         $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
           type: 'body',
@@ -8689,6 +8694,7 @@ export default defineComponent({
         })
       },
       triggerHeaderScrollEvent (evnt, fixedType) {
+        const { scrollXLoad } = reactData
         const { elemStore, intoRunScroll, inWheelScroll, inVirtualScroll, inBodyScroll, inFooterScroll } = internalData
         const yHandleEl = refScrollYHandleElem.value
         const xHandleEl = refScrollXHandleElem.value
@@ -8718,13 +8724,16 @@ export default defineComponent({
         setScrollLeft(xHandleEl, scrollLeft)
         setScrollLeft(footerScrollElem, scrollLeft)
         setScrollLeft(bodyScrollElem, scrollLeft)
-        $xeTable.triggerScrollXEvent(evnt)
+        if (scrollXLoad) {
+          $xeTable.triggerScrollXEvent(evnt)
+        }
         $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
           type: 'header',
           fixed: fixedType
         })
       },
       triggerFooterScrollEvent (evnt, fixedType) {
+        const { scrollXLoad } = reactData
         const { elemStore, intoRunScroll, inWheelScroll, inVirtualScroll, inHeaderScroll, inBodyScroll } = internalData
         const yHandleEl = refScrollYHandleElem.value
         const xHandleEl = refScrollXHandleElem.value
@@ -8754,7 +8763,9 @@ export default defineComponent({
         setScrollLeft(xHandleEl, scrollLeft)
         setScrollLeft(headerScrollElem, scrollLeft)
         setScrollLeft(bodyScrollElem, scrollLeft)
-        $xeTable.triggerScrollXEvent(evnt)
+        if (scrollXLoad) {
+          $xeTable.triggerScrollXEvent(evnt)
+        }
         $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
           type: 'footer',
           fixed: fixedType
@@ -8766,6 +8777,7 @@ export default defineComponent({
           return
         }
         const { highlightHoverRow } = tableProps
+        const { scrollYLoad } = reactData
         const { elemStore, lastScrollTop, lastScrollLeft } = internalData
         const rowOpts = computeRowOpts.value
         const xHandleEl = refScrollXHandleElem.value
@@ -8813,7 +8825,9 @@ export default defineComponent({
             setScrollTop(bodyScrollElem, currTopNum)
             setScrollTop(leftScrollElem, currTopNum)
             setScrollTop(rightScrollElem, currTopNum)
-            $xeTable.triggerScrollYEvent(evnt)
+            if (scrollYLoad) {
+              $xeTable.triggerScrollYEvent(evnt)
+            }
             $xeTable.handleScrollEvent(evnt, isRollY, isRollX, currTopNum, scrollLeft, {
               type: 'table',
               fixed: ''
@@ -8834,6 +8848,7 @@ export default defineComponent({
         }
       },
       triggerVirtualScrollXEvent (evnt) {
+        const { scrollXLoad } = reactData
         const { elemStore, inWheelScroll, lastScrollTop, inHeaderScroll, inBodyScroll, inFooterScroll } = internalData
         if (inHeaderScroll || inBodyScroll || inFooterScroll) {
           return
@@ -8859,13 +8874,16 @@ export default defineComponent({
         setScrollLeft(bodyScrollElem, scrollLeft)
         setScrollLeft(headerScrollElem, scrollLeft)
         setScrollLeft(footerScrollElem, scrollLeft)
-        $xeTable.triggerScrollXEvent(evnt)
+        if (scrollXLoad) {
+          $xeTable.triggerScrollXEvent(evnt)
+        }
         $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
           type: 'table',
           fixed: ''
         })
       },
       triggerVirtualScrollYEvent (evnt) {
+        const { scrollYLoad } = reactData
         const { elemStore, inWheelScroll, lastScrollLeft, inHeaderScroll, inBodyScroll, inFooterScroll } = internalData
         if (inHeaderScroll || inBodyScroll || inFooterScroll) {
           return
@@ -8891,7 +8909,9 @@ export default defineComponent({
         setScrollTop(bodyScrollElem, scrollTop)
         setScrollTop(leftScrollElem, scrollTop)
         setScrollTop(rightScrollElem, scrollTop)
-        $xeTable.triggerScrollYEvent(evnt)
+        if (scrollYLoad) {
+          $xeTable.triggerScrollYEvent(evnt)
+        }
         $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
           type: 'table',
           fixed: ''

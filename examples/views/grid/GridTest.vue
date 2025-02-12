@@ -1,125 +1,78 @@
 <template>
   <div>
-    <vxe-grid ref="gridRef" v-bind="gridOptions">
-      <template #action="{ row }">
-        <template v-if="hasEditStatus(row)">
-          <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
-          <vxe-button @click="cancelRowEvent()">取消</vxe-button>
-        </template>
-        <template v-else>
-          <vxe-button @click="editRowEvent(row)">编辑</vxe-button>
-        </template>
-      </template>
-    </vxe-grid>
+    <p>Grid 演示</p>
+    <vxe-grid v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import { VxeUI } from '../../../packages'
-import { VxeGridInstance, VxeGridProps } from '../../../types'
-
-interface RowVO {
-  id: number;
-  name: string;
-  role: string;
-  sex: string;
-  age: number;
-  address: string;
-}
-
-const gridRef = ref<VxeGridInstance<RowVO>>()
-
-const gridOptions = reactive<VxeGridProps<RowVO>>({
-  border: true,
-  showOverflow: true,
-  loading: false,
-  height: 400,
-  editConfig: {
-    trigger: 'click',
-    mode: 'row'
-  },
-  editRules: {
-    name: [{ required: true, message: '请填写名称', trigger: 'blur' }]
-  },
-
-  columns: [
-    { type: 'seq', width: 70 },
-    { field: 'name', title: 'Name', editRender: { name: 'VxeInput' } },
-    { field: 'sex', title: 'Sex', editRender: { name: 'VxeInput' } },
-    { field: 'age', title: 'Age', editRender: { name: 'VxeInput' } },
-    { title: '操作', slots: { default: 'action' } }
-  ],
-  data: [
-    {
-      id: 10001,
-      name: 'Test1',
-      role: 'Develop',
-      sex: 'Man',
-      age: 28,
-      address: 'test abc'
-    },
-    {
-      id: 10002,
-      name: 'Test2',
-      role: 'Test',
-      sex: 'Women',
-      age: 22,
-      address: 'Guangzhou'
-    },
-    {
-      id: 10003,
-      name: 'Test3',
-      role: 'PM',
-      sex: 'Man',
-      age: 32,
-      address: 'Shanghai'
-    },
-    {
-      id: 10004,
-      name: 'Test4',
-      role: 'Designer',
-      sex: 'Women',
-      age: 24,
-      address: 'Shanghai'
+<script>
+export default {
+  data () {
+    return {
+      gridOptions: {
+        border: true,
+        pagerConfig: {
+          total: 0,
+          currentPage: 1,
+          pageSize: 200
+        },
+        height: 500,
+        scrollY: {
+          gt: 300
+        },
+        columns: [
+          { type: 'seq', width: 60 },
+          { field: 'name', title: 'Name', width: 100 },
+          { field: 'sex', title: 'Sex', width: 100 },
+          { field: 'date', title: 'Date', width: 100 },
+          { field: 'address', title: 'Address', width: 100 },
+          { field: 'address1', title: 'Address1', width: 100 },
+          { field: 'address2', title: 'Address2', width: 100 },
+          { field: 'address3', title: 'Address3', width: 100 },
+          { field: 'address4', title: 'Address4', width: 100 },
+          { field: 'address5', title: 'Address5', width: 100 },
+          { field: 'address6', title: 'Address6', width: 100 },
+          { field: 'address7', title: 'Address7', width: 100 },
+          { field: 'address8', title: 'Address8', width: 100 },
+          { field: 'address9', title: 'Address9', width: 100 },
+          { field: 'address10', title: 'Address10', width: 100 },
+          { field: 'address11', title: 'Address12', width: 100 },
+          { field: 'address12', title: 'Address13', width: 100 },
+          { field: 'address13', title: 'Address14', width: 100 },
+          { field: 'address14', title: 'Address15', width: 100 }
+        ],
+        data: []
+      }
     }
-  ]
-})
-
-const hasEditStatus = (row: RowVO) => {
-  const $grid = gridRef.value
-  if ($grid) {
-    return $grid.isEditByRow(row)
-  }
-}
-
-const editRowEvent = (row: RowVO) => {
-  const $grid = gridRef.value
-  if ($grid) {
-    $grid.setEditRow(row)
-  }
-}
-
-const saveRowEvent = (row: RowVO) => {
-  const $grid = gridRef.value
-  if ($grid) {
-    $grid.clearEdit().then(() => {
-      gridOptions.loading = true
-      setTimeout(() => {
-        gridOptions.loading = false
-        VxeUI.modal.message({
-          content: `保存成功！name=${row.name}`,
-          status: 'success'
-        })
-      }, 300)
-    })
-  }
-}
-
-const cancelRowEvent = () => {
-  const $grid = gridRef.value
-  if ($grid) {
-    $grid.clearEdit()
+  },
+  created () {
+    const list2 = []
+    for (let index = 0; index < 200; index++) {
+      list2.push({
+        name: 'test' + index,
+        role: 'developer',
+        sex: 'Man',
+        date: '2019-05-01',
+        time: 1556677810888 + index * 500,
+        region: 'ShenZhen',
+        address: 'address abc' + index,
+        address1: 'address abc' + index,
+        address2: 'address abc' + index,
+        address3: 'address abc' + index,
+        address4: 'address abc' + index,
+        address5: 'address abc' + index,
+        address6: 'address abc' + index,
+        address7: 'address abc' + index,
+        address8: 'address abc' + index,
+        address9: 'address abc' + index,
+        address10: 'address abc' + index,
+        address11: 'address abc' + index,
+        address12: 'address abc' + index,
+        address13: 'address abc' + index,
+        address14: 'address abc' + index
+      })
+    }
+    this.gridOptions.data = list2
   }
 }
 </script>
