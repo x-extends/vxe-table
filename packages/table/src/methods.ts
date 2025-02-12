@@ -6967,6 +6967,19 @@ const Methods = {
     reactData.pendingRowMaps = pendingMaps
     return $xeTable.$nextTick()
   },
+  hasPendingByRow (row: any) {
+    const $xeTable = this
+
+    return $xeTable.isPendingByRow(row)
+  },
+  isPendingByRow (row: any) {
+    const $xeTable = this
+    const reactData = $xeTable
+
+    const { pendingRowMaps } = reactData
+    const rowid = getRowid($xeTable, row)
+    return !!pendingRowMaps[rowid]
+  },
   getPendingRecords () {
     const $xeTable = this
     const reactData = $xeTable
@@ -6981,11 +6994,6 @@ const Methods = {
       }
     })
     return insertRecords
-  },
-  hasPendingByRow (row: any) {
-    const { pendingRowMaps } = this
-    const rowid = getRowid(this, row)
-    return !!pendingRowMaps[rowid]
   },
   clearPendingRow () {
     this.pendingRowMaps = {}
@@ -7954,8 +7962,10 @@ const Methods = {
   },
   triggerBodyScrollEvent (evnt: Event, fixedType: '' | 'left' | 'right') {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
+    const { scrollYLoad, scrollXLoad } = reactData
     const { elemStore, intoRunScroll, lastScrollTop, lastScrollLeft, inWheelScroll, inVirtualScroll, inHeaderScroll, inBodyScroll, scrollRenderType, inFooterScroll } = internalData
     const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
     const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
@@ -8010,13 +8020,17 @@ const Methods = {
         setScrollTop(rightScrollElem, scrollTop)
       }
       setScrollTop(yHandleEl, scrollTop)
-      $xeTable.triggerScrollYEvent(evnt)
+      if (scrollYLoad) {
+        $xeTable.triggerScrollYEvent(evnt)
+      }
     }
     if (isRollX) {
       setScrollLeft(xHandleEl, scrollLeft)
       setScrollLeft(headerScrollElem, scrollLeft)
       setScrollLeft(footerScrollElem, scrollLeft)
-      $xeTable.triggerScrollXEvent(evnt)
+      if (scrollXLoad) {
+        $xeTable.triggerScrollXEvent(evnt)
+      }
     }
     $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
       type: 'body',
@@ -8025,8 +8039,10 @@ const Methods = {
   },
   triggerHeaderScrollEvent (evnt: Event, fixedType: '' | 'left' | 'right') {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
+    const { scrollXLoad } = reactData
     const { elemStore, intoRunScroll, inWheelScroll, inVirtualScroll, inBodyScroll, inFooterScroll } = internalData
     const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
     const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
@@ -8056,7 +8072,9 @@ const Methods = {
     setScrollLeft(xHandleEl, scrollLeft)
     setScrollLeft(footerScrollElem, scrollLeft)
     setScrollLeft(bodyScrollElem, scrollLeft)
-    $xeTable.triggerScrollXEvent(evnt)
+    if (scrollXLoad) {
+      $xeTable.triggerScrollXEvent(evnt)
+    }
     $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
       type: 'header',
       fixed: fixedType
@@ -8064,8 +8082,10 @@ const Methods = {
   },
   triggerFooterScrollEvent (evnt: Event, fixedType: '' | 'left' | 'right') {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
+    const { scrollXLoad } = reactData
     const { elemStore, intoRunScroll, inWheelScroll, inVirtualScroll, inHeaderScroll, inBodyScroll } = internalData
     const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
     const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
@@ -8095,7 +8115,9 @@ const Methods = {
     setScrollLeft(xHandleEl, scrollLeft)
     setScrollLeft(headerScrollElem, scrollLeft)
     setScrollLeft(bodyScrollElem, scrollLeft)
-    $xeTable.triggerScrollXEvent(evnt)
+    if (scrollXLoad) {
+      $xeTable.triggerScrollXEvent(evnt)
+    }
     $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
       type: 'footer',
       fixed: fixedType
@@ -8112,6 +8134,7 @@ const Methods = {
       return
     }
     const { highlightHoverRow } = tableProps
+    const { scrollYLoad } = reactData
     const { elemStore, lastScrollTop, lastScrollLeft } = internalData
     const rowOpts = $xeTable.computeRowOpts
     const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
@@ -8160,7 +8183,9 @@ const Methods = {
         setScrollTop(bodyScrollElem, currTopNum)
         setScrollTop(leftScrollElem, currTopNum)
         setScrollTop(rightScrollElem, currTopNum)
-        $xeTable.triggerScrollYEvent(evnt)
+        if (scrollYLoad) {
+          $xeTable.triggerScrollYEvent(evnt)
+        }
         $xeTable.handleScrollEvent(evnt, isRollY, isRollX, currTopNum, scrollLeft, {
           type: 'table',
           fixed: ''
@@ -8182,8 +8207,10 @@ const Methods = {
   },
   triggerVirtualScrollXEvent (evnt: Event) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
+    const { scrollXLoad } = reactData
     const { elemStore, inWheelScroll, lastScrollTop, inHeaderScroll, inBodyScroll, inFooterScroll } = internalData
     if (inHeaderScroll || inBodyScroll || inFooterScroll) {
       return
@@ -8209,7 +8236,9 @@ const Methods = {
     setScrollLeft(bodyScrollElem, scrollLeft)
     setScrollLeft(headerScrollElem, scrollLeft)
     setScrollLeft(footerScrollElem, scrollLeft)
-    $xeTable.triggerScrollXEvent(evnt)
+    if (scrollXLoad) {
+      $xeTable.triggerScrollXEvent(evnt)
+    }
     $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
       type: 'table',
       fixed: ''
@@ -8217,8 +8246,10 @@ const Methods = {
   },
   triggerVirtualScrollYEvent (evnt: Event) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
+    const { scrollYLoad } = reactData
     const { elemStore, inWheelScroll, lastScrollLeft, inHeaderScroll, inBodyScroll, inFooterScroll } = internalData
     if (inHeaderScroll || inBodyScroll || inFooterScroll) {
       return
@@ -8244,7 +8275,9 @@ const Methods = {
     setScrollTop(bodyScrollElem, scrollTop)
     setScrollTop(leftScrollElem, scrollTop)
     setScrollTop(rightScrollElem, scrollTop)
-    $xeTable.triggerScrollYEvent(evnt)
+    if (scrollYLoad) {
+      $xeTable.triggerScrollYEvent(evnt)
+    }
     $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
       type: 'table',
       fixed: ''
