@@ -27,7 +27,7 @@ export default defineComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeDefaultRowHeight, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeColumnDragOpts, computeLeftFixedWidth, computeRightFixedWidth, computeResizableOpts } = $xeTable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeDefaultRowHeight, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeColumnDragOpts, computeResizableOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refBodyScroll = ref() as Ref<HTMLDivElement>
@@ -429,7 +429,7 @@ export default defineComponent({
 
     const renderRows = (fixedType: 'left' | 'right' | '', isOptimizeMode: boolean, tableData: any[], tableColumn: VxeTableDefines.ColumnInfo[]) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
-      const { hasFixedColumn, treeExpandedMaps, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, isDragColMove } = tableReactData
+      const { hasFixedColumn, treeExpandedMaps, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, isDragColMove, rowExpandHeightFlag } = tableReactData
       const { fullAllDataRowIdData } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
@@ -462,18 +462,18 @@ export default defineComponent({
           }
         }
         const rowid = getRowid($xeTable, row)
-        const rest = fullAllDataRowIdData[rowid]
+        const rowRest = fullAllDataRowIdData[rowid]
         let rowLevel = 0
         let seq: string | number = -1
         let _rowIndex = 0
-        if (rest) {
-          rowLevel = rest.level
+        if (rowRest) {
+          rowLevel = rowRest.level
           if (treeConfig && transform && seqMode === 'increasing') {
-            seq = rest._index + 1
+            seq = rowRest._index + 1
           } else {
-            seq = rest.seq
+            seq = rowRest.seq
           }
-          _rowIndex = rest._index
+          _rowIndex = rowRest._index
         }
         const params = { $table: $xeTable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
         // 行是否被展开
@@ -537,46 +537,60 @@ export default defineComponent({
         // 如果行被展开了
         if (isExpandRow) {
           const expandOpts = computeExpandOpts.value
-          const { height: expandHeight, padding } = expandOpts
-          const cellStyle: any = {}
-          if (expandHeight) {
-            cellStyle.height = `${expandHeight}px`
-          }
-          if (treeConfig) {
-            cellStyle.paddingLeft = `${(rowLevel * treeOpts.indent) + 30}px`
-          }
-          const { showOverflow } = expandColumn
-          const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? isAllOverflow : showOverflow
-          const expandParams = { $table: $xeTable, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
-          rows.push(
-            h('tr', {
-              class: ['vxe-body--expanded-row', {
-                'is--padding': padding
-              }],
-              key: `expand_${rowid}`,
-              style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(expandParams) : rowStyle) : null,
-              ...trOn
-            }, [
-              h('td', {
-                class: {
-                  'vxe-body--expanded-column': 1,
-                  'fixed--hidden': fixedType && !hasFixedColumn,
-                  'col--ellipsis': hasEllipsis
-                },
-                colspan: tableColumn.length
+          const { height: expandHeight, padding, mode: expandMode } = expandOpts
+          if (expandMode === 'fixed') {
+            rows.push(
+              h('tr', {
+                class: 'vxe-body--row-expanded-place',
+                key: `expand_${rowid}`,
+                rowid
               }, [
-                h('div', {
-                  class: {
-                    'vxe-body--expanded-cell': 1,
-                    'is--ellipsis': expandHeight
-                  },
-                  style: cellStyle
+                h('td', {
+                  class: 'vxe-body--row-expanded-place-column',
+                  colspan: tableColumn.length,
+                  style: {
+                    height: `${rowExpandHeightFlag ? (rowRest.expandHeight || expandHeight) : 0}px`
+                  }
+                })
+              ])
+            )
+          } else {
+            const cellStyle: any = {}
+            if (expandHeight) {
+              cellStyle.height = `${expandHeight}px`
+            }
+            if (treeConfig) {
+              cellStyle.paddingLeft = `${(rowLevel * treeOpts.indent) + 30}px`
+            }
+            const { showOverflow } = expandColumn
+            const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? isAllOverflow : showOverflow
+            const expandParams = { $table: $xeTable, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+            rows.push(
+              h('tr', {
+                class: ['vxe-body--expanded-row', {
+                  'is--padding': padding
+                }],
+                key: `expand_${rowid}`
+              }, [
+                h('td', {
+                  class: ['vxe-body--expanded-column', {
+                    'fixed--hidden': fixedType && !hasFixedColumn,
+                    'col--ellipsis': hasEllipsis
+                  }],
+                  colspan: tableColumn.length
                 }, [
-                  expandColumn.renderData(expandParams)
+                  h('div', {
+                    class: ['vxe-body--expanded-cell', {
+                      'is--ellipsis': expandHeight
+                    }],
+                    style: cellStyle
+                  }, [
+                    expandColumn.renderData(expandParams)
+                  ])
                 ])
               ])
-            ])
-          )
+            )
+          }
         }
         // 如果是树形表格
         if (isExpandTree) {
@@ -627,15 +641,14 @@ export default defineComponent({
       const emptyOpts = computeEmptyOpts.value
       const mouseOpts = computeMouseOpts.value
       const rowDragOpts = computeRowDragOpts.value
-      const leftFixedWidth = computeLeftFixedWidth.value
-      const rightFixedWidth = computeRightFixedWidth.value
+      const expandOpts = computeExpandOpts.value
 
       let renderDataList = tableData
       let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
       let isOptimizeMode = false
       // 如果是使用优化模式
       if (scrollXLoad || scrollYLoad || isAllOverflow) {
-        if (expandColumn || spanMethod || footerSpanMethod) {
+        if ((expandColumn && expandOpts.mode !== 'fixed') || spanMethod || footerSpanMethod) {
           // 如果不支持优化模式
         } else {
           isOptimizeMode = true
@@ -715,9 +728,6 @@ export default defineComponent({
         onScroll (evnt: Event) {
           $xeTable.triggerBodyScrollEvent(evnt, fixedType)
         }
-      }
-      if (scrollYLoad || leftFixedWidth || rightFixedWidth) {
-        ons.onWheel = $xeTable.triggerBodyWheelEvent
       }
 
       return h('div', {

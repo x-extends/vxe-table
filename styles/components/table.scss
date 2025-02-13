@@ -1629,6 +1629,32 @@
   }
 
   /*展开行*/
+  .vxe-table--row-expanded-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .vxe-body--row-expanded-cell {
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: auto;
+    background-color: var(--vxe-ui-layout-background-color);
+    pointer-events: all;
+    &.is--padding {
+      padding: var(--vxe-ui-table-expand-padding-default);
+    }
+  }
+  .vxe-body--row-expanded-place-column {
+    border-bottom: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
+    border-right: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
+  }
   .vxe-table--expanded {
     cursor: pointer;
     .vxe-table--expand-btn {
