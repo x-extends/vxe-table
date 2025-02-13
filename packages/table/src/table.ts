@@ -2,6 +2,7 @@ import { CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { getFuncText, isEnableConf } from '../../ui/src/utils'
 import { initTpImg } from '../../ui/src/dom'
+import { getRowid } from './util'
 import { VxeUI } from '../../ui'
 import methods from './methods'
 import TableBodyComponent from './body'
@@ -187,6 +188,79 @@ function handleUpdateResize (_vm: any) {
   }
 }
 
+function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { treeConfig } = props
+  const { expandColumn } = reactData
+  const tableRowExpandedList: any[] = ($xeTable as any).computeTableRowExpandedList
+  const expandOpts = $xeTable.computeExpandOpts
+  const { mode } = expandOpts
+  if (mode !== 'fixed') {
+    return renderEmptyElement($xeTable)
+  }
+  const expandVNs = [
+    h('div', {
+      key: 'repY',
+      ref: 'refRowExpandYSpaceElem'
+    })
+  ]
+
+  if (expandColumn) {
+    tableRowExpandedList.forEach((row) => {
+      const expandOpts = $xeTable.computeExpandOpts
+      const { height: expandHeight, padding } = expandOpts
+      const { fullAllDataRowIdData } = internalData
+      const treeOpts = $xeTable.computeTreeOpts
+      const { transform, seqMode } = treeOpts
+      const cellStyle: Record<string, string> = {}
+      const rowid = getRowid($xeTable, row)
+      const rest = fullAllDataRowIdData[rowid]
+      let rowLevel = 0
+      let seq: string | number = -1
+      let _rowIndex = 0
+      const rowIndex = $xeTable.getRowIndex(row)
+      const $rowIndex = $xeTable.getVMRowIndex(row)
+      if (rest) {
+        rowLevel = rest.level
+        if (treeConfig && transform && seqMode === 'increasing') {
+          seq = rest._index + 1
+        } else {
+          seq = rest.seq
+        }
+        _rowIndex = rest._index
+      }
+      if (expandHeight) {
+        cellStyle.height = `${expandHeight}px`
+      }
+      if (treeConfig) {
+        cellStyle.paddingLeft = `${(rowLevel * treeOpts.indent) + 30}px`
+      }
+      const expandParams = { $table: $xeTable, seq, column: expandColumn, fixed: '', type: 'body', level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+      expandVNs.push(
+        h('div', {
+          key: rowid,
+          class: ['vxe-body--row-expanded-cell', {
+            'is--padding': padding,
+            'is--ellipsis': expandHeight
+          }],
+          attrs: {
+            rowid
+          },
+          style: cellStyle
+        }, expandColumn.renderData(h, expandParams))
+      )
+    })
+  }
+
+  return h('div', {
+    ref: 'refRowExpandElem',
+    class: 'vxe-table--row-expanded-wrapper'
+  }, expandVNs)
+}
+
 function renderScrollX (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   return h('div', {
     key: 'vsx',
@@ -259,12 +333,20 @@ function renderViewport (h: CreateElement, $xeTable: VxeTableConstructor & VxeTa
   const reactData = $xeTable as unknown as TableReactData
 
   const { showHeader, showFooter } = props
-  const { overflowX, tableData, tableColumn, tableGroupColumn, footerTableData, columnStore } = reactData
+  const { overflowX, scrollYLoad, tableData, tableColumn, tableGroupColumn, footerTableData, columnStore } = reactData
   const { leftList, rightList } = columnStore
+  const leftFixedWidth = $xeTable.computeLeftFixedWidth
+  const rightFixedWidth = $xeTable.computeRightFixedWidth
+
+  const ons: Record<string, any> = {}
+  if (scrollYLoad || leftFixedWidth || rightFixedWidth) {
+    ons.onWheel = $xeTable.triggerBodyWheelEvent
+  }
 
   return h('div', {
     ref: 'refTableViewportElem',
-    class: 'vxe-table--viewport-wrapper'
+    class: 'vxe-table--viewport-wrapper',
+    on: ons
   }, [
     h('div', {
       class: 'vxe-table--main-wrapper'
@@ -310,7 +392,8 @@ function renderViewport (h: CreateElement, $xeTable: VxeTableConstructor & VxeTa
     }, [
       leftList && leftList.length && overflowX ? renderFixed(h, $xeTable, 'left') : renderEmptyElement($xeTable),
       rightList && rightList.length && overflowX ? renderFixed(h, $xeTable, 'right') : renderEmptyElement($xeTable)
-    ])
+    ]),
+    renderRowExpandedVNs(h, $xeTable)
   ])
 }
 
@@ -583,8 +666,9 @@ export default {
 
       scrollVMLoading: false,
 
-      calcCellHeightFlag: 0,
-      resizeHeightFlag: 0,
+      rowExpandHeightFlag: 1,
+      calcCellHeightFlag: 1,
+      resizeHeightFlag: 1,
 
       isCustomStatus: false,
 
@@ -985,6 +1069,25 @@ export default {
     },
     computeCustomOpts () {
       return Object.assign({}, getConfig().table.customConfig, this.customConfig)
+    },
+    computeTableRowExpandedList () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { rowExpandedMaps, tableData, expandColumn } = reactData
+      const expandList: any[] = []
+      if (expandColumn) {
+        const rowKeys: Record<string, boolean> = {}
+        tableData.forEach(row => {
+          rowKeys[getRowid($xeTable, row)] = true
+        })
+        XEUtils.each(rowExpandedMaps, (row, rowid) => {
+          if (rowKeys[rowid]) {
+            expandList.push(row)
+          }
+        })
+      }
+      return expandList
     },
     computeAutoWidthColumnList () {
       const { tableColumn, visibleColumn } = this
@@ -1439,29 +1542,10 @@ export default {
   mounted () {
     const $xeTable = this
     const props = $xeTable
-    const reactData = $xeTable
 
-    const { rowHeightStore } = reactData
-    const varEl = $xeTable.$refs.refVarElem
     const columnOpts = $xeTable.computeColumnOpts
     const rowOpts = $xeTable.computeRowOpts
     const customOpts = $xeTable.computeCustomOpts
-
-    if (varEl) {
-      const [defEl, mediumEl, smallEl, miniEl] = varEl.children
-      if (defEl) {
-        rowHeightStore.default = defEl.clientHeight
-      }
-      if (mediumEl) {
-        rowHeightStore.medium = mediumEl.clientHeight
-      }
-      if (smallEl) {
-        rowHeightStore.small = smallEl.clientHeight
-      }
-      if (miniEl) {
-        rowHeightStore.mini = miniEl.clientHeight
-      }
-    }
 
     if (columnOpts.drag || rowOpts.drag || customOpts.allowSort) {
       initTpImg()
