@@ -47,6 +47,10 @@ export default {
       const { storeData, defaultOptions } = this
       return !defaultOptions.original && defaultOptions.mode === 'current' && (storeData.isPrint || ['html', 'xlsx'].indexOf(defaultOptions.type) > -1)
     },
+    // computeSupportGroup () {
+    //   const { defaultOptions } = this
+    //   return ['html', 'xlsx', 'csv', 'txt'].indexOf(defaultOptions.type) > -1
+    // },
     supportStyle () {
       const { defaultOptions } = this
       return !defaultOptions.original && ['xlsx'].indexOf(defaultOptions.type) > -1
@@ -87,6 +91,7 @@ export default {
     const { _e, checkedAll, isAll: isAllChecked, isIndeterminate: isAllIndeterminate, showSheet, supportMerge, supportStyle, defaultOptions, storeData } = this
     const { hasTree, hasMerge, isPrint, hasColgroup, columns } = storeData
     const { isHeader } = defaultOptions
+    // const supportGroup = this.computeSupportGroup
     const slots = defaultOptions.slots || {}
     const topSlot = slots.top
     const bottomSlot = slots.bottom
@@ -360,6 +365,8 @@ export default {
                               }, [
                                 h('vxe-checkbox', {
                                   props: {
+                                    // value: supportGroup || (isHeader && hasColgroup && supportMerge) ? defaultOptions.isColgroup : false,
+                                    // disabled: !supportGroup && (!isHeader || !hasColgroup || !supportMerge),
                                     value: isHeader && hasColgroup && supportMerge ? defaultOptions.isColgroup : false,
                                     disabled: !isHeader || !hasColgroup || !supportMerge,
                                     title: getI18n('vxe.export.expColgroupTitle'),

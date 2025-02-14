@@ -272,7 +272,7 @@ export default {
     const { headerColumn } = this
 
     const { mouseConfig, showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
-    const { isGroup, scrollXLoad, scrollYLoad, dragCol } = tableReactData
+    const { isGroup, overflowX, scrollXLoad, scrollYLoad, dragCol } = tableReactData
     const { visibleColumn, fullColumnIdData } = tableInternalData
 
     const mouseOpts = $xeTable.computeMouseOpts
@@ -292,8 +292,11 @@ export default {
         }
       }
 
-      if (fixedType) {
+      if (fixedType || !overflowX) {
         renderColumnList = visibleColumn
+      }
+
+      if (fixedType) {
         // 如果是使用优化模式
         if (isOptimizeMode) {
           renderColumnList = fixedColumn || []

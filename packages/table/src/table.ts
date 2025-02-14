@@ -1194,9 +1194,9 @@ export default {
         // if (checkboxColumn && this.tableFullData.length > 300 && !this.checkboxOpts.checkField) {
         //   warnLog('vxe.error.checkProp', ['checkbox-config.checkField'])
         // }
-        if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
-          warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
-        }
+        // if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
+        //   warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
+        // }
         this.recalculate()
       })
     },
@@ -1220,6 +1220,12 @@ export default {
       this.reScrollFlag++
     },
     showFooter () {
+      this.reScrollFlag++
+    },
+    overflowX () {
+      this.reScrollFlag++
+    },
+    overflowY () {
       this.reScrollFlag++
     },
     reScrollFlag () {

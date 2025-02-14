@@ -668,7 +668,7 @@ export default {
     const { fixedColumn, fixedType, tableColumn } = props
 
     const { spanMethod, footerSpanMethod, mouseConfig } = tableProps
-    const { isGroup, tableData, isRowLoading, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn, dragRow, dragCol } = tableReactData
+    const { isGroup, tableData, isRowLoading, isColLoading, overflowX, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn, dragRow, dragCol } = tableReactData
     const { visibleColumn, fullAllDataRowIdData, fullColumnIdData } = tableInternalData
     const rowOpts = $xeTable.computeRowOpts
     const emptyOpts = $xeTable.computeEmptyOpts
@@ -688,8 +688,11 @@ export default {
       }
     }
 
-    if (fixedType) {
+    if (fixedType || !overflowX) {
       renderColumnList = visibleColumn
+    }
+
+    if (fixedType) {
       if (isOptimizeMode) {
         renderColumnList = fixedColumn || []
       }

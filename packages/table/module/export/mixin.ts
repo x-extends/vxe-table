@@ -247,7 +247,7 @@ function getFooterCellValue ($xetable: any, opts: any, row: any, column: any) {
   return XEUtils.get(row, column.field)
 }
 
-function getFooterData (opts: any, footerTableData: any) {
+function getFooterData (opts: VxeTablePropTypes.ExportHandleOptions, footerTableData: any[]) {
   const { footerFilterMethod } = opts
   return footerFilterMethod ? footerTableData.filter((items: any, index: any) => footerFilterMethod({ items, $rowIndex: index })) : footerTableData
 }
@@ -282,43 +282,49 @@ function toTxtCellLabel (val: any) {
   return val
 }
 
-function toCsv ($xetable: any, opts: any, columns: any[], datas: any[]) {
+function toCsv ($xeTable: VxeTableConstructor, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
+  const reactData = $xeTable as unknown as TableReactData
+
   let content = csvBOM
   if (opts.isHeader) {
-    content += columns.map(column => toTxtCellLabel(getHeaderTitle($xetable, opts, column))).join(',') + enterSymbol
+    content += columns.map(column => toTxtCellLabel(getHeaderTitle($xeTable, opts, column))).join(',') + enterSymbol
   }
   datas.forEach(row => {
     content += columns.map(column => toTxtCellLabel(getCsvCellTypeLabel(column, row[column.id]))).join(',') + enterSymbol
   })
   if (opts.isFooter) {
-    const footerTableData = $xetable.footerTableData
+    const { footerTableData } = reactData
     const footers = getFooterData(opts, footerTableData)
-    footers.forEach((row: any) => {
-      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xetable, opts, row, column))).join(',') + enterSymbol
+    footers.forEach((row) => {
+      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xeTable, opts, row, column))).join(',') + enterSymbol
     })
   }
   return content
 }
 
-function toTxt ($xetable: any, opts: any, columns: any[], datas: any[]) {
+function toTxt ($xeTable: VxeTableConstructor, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
+  const reactData = $xeTable as unknown as TableReactData
+
   let content = ''
   if (opts.isHeader) {
-    content += columns.map(column => toTxtCellLabel(getHeaderTitle($xetable, opts, column))).join('\t') + enterSymbol
+    content += columns.map(column => toTxtCellLabel(getHeaderTitle($xeTable, opts, column))).join('\t') + enterSymbol
   }
   datas.forEach(row => {
     content += columns.map(column => toTxtCellLabel(row[column.id])).join('\t') + enterSymbol
   })
   if (opts.isFooter) {
-    const footerTableData = $xetable.footerTableData
+    const { footerTableData } = reactData
     const footers = getFooterData(opts, footerTableData)
-    footers.forEach((row: any) => {
-      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xetable, opts, row, column))).join('\t') + enterSymbol
+    footers.forEach((row) => {
+      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xeTable, opts, row, column))).join('\t') + enterSymbol
     })
   }
   return content
 }
 
-function hasEllipsis ($xetable: any, column: any, property: any, allColumnOverflow: any) {
+function hasEllipsis ($xeTable: VxeTableConstructor, column: VxeTableDefines.ColumnInfo, property: 'showOverflow' | 'showHeaderOverflow', allColumnOverflow: VxeTablePropTypes.ShowOverflow | undefined) {
+  const reactData = $xeTable as unknown as TableReactData
+
   const columnOverflow = column[property]
   const headOverflow = XEUtils.isUndefined(columnOverflow) || XEUtils.isNull(columnOverflow) ? allColumnOverflow : columnOverflow
   const showEllipsis = headOverflow === 'ellipsis'
@@ -326,14 +332,20 @@ function hasEllipsis ($xetable: any, column: any, property: any, allColumnOverfl
   const showTooltip = headOverflow === true || headOverflow === 'tooltip'
   let isEllipsis = showTitle || showTooltip || showEllipsis
   // 虚拟滚动不支持动态高度
-  if (($xetable.scrollXLoad || $xetable.scrollYLoad) && !isEllipsis) {
+  const { scrollXLoad, scrollYLoad } = reactData
+  if ((scrollXLoad || scrollYLoad) && !isEllipsis) {
     isEllipsis = true
   }
   return isEllipsis
 }
 
-function toHtml ($xetable: any, opts: any, columns: any[], datas: any[]) {
-  const { id, border, treeConfig, treeOpts, isAllSelected, isIndeterminate, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow, mergeList } = $xetable
+function toHtml ($xeTable: VxeTableConstructor, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+
+  const { id, border, treeConfig, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow } = props
+  const { isAllSelected, isIndeterminate, mergeList } = reactData
+  const treeOpts = $xeTable.computeTreeOpts
   const { print: isPrint, isHeader, isFooter, isColgroup, isMerge, colgroups, original } = opts
   const allCls = 'check-all'
   const clss = [
@@ -353,8 +365,8 @@ function toHtml ($xetable: any, opts: any, columns: any[], datas: any[]) {
         tables.push(
           `<tr>${cols.map(column => {
             const headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
-            const classNames = hasEllipsis($xetable, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
-            const cellTitle = getHeaderTitle($xetable, opts, column)
+            const classNames = hasEllipsis($xeTable, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
+            const cellTitle = getHeaderTitle($xeTable, opts, column)
             let childWidth = 0
             let countChild = 0
             XEUtils.eachTree([column], item => {
@@ -378,8 +390,8 @@ function toHtml ($xetable: any, opts: any, columns: any[], datas: any[]) {
       tables.push(
         `<tr>${columns.map(column => {
           const headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
-          const classNames = hasEllipsis($xetable, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
-          const cellTitle = getHeaderTitle($xetable, opts, column)
+          const classNames = hasEllipsis($xeTable, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
+          const cellTitle = getHeaderTitle($xeTable, opts, column)
           if (headAlign) {
             classNames.push(`col--${headAlign}`)
           }
@@ -399,7 +411,7 @@ function toHtml ($xetable: any, opts: any, columns: any[], datas: any[]) {
         tables.push(
           '<tr>' + columns.map(column => {
             const cellAlign = column.align || allAlign
-            const classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+            const classNames = hasEllipsis($xeTable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
             const cellValue = item[column.id]
             if (cellAlign) {
               classNames.push(`col--${cellAlign}`)
@@ -431,13 +443,13 @@ function toHtml ($xetable: any, opts: any, columns: any[], datas: any[]) {
         tables.push(
           '<tr>' + columns.map(column => {
             const cellAlign = column.align || allAlign
-            const classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+            const classNames = hasEllipsis($xeTable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
             const cellValue = item[column.id]
             let rowSpan = 1
             let colSpan = 1
             if (isMerge && mergeList.length) {
-              const _rowIndex = $xetable.getVTRowIndex(item._row)
-              const _columnIndex = $xetable.getVTColumnIndex(column)
+              const _rowIndex = $xeTable.getVTRowIndex(item._row)
+              const _columnIndex = $xeTable.getVTColumnIndex(column)
               const spanRest = mergeBodyMethod(mergeList, _rowIndex, _columnIndex)
               if (spanRest) {
                 const { rowspan, colspan } = spanRest
@@ -468,7 +480,7 @@ function toHtml ($xetable: any, opts: any, columns: any[], datas: any[]) {
     tables.push('</tbody>')
   }
   if (isFooter) {
-    const footerTableData = $xetable.footerTableData
+    const { footerTableData } = reactData
     const footers = getFooterData(opts, footerTableData)
     if (footers.length) {
       tables.push('<tfoot>')
@@ -476,8 +488,8 @@ function toHtml ($xetable: any, opts: any, columns: any[], datas: any[]) {
         tables.push(
           `<tr>${columns.map(column => {
             const footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
-            const classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-            const cellValue = getFooterCellValue($xetable, opts, row, column)
+            const classNames = hasEllipsis($xeTable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+            const cellValue = getFooterCellValue($xeTable, opts, row, column)
             if (footAlign) {
               classNames.push(`col--${footAlign}`)
             }
@@ -530,17 +542,17 @@ function toXML ($xetable: any, opts: any, columns: any[], datas: any[]) {
   return `${xml}</Table></Worksheet></Workbook>`
 }
 
-function getContent ($xetable: any, opts: any, columns: any[], datas: any[]) {
+function getContent ($xeTable: VxeTableConstructor, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
   if (columns.length) {
     switch (opts.type) {
       case 'csv':
-        return toCsv($xetable, opts, columns, datas)
+        return toCsv($xeTable, opts, columns, datas)
       case 'txt':
-        return toTxt($xetable, opts, columns, datas)
+        return toTxt($xeTable, opts, columns, datas)
       case 'html':
-        return toHtml($xetable, opts, columns, datas)
+        return toHtml($xeTable, opts, columns, datas)
       case 'xml':
-        return toXML($xetable, opts, columns, datas)
+        return toXML($xeTable, opts, columns, datas)
     }
   }
   return ''
@@ -1241,22 +1253,33 @@ export default {
      */
     _exportData (options: any) {
       const $xeTable = this
+      const props = $xeTable
+      const reactData = $xeTable
+      const internalData = $xeTable
       const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor
 
-      const { isGroup, tableGroupColumn, tableFullColumn, afterFullData, treeConfig, treeOpts, exportOpts } = this
+      const { treeConfig, showHeader, showFooter } = props
+      const { mergeList, mergeFooterList, isGroup, tableGroupColumn } = reactData
+      const { tableFullColumn, afterFullData } = internalData
+      const exportOpts = $xeTable.computeExportOpts
+      const treeOpts = $xeTable.computeTreeOpts
+      const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : {}
+      const hasMerge = !!(mergeList.length || mergeFooterList.length)
       const opts = Object.assign({
+        message: true,
+        isHeader: showHeader,
+        isFooter: showFooter,
+        isColgroup: isGroup,
+        isMerge: hasMerge,
+        useStyle: true,
+        current: 'current',
+        modes: ['current', 'selected'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : []),
+        download: true,
+        type: 'csv'
         // filename: '',
         // sheetName: '',
         // original: false,
-        // message: false,
-        isHeader: true,
-        isFooter: true,
-        isColgroup: true,
-        isMerge: false,
-        isAllExpand: false,
-        download: true,
-        type: 'csv',
-        mode: 'current'
+        // isAllExpand: false,
         // data: null,
         // remote: false,
         // dataFilterMethod: null,
@@ -1265,12 +1288,23 @@ export default {
         // columnFilterMethod: null,
         // beforeExportMethod: null,
         // afterExportMethod: null
-      }, exportOpts, {
-        print: false
-      }, options)
+      }, exportOpts, options)
       const { filename, sheetName, type, mode, columns, original, columnFilterMethod, beforeExportMethod, includeFields, excludeFields } = opts
-      let groups = []
-      const customCols = columns && columns.length ? columns : null
+      let groups: any[] = []
+      const customCols = columns && columns.length
+        ? columns
+        : XEUtils.searchTree(tableGroupColumn, column => {
+          const isColGroup = column.children && column.children.length
+          let isChecked = false
+          if (columns && columns.length) {
+            isChecked = handleFilterColumns(opts, column, columns)
+          } else if (excludeFields || includeFields) {
+            isChecked = handleFilterFields(opts, column, includeFields, excludeFields)
+          } else {
+            isChecked = column.visible && (isColGroup || defaultFilterExportColumn(column))
+          }
+          return isChecked
+        }, { children: 'children', mapChildren: 'childNodes', original: true })
       const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({ } as { data: any[], colgroups: any[], columns: any[] }, opts, { filename: '', sheetName: '' })
       // 如果设置源数据，则默认导出设置了字段的列
       if (!customCols && !columnFilterMethod) {
