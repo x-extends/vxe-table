@@ -223,7 +223,7 @@ export default defineComponent({
     const renderVN = () => {
       const { fixedType, fixedColumn, tableColumn } = props
       const { mouseConfig, showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
-      const { isGroup, scrollXLoad, scrollYLoad, dragCol } = tableReactData
+      const { isGroup, overflowX, scrollXLoad, scrollYLoad, dragCol } = tableReactData
       const { visibleColumn, fullColumnIdData } = tableInternalData
 
       const mouseOpts = computeMouseOpts.value
@@ -243,8 +243,11 @@ export default defineComponent({
           }
         }
 
-        if (fixedType) {
+        if (fixedType || !overflowX) {
           renderColumnList = visibleColumn
+        }
+
+        if (fixedType) {
           // 如果是使用优化模式
           if (isOptimizeMode) {
             renderColumnList = fixedColumn || []

@@ -267,7 +267,7 @@ export default defineComponent({
       const { fixedType, fixedColumn, tableColumn } = props
       const { spanMethod, footerSpanMethod, showFooterOverflow: allColumnFooterOverflow } = tableProps
       const { visibleColumn, fullColumnIdData } = tableInternalData
-      const { isGroup, scrollXLoad, scrollYLoad, dragCol } = tableReactData
+      const { isGroup, overflowX, scrollXLoad, scrollYLoad, dragCol } = tableReactData
 
       let renderColumnList = tableColumn
       let isOptimizeMode = false
@@ -280,8 +280,11 @@ export default defineComponent({
         }
       }
 
-      if (fixedType) {
+      if (fixedType || !overflowX) {
         renderColumnList = visibleColumn
+      }
+
+      if (fixedType) {
         if (isOptimizeMode) {
           renderColumnList = fixedColumn || []
         }

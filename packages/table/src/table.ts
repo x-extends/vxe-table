@@ -3107,11 +3107,11 @@ export default defineComponent({
         $xeTable.clearMergeCells()
         $xeTable.clearMergeFooterItems()
         $xeTable.handleTableData(true)
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if ((reactData.scrollXLoad || reactData.scrollYLoad) && reactData.expandColumn) {
-            warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
-          }
-        }
+        // if (process.env.VUE_APP_VXE_ENV === 'development') {
+        //   if ((reactData.scrollXLoad || reactData.scrollYLoad) && reactData.expandColumn) {
+        //     warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
+        //   }
+        // }
         return nextTick().then(() => {
           if ($xeToolbar) {
             $xeToolbar.syncUpdate({
@@ -9046,7 +9046,7 @@ export default defineComponent({
       updateScrollYStatus,
       // 更新横向 X 可视渲染上下剩余空间大小
       updateScrollXSpace () {
-        const { isGroup, scrollXLoad } = reactData
+        const { isGroup, scrollXLoad, overflowX } = reactData
         const { visibleColumn, scrollXStore, elemStore, tableWidth } = internalData
         const tableHeader = refTableHeader.value
         const tableBody = refTableBody.value
@@ -9060,7 +9060,7 @@ export default defineComponent({
           const footerElem = tableFooterElem ? tableFooterElem.querySelector('.vxe-table--footer') as HTMLTableElement : null
           const leftSpaceWidth = visibleColumn.slice(0, scrollXStore.startIndex).reduce((previous, column) => previous + column.renderWidth, 0)
           let marginLeft = ''
-          if (scrollXLoad) {
+          if (scrollXLoad && overflowX) {
             marginLeft = `${leftSpaceWidth}px`
           }
           if (headerElem) {
@@ -9888,7 +9888,7 @@ export default defineComponent({
         warnLog('vxe.error.errLargeData', ['loadData(data), reloadData(data)'])
       }
       loadTableData(value, true).then(() => {
-        const { scrollXLoad, scrollYLoad, expandColumn } = reactData
+        // const { scrollXLoad, scrollYLoad, expandColumn } = reactData
         internalData.inited = true
         internalData.initStatus = true
         if (!initStatus) {
@@ -9899,9 +9899,9 @@ export default defineComponent({
         // if (checkboxColumn && internalData.tableFullData.length > 300 && !checkboxOpts.checkField) {
         //   warnLog('vxe.error.checkProp', ['checkbox-config.checkField'])
         // }
-        if ((scrollXLoad || scrollYLoad) && expandColumn) {
-          warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
-        }
+        // if ((scrollXLoad || scrollYLoad) && expandColumn) {
+        //   warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
+        // }
         return tableMethods.recalculate()
       })
     })
@@ -9948,6 +9948,12 @@ export default defineComponent({
       reScrollFlag.value++
     })
     watch(() => props.showFooter, () => {
+      reScrollFlag.value++
+    })
+    watch(() => reactData.overflowX, () => {
+      reScrollFlag.value++
+    })
+    watch(() => reactData.overflowY, () => {
       reScrollFlag.value++
     })
     watch(reScrollFlag, () => {

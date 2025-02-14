@@ -50,6 +50,11 @@ export default defineComponent({
       return !defaultOptions.original && defaultOptions.mode === 'current' && (storeData.isPrint || ['html', 'xlsx'].indexOf(defaultOptions.type) > -1)
     })
 
+    // const computeSupportGroup = computed(() => {
+    //   const { defaultOptions } = props
+    //   return ['html', 'xlsx', 'csv', 'txt'].indexOf(defaultOptions.type) > -1
+    // })
+
     const computeSupportStyle = computed(() => {
       const { defaultOptions } = props
       return !defaultOptions.original && ['xlsx'].indexOf(defaultOptions.type) > -1
@@ -166,6 +171,7 @@ export default defineComponent({
       const showSheet = computeShowSheet.value
       const supportMerge = computeSupportMerge.value
       const supportStyle = computeSupportStyle.value
+      // const supportGroup = computeSupportGroup.value
       const slots = defaultOptions.slots || {}
       const topSlot = slots.top
       const bottomSlot = slots.bottom
@@ -415,6 +421,9 @@ export default defineComponent({
                                 }, [
                                   VxeUICheckboxComponent
                                     ? h(VxeUICheckboxComponent, {
+                                      // modelValue: supportGroup || (isHeader && hasColgroup && supportMerge) ? defaultOptions.isColgroup : false,
+                                      // title: getI18n('vxe.export.expColgroupTitle'),
+                                      // disabled: !supportGroup && (!isHeader || !hasColgroup || !supportMerge),
                                       modelValue: isHeader && hasColgroup && supportMerge ? defaultOptions.isColgroup : false,
                                       title: getI18n('vxe.export.expColgroupTitle'),
                                       disabled: !isHeader || !hasColgroup || !supportMerge,

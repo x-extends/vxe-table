@@ -142,7 +142,8 @@ VxeUI.setConfig({
     },
     expandConfig: {
       // trigger: 'default',
-      showIcon: true
+      showIcon: true,
+      mode: 'fixed'
     },
     editConfig: {
       // mode: 'cell',
