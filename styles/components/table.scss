@@ -54,6 +54,7 @@
   overflow: hidden;
   outline: 0;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 .vxe-table--header-inner-wrapper,
 .vxe-table--body-inner-wrapper,
@@ -63,6 +64,7 @@
   height: 100%;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
   &::-webkit-scrollbar {
     display: none;
   }

@@ -333,20 +333,12 @@ function renderViewport (h: CreateElement, $xeTable: VxeTableConstructor & VxeTa
   const reactData = $xeTable as unknown as TableReactData
 
   const { showHeader, showFooter } = props
-  const { overflowX, scrollYLoad, tableData, tableColumn, tableGroupColumn, footerTableData, columnStore } = reactData
+  const { overflowX, tableData, tableColumn, tableGroupColumn, footerTableData, columnStore } = reactData
   const { leftList, rightList } = columnStore
-  const leftFixedWidth = $xeTable.computeLeftFixedWidth
-  const rightFixedWidth = $xeTable.computeRightFixedWidth
-
-  const ons: Record<string, any> = {}
-  if (scrollYLoad || leftFixedWidth || rightFixedWidth) {
-    ons.wheel = $xeTable.triggerBodyWheelEvent
-  }
 
   return h('div', {
     ref: 'refTableViewportElem',
-    class: 'vxe-table--viewport-wrapper',
-    on: ons
+    class: 'vxe-table--viewport-wrapper'
   }, [
     h('div', {
       class: 'vxe-table--main-wrapper'
@@ -1290,6 +1282,8 @@ export default {
     }
   } as any,
   created () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     const { scrollXStore, sYOpts, scrollYStore, data, editOpts, treeOpts, treeConfig, showOverflow, rowOpts } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
@@ -1548,7 +1542,7 @@ export default {
     globalEvents.on(this, 'keydown', this.handleGlobalKeydownEvent)
     globalEvents.on(this, 'resize', this.handleGlobalResizeEvent)
     globalEvents.on(this, 'contextmenu', this.handleGlobalContextmenuEvent)
-    this.preventEvent(null, 'created')
+    $xeTable.preventEvent(null, 'created')
   },
   mounted () {
     const $xeTable = this
@@ -1603,6 +1597,12 @@ export default {
       resizeObserver.observe(this.getParentElem())
       this.$resize = resizeObserver
     }
+
+    const tableViewportEl = $xeTable.$refs.refTableViewportElem as HTMLDivElement
+    if (tableViewportEl) {
+      tableViewportEl.addEventListener('wheel', $xeTable.triggerBodyWheelEvent, { passive: false })
+    }
+
     this.preventEvent(null, 'mounted')
   },
   activated () {
@@ -1613,6 +1613,12 @@ export default {
     this.preventEvent(null, 'deactivated')
   },
   beforeDestroy () {
+    const $xeTable = this
+
+    const tableViewportEl = $xeTable.$refs.refTableViewportElem as HTMLDivElement
+    if (tableViewportEl) {
+      tableViewportEl.removeEventListener('wheel', $xeTable.triggerBodyWheelEvent)
+    }
     if (this.$resize) {
       this.$resize.disconnect()
     }

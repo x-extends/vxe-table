@@ -1259,8 +1259,8 @@ export default {
       const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor
 
       const { treeConfig, showHeader, showFooter } = props
-      const { mergeList, mergeFooterList, isGroup, tableGroupColumn } = reactData
-      const { tableFullColumn, afterFullData } = internalData
+      const { mergeList, mergeFooterList, isGroup } = reactData
+      const { tableFullColumn, afterFullData, collectColumn } = internalData
       const exportOpts = $xeTable.computeExportOpts
       const treeOpts = $xeTable.computeTreeOpts
       const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : {}
@@ -1289,11 +1289,15 @@ export default {
         // beforeExportMethod: null,
         // afterExportMethod: null
       }, exportOpts, options)
-      const { filename, sheetName, type, mode, columns, original, columnFilterMethod, beforeExportMethod, includeFields, excludeFields } = opts
+      let { filename, sheetName, type, mode, columns, original, columnFilterMethod, beforeExportMethod, includeFields, excludeFields } = opts
       let groups: any[] = []
+      const selectRecords = $xeTable.getCheckboxRecords()
+      if (!mode) {
+        mode = selectRecords.length ? 'selected' : 'current'
+      }
       const customCols = columns && columns.length
         ? columns
-        : XEUtils.searchTree(tableGroupColumn, column => {
+        : XEUtils.searchTree(collectColumn, column => {
           const isColGroup = column.children && column.children.length
           let isChecked = false
           if (columns && columns.length) {
@@ -1361,7 +1365,7 @@ export default {
           }
         )
       } else {
-        groups = XEUtils.searchTree(isGroup ? tableGroupColumn : tableFullColumn, (column, index) => column.visible && (!columnFilterMethod || columnFilterMethod({ column, $columnIndex: index })), { children: 'children', mapChildren: 'childNodes', original: true })
+        groups = XEUtils.searchTree(isGroup ? collectColumn : tableFullColumn, (column, index) => column.visible && (!columnFilterMethod || columnFilterMethod({ column, $columnIndex: index })), { children: 'children', mapChildren: 'childNodes', original: true })
       }
       // 获取所有列
       const cols: VxeTableDefines.ColumnInfo[] = []
@@ -1425,7 +1429,6 @@ export default {
       if (!handleOptions.data) {
         handleOptions.data = []
         if (mode === 'selected') {
-          const selectRecords = $xeTable.getCheckboxRecords()
           if (['html', 'pdf'].indexOf(type) > -1 && treeConfig) {
             handleOptions.data = XEUtils.searchTree($xeTable.getTableData().fullData, item => $xeTable.findRowIndexOf(selectRecords, item) > -1, Object.assign({}, treeOpts, { data: '_row' }))
           } else {

@@ -1877,7 +1877,13 @@ const getWheelSpeed = (lastScrollTime: number) => {
   return multiple
 }
 
-const wheelScrollTo = (diffNum: number, cb: (progress: number) => void) => {
+const wheelScrollLeftTo = (scrollLeft: number, cb: (offsetLeft: number) => void) => {
+  requestAnimationFrame(() => {
+    cb(scrollLeft)
+  })
+}
+
+const wheelScrollTopTo = (diffNum: number, cb: (progress: number) => void) => {
   const duration = Math.abs(diffNum)
   const startTime = performance.now()
   let countTop = 0
@@ -8090,6 +8096,9 @@ const Methods = {
 
     const { scrollYLoad, scrollXLoad } = reactData
     const { elemStore, intoRunScroll, lastScrollTop, lastScrollLeft, inWheelScroll, inVirtualScroll, inHeaderScroll, inBodyScroll, scrollRenderType, inFooterScroll } = internalData
+    if (inWheelScroll || inVirtualScroll || inHeaderScroll || inFooterScroll) {
+      return
+    }
     const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
     const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
     const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
@@ -8098,9 +8107,6 @@ const Methods = {
     const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
     const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
     const rowExpandEl = $xeTable.$refs.refRowExpandElem as HTMLDivElement
-    if (inWheelScroll || inVirtualScroll || inHeaderScroll || inFooterScroll) {
-      return
-    }
     if (intoRunScroll) {
       return
     }
@@ -8169,17 +8175,17 @@ const Methods = {
 
     const { scrollXLoad } = reactData
     const { elemStore, intoRunScroll, inWheelScroll, inVirtualScroll, inBodyScroll, inFooterScroll } = internalData
-    const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
-    const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
-    const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
-    const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
-    const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
     if (inWheelScroll || inVirtualScroll || inBodyScroll || inFooterScroll) {
       return
     }
     if (intoRunScroll) {
       return
     }
+    const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
+    const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
+    const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+    const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
+    const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
     if (!headerScrollElem) {
       return
     }
@@ -8212,14 +8218,14 @@ const Methods = {
 
     const { scrollXLoad } = reactData
     const { elemStore, intoRunScroll, inWheelScroll, inVirtualScroll, inHeaderScroll, inBodyScroll } = internalData
+    if (inWheelScroll || inVirtualScroll || inHeaderScroll || inBodyScroll) {
+      return
+    }
     const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
     const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
     const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
     const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
     const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
-    if (inWheelScroll || inVirtualScroll || inHeaderScroll || inBodyScroll) {
-      return
-    }
     if (intoRunScroll) {
       return
     }
@@ -8258,17 +8264,25 @@ const Methods = {
     if (target && /^textarea$/i.test((target as HTMLElement).tagName)) {
       return
     }
+
     const { highlightHoverRow } = tableProps
-    const { scrollYLoad } = reactData
+    const { scrollXLoad, scrollYLoad } = reactData
+    const leftFixedWidth = $xeTable.computeLeftFixedWidth
+    const rightFixedWidth = $xeTable.computeRightFixedWidth
+    if (!(scrollYLoad || leftFixedWidth || rightFixedWidth)) {
+      return
+    }
+
     const { elemStore, lastScrollTop, lastScrollLeft } = internalData
     const rowOpts = $xeTable.computeRowOpts
     const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
     const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
     const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
+    const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
     const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+    const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
     const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
     const rowExpandEl = $xeTable.$refs.refRowExpandElem as HTMLDivElement
-
     if (!xHandleEl) {
       return
     }
@@ -8280,8 +8294,8 @@ const Methods = {
     }
 
     const wheelSpeed = getWheelSpeed(reactData.lastScrollTime)
-    const deltaTop = deltaY * wheelSpeed
-    const deltaLeft = deltaX * wheelSpeed
+    const deltaTop = Math.ceil(deltaY * wheelSpeed)
+    const deltaLeft = Math.ceil(deltaX * wheelSpeed)
 
     const isTopWheel = deltaTop < 0
     const currScrollTop = bodyScrollElem.scrollTop
@@ -8290,19 +8304,36 @@ const Methods = {
       return
     }
 
-    const scrollTop = bodyScrollElem.scrollTop + deltaTop
+    const scrollTop = currScrollTop + deltaTop
     const scrollLeft = bodyScrollElem.scrollLeft + deltaLeft
     const isRollX = scrollLeft !== lastScrollLeft
     const isRollY = scrollTop !== lastScrollTop
 
+    if (rowOpts.isHover || highlightHoverRow) {
+      $xeTable.clearHoverRow()
+    }
     // 用于鼠标纵向滚轮处理
+    if (isRollX) {
+      evnt.preventDefault()
+      internalData.inWheelScroll = true
+      wheelScrollLeftTo(scrollLeft, (offsetLeft: number) => {
+        const currLeftNum = offsetLeft
+        setScrollLeft(xHandleEl, currLeftNum)
+        setScrollLeft(bodyScrollElem, currLeftNum)
+        setScrollLeft(headerScrollElem, currLeftNum)
+        setScrollLeft(footerScrollElem, currLeftNum)
+        if (scrollXLoad) {
+          $xeTable.triggerScrollXEvent(evnt)
+        }
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, bodyScrollElem.scrollTop, currLeftNum, {
+          type: 'table',
+          fixed: ''
+        })
+      })
+    }
     if (isRollY) {
       evnt.preventDefault()
-      if (rowOpts.isHover || highlightHoverRow) {
-        $xeTable.clearHoverRow()
-      }
-
-      wheelScrollTo(scrollTop - bodyScrollElem.scrollTop, (offsetTop: number) => {
+      wheelScrollTopTo(scrollTop - currScrollTop, (offsetTop: number) => {
         const currTopNum = bodyScrollElem.scrollTop + offsetTop
         internalData.inWheelScroll = true
         setScrollTop(yHandleEl, currTopNum)
@@ -8313,7 +8344,7 @@ const Methods = {
         if (scrollYLoad) {
           $xeTable.triggerScrollYEvent(evnt)
         }
-        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, currTopNum, scrollLeft, {
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, currTopNum, bodyScrollElem.scrollLeft, {
           type: 'table',
           fixed: ''
         })
