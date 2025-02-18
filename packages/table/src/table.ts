@@ -340,7 +340,7 @@ function renderViewport (h: CreateElement, $xeTable: VxeTableConstructor & VxeTa
 
   const ons: Record<string, any> = {}
   if (scrollYLoad || leftFixedWidth || rightFixedWidth) {
-    ons.onWheel = $xeTable.triggerBodyWheelEvent
+    ons.wheel = $xeTable.triggerBodyWheelEvent
   }
 
   return h('div', {
