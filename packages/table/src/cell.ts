@@ -806,6 +806,9 @@ export const Cell = {
           class: ['vxe-table--expanded', {
             'is--active': isActive
           }],
+          onMousedown (evnt) {
+            evnt.stopPropagation()
+          },
           onClick (evnt: MouseEvent) {
             $table.triggerRowExpandEvent(evnt, params)
           }

@@ -289,12 +289,10 @@ hooks.add('tableEditModule', {
     }
 
     const handleClearEdit = (evnt: Event | null, targetRow?: any) => {
-      const { mouseConfig } = props
       const { editStore } = reactData
       const { actived, focused } = editStore
       const { row, column } = actived
       const validOpts = computeValidOpts.value
-      const mouseOpts = computeMouseOpts.value
       if (row || column) {
         if (targetRow && getRowid($xeTable, targetRow) !== getRowid($xeTable, row)) {
           return nextTick()
@@ -322,11 +320,7 @@ hooks.add('tableEditModule', {
           }
         }
       }
-      return nextTick().then(() => {
-        if (mouseConfig && mouseOpts.area && $xeTable.handleRecalculateCellAreas) {
-          return $xeTable.handleRecalculateCellAreas()
-        }
-      })
+      return nextTick().then(() => $xeTable.updateCellAreas())
     }
 
     const handleEditActive = (params: any, evnt: Event | null, isFocus: boolean) => {

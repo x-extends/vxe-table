@@ -1247,6 +1247,7 @@ export default defineComponent({
       const fullColumnIdData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnIdData = {}
       const fullColumnFieldData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnFieldData = {}
       const mouseOpts = computeMouseOpts.value
+      const expandOpts = computeExpandOpts.value
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
       const { isCrossDrag, isSelfToChildDrag } = columnDragOpts
@@ -1333,10 +1334,8 @@ export default defineComponent({
         tableFullColumn.forEach(handleFunc)
       }
 
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (expandColumn && mouseOpts.area) {
-          errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
-        }
+      if ((expandColumn && expandOpts.mode !== 'fixed') && mouseOpts.area) {
+        errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
       }
 
       if (process.env.VUE_APP_VXE_ENV === 'development') {
@@ -1584,6 +1583,7 @@ export default defineComponent({
     }
 
     const updateAfterListIndex = () => {
+      const { treeConfig } = props
       const { afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
       const fullMaps: Record<string, any> = {}
       afterFullData.forEach((row, index) => {
@@ -1591,7 +1591,9 @@ export default defineComponent({
         const rowRest = fullAllDataRowIdData[rowid]
         const seq = index + 1
         if (rowRest) {
-          rowRest.seq = seq
+          if (!treeConfig) {
+            rowRest.seq = seq
+          }
           rowRest._index = index
         } else {
           const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, treeIndex: -1, items: [], parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
@@ -2607,7 +2609,10 @@ export default defineComponent({
               delete rExpandLazyLoadedMaps[rowid]
             }
             reactData.rowExpandLazyLoadedMaps = rExpandLazyLoadedMaps
-            nextTick().then(() => tableMethods.recalculate()).then(() => resolve())
+            nextTick()
+              .then(() => $xeTable.recalculate())
+              .then(() => $xeTable.updateCellAreas())
+              .then(() => resolve())
           })
         } else {
           resolve()
@@ -3089,6 +3094,7 @@ export default defineComponent({
     }
 
     const handleColumn = (collectColumn: VxeTableDefines.ColumnInfo[]) => {
+      const expandOpts = computeExpandOpts.value
       internalData.collectColumn = collectColumn
       const tableFullColumn = getColumnList(collectColumn)
       internalData.tableFullColumn = tableFullColumn
@@ -3098,6 +3104,7 @@ export default defineComponent({
       return Promise.resolve(
         restoreCustomStorage()
       ).then(() => {
+        const { scrollXLoad, scrollYLoad, expandColumn } = reactData
         cacheColumnMap()
         parseColumns(true).then(() => {
           if (reactData.scrollXLoad) {
@@ -3107,11 +3114,11 @@ export default defineComponent({
         $xeTable.clearMergeCells()
         $xeTable.clearMergeFooterItems()
         $xeTable.handleTableData(true)
-        // if (process.env.VUE_APP_VXE_ENV === 'development') {
-        //   if ((reactData.scrollXLoad || reactData.scrollYLoad) && reactData.expandColumn) {
-        //     warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
-        //   }
-        // }
+
+        if ((scrollXLoad || scrollYLoad) && (expandColumn && expandOpts.mode !== 'fixed')) {
+          warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
+        }
+
         return nextTick().then(() => {
           if ($xeToolbar) {
             $xeToolbar.syncUpdate({
@@ -3492,6 +3499,15 @@ export default defineComponent({
             reactData.rowExpandHeightFlag++
           }
         }
+      }
+    }
+
+    const handleRowExpandScroll = () => {
+      const { elemStore } = internalData
+      const rowExpandEl = refRowExpandElem.value
+      const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+      if (rowExpandEl && bodyScrollElem) {
+        rowExpandEl.scrollTop = bodyScrollElem.scrollTop
       }
     }
 
@@ -5211,14 +5227,14 @@ export default defineComponent({
        * @param {Boolean} expanded 是否展开
        */
       setRowExpand (rows, expanded) {
-        const { rowExpandedMaps, rowExpandLazyLoadedMaps, expandColumn: column } = reactData
+        const { rowExpandedMaps, rowExpandLazyLoadedMaps, expandColumn } = reactData
         const { fullAllDataRowIdData } = internalData
         let rExpandedMaps = { ...rowExpandedMaps }
         const expandOpts = computeExpandOpts.value
         const { reserve, lazy, accordion, toggleMethod } = expandOpts
         const lazyRests: any[] = []
-        const columnIndex = tableMethods.getColumnIndex(column)
-        const $columnIndex = tableMethods.getVMColumnIndex(column)
+        const columnIndex = $xeTable.getColumnIndex(expandColumn)
+        const $columnIndex = $xeTable.getVMColumnIndex(expandColumn)
         if (rows) {
           if (!XEUtils.isArray(rows)) {
             rows = [rows]
@@ -5228,7 +5244,7 @@ export default defineComponent({
             rExpandedMaps = {}
             rows = rows.slice(rows.length - 1, rows.length)
           }
-          const validRows: any[] = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column, columnIndex, $columnIndex, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) })) : rows
+          const validRows: any[] = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column: expandColumn, columnIndex, $columnIndex, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) })) : rows
           if (expanded) {
             validRows.forEach((row: any) => {
               const rowid = getRowid($xeTable, row)
@@ -5251,11 +5267,19 @@ export default defineComponent({
             })
           }
           if (reserve) {
-            validRows.forEach((row: any) => handleRowExpandReserve(row, expanded))
+            validRows.forEach((row) => handleRowExpandReserve(row, expanded))
           }
         }
         reactData.rowExpandedMaps = rExpandedMaps
-        return Promise.all(lazyRests).then(() => tableMethods.recalculate())
+        return Promise.all(lazyRests)
+          .then(() => $xeTable.recalculate())
+          .then(() => {
+            if (expandColumn) {
+              updateRowExpandStyle()
+              handleRowExpandScroll()
+            }
+            return $xeTable.updateCellAreas()
+          })
       },
       /**
        * 判断行是否为展开状态
@@ -5289,7 +5313,7 @@ export default defineComponent({
           if (expList.length) {
             tableMethods.recalculate()
           }
-        })
+        }).then(() => $xeTable.updateCellAreas())
       },
       clearRowExpandReserve () {
         internalData.rowExpandedReserveRowMap = {}
@@ -5712,8 +5736,8 @@ export default defineComponent({
       updateCellAreas () {
         const { mouseConfig } = props
         const mouseOpts = computeMouseOpts.value
-        if (mouseConfig && mouseOpts.area && $xeTable.handleRecalculateCellAreas) {
-          return $xeTable.handleRecalculateCellAreas()
+        if (mouseConfig && mouseOpts.area && $xeTable.handleRecalculateCellAreaEvent) {
+          return $xeTable.handleRecalculateCellAreaEvent()
         }
         return nextTick()
       },
@@ -7314,7 +7338,7 @@ export default defineComponent({
             const isSelected = sLen >= vLen
             const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
             if (checkField) {
-              XEUtils.get(row, checkField, isSelected)
+              XEUtils.set(row, checkField, isSelected)
             }
             if (isSelected) {
               if (!checkField) {
@@ -7384,7 +7408,7 @@ export default defineComponent({
             vLen++
           })
 
-        const isSelected = vLen > 0 ? sLen >= vLen : sLen >= rootList.length
+        const isSelected = rootList.length > 0 ? (vLen > 0 ? (sLen >= vLen) : (sLen >= rootList.length)) : false
         const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
 
         reactData.isAllSelected = isSelected
@@ -9888,7 +9912,8 @@ export default defineComponent({
         warnLog('vxe.error.errLargeData', ['loadData(data), reloadData(data)'])
       }
       loadTableData(value, true).then(() => {
-        // const { scrollXLoad, scrollYLoad, expandColumn } = reactData
+        const { scrollXLoad, scrollYLoad, expandColumn } = reactData
+        const expandOpts = computeExpandOpts.value
         internalData.inited = true
         internalData.initStatus = true
         if (!initStatus) {
@@ -9899,9 +9924,9 @@ export default defineComponent({
         // if (checkboxColumn && internalData.tableFullData.length > 300 && !checkboxOpts.checkField) {
         //   warnLog('vxe.error.checkProp', ['checkbox-config.checkField'])
         // }
-        // if ((scrollXLoad || scrollYLoad) && expandColumn) {
-        //   warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
-        // }
+        if ((scrollXLoad || scrollYLoad) && (expandColumn && expandOpts.mode !== 'fixed')) {
+          warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
+        }
         return tableMethods.recalculate()
       })
     })
