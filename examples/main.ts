@@ -14,8 +14,14 @@ import './style/index.scss'
 
 VxeUI.setI18n('en-US', enUS)
 
-createApp(App)
-  .use(router)
-  .use(VxeUI)
-  .use(VxeTable)
-  .mount('#app')
+// Secure configuration example
+const app = createApp(App);
+app.use(router);
+app.use(VxeUI);
+app.use(VxeTable);
+
+// Ensure secure defaults for third-party libraries
+// Example: Securely configure a hypothetical analytics library
+// analyticsLibrary.configure({ secure: true });
+
+app.mount('#app');
