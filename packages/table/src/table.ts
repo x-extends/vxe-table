@@ -3385,7 +3385,13 @@ export default defineComponent({
       return multiple
     }
 
-    const wheelScrollTo = (diffNum: number, cb: (progress: number) => void) => {
+    const wheelScrollLeftTo = (scrollLeft: number, cb: (offsetLeft: number) => void) => {
+      requestAnimationFrame(() => {
+        cb(scrollLeft)
+      })
+    }
+
+    const wheelScrollTopTo = (diffNum: number, cb: (progress: number) => void) => {
       const duration = Math.abs(diffNum)
       const startTime = performance.now()
       let countTop = 0
@@ -8755,6 +8761,9 @@ export default defineComponent({
       triggerBodyScrollEvent (evnt, fixedType) {
         const { scrollYLoad, scrollXLoad } = reactData
         const { elemStore, intoRunScroll, lastScrollTop, lastScrollLeft, inWheelScroll, inVirtualScroll, inHeaderScroll, inBodyScroll, scrollRenderType, inFooterScroll } = internalData
+        if (inWheelScroll || inVirtualScroll || inHeaderScroll || inFooterScroll) {
+          return
+        }
         const xHandleEl = refScrollXHandleElem.value
         const yHandleEl = refScrollYHandleElem.value
         const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
@@ -8763,9 +8772,6 @@ export default defineComponent({
         const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
         const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
         const rowExpandEl = refRowExpandElem.value
-        if (inWheelScroll || inVirtualScroll || inHeaderScroll || inFooterScroll) {
-          return
-        }
         if (intoRunScroll) {
           return
         }
@@ -8783,6 +8789,7 @@ export default defineComponent({
             return
           }
         }
+        console.log('triggerBodyScrollEvent', 11)
         let scrollTop = yHandleEl.scrollTop
         let scrollLeft = xHandleEl.scrollLeft
         if (leftScrollElem && fixedType === 'left') {
@@ -8830,14 +8837,14 @@ export default defineComponent({
       triggerHeaderScrollEvent (evnt, fixedType) {
         const { scrollXLoad } = reactData
         const { elemStore, intoRunScroll, inWheelScroll, inVirtualScroll, inBodyScroll, inFooterScroll } = internalData
+        if (inWheelScroll || inVirtualScroll || inBodyScroll || inFooterScroll) {
+          return
+        }
         const yHandleEl = refScrollYHandleElem.value
         const xHandleEl = refScrollXHandleElem.value
         const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
         const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
         const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
-        if (inWheelScroll || inVirtualScroll || inBodyScroll || inFooterScroll) {
-          return
-        }
         if (intoRunScroll) {
           return
         }
@@ -8850,6 +8857,7 @@ export default defineComponent({
         if (!yHandleEl) {
           return
         }
+        console.log('triggerHeaderScrollEvent', 11)
         const scrollTop = yHandleEl.scrollTop
         const scrollLeft = headerScrollElem.scrollLeft
         const isRollX = true
@@ -8869,14 +8877,14 @@ export default defineComponent({
       triggerFooterScrollEvent (evnt, fixedType) {
         const { scrollXLoad } = reactData
         const { elemStore, intoRunScroll, inWheelScroll, inVirtualScroll, inHeaderScroll, inBodyScroll } = internalData
+        if (inWheelScroll || inVirtualScroll || inHeaderScroll || inBodyScroll) {
+          return
+        }
         const yHandleEl = refScrollYHandleElem.value
         const xHandleEl = refScrollXHandleElem.value
         const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
         const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
         const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
-        if (inWheelScroll || inVirtualScroll || inHeaderScroll || inBodyScroll) {
-          return
-        }
         if (intoRunScroll) {
           return
         }
@@ -8889,6 +8897,7 @@ export default defineComponent({
         if (!yHandleEl) {
           return
         }
+        console.log('triggerFooterScrollEvent')
         const scrollTop = yHandleEl.scrollTop
         const scrollLeft = footerScrollElem.scrollLeft
         const isRollX = true
@@ -8910,17 +8919,25 @@ export default defineComponent({
         if (target && /^textarea$/i.test((target as HTMLElement).tagName)) {
           return
         }
+
         const { highlightHoverRow } = tableProps
-        const { scrollYLoad } = reactData
+        const { scrollXLoad, scrollYLoad } = reactData
+        const leftFixedWidth = computeLeftFixedWidth.value
+        const rightFixedWidth = computeRightFixedWidth.value
+        if (!(scrollYLoad || leftFixedWidth || rightFixedWidth)) {
+          return
+        }
+
         const { elemStore, lastScrollTop, lastScrollLeft } = internalData
         const rowOpts = computeRowOpts.value
         const xHandleEl = refScrollXHandleElem.value
         const yHandleEl = refScrollYHandleElem.value
         const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
+        const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
         const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+        const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
         const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
         const rowExpandEl = refRowExpandElem.value
-
         if (!xHandleEl) {
           return
         }
@@ -8930,9 +8947,10 @@ export default defineComponent({
         if (!bodyScrollElem) {
           return
         }
+
         const wheelSpeed = getWheelSpeed(reactData.lastScrollTime)
-        const deltaTop = deltaY * wheelSpeed
-        const deltaLeft = deltaX * wheelSpeed
+        const deltaTop = Math.ceil(deltaY * wheelSpeed)
+        const deltaLeft = Math.ceil(deltaX * wheelSpeed)
 
         const isTopWheel = deltaTop < 0
         const currScrollTop = bodyScrollElem.scrollTop
@@ -8941,19 +8959,36 @@ export default defineComponent({
           return
         }
 
-        const scrollTop = bodyScrollElem.scrollTop + deltaTop
+        const scrollTop = currScrollTop + deltaTop
         const scrollLeft = bodyScrollElem.scrollLeft + deltaLeft
         const isRollX = scrollLeft !== lastScrollLeft
         const isRollY = scrollTop !== lastScrollTop
 
+        if (rowOpts.isHover || highlightHoverRow) {
+          $xeTable.clearHoverRow()
+        }
         // 用于鼠标纵向滚轮处理
+        if (isRollX) {
+          evnt.preventDefault()
+          internalData.inWheelScroll = true
+          wheelScrollLeftTo(scrollLeft, (offsetLeft: number) => {
+            const currLeftNum = offsetLeft
+            setScrollLeft(xHandleEl, currLeftNum)
+            setScrollLeft(bodyScrollElem, currLeftNum)
+            setScrollLeft(headerScrollElem, currLeftNum)
+            setScrollLeft(footerScrollElem, currLeftNum)
+            if (scrollXLoad) {
+              $xeTable.triggerScrollXEvent(evnt)
+            }
+            $xeTable.handleScrollEvent(evnt, isRollY, isRollX, bodyScrollElem.scrollTop, currLeftNum, {
+              type: 'table',
+              fixed: ''
+            })
+          })
+        }
         if (isRollY) {
           evnt.preventDefault()
-          if (rowOpts.isHover || highlightHoverRow) {
-            $xeTable.clearHoverRow()
-          }
-
-          wheelScrollTo(scrollTop - bodyScrollElem.scrollTop, (offsetTop: number) => {
+          wheelScrollTopTo(scrollTop - currScrollTop, (offsetTop: number) => {
             const currTopNum = bodyScrollElem.scrollTop + offsetTop
             internalData.inWheelScroll = true
             setScrollTop(yHandleEl, currTopNum)
@@ -8964,7 +8999,7 @@ export default defineComponent({
             if (scrollYLoad) {
               $xeTable.triggerScrollYEvent(evnt)
             }
-            $xeTable.handleScrollEvent(evnt, isRollY, isRollX, currTopNum, scrollLeft, {
+            $xeTable.handleScrollEvent(evnt, isRollY, isRollX, currTopNum, bodyScrollElem.scrollLeft, {
               type: 'table',
               fixed: ''
             })
@@ -9563,20 +9598,12 @@ export default defineComponent({
 
     const renderViewport = () => {
       const { showHeader, showFooter } = props
-      const { overflowX, scrollYLoad, tableData, tableColumn, tableGroupColumn, footerTableData, columnStore } = reactData
+      const { overflowX, tableData, tableColumn, tableGroupColumn, footerTableData, columnStore } = reactData
       const { leftList, rightList } = columnStore
-      const leftFixedWidth = computeLeftFixedWidth.value
-      const rightFixedWidth = computeRightFixedWidth.value
-
-      const ons: Record<string, any> = {}
-      if (scrollYLoad || leftFixedWidth || rightFixedWidth) {
-        ons.onWheel = $xeTable.triggerBodyWheelEvent
-      }
 
       return h('div', {
         ref: refTableViewportElem,
-        class: 'vxe-table--viewport-wrapper',
-        ...ons
+        class: 'vxe-table--viewport-wrapper'
       }, [
         h('div', {
           class: 'vxe-table--main-wrapper'
@@ -10272,6 +10299,12 @@ export default defineComponent({
           }
         }
       })
+
+      const tableViewportEl = refTableViewportElem.value
+      if (tableViewportEl) {
+        tableViewportEl.addEventListener('wheel', $xeTable.triggerBodyWheelEvent, { passive: false })
+      }
+
       globalEvents.on($xeTable, 'paste', handleGlobalPasteEvent)
       globalEvents.on($xeTable, 'copy', handleGlobalCopyEvent)
       globalEvents.on($xeTable, 'cut', handleGlobalCutEvent)
@@ -10285,6 +10318,10 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
+      const tableViewportEl = refTableViewportElem.value
+      if (tableViewportEl) {
+        tableViewportEl.removeEventListener('wheel', $xeTable.triggerBodyWheelEvent)
+      }
       if (resizeObserver) {
         resizeObserver.disconnect()
       }
