@@ -284,15 +284,12 @@ function handleInsertChildRowAt ($xeTable: VxeTableConstructor, records: any, pa
 }
 
 function handleClearEdit ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: Event | null, targetRow?: any) {
-  const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
 
-  const { mouseConfig } = props
   const { editStore } = reactData
   const { actived, focused } = editStore
   const { row, column } = actived
   const validOpts = $xeTable.computeValidOpts
-  const mouseOpts = $xeTable.computeMouseOpts
   if (row || column) {
     if (targetRow && getRowid($xeTable, targetRow) !== getRowid($xeTable, row)) {
       return $xeTable.$nextTick()
@@ -320,11 +317,7 @@ function handleClearEdit ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
       }
     }
   }
-  return $xeTable.$nextTick().then(() => {
-    if (mouseConfig && mouseOpts.area && $xeTable.handleRecalculateCellAreas) {
-      return $xeTable.handleRecalculateCellAreas()
-    }
-  })
+  return $xeTable.$nextTick().then(() => $xeTable.updateCellAreas())
 }
 
 function handleEditActive ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, params: any, evnt: Event | null, isFocus: boolean) {

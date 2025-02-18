@@ -190,6 +190,7 @@ function cacheColumnMap ($xeTable: VxeTableConstructor) {
   const fullColumnIdData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnIdData = {}
   const fullColumnFieldData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnFieldData = {}
   const mouseOpts = $xeTable.computeMouseOpts
+  const expandOpts = $xeTable.computeExpandOpts
   const columnOpts = $xeTable.computeColumnOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
   const { isCrossDrag, isSelfToChildDrag } = columnDragOpts
@@ -277,10 +278,8 @@ function cacheColumnMap ($xeTable: VxeTableConstructor) {
     tableFullColumn.forEach(handleFunc)
   }
 
-  if (process.env.VUE_APP_VXE_ENV === 'development') {
-    if (expandColumn && mouseOpts.area) {
-      errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
-    }
+  if ((expandColumn && expandOpts.mode !== 'fixed') && mouseOpts.area) {
+    errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
   }
 
   if (process.env.VUE_APP_VXE_ENV === 'developmeznt') {
@@ -317,8 +316,10 @@ const updateScrollYStatus = ($xeTable: VxeTableConstructor, fullData?: any[]) =>
 }
 
 function updateAfterListIndex ($xeTable: VxeTableConstructor) {
+  const props = $xeTable
   const internalData = $xeTable as unknown as TableInternalData
 
+  const { treeConfig } = props
   const { afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
   const fullMaps: Record<string, any> = {}
   afterFullData.forEach((row, index) => {
@@ -326,7 +327,9 @@ function updateAfterListIndex ($xeTable: VxeTableConstructor) {
     const rowRest = fullAllDataRowIdData[rowid]
     const seq = index + 1
     if (rowRest) {
-      rowRest.seq = seq
+      if (!treeConfig) {
+        rowRest.seq = seq
+      }
       rowRest._index = index
     } else {
       const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, treeIndex: -1, items: [], parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
@@ -1712,6 +1715,7 @@ function handleColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
+  const expandOpts = $xeTable.computeExpandOpts
   internalData.collectColumn = collectColumn
   const tableFullColumn = getColumnList(collectColumn)
   internalData.tableFullColumn = tableFullColumn
@@ -1721,6 +1725,7 @@ function handleColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
   return Promise.resolve(
     restoreCustomStorage($xeTable)
   ).then(() => {
+    const { scrollXLoad, scrollYLoad, expandColumn } = reactData
     cacheColumnMap($xeTable)
     parseColumns($xeTable, true).then(() => {
       if (reactData.scrollXLoad) {
@@ -1730,11 +1735,11 @@ function handleColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
     $xeTable.clearMergeCells()
     $xeTable.clearMergeFooterItems()
     $xeTable.handleTableData(true)
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      if ((reactData.scrollXLoad || reactData.scrollYLoad) && reactData.expandColumn) {
-        warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
-      }
+
+    if ((scrollXLoad || scrollYLoad) && (expandColumn && expandOpts.mode !== 'fixed')) {
+      warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
     }
+
     return $xeTable.$nextTick().then(() => {
       if ($xeToolbar) {
         $xeToolbar.syncUpdate({
@@ -2017,6 +2022,17 @@ function updateRowExpandStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMe
         reactData.rowExpandHeightFlag++
       }
     }
+  }
+}
+
+function handleRowExpandScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { elemStore } = internalData
+  const rowExpandEl = $xeTable.$refs.refRowExpandElem as HTMLDivElement
+  const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+  if (rowExpandEl && bodyScrollElem) {
+    rowExpandEl.scrollTop = bodyScrollElem.scrollTop
   }
 }
 
@@ -5532,7 +5548,7 @@ const Methods = {
         const isSelected = sLen >= vLen
         const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
         if (checkField) {
-          XEUtils.get(row, checkField, isSelected)
+          XEUtils.set(row, checkField, isSelected)
         }
         if (isSelected) {
           if (!checkField) {
@@ -5607,7 +5623,7 @@ const Methods = {
         vLen++
       })
 
-    const isSelected = vLen > 0 ? sLen >= vLen : sLen >= rootList.length
+    const isSelected = rootList.length > 0 ? (vLen > 0 ? (sLen >= vLen) : (sLen >= rootList.length)) : false
     const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
 
     reactData.isAllSelected = isSelected
@@ -7412,7 +7428,10 @@ const Methods = {
             delete rExpandLazyLoadedMaps[rowid]
           }
           reactData.rowExpandLazyLoadedMaps = rExpandLazyLoadedMaps
-          $xeTable.$nextTick().then(() => $xeTable.recalculate()).then(() => resolve())
+          $xeTable.$nextTick()
+            .then(() => $xeTable.recalculate())
+            .then(() => $xeTable.updateCellAreas())
+            .then(() => resolve())
         })
       } else {
         resolve()
@@ -7427,12 +7446,14 @@ const Methods = {
    * @param {Boolean} expanded 是否展开
    */
   setRowExpand (rows: any, expanded: any) {
-    const { rowExpandedMaps, fullAllDataRowIdData, rowExpandLazyLoadedMaps, expandOpts, expandColumn: column } = this
+    const $xeTable = this
+
+    const { rowExpandedMaps, fullAllDataRowIdData, rowExpandLazyLoadedMaps, expandOpts, expandColumn } = this
     let rExpandedMaps = { ...rowExpandedMaps }
     const { reserve, lazy, accordion, toggleMethod } = expandOpts
     const lazyRests: any[] = []
-    const columnIndex = this.getColumnIndex(column)
-    const $columnIndex = this.getVMColumnIndex(column)
+    const columnIndex = $xeTable.getColumnIndex(expandColumn)
+    const $columnIndex = $xeTable.getVMColumnIndex(expandColumn)
     if (rows) {
       if (!XEUtils.isArray(rows)) {
         rows = [rows]
@@ -7442,7 +7463,7 @@ const Methods = {
         rExpandedMaps = {}
         rows = rows.slice(rows.length - 1, rows.length)
       }
-      const validRows = toggleMethod ? rows.filter((row: any) => toggleMethod({ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) })) : rows
+      const validRows: any[] = toggleMethod ? rows.filter((row: any) => toggleMethod({ expanded, column: expandColumn, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) })) : rows
       if (expanded) {
         validRows.forEach((row: any) => {
           const rowid = getRowid(this, row)
@@ -7457,7 +7478,7 @@ const Methods = {
           }
         })
       } else {
-        validRows.forEach((item: any) => {
+        validRows.forEach((item) => {
           const rowid = getRowid(this, item)
           if (rExpandedMaps[rowid]) {
             delete rExpandedMaps[rowid]
@@ -7465,11 +7486,19 @@ const Methods = {
         })
       }
       if (reserve) {
-        validRows.forEach((row: any) => this.handleRowExpandReserve(row, expanded))
+        validRows.forEach((row) => this.handleRowExpandReserve(row, expanded))
       }
     }
     this.rowExpandedMaps = rExpandedMaps
-    return Promise.all(lazyRests).then(this.recalculate)
+    return Promise.all(lazyRests)
+      .then(() => $xeTable.recalculate())
+      .then(() => {
+        if (expandColumn) {
+          updateRowExpandStyle($xeTable)
+          handleRowExpandScroll($xeTable)
+        }
+        return $xeTable.updateCellAreas()
+      })
   },
   /**
    * 判断行是否为展开状态
@@ -7491,6 +7520,8 @@ const Methods = {
    * 手动清空展开行状态，数据会恢复成未展开的状态
    */
   clearRowExpand () {
+    const $xeTable = this
+
     const { expandOpts, tableFullData } = this
     const { reserve } = expandOpts
     const expList = this.getRowExpandRecords()
@@ -7502,7 +7533,7 @@ const Methods = {
       if (expList.length) {
         this.recalculate()
       }
-    })
+    }).then(() => $xeTable.updateCellAreas())
   },
   clearRowExpandReserve () {
     this.rowExpandedReserveRowMap = {}
@@ -8810,10 +8841,15 @@ const Methods = {
     }
   },
   updateCellAreas () {
-    if (this.mouseConfig && this.mouseOpts.area && this.handleRecalculateCellAreas) {
-      return this.handleRecalculateCellAreas()
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+
+    const { mouseConfig } = props
+    const mouseOpts = $xeTable.computeMouseOpts
+    if (mouseConfig && mouseOpts.area && $xeTable.handleRecalculateCellAreaEvent) {
+      return $xeTable.handleRecalculateCellAreaEvent()
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   dispatchEvent (type: ValueOf<VxeTableEmits>, params: Record<string, any>, evnt: Event | null) {
     const $xeTable = this

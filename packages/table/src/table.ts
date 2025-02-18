@@ -1180,11 +1180,16 @@ export default {
   } as any,
   watch: {
     data (value: any) {
+      const $xeTable = this
+      const reactData = $xeTable
+
       const { initStatus } = this
       if (value && value.length >= 50000) {
         warnLog('vxe.error.errLargeData', ['loadData(data), reloadData(data)'])
       }
       this.loadTableData(value || [], true).then(() => {
+        const { scrollXLoad, scrollYLoad, expandColumn } = reactData
+        const expandOpts = $xeTable.computeExpandOpts
         this.inited = true
         this.initStatus = true
         if (!initStatus) {
@@ -1194,9 +1199,9 @@ export default {
         // if (checkboxColumn && this.tableFullData.length > 300 && !this.checkboxOpts.checkField) {
         //   warnLog('vxe.error.checkProp', ['checkbox-config.checkField'])
         // }
-        // if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
-        //   warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
-        // }
+        if ((scrollXLoad || scrollYLoad) && (expandColumn && expandOpts.mode !== 'fixed')) {
+          warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
+        }
         this.recalculate()
       })
     },

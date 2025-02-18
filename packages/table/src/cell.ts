@@ -788,7 +788,10 @@ export const Cell = {
             'is--active': isActive
           }],
           on: {
-            click (evnt: any) {
+            mousedown (evnt: MouseEvent) {
+              evnt.stopPropagation()
+            },
+            click (evnt: MouseEvent) {
               $table.triggerRowExpandEvent(evnt, params)
             }
           }

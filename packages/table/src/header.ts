@@ -116,8 +116,8 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
         'is--sortable': column.sortable,
         'col--filter': !!filters,
         'is--filter-active': hasFilter,
-        'is--drag-active': !column.fixed && !isDisabledDrag && (isCrossDrag || isPeerDrag || !column.parentId),
-        'is--drag-disabled': isDisabledDrag,
+        'is--drag-active': columnOpts.drag && !column.fixed && !isDisabledDrag && (isCrossDrag || isPeerDrag || !column.parentId),
+        'is--drag-disabled': columnOpts.drag && isDisabledDrag,
         'col--current': currentColumn === column
       }, getClass(headerClassName, cellParams), getClass(headerCellClassName, cellParams)],
       attrs: thAttrs,

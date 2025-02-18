@@ -827,6 +827,11 @@ renderer.mixin({
     tableFilterDefaultMethod: handleFilterMethod,
     tableExportMethod: handleExportSelectMethod
   },
+  formatOption: {
+    renderTableDefault (h, renderOpts, params) {
+      return getCellLabelVNs(h, renderOpts, params, getSelectCellValue(renderOpts, params))
+    }
+  },
   VxeTreeSelect: {
     tableAutoFocus: 'input',
     renderTableEdit: defaultTableOrTreeSelectEditRender,
@@ -842,6 +847,11 @@ renderer.mixin({
       return getCellLabelVNs(h, renderOpts, params, getTreeSelectCellValue(renderOpts, params))
     },
     tableExportMethod: handleExportTreeSelectMethod
+  },
+  formatTree: {
+    renderTableDefault (h, renderOpts, params) {
+      return getCellLabelVNs(h, renderOpts, params, getTreeSelectCellValue(renderOpts, params))
+    }
   },
   VxeColorPicker: {
     tableAutoFocus: 'input',
