@@ -8789,7 +8789,6 @@ export default defineComponent({
             return
           }
         }
-        console.log('triggerBodyScrollEvent', 11)
         let scrollTop = yHandleEl.scrollTop
         let scrollLeft = xHandleEl.scrollLeft
         if (leftScrollElem && fixedType === 'left') {
@@ -8857,7 +8856,6 @@ export default defineComponent({
         if (!yHandleEl) {
           return
         }
-        console.log('triggerHeaderScrollEvent', 11)
         const scrollTop = yHandleEl.scrollTop
         const scrollLeft = headerScrollElem.scrollLeft
         const isRollX = true
@@ -8897,7 +8895,6 @@ export default defineComponent({
         if (!yHandleEl) {
           return
         }
-        console.log('triggerFooterScrollEvent')
         const scrollTop = yHandleEl.scrollTop
         const scrollLeft = footerScrollElem.scrollLeft
         const isRollX = true
