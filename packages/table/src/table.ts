@@ -2789,15 +2789,11 @@ export default defineComponent({
       internalData.tableFullData = fullData
       internalData.tableFullTreeData = treeData
       // 缓存数据
-      $xeTable.cacheRowMap(true, isReset)
+      $xeTable.cacheRowMap(true)
       // 原始数据
       internalData.tableSynchData = datas
       if (isReset) {
         internalData.isResizeCellHeight = false
-        reactData.rowExpandedMaps = {}
-        reactData.rowExpandLazyLoadedMaps = {}
-        reactData.treeExpandedMaps = {}
-        reactData.treeExpandLazyLoadedMaps = {}
       }
       // 克隆原数据，用于显示编辑状态，与编辑值做对比
       if (keepSource) {
@@ -4124,7 +4120,7 @@ export default defineComponent({
        */
       getTreeRowChildren (rowOrRowid) {
         const { treeConfig } = props
-        const { fullDataRowIdData } = internalData
+        const { fullAllDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
         const { transform, mapChildrenField } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
@@ -4136,7 +4132,7 @@ export default defineComponent({
             rowid = getRowid($xeTable, rowOrRowid)
           }
           if (rowid) {
-            const rest = fullDataRowIdData[rowid]
+            const rest = fullAllDataRowIdData[rowid]
             const row = rest ? rest.row : null
             if (row) {
               return row[transform ? mapChildrenField : childrenField] || []
@@ -4150,7 +4146,7 @@ export default defineComponent({
        */
       getTreeParentRow (rowOrRowid) {
         const { treeConfig } = props
-        const { fullDataRowIdData } = internalData
+        const { fullAllDataRowIdData } = internalData
         if (rowOrRowid && treeConfig) {
           let rowid
           if (XEUtils.isString(rowOrRowid)) {
@@ -4159,7 +4155,7 @@ export default defineComponent({
             rowid = getRowid($xeTable, rowOrRowid)
           }
           if (rowid) {
-            const rest = fullDataRowIdData[rowid]
+            const rest = fullAllDataRowIdData[rowid]
             return rest ? rest.parent : null
           }
         }
@@ -4174,9 +4170,9 @@ export default defineComponent({
        * @param {String/Number} rowid 行主键
        */
       getRowById (cellValue) {
-        const { fullDataRowIdData } = internalData
+        const { fullAllDataRowIdData } = internalData
         const rowid = XEUtils.eqNull(cellValue) ? '' : encodeURIComponent(cellValue || '')
-        return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].row : null
+        return fullAllDataRowIdData[rowid] ? fullAllDataRowIdData[rowid].row : null
       },
       /**
        * 根据行获取行的唯一主键
@@ -5353,11 +5349,12 @@ export default defineComponent({
         return rowRest && !!rowRest.treeLoaded
       },
       clearTreeExpandLoaded (rows: any) {
-        const tExpandedMaps = { ...reactData.treeExpandedMaps }
         const { fullAllDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
         const { transform } = treeOpts
+        let tExpandedMaps: Record<string, any> = {}
         if (rows) {
+          tExpandedMaps = { ...reactData.treeExpandedMaps }
           if (!XEUtils.isArray(rows)) {
             rows = [rows]
           }
@@ -5371,11 +5368,15 @@ export default defineComponent({
               }
             }
           })
+        } else {
+          XEUtils.each(fullAllDataRowIdData, (rowRest) => {
+            rowRest.treeLoaded = false
+          })
         }
-        reactData.treeExpandedMaps = tExpandedMaps
+        reactData.treeExpandedMaps = {}
         if (transform) {
           handleVirtualTreeToList()
-          return tablePrivateMethods.handleTableData()
+          return $xeTable.handleTableData()
         }
         return nextTick()
       },
@@ -6754,7 +6755,7 @@ export default defineComponent({
       /**
        * 更新数据行的 Map
        */
-      cacheRowMap (isReset, isSource) {
+      cacheRowMap () {
         const { treeConfig } = props
         const treeOpts = computeTreeOpts.value
         const { fullAllDataRowIdData, tableFullData, tableFullTreeData } = internalData
@@ -6764,7 +6765,7 @@ export default defineComponent({
         const isLazy = treeConfig && treeOpts.lazy
         const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
         const fullDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
-        const handleRow = (row: any, index: any, items: any, path?: any[], parentRow?: any, nodes?: any[]) => {
+        const handleRow = (row: any, index: number, items: any, path?: any[], parentRow?: any, nodes?: any[]) => {
           let rowid = getRowid($xeTable, row)
           const seq = treeConfig && path ? toTreePathSeq(path) : index + 1
           const level = nodes ? nodes.length - 1 : 0
@@ -6775,23 +6776,19 @@ export default defineComponent({
           if (isLazy && row[hasChildField] && XEUtils.isUndefined(row[childrenField])) {
             row[childrenField] = null
           }
-          let cacheItem = fullAllDataRowIdData[rowid]
-          if (isReset || !cacheItem) {
-            cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+          let rowRest = fullAllDataRowIdData[rowid]
+          if (!rowRest) {
+            rowRest = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
           }
-          cacheItem.row = row
-          cacheItem.items = items
-          cacheItem.parent = parentRow
-          cacheItem.level = level
-          cacheItem.index = treeConfig && parentRow ? -1 : index
-          if (isSource) {
-            fullDataRowIdMaps[rowid] = cacheItem
-          }
-          fullAllDataRowIdMaps[rowid] = cacheItem
+          rowRest.row = row
+          rowRest.items = items
+          rowRest.parent = parentRow
+          rowRest.level = level
+          rowRest.index = treeConfig && parentRow ? -1 : index
+          fullDataRowIdMaps[rowid] = rowRest
+          fullAllDataRowIdMaps[rowid] = rowRest
         }
-        if (isSource) {
-          internalData.fullDataRowIdData = fullDataRowIdMaps
-        }
+        internalData.fullDataRowIdData = fullDataRowIdMaps
         internalData.fullAllDataRowIdData = fullAllDataRowIdMaps
         if (treeConfig) {
           XEUtils.eachTree(tableFullTreeData, handleRow, { children: childrenField })
@@ -9935,7 +9932,7 @@ export default defineComponent({
       if (value && value.length >= 50000) {
         warnLog('vxe.error.errLargeData', ['loadData(data), reloadData(data)'])
       }
-      loadTableData(value, true).then(() => {
+      loadTableData(value, false).then(() => {
         const { scrollXLoad, scrollYLoad, expandColumn } = reactData
         const expandOpts = computeExpandOpts.value
         internalData.inited = true
