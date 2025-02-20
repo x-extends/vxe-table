@@ -92,11 +92,13 @@ function isImmediateCell (renderOpts: VxeColumnPropTypes.EditRender, params: any
   return params.$type === 'cell' || getInputImmediateModel(renderOpts)
 }
 
-function getCellLabelVNs (renderOpts: any, params: any, cellLabel: any) {
+function getCellLabelVNs (renderOpts: any, params: any, cellLabel: any, opts?: {
+  class?: string
+}) {
   const { placeholder } = renderOpts
   return [
     h('span', {
-      class: 'vxe-cell--label'
+      class: ['vxe-cell--label', opts ? opts.class : '']
     }, placeholder && isEmptyValue(cellLabel)
       ? [
           h('span', {
@@ -678,11 +680,12 @@ renderer.mixin({
     tableAutoFocus: 'input',
     renderTableEdit: defaultEditRender,
     renderTableCell (renderOpts, params) {
-      const { props = {} } = renderOpts
+      const { props = {}, showNegativeStatus } = renderOpts
       const { row, column } = params
       const { type } = props
       let cellValue = XEUtils.get(row, column.field)
-      if (cellValue) {
+      let isNegative = false
+      if (!isEmptyValue(cellValue)) {
         const numberInputConfig = getConfig().numberInput || {}
         if (type === 'float') {
           const autoFill = handleDefaultValue(props.autoFill, numberInputConfig.autoFill, true)
@@ -691,11 +694,22 @@ renderer.mixin({
           if (!autoFill) {
             cellValue = XEUtils.toNumber(cellValue)
           }
+          if (showNegativeStatus) {
+            if (cellValue < 0) {
+              isNegative = true
+            }
+          }
         } else if (type === 'amount') {
           const autoFill = handleDefaultValue(props.autoFill, numberInputConfig.autoFill, true)
           const digits = handleDefaultValue(props.digits, numberInputConfig.digits, 2)
           const showCurrency = handleDefaultValue(props.showCurrency, numberInputConfig.showCurrency, false)
-          cellValue = XEUtils.commafy(XEUtils.toNumber(cellValue), { digits })
+          cellValue = XEUtils.toNumber(cellValue)
+          if (showNegativeStatus) {
+            if (cellValue < 0) {
+              isNegative = true
+            }
+          }
+          cellValue = XEUtils.commafy(cellValue, { digits })
           if (!autoFill) {
             const [iStr, dStr] = cellValue.split('.')
             if (dStr) {
@@ -706,9 +720,19 @@ renderer.mixin({
           if (showCurrency) {
             cellValue = `${props.currencySymbol || numberInputConfig.currencySymbol || getI18n('vxe.numberInput.currencySymbol') || ''}${cellValue}`
           }
+        } else {
+          if (showNegativeStatus) {
+            if (XEUtils.toNumber(cellValue) < 0) {
+              isNegative = true
+            }
+          }
         }
       }
-      return getCellLabelVNs(renderOpts, params, cellValue)
+      return getCellLabelVNs(renderOpts, params, cellValue, isNegative
+        ? {
+            class: 'is--negative'
+          }
+        : {})
     },
     renderTableFooter (renderOpts, params) {
       const { props = {} } = renderOpts

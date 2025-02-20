@@ -44,7 +44,7 @@ export default defineComponent({
 
     const renderRows = (isGroup: boolean, isOptimizeMode: boolean, cols: VxeTableDefines.ColumnInfo[], $rowIndex: number) => {
       const { fixedType } = props
-      const { resizable: allResizable, border, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
+      const { resizable: allResizable, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
       const { currentColumn, scrollXLoad, scrollYLoad, overflowX } = tableReactData
       const { scrollXStore } = tableInternalData
       const columnOpts = computeColumnOpts.value
@@ -174,9 +174,7 @@ export default defineComponent({
            */
           !fixedHiddenColumn && showResizable
             ? h('div', {
-              class: ['vxe-cell--col-resizable', {
-                'is--line': !border || border === 'none'
-              }],
+              class: 'vxe-cell--col-resizable',
               onMousedown: (evnt: MouseEvent) => $xeTable.handleColResizeMousedownEvent(evnt, fixedType, cellParams),
               onDblclick: (evnt: MouseEvent) => $xeTable.handleColResizeDblclickEvent(evnt, cellParams)
             })
