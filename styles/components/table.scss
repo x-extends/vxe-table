@@ -263,6 +263,13 @@
   }
 }
 
+/*负数显示红色*/
+.vxe-cell--label {
+  &.is--negative {
+    color: var(--vxe-ui-table-cell-negative-color);
+  }
+}
+
 .vxe-table--checkbox-range,
 .vxe-table--cell-main-area,
 .vxe-table--cell-extend-area,
@@ -273,7 +280,7 @@
   display: none;
   position: absolute;
   pointer-events: none;
-  z-index: 6;
+  z-index: 1;
 }
 
 .vxe-table--header-wrapper {
@@ -1115,6 +1122,28 @@
         &::before {
           top: -1px;
         }
+      }
+    }
+  }
+  &.border--default,
+  &.border--none,
+  &.border--outer,
+  &.border--inner {
+    .vxe-cell--col-resizable {
+      &:before,
+      &:after {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+      }
+      &:before {
+        width: 1px;
+        height: 50%;
+        background-color: var(--vxe-ui-table-resizable-line-color);
+      }
+      &:after {
+        width: 0;
+        height: 100%;
       }
     }
   }

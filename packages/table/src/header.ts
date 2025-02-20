@@ -19,7 +19,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
   const tableInternalData = $xeTable as unknown as TableInternalData
 
   const { fixedType } = props
-  const { resizable: allResizable, border, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
+  const { resizable: allResizable, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
   const { currentColumn, scrollXLoad, scrollYLoad, overflowX } = tableReactData
   const { scrollXStore } = tableInternalData
   const columnOpts = $xeTable.computeColumnOpts
@@ -147,9 +147,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
      */
       !fixedHiddenColumn && showResizable
         ? h('div', {
-          class: ['vxe-cell--col-resizable', {
-            'is--line': !border || border === 'none'
-          }],
+          class: 'vxe-cell--col-resizable',
           on: {
             mousedown: (evnt: MouseEvent) => $xeTable.handleColResizeMousedownEvent(evnt, fixedType, cellParams),
             dblclick: (evnt: MouseEvent) => $xeTable.handleColResizeDblclickEvent(evnt, cellParams)

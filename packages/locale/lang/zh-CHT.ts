@@ -293,7 +293,7 @@ export default {
       }
     },
     numberInput: {
-      currencySymbol: '￥'
+      currencySymbol: '¥'
     },
     imagePreview: {
       popupTitle: '預覽',
