@@ -2210,15 +2210,11 @@ const Methods = {
     internalData.tableFullData = fullData
     internalData.tableFullTreeData = treeData
     // 缓存数据
-    $xeTable.cacheRowMap(true, isReset)
+    $xeTable.cacheRowMap(true)
     // 原始数据
     internalData.tableSynchData = datas
     if (isReset) {
       internalData.isResizeCellHeight = false
-      reactData.rowExpandedMaps = {}
-      reactData.rowExpandLazyLoadedMaps = {}
-      reactData.treeExpandedMaps = {}
-      reactData.treeExpandLazyLoadedMaps = {}
     }
     // 克隆原数据，用于显示编辑状态，与编辑值做对比
     if (keepSource) {
@@ -2404,16 +2400,22 @@ const Methods = {
   /**
    * 更新数据行的 Map
    */
-  cacheRowMap (isReset: boolean, isSource?: boolean) {
-    const { treeConfig, treeOpts, tableFullData, fullAllDataRowIdData, tableFullTreeData } = this
+  cacheRowMap () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeConfig } = props
+    const treeOpts = $xeTable.computeTreeOpts
+    const { fullAllDataRowIdData, tableFullData, tableFullTreeData } = internalData
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
-    const rowkey = getRowkey(this)
+    const rowkey = getRowkey($xeTable)
     const isLazy = treeConfig && treeOpts.lazy
     const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
     const fullDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
-    const handleCache = (row: any, index: any, items: any, path: any, parentRow: any, nodes: any) => {
-      let rowid = getRowid(this, row)
+    const handleRow = (row: any, index: number, items: any, path?: any[], parentRow?: any, nodes?: any[]) => {
+      let rowid = getRowid($xeTable, row)
       const seq = treeConfig && path ? toTreePathSeq(path) : index + 1
       const level = nodes ? nodes.length - 1 : 0
       if (eqEmptyValue(rowid)) {
@@ -2423,31 +2425,27 @@ const Methods = {
       if (isLazy && row[hasChildField] && XEUtils.isUndefined(row[childrenField])) {
         row[childrenField] = null
       }
-      let cacheItem = fullAllDataRowIdData[rowid]
-      if (isReset || !cacheItem) {
-        cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+      let rowRest = fullAllDataRowIdData[rowid]
+      if (!rowRest) {
+        rowRest = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
       }
-      cacheItem.row = row
-      cacheItem.items = items
-      cacheItem.parent = parentRow
-      cacheItem.level = level
-      cacheItem.index = treeConfig && parentRow ? -1 : index
-      if (isSource) {
-        fullDataRowIdMaps[rowid] = cacheItem
-      }
-      fullAllDataRowIdMaps[rowid] = cacheItem
+      rowRest.row = row
+      rowRest.items = items
+      rowRest.parent = parentRow
+      rowRest.level = level
+      rowRest.index = treeConfig && parentRow ? -1 : index
+      fullDataRowIdMaps[rowid] = rowRest
+      fullAllDataRowIdMaps[rowid] = rowRest
     }
-    if (isSource) {
-      this.fullDataRowIdData = fullDataRowIdMaps
-    }
-    this.fullAllDataRowIdData = fullAllDataRowIdMaps
+    internalData.fullDataRowIdData = fullDataRowIdMaps
+    internalData.fullAllDataRowIdData = fullAllDataRowIdMaps
     if (treeConfig) {
-      XEUtils.eachTree(tableFullTreeData, handleCache, { children: childrenField })
+      XEUtils.eachTree(tableFullTreeData, handleRow, { children: childrenField })
     } else {
-      tableFullData.forEach(handleCache)
+      tableFullData.forEach(handleRow)
     }
   },
-  cacheSourceMap (fullData: any) {
+  cacheSourceMap (fullData: any[]) {
     let { treeConfig, treeOpts, sourceDataRowIdData } = this
     const sourceData = XEUtils.clone(fullData, true)
     const rowkey = getRowkey(this)
@@ -3260,7 +3258,7 @@ const Methods = {
     const internalData = $xeTable
 
     const { treeConfig } = props
-    const { fullDataRowIdData } = internalData
+    const { fullAllDataRowIdData } = internalData
     const treeOpts = $xeTable.computeTreeOpts
     const { transform, mapChildrenField } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
@@ -3272,7 +3270,7 @@ const Methods = {
         rowid = getRowid($xeTable, rowOrRowid)
       }
       if (rowid) {
-        const rest = fullDataRowIdData[rowid]
+        const rest = fullAllDataRowIdData[rowid]
         const row = rest ? rest.row : null
         if (row) {
           return row[transform ? mapChildrenField : childrenField] || []
@@ -3290,7 +3288,7 @@ const Methods = {
     const internalData = $xeTable as unknown as TableInternalData
 
     const { treeConfig } = props
-    const { fullDataRowIdData } = internalData
+    const { fullAllDataRowIdData } = internalData
     if (rowOrRowid && treeConfig) {
       let rowid
       if (XEUtils.isString(rowOrRowid)) {
@@ -3299,7 +3297,7 @@ const Methods = {
         rowid = getRowid($xeTable, rowOrRowid)
       }
       if (rowid) {
-        const rest = fullDataRowIdData[rowid]
+        const rest = fullAllDataRowIdData[rowid]
         return rest ? rest.parent : null
       }
     }
@@ -3319,9 +3317,9 @@ const Methods = {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { fullDataRowIdData } = internalData
+    const { fullAllDataRowIdData } = internalData
     const rowid = XEUtils.eqNull(cellValue) ? '' : encodeURIComponent(cellValue)
-    return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].row : null
+    return fullAllDataRowIdData[rowid] ? fullAllDataRowIdData[rowid].row : null
   },
   /**
    * 根据行获取行的唯一主键
@@ -7602,11 +7600,12 @@ const Methods = {
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const tExpandedMaps = { ...reactData.treeExpandedMaps }
     const { fullAllDataRowIdData } = internalData
     const treeOpts = $xeTable.computeTreeOpts
     const { transform } = treeOpts
+    let tExpandedMaps: Record<string, any> = {}
     if (rows) {
+      tExpandedMaps = { ...reactData.treeExpandedMaps }
       if (!XEUtils.isArray(rows)) {
         rows = [rows]
       }
@@ -7620,8 +7619,12 @@ const Methods = {
           }
         }
       })
+    } else {
+      XEUtils.each(fullAllDataRowIdData, (rowRest) => {
+        rowRest.treeLoaded = false
+      })
     }
-    reactData.treeExpandedMaps = tExpandedMaps
+    reactData.treeExpandedMaps = {}
     if (transform) {
       handleVirtualTreeToList($xeTable)
       return $xeTable.handleTableData()

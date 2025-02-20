@@ -18,31 +18,20 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { VxeUI } from '../../../packages'
-import { VxeGridProps, VxeColumnPropTypes } from '../../../types'
-
-interface RowVO {
-  id: number
-  [key: string]: string | number | boolean | any[]
-}
-
-export default Vue.extend({
+<script>
+export default {
   data () {
-    const flag1CellRender: VxeColumnPropTypes.CellRender = {
+    const flag1CellRender = {
       name: 'VxeSwitch'
     }
-
-    const imgUrlCellRender: VxeColumnPropTypes.CellRender = {
+    const imgUrlCellRender = {
       name: 'VxeImage',
       props: {
         width: 36,
         height: 36
       }
     }
-
-    const imgList1CellRender: VxeColumnPropTypes.CellRender = {
+    const imgList1CellRender = {
       name: 'VxeUpload',
       props: {
         mode: 'image',
@@ -56,8 +45,7 @@ export default Vue.extend({
         }
       }
     }
-
-    const gridOptions: VxeGridProps<RowVO> = {
+    const gridOptions = {
       border: true,
       showFooter: true,
       showOverflow: true,
@@ -187,7 +175,6 @@ export default Vue.extend({
         { checkbox: '合计', col0: '222', col1: '333', col3: '444', col5: '888', col7: '555', col97: '444', imgList1: '777' }
       ]
     }
-
     return {
       gridOptions,
       flag1CellRender,
@@ -197,12 +184,12 @@ export default Vue.extend({
   },
   methods: {
     // 模拟行数据
-    loadData (rowSize: number) {
+    loadData (rowSize) {
       this.gridOptions.loading = true
       setTimeout(() => {
-        const dataList: RowVO[] = []
+        const dataList = []
         for (let i = 0; i < rowSize; i++) {
-          const item: RowVO = {
+          const item = {
             id: 10000 + i,
             status: i % 3 === 0 ? '1' : (i % 2 === 0 ? '2' : '0'),
             imgUrl: i % 3 === 0 ? 'https://vxeui.com/resource/img/546.gif' : 'https://vxeui.com/resource/img/673.gif',
@@ -221,15 +208,11 @@ export default Vue.extend({
           }
           dataList.push(item)
         }
-
         const startTime = Date.now()
         this.gridOptions.data = dataList
         this.gridOptions.loading = false
         this.$nextTick(() => {
-          VxeUI.modal.message({
-            content: `加载时间 ${Date.now() - startTime} 毫秒`,
-            status: 'success'
-          })
+          console.log(`加载时间 ${Date.now() - startTime} 毫秒`)
         })
       }, 350)
     }
@@ -237,5 +220,5 @@ export default Vue.extend({
   created () {
     this.loadData(200)
   }
-})
+}
 </script>
