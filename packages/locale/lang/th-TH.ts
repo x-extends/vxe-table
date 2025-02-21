@@ -50,7 +50,7 @@ export default {
       treeNotImp: 'ตารางแผนผังไม่รองรับการนำเข้า',
       treeCrossDrag: 'สามารถลากได้เฉพาะระดับแรกเท่านั้น',
       treeDragChild: 'ผู้ปกครองไม่สามารถถูกลากเข้าไปในลูกของตัวเองได้',
-      reqPlugin: 'ส่วนขยายเพิ่มเติม "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'ยังไม่มีข้อมูล',
@@ -170,6 +170,7 @@ export default {
         pdf: 'PDF (*.pdf)'
       },
       modes: {
+        empty: '空数据',
         current: 'ข้อมูลปัจจุบัน (ข้อมูลของหน้าปัจจุบัน)',
         selected: 'ข้อมูลที่เลือก (ข้อมูลที่เลือกในหน้าปัจจุบัน)',
         all: 'ข้อมูลทั้งหมด (รวมถึงข้อมูลที่แบ่งหน้าทั้งหมด)'

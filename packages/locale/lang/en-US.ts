@@ -50,7 +50,7 @@ export default {
       treeNotImp: 'Tree tables do not support importing',
       treeCrossDrag: 'Only the first level can be dragged',
       treeDragChild: 'A parent cannot be dragged into its own children',
-      reqPlugin: 'Optional extension "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: 'Extension plugin not installed "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'No data yet',
@@ -170,6 +170,7 @@ export default {
         pdf: 'PDF (*.pdf)'
       },
       modes: {
+        empty: 'Null data',
         current: 'Current data (data of the current page)',
         selected: 'Selected data (selected data on the current page)',
         all: 'Full data (including all paginated data)'

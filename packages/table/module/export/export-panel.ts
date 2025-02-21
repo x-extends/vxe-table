@@ -247,6 +247,8 @@ export default defineComponent({
               columns,
               params: defaultOptions.params as any
             }
+            const hasEmptyData = defaultOptions.mode === 'empty'
+
             return h('div', {
               class: 'vxe-table-export--panel'
             }, [
@@ -386,7 +388,8 @@ export default defineComponent({
                                 }, [
                                   VxeUICheckboxComponent
                                     ? h(VxeUICheckboxComponent, {
-                                      modelValue: defaultOptions.isHeader,
+                                      modelValue: hasEmptyData || defaultOptions.isHeader,
+                                      disabled: hasEmptyData,
                                       title: getI18n('vxe.export.expHeaderTitle'),
                                       content: getI18n('vxe.export.expOptHeader'),
                                       'onUpdate:modelValue' (value: any) {
@@ -407,7 +410,8 @@ export default defineComponent({
                                     : createCommentVNode(),
                                   VxeUICheckboxComponent
                                     ? h(VxeUICheckboxComponent, {
-                                      modelValue: defaultOptions.original,
+                                      modelValue: hasEmptyData ? false : defaultOptions.original,
+                                      disabled: hasEmptyData,
                                       title: getI18n('vxe.export.expOriginalTitle'),
                                       content: getI18n('vxe.export.expOptOriginal'),
                                       'onUpdate:modelValue' (value: any) {
@@ -437,7 +441,7 @@ export default defineComponent({
                                     ? h(VxeUICheckboxComponent, {
                                       modelValue: hasMerge && supportMerge && checkedAll ? defaultOptions.isMerge : false,
                                       title: getI18n('vxe.export.expMergeTitle'),
-                                      disabled: !hasMerge || !supportMerge || !checkedAll,
+                                      disabled: hasEmptyData || !hasMerge || !supportMerge || !checkedAll,
                                       content: getI18n('vxe.export.expOptMerge'),
                                       'onUpdate:modelValue' (value: any) {
                                         defaultOptions.isMerge = value
@@ -458,7 +462,7 @@ export default defineComponent({
                                   VxeUICheckboxComponent
                                     ? h(VxeUICheckboxComponent, {
                                       modelValue: hasTree ? defaultOptions.isAllExpand : false,
-                                      disabled: !hasTree,
+                                      disabled: hasEmptyData || !hasTree,
                                       title: getI18n('vxe.export.expAllExpandTitle'),
                                       content: getI18n('vxe.export.expOptAllExpand'),
                                       'onUpdate:modelValue' (value: any) {

@@ -2436,7 +2436,7 @@ export default defineComponent({
       reactData.isIndeterminate = false
       reactData.treeIndeterminateMaps = {}
       internalData.treeIndeterminateRowMaps = {}
-      tablePrivateMethods.checkSelectionStatus()
+      $xeTable.checkSelectionStatus()
       return nextTick()
     }
 
@@ -2473,12 +2473,12 @@ export default defineComponent({
       reactData.rowExpandedMaps = expandColumn ? getRecoverRowMaps(rowExpandedMaps) : {} // 刷新行展开状态
       // 还原保留状态
       if (expandColumn && expandOpts.reserve) {
-        tableMethods.setRowExpand(handleReserveRow(internalData.rowExpandedReserveRowMap), true)
+        $xeTable.setRowExpand(handleReserveRow(internalData.rowExpandedReserveRowMap), true)
       }
       // 树展开
       reactData.treeExpandedMaps = treeConfig ? getRecoverRowMaps(treeExpandedMaps) : {} // 刷新树展开状态
       if (treeConfig && treeOpts.reserve) {
-        tableMethods.setTreeExpand(handleReserveRow(internalData.treeExpandedReserveRowMap), true)
+        $xeTable.setTreeExpand(handleReserveRow(internalData.treeExpandedReserveRowMap), true)
       }
     }
 
@@ -3234,9 +3234,9 @@ export default defineComponent({
       handleCheckedAllCheckboxRow(value)
       if (evnt) {
         dispatchEvent('checkbox-all', {
-          records: tableMethods.getCheckboxRecords(),
-          reserves: tableMethods.getCheckboxReserveRecords(),
-          indeterminates: tableMethods.getCheckboxIndeterminateRecords(),
+          records: $xeTable.getCheckboxRecords(),
+          reserves: $xeTable.getCheckboxReserveRecords(),
+          indeterminates: $xeTable.getCheckboxIndeterminateRecords(),
           checked: value
         }, evnt)
       }

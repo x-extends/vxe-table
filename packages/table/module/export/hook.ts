@@ -1033,7 +1033,7 @@ hooks.add('tableExportModule', {
         isMerge: hasMerge,
         useStyle: true,
         current: 'current',
-        modes: ['current', 'selected'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : [])
+        modes: ['current', 'selected', 'empty'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : [])
       }, options)
       const types: string[] = defOpts.types || XEUtils.keys(exportOpts._typeMaps)
       const modes: string[] = defOpts.modes || []
@@ -1153,7 +1153,7 @@ hooks.add('tableExportModule', {
           isMerge: hasMerge,
           useStyle: true,
           current: 'current',
-          modes: ['current', 'selected'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : []),
+          modes: ['current', 'selected', 'empty'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : []),
           download: true,
           type: 'csv'
           // filename: '',
@@ -1366,7 +1366,7 @@ hooks.add('tableExportModule', {
                   })
               }
             }
-          } else if (mode === 'current') {
+          } if (mode === 'current') {
             handleOptions.data = afterFullData
           }
         }

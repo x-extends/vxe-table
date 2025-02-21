@@ -50,7 +50,7 @@ export default {
       treeNotImp: 'A fatáblák nem támogatják az importálást',
       treeCrossDrag: '只能拖拽第一层级',
       treeDragChild: '父级不能拖拽到自己的子级中',
-      reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'Még nincsenek adatok',
@@ -170,6 +170,7 @@ export default {
         pdf: 'PDF (*.pdf)'
       },
       modes: {
+        empty: '空数据',
         current: 'Aktuális adatok (az aktuális oldal adatai)',
         selected: 'Kijelölt adatok (kijelölt adatok az aktuális oldalon)',
         all: 'Teljes adat (beleértve az összes oldalszámozott adatot)'

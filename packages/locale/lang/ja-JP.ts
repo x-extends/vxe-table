@@ -50,7 +50,7 @@ export default {
       treeNotImp: 'ツリーテーブルはインポートをサポートしていません',
       treeCrossDrag: '只能拖拽第一层级',
       treeDragChild: '父级不能拖拽到自己的子级中',
-      reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'データがありません',
@@ -170,6 +170,7 @@ export default {
         pdf: 'PDF (*.pdf)'
       },
       modes: {
+        empty: '空数据',
         current: '表示中のデータ(表示中のページのデータ)',
         selected: '選択したデータ(表示中のページに選択したデータ)',
         all: '全てのデータ（全てのページのデータを含む）'

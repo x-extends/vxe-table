@@ -50,7 +50,7 @@ export default {
       treeNotImp: '樹表格不支援導入',
       treeCrossDrag: '只能拖曳第一層級',
       treeDragChild: '父級不能拖曳到自己的子級中',
-      reqPlugin: '選用擴充插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '擴展挿件未安裝 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: '暫無數據',
@@ -170,6 +170,7 @@ export default {
         pdf: 'PDF (*.pdf)'
       },
       modes: {
+        empty: '空数据',
         current: '目前數據（當前頁的數據）',
         selected: '選取資料（目前頁選取的資料）',
         all: '全量資料（包括所有分頁的資料）'

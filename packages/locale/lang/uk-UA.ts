@@ -50,7 +50,7 @@ export default {
       treeNotImp: 'Деревовидна таблиця не підтримує імпорт',
       treeCrossDrag: 'Можна перетягувати тільки на першому рівні',
       treeDragChild: 'Батьківський елемент не можна перетягнути в свій дочірній елемент',
-      reqPlugin: 'Опційний розширений плагін "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'Немає даних',
@@ -170,6 +170,7 @@ export default {
         pdf: 'PDF (*.pdf)'
       },
       modes: {
+        empty: '空数据',
         current: 'Поточні дані (дані поточної сторінки)',
         selected: 'Вибрані дані (дані, вибрані на поточній сторінці)',
         all: 'Всі дані (включаючи дані з усіх сторінок)'

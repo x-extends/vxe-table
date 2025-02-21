@@ -831,7 +831,7 @@
     background-color: var(--vxe-ui-layout-background-color);
   }
   .vxe-table--footer-wrapper {
-    margin-top: -1px;
+    margin-top: calc(var(--vxe-ui-table-border-width) * -1);
     background-color: var(--vxe-ui-table-footer-background-color);
   }
   .vxe-table--header,

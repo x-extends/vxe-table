@@ -50,7 +50,7 @@ export default {
       treeNotImp: '树表格不支持导入',
       treeCrossDrag: '只能拖拽第一层级',
       treeDragChild: '父级不能拖拽到自己的子级中',
-      reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'Ingen data ennå',
@@ -170,6 +170,7 @@ export default {
         pdf: 'PDF (*.pdf)'
       },
       modes: {
+        empty: '空数据',
         current: '当前数据（当前页的数据）',
         selected: '选中数据（当前页选中的数据）',
         all: '全量数据（包括所有分页的数据）'
