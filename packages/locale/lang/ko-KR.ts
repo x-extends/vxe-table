@@ -50,7 +50,7 @@ export default {
       treeNotImp: '트리 테이블은 가져오기를 지원하지 않습니다.',
       treeCrossDrag: '첫 번째 계층만 드래그할 수 있습니다.',
       treeDragChild: '부모 항목은 자신의 하위 항목으로 드래그할 수 없습니다.',
-      reqPlugin: '선택적 확장 플러그인 "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: '데이터가 없습니다.',
@@ -170,6 +170,7 @@ export default {
         pdf: 'PDF (*.pdf)'
       },
       modes: {
+        empty: '空数据',
         current: '현재 데이터(현재 페이지의 데이터)',
         selected: '선택된 데이터(현재 페이지에서 선택된 데이터)',
         all: '전체 데이터(모든 페이지의 데이터 포함)'

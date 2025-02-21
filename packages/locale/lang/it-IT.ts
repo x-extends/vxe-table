@@ -50,7 +50,7 @@ export default {
       treeNotImp: "Le tabelle dell'albero non supportano l'importazione",
       treeCrossDrag: 'È possibile trascinare solo il primo livello',
       treeDragChild: 'Un genitore non può essere trascinato nei propri figli',
-      reqPlugin: 'Estensione facoltativa "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'Nessun dato ancora',
@@ -170,6 +170,7 @@ export default {
         pdf: 'PDF (*.pdf)'
       },
       modes: {
+        empty: '空数据',
         current: 'Dati attuali (dati della pagina corrente)',
         selected: 'Dati selezionati (dati selezionati nella pagina corrente)',
         all: 'Dati completi (compresi tutti i dati impaginati)'

@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { VxeUI } from 'vxe-table'
 export default {
   data () {
     const flag1CellRender = {
@@ -212,7 +213,10 @@ export default {
         this.gridOptions.data = dataList
         this.gridOptions.loading = false
         this.$nextTick(() => {
-          console.log(`加载时间 ${Date.now() - startTime} 毫秒`)
+          VxeUI.modal.message({
+            content: `加载时间 ${Date.now() - startTime} 毫秒`,
+            status: 'success'
+          })
         })
       }, 350)
     }

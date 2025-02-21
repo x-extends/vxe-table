@@ -51,7 +51,7 @@ export default
       treeNotImp: 'Baumtabellen unterstützen den Import nicht',
       treeCrossDrag: 'Nur die erste Ebene kann gezogen werden',
       treeDragChild: 'Ein übergeordnetes Element kann nicht in seine eigenen untergeordneten Elemente gezogen werden',
-      reqPlugin: 'Optionale Erweiterung „{1}“ https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'Noch keine Daten',
@@ -171,6 +171,7 @@ export default
         pdf: 'PDF (*.pdf)'
       },
       modes: {
+        empty: '空数据',
         current: 'Aktuelle Daten (Daten der aktuellen Seite)',
         selected: 'Ausgewählte Daten (ausgewählte Daten auf der aktuellen Seite)',
         all: 'Vollständige Daten (einschließlich aller paginierten Daten)'

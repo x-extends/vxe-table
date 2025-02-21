@@ -1095,7 +1095,7 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
     isMerge: hasMerge,
     useStyle: true,
     current: 'current',
-    modes: ['current', 'selected'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : [])
+    modes: ['current', 'selected', 'empty'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : [])
   }, options)
   const types = defOpts.types || XEUtils.keys(exportOpts._typeMaps)
   const modes = defOpts.modes || []
@@ -1273,7 +1273,7 @@ export default {
         isMerge: hasMerge,
         useStyle: true,
         current: 'current',
-        modes: ['current', 'selected'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : []),
+        modes: ['current', 'selected', 'empty'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : []),
         download: true,
         type: 'csv'
         // filename: '',

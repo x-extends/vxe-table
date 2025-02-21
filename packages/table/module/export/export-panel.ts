@@ -175,6 +175,7 @@ export default {
             columns,
             params: defaultOptions.params as any
           }
+          const hasEmptyData = defaultOptions.mode === 'empty'
 
           return h('div', {
             class: 'vxe-table-export--panel'
@@ -324,7 +325,8 @@ export default {
                               }, [
                                 h('vxe-checkbox', {
                                   props: {
-                                    value: isHeader,
+                                    value: hasEmptyData || isHeader,
+                                    disabled: hasEmptyData,
                                     title: getI18n('vxe.export.expHeaderTitle'),
                                     content: getI18n('vxe.export.expOptHeader')
                                   },
@@ -349,7 +351,8 @@ export default {
                                 }),
                                 h('vxe-checkbox', {
                                   props: {
-                                    value: defaultOptions.original,
+                                    value: hasEmptyData ? false : defaultOptions.original,
+                                    disabled: hasEmptyData,
                                     title: getI18n('vxe.export.expOriginalTitle'),
                                     content: getI18n('vxe.export.expOptOriginal')
                                   },
@@ -381,7 +384,7 @@ export default {
                                 h('vxe-checkbox', {
                                   props: {
                                     value: hasMerge && supportMerge && checkedAll ? defaultOptions.isMerge : false,
-                                    disabled: !hasMerge || !supportMerge || !checkedAll,
+                                    disabled: hasEmptyData || !hasMerge || !supportMerge || !checkedAll,
                                     title: getI18n('vxe.export.expMergeTitle'),
                                     content: getI18n('vxe.export.expOptMerge')
                                   },
@@ -409,7 +412,7 @@ export default {
                                 h('vxe-checkbox', {
                                   props: {
                                     value: hasTree ? defaultOptions.isAllExpand : false,
-                                    disabled: !hasTree,
+                                    disabled: hasEmptyData || !hasTree,
                                     title: getI18n('vxe.export.expAllExpandTitle'),
                                     content: getI18n('vxe.export.expOptAllExpand')
                                   },
