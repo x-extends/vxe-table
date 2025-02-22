@@ -109,7 +109,11 @@ export function getRowkey ($xeTable: VxeTableConstructor) {
 // 行主键 value
 export function getRowid ($xeTable: VxeTableConstructor, row: any) {
   const rowid = XEUtils.get(row, getRowkey($xeTable))
-  return XEUtils.eqNull(rowid) ? '' : encodeURIComponent(rowid)
+  if (XEUtils.eqNull(rowid)) {
+    return ''
+  }
+  const type = typeof rowid
+  return (type === 'number' || type === 'bigint') ? rowid : encodeURIComponent(rowid)
 }
 
 export interface XEColumnInstance {
