@@ -118,7 +118,8 @@ export default {
     },
     button: {
       confirm: 'confirm',
-      cancel: 'Cancel'
+      cancel: 'Cancel',
+      clear: '清除'
     },
     filter: {
       search: 'search'

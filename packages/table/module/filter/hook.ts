@@ -14,7 +14,7 @@ const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['openFilter', 'setF
 hooks.add('tableFilterModule', {
   setupTable ($xeTable) {
     const { props, reactData, internalData } = $xeTable
-    const { refTableHeader, refTableBody, refTableFilter } = $xeTable.getRefMaps()
+    const { refElem, refTableFilter } = $xeTable.getRefMaps()
     const { computeFilterOpts, computeMouseOpts } = $xeTable.getComputeMaps()
 
     // 确认筛选
@@ -69,12 +69,16 @@ hooks.add('tableFilterModule', {
        * @param {ColumnInfo} column 列配置
        * @param {Object} params 参数
        */
-      triggerFilterEvent (evnt, column, params) {
+      triggerFilterEvent (evnt: MouseEvent, column, params) {
         const { initStore, filterStore } = reactData
+        const { elemStore } = internalData
         if (filterStore.column === column && filterStore.visible) {
           filterStore.visible = false
         } else {
-          const { target: targetElem, pageX } = evnt
+          const { clientY, pageX } = evnt
+          const el = refElem.value
+          const tableRect = el.getBoundingClientRect()
+          const targetElem = evnt.target as HTMLDivElement
           const { visibleWidth } = getDomNode()
           const { filters, filterMultiple, filterRender } = column
           const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
@@ -100,11 +104,8 @@ hooks.add('tableFilterModule', {
           filterStore.visible = true
           initStore.filter = true
           nextTick(() => {
-            const tableHeader = refTableHeader.value
-            const tableBody = refTableBody.value
-            const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
-            const bodyElem = tableBody.$el as HTMLDivElement
-            if (!bodyElem) {
+            const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
+            if (!headerScrollElem) {
               return
             }
             const tableFilter = refTableFilter.value
@@ -113,28 +114,25 @@ hooks.add('tableFilterModule', {
               return
             }
             const filterWidth = filterWrapperElem.offsetWidth
-            const filterHeight = filterWrapperElem.offsetHeight
             const filterHeadElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-header')
             const filterFootElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-footer')
             const centerWidth = filterWidth / 2
             const minMargin = 10
-            const maxLeft = bodyElem.clientWidth - filterWidth - minMargin
+            const maxLeft = el.clientWidth - filterWidth - minMargin
             let left, right
+            const thEl = targetElem.offsetParent as HTMLTableCellElement
+            const trEl = thEl.offsetParent as HTMLTableCellElement
             const style: any = {
-              top: `${targetElem.offsetTop + targetElem.offsetParent.offsetTop + targetElem.offsetHeight}px`
+              top: `${targetElem.offsetTop + thEl.offsetTop + targetElem.offsetHeight}px`
             }
             // 判断面板不能大于表格高度
-            let maxHeight: number | null = null
-            const bodyHeight = bodyElem.clientHeight - (headerElem ? headerElem.clientHeight / 2 : 0)
-            if (filterHeight >= bodyHeight) {
-              maxHeight = Math.max(40, bodyHeight - (filterFootElem ? filterFootElem.offsetHeight : 0) - (filterHeadElem ? filterHeadElem.offsetHeight : 0))
-            }
+            const maxHeight = Math.max(40, el.clientHeight - (clientY - tableRect.y) - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
             if (column.fixed === 'left') {
-              left = targetElem.offsetLeft + targetElem.offsetParent.offsetLeft - centerWidth
+              left = targetElem.offsetLeft + thEl.offsetLeft - centerWidth
             } else if (column.fixed === 'right') {
-              right = (targetElem.offsetParent.offsetWidth - targetElem.offsetLeft) + (targetElem.offsetParent.offsetParent.offsetWidth - targetElem.offsetParent.offsetLeft) - column.renderWidth - centerWidth
+              right = (thEl.offsetWidth - targetElem.offsetLeft) + (trEl.offsetWidth - trEl.offsetLeft) - column.renderWidth - centerWidth
             } else {
-              left = targetElem.offsetLeft + targetElem.offsetParent.offsetLeft - centerWidth - bodyElem.scrollLeft
+              left = targetElem.offsetLeft + thEl.offsetLeft - centerWidth - headerScrollElem.scrollLeft
             }
             if (left) {
               const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth

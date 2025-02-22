@@ -118,7 +118,8 @@ export default {
     },
     button: {
       confirm: 'جەزىملەش',
-      cancel: 'ئەمەلدىن قالدۇرۇش'
+      cancel: 'ئەمەلدىن قالدۇرۇش',
+      clear: '清除'
     },
     filter: {
       search: 'ئىزدەش'

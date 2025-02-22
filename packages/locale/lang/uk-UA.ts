@@ -118,7 +118,8 @@ export default {
     },
     button: {
       confirm: 'Підтвердити',
-      cancel: 'Скасувати'
+      cancel: 'Скасувати',
+      clear: '清除'
     },
     filter: {
       search: 'Пошук'

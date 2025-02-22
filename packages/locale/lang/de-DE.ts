@@ -119,7 +119,8 @@ export default
     },
     button: {
       confirm: 'bestätigen',
-      cancel: 'Stornieren'
+      cancel: 'Stornieren',
+      clear: '清除'
     },
     filter: {
       search: 'suchen'

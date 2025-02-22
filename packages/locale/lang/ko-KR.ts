@@ -118,7 +118,8 @@ export default {
     },
     button: {
       confirm: '확인',
-      cancel: '취소'
+      cancel: '취소',
+      clear: '清除'
     },
     filter: {
       search: '검색'

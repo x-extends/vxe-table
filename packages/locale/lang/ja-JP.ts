@@ -118,7 +118,8 @@ export default {
     },
     button: {
       confirm: 'OK',
-      cancel: 'キャンセル'
+      cancel: 'キャンセル',
+      clear: '清除'
     },
     filter: {
       search: '検索'

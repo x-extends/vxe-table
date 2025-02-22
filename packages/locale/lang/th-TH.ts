@@ -118,7 +118,8 @@ export default {
     },
     button: {
       confirm: 'ยืนยัน',
-      cancel: 'ยกเลิก'
+      cancel: 'ยกเลิก',
+      clear: '清除'
     },
     filter: {
       search: 'ค้นหา'
