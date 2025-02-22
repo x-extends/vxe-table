@@ -1,10 +1,10 @@
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
-import { toFilters, handleFieldOrColumn } from '../../src/util'
+import { toFilters, handleFieldOrColumn, getRefElem } from '../../src/util'
 import { getDomNode, triggerEvent } from '../../../ui/src/dom'
 import { isEnableConf } from '../../../ui/src/utils'
 
-import type { VxeTableDefines } from '../../../../types'
+import type { VxeTableConstructor, VxeTableDefines, TableReactData, TableInternalData } from '../../../../types'
 
 const { renderer } = VxeUI
 
@@ -61,89 +61,97 @@ export default {
      * @param {Object} params 参数
      */
     triggerFilterEvent (evnt: any, column: any, params: any) {
+      const $xeTable = this as VxeTableConstructor
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
       const { filterStore } = this
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
-        const { target: targetElem, pageX } = evnt
-        const { filters, filterMultiple, filterRender } = column
-        const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
-        const filterRecoverMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
-        const { visibleWidth } = getDomNode()
-        Object.assign(filterStore, {
-          args: params,
-          multiple: filterMultiple,
-          options: filters,
-          column,
-          style: null,
-          visible: true
-        })
-        // 复原状态
-        filterStore.options.forEach((option: any) => {
-          const { _checked, checked } = option
-          option._checked = checked
-          if (!checked && _checked !== checked) {
-            if (filterRecoverMethod) {
-              filterRecoverMethod({ option, column, $table: this })
+        const { initStore, filterStore } = reactData
+        const { elemStore } = internalData
+        if (filterStore.column === column && filterStore.visible) {
+          filterStore.visible = false
+        } else {
+          const { clientY, pageX } = evnt
+          const el = $xeTable.$refs.refElem as HTMLDivElement
+          const tableRect = el.getBoundingClientRect()
+          const targetElem = evnt.target as HTMLDivElement
+          const { visibleWidth } = getDomNode()
+          const { filters, filterMultiple, filterRender } = column
+          const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+          const frMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
+          internalData._currFilterParams = params
+          Object.assign(filterStore, {
+            multiple: filterMultiple,
+            options: filters,
+            column,
+            style: null
+          })
+          // 复原状态
+          filterStore.options.forEach((option: any) => {
+            const { _checked, checked } = option
+            option._checked = checked
+            if (!checked && _checked !== checked) {
+              if (frMethod) {
+                frMethod({ option, column, $table: $xeTable })
+              }
             }
-          }
-        })
-        this.checkFilterOptions()
-        this.initStore.filter = true
-        this.$nextTick(() => {
-          const { $refs } = this
-          const { refTableHeader, refTableBody, filterWrapper } = $refs
-          const bodyElem = refTableBody.$el
-          const headerElem = refTableHeader ? refTableHeader.$el : null
-          if (!bodyElem) {
-            return
-          }
-          const filterWrapperElem = filterWrapper.$el
-          if (!filterWrapperElem) {
-            return
-          }
-          const filterWidth = filterWrapperElem.offsetWidth
-          const filterHeight = filterWrapperElem.offsetHeight
-          const filterHeadElem = filterWrapperElem.querySelector('.vxe-table--filter-header')
-          const filterFootElem = filterWrapperElem.querySelector('.vxe-table--filter-footer')
-          const centerWidth = filterWidth / 2
-          const minMargin = 10
-          const maxLeft = bodyElem.clientWidth - filterWidth - minMargin
-          let left, right
-          const style: any = {
-            top: `${targetElem.offsetTop + targetElem.offsetParent.offsetTop + targetElem.offsetHeight}px`
-          }
-          // 判断面板不能大于表格高度
-          let maxHeight = null
-          const bodyHeight = bodyElem.clientHeight - (headerElem ? headerElem.clientHeight / 2 : 0)
-          if (filterHeight >= bodyHeight) {
-            maxHeight = Math.max(40, bodyHeight - (filterFootElem ? filterFootElem.offsetHeight : 0) - (filterHeadElem ? filterHeadElem.offsetHeight : 0))
-          }
-          if (column.fixed === 'left') {
-            left = targetElem.offsetLeft + targetElem.offsetParent.offsetLeft - centerWidth
-          } else if (column.fixed === 'right') {
-            right = (targetElem.offsetParent.offsetWidth - targetElem.offsetLeft) + (targetElem.offsetParent.offsetParent.offsetWidth - targetElem.offsetParent.offsetLeft) - column.renderWidth - centerWidth
-          } else {
-            left = targetElem.offsetLeft + targetElem.offsetParent.offsetLeft - centerWidth - bodyElem.scrollLeft
-          }
-          if (left) {
-            const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
-            if (overflowWidth > 0) {
-              left -= overflowWidth
+          })
+          this.checkFilterOptions()
+          filterStore.visible = true
+          initStore.filter = true
+          $xeTable.$nextTick(() => {
+            const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
+            if (!headerScrollElem) {
+              return
             }
-            style.left = `${Math.min(maxLeft, Math.max(minMargin, left))}px`
-          } else if (right) {
-            const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
-            if (overflowWidth > 0) {
-              right += overflowWidth
+            const tableFilter = $xeTable.$refs.refTableFilter
+            const filterWrapperElem = tableFilter ? (tableFilter as any).$el as HTMLDivElement : null
+            if (!filterWrapperElem) {
+              return
             }
-            style.right = `${Math.max(minMargin, right)}px`
-          }
-          filterStore.style = style
-          filterStore.maxHeight = maxHeight
-        })
+            const filterWidth = filterWrapperElem.offsetWidth
+            const filterHeadElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-header')
+            const filterFootElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-footer')
+            const centerWidth = filterWidth / 2
+            const minMargin = 10
+            const maxLeft = el.clientWidth - filterWidth - minMargin
+            let left, right
+            const thEl = targetElem.offsetParent as HTMLTableCellElement
+            const trEl = thEl.offsetParent as HTMLTableCellElement
+            const style: any = {
+              top: `${targetElem.offsetTop + thEl.offsetTop + targetElem.offsetHeight}px`
+            }
+            // 判断面板不能大于表格高度
+            const maxHeight = Math.max(40, el.clientHeight - (clientY - tableRect.y) - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
+            if (column.fixed === 'left') {
+              left = targetElem.offsetLeft + thEl.offsetLeft - centerWidth
+            } else if (column.fixed === 'right') {
+              right = (thEl.offsetWidth - targetElem.offsetLeft) + (trEl.offsetWidth - trEl.offsetLeft) - column.renderWidth - centerWidth
+            } else {
+              left = targetElem.offsetLeft + thEl.offsetLeft - centerWidth - headerScrollElem.scrollLeft
+            }
+            if (left) {
+              const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
+              if (overflowWidth > 0) {
+                left -= overflowWidth
+              }
+              style.left = `${Math.min(maxLeft, Math.max(minMargin, left))}px`
+            } else if (right) {
+              const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
+              if (overflowWidth > 0) {
+                right += overflowWidth
+              }
+              style.right = `${Math.max(minMargin, right)}px`
+            }
+            filterStore.style = style
+            filterStore.maxHeight = maxHeight
+          })
+        }
+        $xeTable.dispatchEvent('filter-visible', { column, field: column.field, property: column.field, filterList: $xeTable.getCheckedFilters(), visible: filterStore.visible }, evnt)
       }
-      this.emitEvent('filter-visible', { column, field: column.field, property: column.field, filterList: this.getCheckedFilters(), visible: filterStore.visible }, evnt)
     },
     handleFilterConfirmFilter (evnt: Event | null) {
       const $xeTable = this

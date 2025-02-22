@@ -60,6 +60,7 @@ export default {
 
       const { $refs, tId, editStore, menuConfig, contextMenu, ctxMenuStore, ctxMenuOpts, mouseConfig, mouseOpts } = this
       const { selected } = editStore
+      const tableFilter = $xeTable.$refs.refTableFilter
       const layoutList = ['header', 'body', 'footer']
       if (isEnableConf(menuConfig) || contextMenu) {
         if (ctxMenuStore.visible && $refs.refTableMenu && getEventTargetNode(evnt, $refs.refTableMenu.$el).flag) {
@@ -128,7 +129,7 @@ export default {
           }
         }
       }
-      if ($refs.filterWrapper && !getEventTargetNode(evnt, $refs.filterWrapper.$el).flag) {
+      if (tableFilter && !getEventTargetNode(evnt, tableFilter.$el).flag) {
         this.closeFilter()
       }
       this.closeMenu()

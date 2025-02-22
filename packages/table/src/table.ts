@@ -1840,7 +1840,7 @@ export default {
       initStore.filter
         ? h(TableFilterPanelComponent, {
           key: 'tf',
-          ref: 'filterWrapper',
+          ref: 'refTableFilter',
           props: {
             filterStore
           }

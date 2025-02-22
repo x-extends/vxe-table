@@ -118,7 +118,8 @@ export default {
     },
     button: {
       confirm: 'подтверждать',
-      cancel: 'Отмена'
+      cancel: 'Отмена',
+      clear: '清除'
     },
     filter: {
       search: 'поиск'

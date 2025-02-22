@@ -118,7 +118,8 @@ export default {
     },
     button: {
       confirm: 'erősítse meg',
-      cancel: 'Mégsem'
+      cancel: 'Mégsem',
+      clear: '清除'
     },
     filter: {
       search: 'keresés'

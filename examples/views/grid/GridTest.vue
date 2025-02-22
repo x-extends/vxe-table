@@ -19,7 +19,8 @@
 </template>
 
 <script>
-import { VxeUI } from 'vxe-table'
+import { VxeUI } from '../../../packages'
+
 export default {
   data () {
     const flag1CellRender = {

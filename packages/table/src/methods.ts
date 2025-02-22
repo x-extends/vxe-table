@@ -4643,12 +4643,14 @@ const Methods = {
   handleGlobalMousedownEvent (evnt: any) {
     const { $el, $refs, $xegrid, $toolbar, mouseConfig, editStore, ctxMenuStore, editRules, editOpts, validOpts, areaOpts, filterStore, customStore, getRowNode } = this
     const { actived } = editStore
-    const { refTableMenu, filterWrapper, customWrapper, refValidTooltip } = $refs
+    const { customWrapper, refValidTooltip } = $refs
+    const tableFilter = $refs.refTableFilter
+    const tableMenu = $refs.refTableMenu
     // 筛选
-    if (filterWrapper) {
+    if (tableFilter) {
       if (getEventTargetNode(evnt, $el, 'vxe-cell--filter').flag) {
         // 如果点击了筛选按钮
-      } else if (getEventTargetNode(evnt, filterWrapper.$el).flag) {
+      } else if (getEventTargetNode(evnt, tableFilter.$el).flag) {
         // 如果点击筛选容器
       } else {
         if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
@@ -4725,7 +4727,7 @@ const Methods = {
         }
       }
     } else if (mouseConfig) {
-      if (!getEventTargetNode(evnt, $el).flag && !($xegrid && getEventTargetNode(evnt, $xegrid.$el).flag) && !(refTableMenu && getEventTargetNode(evnt, refTableMenu.$el).flag) && !($toolbar && getEventTargetNode(evnt, $toolbar.$el).flag)) {
+      if (!getEventTargetNode(evnt, $el).flag && !($xegrid && getEventTargetNode(evnt, $xegrid.$el).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.$el).flag) && !($toolbar && getEventTargetNode(evnt, $toolbar.$el).flag)) {
         if (this.clearSelected) {
           this.clearSelected()
         }
@@ -4744,7 +4746,7 @@ const Methods = {
       }
     }
     // 如果配置了快捷菜单且，点击了其他地方则关闭
-    if (ctxMenuStore.visible && refTableMenu && !getEventTargetNode(evnt, refTableMenu.$el).flag) {
+    if (ctxMenuStore.visible && tableMenu && !getEventTargetNode(evnt, tableMenu.$el).flag) {
       this.closeMenu()
     }
     const isActivated = getEventTargetNode(evnt, ($xegrid || this).$el).flag
