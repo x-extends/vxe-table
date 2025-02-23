@@ -119,7 +119,7 @@ export default {
     button: {
       confirm: 'OK',
       cancel: 'キャンセル',
-      clear: '清除'
+      clear: 'パージ'
     },
     filter: {
       search: '検索'
