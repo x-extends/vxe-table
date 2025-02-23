@@ -37,11 +37,18 @@ body:
     placeholder: "例如：window10"
   validations:
     required: true
-- type: input
+- type: dropdown
   id: issue_browser_version
   attributes:
     label: "浏览器版本："
     placeholder: "例如：chrome 95.0.4638.69"
+    options:
+      - Chrome
+      - Microsoft Edge
+      - Firefox
+      - Safari
+      - IE
+    default: 0
   validations:
     required: true
 - type: input
