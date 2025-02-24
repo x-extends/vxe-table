@@ -323,7 +323,7 @@ hooks.add('tableEditModule', {
       return nextTick().then(() => $xeTable.updateCellAreas())
     }
 
-    const handleEditActive = (params: any, evnt: Event | null, isFocus: boolean) => {
+    const handleEditActive = (params: any, evnt: Event | null, isFocus: boolean, isPos: boolean) => {
       const { editConfig, mouseConfig } = props
       const { editStore, tableColumn } = reactData
       const editOpts = computeEditOpts.value
@@ -413,7 +413,7 @@ hooks.add('tableEditModule', {
             column.renderHeight = cell.offsetHeight
             actived.args = params
             actived.column = column
-            if (isFocus) {
+            if (isPos) {
               setTimeout(() => {
                 $xeTable.handleFocus(params, evnt)
               })
@@ -441,7 +441,7 @@ hooks.add('tableEditModule', {
               columnIndex: $xeTable.getColumnIndex(column),
               cell,
               $table: $xeTable
-            }, null, false)
+            }, null, isPos, isPos)
             internalData._lastCallTime = Date.now()
           }
           return nextTick()
@@ -776,10 +776,12 @@ hooks.add('tableEditModule', {
       setEditRow (row, fieldOrColumn) {
         const { visibleColumn } = internalData
         let column: any = XEUtils.find(visibleColumn, column => isEnableConf(column.editRender))
+        let isPos = false
         if (fieldOrColumn) {
+          isPos = true
           column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
         }
-        return handleEditCell(row, column, false)
+        return handleEditCell(row, column, isPos)
       },
       setActiveCell (row, fieldOrColumn) {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
@@ -824,7 +826,7 @@ hooks.add('tableEditModule', {
        * 处理激活编辑
        */
       handleEdit (params, evnt) {
-        return handleEditActive(params, evnt, true)
+        return handleEditActive(params, evnt, true, true)
       },
       /**
        * @deprecated
