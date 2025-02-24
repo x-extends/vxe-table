@@ -211,7 +211,7 @@ function cacheColumnMap ($xeTable: VxeTableConstructor) {
   let hasFixed: VxeColumnPropTypes.Fixed | undefined
   const handleFunc = (column: VxeTableDefines.ColumnInfo, index: number, items: VxeTableDefines.ColumnInfo[], path?: string[], parentColumn?: VxeTableDefines.ColumnInfo) => {
     const { id: colid, field, fixed, type, treeNode } = column
-    const rest = { $index: -1, _index: -1, column, colid, index, items, parent: parentColumn || null, width: 0 }
+    const rest = { $index: -1, _index: -1, column, colid, index, items, parent: parentColumn || null, width: 0, oLeft: 0 }
     if (field) {
       if (fullColumnFieldData[field]) {
         errLog('vxe.error.colRepet', ['field', field])
@@ -1639,6 +1639,21 @@ function handleScrollToRowColumn ($xeTable: VxeTableConstructor & VxeTablePrivat
     return colToVisible($xeTable, column, row)
   }
   return $xeTable.$nextTick()
+}
+
+const handleRowExpandReserve = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any, expanded: boolean) => {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { rowExpandedReserveRowMap } = internalData
+  const expandOpts = $xeTable.computeExpandOpts
+  if (expandOpts.reserve) {
+    const rowid = getRowid($xeTable, row)
+    if (expanded) {
+      rowExpandedReserveRowMap[rowid] = row
+    } else if (rowExpandedReserveRowMap[rowid]) {
+      delete rowExpandedReserveRowMap[rowid]
+    }
+  }
 }
 
 // 计算可视渲染相关数据
@@ -7540,7 +7555,7 @@ const Methods = {
         })
       }
       if (reserve) {
-        validRows.forEach((row) => this.handleRowExpandReserve(row, expanded))
+        validRows.forEach((row) => handleRowExpandReserve($xeTable, row, expanded))
       }
     }
     this.rowExpandedMaps = rExpandedMaps
@@ -7574,35 +7589,29 @@ const Methods = {
    * 手动清空展开行状态，数据会恢复成未展开的状态
    */
   clearRowExpand () {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { expandOpts, tableFullData } = this
+    const { tableFullData } = internalData
+    const expandOpts = $xeTable.computeExpandOpts
     const { reserve } = expandOpts
-    const expList = this.getRowExpandRecords()
-    this.rowExpandedMaps = {}
+    const expList = $xeTable.getRowExpandRecords()
+    reactData.rowExpandedMaps = {}
     if (reserve) {
-      tableFullData.forEach((row: any) => this.handleRowExpandReserve(row, false))
+      tableFullData.forEach((row) => handleRowExpandReserve($xeTable, row, false))
     }
-    return this.$nextTick().then(() => {
+    return $xeTable.$nextTick().then(() => {
       if (expList.length) {
-        this.recalculate()
+        return $xeTable.recalculate()
       }
-    }).then(() => $xeTable.updateCellAreas())
+    }).then(() => {
+      return $xeTable.updateCellAreas()
+    })
   },
   clearRowExpandReserve () {
     this.rowExpandedReserveRowMap = {}
     return this.$nextTick()
-  },
-  handleRowExpandReserve (row: any, expanded: any) {
-    const { rowExpandedReserveRowMap, expandOpts } = this
-    if (expandOpts.reserve) {
-      const rowid = getRowid(this, row)
-      if (expanded) {
-        rowExpandedReserveRowMap[rowid] = row
-      } else if (rowExpandedReserveRowMap[rowid]) {
-        delete rowExpandedReserveRowMap[rowid]
-      }
-    }
   },
   getRowExpandRecords () {
     const rest: any[] = []
@@ -7639,7 +7648,7 @@ const Methods = {
    * @param {Row} row 行对象
    */
   isTreeExpandLoaded (row: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     const { fullAllDataRowIdData } = this
     const rowRest = fullAllDataRowIdData[getRowid($xeTable, row)]

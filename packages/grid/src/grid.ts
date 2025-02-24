@@ -733,7 +733,7 @@ export default {
       const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, isRespMsg, isActiveMsg, validConfig, pagerOpts } = this
       const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {} } = proxyOpts
       const resConfigs = proxyOpts.response || proxyOpts.props || {}
-      const $xetable = $refs.xTable
+      const $xeTable = $refs.xTable
       const formData = this.getFormData()
       let button: any
       let code: string
@@ -799,8 +799,8 @@ export default {
             }
             if (isInited) {
               let defaultSort = null
-              if ($xetable) {
-                const { sortOpts } = $xetable
+              if ($xeTable) {
+                const { sortOpts } = $xeTable
                 defaultSort = sortOpts.defaultSort
               }
               // 如果使用默认排序
@@ -816,16 +816,16 @@ export default {
                   }
                 })
               }
-              if ($xetable) {
-                filterList = $xetable.getCheckedFilters()
+              if ($xeTable) {
+                filterList = $xeTable.getCheckedFilters()
               }
             } else {
-              if ($xetable) {
+              if ($xeTable) {
                 if (isReload) {
-                  $xetable.clearAll()
+                  $xeTable.clearAll()
                 } else {
-                  sortList = $xetable.getSortColumns()
-                  filterList = $xetable.getCheckedFilters()
+                  sortList = $xeTable.getSortColumns()
+                  filterList = $xeTable.getCheckedFilters()
                 }
               }
             }
@@ -848,6 +848,7 @@ export default {
             const applyArgs = [commitParams].concat(args)
             return Promise.resolve((beforeQuery || ajaxMethods)(...applyArgs))
               .then(rest => {
+                let tableData: any[] = []
                 this.tableLoading = false
                 if (rest) {
                   if (pagerConfig && isEnableConf(pagerOpts)) {
@@ -855,7 +856,7 @@ export default {
                     const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $grid: this }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
                     tablePage.total = XEUtils.toNumber(total)
                     const resultProp = resConfigs.result
-                    this.tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $grid: this }) : XEUtils.get(rest, resultProp || 'result')) || []
+                    tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $grid: this }) : XEUtils.get(rest, resultProp || 'result')) || []
                     // 检验当前页码，不能超出当前最大页数
                     const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
                     if (tablePage.currentPage > pageCount) {
@@ -863,10 +864,17 @@ export default {
                     }
                   } else {
                     const listProp = resConfigs.list
-                    this.tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: this }) : XEUtils.get(rest, listProp)) : rest) || []
+                    tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: this }) : XEUtils.get(rest, listProp)) : rest) || []
                   }
+                }
+                if ($xeTable as any) {
+                  $xeTable.loadData(tableData)
                 } else {
-                  this.tableData = []
+                  $xeTable.$nextTick(() => {
+                    if ($xeTable) {
+                      $xeTable.loadData(tableData)
+                    }
+                  })
                 }
                 if (afterQuery) {
                   afterQuery(...applyArgs)
@@ -894,21 +902,21 @@ export default {
           const deleteSuccessMethods = ajax.deleteSuccess
           const deleteErrorMethods = ajax.deleteError
           if (ajaxMethods) {
-            const selectRecords = $xetable.getCheckboxRecords()
-            const removeRecords = selectRecords.filter((row: any) => !$xetable.isInsertByRow(row))
+            const selectRecords = $xeTable.getCheckboxRecords()
+            const removeRecords = selectRecords.filter((row: any) => !$xeTable.isInsertByRow(row))
             const body = { removeRecords }
             const commitParams = { $grid: this, code, button, body, form: formData, options: ajaxMethods }
             const applyArgs = [commitParams].concat(args)
             if (selectRecords.length) {
               return this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
                 if (!removeRecords.length) {
-                  return $xetable.remove(selectRecords)
+                  return $xeTable.remove(selectRecords)
                 }
                 this.tableLoading = true
                 return Promise.resolve((beforeDelete || ajaxMethods)(...applyArgs))
                   .then(rest => {
                     this.tableLoading = false
-                    $xetable.setPendingRow(removeRecords, false)
+                    $xeTable.setPendingRow(removeRecords, false)
                     if (isRespMsg) {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_ENV === 'development') {
@@ -995,7 +1003,7 @@ export default {
                 return Promise.resolve((beforeSave || ajaxMethods)(...applyArgs))
                   .then(rest => {
                     this.tableLoading = false
-                    $xetable.clearPendingRow()
+                    $xeTable.clearPendingRow()
                     if (isRespMsg) {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_ENV === 'development') {
@@ -1054,7 +1062,7 @@ export default {
           const gCommandOpts = commands.get(code)
           if (gCommandOpts) {
             if (gCommandOpts.commandMethod) {
-              gCommandOpts.commandMethod({ code, button, $grid: this, $table: $xetable }, ...args)
+              gCommandOpts.commandMethod({ code, button, $grid: this, $table: $xeTable }, ...args)
             } else {
               if (process.env.VUE_APP_VXE_ENV === 'development') {
                 errLog('vxe.error.notCommands', [code])
@@ -1247,16 +1255,16 @@ export default {
     },
     getProxyInfo () {
       const { $refs, sortData, proxyConfig } = this
-      const $xetable = $refs.xTable
+      const $xeTable = $refs.xTable
       if (proxyConfig) {
         return {
-          data: this.tableData,
+          data: $xeTable ? $xeTable.getFullData() : [],
           filter: this.filterData,
           form: this.getFormData(),
           sort: sortData.length ? sortData[0] : {},
           sorts: sortData,
           pager: this.tablePage,
-          pendingRecords: $xetable ? $xetable.getPendingRecords() : []
+          pendingRecords: $xeTable ? $xeTable.getPendingRecords() : []
         }
       }
       return null

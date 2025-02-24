@@ -657,6 +657,8 @@ export default {
       },
 
       scrollVMLoading: false,
+      scrollYHeight: 0,
+      scrollXWidth: 0,
 
       rowExpandHeightFlag: 1,
       calcCellHeightFlag: 1,
