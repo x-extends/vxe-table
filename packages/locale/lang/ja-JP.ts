@@ -10,7 +10,7 @@ export default {
       text: 'Loading...'
     },
     error: {
-      downErr: '下载失败',
+      downErr: 'ダウンロードに失敗しました',
       errLargeData: '当绑定的数据量过大时，应该请使用 {0}，否则可能会出现卡顿',
       groupFixed: 'ヘッダー結合を使用する場合、固定列はグループで設定しなければなりません',
       groupMouseRange: 'ヘッダー結合と「{0}」は同時に使用できません。これによりエラーが発生する可能性があります',
@@ -119,7 +119,7 @@ export default {
     button: {
       confirm: 'OK',
       cancel: 'キャンセル',
-      clear: '清除'
+      clear: 'パージ'
     },
     filter: {
       search: '検索'

@@ -6067,7 +6067,7 @@ const Methods = {
     const rowid = getRowid(this, row)
     this.clearHoverRow()
     if ($el) {
-      XEUtils.arrayEach($el.querySelectorAll(`[rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
+      XEUtils.arrayEach($el.querySelectorAll(`.vxe-body--row[rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
     }
     this.hoverRow = row
   },

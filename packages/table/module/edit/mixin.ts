@@ -320,7 +320,7 @@ function handleClearEdit ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   return $xeTable.$nextTick().then(() => $xeTable.updateCellAreas())
 }
 
-function handleEditActive ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, params: any, evnt: Event | null, isFocus: boolean) {
+function handleEditActive ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, params: any, evnt: Event | null, isFocus: boolean, isPos: boolean) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
 
@@ -413,7 +413,7 @@ function handleEditActive ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
         column.renderHeight = cell.offsetHeight
         actived.args = params
         actived.column = column
-        if (isFocus) {
+        if (isPos) {
           setTimeout(() => {
             $xeTable.handleFocus(params, evnt)
           })
@@ -444,7 +444,7 @@ function handleEditCell ($xeTable: VxeTableConstructor & VxeTablePrivateMethods,
           columnIndex: $xeTable.getColumnIndex(column),
           cell,
           $table: $xeTable
-        }, null, false)
+        }, null, isPos, isPos)
         internalData._lastCallTime = Date.now()
       }
       return $xeTable.$nextTick()
@@ -717,7 +717,7 @@ export default {
     handleEdit (params: any, evnt: any) {
       const $xeTable = this
 
-      return handleEditActive($xeTable, params, evnt, true)
+      return handleEditActive($xeTable, params, evnt, true, true)
     },
     /**
      * @deprecated
@@ -860,10 +860,12 @@ export default {
       const $xeTable = this
 
       let column = XEUtils.find(this.visibleColumn, column => isEnableConf(column.editRender))
+      let isPos = false
       if (fieldOrColumn) {
+        isPos = true
         column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
       }
-      return handleEditCell($xeTable, row, column, false)
+      return handleEditCell($xeTable, row, column, isPos)
     },
     _setActiveCell (row: any, fieldOrColumn: any) {
       if (process.env.VUE_APP_VXE_ENV === 'development') {

@@ -648,15 +648,6 @@
 .vxe-table {
   .vxe-table--header-wrapper {
     color: var(--vxe-ui-table-header-font-color);
-    &::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      height: 0;
-      width: 100%;
-      border-bottom: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
-    }
   }
   /*排序*/
   .vxe-cell--sort {
@@ -993,11 +984,6 @@
       }
     }
   }
-  &.header-cell--area {
-    .vxe-table--header-wrapper {
-      user-select: none;
-    }
-  }
   &.body-cell--area {
     .vxe-table--body-wrapper {
       user-select: none;
@@ -1248,11 +1234,6 @@
   &.border--none {
     .vxe-table--border-line {
       display: none;
-    }
-    .vxe-table--header-wrapper {
-      &::after {
-        display: none;
-      }
     }
   }
   
