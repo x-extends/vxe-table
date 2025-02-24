@@ -3,6 +3,8 @@ import { formatText, isEnableConf, getClass } from '../../../ui/src/utils'
 import { getSlotVNs } from '../../../ui/src/vn'
 import { CreateElement } from 'vue'
 
+import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData } from '../../../../types'
+
 const { getI18n, getIcon, renderer } = VxeUI
 
 export default {
@@ -17,13 +19,16 @@ export default {
     }
   } as any,
   render (this: any, h: CreateElement) {
-    const $xeTable = this.$parent
+    const $panel = this
+    const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+    const tableInternalData = $xeTable as unknown as TableInternalData
 
     const { filterStore } = this
-    const { args, visible, multiple, column } = filterStore
+    const { visible, multiple, column } = filterStore
     const filterRender = column ? column.filterRender : null
     const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
     const filterClassName = compConf ? (compConf.tableFilterClassName || compConf.filterClassName) : ''
+    const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xeTable })
     const filterOpts = $xeTable.computeFilterOpts
     const { destroyOnClose } = filterOpts
     return h('div', {
@@ -31,7 +36,7 @@ export default {
         'vxe-table--filter-wrapper',
         'filter--prevent-default',
         compConf && compConf.className ? compConf.className : '',
-        getClass(filterClassName, Object.assign({ $panel: this, $table: $xeTable }, args)),
+        getClass(filterClassName, params),
         {
           'is--animat': $xeTable.animat,
           'is--multiple': multiple,
@@ -43,21 +48,27 @@ export default {
   },
   methods: {
     renderOptions (h: CreateElement, filterRender: any, compConf: any) {
-      const { $parent: $xetable, filterStore } = this
-      const { args, column, multiple, maxHeight } = filterStore
+      const $panel = this
+      const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+      const tableInternalData = $xeTable as unknown as TableInternalData
+
+      const { filterStore } = this
+      const { column, multiple, maxHeight } = filterStore
       const slots = column ? column.slots : null
+      const filterSlot = slots ? slots.filter : null
+      const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xeTable })
       const rtFilter = compConf ? (compConf.renderTableFilter || compConf.renderFilter) : null
-      if (slots && slots.filter) {
+      if (filterSlot) {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, $xetable.callSlot(slots.filter, Object.assign({ $panel: this, context: this }, args), h))
+          }, $xeTable.callSlot(filterSlot, params, h))
         ]
       } else if (rtFilter) {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, getSlotVNs(rtFilter.call($xetable, h, filterRender, Object.assign({ $panel: this, context: this }, args))))
+          }, getSlotVNs(rtFilter.call($xeTable, h, filterRender, params)))
         ]
       }
       const isAllChecked = multiple ? filterStore.isAllSelected : !filterStore.options.some((item: any) => item._checked)
@@ -75,7 +86,7 @@ export default {
               title: getI18n(multiple ? 'vxe.table.allTitle' : 'vxe.table.allFilter')
             },
             on: {
-              click: (evnt: any) => {
+              click: (evnt: MouseEvent) => {
                 this.changeAllOption(evnt, !filterStore.isAllSelected)
               }
             }
@@ -109,7 +120,7 @@ export default {
               title: item.label
             },
             on: {
-              click: (evnt: any) => {
+              click: (evnt: MouseEvent) => {
                 this.changeOption(evnt, !item._checked, item)
               }
             }
@@ -128,9 +139,11 @@ export default {
       ]
     },
     renderFooter (h: CreateElement) {
-      const { $parent: $xetable, hasCheckOption, filterStore } = this
-      const { filterOpts } = $xetable
+      const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+
+      const { hasCheckOption, filterStore } = this
       const { column, multiple } = filterStore
+      const filterOpts = $xeTable.computeFilterOpts
       const filterRender = column.filterRender
       const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
