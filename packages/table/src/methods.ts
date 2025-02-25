@@ -534,18 +534,11 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
       if (layout === 'header') {
         // 表头体样式处理
         // 横向滚动渲染
-        let tWidth = tableWidth
         let renderColumnList = tableColumn
         let isOptimizeMode = false
 
         if (isGroup) {
           renderColumnList = visibleColumn
-
-          if (fixedType) {
-            if (wrapperElem) {
-              wrapperElem.style.width = tWidth ? `${tWidth}px` : ''
-            }
-          }
         } else {
           // 如果是使用优化模式
           if (scrollXLoad || scrollYLoad || allColumnHeaderOverflow) {
@@ -562,16 +555,28 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
             if (isOptimizeMode) {
               renderColumnList = fixedColumn || []
             }
+          }
+        }
 
-            if (!isOptimizeMode) {
+        const tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
+
+        if (fixedType) {
+          if (isGroup) {
+            if (wrapperElem) {
+              wrapperElem.style.width = tableWidth ? `${tableWidth}px` : ''
+            }
+          } else {
+            if (isOptimizeMode) {
               if (wrapperElem) {
                 wrapperElem.style.width = tWidth ? `${tWidth}px` : ''
+              }
+            } else {
+              if (wrapperElem) {
+                wrapperElem.style.width = tableWidth ? `${tableWidth}px` : ''
               }
             }
           }
         }
-
-        tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
 
         if (currScrollElem) {
           currScrollElem.style.height = `${headerHeight}px`
@@ -628,7 +633,6 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
           fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, 0)}px`
         }
 
-        let tWidth = tableWidth
         let renderColumnList = tableColumn
 
         let isOptimizeMode = false
@@ -646,15 +650,21 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
           if (isOptimizeMode) {
             renderColumnList = fixedColumn || []
           }
+        }
 
-          if (!isOptimizeMode) {
+        const tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
+
+        if (fixedType) {
+          if (isOptimizeMode) {
             if (wrapperElem) {
               wrapperElem.style.width = tWidth ? `${tWidth}px` : ''
             }
+          } else {
+            if (wrapperElem) {
+              wrapperElem.style.width = tableWidth ? `${tableWidth}px` : ''
+            }
           }
         }
-
-        tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
 
         if (tableElem) {
           tableElem.style.width = tWidth ? `${tWidth}px` : ''
@@ -666,8 +676,6 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
           emptyBlockElem.style.width = tWidth ? `${tWidth}px` : ''
         }
       } else if (layout === 'footer') {
-        let tWidth = tableWidth
-
         let renderColumnList = tableColumn
         let isOptimizeMode = false
         // 如果是使用优化模式
@@ -684,15 +692,21 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
           if (isOptimizeMode) {
             renderColumnList = fixedColumn || []
           }
+        }
 
-          if (!isOptimizeMode) {
+        const tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
+
+        if (fixedType) {
+          if (isOptimizeMode) {
             if (wrapperElem) {
               wrapperElem.style.width = tWidth ? `${tWidth}px` : ''
             }
+          } else {
+            if (wrapperElem) {
+              wrapperElem.style.width = tableWidth ? `${tableWidth}px` : ''
+            }
           }
         }
-
-        tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
 
         if (currScrollElem) {
           currScrollElem.style.height = `${footerHeight}px`
