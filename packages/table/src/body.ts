@@ -104,7 +104,7 @@ export default defineComponent({
     ) => {
       const { fullAllDataRowIdData } = tableInternalData
       const { columnKey, resizable: allResizable, border, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
-      const { tableData, overflowX, currentColumn, scrollXLoad, scrollYLoad, calcCellHeightFlag, resizeHeightFlag, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
+      const { tableData, dragRow, overflowX, currentColumn, scrollXLoad, scrollYLoad, calcCellHeightFlag, resizeHeightFlag, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
       const { afterFullData, scrollXStore, scrollYStore } = tableInternalData
       const cellOpts = computeCellOpts.value
       const validOpts = computeValidOpts.value
@@ -276,10 +276,12 @@ export default defineComponent({
       const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
       let isVNPreEmptyStatus = false
-      if (scrollYLoad && (_rowIndex < scrollYStore.visibleStartIndex - scrollYStore.preloadSize || _rowIndex > scrollYStore.visibleEndIndex + scrollYStore.preloadSize)) {
-        isVNPreEmptyStatus = true
-      } else if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
-        isVNPreEmptyStatus = true
+      if (!dragRow || getRowid($xeTable, dragRow) !== rowid) {
+        if (scrollYLoad && (_rowIndex < scrollYStore.visibleStartIndex - scrollYStore.preloadSize || _rowIndex > scrollYStore.visibleEndIndex + scrollYStore.preloadSize)) {
+          isVNPreEmptyStatus = true
+        } else if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+          isVNPreEmptyStatus = true
+        }
       }
 
       const tcStyle: Record<string, string> = {}
