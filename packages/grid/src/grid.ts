@@ -492,27 +492,29 @@ export default {
       })
       return rest
     },
-    tableProps () {
-      const { isZMax, seqConfig, pagerConfig, loading, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData } = this
-      const tableProps = Object.assign({}, tableExtendProps)
+    computeTableProps () {
+      const { isZMax, seqConfig, pagerConfig, loading, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage } = this
+      const tProps = Object.assign({}, tableExtendProps)
       if (isZMax) {
         if (tableExtendProps.maxHeight) {
-          tableProps.maxHeight = '100%'
+          tProps.maxHeight = '100%'
         } else {
-          tableProps.height = '100%'
+          tProps.height = '100%'
         }
       }
       if (proxyConfig) {
-        tableProps.loading = loading || tableLoading
-        tableProps.data = tableData
+        tProps.loading = loading || tableLoading
         if (proxyOpts.seq && isEnableConf(pagerConfig)) {
-          tableProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
+          tProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
       if (editConfig) {
-        tableProps.editConfig = Object.assign({}, editConfig)
+        tProps.editConfig = Object.assign({}, editConfig)
       }
-      return tableProps
+      return tProps
+    },
+    tableProps () {
+      return this.computeTableProps
     },
     computeCurrLayoutConf () {
       const $xeGrid = this
