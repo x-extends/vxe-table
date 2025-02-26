@@ -175,29 +175,28 @@ export default defineComponent({
 
     const computeTableProps = computed(() => {
       const { seqConfig, pagerConfig, loading, editConfig, proxyConfig } = props
-      const { isZMax, tableLoading, tablePage, tableData } = reactData
+      const { isZMax, tableLoading, tablePage } = reactData
       const tableExtendProps = computeTableExtendProps.value
       const proxyOpts = computeProxyOpts.value
       const pagerOpts = computePagerOpts.value
-      const tableProps = Object.assign({}, tableExtendProps)
+      const tProps = Object.assign({}, tableExtendProps)
       if (isZMax) {
         if (tableExtendProps.maxHeight) {
-          tableProps.maxHeight = '100%'
+          tProps.maxHeight = '100%'
         } else {
-          tableProps.height = '100%'
+          tProps.height = '100%'
         }
       }
       if (proxyConfig && isEnableConf(proxyOpts)) {
-        tableProps.loading = loading || tableLoading
-        tableProps.data = tableData
+        tProps.loading = loading || tableLoading
         if (pagerConfig && proxyOpts.seq && isEnableConf(pagerOpts)) {
-          tableProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
+          tProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
       if (editConfig) {
-        tableProps.editConfig = Object.assign({}, editConfig)
+        tProps.editConfig = Object.assign({}, editConfig)
       }
-      return tableProps
+      return tProps
     })
 
     const computeCurrLayoutConf = computed(() => {
@@ -967,6 +966,7 @@ export default defineComponent({
               reactData.tableLoading = true
               return Promise.resolve((beforeQuery || ajaxMethods)(commitParams, ...args))
                 .then(rest => {
+                  let tableData: any[] = []
                   reactData.tableLoading = false
                   if (rest) {
                     if (pagerConfig && isEnableConf(pagerOpts)) {
@@ -974,7 +974,7 @@ export default defineComponent({
                       const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $grid: $xeGrid }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
                       tablePage.total = XEUtils.toNumber(total)
                       const resultProp = resConfigs.result
-                      reactData.tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $grid: $xeGrid }) : XEUtils.get(rest, resultProp || 'result')) || []
+                      tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $grid: $xeGrid }) : XEUtils.get(rest, resultProp || 'result')) || []
                       // 检验当前页码，不能超出当前最大页数
                       const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
                       if (tablePage.currentPage > pageCount) {
@@ -982,10 +982,17 @@ export default defineComponent({
                       }
                     } else {
                       const listProp = resConfigs.list
-                      reactData.tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: $xeGrid }) : XEUtils.get(rest, listProp)) : rest) || []
+                      tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: $xeGrid }) : XEUtils.get(rest, listProp)) : rest) || []
                     }
+                  }
+                  if ($xeTable as any) {
+                    $xeTable.loadData(tableData)
                   } else {
-                    reactData.tableData = []
+                    nextTick(() => {
+                      if ($xeTable) {
+                        $xeTable.loadData(tableData)
+                      }
+                    })
                   }
                   if (afterQuery) {
                     afterQuery(commitParams, ...args)
@@ -1190,7 +1197,7 @@ export default defineComponent({
         if (props.proxyConfig) {
           const { sortData } = reactData
           return {
-            data: reactData.tableData,
+            data: $xeTable ? $xeTable.getFullData() : [],
             filter: reactData.filterData,
             form: getFormData(),
             sort: sortData.length ? sortData[0] : {},

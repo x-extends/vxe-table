@@ -3,6 +3,7 @@
     <vxe-table
       border
       stripe
+      round
       resizable
       show-footer
       height="400"

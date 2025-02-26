@@ -6,6 +6,7 @@
     <vxe-table
       border
       stripe
+      round
       resizable
       show-footer
       highlight-hover-row

@@ -12,6 +12,7 @@
 
     <vxe-table
       border
+      round
       show-footer
       show-overflow
       height="800"

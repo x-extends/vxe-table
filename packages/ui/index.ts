@@ -198,14 +198,14 @@ VxeUI.setConfig({
     virtualXConfig: {
       enabled: true,
       gt: 60,
-      preSize: 0,
-      oSize: 1
+      preSize: 1,
+      oSize: 2
     },
     virtualYConfig: {
       enabled: true,
       gt: 100,
-      preSize: 0,
-      oSize: 1
+      preSize: 1,
+      oSize: 2
     },
     scrollbarConfig: {
       // width: 0,
