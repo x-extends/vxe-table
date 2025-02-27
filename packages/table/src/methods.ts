@@ -211,7 +211,7 @@ function cacheColumnMap ($xeTable: VxeTableConstructor) {
   let hasFixed: VxeColumnPropTypes.Fixed | undefined
   const handleFunc = (column: VxeTableDefines.ColumnInfo, index: number, items: VxeTableDefines.ColumnInfo[], path?: string[], parentColumn?: VxeTableDefines.ColumnInfo) => {
     const { id: colid, field, fixed, type, treeNode } = column
-    const rest = { $index: -1, _index: -1, column, colid, index, items, parent: parentColumn || null, width: 0 }
+    const rest = { $index: -1, _index: -1, column, colid, index, items, parent: parentColumn || null, width: 0, oLeft: 0 }
     if (field) {
       if (fullColumnFieldData[field]) {
         errLog('vxe.error.colRepet', ['field', field])

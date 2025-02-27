@@ -273,7 +273,7 @@ function renderCellHandle (h: CreateElement, params: VxeTableDefines.CellRenderB
     case 'html':
       return treeNode ? Cell.renderTreeHTMLCell(h, params) : Cell.renderHTMLCell(h, params)
   }
-  if (editConfig && editRender) {
+  if (isEnableConf(editConfig) && editRender) {
     return editOpts.mode === 'cell' ? (treeNode ? Cell.renderTreeCellEdit(h, params) : Cell.renderCellEdit(h, params)) : (treeNode ? Cell.renderTreeRowEdit(h, params) : Cell.renderRowEdit(h, params))
   }
   return treeNode ? Cell.renderTreeCell(h, params) : Cell.renderDefaultCell(h, params)
