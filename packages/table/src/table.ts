@@ -263,6 +263,12 @@ export default defineComponent({
       },
 
       scrollVMLoading: false,
+      scrollYHeight: 0,
+      scrollYTop: 0,
+      isScrollYBig: false,
+      scrollXLeft: 0,
+      scrollXWidth: 0,
+      isScrollXBig: false,
 
       rowExpandHeightFlag: 1,
       calcCellHeightFlag: 1,
@@ -1264,7 +1270,7 @@ export default defineComponent({
       let hasFixed: VxeColumnPropTypes.Fixed | undefined
       const handleFunc = (column: VxeTableDefines.ColumnInfo, index: number, items: VxeTableDefines.ColumnInfo[], path?: string[], parentColumn?: VxeTableDefines.ColumnInfo) => {
         const { id: colid, field, fixed, type, treeNode } = column
-        const rest = { $index: -1, _index: -1, column, colid, index, items, parent: parentColumn || null, width: 0 }
+        const rest = { $index: -1, _index: -1, column, colid, index, items, parent: parentColumn || null, width: 0, oLeft: 0 }
         if (field) {
           if (fullColumnFieldData[field]) {
             errLog('vxe.error.colRepet', ['field', field])

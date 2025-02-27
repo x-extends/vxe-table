@@ -263,14 +263,14 @@ export default {
           year: 'yyyy'
         },
         weeks: {
-          w: 'week',
-          w0: 'Sunday',
-          w1: 'on Monday',
-          w2: 'Tuesday',
-          w3: 'Wednesday',
-          w4: 'Thursday',
-          w5: 'Friday',
-          w6: 'Saturday'
+          w: 'Week',
+          w0: 'Sun',
+          w1: 'Mon',
+          w2: 'Tue',
+          w3: 'Wed',
+          w4: 'Thu',
+          w5: 'Fri',
+          w6: 'Sat'
         },
         months: {
           m0: 'January',
