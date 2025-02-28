@@ -6498,6 +6498,7 @@ const Methods = {
         const dragParams = {
           oldRow: dragRow,
           newRow: prevDragRow,
+          dragRow,
           dragPos: prevDragPos as 'top' | 'bottom',
           dragToChild: !!prevDragToChild,
           offsetIndex: dragOffsetIndex as 0 | 1
@@ -6648,6 +6649,7 @@ const Methods = {
           $xeTable.dispatchEvent('row-dragend', {
             oldRow: dragRow,
             newRow: prevDragRow,
+            dragRow,
             dragPos: prevDragPos as any,
             dragToChild: isDragToChildFlag,
             offsetIndex: dragOffsetIndex,
@@ -6813,11 +6815,12 @@ const Methods = {
     if (prevDragCol && dragCol) {
       // 判断是否有拖动
       if (prevDragCol !== dragCol) {
-        const oldColumn = dragCol
+        const dragColumn = dragCol
         const newColumn = prevDragCol
         const dragParams = {
-          oldColumn,
+          oldColumn: dragColumn,
           newColumn,
+          dragColumn,
           dragPos: prevDragPos as 'left' | 'right',
           dragToChild: !!prevDragToChild,
           offsetIndex: dragOffsetIndex as 0 | 1
@@ -6832,17 +6835,17 @@ const Methods = {
           let nafIndex = -1
 
           const oldAllMaps: Record<string, any> = {}
-          XEUtils.eachTree([oldColumn], column => {
+          XEUtils.eachTree([dragColumn], column => {
             oldAllMaps[column.id] = column
           })
 
           let isSelfToChildStatus = false
 
-          if (oldColumn.parentId && newColumn.parentId) {
+          if (dragColumn.parentId && newColumn.parentId) {
             // 子到子
 
             if (isPeerDrag && !isCrossDrag) {
-              if (oldColumn.parentId !== newColumn.parentId) {
+              if (dragColumn.parentId !== newColumn.parentId) {
                 // 非同级
                 return
               }
@@ -6864,7 +6867,7 @@ const Methods = {
                 }
               }
             }
-          } else if (oldColumn.parentId) {
+          } else if (dragColumn.parentId) {
             // 子到根
 
             if (!isCrossDrag) {
@@ -6892,18 +6895,18 @@ const Methods = {
             // 根到根
           }
 
-          const oldewMatchRest = XEUtils.findTree(collectColumn as VxeTableDefines.ColumnInfo[], item => item.id === oldColumn.id)
+          const oldewMatchRest = XEUtils.findTree(collectColumn as VxeTableDefines.ColumnInfo[], item => item.id === dragColumn.id)
 
           // 改变层级
           if (isSelfToChildStatus && (isCrossDrag && isSelfToChildDrag)) {
             if (oldewMatchRest) {
               const { items: oCols, index: oIndex } = oldewMatchRest
-              const childList = oldColumn.children || []
+              const childList = dragColumn.children || []
               childList.forEach(column => {
-                column.parentId = oldColumn.parentId
+                column.parentId = dragColumn.parentId
               })
               oCols.splice(oIndex, 1, ...childList)
-              oldColumn.children = []
+              dragColumn.children = []
             }
           } else {
             if (oldewMatchRest) {
@@ -6920,11 +6923,11 @@ const Methods = {
             const { items: nCols, index: nIndex, parent: nParent } = newMatchRest
             // 转子级
             if ((isCrossDrag && isToChildDrag) && isDragToChildFlag) {
-              oldColumn.parentId = newColumn.id
-              newColumn.children = (newColumn.children || []).concat([oldColumn])
+              dragColumn.parentId = newColumn.id
+              newColumn.children = (newColumn.children || []).concat([dragColumn])
             } else {
-              oldColumn.parentId = newColumn.parentId
-              nCols.splice(nIndex + dragOffsetIndex, 0, oldColumn)
+              dragColumn.parentId = newColumn.parentId
+              nCols.splice(nIndex + dragOffsetIndex, 0, dragColumn)
             }
             if (!nParent) {
               nafIndex = nIndex
@@ -6950,8 +6953,9 @@ const Methods = {
           }
 
           $xeTable.dispatchEvent('column-dragend', {
-            oldColumn,
+            oldColumn: dragColumn,
             newColumn,
+            dragColumn,
             dragPos: prevDragPos,
             dragToChild: isDragToChildFlag,
             offsetIndex: dragOffsetIndex,
@@ -8327,7 +8331,7 @@ const Methods = {
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { target, deltaY, deltaX } = evnt
+    const { target, deltaY, deltaX, shiftKey } = evnt
     if (target && /^textarea$/i.test((target as HTMLElement).tagName)) {
       return
     }
@@ -8361,8 +8365,8 @@ const Methods = {
     }
 
     const wheelSpeed = getWheelSpeed(reactData.lastScrollTime)
-    const deltaTop = Math.ceil(deltaY * wheelSpeed)
-    const deltaLeft = Math.ceil(deltaX * wheelSpeed)
+    const deltaTop = Math.ceil((shiftKey ? deltaX : deltaY) * wheelSpeed)
+    const deltaLeft = Math.ceil((shiftKey ? deltaY : deltaX) * wheelSpeed)
 
     const isTopWheel = deltaTop < 0
     const currScrollTop = bodyScrollElem.scrollTop

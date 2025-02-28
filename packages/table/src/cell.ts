@@ -89,12 +89,13 @@ function renderCellBaseVNs (h: CreateElement, params: VxeTableDefines.CellRender
   const { treeConfig, dragConfig } = tableProps
   const rowOpts = $table.computeRowOpts
   const rowDragOpts = $table.computeRowDragOpts
+  const treeOpts = $table.computeTreeOpts
   const { showIcon, isPeerDrag, isCrossDrag, visibleMethod } = rowDragOpts
   const rVisibleMethod = visibleMethod || (dragConfig ? dragConfig.rowVisibleMethod : null)
   const vns: any[] = XEUtils.isArray(content) ? content : [content]
   if (dragSort && rowOpts.drag && ((showIcon || (dragConfig ? dragConfig.showRowIcon : false)) && (!rVisibleMethod || rVisibleMethod(params)))) {
     if (treeConfig) {
-      if (isPeerDrag || isCrossDrag || !level) {
+      if (treeOpts.transform && (isPeerDrag || isCrossDrag || !level)) {
         vns.unshift(
           renderCellDragIcon(h, params)
         )

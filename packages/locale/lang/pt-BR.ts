@@ -17,6 +17,7 @@ export default {
       groupTag: 'O cabeçalho da coluna de agrupamento deve usar "{0}" em vez de "{1}", o que pode causar erros.',
       scrollErrProp: 'O parâmetro "{0}" não é suportado quando a rolagem virtual está habilitada.',
       errConflicts: 'O argumento "{0}" entra em conflito com "{1}"',
+      notSupportProp: '当启用参数 "{0}" 时不支持 "{1}"，应该为 "{2}"，否则将会出现错误',
       unableInsert: 'Não é possível inserir na localização especificada.',
       useErr: 'Erro ao instalar o módulo "{0}", possivelmente na ordem errada, os módulos dependentes precisam ser instalados antes da Tabela.',
       barUnableLink: 'A barra de ferramentas não pode ser associada à tabela.',
