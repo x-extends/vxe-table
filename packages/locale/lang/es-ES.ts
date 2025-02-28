@@ -17,6 +17,7 @@ export default {
       groupTag: 'El encabezado de columna de agrupación debería utilizar "{0}" en lugar de "{1}", lo que puede causar errores.',
       scrollErrProp: 'El parámetro "{0}" no es compatible cuando el desplazamiento virtual está habilitado.',
       errConflicts: 'El argumento "{0}" entra en conflicto con "{1}"',
+      notSupportProp: '当启用参数 "{0}" 时不支持 "{1}"，应该为 "{2}"，否则将会出现错误',
       unableInsert: 'No se puede insertar en la ubicación especificada.',
       useErr: 'Error al instalar el módulo "{0}", posiblemente en el orden equivocado, los módulos dependientes deben ser instalados antes de la tabla.',
       barUnableLink: 'La barra de herramientas no puede asociarse con la tabla.',

@@ -86,15 +86,16 @@ function renderCellBaseVNs (params: VxeTableDefines.CellRenderBodyParams & { $ta
   const { dragSort } = column
   const tableProps = $table.props
   const { treeConfig, dragConfig } = tableProps
-  const { computeRowOpts, computeRowDragOpts } = $table.getComputeMaps()
+  const { computeRowOpts, computeRowDragOpts, computeTreeOpts } = $table.getComputeMaps()
   const rowOpts = computeRowOpts.value
   const rowDragOpts = computeRowDragOpts.value
+  const treeOpts = computeTreeOpts.value
   const { showIcon, isPeerDrag, isCrossDrag, visibleMethod } = rowDragOpts
   const rVisibleMethod = visibleMethod || (dragConfig ? dragConfig.rowVisibleMethod : null)
   const vns: VxeComponentSlotType[] = XEUtils.isArray(content) ? content : [content]
   if (dragSort && rowOpts.drag && ((showIcon || (dragConfig ? dragConfig.showRowIcon : false)) && (!rVisibleMethod || rVisibleMethod(params)))) {
     if (treeConfig) {
-      if (isPeerDrag || isCrossDrag || !level) {
+      if (treeOpts.transform && (isPeerDrag || isCrossDrag || !level)) {
         vns.unshift(
           renderCellDragIcon(params)
         )
