@@ -283,7 +283,7 @@ hooks.add('tableEditModule', {
         }
         return handleInsertRowAt(records.map((item: any) => Object.assign({}, item, { [parentField]: parentRow[rowField] })), targetRow, isInsertNextRow)
       } else {
-        errLog('vxe.error.errProp', ['tree-config.treeConfig=false', 'tree-config.treeConfig=true'])
+        errLog('vxe.error.errProp', ['tree-config.transform=false', 'tree-config.transform=true'])
       }
       return Promise.resolve({ row: null, rows: [] })
     }
@@ -779,7 +779,9 @@ hooks.add('tableEditModule', {
         let isPos = false
         if (fieldOrColumn) {
           isPos = true
-          column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
+          if (fieldOrColumn !== true) {
+            column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
+          }
         }
         return handleEditCell(row, column, isPos)
       },
