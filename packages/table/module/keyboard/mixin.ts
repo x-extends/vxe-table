@@ -2,6 +2,8 @@ import XEUtils from 'xe-utils'
 import { getRefElem } from '../../src/util'
 import { browse, hasClass, getAbsolutePos, addClass, removeClass } from '../../../ui/src/dom'
 
+import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../../types'
+
 function getTargetOffset (target: any, container: any) {
   let offsetTop = 0
   let offsetLeft = 0
@@ -217,9 +219,11 @@ export default {
       })
     },
     handleCellMousedownEvent (evnt: any, params: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       const { editConfig, editOpts, handleSelected, checkboxConfig, checkboxOpts, mouseConfig, mouseOpts } = this
-      if (mouseConfig && mouseOpts.area && this.handleMousedownCellAreaEvent) {
-        return this.handleMousedownCellAreaEvent(evnt, params)
+      if (mouseConfig && mouseOpts.area && $xeTable.handleCellAreaMousedownEvent) {
+        return $xeTable.handleCellAreaMousedownEvent(evnt, params)
       } else {
         if (checkboxConfig && checkboxOpts.range) {
           this.handleCheckboxRangeEvent(evnt, params)

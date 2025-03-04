@@ -163,7 +163,7 @@ function renderForm (h: CreateElement, _vm: any) {
   if (hasForm) {
     return h('div', {
       key: 'form',
-      ref: 'formWrapper',
+      ref: 'refFormWrapper',
       class: 'vxe-grid--form-wrapper'
     }, formSlot ? formSlot.call(_vm, { $grid: _vm }, h) : renderDefaultForm(h, _vm))
   }
@@ -181,7 +181,7 @@ function renderToolbar (h: CreateElement, _vm: any) {
   if (hasToolbar) {
     return h('div', {
       key: 'toolbar',
-      ref: 'toolbarWrapper',
+      ref: 'refToolbarWrapper',
       class: 'vxe-grid--toolbar-wrapper'
     }, toolbarSlot
       ? toolbarSlot.call(_vm, { $grid: _vm }, h)
@@ -207,7 +207,7 @@ function renderTop (h: CreateElement, _vm: any) {
   return topSlot
     ? h('div', {
       key: 'top',
-      ref: 'topWrapper',
+      ref: 'refTopWrapper',
       class: 'vxe-grid--top-wrapper'
     }, topSlot.call(_vm, { $grid: _vm }, h))
     : _e()
@@ -264,7 +264,7 @@ function renderBottom (h: CreateElement, _vm: any) {
   return bottomSlot
     ? h('div', {
       key: 'bottom',
-      ref: 'bottomWrapper',
+      ref: 'refBottomWrapper',
       class: 'vxe-grid--bottom-wrapper'
     }, bottomSlot.call(_vm, { $grid: _vm }, h))
     : _e()
@@ -285,7 +285,7 @@ function renderPager (h: CreateElement, $xeGrid: any) {
   if (hasPager) {
     return h('div', {
       key: 'pager',
-      ref: 'pagerWrapper',
+      ref: 'refPagerWrapper',
       class: 'vxe-grid--pager-wrapper'
     }, pagerSlot
       ? pagerSlot.call($xeGrid, { $grid: $xeGrid }, h)
@@ -634,6 +634,7 @@ export default {
     const vSize = $xeGrid.computeSize
     const styles = $xeGrid.computeStyles
     return h('div', {
+      ref: 'refElem',
       class: ['vxe-grid', {
         [`size--${vSize}`]: vSize,
         'is--animat': !!this.animat,
@@ -658,18 +659,32 @@ export default {
       }
       return []
     },
-    getParentHeight () {
-      const { $el, isZMax } = this
-      return (isZMax ? getDomNode().visibleHeight : XEUtils.toNumber(getComputedStyle($el.parentNode).height)) - this.getExcludeHeight()
-    },
     /**
      * 获取需要排除的高度
      */
     getExcludeHeight () {
-      const { $refs, $el, isZMax, height } = this
-      const { formWrapper, toolbarWrapper, topWrapper, bottomWrapper, pagerWrapper } = $refs
-      const parentPaddingSize = isZMax || !(height === 'auto' || height === '100%') ? 0 : getPaddingTopBottomSize($el.parentNode)
-      return parentPaddingSize + getPaddingTopBottomSize($el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
+      const $xeGrid = this
+      const reactData = $xeGrid as GridReactData
+
+      const { isZMax } = reactData
+      const el = $xeGrid.$refs.refElem as HTMLDivElement
+      const formWrapper = $xeGrid.$refs.refFormWrapper as HTMLDivElement
+      const toolbarWrapper = $xeGrid.$refs.refToolbarWrapper as HTMLDivElement
+      const topWrapper = $xeGrid.$refs.refTopWrapper as HTMLDivElement
+      const bottomWrapper = $xeGrid.$refs.refBottomWrapper as HTMLDivElement
+      const pagerWrapper = $xeGrid.$refs.refPagerWrapper as HTMLDivElement
+      const parentPaddingSize = isZMax ? 0 : getPaddingTopBottomSize(el.parentNode as HTMLElement)
+      return parentPaddingSize + getPaddingTopBottomSize(el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
+    },
+    getParentHeight () {
+      const $xeGrid = this
+      const reactData = $xeGrid as GridReactData
+
+      const el = $xeGrid.$refs.refElem as HTMLDivElement
+      if (el) {
+        return (reactData.isZMax ? getDomNode().visibleHeight : XEUtils.toNumber(getComputedStyle(el.parentNode as HTMLElement).height)) - $xeGrid.getExcludeHeight()
+      }
+      return 0
     },
     initToolbar () {
       this.$nextTick(() => {

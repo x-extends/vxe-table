@@ -148,7 +148,7 @@ Object.keys(columnProps).forEach(name => {
   }
 })
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeColumn',
   props: columnProps,
   provide () {
@@ -180,4 +180,4 @@ export default defineVxeComponent({
     return h('div', this.$slots.default)
   },
   methods: Cell
-})
+}) /* define-vxe-component end */

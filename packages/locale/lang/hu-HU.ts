@@ -17,6 +17,7 @@ export default {
       groupTag: 'A csoportosító oszlopfejlécben a „{0}” értéket kell használni a „{1}” helyett, ami hibákat okozhat',
       scrollErrProp: 'A "{0}" paraméter nem támogatott, ha a virtuális görgetés engedélyezve van',
       errConflicts: 'A "{0}" paraméter ütközik a következővel: "{1}"',
+      notSupportProp: '当启用参数 "{0}" 时不支持 "{1}"，应该为 "{2}"，否则将会出现错误',
       unableInsert: 'Nem sikerült beilleszteni a megadott pozícióba, ellenőrizze, hogy a paraméterek helyesek-e',
       useErr: 'Hiba történt a "{0}" modul telepítésekor. Lehet, hogy a sorrend helytelen. A függő modulokat a táblázat előtt kell telepíteni.',
       barUnableLink: 'Az eszköztár nem társítható a táblázathoz',

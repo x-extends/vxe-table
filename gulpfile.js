@@ -91,6 +91,8 @@ gulp.task('build_escode', function () {
     .pipe(replace('process.env.VUE_APP_VXE_VERSION', `"${pack.version}"`))
     .pipe(replace('process.env.VUE_APP_VXE_ENV', 'process.env.NODE_ENV'))
     .pipe(ts(tsSettings))
+    .pipe(replace('export default /* define-vxe-component start */ defineVxeComponent({', 'export default {'))
+    .pipe(replace('}); /* define-vxe-component end */', '};'))
     .pipe(gulp.dest(esmOutDir))
 })
 

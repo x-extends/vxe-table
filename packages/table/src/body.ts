@@ -91,7 +91,7 @@ function renderTdColumn (
   const tableInternalData = $xeTable as unknown as TableInternalData
 
   const { fullAllDataRowIdData } = tableInternalData
-  const { columnKey, resizable: allResizable, border, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
+  const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
   const { tableData, dragRow, overflowX, currentColumn, scrollXLoad, scrollYLoad, calcCellHeightFlag, resizeHeightFlag, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
   const { afterFullData, scrollXStore, scrollYStore } = tableInternalData
   const cellOpts = $xeTable.computeCellOpts
@@ -125,7 +125,7 @@ function renderTdColumn (
   const resizeHeight = resizeHeightFlag ? rowRest.resizeHeight : 0
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const isCellPadding = XEUtils.eqNull(padding) ? (allPadding === null ? cellOpts.padding : allPadding) : padding
-  const cellOverflow = XEUtils.eqNull(showOverflow) ? isAllOverflow : showOverflow
+  const cellOverflow = XEUtils.eqNull(showOverflow) ? allShowOverflow : showOverflow
   const showEllipsis = cellOverflow === 'ellipsis'
   const showTitle = cellOverflow === 'title'
   const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'

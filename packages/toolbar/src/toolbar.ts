@@ -10,7 +10,7 @@ import type { VxeGridConstructor, GridPrivateMethods, ToolbarInternalData, VxeTa
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, globalMixins, renderEmptyElement } = VxeUI
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeToolbar',
   mixins: [
     globalMixins.sizeMixin
@@ -762,4 +762,4 @@ export default defineVxeComponent({
   render (this: any, h) {
     return this.renderVN(h)
   }
-})
+}) /* define-vxe-component end */

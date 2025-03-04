@@ -3,7 +3,7 @@ import { defineVxeComponent } from '../../ui/src/comp'
 import { assembleColumn, destroyColumn } from './util'
 import { columnProps, columnWatch } from './column'
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeColgroup',
   props: columnProps,
   provide () {
@@ -43,4 +43,4 @@ export default defineVxeComponent({
     return h('div', this.$slots.default)
   },
   methods: Cell
-})
+}) /* define-vxe-component end */

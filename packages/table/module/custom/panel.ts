@@ -5,7 +5,7 @@ import { getTpImg, addClass, removeClass } from '../../../ui/src/dom'
 import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
-import type { VxeTableDefines } from '../../../../types'
+import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, TableReactData, TableInternalData } from '../../../../types'
 import type { VxeModalComponent, VxeDrawerComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeInputComponent } from 'vxe-pc-ui'
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
@@ -1083,10 +1083,10 @@ export default {
       }
     },
     sortDragendEvent (evnt: any) {
-      const $xeTable = this.$xetable
+      const $xeTable = this.$xetable as VxeTableConstructor & VxeTablePrivateMethods
       const tableProps = $xeTable
-      const reactData = $xeTable
-      const internalData = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
 
       const { dragCol, prevDragPos, prevDragCol, prevDragToChild } = this
 
@@ -1102,13 +1102,14 @@ export default {
       if (prevDragCol && dragCol) {
         // 判断是否有拖动
         if (prevDragCol !== dragCol) {
-          const oldColumn: VxeTableDefines.ColumnInfo = dragCol
+          const dragColumn: VxeTableDefines.ColumnInfo = dragCol
           const newColumn: VxeTableDefines.ColumnInfo = prevDragCol
           Promise.resolve(
             dragEndMethod
               ? dragEndMethod({
-                oldColumn,
+                oldColumn: dragColumn,
                 newColumn,
+                dragColumn,
                 dragPos: prevDragPos as any,
                 dragToChild: !!prevDragToChild,
                 offsetIndex: dragOffsetIndex
@@ -1123,7 +1124,7 @@ export default {
             let nafIndex = -1
 
             const oldAllMaps: Record<string, any> = {}
-            XEUtils.eachTree([oldColumn], column => {
+            XEUtils.eachTree([dragColumn], column => {
               oldAllMaps[column.id] = column
             })
 
@@ -1131,7 +1132,7 @@ export default {
 
             // 只有实时拖拽支持跨层级
             if (immediate) {
-              if (oldColumn.parentId && newColumn.parentId) {
+              if (dragColumn.parentId && newColumn.parentId) {
               // 子到子
 
                 if (!isCrossDrag) {
@@ -1149,7 +1150,7 @@ export default {
                     return
                   }
                 }
-              } else if (oldColumn.parentId) {
+              } else if (dragColumn.parentId) {
               // 子到根
 
                 if (!isCrossDrag) {
@@ -1177,18 +1178,18 @@ export default {
               // 根到根
               }
 
-              const oldewMatchRest = XEUtils.findTree(collectColumn as VxeTableDefines.ColumnInfo[], item => item.id === oldColumn.id)
+              const oldewMatchRest = XEUtils.findTree(collectColumn as VxeTableDefines.ColumnInfo[], item => item.id === dragColumn.id)
 
               // 改变层级
               if (isSelfToChildStatus && (isCrossDrag && isSelfToChildDrag)) {
                 if (oldewMatchRest) {
                   const { items: oCols, index: oIndex } = oldewMatchRest
-                  const childList = oldColumn.children || []
+                  const childList = dragColumn.children || []
                   childList.forEach(column => {
-                    column.parentId = oldColumn.parentId
+                    column.parentId = dragColumn.parentId
                   })
                   oCols.splice(oIndex, 1, ...childList)
-                  oldColumn.children = []
+                  dragColumn.children = []
                 }
               } else {
                 if (oldewMatchRest) {
@@ -1205,11 +1206,11 @@ export default {
                 const { items: nCols, index: nIndex, parent: nParent } = newMatchRest
                 // 转子级
                 if ((isCrossDrag && isToChildDrag) && prevDragToChild) {
-                  oldColumn.parentId = newColumn.id
-                  newColumn.children = (newColumn.children || []).concat([oldColumn])
+                  dragColumn.parentId = newColumn.id
+                  newColumn.children = (newColumn.children || []).concat([dragColumn])
                 } else {
-                  oldColumn.parentId = newColumn.parentId
-                  nCols.splice(nIndex + dragOffsetIndex, 0, oldColumn)
+                  dragColumn.parentId = newColumn.parentId
+                  nCols.splice(nIndex + dragOffsetIndex, 0, dragColumn)
                 }
                 if (!nParent) {
                   nafIndex = nIndex
@@ -1223,11 +1224,11 @@ export default {
                 }
               })
             } else {
-              oafIndex = XEUtils.findIndexOf(customColumnList, item => item.id === oldColumn.id)
+              oafIndex = XEUtils.findIndexOf(customColumnList, item => item.id === dragColumn.id)
               customColumnList.splice(oafIndex, 1)
 
               nafIndex = XEUtils.findIndexOf(customColumnList, item => item.id === newColumn.id)
-              customColumnList.splice(nafIndex + dragOffsetIndex, 0, oldColumn)
+              customColumnList.splice(nafIndex + dragOffsetIndex, 0, dragColumn)
             }
 
             reactData.isDragColMove = true
@@ -1242,8 +1243,9 @@ export default {
             }
 
             $xeTable.dispatchEvent('column-dragend', {
-              oldColumn,
+              oldColumn: dragColumn,
               newColumn,
+              dragColumn,
               dragPos: prevDragPos,
               offsetIndex: dragOffsetIndex,
               _index: {

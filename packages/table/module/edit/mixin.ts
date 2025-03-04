@@ -278,7 +278,7 @@ function handleInsertChildRowAt ($xeTable: VxeTableConstructor, records: any, pa
     }
     return handleInsertRowAt($xeTable, records.map((item: any) => Object.assign({}, item, { [parentField]: parentRow[rowField] })), targetRow, isInsertNextRow)
   } else {
-    errLog('vxe.error.errProp', ['tree-config.treeConfig=false', 'tree-config.treeConfig=true'])
+    errLog('vxe.error.errProp', ['tree-config.transform=false', 'tree-config.transform=true'])
   }
   return Promise.resolve({ row: null, rows: [] })
 }
@@ -863,7 +863,9 @@ export default {
       let isPos = false
       if (fieldOrColumn) {
         isPos = true
-        column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+        if (fieldOrColumn !== true) {
+          column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+        }
       }
       return handleEditCell($xeTable, row, column, isPos)
     },
