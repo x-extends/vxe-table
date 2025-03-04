@@ -1271,7 +1271,6 @@ export default defineComponent({
        * 获取需要排除的高度
        */
       getExcludeHeight () {
-        const { height } = props
         const { isZMax } = reactData
         const el = refElem.value
         const formWrapper = refFormWrapper.value
@@ -1279,7 +1278,7 @@ export default defineComponent({
         const topWrapper = refTopWrapper.value
         const bottomWrapper = refBottomWrapper.value
         const pagerWrapper = refPagerWrapper.value
-        const parentPaddingSize = isZMax || !(height === 'auto' || height === '100%') ? 0 : getPaddingTopBottomSize(el.parentNode as HTMLElement)
+        const parentPaddingSize = isZMax ? 0 : getPaddingTopBottomSize(el.parentNode as HTMLElement)
         return parentPaddingSize + getPaddingTopBottomSize(el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
       },
       getParentHeight () {

@@ -7460,8 +7460,8 @@ export default defineComponent({
         const { treeConfig } = props
         const { selectCheckboxMaps, treeIndeterminateMaps } = reactData
         const checkboxOpts = computeCheckboxOpts.value
-        const { checkField, checkMethod } = checkboxOpts
-        const { afterFullData, afterTreeFullData } = internalData
+        const { checkField, checkMethod, showReserveStatus } = checkboxOpts
+        const { afterFullData, afterTreeFullData, checkboxReserveRowMap } = internalData
 
         let sLen = 0 // 已选
         let hLen = 0 // 半选
@@ -7499,7 +7499,12 @@ export default defineComponent({
           })
 
         const isSelected = rootList.length > 0 ? (vLen > 0 ? (sLen >= vLen) : (sLen >= rootList.length)) : false
-        const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
+        let halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
+
+        // 如果复选框启用保留记录，当保留数据存在时显示半选
+        if (!isSelected && !halfSelect && showReserveStatus) {
+          halfSelect = !XEUtils.isEmpty(checkboxReserveRowMap)
+        }
 
         reactData.isAllSelected = isSelected
         reactData.isIndeterminate = halfSelect
@@ -8164,6 +8169,7 @@ export default defineComponent({
             const dragParams = {
               oldRow: dragRow,
               newRow: prevDragRow,
+              dragRow,
               dragPos: prevDragPos as 'top' | 'bottom',
               dragToChild: !!prevDragToChild,
               offsetIndex: dragOffsetIndex as 0 | 1
@@ -8314,6 +8320,7 @@ export default defineComponent({
               dispatchEvent('row-dragend', {
                 oldRow: dragRow,
                 newRow: prevDragRow,
+                dragRow,
                 dragPos: prevDragPos as any,
                 dragToChild: isDragToChildFlag,
                 offsetIndex: dragOffsetIndex,
@@ -8454,11 +8461,12 @@ export default defineComponent({
         if (prevDragCol && dragCol) {
           // 判断是否有拖动
           if (prevDragCol !== dragCol) {
-            const oldColumn = dragCol
+            const dragColumn = dragCol
             const newColumn = prevDragCol
             const dragParams = {
-              oldColumn,
+              oldColumn: dragColumn,
               newColumn,
+              dragColumn,
               dragPos: prevDragPos as 'left' | 'right',
               dragToChild: !!prevDragToChild,
               offsetIndex: dragOffsetIndex as 0 | 1
@@ -8473,17 +8481,17 @@ export default defineComponent({
               let nafIndex = -1
 
               const oldAllMaps: Record<string, any> = {}
-              XEUtils.eachTree([oldColumn], column => {
+              XEUtils.eachTree([dragColumn], column => {
                 oldAllMaps[column.id] = column
               })
 
               let isSelfToChildStatus = false
 
-              if (oldColumn.parentId && newColumn.parentId) {
+              if (dragColumn.parentId && newColumn.parentId) {
                 // 子到子
 
                 if (isPeerDrag && !isCrossDrag) {
-                  if (oldColumn.parentId !== newColumn.parentId) {
+                  if (dragColumn.parentId !== newColumn.parentId) {
                     // 非同级
                     return
                   }
@@ -8505,7 +8513,7 @@ export default defineComponent({
                     }
                   }
                 }
-              } else if (oldColumn.parentId) {
+              } else if (dragColumn.parentId) {
                 // 子到根
 
                 if (!isCrossDrag) {
@@ -8533,18 +8541,18 @@ export default defineComponent({
                 // 根到根
               }
 
-              const oldewMatchRest = XEUtils.findTree(collectColumn, item => item.id === oldColumn.id)
+              const oldewMatchRest = XEUtils.findTree(collectColumn, item => item.id === dragColumn.id)
 
               // 改变层级
               if (isSelfToChildStatus && (isCrossDrag && isSelfToChildDrag)) {
                 if (oldewMatchRest) {
                   const { items: oCols, index: oIndex } = oldewMatchRest
-                  const childList = oldColumn.children || []
+                  const childList = dragColumn.children || []
                   childList.forEach(column => {
-                    column.parentId = oldColumn.parentId
+                    column.parentId = dragColumn.parentId
                   })
                   oCols.splice(oIndex, 1, ...childList)
-                  oldColumn.children = []
+                  dragColumn.children = []
                 }
               } else {
                 if (oldewMatchRest) {
@@ -8561,11 +8569,11 @@ export default defineComponent({
                 const { items: nCols, index: nIndex, parent: nParent } = newMatchRest
                 // 转子级
                 if ((isCrossDrag && isToChildDrag) && isDragToChildFlag) {
-                  oldColumn.parentId = newColumn.id
-                  newColumn.children = (newColumn.children || []).concat([oldColumn])
+                  dragColumn.parentId = newColumn.id
+                  newColumn.children = (newColumn.children || []).concat([dragColumn])
                 } else {
-                  oldColumn.parentId = newColumn.parentId
-                  nCols.splice(nIndex + dragOffsetIndex, 0, oldColumn)
+                  dragColumn.parentId = newColumn.parentId
+                  nCols.splice(nIndex + dragOffsetIndex, 0, dragColumn)
                 }
                 if (!nParent) {
                   nafIndex = nIndex
@@ -8591,8 +8599,9 @@ export default defineComponent({
               }
 
               dispatchEvent('column-dragend', {
-                oldColumn,
+                oldColumn: dragColumn,
                 newColumn,
+                dragColumn,
                 dragPos: prevDragPos,
                 dragToChild: isDragToChildFlag,
                 offsetIndex: dragOffsetIndex,
@@ -8996,7 +9005,7 @@ export default defineComponent({
         })
       },
       triggerBodyWheelEvent (evnt) {
-        const { target, deltaY, deltaX } = evnt
+        const { target, deltaY, deltaX, shiftKey } = evnt
         if (target && /^textarea$/i.test((target as HTMLElement).tagName)) {
           return
         }
@@ -9030,8 +9039,8 @@ export default defineComponent({
         }
 
         const wheelSpeed = getWheelSpeed(reactData.lastScrollTime)
-        const deltaTop = Math.ceil(deltaY * wheelSpeed)
-        const deltaLeft = Math.ceil(deltaX * wheelSpeed)
+        const deltaTop = Math.ceil((shiftKey ? deltaX : deltaY) * wheelSpeed)
+        const deltaLeft = Math.ceil((shiftKey ? deltaY : deltaX) * wheelSpeed)
 
         const isTopWheel = deltaTop < 0
         const currScrollTop = bodyScrollElem.scrollTop
@@ -10251,7 +10260,7 @@ export default defineComponent({
       }
 
       nextTick(() => {
-        const { data, treeConfig, showOverflow } = props
+        const { data, exportConfig, importConfig, treeConfig, showOverflow } = props
         const { scrollXStore, scrollYStore } = internalData
         const sYOpts = computeSYOpts.value
         const editOpts = computeEditOpts.value
@@ -10260,132 +10269,124 @@ export default defineComponent({
         const checkboxOpts = computeCheckboxOpts.value
         const expandOpts = computeExpandOpts.value
         const rowOpts = computeRowOpts.value
+        const customOpts = computeCustomOpts.value
+        const mouseOpts = computeMouseOpts.value
+        const exportOpts = computeExportOpts.value
+        const importOpts = computeImportOpts.value
 
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (props.rowId) {
-            warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
-          }
-          if (props.rowKey) {
-            warnLog('vxe.error.delProp', ['row-key', 'row-config.useKey'])
-          }
-          if (props.columnKey) {
-            warnLog('vxe.error.delProp', ['column-id', 'column-config.useKey'])
-          }
-          if (!(props.rowId || rowOpts.keyField) && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
-            warnLog('vxe.error.reqProp', ['row-config.keyField'])
-          }
-          if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
-            warnLog('vxe.error.reqProp', ['keep-source'])
-          }
-          if (treeConfig && (treeOpts.showLine || treeOpts.line) && (!(props.rowKey || rowOpts.useKey) || !showOverflow)) {
-            warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
-          }
-          if (treeConfig && !treeOpts.transform && props.stripe) {
-            warnLog('vxe.error.noTree', ['stripe'])
-          }
-          if (props.showFooter && !(props.footerMethod || props.footerData)) {
-            warnLog('vxe.error.reqProp', ['footer-data | footer-method'])
-          }
-          if (rowOpts.height) {
-            warnLog('vxe.error.delProp', ['row-config.height', 'cell-config.height'])
-          }
-          // if (props.highlightCurrentRow) {
-          //   warnLog('vxe.error.delProp', ['highlight-current-row', 'row-config.isCurrent'])
-          // }
-          // if (props.highlightHoverRow) {
-          //   warnLog('vxe.error.delProp', ['highlight-hover-row', 'row-config.isHover'])
-          // }
-          // if (props.highlightCurrentColumn) {
-          //   warnLog('vxe.error.delProp', ['highlight-current-column', 'column-config.isCurrent'])
-          // }
-          // if (props.highlightHoverColumn) {
-          //   warnLog('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
-          // }
-          // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
-          const { exportConfig, importConfig } = props
-          const exportOpts = computeExportOpts.value
-          const importOpts = computeImportOpts.value
-          if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), importOpts.types)) {
-            warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type: string) => XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)).join(',') || XEUtils.keys(importOpts._typeMaps).join(',')])
-          }
-          if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(XEUtils.keys(exportOpts._typeMaps), exportOpts.types)) {
-            warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type: string) => XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)).join(',') || XEUtils.keys(exportOpts._typeMaps).join(',')])
-          }
+        if (props.rowId) {
+          warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
+        }
+        if (props.rowKey) {
+          warnLog('vxe.error.delProp', ['row-key', 'row-config.useKey'])
+        }
+        if (props.columnKey) {
+          warnLog('vxe.error.delProp', ['column-id', 'column-config.useKey'])
+        }
+        if (!(props.rowId || rowOpts.keyField) && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
+          warnLog('vxe.error.reqProp', ['row-config.keyField'])
+        }
+        if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
+          warnLog('vxe.error.reqProp', ['keep-source'])
+        }
+        if (treeConfig && (treeOpts.showLine || treeOpts.line) && (!(props.rowKey || rowOpts.useKey) || !showOverflow)) {
+          warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
+        }
+        if (treeConfig && !treeOpts.transform && props.stripe) {
+          warnLog('vxe.error.noTree', ['stripe'])
+        }
+        if (props.showFooter && !(props.footerMethod || props.footerData)) {
+          warnLog('vxe.error.reqProp', ['footer-data | footer-method'])
+        }
+        if (rowOpts.height) {
+          warnLog('vxe.error.delProp', ['row-config.height', 'cell-config.height'])
+        }
+        if (props.highlightCurrentRow) {
+          warnLog('vxe.error.delProp', ['highlight-current-row', 'row-config.isCurrent'])
+        }
+        if (props.highlightHoverRow) {
+          warnLog('vxe.error.delProp', ['highlight-hover-row', 'row-config.isHover'])
+        }
+        if (props.highlightCurrentColumn) {
+          warnLog('vxe.error.delProp', ['highlight-current-column', 'column-config.isCurrent'])
+        }
+        if (props.highlightHoverColumn) {
+          warnLog('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
+        }
+        // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
+        if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), importOpts.types)) {
+          warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)).join(',') || XEUtils.keys(importOpts._typeMaps).join(',')])
+        }
+        if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(XEUtils.keys(exportOpts._typeMaps), exportOpts.types)) {
+          warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)).join(',') || XEUtils.keys(exportOpts._typeMaps).join(',')])
         }
 
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          const customOpts = computeCustomOpts.value
-          const mouseOpts = computeMouseOpts.value
-          const rowOpts = computeRowOpts.value
-          if (!props.id) {
-            if ((props.customConfig ? isEnableConf(customOpts) : customOpts.enabled) && customOpts.storage) {
-              errLog('vxe.error.reqProp', ['id'])
-            }
+        if (!props.id) {
+          if ((props.customConfig ? isEnableConf(customOpts) : customOpts.enabled) && customOpts.storage) {
+            errLog('vxe.error.reqProp', ['id'])
           }
-          if (props.treeConfig && checkboxOpts.range) {
-            errLog('vxe.error.noTree', ['checkbox-config.range'])
+        }
+        if (props.treeConfig && checkboxOpts.range) {
+          errLog('vxe.error.noTree', ['checkbox-config.range'])
+        }
+        if (rowOpts.height && !props.showOverflow) {
+          warnLog('vxe.error.notProp', ['table.show-overflow'])
+        }
+        if (!$xeTable.handleCellAreaMousedownEvent) {
+          if (props.areaConfig) {
+            warnLog('vxe.error.notProp', ['area-config'])
           }
-          if (rowOpts.height && !props.showOverflow) {
-            warnLog('vxe.error.notProp', ['table.show-overflow'])
+          if (props.clipConfig) {
+            warnLog('vxe.error.notProp', ['clip-config'])
           }
-          if (!$xeTable.handleMousedownCellAreaEvent) {
-            if (props.areaConfig) {
-              warnLog('vxe.error.notProp', ['area-config'])
-            }
-            if (props.clipConfig) {
-              warnLog('vxe.error.notProp', ['clip-config'])
-            }
-            if (props.fnrConfig) {
-              warnLog('vxe.error.notProp', ['fnr-config'])
-            }
-            if (mouseOpts.area) {
-              errLog('vxe.error.notProp', ['mouse-config.area'])
-              return
-            }
+          if (props.fnrConfig) {
+            warnLog('vxe.error.notProp', ['fnr-config'])
           }
-          if (props.dragConfig) {
-            warnLog('vxe.error.delProp', ['drag-config', 'row-drag-config'])
+          if (mouseOpts.area) {
+            errLog('vxe.error.notProp', ['mouse-config.area'])
+            return
           }
-          if (props.treeConfig && treeOpts.children) {
-            warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
-          }
-          if (props.treeConfig && treeOpts.line) {
-            warnLog('vxe.error.delProp', ['tree-config.line', 'tree-config.showLine'])
-          }
-          if (mouseOpts.area && mouseOpts.selected) {
-            warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
-          }
-          // if (mouseOpts.area && checkboxOpts.range) {
-          //   warnLog('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
-          // }
-          if (mouseOpts.area && (props.treeConfig && !treeOpts.transform)) {
-            errLog('vxe.error.noTree', ['mouse-config.area'])
-          }
-          if (props.editConfig && editOpts.activeMethod) {
-            warnLog('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
-          }
-          if (props.treeConfig && checkboxOpts.isShiftKey) {
-            errLog('vxe.error.errConflicts', ['tree-config', 'checkbox-config.isShiftKey'])
-          }
-          if (checkboxOpts.halfField) {
-            warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
-          }
+        }
+        if (treeConfig && rowOpts.drag && !treeOpts.transform) {
+          errLog('vxe.error.notSupportProp', ['column-config.drag', 'tree-config.transform=false', 'tree-config.transform=true'])
+        }
+        if (props.dragConfig) {
+          warnLog('vxe.error.delProp', ['drag-config', 'row-drag-config'])
+        }
+        if (props.treeConfig && treeOpts.children) {
+          warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
+        }
+        if (props.treeConfig && treeOpts.line) {
+          warnLog('vxe.error.delProp', ['tree-config.line', 'tree-config.showLine'])
+        }
+        if (mouseOpts.area && mouseOpts.selected) {
+          warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+        }
+        if (mouseOpts.area && (props.treeConfig && !treeOpts.transform)) {
+          errLog('vxe.error.noTree', ['mouse-config.area'])
+        }
+        if (props.editConfig && editOpts.activeMethod) {
+          warnLog('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
+        }
+        if (props.treeConfig && checkboxOpts.isShiftKey) {
+          errLog('vxe.error.errConflicts', ['tree-config', 'checkbox-config.isShiftKey'])
+        }
+        if (checkboxOpts.halfField) {
+          warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
         }
 
         // 检查是否有安装需要的模块
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (props.editConfig && !$xeTable.insert) {
-            errLog('vxe.error.reqModule', ['Edit'])
-          }
-          if (props.editRules && !$xeTable.validate) {
-            errLog('vxe.error.reqModule', ['Validator'])
-          }
-          if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xeTable.handleCellMousedownEvent) {
-            errLog('vxe.error.reqModule', ['Keyboard'])
-          }
-          if ((props.printConfig || props.importConfig || props.exportConfig) && !$xeTable.exportData) {
-            errLog('vxe.error.reqModule', ['Export'])
-          }
+        if (props.editConfig && !$xeTable.insert) {
+          errLog('vxe.error.reqModule', ['Edit'])
+        }
+        if (props.editRules && !$xeTable.validate) {
+          errLog('vxe.error.reqModule', ['Validator'])
+        }
+        if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xeTable.handleCellMousedownEvent) {
+          errLog('vxe.error.reqModule', ['Keyboard'])
+        }
+        if ((props.printConfig || props.importConfig || props.exportConfig) && !$xeTable.exportData) {
+          errLog('vxe.error.reqModule', ['Export'])
         }
 
         Object.assign(scrollYStore, {

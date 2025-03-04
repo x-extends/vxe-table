@@ -269,13 +269,14 @@ export default defineComponent({
       if (prevDragCol && dragCol) {
         // 判断是否有拖动
         if (prevDragCol !== dragCol) {
-          const oldColumn = dragCol
+          const dragColumn = dragCol
           const newColumn = prevDragCol
           Promise.resolve(
             dragEndMethod
               ? dragEndMethod({
-                oldColumn,
+                oldColumn: dragColumn,
                 newColumn,
+                dragColumn,
                 dragPos: prevDragPos as any,
                 dragToChild: !!prevDragToChild,
                 offsetIndex: dragOffsetIndex
@@ -290,7 +291,7 @@ export default defineComponent({
             let nafIndex = -1
 
             const oldAllMaps: Record<string, any> = {}
-            XEUtils.eachTree([oldColumn], column => {
+            XEUtils.eachTree([dragColumn], column => {
               oldAllMaps[column.id] = column
             })
 
@@ -298,7 +299,7 @@ export default defineComponent({
 
             // 只有实时拖拽支持跨层级
             if (immediate) {
-              if (oldColumn.parentId && newColumn.parentId) {
+              if (dragColumn.parentId && newColumn.parentId) {
               // 子到子
 
                 if (!isCrossDrag) {
@@ -316,7 +317,7 @@ export default defineComponent({
                     return
                   }
                 }
-              } else if (oldColumn.parentId) {
+              } else if (dragColumn.parentId) {
               // 子到根
 
                 if (!isCrossDrag) {
@@ -344,18 +345,18 @@ export default defineComponent({
               // 根到根
               }
 
-              const oldewMatchRest = XEUtils.findTree(collectColumn, item => item.id === oldColumn.id)
+              const oldewMatchRest = XEUtils.findTree(collectColumn, item => item.id === dragColumn.id)
 
               // 改变层级
               if (isSelfToChildStatus && (isCrossDrag && isSelfToChildDrag)) {
                 if (oldewMatchRest) {
                   const { items: oCols, index: oIndex } = oldewMatchRest
-                  const childList = oldColumn.children || []
+                  const childList = dragColumn.children || []
                   childList.forEach(column => {
-                    column.parentId = oldColumn.parentId
+                    column.parentId = dragColumn.parentId
                   })
                   oCols.splice(oIndex, 1, ...childList)
-                  oldColumn.children = []
+                  dragColumn.children = []
                 }
               } else {
                 if (oldewMatchRest) {
@@ -372,11 +373,11 @@ export default defineComponent({
                 const { items: nCols, index: nIndex, parent: nParent } = newMatchRest
                 // 转子级
                 if ((isCrossDrag && isToChildDrag) && prevDragToChild) {
-                  oldColumn.parentId = newColumn.id
-                  newColumn.children = (newColumn.children || []).concat([oldColumn])
+                  dragColumn.parentId = newColumn.id
+                  newColumn.children = (newColumn.children || []).concat([dragColumn])
                 } else {
-                  oldColumn.parentId = newColumn.parentId
-                  nCols.splice(nIndex + dragOffsetIndex, 0, oldColumn)
+                  dragColumn.parentId = newColumn.parentId
+                  nCols.splice(nIndex + dragOffsetIndex, 0, dragColumn)
                 }
                 if (!nParent) {
                   nafIndex = nIndex
@@ -390,11 +391,11 @@ export default defineComponent({
                 }
               })
             } else {
-              oafIndex = XEUtils.findIndexOf(customColumnList, item => item.id === oldColumn.id)
+              oafIndex = XEUtils.findIndexOf(customColumnList, item => item.id === dragColumn.id)
               customColumnList.splice(oafIndex, 1)
 
               nafIndex = XEUtils.findIndexOf(customColumnList, item => item.id === newColumn.id)
-              customColumnList.splice(nafIndex + dragOffsetIndex, 0, oldColumn)
+              customColumnList.splice(nafIndex + dragOffsetIndex, 0, dragColumn)
             }
 
             reactData.isDragColMove = true
@@ -409,8 +410,9 @@ export default defineComponent({
             }
 
             $xeTable.dispatchEvent('column-dragend', {
-              oldColumn,
+              oldColumn: dragColumn,
               newColumn,
+              dragColumn,
               dragPos: prevDragPos,
               offsetIndex: dragOffsetIndex,
               _index: {

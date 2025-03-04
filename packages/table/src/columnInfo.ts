@@ -26,9 +26,6 @@ export class ColumnInfo {
       if (XEUtils.isBoolean(_vm.editRender) || (_vm.editRender && !XEUtils.isObject(_vm.editRender))) {
         warnLog('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
       }
-      if (_vm.cellRender && _vm.editRender) {
-        warnLog('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
-      }
       if (_vm.type === 'expand') {
         const { treeConfig } = tableProps
         const { computeTreeOpts } = $xeTable.getComputeMaps()

@@ -17,6 +17,7 @@ export default {
       groupTag: 'Le intestazioni delle colonne di raggruppamento devono utilizzare "{0}" anziché "{1}", il che potrebbe causare errori',
       scrollErrProp: 'Il parametro "{0}" non è supportato quando è abilitato lo scorrimento virtuale',
       errConflicts: 'I parametri "{0}" sono in conflitto con "{1}"',
+      notSupportProp: '当启用参数 "{0}" 时不支持 "{1}"，应该为 "{2}"，否则将会出现错误',
       unableInsert: 'Impossibile inserire nella posizione specificata, verificare se i parametri sono corretti',
       useErr: "Si è verificato un errore durante l'installazione del modulo \"{0}\". L'ordine potrebbe essere errato. I moduli dipendenti devono essere installati prima della Tabella.",
       barUnableLink: 'La barra degli strumenti non può essere associata alla tabella',

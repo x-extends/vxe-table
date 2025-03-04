@@ -86,15 +86,16 @@ function renderCellBaseVNs (params: VxeTableDefines.CellRenderBodyParams & { $ta
   const { dragSort } = column
   const tableProps = $table.props
   const { treeConfig, dragConfig } = tableProps
-  const { computeRowOpts, computeRowDragOpts } = $table.getComputeMaps()
+  const { computeRowOpts, computeRowDragOpts, computeTreeOpts } = $table.getComputeMaps()
   const rowOpts = computeRowOpts.value
   const rowDragOpts = computeRowDragOpts.value
+  const treeOpts = computeTreeOpts.value
   const { showIcon, isPeerDrag, isCrossDrag, visibleMethod } = rowDragOpts
   const rVisibleMethod = visibleMethod || (dragConfig ? dragConfig.rowVisibleMethod : null)
   const vns: VxeComponentSlotType[] = XEUtils.isArray(content) ? content : [content]
   if (dragSort && rowOpts.drag && ((showIcon || (dragConfig ? dragConfig.showRowIcon : false)) && (!rVisibleMethod || rVisibleMethod(params)))) {
     if (treeConfig) {
-      if (isPeerDrag || isCrossDrag || !level) {
+      if (treeOpts.transform && (isPeerDrag || isCrossDrag || !level)) {
         vns.unshift(
           renderCellDragIcon(params)
         )
@@ -278,7 +279,7 @@ function renderCellHandle (params: VxeTableDefines.CellRenderBodyParams & {
     case 'html':
       return treeNode ? Cell.renderTreeHTMLCell(params) : Cell.renderHTMLCell(params)
   }
-  if (editConfig && editRender) {
+  if (isEnableConf(editConfig) && editRender) {
     return editOpts.mode === 'cell' ? (treeNode ? Cell.renderTreeCellEdit(params) : Cell.renderCellEdit(params)) : (treeNode ? Cell.renderTreeRowEdit(params) : Cell.renderRowEdit(params))
   }
   return treeNode ? Cell.renderTreeCell(params) : Cell.renderDefaultCell(params)
