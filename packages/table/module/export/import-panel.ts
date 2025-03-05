@@ -238,19 +238,17 @@ export default defineComponent({
         : createCommentVNode()
     }
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      nextTick(() => {
-        if (!VxeUIModalComponent) {
-          errLog('vxe.error.reqComp', ['vxe-modal'])
-        }
-        if (!VxeUIButtonComponent) {
-          errLog('vxe.error.reqComp', ['vxe-button'])
-        }
-        if (!VxeUISelectComponent) {
-          errLog('vxe.error.reqComp', ['vxe-select'])
-        }
-      })
-    }
+    nextTick(() => {
+      if (!VxeUIModalComponent) {
+        errLog('vxe.error.reqComp', ['vxe-modal'])
+      }
+      if (!VxeUIButtonComponent) {
+        errLog('vxe.error.reqComp', ['vxe-button'])
+      }
+      if (!VxeUISelectComponent) {
+        errLog('vxe.error.reqComp', ['vxe-select'])
+      }
+    })
 
     return renderVN
   }

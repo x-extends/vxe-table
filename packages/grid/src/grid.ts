@@ -457,9 +457,7 @@ export default defineComponent({
           if (slots[funcSlot]) {
             return slots[funcSlot]
           } else {
-            if (process.env.VUE_APP_VXE_ENV === 'development') {
-              errLog('vxe.error.notSlot', [funcSlot])
-            }
+            errLog('vxe.error.notSlot', [funcSlot])
           }
         } else {
           return funcSlot
@@ -1002,9 +1000,7 @@ export default defineComponent({
                   return { status: false }
                 })
             } else {
-              if (process.env.VUE_APP_VXE_ENV === 'development') {
-                errLog('vxe.error.notFunc', ['proxy-config.ajax.query'])
-              }
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.query'])
             }
             break
           }
@@ -1063,9 +1059,7 @@ export default defineComponent({
                 }
               }
             } else {
-              if (process.env.VUE_APP_VXE_ENV === 'development') {
-                errLog('vxe.error.notFunc', ['proxy-config.ajax.delete'])
-              }
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.delete'])
             }
             break
           }
@@ -1137,9 +1131,7 @@ export default defineComponent({
                 }
               })
             } else {
-              if (process.env.VUE_APP_VXE_ENV === 'development') {
-                errLog('vxe.error.notFunc', ['proxy-config.ajax.save'])
-              }
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.save'])
             }
             break
           }
@@ -1150,9 +1142,7 @@ export default defineComponent({
               if (tCommandMethod) {
                 tCommandMethod({ code, button, $grid: $xeGrid, $table: $xeTable }, ...args)
               } else {
-                if (process.env.VUE_APP_VXE_ENV === 'development') {
-                  errLog('vxe.error.notCommands', [code])
-                }
+                errLog('vxe.error.notCommands', [code])
               }
             }
           }
@@ -1341,23 +1331,20 @@ export default defineComponent({
     initPages()
 
     onMounted(() => {
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        nextTick(() => {
-          if (props.formConfig) {
-            if (!VxeUIFormComponent) {
-              errLog('vxe.error.reqComp', ['vxe-form'])
-            }
-          }
-          if (props.pagerConfig) {
-            if (!VxeUIPagerComponent) {
-              errLog('vxe.error.reqComp', ['vxe-pager'])
-            }
-          }
-        })
-      }
-
       nextTick(() => {
         const { columns } = props
+
+        if (props.formConfig) {
+          if (!VxeUIFormComponent) {
+            errLog('vxe.error.reqComp', ['vxe-form'])
+          }
+        }
+        if (props.pagerConfig) {
+          if (!VxeUIPagerComponent) {
+            errLog('vxe.error.reqComp', ['vxe-pager'])
+          }
+        }
+
         // const { data, columns, proxyConfig } = props
         // const proxyOpts = computeProxyOpts.value
         // const formOpts = computeFormOpts.value

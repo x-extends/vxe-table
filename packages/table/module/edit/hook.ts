@@ -169,11 +169,9 @@ hooks.add('tableEditModule', {
               const parentLevel = parentRest ? parentRest.level : 0
               newRecords.forEach((item, i) => {
                 const rowid = getRowid($xeTable, item)
-                if (process.env.VUE_APP_VXE_ENV === 'development') {
-                  if (item[treeOpts.parentField]) {
-                    if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
-                      errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
-                    }
+                if (item[treeOpts.parentField]) {
+                  if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
+                    errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
                   }
                 }
                 if (parentRow) {

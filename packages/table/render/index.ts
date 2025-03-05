@@ -185,10 +185,8 @@ function getComponentOns (renderOpts: any, params: any, eFns?: {
   const ons: any = {}
   XEUtils.objectEach(events, (func, key: any) => {
     ons[getOnName(key)] = function (...args: any[]) {
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (!XEUtils.isFunction(func)) {
-          errLog('vxe.error.errFunc', [func])
-        }
+      if (!XEUtils.isFunction(func)) {
+        errLog('vxe.error.errFunc', [func])
       }
       func(params, ...args)
     }

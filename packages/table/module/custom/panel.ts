@@ -1151,27 +1151,25 @@ export default defineComponent({
       return renderSimplePanel()
     }
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      nextTick(() => {
-        const customOpts = computeCustomOpts.value
-        const { mode } = customOpts
-        if (!VxeUIModalComponent) {
-          errLog('vxe.error.reqComp', ['vxe-modal'])
-        }
-        if (!VxeUIDrawerComponent && (mode === 'drawer')) {
-          errLog('vxe.error.reqComp', ['vxe-drawer'])
-        }
-        if (!VxeUIButtonComponent) {
-          errLog('vxe.error.reqComp', ['vxe-button'])
-        }
-        if (!VxeUINumberInputComponent) {
-          errLog('vxe.error.reqComp', ['vxe-number-input'])
-        }
-        if (!VxeUIRadioGroupComponent) {
-          errLog('vxe.error.reqComp', ['vxe-radio-group'])
-        }
-      })
-    }
+    nextTick(() => {
+      const customOpts = computeCustomOpts.value
+      const { mode } = customOpts
+      if (!VxeUIModalComponent) {
+        errLog('vxe.error.reqComp', ['vxe-modal'])
+      }
+      if (!VxeUIDrawerComponent && (mode === 'drawer')) {
+        errLog('vxe.error.reqComp', ['vxe-drawer'])
+      }
+      if (!VxeUIButtonComponent) {
+        errLog('vxe.error.reqComp', ['vxe-button'])
+      }
+      if (!VxeUINumberInputComponent) {
+        errLog('vxe.error.reqComp', ['vxe-number-input'])
+      }
+      if (!VxeUIRadioGroupComponent) {
+        errLog('vxe.error.reqComp', ['vxe-radio-group'])
+      }
+    })
 
     return renderVN
   }

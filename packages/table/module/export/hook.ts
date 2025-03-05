@@ -956,9 +956,7 @@ hooks.add('tableExportModule', {
           }
         } else {
           // 不支持的浏览器
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            errLog('vxe.error.notExp')
-          }
+          errLog('vxe.error.notExp')
           _importResolve({ status: true })
         }
       })
@@ -1572,10 +1570,8 @@ hooks.add('tableExportModule', {
           message: true,
           types: XEUtils.keys(exportOpts._typeMaps)
         }, exportOpts, options)
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (!props.exportConfig) {
-            errLog('vxe.error.reqProp', ['export-config'])
-          }
+        if (!props.exportConfig) {
+          errLog('vxe.error.reqProp', ['export-config'])
         }
         handleExportAndPrint(defOpts)
       },
@@ -1585,10 +1581,8 @@ hooks.add('tableExportModule', {
         const defOpts = Object.assign({
           message: true
         }, printOpts, options)
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (!props.printConfig) {
-            errLog('vxe.error.reqProp', ['print-config'])
-          }
+        if (!props.printConfig) {
+          errLog('vxe.error.reqProp', ['print-config'])
         }
         handleExportAndPrint(defOpts, true)
       }

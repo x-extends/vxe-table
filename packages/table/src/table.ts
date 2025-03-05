@@ -1344,14 +1344,12 @@ export default defineComponent({
         errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
       }
 
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (htmlColumn) {
-          if (!columnOpts.useKey) {
-            errLog('vxe.error.reqProp', ['column-config.useKey & column.type=html'])
-          }
-          if (!rowOpts.useKey) {
-            errLog('vxe.error.reqProp', ['row-config.useKey & column.type=html'])
-          }
+      if (htmlColumn) {
+        if (!columnOpts.useKey) {
+          errLog('vxe.error.reqProp', ['column-config.useKey & column.type=html'])
+        }
+        if (!rowOpts.useKey) {
+          errLog('vxe.error.reqProp', ['row-config.useKey & column.type=html'])
         }
       }
 
@@ -2756,28 +2754,26 @@ export default defineComponent({
       if (treeConfig) {
         if (transform) {
           // 树结构自动转换
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (!treeOpts.rowField) {
-              errLog('vxe.error.reqProp', ['tree-config.rowField'])
-            }
-            if (!treeOpts.parentField) {
-              errLog('vxe.error.reqProp', ['tree-config.parentField'])
-            }
-            if (!childrenField) {
-              errLog('vxe.error.reqProp', ['tree-config.childrenField'])
-            }
-            if (!treeOpts.mapChildrenField) {
-              errLog('vxe.error.reqProp', ['tree-config.mapChildrenField'])
-            }
-            if (childrenField === treeOpts.mapChildrenField) {
-              errLog('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
-            }
-            // fullData.forEach(row => {
-            //   if (row[treeOpts.children] && row[treeOpts.children].length) {
-            //     warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
-            //   }
-            // })
+          if (!treeOpts.rowField) {
+            errLog('vxe.error.reqProp', ['tree-config.rowField'])
           }
+          if (!treeOpts.parentField) {
+            errLog('vxe.error.reqProp', ['tree-config.parentField'])
+          }
+          if (!childrenField) {
+            errLog('vxe.error.reqProp', ['tree-config.childrenField'])
+          }
+          if (!treeOpts.mapChildrenField) {
+            errLog('vxe.error.reqProp', ['tree-config.mapChildrenField'])
+          }
+          if (childrenField === treeOpts.mapChildrenField) {
+            errLog('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
+          }
+          // fullData.forEach(row => {
+          //   if (row[treeOpts.children] && row[treeOpts.children].length) {
+          //     warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
+          //   }
+          // })
           treeData = XEUtils.toArrayTree(fullData, {
             key: treeOpts.rowField,
             parentKey: treeOpts.parentField,
@@ -2843,16 +2839,14 @@ export default defineComponent({
           //   }
           // }
 
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (!(props.height || props.maxHeight)) {
-              errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
-            }
-            // if (!props.showOverflow) {
-            //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
-            // }
-            if (props.spanMethod) {
-              warnLog('vxe.error.scrollErrProp', ['table.span-method'])
-            }
+          if (!(props.height || props.maxHeight)) {
+            errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+          }
+          // if (!props.showOverflow) {
+          //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
+          // }
+          if (props.spanMethod) {
+            warnLog('vxe.error.scrollErrProp', ['table.span-method'])
           }
         }
 
@@ -3846,8 +3840,10 @@ export default defineComponent({
        * 如果还额外传了 field 则还原指定的单元格数据
        */
       revertData (rows: any, field) {
-        const { keepSource } = props
-        const { tableSourceData, sourceDataRowIdData } = internalData
+        const { keepSource, treeConfig } = props
+        const { fullAllDataRowIdData, tableSourceData, sourceDataRowIdData, tableFullData, afterFullData } = internalData
+        const treeOpts = computeTreeOpts.value
+        const { transform } = treeOpts
         if (!keepSource) {
           if (process.env.VUE_APP_VXE_ENV === 'development') {
             warnLog('vxe.error.reqProp', ['keep-source'])
@@ -3862,9 +3858,10 @@ export default defineComponent({
         } else {
           targetRows = XEUtils.toArray($xeTable.getUpdateRecords())
         }
+        let reDelFlag = false
         if (targetRows.length) {
           targetRows.forEach((row: any) => {
-            if (!tableMethods.isInsertByRow(row)) {
+            if (!$xeTable.isInsertByRow(row)) {
               const rowid = getRowid($xeTable, row)
               const oRow = sourceDataRowIdData[rowid]
               if (oRow && row) {
@@ -3873,14 +3870,38 @@ export default defineComponent({
                 } else {
                   XEUtils.destructuring(row, XEUtils.clone(oRow, true))
                 }
+                if ($xeTable.isRemoveByRow(row)) {
+                  const rowRest = fullAllDataRowIdData[rowid]
+                  if (rowRest) {
+                    const reRow = rowRest.row
+                    tableFullData.unshift(reRow)
+                    afterFullData.unshift(reRow)
+                    reDelFlag = true
+                  }
+                }
               }
             }
           })
         }
         if (rows) {
-          return nextTick()
+          if (reDelFlag) {
+            $xeTable.updateFooter()
+            $xeTable.cacheRowMap(false)
+            $xeTable.handleTableData(treeConfig && transform)
+            if (!(treeConfig && transform)) {
+              $xeTable.updateAfterDataIndex()
+            }
+            $xeTable.checkSelectionStatus()
+            if (reactData.scrollYLoad) {
+              $xeTable.updateScrollYSpace()
+            }
+          }
+          return nextTick().then(() => {
+            $xeTable.updateCellAreas()
+            return $xeTable.recalculate()
+          })
         }
-        return tableMethods.reloadData(tableSourceData)
+        return $xeTable.reloadData(tableSourceData)
       },
       /**
        * 清空单元格内容
@@ -3994,6 +4015,11 @@ export default defineComponent({
         const { editStore } = reactData
         const rowid = getRowid($xeTable, row)
         return !!editStore.insertMaps[rowid]
+      },
+      isRemoveByRow (row) {
+        const { editStore } = reactData
+        const rowid = getRowid($xeTable, row)
+        return !!editStore.removeMaps[rowid]
       },
       /**
        * 删除所有新增的临时数据
@@ -6772,14 +6798,15 @@ export default defineComponent({
        */
       cacheRowMap () {
         const { treeConfig } = props
-        const treeOpts = computeTreeOpts.value
+        const { treeExpandedMaps } = reactData
         const { fullAllDataRowIdData, tableFullData, tableFullTreeData } = internalData
+        const treeOpts = computeTreeOpts.value
         const childrenField = treeOpts.children || treeOpts.childrenField
         const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
         const rowkey = getRowkey($xeTable)
-        const isLazy = treeConfig && treeOpts.lazy
-        const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
+        const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = { ...fullAllDataRowIdData } // 存在已删除数据
         const fullDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
+        const treeTempExpandedMaps = { ...treeExpandedMaps }
         const handleRow = (row: any, index: number, items: any, path?: any[], parentRow?: any, nodes?: any[]) => {
           let rowid = getRowid($xeTable, row)
           const seq = treeConfig && path ? toTreePathSeq(path) : index + 1
@@ -6788,13 +6815,24 @@ export default defineComponent({
             rowid = getRowUniqueId()
             XEUtils.set(row, rowkey, rowid)
           }
-          if (isLazy && row[hasChildField] && XEUtils.isUndefined(row[childrenField])) {
-            row[childrenField] = null
+          if (treeConfig && treeOpts.lazy) {
+            const treeExpRest = treeExpandedMaps[rowid]
+            if (row[hasChildField] && XEUtils.isUndefined(row[childrenField])) {
+              row[childrenField] = null
+            }
+            if (treeExpRest) {
+              if (!row[childrenField] || !row[childrenField].length) {
+                delete treeTempExpandedMaps[rowid]
+              }
+            }
           }
           let rowRest = fullAllDataRowIdData[rowid]
           if (!rowRest) {
             rowRest = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
           }
+          rowRest.treeLoaded = false
+          rowRest.expandLoaded = false
+
           rowRest.row = row
           rowRest.items = items
           rowRest.parent = parentRow
@@ -6803,13 +6841,14 @@ export default defineComponent({
           fullDataRowIdMaps[rowid] = rowRest
           fullAllDataRowIdMaps[rowid] = rowRest
         }
-        internalData.fullDataRowIdData = fullDataRowIdMaps
-        internalData.fullAllDataRowIdData = fullAllDataRowIdMaps
         if (treeConfig) {
           XEUtils.eachTree(tableFullTreeData, handleRow, { children: childrenField })
         } else {
           tableFullData.forEach(handleRow)
         }
+        internalData.fullDataRowIdData = fullDataRowIdMaps
+        internalData.fullAllDataRowIdData = fullAllDataRowIdMaps
+        reactData.treeExpandedMaps = treeTempExpandedMaps
       },
       cacheSourceMap (fullData) {
         const { treeConfig } = props
@@ -9331,18 +9370,16 @@ export default defineComponent({
     }
 
     // 检测对应模块是否安装
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      'openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').forEach(name => {
-        ($xeTable as any)[name] = function () {
-          errLog('vxe.error.reqModule', ['VxeTableExportModule'])
-        }
-      })
-      'clearValidate,fullValidate,validate'.split(',').forEach(name => {
-        ($xeTable as any)[name] = function () {
-          errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
-        }
-      })
-    }
+    'openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').forEach(name => {
+      ($xeTable as any)[name] = function () {
+        errLog('vxe.error.reqModule', ['VxeTableExportModule'])
+      }
+    })
+    'clearValidate,fullValidate,validate'.split(',').forEach(name => {
+      ($xeTable as any)[name] = function () {
+        errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
+      }
+    })
 
     Object.assign($xeTable, tableMethods, tablePrivateMethods)
 
@@ -10350,23 +10387,21 @@ export default defineComponent({
       tablePrivateMethods.preventEvent(null, 'unmounted', { $table: $xeTable })
     })
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      nextTick(() => {
-        if (props.loading) {
-          if (!VxeUILoadingComponent && !slots.loading) {
-            errLog('vxe.error.reqComp', ['vxe-loading'])
-          }
+    nextTick(() => {
+      if (props.loading) {
+        if (!VxeUILoadingComponent && !slots.loading) {
+          errLog('vxe.error.reqComp', ['vxe-loading'])
         }
-        if ((props.showOverflow === true || props.showOverflow === 'tooltip') ||
+      }
+      if ((props.showOverflow === true || props.showOverflow === 'tooltip') ||
           (props.showHeaderOverflow === true || props.showHeaderOverflow === 'tooltip') ||
           (props.showFooterOverflow === true || props.showFooterOverflow === 'tooltip') ||
           props.tooltipConfig || props.editRules) {
-          if (!VxeUITooltipComponent) {
-            errLog('vxe.error.reqComp', ['vxe-tooltip'])
-          }
+        if (!VxeUITooltipComponent) {
+          errLog('vxe.error.reqComp', ['vxe-tooltip'])
         }
-      })
-    }
+      }
+    })
 
     provide('$xeColgroup', null)
     provide('$xeTable', $xeTable)
