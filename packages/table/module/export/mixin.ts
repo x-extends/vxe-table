@@ -599,10 +599,8 @@ function downloadFile ($xetable: any, opts: any, content: any) {
   saveLocalFile({ filename, type, content }).then(() => {
     if (opts.message !== false) {
       // 检测弹窗模块
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (!VxeUI.modal) {
-          errLog('vxe.error.reqModule', ['Modal'])
-        }
+      if (!VxeUI.modal) {
+        errLog('vxe.error.reqModule', ['Modal'])
       }
       VxeUI.modal.message({ content: getI18n('vxe.table.expSuccess'), status: 'success' })
     }
@@ -865,10 +863,8 @@ function handleImport ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
         }
         if (opts.message !== false) {
           // 检测弹窗模块
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (!VxeUI.modal) {
-              errLog('vxe.error.reqModule', ['Modal'])
-            }
+          if (!VxeUI.modal) {
+            errLog('vxe.error.reqModule', ['Modal'])
           }
           VxeUI.modal.message({ content: getI18n('vxe.table.impSuccess', [rows.length]), status: 'success' })
         }
@@ -880,10 +876,8 @@ function handleImport ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
       })
   } else if (opts.message !== false) {
     // 检测弹窗模块
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      if (!VxeUI.modal) {
-        errLog('vxe.error.reqModule', ['Modal'])
-      }
+    if (!VxeUI.modal) {
+      errLog('vxe.error.reqModule', ['Modal'])
     }
     VxeUI.modal.message({ content: getI18n('vxe.error.impFields'), status: 'error' })
     if (_importReject) {
@@ -901,10 +895,8 @@ function handleFileImport ($xetable: any, file: any, opts: any) {
   if (!importMethod && !XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)) {
     if (opts.message !== false) {
       // 检测弹窗模块
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (!VxeUI.modal) {
-          errLog('vxe.error.reqModule', ['Modal'])
-        }
+      if (!VxeUI.modal) {
+        errLog('vxe.error.reqModule', ['Modal'])
       }
       VxeUI.modal.message({ content: getI18n('vxe.error.notType', [type]), status: 'error' })
     }
@@ -952,9 +944,7 @@ function handleFileImport ($xetable: any, file: any, opts: any) {
       }
     } else {
       // 不支持的浏览器
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        errLog('vxe.error.notExp')
-      }
+      errLog('vxe.error.notExp')
       _importResolve({ status: true })
     }
   })
@@ -1016,10 +1006,8 @@ export function readLocalFile (options: any = {}) {
       } else {
         if (options.message !== false) {
           // 检测弹窗模块
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (!VxeUI.modal) {
-              errLog('vxe.error.reqModule', ['Modal'])
-            }
+          if (!VxeUI.modal) {
+            errLog('vxe.error.reqModule', ['Modal'])
           }
           VxeUI.modal.message({ content: getI18n('vxe.error.notType', [errType]), status: 'error' })
         }
@@ -1688,20 +1676,16 @@ export default {
     _closeExport: handleCloseExport,
     _openExport (options: any) {
       const { exportOpts } = this
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (!this.exportConfig) {
-          errLog('vxe.error.reqProp', ['export-config'])
-        }
+      if (!this.exportConfig) {
+        errLog('vxe.error.reqProp', ['export-config'])
       }
       return handleExportAndPrint(this, Object.assign({}, exportOpts, options))
     },
     _closePrint: handleCloseExport,
     _openPrint (options: any) {
       const { printOpts } = this
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (!this.printConfig) {
-          errLog('vxe.error.reqProp', ['print-config'])
-        }
+      if (!this.printConfig) {
+        errLog('vxe.error.reqProp', ['print-config'])
       }
       return handleExportAndPrint(this, Object.assign({}, printOpts, options), true)
     }

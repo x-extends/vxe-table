@@ -51,23 +51,21 @@ export default {
   created (this: any) {
     const $xeTableImportPanel = this
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
-      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
-      const VxeUISelectComponent = VxeUI.getComponent<VxeSelectComponent>('VxeSelect')
+    const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
+    const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+    const VxeUISelectComponent = VxeUI.getComponent<VxeSelectComponent>('VxeSelect')
 
-      $xeTableImportPanel.$nextTick(() => {
-        if (!VxeUIModalComponent) {
-          errLog('vxe.error.reqComp', ['vxe-modal'])
-        }
-        if (!VxeUIButtonComponent) {
-          errLog('vxe.error.reqComp', ['vxe-button'])
-        }
-        if (!VxeUISelectComponent) {
-          errLog('vxe.error.reqComp', ['vxe-select'])
-        }
-      })
-    }
+    $xeTableImportPanel.$nextTick(() => {
+      if (!VxeUIModalComponent) {
+        errLog('vxe.error.reqComp', ['vxe-modal'])
+      }
+      if (!VxeUIButtonComponent) {
+        errLog('vxe.error.reqComp', ['vxe-button'])
+      }
+      if (!VxeUISelectComponent) {
+        errLog('vxe.error.reqComp', ['vxe-select'])
+      }
+    })
   },
   render (this: any, h: CreateElement) {
     const $xeTable = this.$xeTable

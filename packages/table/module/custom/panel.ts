@@ -844,34 +844,32 @@ export default {
   computed: {
   },
   created (this: any) {
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
-      const VxeUIDrawerComponent = VxeUI.getComponent<VxeDrawerComponent>('VxeDrawer')
-      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
-      const VxeUINumberInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeNumberInput')
-      const VxeUIRadioGroupComponent = VxeUI.getComponent<VxeRadioGroupComponent>('VxeRadioGroup')
+    const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
+    const VxeUIDrawerComponent = VxeUI.getComponent<VxeDrawerComponent>('VxeDrawer')
+    const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+    const VxeUINumberInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeNumberInput')
+    const VxeUIRadioGroupComponent = VxeUI.getComponent<VxeRadioGroupComponent>('VxeRadioGroup')
 
-      this.$nextTick(() => {
-        const { $xetable } = this
-        const { customOpts } = $xetable
-        const { mode } = customOpts
-        if (!VxeUIModalComponent) {
-          errLog('vxe.error.reqComp', ['vxe-modal'])
-        }
-        if (!VxeUIDrawerComponent && (mode === 'drawer')) {
-          errLog('vxe.error.reqComp', ['vxe-drawer'])
-        }
-        if (!VxeUIButtonComponent) {
-          errLog('vxe.error.reqComp', ['vxe-button'])
-        }
-        if (!VxeUINumberInputComponent) {
-          errLog('vxe.error.reqComp', ['vxe-input'])
-        }
-        if (!VxeUIRadioGroupComponent) {
-          errLog('vxe.error.reqComp', ['vxe-radio-group'])
-        }
-      })
-    }
+    this.$nextTick(() => {
+      const { $xetable } = this
+      const { customOpts } = $xetable
+      const { mode } = customOpts
+      if (!VxeUIModalComponent) {
+        errLog('vxe.error.reqComp', ['vxe-modal'])
+      }
+      if (!VxeUIDrawerComponent && (mode === 'drawer')) {
+        errLog('vxe.error.reqComp', ['vxe-drawer'])
+      }
+      if (!VxeUIButtonComponent) {
+        errLog('vxe.error.reqComp', ['vxe-button'])
+      }
+      if (!VxeUINumberInputComponent) {
+        errLog('vxe.error.reqComp', ['vxe-input'])
+      }
+      if (!VxeUIRadioGroupComponent) {
+        errLog('vxe.error.reqComp', ['vxe-radio-group'])
+      }
+    })
   },
   render (this: any, h: CreateElement) {
     const $xeTable = this.$xeTable

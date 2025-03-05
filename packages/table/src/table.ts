@@ -1577,27 +1577,25 @@ export default {
       }
     }
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      // 使用已安装的组件，如果未安装则不渲染
-      const VxeUILoadingComponent = VxeUI.getComponent<VxeLoadingComponent>('VxeLoading')
-      const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
+    // 使用已安装的组件，如果未安装则不渲染
+    const VxeUILoadingComponent = VxeUI.getComponent<VxeLoadingComponent>('VxeLoading')
+    const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
 
-      $xeTable.$nextTick(() => {
-        if (props.loading) {
-          if (!VxeUILoadingComponent && !this.$scopedSlots.loading) {
-            errLog('vxe.error.reqComp', ['vxe-loading'])
-          }
+    $xeTable.$nextTick(() => {
+      if (props.loading) {
+        if (!VxeUILoadingComponent && !this.$scopedSlots.loading) {
+          errLog('vxe.error.reqComp', ['vxe-loading'])
         }
-        if ((props.showOverflow === true || props.showOverflow === 'tooltip') ||
+      }
+      if ((props.showOverflow === true || props.showOverflow === 'tooltip') ||
           (props.showHeaderOverflow === true || props.showHeaderOverflow === 'tooltip') ||
           (props.showFooterOverflow === true || props.showFooterOverflow === 'tooltip') ||
           props.tooltipConfig || props.editRules) {
-          if (!VxeUITooltipComponent) {
-            errLog('vxe.error.reqComp', ['vxe-tooltip'])
-          }
+        if (!VxeUITooltipComponent) {
+          errLog('vxe.error.reqComp', ['vxe-tooltip'])
         }
-      })
-    }
+      }
+    })
     if (this.autoResize) {
       const resizeObserver = globalResize.create(() => {
         if (this.autoResize) {

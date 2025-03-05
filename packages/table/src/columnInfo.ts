@@ -15,40 +15,38 @@ export class ColumnInfo {
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
     const tableProps = $xetable
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
-      if (_vm.type && types.indexOf(_vm.type) === -1) {
-        warnLog('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])
+    const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
+    if (_vm.type && types.indexOf(_vm.type) === -1) {
+      warnLog('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])
+    }
+    if (XEUtils.isBoolean(_vm.cellRender) || (_vm.cellRender && !XEUtils.isObject(_vm.cellRender))) {
+      warnLog('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
+    }
+    if (XEUtils.isBoolean(_vm.editRender) || (_vm.editRender && !XEUtils.isObject(_vm.editRender))) {
+      warnLog('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
+    }
+    if (_vm.type === 'expand') {
+      const { treeConfig } = tableProps
+      if (treeConfig && ($xetable.treeOpts.showLine || $xetable.treeOpts.line)) {
+        errLog('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
       }
-      if (XEUtils.isBoolean(_vm.cellRender) || (_vm.cellRender && !XEUtils.isObject(_vm.cellRender))) {
-        warnLog('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
-      }
-      if (XEUtils.isBoolean(_vm.editRender) || (_vm.editRender && !XEUtils.isObject(_vm.editRender))) {
-        warnLog('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
-      }
-      if (_vm.type === 'expand') {
-        const { treeConfig } = tableProps
-        if (treeConfig && ($xetable.treeOpts.showLine || $xetable.treeOpts.line)) {
-          errLog('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
+    }
+    if (_vm.remoteSort) {
+      warnLog('vxe.error.delProp', ['column.remote-sort', 'sort-config.remote'])
+    }
+    if (_vm.sortMethod) {
+      warnLog('vxe.error.delProp', ['column.sort-method', 'sort-config.sortMethod'])
+    }
+    if (formatter) {
+      if (XEUtils.isString(formatter)) {
+        const gFormatOpts = formats.get(formatter) || XEUtils[formatter]
+        if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod)) {
+          errLog('vxe.error.notFormats', [formatter])
         }
-      }
-      if (_vm.remoteSort) {
-        warnLog('vxe.error.delProp', ['column.remote-sort', 'sort-config.remote'])
-      }
-      if (_vm.sortMethod) {
-        warnLog('vxe.error.delProp', ['column.sort-method', 'sort-config.sortMethod'])
-      }
-      if (formatter) {
-        if (XEUtils.isString(formatter)) {
-          const gFormatOpts = formats.get(formatter) || XEUtils[formatter]
-          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod)) {
-            errLog('vxe.error.notFormats', [formatter])
-          }
-        } else if (XEUtils.isArray(formatter)) {
-          const gFormatOpts = formats.get(formatter[0]) || XEUtils[formatter[0]]
-          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod)) {
-            errLog('vxe.error.notFormats', [formatter[0]])
-          }
+      } else if (XEUtils.isArray(formatter)) {
+        const gFormatOpts = formats.get(formatter[0]) || XEUtils[formatter[0]]
+        if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod)) {
+          errLog('vxe.error.notFormats', [formatter[0]])
         }
       }
     }

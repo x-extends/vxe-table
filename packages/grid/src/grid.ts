@@ -76,9 +76,7 @@ function getFuncSlot ($xeGrid: any, optSlots: any, slotKey: any) {
       if (slots[funcSlot]) {
         return slots[funcSlot]
       } else {
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          errLog('vxe.error.notSlot', [funcSlot])
-        }
+        errLog('vxe.error.notSlot', [funcSlot])
       }
     } else {
       return funcSlot
@@ -580,36 +578,32 @@ export default {
     //   errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
     // }
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      if (this.toolbar) {
-        warnLog('vxe.error.delProp', ['grid.toolbar', 'grid.toolbar-config'])
-      }
-      if (this.toolbarConfig && !XEUtils.isObject(this.toolbarConfig)) {
-        warnLog('vxe.error.errProp', [`grid.toolbar-config=${this.toolbarConfig}`, 'grid.toolbar-config={}'])
-      }
-      // if (proxyOpts.props) {
-      //   warnLog('vxe.error.delProp', ['proxy-config.props', 'proxy-config.response'])
-      // }
+    if (this.toolbar) {
+      warnLog('vxe.error.delProp', ['grid.toolbar', 'grid.toolbar-config'])
     }
-
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      // 使用已安装的组件，如果未安装则不渲染
-      const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
-      const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
-
-      $xeGrid.$nextTick(() => {
-        if (props.formConfig) {
-          if (!VxeUIFormComponent) {
-            errLog('vxe.error.reqComp', ['vxe-form'])
-          }
-        }
-        if (props.pagerConfig) {
-          if (!VxeUIPagerComponent) {
-            errLog('vxe.error.reqComp', ['vxe-pager'])
-          }
-        }
-      })
+    if (this.toolbarConfig && !XEUtils.isObject(this.toolbarConfig)) {
+      warnLog('vxe.error.errProp', [`grid.toolbar-config=${this.toolbarConfig}`, 'grid.toolbar-config={}'])
     }
+    // if (proxyOpts.props) {
+    //   warnLog('vxe.error.delProp', ['proxy-config.props', 'proxy-config.response'])
+    // }
+
+    // 使用已安装的组件，如果未安装则不渲染
+    const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
+    const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
+
+    $xeGrid.$nextTick(() => {
+      if (props.formConfig) {
+        if (!VxeUIFormComponent) {
+          errLog('vxe.error.reqComp', ['vxe-form'])
+        }
+      }
+      if (props.pagerConfig) {
+        if (!VxeUIPagerComponent) {
+          errLog('vxe.error.reqComp', ['vxe-pager'])
+        }
+      }
+    })
 
     this.initPages()
     globalEvents.on(this, 'keydown', this.handleGlobalKeydownEvent)
@@ -898,9 +892,7 @@ export default {
                 return { status: false }
               })
           } else {
-            if (process.env.VUE_APP_VXE_ENV === 'development') {
-              errLog('vxe.error.notFunc', ['proxy-config.ajax.query'])
-            }
+            errLog('vxe.error.notFunc', ['proxy-config.ajax.query'])
           }
           break
         }
@@ -926,10 +918,8 @@ export default {
                     $xetable.setPendingRow(removeRecords, false)
                     if (isRespMsg) {
                       // 检测弹窗模块
-                      if (process.env.VUE_APP_VXE_ENV === 'development') {
-                        if (!VxeUI.modal) {
-                          errLog('vxe.error.reqModule', ['Modal'])
-                        }
+                      if (!VxeUI.modal) {
+                        errLog('vxe.error.reqModule', ['Modal'])
                       }
                       VxeUI.modal.message({ content: this.getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
                     }
@@ -947,10 +937,8 @@ export default {
                     this.tableLoading = false
                     if (isRespMsg) {
                       // 检测弹窗模块
-                      if (process.env.VUE_APP_VXE_ENV === 'development') {
-                        if (!VxeUI.modal) {
-                          errLog('vxe.error.reqModule', ['Modal'])
-                        }
+                      if (!VxeUI.modal) {
+                        errLog('vxe.error.reqModule', ['Modal'])
                       }
                       VxeUI.modal.message({ id: code, content: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
@@ -963,18 +951,14 @@ export default {
             } else {
               if (isActiveMsg) {
                 // 检测弹窗模块
-                if (process.env.VUE_APP_VXE_ENV === 'development') {
-                  if (!VxeUI.modal) {
-                    errLog('vxe.error.reqModule', ['Modal'])
-                  }
+                if (!VxeUI.modal) {
+                  errLog('vxe.error.reqModule', ['Modal'])
                 }
                 VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
               }
             }
           } else {
-            if (process.env.VUE_APP_VXE_ENV === 'development') {
-              errLog('vxe.error.notFunc', ['proxy-config.ajax.delete'])
-            }
+            errLog('vxe.error.notFunc', ['proxy-config.ajax.delete'])
           }
           break
         }
@@ -1013,10 +997,8 @@ export default {
                     $xetable.clearPendingRow()
                     if (isRespMsg) {
                       // 检测弹窗模块
-                      if (process.env.VUE_APP_VXE_ENV === 'development') {
-                        if (!VxeUI.modal) {
-                          errLog('vxe.error.reqModule', ['Modal'])
-                        }
+                      if (!VxeUI.modal) {
+                        errLog('vxe.error.reqModule', ['Modal'])
                       }
                       VxeUI.modal.message({ content: this.getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
                     }
@@ -1034,10 +1016,8 @@ export default {
                     this.tableLoading = false
                     if (isRespMsg) {
                       // 检测弹窗模块
-                      if (process.env.VUE_APP_VXE_ENV === 'development') {
-                        if (!VxeUI.modal) {
-                          errLog('vxe.error.reqModule', ['Modal'])
-                        }
+                      if (!VxeUI.modal) {
+                        errLog('vxe.error.reqModule', ['Modal'])
                       }
                       VxeUI.modal.message({ id: code, content: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
@@ -1049,19 +1029,15 @@ export default {
               } else {
                 if (isActiveMsg) {
                   // 检测弹窗模块
-                  if (process.env.VUE_APP_VXE_ENV === 'development') {
-                    if (!VxeUI.modal) {
-                      errLog('vxe.error.reqModule', ['Modal'])
-                    }
+                  if (!VxeUI.modal) {
+                    errLog('vxe.error.reqModule', ['Modal'])
                   }
                   VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.dataUnchanged'), status: 'info' })
                 }
               }
             })
           } else {
-            if (process.env.VUE_APP_VXE_ENV === 'development') {
-              errLog('vxe.error.notFunc', ['proxy-config.ajax.save'])
-            }
+            errLog('vxe.error.notFunc', ['proxy-config.ajax.save'])
           }
           break
         }
@@ -1071,9 +1047,7 @@ export default {
             if (gCommandOpts.commandMethod) {
               gCommandOpts.commandMethod({ code, button, $grid: this, $table: $xetable }, ...args)
             } else {
-              if (process.env.VUE_APP_VXE_ENV === 'development') {
-                errLog('vxe.error.notCommands', [code])
-              }
+              errLog('vxe.error.notCommands', [code])
             }
           }
         }
@@ -1100,10 +1074,8 @@ export default {
           })
         } else {
           // 检测弹窗模块
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (!VxeUI.modal) {
-              errLog('vxe.error.reqModule', ['Modal'])
-            }
+          if (!VxeUI.modal) {
+            errLog('vxe.error.reqModule', ['Modal'])
           }
           VxeUI.modal.message({ id: `msg_${code}`, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }
@@ -1151,10 +1123,8 @@ export default {
       } else {
         if (isActiveMsg) {
           // 检测弹窗模块
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (!VxeUI.modal) {
-              errLog('vxe.error.reqModule', ['Modal'])
-            }
+          if (!VxeUI.modal) {
+            errLog('vxe.error.reqModule', ['Modal'])
           }
           VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }

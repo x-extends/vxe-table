@@ -151,12 +151,10 @@ export function assembleColumn (_vm: any) {
   const { $el, $xetable, $xecolumn, columnConfig } = _vm
   const groupConfig = $xecolumn ? $xecolumn.columnConfig : null
   if (groupConfig) {
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      if ($xecolumn.$options._componentTag === 'vxe-table-column') {
-        errLog('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xecolumn.title} ...>`, `<vxe-table-column title=${$xecolumn.title} ...>`])
-      } else if ($xecolumn.$options._componentTag === 'vxe-column') {
-        warnLog('vxe.error.groupTag', [`<vxe-colgroup title=${$xecolumn.title} ...>`, `<vxe-column title=${$xecolumn.title} ...>`])
-      }
+    if ($xecolumn.$options._componentTag === 'vxe-table-column') {
+      errLog('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xecolumn.title} ...>`, `<vxe-table-column title=${$xecolumn.title} ...>`])
+    } else if ($xecolumn.$options._componentTag === 'vxe-column') {
+      warnLog('vxe.error.groupTag', [`<vxe-colgroup title=${$xecolumn.title} ...>`, `<vxe-column title=${$xecolumn.title} ...>`])
     }
     if (!groupConfig.children) {
       groupConfig.children = []

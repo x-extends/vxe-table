@@ -2393,28 +2393,26 @@ const Methods = {
     if (treeConfig) {
       // 树结构自动转换
       if (treeOpts.transform) {
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (!treeOpts.rowField) {
-            errLog('vxe.error.reqProp', ['table.tree-config.rowField'])
-          }
-          if (!treeOpts.parentField) {
-            errLog('vxe.error.reqProp', ['table.tree-config.parentField'])
-          }
-          if (!childrenField) {
-            errLog('vxe.error.reqProp', ['tree-config.childrenField'])
-          }
-          if (!treeOpts.mapChildrenField) {
-            errLog('vxe.error.reqProp', ['tree-config.mapChildrenField'])
-          }
-          if (childrenField === treeOpts.mapChildrenField) {
-            errLog('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
-          }
-          // fullData.forEach(row => {
-          //   if (row[childrenField] && row[childrenField].length) {
-          //     warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${childrenField}`])
-          //   }
-          // })
+        if (!treeOpts.rowField) {
+          errLog('vxe.error.reqProp', ['table.tree-config.rowField'])
         }
+        if (!treeOpts.parentField) {
+          errLog('vxe.error.reqProp', ['table.tree-config.parentField'])
+        }
+        if (!childrenField) {
+          errLog('vxe.error.reqProp', ['tree-config.childrenField'])
+        }
+        if (!treeOpts.mapChildrenField) {
+          errLog('vxe.error.reqProp', ['tree-config.mapChildrenField'])
+        }
+        if (childrenField === treeOpts.mapChildrenField) {
+          errLog('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
+        }
+        // fullData.forEach(row => {
+        //   if (row[childrenField] && row[childrenField].length) {
+        //     warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${childrenField}`])
+        //   }
+        // })
         treeData = XEUtils.toArrayTree(fullData, {
           key: treeOpts.rowField,
           parentKey: treeOpts.parentField,
@@ -2480,16 +2478,14 @@ const Methods = {
         //   }
         // }
 
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (!(this.height || this.maxHeight)) {
-            errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
-          }
-          // if (!this.showOverflow) {
-          //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
-          // }
-          if (this.spanMethod) {
-            warnLog('vxe.error.scrollErrProp', ['table.span-method'])
-          }
+        if (!(this.height || this.maxHeight)) {
+          errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+        }
+        // if (!this.showOverflow) {
+        //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
+        // }
+        if (this.spanMethod) {
+          warnLog('vxe.error.scrollErrProp', ['table.span-method'])
         }
       }
 
@@ -2634,17 +2630,19 @@ const Methods = {
   cacheRowMap () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
     const { treeConfig } = props
-    const treeOpts = $xeTable.computeTreeOpts
+    const { treeExpandedMaps } = reactData
     const { fullAllDataRowIdData, tableFullData, tableFullTreeData } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowkey = getRowkey($xeTable)
-    const isLazy = treeConfig && treeOpts.lazy
-    const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
+    const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = { ...fullAllDataRowIdData } // 存在已删除数据
     const fullDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
+    const treeTempExpandedMaps = { ...treeExpandedMaps }
     const handleRow = (row: any, index: number, items: any, path?: any[], parentRow?: any, nodes?: any[]) => {
       let rowid = getRowid($xeTable, row)
       const seq = treeConfig && path ? toTreePathSeq(path) : index + 1
@@ -2653,13 +2651,24 @@ const Methods = {
         rowid = getRowUniqueId()
         XEUtils.set(row, rowkey, rowid)
       }
-      if (isLazy && row[hasChildField] && XEUtils.isUndefined(row[childrenField])) {
-        row[childrenField] = null
+      if (treeConfig && treeOpts.lazy) {
+        const treeExpRest = treeExpandedMaps[rowid]
+        if (row[hasChildField] && XEUtils.isUndefined(row[childrenField])) {
+          row[childrenField] = null
+        }
+        if (treeExpRest) {
+          if (!row[childrenField] || !row[childrenField].length) {
+            delete treeTempExpandedMaps[rowid]
+          }
+        }
       }
       let rowRest = fullAllDataRowIdData[rowid]
       if (!rowRest) {
         rowRest = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
       }
+      rowRest.treeLoaded = false
+      rowRest.expandLoaded = false
+
       rowRest.row = row
       rowRest.items = items
       rowRest.parent = parentRow
@@ -2668,13 +2677,14 @@ const Methods = {
       fullDataRowIdMaps[rowid] = rowRest
       fullAllDataRowIdMaps[rowid] = rowRest
     }
-    internalData.fullDataRowIdData = fullDataRowIdMaps
-    internalData.fullAllDataRowIdData = fullAllDataRowIdMaps
     if (treeConfig) {
       XEUtils.eachTree(tableFullTreeData, handleRow, { children: childrenField })
     } else {
       tableFullData.forEach(handleRow)
     }
+    internalData.fullDataRowIdData = fullDataRowIdMaps
+    internalData.fullAllDataRowIdData = fullAllDataRowIdMaps
+    reactData.treeExpandedMaps = treeTempExpandedMaps
   },
   cacheSourceMap (fullData: any[]) {
     let { treeConfig, treeOpts, sourceDataRowIdData } = this
@@ -3010,12 +3020,20 @@ const Methods = {
    * 如果还额外传了 field 则还原指定的单元格数据
    */
   revertData (rows: any, field: any) {
-    const { keepSource, tableSourceData, treeConfig } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { keepSource, treeConfig } = props
+    const { fullAllDataRowIdData, tableSourceData, sourceDataRowIdData, tableFullData, afterFullData } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
+    const { transform } = treeOpts
     if (!keepSource) {
       if (process.env.VUE_APP_VXE_ENV === 'development') {
         warnLog('vxe.error.reqProp', ['keep-source'])
       }
-      return this.$nextTick()
+      return $xeTable.$nextTick()
     }
     let targetRows = rows
     if (rows) {
@@ -3023,30 +3041,52 @@ const Methods = {
         targetRows = [rows]
       }
     } else {
-      targetRows = XEUtils.toArray(this.getUpdateRecords())
+      targetRows = XEUtils.toArray($xeTable.getUpdateRecords())
     }
+    let reDelFlag = false
     if (targetRows.length) {
       targetRows.forEach((row: any) => {
-        if (!this.isInsertByRow(row)) {
-          const rowIndex = this.getRowIndex(row)
-          if (treeConfig && rowIndex === -1) {
-            errLog('vxe.error.noTree', ['revertData'])
-          }
-          const oRow = tableSourceData[rowIndex]
+        if (!$xeTable.isInsertByRow(row)) {
+          const rowid = getRowid($xeTable, row)
+          const oRow = sourceDataRowIdData[rowid]
           if (oRow && row) {
             if (field) {
               XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
             } else {
               XEUtils.destructuring(row, XEUtils.clone(oRow, true))
             }
+            if ($xeTable.isRemoveByRow(row)) {
+              const rowRest = fullAllDataRowIdData[rowid]
+              if (rowRest) {
+                const reRow = rowRest.row
+                tableFullData.unshift(reRow)
+                afterFullData.unshift(reRow)
+                reDelFlag = true
+              }
+            }
           }
         }
       })
     }
     if (rows) {
-      return this.$nextTick()
+      if (reDelFlag) {
+        $xeTable.updateFooter()
+        $xeTable.cacheRowMap(false)
+        $xeTable.handleTableData(treeConfig && transform)
+        if (!(treeConfig && transform)) {
+          $xeTable.updateAfterDataIndex()
+        }
+        $xeTable.checkSelectionStatus()
+        if (reactData.scrollYLoad) {
+          $xeTable.updateScrollYSpace()
+        }
+      }
+      return $xeTable.$nextTick().then(() => {
+        $xeTable.updateCellAreas()
+        return $xeTable.recalculate()
+      })
     }
-    return this.reloadData(tableSourceData)
+    return $xeTable.reloadData(tableSourceData)
   },
   /**
    * 清空单元格内容
@@ -3162,17 +3202,28 @@ const Methods = {
    * @param {Row} row 行对象
    */
   isInsertByRow (row: any) {
-    const { editStore } = this
-    const rowid = getRowid(this, row)
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+
+    const { editStore } = reactData
+    const rowid = getRowid($xeTable, row)
     return !!editStore.insertMaps[rowid]
+  },
+  isRemoveByRow (row: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+
+    const { editStore } = reactData
+    const rowid = getRowid($xeTable, row)
+    return !!editStore.removeMaps[rowid]
   },
   /**
    * 删除所有新增的临时数据
    * @returns
    */
   removeInsertRow () {
-    const $xeTable = this
-    const reactData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
 
     const { editStore } = reactData
     editStore.insertMaps = {}
@@ -9016,19 +9067,17 @@ const funcs = 'setFilter,openFilter,clearFilter,saveFilterPanel,resetFilterPanel
 
 funcs.forEach(name => {
   Methods[name] = function (...args: any[]) {
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      if (!this[`_${name}`]) {
-        if ('openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').includes(name)) {
-          errLog('vxe.error.reqModule', ['VxeTableExportModule'])
-        } else if ('fullValidate,validate'.split(',').includes(name)) {
-          errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
-        } else if ('setFilter,openFilter,clearFilter,getCheckedFilters'.split(',').includes(name)) {
-          errLog('vxe.error.reqModule', ['VxeTableFilterModule'])
-        } else if ('insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell'.split(',').includes(name)) {
-          errLog('vxe.error.reqModule', ['VxeTableEditModule'])
-        } else if ('openCustom'.split(',').includes(name)) {
-          errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
-        }
+    if (!this[`_${name}`]) {
+      if ('openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').includes(name)) {
+        errLog('vxe.error.reqModule', ['VxeTableExportModule'])
+      } else if ('fullValidate,validate'.split(',').includes(name)) {
+        errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
+      } else if ('setFilter,openFilter,clearFilter,getCheckedFilters'.split(',').includes(name)) {
+        errLog('vxe.error.reqModule', ['VxeTableFilterModule'])
+      } else if ('insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell'.split(',').includes(name)) {
+        errLog('vxe.error.reqModule', ['VxeTableEditModule'])
+      } else if ('openCustom'.split(',').includes(name)) {
+        errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
       }
     }
     return this[`_${name}`] ? this[`_${name}`](...args) : null
