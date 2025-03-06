@@ -7,7 +7,7 @@ import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible,
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, VxeToolbarConstructor, TableInternalData, VxeTablePrivateMethods, VxeTooltipInstance, VxeTablePropTypes } from '../../../types'
+import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, VxeToolbarConstructor, TableInternalData, VxeGridConstructor, GridPrivateMethods, VxeTablePrivateMethods, VxeTooltipInstance, VxeTablePropTypes } from '../../../types'
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent } = VxeUI
 
@@ -2297,10 +2297,26 @@ const Methods = {
    * 获取父容器的高度
    */
   getParentHeight () {
-    const { $el, $xegrid, height } = this
-    const parentElem = $el.parentNode
-    const parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
-    return Math.floor($xegrid ? $xegrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(parentElem).height) - parentPaddingSize)
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+    const props = $xeTable
+
+    const { height } = props
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    if (el) {
+      const parentElem = el.parentNode as HTMLElement
+      const parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
+      let parentWrapperHeight = 0
+      if (parentElem) {
+        if ($xeGrid && hasClass(parentElem, 'vxe-grid--table-wrapper')) {
+          parentWrapperHeight = $xeGrid.getParentHeight()
+        } else {
+          parentWrapperHeight = parentElem.clientHeight
+        }
+      }
+      return Math.floor(parentWrapperHeight - parentPaddingSize)
+    }
+    return 0
   },
   /**
    * 获取需要排除的高度
@@ -2485,7 +2501,7 @@ const Methods = {
         //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
         // }
         if (this.spanMethod) {
-          warnLog('vxe.error.scrollErrProp', ['table.span-method'])
+          errLog('vxe.error.scrollErrProp', ['table.span-method'])
         }
       }
 
@@ -3026,12 +3042,12 @@ const Methods = {
     const internalData = $xeTable as unknown as TableInternalData
 
     const { keepSource, treeConfig } = props
-    const { fullAllDataRowIdData, tableSourceData, sourceDataRowIdData, tableFullData, afterFullData } = internalData
+    const { fullAllDataRowIdData, fullDataRowIdData, tableSourceData, sourceDataRowIdData, tableFullData, afterFullData } = internalData
     const treeOpts = $xeTable.computeTreeOpts
     const { transform } = treeOpts
     if (!keepSource) {
       if (process.env.VUE_APP_VXE_ENV === 'development') {
-        warnLog('vxe.error.reqProp', ['keep-source'])
+        errLog('vxe.error.reqProp', ['keep-source'])
       }
       return $xeTable.$nextTick()
     }
@@ -3045,22 +3061,22 @@ const Methods = {
     }
     let reDelFlag = false
     if (targetRows.length) {
-      targetRows.forEach((row: any) => {
-        if (!$xeTable.isInsertByRow(row)) {
-          const rowid = getRowid($xeTable, row)
-          const oRow = sourceDataRowIdData[rowid]
-          if (oRow && row) {
-            if (field) {
-              XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
-            } else {
-              XEUtils.destructuring(row, XEUtils.clone(oRow, true))
-            }
-            if ($xeTable.isRemoveByRow(row)) {
-              const rowRest = fullAllDataRowIdData[rowid]
-              if (rowRest) {
-                const reRow = rowRest.row
-                tableFullData.unshift(reRow)
-                afterFullData.unshift(reRow)
+      targetRows.forEach((item: any) => {
+        const rowid = getRowid($xeTable, item)
+        const rowRest = fullAllDataRowIdData[rowid]
+        if (rowRest) {
+          const row = rowRest.row
+          if (!$xeTable.isInsertByRow(row)) {
+            const oRow = sourceDataRowIdData[rowid]
+            if (oRow && row) {
+              if (field) {
+                XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
+              } else {
+                XEUtils.destructuring(row, XEUtils.clone(oRow, true))
+              }
+              if (!fullDataRowIdData[rowid] && $xeTable.isRemoveByRow(row)) {
+                tableFullData.unshift(row)
+                afterFullData.unshift(row)
                 reDelFlag = true
               }
             }

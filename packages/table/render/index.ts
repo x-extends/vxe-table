@@ -620,6 +620,62 @@ function handleExportTreeSelectMethod (params: any) {
   return options.original ? getCellValue(row, column) : getTreeSelectCellValue(column.editRender || column.cellRender, params)
 }
 
+function handleNumberCell (h: CreateElement, renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, params: VxeGlobalRendererHandles.RenderTableDefaultParams) {
+  const { props = {}, showNegativeStatus } = renderOpts
+  const { row, column } = params
+  const { type } = props
+  let cellValue = XEUtils.get(row, column.field)
+  let isNegative = false
+  if (!isEmptyValue(cellValue)) {
+    const numberInputConfig = getConfig().numberInput || {}
+    if (type === 'float') {
+      const autoFill = handleDefaultValue(props.autoFill, numberInputConfig.autoFill, true)
+      const digits = handleDefaultValue(props.digits, numberInputConfig.digits, 1)
+      cellValue = XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
+      if (!autoFill) {
+        cellValue = XEUtils.toNumber(cellValue)
+      }
+      if (showNegativeStatus) {
+        if (cellValue < 0) {
+          isNegative = true
+        }
+      }
+    } else if (type === 'amount') {
+      const autoFill = handleDefaultValue(props.autoFill, numberInputConfig.autoFill, true)
+      const digits = handleDefaultValue(props.digits, numberInputConfig.digits, 2)
+      const showCurrency = handleDefaultValue(props.showCurrency, numberInputConfig.showCurrency, false)
+      cellValue = XEUtils.toNumber(cellValue)
+      if (showNegativeStatus) {
+        if (cellValue < 0) {
+          isNegative = true
+        }
+      }
+      cellValue = XEUtils.commafy(cellValue, { digits })
+      if (!autoFill) {
+        const [iStr, dStr] = cellValue.split('.')
+        if (dStr) {
+          const dRest = dStr.replace(/0+$/, '')
+          cellValue = dRest ? [iStr, '.', dRest].join('') : iStr
+        }
+      }
+      if (showCurrency) {
+        cellValue = `${props.currencySymbol || numberInputConfig.currencySymbol || getI18n('vxe.numberInput.currencySymbol') || ''}${cellValue}`
+      }
+    } else {
+      if (showNegativeStatus) {
+        if (XEUtils.toNumber(cellValue) < 0) {
+          isNegative = true
+        }
+      }
+    }
+  }
+  return getCellLabelVNs(h, renderOpts, params, cellValue, isNegative
+    ? {
+        class: 'is--negative'
+      }
+    : {})
+}
+
 /**
  * 表格 - 渲染器
  */
@@ -685,64 +741,19 @@ renderer.mixin({
     renderTableFilter: defaultFilterRender,
     tableFilterDefaultMethod: handleInputFilterMethod
   },
+  FormatNumberInput: {
+    renderTableDefault: handleNumberCell,
+    tableFilterDefaultMethod: handleInputFilterMethod,
+    tableExportMethod (params) {
+      const { row, column } = params
+      const cellValue = XEUtils.get(row, column.field)
+      return cellValue
+    }
+  },
   VxeNumberInput: {
     tableAutoFocus: 'input',
     renderTableEdit: defaultEditRender,
-    renderTableCell (h, renderOpts, params) {
-      const { props = {}, showNegativeStatus } = renderOpts
-      const { row, column } = params
-      const { type } = props
-      let cellValue = XEUtils.get(row, column.field)
-      let isNegative = false
-      if (!isEmptyValue(cellValue)) {
-        const numberInputConfig = getConfig().numberInput || {}
-        if (type === 'float') {
-          const autoFill = handleDefaultValue(props.autoFill, numberInputConfig.autoFill, true)
-          const digits = handleDefaultValue(props.digits, numberInputConfig.digits, 1)
-          cellValue = XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
-          if (!autoFill) {
-            cellValue = XEUtils.toNumber(cellValue)
-          }
-          if (showNegativeStatus) {
-            if (cellValue < 0) {
-              isNegative = true
-            }
-          }
-        } else if (type === 'amount') {
-          const autoFill = handleDefaultValue(props.autoFill, numberInputConfig.autoFill, true)
-          const digits = handleDefaultValue(props.digits, numberInputConfig.digits, 2)
-          const showCurrency = handleDefaultValue(props.showCurrency, numberInputConfig.showCurrency, false)
-          cellValue = XEUtils.toNumber(cellValue)
-          if (showNegativeStatus) {
-            if (cellValue < 0) {
-              isNegative = true
-            }
-          }
-          cellValue = XEUtils.commafy(cellValue, { digits })
-          if (!autoFill) {
-            const [iStr, dStr] = cellValue.split('.')
-            if (dStr) {
-              const dRest = dStr.replace(/0+$/, '')
-              cellValue = dRest ? [iStr, '.', dRest].join('') : iStr
-            }
-          }
-          if (showCurrency) {
-            cellValue = `${props.currencySymbol || numberInputConfig.currencySymbol || getI18n('vxe.numberInput.currencySymbol') || ''}${cellValue}`
-          }
-        } else {
-          if (showNegativeStatus) {
-            if (XEUtils.toNumber(cellValue) < 0) {
-              isNegative = true
-            }
-          }
-        }
-      }
-      return getCellLabelVNs(h, renderOpts, params, cellValue, isNegative
-        ? {
-            class: 'is--negative'
-          }
-        : {})
-    },
+    renderTableCell: handleNumberCell,
     renderTableFooter (h, renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column, _columnIndex } = params
@@ -849,10 +860,21 @@ renderer.mixin({
     tableFilterDefaultMethod: handleFilterMethod,
     tableExportMethod: handleExportSelectMethod
   },
+  /**
+   * 已废弃，被 FormatSelect 替换
+   * @deprecated
+   */
   formatOption: {
     renderTableDefault (h, renderOpts, params) {
       return getCellLabelVNs(h, renderOpts, params, getSelectCellValue(renderOpts, params))
     }
+  },
+  FormatSelect: {
+    renderTableDefault (h, renderOpts, params) {
+      return getCellLabelVNs(h, renderOpts, params, getSelectCellValue(renderOpts, params))
+    },
+    tableFilterDefaultMethod: handleFilterMethod,
+    tableExportMethod: handleExportSelectMethod
   },
   VxeTreeSelect: {
     tableAutoFocus: 'input',
@@ -870,10 +892,20 @@ renderer.mixin({
     },
     tableExportMethod: handleExportTreeSelectMethod
   },
+  /**
+   * 已废弃，被 FormatTreeSelect 替换
+   * @deprecated
+   */
   formatTree: {
     renderTableDefault (h, renderOpts, params) {
       return getCellLabelVNs(h, renderOpts, params, getTreeSelectCellValue(renderOpts, params))
     }
+  },
+  FormatTreeSelect: {
+    renderTableDefault (h, renderOpts, params) {
+      return getCellLabelVNs(h, renderOpts, params, getTreeSelectCellValue(renderOpts, params))
+    },
+    tableExportMethod: handleExportTreeSelectMethod
   },
   VxeColorPicker: {
     tableAutoFocus: 'input',
