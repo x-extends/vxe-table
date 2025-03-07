@@ -101,15 +101,19 @@ export function getRowUniqueId () {
 export function getRowkey ($xeTable: VxeTableConstructor) {
   const { props } = $xeTable
   const { computeRowOpts } = $xeTable.getComputeMaps()
-  const { rowId } = props
   const rowOpts = computeRowOpts.value
-  return rowId || rowOpts.keyField || '_X_ROW_KEY'
+  return `${props.rowId || rowOpts.keyField || '_X_ROW_KEY'}`
 }
 
 // 行主键 value
 export function getRowid ($xeTable: VxeTableConstructor, row: any) {
   const rowid = XEUtils.get(row, getRowkey($xeTable))
-  return XEUtils.eqNull(rowid) ? '' : encodeURIComponent(rowid)
+  return encodeRowid(rowid)
+}
+
+// 编码行主键
+export function encodeRowid (rowVal: string) {
+  return XEUtils.eqNull(rowVal) ? '' : encodeURIComponent(rowVal)
 }
 
 export interface XEColumnInstance {
@@ -119,6 +123,14 @@ export interface XEColumnInstance {
 export const handleFieldOrColumn = ($xeTable: VxeTableConstructor, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null) => {
   if (fieldOrColumn) {
     return XEUtils.isString(fieldOrColumn) || XEUtils.isNumber(fieldOrColumn) ? $xeTable.getColumnByField(`${fieldOrColumn}`) : fieldOrColumn
+  }
+  return null
+}
+
+export const handleRowidOrRow = ($xeTable: VxeTableConstructor, rowidOrRow: any) => {
+  if (rowidOrRow) {
+    const rowid = XEUtils.isString(rowidOrRow) || XEUtils.isNumber(rowidOrRow) ? rowidOrRow : getRowid($xeTable, rowidOrRow)
+    return $xeTable.getRowById(rowid)
   }
   return null
 }

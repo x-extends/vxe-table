@@ -230,6 +230,7 @@ export default defineComponent({
       tdOns.onDblclick = (evnt: MouseEvent) => {
         $xeTable.triggerCellDblclickEvent(evnt, cellParams)
       }
+      let isMergeCell = false
       // 合并行或列
       if (mergeList.length) {
         const spanRest = mergeBodyMethod(mergeList, _rowIndex, _columnIndex)
@@ -239,9 +240,11 @@ export default defineComponent({
             return null
           }
           if (rowspan > 1) {
+            isMergeCell = true
             tdAttrs.rowspan = rowspan
           }
           if (colspan > 1) {
+            isMergeCell = true
             tdAttrs.colspan = colspan
           }
         }
@@ -276,11 +279,13 @@ export default defineComponent({
       const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
       let isVNPreEmptyStatus = false
-      if (!dragRow || getRowid($xeTable, dragRow) !== rowid) {
-        if (scrollYLoad && (_rowIndex < scrollYStore.visibleStartIndex - scrollYStore.preloadSize || _rowIndex > scrollYStore.visibleEndIndex + scrollYStore.preloadSize)) {
-          isVNPreEmptyStatus = true
-        } else if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
-          isVNPreEmptyStatus = true
+      if (!isMergeCell) {
+        if (!dragRow || getRowid($xeTable, dragRow) !== rowid) {
+          if (scrollYLoad && (_rowIndex < scrollYStore.visibleStartIndex - scrollYStore.preloadSize || _rowIndex > scrollYStore.visibleEndIndex + scrollYStore.preloadSize)) {
+            isVNPreEmptyStatus = true
+          } else if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+            isVNPreEmptyStatus = true
+          }
         }
       }
 
