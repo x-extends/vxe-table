@@ -2708,20 +2708,23 @@ const Methods = {
     reactData.treeExpandedMaps = treeTempExpandedMaps
   },
   cacheSourceMap (fullData: any[]) {
-    let { treeConfig, treeOpts, sourceDataRowIdData } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeConfig } = props
+    const treeOpts = $xeTable.computeTreeOpts
+    let { sourceDataRowIdData } = internalData
     const sourceData = XEUtils.clone(fullData, true)
-    const rowkey = getRowkey(this)
-    sourceDataRowIdData = this.sourceDataRowIdData = {}
+    const rowkey = getRowkey($xeTable)
+    sourceDataRowIdData = internalData.sourceDataRowIdData = {}
     const handleSourceRow = (row: any) => {
-      let rowid = getRowid(this, row)
+      let rowid = getRowid($xeTable, row)
       if (eqEmptyValue(rowid)) {
         rowid = getRowUniqueId()
         XEUtils.set(row, rowkey, rowid)
       }
-      sourceDataRowIdData[rowid] = {
-        row,
-        rowid
-      }
+      sourceDataRowIdData[rowid] = row
     }
     // 源数据缓存
     if (treeConfig) {
@@ -2730,7 +2733,7 @@ const Methods = {
     } else {
       sourceData.forEach(handleSourceRow)
     }
-    this.tableSourceData = sourceData
+    internalData.tableSourceData = sourceData
   },
   getParams () {
     return this.params
@@ -3047,7 +3050,9 @@ const Methods = {
     const internalData = $xeTable as unknown as TableInternalData
 
     const { keepSource, treeConfig } = props
+    const { editStore } = reactData
     const { fullAllDataRowIdData, fullDataRowIdData, tableSourceData, sourceDataRowIdData, tableFullData, afterFullData } = internalData
+    const removeTempMaps = { ...editStore.removeMaps }
     const treeOpts = $xeTable.computeTreeOpts
     const { transform } = treeOpts
     if (!keepSource) {
@@ -3080,6 +3085,7 @@ const Methods = {
                 XEUtils.destructuring(row, XEUtils.clone(oRow, true))
               }
               if (!fullDataRowIdData[rowid] && $xeTable.isRemoveByRow(row)) {
+                delete removeTempMaps[rowid]
                 tableFullData.unshift(row)
                 afterFullData.unshift(row)
                 reDelFlag = true
@@ -3091,6 +3097,7 @@ const Methods = {
     }
     if (rows) {
       if (reDelFlag) {
+        editStore.removeMaps = removeTempMaps
         $xeTable.updateFooter()
         $xeTable.cacheRowMap(false)
         $xeTable.handleTableData(treeConfig && transform)

@@ -665,13 +665,17 @@ export default {
 
       const { isZMax } = reactData
       const el = $xeGrid.$refs.refElem as HTMLDivElement
-      const formWrapper = $xeGrid.$refs.refFormWrapper as HTMLDivElement
-      const toolbarWrapper = $xeGrid.$refs.refToolbarWrapper as HTMLDivElement
-      const topWrapper = $xeGrid.$refs.refTopWrapper as HTMLDivElement
-      const bottomWrapper = $xeGrid.$refs.refBottomWrapper as HTMLDivElement
-      const pagerWrapper = $xeGrid.$refs.refPagerWrapper as HTMLDivElement
-      const parentPaddingSize = isZMax ? 0 : getPaddingTopBottomSize(el.parentNode as HTMLElement)
-      return parentPaddingSize + getPaddingTopBottomSize(el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
+      if (el) {
+        const formWrapper = $xeGrid.$refs.refFormWrapper as HTMLDivElement
+        const toolbarWrapper = $xeGrid.$refs.refToolbarWrapper as HTMLDivElement
+        const topWrapper = $xeGrid.$refs.refTopWrapper as HTMLDivElement
+        const bottomWrapper = $xeGrid.$refs.refBottomWrapper as HTMLDivElement
+        const pagerWrapper = $xeGrid.$refs.refPagerWrapper as HTMLDivElement
+        const parentEl = el.parentElement as HTMLElement
+        const parentPaddingSize = isZMax ? 0 : (parentEl ? getPaddingTopBottomSize(parentEl) : 0)
+        return parentPaddingSize + getPaddingTopBottomSize(el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
+      }
+      return 0
     },
     getParentHeight () {
       const $xeGrid = this
@@ -679,7 +683,8 @@ export default {
 
       const el = $xeGrid.$refs.refElem as HTMLDivElement
       if (el) {
-        return (reactData.isZMax ? getDomNode().visibleHeight : XEUtils.toNumber(getComputedStyle(el.parentNode as HTMLElement).height)) - $xeGrid.getExcludeHeight()
+        const parentEl = el.parentElement as HTMLElement
+        return (reactData.isZMax ? getDomNode().visibleHeight : (parentEl ? XEUtils.toNumber(getComputedStyle(parentEl).height) : 0)) - $xeGrid.getExcludeHeight()
       }
       return 0
     },
