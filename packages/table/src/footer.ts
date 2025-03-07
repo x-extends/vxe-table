@@ -110,6 +110,7 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
     tfOns.dblclick = (evnt: MouseEvent) => {
       $xeTable.dispatchEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
     }
+    let isMergeCell = false
     // 合并行或列
     if (mergeFooterList.length) {
       const spanRest = mergeFooterMethod(mergeFooterList, _rowIndex, _columnIndex)
@@ -119,9 +120,11 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
           return null
         }
         if (rowspan > 1) {
+          isMergeCell = true
           attrs.rowspan = rowspan
         }
         if (colspan > 1) {
+          isMergeCell = true
           attrs.colspan = colspan
         }
       }
@@ -142,8 +145,10 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
     const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
     let isVNPreEmptyStatus = false
-    if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
-      isVNPreEmptyStatus = true
+    if (!isMergeCell) {
+      if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+        isVNPreEmptyStatus = true
+      }
     }
 
     const tcStyle: Record<string, string> = {}

@@ -651,6 +651,11 @@ export default {
       }
       return []
     },
+    getEl () {
+      const $xeGrid = this
+
+      return $xeGrid.$refs.refElem as HTMLDivElement
+    },
     /**
      * 获取需要排除的高度
      */
