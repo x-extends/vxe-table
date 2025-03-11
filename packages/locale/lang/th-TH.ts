@@ -237,6 +237,9 @@ export default {
       fixedRight: 'แช่แข็งทางด้านขวา',
       cancelFixed: 'เลิกตรึงคอลัมน์'
     },
+    datePicker: {
+      yearTitle: '{0} ปี'
+    },
     input: {
       date: {
         m1: 'มกราคม',

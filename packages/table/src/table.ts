@@ -9,7 +9,7 @@ import TableHeaderComponent from './header'
 import TableFooterComponent from './footer'
 import tableProps from './props'
 import tableEmits from './emits'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, updateDeepRowKey, updateFastRowKey } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 import TableCustomPanelComponent from '../module/custom/panel'
@@ -506,6 +506,10 @@ export default defineComponent({
       return Object.assign({}, getConfig().table.columnConfig, props.columnConfig) as VxeTablePropTypes.ColumnOpts
     })
 
+    const computeCurrentColumnOpts = computed(() => {
+      return Object.assign({}, getConfig().table.currentColumnConfig, props.currentColumnConfig)
+    })
+
     const computeCellOpts = computed(() => {
       return Object.assign({}, getConfig().table.cellConfig, props.cellConfig)
     })
@@ -519,7 +523,11 @@ export default defineComponent({
     })
 
     const computeRowOpts = computed(() => {
-      return Object.assign({}, getConfig().table.rowConfig, props.rowConfig) as VxeTablePropTypes.RowOpts
+      return Object.assign({}, getConfig().table.rowConfig, props.rowConfig)
+    })
+
+    const computeCurrentRowOpts = computed(() => {
+      return Object.assign({}, getConfig().table.currentRowConfig, props.currentRowConfig)
     })
 
     const computeRowDragOpts = computed(() => {
@@ -823,6 +831,7 @@ export default defineComponent({
       computeScrollbarXToTop,
       computeScrollbarYToLeft,
       computeColumnOpts,
+      computeCurrentColumnOpts,
       computeScrollXThreshold,
       computeScrollYThreshold,
       computeDefaultRowHeight,
@@ -830,6 +839,7 @@ export default defineComponent({
       computeHeaderCellOpts,
       computeFooterCellOpts,
       computeRowOpts,
+      computeCurrentRowOpts,
       computeRowDragOpts,
       computeColumnDragOpts,
       computeResizeOpts,
@@ -1366,14 +1376,12 @@ export default defineComponent({
         errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
       }
 
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (htmlColumn) {
-          if (!columnOpts.useKey) {
-            errLog('vxe.error.reqProp', ['column-config.useKey & column.type=html'])
-          }
-          if (!rowOpts.useKey) {
-            errLog('vxe.error.reqProp', ['row-config.useKey & column.type=html'])
-          }
+      if (htmlColumn) {
+        if (!columnOpts.useKey) {
+          errLog('vxe.error.reqProp', ['column-config.useKey & column.type=html'])
+        }
+        if (!rowOpts.useKey) {
+          errLog('vxe.error.reqProp', ['row-config.useKey & column.type=html'])
         }
       }
 
@@ -2369,6 +2377,7 @@ export default defineComponent({
       const childrenField = treeOpts.children || treeOpts.childrenField
       const checkboxOpts = computeCheckboxOpts.value
       const { checkField, reserve, checkMethod } = checkboxOpts
+      // indeterminateField 仅支持读取
       const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
       const selectRowMaps: Record<string, any> = {}
       /**
@@ -2632,12 +2641,12 @@ export default defineComponent({
           rExpandLazyLoadedMaps[rowid] = row
           reactData.rowExpandLazyLoadedMaps = rExpandLazyLoadedMaps
           loadMethod({ $table: $xeTable, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) }).then(() => {
-            const rExpandedMaps = { ...reactData.rowExpandedMaps }
+            const rowTempExpandedMaps = { ...reactData.rowExpandedMaps }
             if (rowRest) {
               rowRest.expandLoaded = true
             }
-            rExpandedMaps[rowid] = row
-            reactData.rowExpandedMaps = rExpandedMaps
+            rowTempExpandedMaps[rowid] = row
+            reactData.rowExpandedMaps = rowTempExpandedMaps
           }).catch(() => {
             if (rowRest) {
               rowRest.expandLoaded = false
@@ -2782,32 +2791,30 @@ export default defineComponent({
       const { transform } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       let treeData = []
-      let fullData = reactive(datas ? datas.slice(0) : []) // 转为响应式
+      let fullData = reactive(datas ? datas.slice(0) : []) // 转为响应式数据
       if (treeConfig) {
         if (transform) {
           // 树结构自动转换
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (!treeOpts.rowField) {
-              errLog('vxe.error.reqProp', ['tree-config.rowField'])
-            }
-            if (!treeOpts.parentField) {
-              errLog('vxe.error.reqProp', ['tree-config.parentField'])
-            }
-            if (!childrenField) {
-              errLog('vxe.error.reqProp', ['tree-config.childrenField'])
-            }
-            if (!treeOpts.mapChildrenField) {
-              errLog('vxe.error.reqProp', ['tree-config.mapChildrenField'])
-            }
-            if (childrenField === treeOpts.mapChildrenField) {
-              errLog('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
-            }
-            // fullData.forEach(row => {
-            //   if (row[treeOpts.children] && row[treeOpts.children].length) {
-            //     warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
-            //   }
-            // })
+          if (!treeOpts.rowField) {
+            errLog('vxe.error.reqProp', ['tree-config.rowField'])
           }
+          if (!treeOpts.parentField) {
+            errLog('vxe.error.reqProp', ['tree-config.parentField'])
+          }
+          if (!childrenField) {
+            errLog('vxe.error.reqProp', ['tree-config.childrenField'])
+          }
+          if (!treeOpts.mapChildrenField) {
+            errLog('vxe.error.reqProp', ['tree-config.mapChildrenField'])
+          }
+          if (childrenField === treeOpts.mapChildrenField) {
+            errLog('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
+          }
+          // fullData.forEach(row => {
+          //   if (row[treeOpts.children] && row[treeOpts.children].length) {
+          //     warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
+          //   }
+          // })
           treeData = XEUtils.toArrayTree(fullData, {
             key: treeOpts.rowField,
             parentKey: treeOpts.parentField,
@@ -2873,16 +2880,14 @@ export default defineComponent({
           //   }
           // }
 
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (!(props.height || props.maxHeight)) {
-              errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
-            }
-            // if (!props.showOverflow) {
-            //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
-            // }
-            if (props.spanMethod) {
-              warnLog('vxe.error.scrollErrProp', ['table.span-method'])
-            }
+          if (!(props.height || props.maxHeight)) {
+            errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+          }
+          // if (!props.showOverflow) {
+          //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
+          // }
+          if (props.spanMethod) {
+            errLog('vxe.error.scrollErrProp', ['table.span-method'])
           }
         }
 
@@ -3595,6 +3600,9 @@ export default defineComponent({
 
     tableMethods = {
       dispatchEvent,
+      getEl () {
+        return refElem.value
+      },
       /**
        * 重置表格的一切数据状态
        */
@@ -3886,23 +3894,6 @@ export default defineComponent({
         }
         return tableMethods.createData(records).then((rows) => isArr ? rows : rows[0])
       },
-      // toOriginalRecords (rows: any[]) {
-      //   const { treeConfig } = props
-      //   const treeOpts = computeTreeOpts.value
-      //   const { transform, mapChildrenField } = treeOpts
-      //   const rowkey = getRowkey($xeTable)
-      //   if (treeConfig) {
-      //     if (transform) {
-      //       return []
-      //     }
-      //     return []
-      //   }
-      //   return rows.map(item => {
-      //     const obj = Object.assign({}, item)
-      //     delete obj.rowkey
-      //     return obj
-      //   })
-      // },
       /**
        * 还原数据
        * 如果不传任何参数，则还原整个表格
@@ -3911,11 +3902,15 @@ export default defineComponent({
        * 如果还额外传了 field 则还原指定的单元格数据
        */
       revertData (rows: any, field) {
-        const { keepSource } = props
-        const { tableSourceData, sourceDataRowIdData } = internalData
+        const { keepSource, treeConfig } = props
+        const { editStore } = reactData
+        const { fullAllDataRowIdData, fullDataRowIdData, tableSourceData, sourceDataRowIdData, tableFullData, afterFullData } = internalData
+        const removeTempMaps = { ...editStore.removeMaps }
+        const treeOpts = computeTreeOpts.value
+        const { transform } = treeOpts
         if (!keepSource) {
           if (process.env.VUE_APP_VXE_ENV === 'development') {
-            warnLog('vxe.error.reqProp', ['keep-source'])
+            errLog('vxe.error.reqProp', ['keep-source'])
           }
           return nextTick()
         }
@@ -3927,25 +3922,52 @@ export default defineComponent({
         } else {
           targetRows = XEUtils.toArray($xeTable.getUpdateRecords())
         }
+        let reDelFlag = false
         if (targetRows.length) {
-          targetRows.forEach((row: any) => {
-            if (!tableMethods.isInsertByRow(row)) {
-              const rowid = getRowid($xeTable, row)
-              const oRow = sourceDataRowIdData[rowid]
-              if (oRow && row) {
-                if (field) {
-                  XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
-                } else {
-                  XEUtils.destructuring(row, XEUtils.clone(oRow, true))
+          targetRows.forEach((item: any) => {
+            const rowid = getRowid($xeTable, item)
+            const rowRest = fullAllDataRowIdData[rowid]
+            if (rowRest) {
+              const row = rowRest.row
+              if (!$xeTable.isInsertByRow(row)) {
+                const oRow = sourceDataRowIdData[rowid]
+                if (oRow && row) {
+                  if (field) {
+                    XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
+                  } else {
+                    XEUtils.destructuring(row, XEUtils.clone(oRow, true))
+                  }
+                  if (!fullDataRowIdData[rowid] && $xeTable.isRemoveByRow(row)) {
+                    delete removeTempMaps[rowid]
+                    tableFullData.unshift(row)
+                    afterFullData.unshift(row)
+                    reDelFlag = true
+                  }
                 }
               }
             }
           })
         }
         if (rows) {
-          return nextTick()
+          if (reDelFlag) {
+            editStore.removeMaps = removeTempMaps
+            $xeTable.updateFooter()
+            $xeTable.cacheRowMap(false)
+            $xeTable.handleTableData(treeConfig && transform)
+            if (!(treeConfig && transform)) {
+              $xeTable.updateAfterDataIndex()
+            }
+            $xeTable.checkSelectionStatus()
+            if (reactData.scrollYLoad) {
+              $xeTable.updateScrollYSpace()
+            }
+          }
+          return nextTick().then(() => {
+            $xeTable.updateCellAreas()
+            return $xeTable.recalculate()
+          })
         }
-        return tableMethods.reloadData(tableSourceData)
+        return $xeTable.reloadData(tableSourceData)
       },
       /**
        * 清空单元格内容
@@ -4060,6 +4082,11 @@ export default defineComponent({
         const rowid = getRowid($xeTable, row)
         return !!editStore.insertMaps[rowid]
       },
+      isRemoveByRow (row) {
+        const { editStore } = reactData
+        const rowid = getRowid($xeTable, row)
+        return !!editStore.removeMaps[rowid]
+      },
       /**
        * 删除所有新增的临时数据
        * @returns
@@ -4071,18 +4098,20 @@ export default defineComponent({
       },
       /**
        * 检查行或列数据是否发生改变
-       * @param {Row} row 行对象
+       * @param {Row} rowidOrRow 行对象、行主键
        * @param {String} field 字段名
        */
-      isUpdateByRow (row, field) {
+      isUpdateByRow (rowidOrRow, field) {
         const { keepSource } = props
         const { tableFullColumn, fullDataRowIdData, sourceDataRowIdData } = internalData
         if (keepSource) {
-          const rowid = getRowid($xeTable, row)
+          const rowid = XEUtils.isString(rowidOrRow) || XEUtils.isNumber(rowidOrRow) ? rowidOrRow : getRowid($xeTable, rowidOrRow)
+          const rowRest = fullDataRowIdData[rowid]
           // 新增的数据不需要检测
-          if (!fullDataRowIdData[rowid]) {
+          if (!rowRest) {
             return false
           }
+          const row = rowRest.row
           const oRow = sourceDataRowIdData[rowid]
           if (oRow) {
             if (arguments.length > 1) {
@@ -4147,6 +4176,92 @@ export default defineComponent({
         }
       },
       /**
+       * 移动列到指定列的位置
+       * @param fieldOrColumn
+       * @param targetFieldOrColumn
+       * @param options
+       */
+      moveColumnTo (fieldOrColumn, targetFieldOrColumn, options) {
+        const { fullColumnIdData, visibleColumn } = internalData
+        const { dragToChild, dragPos, isCrossDrag } = Object.assign({}, options)
+        const dragCol = handleFieldOrColumn($xeTable, fieldOrColumn)
+        let prevDragCol: VxeTableDefines.ColumnInfo | null = null
+        const colRest = dragCol ? fullColumnIdData[dragCol.id] : null
+        let defPos: 'left' | 'right' = 'left'
+        if (XEUtils.isNumber(targetFieldOrColumn)) {
+          if (colRest && targetFieldOrColumn) {
+            let currList = colRest.items
+            let offsetIndex = colRest._index + targetFieldOrColumn
+            if (isCrossDrag) {
+              currList = visibleColumn
+              offsetIndex = colRest._index + targetFieldOrColumn
+            }
+            if (offsetIndex > 0 && offsetIndex < currList.length - 1) {
+              prevDragCol = currList[offsetIndex]
+            }
+            if (targetFieldOrColumn > 0) {
+              defPos = 'right'
+            }
+          }
+        } else {
+          prevDragCol = handleFieldOrColumn($xeTable, targetFieldOrColumn)
+          const targetColRest = prevDragCol ? fullColumnIdData[prevDragCol.id] : null
+          if (colRest && targetColRest) {
+            if (targetColRest._index > colRest._index) {
+              defPos = 'right'
+            }
+          }
+        }
+        return $xeTable.handleColDragSwapEvent(null, true, dragCol, prevDragCol, dragPos || defPos, dragToChild === true)
+      },
+      /**
+       * 移动行到指定行的位置
+       * @param rowidOrRow
+       * @param targetRowidOrRow
+       * @param options
+       */
+      moveRowTo (rowidOrRow, targetRowidOrRow, options) {
+        const { treeConfig } = props
+        const { fullAllDataRowIdData, afterFullData } = internalData
+        const { dragToChild, dragPos, isCrossDrag } = Object.assign({}, options)
+        const treeOpts = computeTreeOpts.value
+        const dragRow = handleRowidOrRow($xeTable, rowidOrRow)
+        let prevDragRow: any = null
+        let defPos: 'top' | 'bottom' = 'top'
+        const rowRest = dragRow ? fullAllDataRowIdData[getRowid($xeTable, dragRow)] : null
+        if (XEUtils.isNumber(targetRowidOrRow)) {
+          if (rowRest && targetRowidOrRow) {
+            let currList = afterFullData
+            let offsetIndex = rowRest._index + targetRowidOrRow
+            if (treeConfig) {
+              currList = rowRest.items
+              if (treeOpts.transform) {
+                offsetIndex = rowRest.treeIndex + targetRowidOrRow
+                if (isCrossDrag) {
+                  currList = afterFullData
+                  offsetIndex = rowRest._index + targetRowidOrRow
+                }
+              }
+            }
+            if (offsetIndex >= 0 && offsetIndex <= currList.length - 1) {
+              prevDragRow = currList[offsetIndex]
+            }
+            if (targetRowidOrRow > 0) {
+              defPos = 'bottom'
+            }
+          }
+        } else {
+          prevDragRow = handleRowidOrRow($xeTable, targetRowidOrRow)
+          const targetRowRest = prevDragRow ? fullAllDataRowIdData[getRowid($xeTable, prevDragRow)] : null
+          if (rowRest && targetRowRest) {
+            if (targetRowRest._index > rowRest._index) {
+              defPos = 'bottom'
+            }
+          }
+        }
+        return $xeTable.handleRowDragSwapEvent(null, true, dragRow, prevDragRow, dragPos || defPos, dragToChild === true)
+      },
+      /**
        * 获取表格的全量列
        */
       getFullColumns () {
@@ -4165,6 +4280,7 @@ export default defineComponent({
        */
       getCheckboxRecords (isFull) {
         const { treeConfig } = props
+        const { selectCheckboxMaps } = reactData
         const { tableFullData, afterFullData, afterTreeFullData, tableFullTreeData, fullDataRowIdData, afterFullRowMaps } = internalData
         const treeOpts = computeTreeOpts.value
         const checkboxOpts = computeCheckboxOpts.value
@@ -4172,15 +4288,15 @@ export default defineComponent({
         const { checkField } = checkboxOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
         let rowList: any[] = []
-        const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
         if (checkField) {
           if (treeConfig) {
+            const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
             rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildrenField : childrenField })
           } else {
+            const currTableData = isFull ? tableFullData : afterFullData
             rowList = currTableData.filter((row) => XEUtils.get(row, checkField))
           }
         } else {
-          const { selectCheckboxMaps } = reactData
           XEUtils.each(selectCheckboxMaps, (row, rowid) => {
             if (isFull) {
               if (fullDataRowIdData[rowid]) {
@@ -4864,6 +4980,7 @@ export default defineComponent({
         const childrenField = treeOpts.children || treeOpts.childrenField
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField, reserve } = checkboxOpts
+        // indeterminateField 仅支持读取
         const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
         if (checkField) {
           const handleClearChecked = (item: any) => {
@@ -4991,13 +5108,20 @@ export default defineComponent({
        * 用于当前列，设置某列行为高亮状态
        */
       setCurrentColumn (fieldOrColumn) {
+        const { mouseConfig } = props
+        const mouseOpts = computeMouseOpts.value
+        const isMouseSelected = mouseConfig && mouseOpts.selected
         const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column) {
-          // tableMethods.clearCurrentRow()
-          tableMethods.clearCurrentColumn()
+          $xeTable.clearCurrentColumn()
           reactData.currentColumn = column
         }
-        return nextTick()
+        return nextTick().then(() => {
+          // 更新状选中态
+          if (isMouseSelected) {
+            $xeTable.addCellSelectedClass()
+          }
+        })
       },
       /**
        * 用于当前列，手动清空当前高亮的状态
@@ -6137,7 +6261,7 @@ export default defineComponent({
       // 该行为只对当前激活的表格有效
       if (internalData.isActivated) {
         tablePrivateMethods.preventEvent(evnt, 'event.keydown', null, () => {
-          const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow } = props
+          const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow, highlightCurrentColumn } = props
           const { ctxMenuStore, editStore, currentRow } = reactData
           const { afterFullData } = internalData
           const isMenu = computeIsMenu.value
@@ -6148,6 +6272,7 @@ export default defineComponent({
           const treeOpts = computeTreeOpts.value
           const menuList = computeMenuList.value
           const rowOpts = computeRowOpts.value
+          const columnOpts = computeColumnOpts.value
           const { selected, actived } = editStore
           const childrenField = treeOpts.children || treeOpts.childrenField
           const keyCode = evnt.keyCode
@@ -6306,9 +6431,14 @@ export default defineComponent({
               // 如果按下了方向键
               if (selected.row && selected.column) {
                 $xeTable.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
-              } else if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
-                // 当前行按键上下移动
+              }
+              // 当前行按键上下移动
+              if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
                 $xeTable.moveCurrentRow(isUpArrow, isDwArrow, evnt)
+              }
+              // 当前行按键左右移动
+              if ((isLeftArrow || isRightArrow) && (columnOpts.isCurrent || highlightCurrentColumn)) {
+                $xeTable.moveCurrentColumn(isLeftArrow, isRightArrow, evnt)
               }
             }
           } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
@@ -6757,7 +6887,15 @@ export default defineComponent({
         if (el) {
           const parentElem = el.parentNode as HTMLElement
           const parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
-          return Math.floor($xeGrid ? $xeGrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(parentElem).height) - parentPaddingSize)
+          let parentWrapperHeight = 0
+          if (parentElem) {
+            if ($xeGrid && hasClass(parentElem, 'vxe-grid--table-wrapper')) {
+              parentWrapperHeight = $xeGrid.getParentHeight()
+            } else {
+              parentWrapperHeight = parentElem.clientHeight
+            }
+          }
+          return Math.floor(parentWrapperHeight - parentPaddingSize)
         }
         return 0
       },
@@ -6843,44 +6981,65 @@ export default defineComponent({
        */
       cacheRowMap () {
         const { treeConfig } = props
-        const treeOpts = computeTreeOpts.value
+        const { treeExpandedMaps } = reactData
         const { fullAllDataRowIdData, tableFullData, tableFullTreeData } = internalData
+        const treeOpts = computeTreeOpts.value
         const childrenField = treeOpts.children || treeOpts.childrenField
         const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
+        const { lazy } = treeOpts
         const rowkey = getRowkey($xeTable)
-        const isLazy = treeConfig && treeOpts.lazy
-        const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
+        const isDeepKey = rowkey.indexOf('.') > -1
+        const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = { ...fullAllDataRowIdData } // 存在已删除数据
         const fullDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
-        const handleRow = (row: any, index: number, items: any, path?: any[], parentRow?: any, nodes?: any[]) => {
-          let rowid = getRowid($xeTable, row)
-          const seq = treeConfig && path ? toTreePathSeq(path) : index + 1
-          const level = nodes ? nodes.length - 1 : 0
-          if (eqEmptyValue(rowid)) {
-            rowid = getRowUniqueId()
-            XEUtils.set(row, rowkey, rowid)
-          }
-          if (isLazy && row[hasChildField] && XEUtils.isUndefined(row[childrenField])) {
-            row[childrenField] = null
-          }
-          let rowRest = fullAllDataRowIdData[rowid]
+        const treeTempExpandedMaps = { ...treeExpandedMaps }
+
+        const handleRowId = isDeepKey ? updateDeepRowKey : updateFastRowKey
+        const handleRowCache = (row: any, index: number, items: any, currIndex: number, parentRow: any, rowid: string, level: number, seq: string | number) => {
+          let rowRest = fullAllDataRowIdMaps[rowid]
           if (!rowRest) {
             rowRest = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+            fullDataRowIdMaps[rowid] = rowRest
+            fullAllDataRowIdMaps[rowid] = rowRest
           }
+          rowRest.treeLoaded = false
+          rowRest.expandLoaded = false
+
           rowRest.row = row
           rowRest.items = items
           rowRest.parent = parentRow
           rowRest.level = level
-          rowRest.index = treeConfig && parentRow ? -1 : index
+          rowRest.index = currIndex
+          rowRest.treeIndex = index
+
           fullDataRowIdMaps[rowid] = rowRest
           fullAllDataRowIdMaps[rowid] = rowRest
         }
+
+        if (treeConfig) {
+          XEUtils.eachTree(tableFullTreeData, (row, index, items, path, parentRow, nodes) => {
+            const rowid = handleRowId(row, rowkey)
+            if (treeConfig && lazy) {
+              const treeExpRest = treeTempExpandedMaps[rowid]
+              if (row[hasChildField] && row[childrenField] === undefined) {
+                row[childrenField] = null
+              }
+              if (treeExpRest) {
+                if (!row[childrenField] || !row[childrenField].length) {
+                  delete treeTempExpandedMaps[rowid]
+                }
+              }
+            }
+            handleRowCache(row, index, items, parentRow ? -1 : index, parentRow, rowid, nodes.length - 1, toTreePathSeq(path))
+          }, { children: childrenField })
+        } else {
+          tableFullData.forEach((row, index, items) => {
+            handleRowCache(row, index, items, index, null, handleRowId(row, rowkey), 0, index + 1)
+          })
+        }
+
         internalData.fullDataRowIdData = fullDataRowIdMaps
         internalData.fullAllDataRowIdData = fullAllDataRowIdMaps
-        if (treeConfig) {
-          XEUtils.eachTree(tableFullTreeData, handleRow, { children: childrenField })
-        } else {
-          tableFullData.forEach(handleRow)
-        }
+        reactData.treeExpandedMaps = treeTempExpandedMaps
       },
       cacheSourceMap (fullData) {
         const { treeConfig } = props
@@ -7526,6 +7685,7 @@ export default defineComponent({
         const childrenField = treeOpts.children || treeOpts.childrenField
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField, checkStrictly, checkMethod } = checkboxOpts
+        // indeterminateField 仅支持读取
         const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
         if (checkField) {
           // 树结构
@@ -7702,17 +7862,18 @@ export default defineComponent({
         const { _lastResizeTime } = internalData
         const sortOpts = computeSortOpts.value
         const columnOpts = computeColumnOpts.value
+        const currentColumnOpts = computeCurrentColumnOpts.value
         const { column } = params
         const cell = evnt.currentTarget
         const triggerResizable = _lastResizeTime && _lastResizeTime > Date.now() - 300
         const triggerSort = getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
         const triggerFilter = getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
         if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
-          tablePrivateMethods.triggerSortEvent(evnt, column, getNextSortOrder(column))
+          $xeTable.triggerSortEvent(evnt, column, getNextSortOrder(column))
         }
         dispatchEvent('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell }, params), evnt)
-        if (columnOpts.isCurrent || props.highlightCurrentColumn) {
-          tablePrivateMethods.triggerCurrentColumnEvent(evnt, params)
+        if ((columnOpts.isCurrent || props.highlightCurrentColumn) && (!currentColumnOpts.trigger || ['header', 'default'].includes(currentColumnOpts.trigger))) {
+          $xeTable.triggerCurrentColumnEvent(evnt, params)
         }
       },
       triggerHeaderCellDblclickEvent (evnt, params) {
@@ -7724,7 +7885,7 @@ export default defineComponent({
        * 如果是双击模式，则单击后选中状态
        */
       triggerCellClickEvent (evnt, params) {
-        const { highlightCurrentRow, editConfig } = props
+        const { highlightCurrentRow, highlightCurrentColumn, editConfig } = props
         const { editStore, isDragResize } = reactData
         if (isDragResize) {
           return
@@ -7736,6 +7897,8 @@ export default defineComponent({
         const checkboxOpts = computeCheckboxOpts.value
         const keyboardOpts = computeKeyboardOpts.value
         const rowOpts = computeRowOpts.value
+        const columnOpts = computeColumnOpts.value
+        const currentColumnOpts = computeCurrentColumnOpts.value
         const { actived, focused } = editStore
         const { row, column } = params
         const { type, treeNode } = column
@@ -7751,29 +7914,35 @@ export default defineComponent({
         if (!triggerCheckbox && !triggerRadio) {
           // 如果是展开行
           if (!triggerExpandNode && (expandOpts.trigger === 'row' || (isExpandType && expandOpts.trigger === 'cell'))) {
-            tablePrivateMethods.triggerRowExpandEvent(evnt, params)
+            $xeTable.triggerRowExpandEvent(evnt, params)
           }
           // 如果是树形表格
           if ((treeOpts.trigger === 'row' || (treeNode && treeOpts.trigger === 'cell'))) {
-            tablePrivateMethods.triggerTreeExpandEvent(evnt, params)
+            $xeTable.triggerTreeExpandEvent(evnt, params)
           }
         }
         // 如果点击了树节点
         if (!triggerTreeNode) {
           if (!triggerExpandNode) {
-            // 如果是高亮行
+            // 如果是当前行
             if (rowOpts.isCurrent || highlightCurrentRow) {
               if (!triggerCheckbox && !triggerRadio) {
-                tablePrivateMethods.triggerCurrentRowEvent(evnt, params)
+                $xeTable.triggerCurrentRowEvent(evnt, params)
+              }
+            }
+            // 如果是当前列
+            if ((columnOpts.isCurrent || highlightCurrentColumn) && (!currentColumnOpts.trigger || ['cell', 'default'].includes(currentColumnOpts.trigger))) {
+              if (!triggerCheckbox && !triggerRadio) {
+                $xeTable.triggerCurrentColumnEvent(evnt, params)
               }
             }
             // 如果是单选框
             if (!triggerRadio && (radioOpts.trigger === 'row' || (isRadioType && radioOpts.trigger === 'cell'))) {
-              tablePrivateMethods.triggerRadioRowEvent(evnt, params)
+              $xeTable.triggerRadioRowEvent(evnt, params)
             }
             // 如果是复选框
             if (!triggerCheckbox && (checkboxOpts.trigger === 'row' || (isCheckboxType && checkboxOpts.trigger === 'cell'))) {
-              tablePrivateMethods.handleToggleCheckRowEvent(evnt, params)
+              $xeTable.handleToggleCheckRowEvent(evnt, params)
             }
           }
           // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
@@ -8163,6 +8332,9 @@ export default defineComponent({
         const { afterFullData, tableFullData } = internalData
         const dEndMethod = dragEndMethod || (dragConfig ? dragConfig.dragEndMethod : null)
         const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
+        const errRest = {
+          status: false
+        }
         if (prevDragRow && dragRow) {
           // 判断是否有拖动
           if (prevDragRow !== dragRow) {
@@ -8177,7 +8349,7 @@ export default defineComponent({
             const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
             return Promise.resolve(dEndMethod ? dEndMethod(dragParams) : true).then((status) => {
               if (!status) {
-                return
+                return errRest
               }
 
               let oafIndex = -1
@@ -8208,11 +8380,11 @@ export default defineComponent({
                       if (isPeerDrag && !isCrossDrag) {
                         if (oldRest.row[parentField] !== newRest.row[parentField]) {
                           // 非同级
-                          return
+                          return errRest
                         }
                       } else {
                         if (!isCrossDrag) {
-                          return
+                          return errRest
                         }
                         if (oldAllMaps[newRowid]) {
                           isSelfToChildStatus = true
@@ -8223,7 +8395,7 @@ export default defineComponent({
                                 content: getI18n('vxe.error.treeDragChild')
                               })
                             }
-                            return
+                            return errRest
                           }
                         }
                       }
@@ -8231,13 +8403,13 @@ export default defineComponent({
                       // 子到根
 
                       if (!isCrossDrag) {
-                        return
+                        return errRest
                       }
                     } else if (newLevel) {
                       // 根到子
 
                       if (!isCrossDrag) {
-                        return
+                        return errRest
                       }
                       if (oldAllMaps[newRowid]) {
                         isSelfToChildStatus = true
@@ -8248,7 +8420,7 @@ export default defineComponent({
                               content: getI18n('vxe.error.treeDragChild')
                             })
                           }
-                          return
+                          return errRest
                         }
                       }
                     } else {
@@ -8312,28 +8484,36 @@ export default defineComponent({
               if (reactData.scrollYLoad) {
                 $xeTable.updateScrollYSpace()
               }
-              nextTick().then(() => {
+
+              if (evnt) {
+                dispatchEvent('row-dragend', {
+                  oldRow: dragRow,
+                  newRow: prevDragRow,
+                  dragRow,
+                  dragPos: prevDragPos as any,
+                  dragToChild: isDragToChildFlag,
+                  offsetIndex: dragOffsetIndex,
+                  _index: {
+                    newIndex: nafIndex,
+                    oldIndex: oafIndex
+                  }
+                }, evnt)
+              }
+
+              return nextTick().then(() => {
                 $xeTable.updateCellAreas()
                 $xeTable.recalculate()
-              })
-
-              dispatchEvent('row-dragend', {
-                oldRow: dragRow,
-                newRow: prevDragRow,
-                dragRow,
-                dragPos: prevDragPos as any,
-                dragToChild: isDragToChildFlag,
-                offsetIndex: dragOffsetIndex,
-                _index: {
-                  newIndex: nafIndex,
-                  oldIndex: oafIndex
+              }).then(() => {
+                return {
+                  status: true
                 }
-              }, evnt)
+              })
             }).catch(() => {
+              return errRest
             })
           }
         }
-        return Promise.resolve()
+        return Promise.resolve(errRest)
       },
       handleRowDragDragendEvent (evnt) {
         const { treeConfig } = props
@@ -8458,6 +8638,9 @@ export default defineComponent({
         const { isPeerDrag, isCrossDrag, isSelfToChildDrag, isToChildDrag, dragEndMethod, dragToChildMethod } = columnDragOpts
         const { collectColumn } = internalData
         const dragOffsetIndex = prevDragPos === 'right' ? 1 : 0
+        const errRest = {
+          status: false
+        }
         if (prevDragCol && dragCol) {
           // 判断是否有拖动
           if (prevDragCol !== dragCol) {
@@ -8474,7 +8657,7 @@ export default defineComponent({
             const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
             return Promise.resolve(dragEndMethod ? dragEndMethod(dragParams) : true).then((status) => {
               if (!status) {
-                return
+                return errRest
               }
 
               let oafIndex = -1
@@ -8493,11 +8676,11 @@ export default defineComponent({
                 if (isPeerDrag && !isCrossDrag) {
                   if (dragColumn.parentId !== newColumn.parentId) {
                     // 非同级
-                    return
+                    return errRest
                   }
                 } else {
                   if (!isCrossDrag) {
-                    return
+                    return errRest
                   }
 
                   if (oldAllMaps[newColumn.id]) {
@@ -8509,7 +8692,7 @@ export default defineComponent({
                           content: getI18n('vxe.error.treeDragChild')
                         })
                       }
-                      return
+                      return errRest
                     }
                   }
                 }
@@ -8517,13 +8700,13 @@ export default defineComponent({
                 // 子到根
 
                 if (!isCrossDrag) {
-                  return
+                  return errRest
                 }
               } else if (newColumn.parentId) {
                 // 根到子
 
                 if (!isCrossDrag) {
-                  return
+                  return errRest
                 }
                 if (oldAllMaps[newColumn.id]) {
                   isSelfToChildStatus = true
@@ -8534,7 +8717,7 @@ export default defineComponent({
                         content: getI18n('vxe.error.treeDragChild')
                       })
                     }
-                    return
+                    return errRest
                   }
                 }
               } else {
@@ -8598,27 +8781,34 @@ export default defineComponent({
                 }
               }
 
-              dispatchEvent('column-dragend', {
-                oldColumn: dragColumn,
-                newColumn,
-                dragColumn,
-                dragPos: prevDragPos,
-                dragToChild: isDragToChildFlag,
-                offsetIndex: dragOffsetIndex,
-                _index: {
-                  newIndex: nafIndex,
-                  oldIndex: oafIndex
-                }
-              }, evnt)
+              if (evnt) {
+                dispatchEvent('column-dragend', {
+                  oldColumn: dragColumn,
+                  newColumn,
+                  dragColumn,
+                  dragPos: prevDragPos,
+                  dragToChild: isDragToChildFlag,
+                  offsetIndex: dragOffsetIndex,
+                  _index: {
+                    newIndex: nafIndex,
+                    oldIndex: oafIndex
+                  }
+                }, evnt)
+              }
 
               if (isSyncColumn) {
                 $xeTable.handleColDragSwapColumn()
               }
+
+              return {
+                status: true
+              }
             }).catch(() => {
+              return errRest
             })
           }
         }
-        return Promise.resolve()
+        return Promise.resolve(errRest)
       },
       handleHeaderCellDragDragendEvent (evnt) {
         const { dragCol } = reactData
@@ -9454,18 +9644,16 @@ export default defineComponent({
     }
 
     // 检测对应模块是否安装
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      'openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').forEach(name => {
-        ($xeTable as any)[name] = function () {
-          errLog('vxe.error.reqModule', ['VxeTableExportModule'])
-        }
-      })
-      'clearValidate,fullValidate,validate'.split(',').forEach(name => {
-        ($xeTable as any)[name] = function () {
-          errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
-        }
-      })
-    }
+    'openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').forEach(name => {
+      ($xeTable as any)[name] = function () {
+        errLog('vxe.error.reqModule', ['VxeTableExportModule'])
+      }
+    })
+    'clearValidate,fullValidate,validate'.split(',').forEach(name => {
+      ($xeTable as any)[name] = function () {
+        errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
+      }
+    })
 
     Object.assign($xeTable, tableMethods, tablePrivateMethods)
 
@@ -10473,23 +10661,21 @@ export default defineComponent({
       tablePrivateMethods.preventEvent(null, 'unmounted', { $table: $xeTable })
     })
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      nextTick(() => {
-        if (props.loading) {
-          if (!VxeUILoadingComponent && !slots.loading) {
-            errLog('vxe.error.reqComp', ['vxe-loading'])
-          }
+    nextTick(() => {
+      if (props.loading) {
+        if (!VxeUILoadingComponent && !slots.loading) {
+          errLog('vxe.error.reqComp', ['vxe-loading'])
         }
-        if ((props.showOverflow === true || props.showOverflow === 'tooltip') ||
+      }
+      if ((props.showOverflow === true || props.showOverflow === 'tooltip') ||
           (props.showHeaderOverflow === true || props.showHeaderOverflow === 'tooltip') ||
           (props.showFooterOverflow === true || props.showFooterOverflow === 'tooltip') ||
           props.tooltipConfig || props.editRules) {
-          if (!VxeUITooltipComponent) {
-            errLog('vxe.error.reqComp', ['vxe-tooltip'])
-          }
+        if (!VxeUITooltipComponent) {
+          errLog('vxe.error.reqComp', ['vxe-tooltip'])
         }
-      })
-    }
+      }
+    })
 
     provide('$xeColgroup', null)
     provide('$xeTable', $xeTable)

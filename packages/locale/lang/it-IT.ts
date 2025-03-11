@@ -237,6 +237,9 @@ export default {
       fixedRight: 'congelato a destra',
       cancelFixed: 'Sblocca colonna'
     },
+    datePicker: {
+      yearTitle: '{0} anni'
+    },
     input: {
       date: {
         m1: 'Gennaio',

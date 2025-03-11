@@ -521,25 +521,23 @@ export default defineComponent({
         : createCommentVNode()
     }
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      nextTick(() => {
-        if (!VxeUIModalComponent) {
-          errLog('vxe.error.reqComp', ['vxe-modal'])
-        }
-        if (!VxeUIButtonComponent) {
-          errLog('vxe.error.reqComp', ['vxe-button'])
-        }
-        if (!VxeUISelectComponent) {
-          errLog('vxe.error.reqComp', ['vxe-select'])
-        }
-        if (!VxeUIInputComponent) {
-          errLog('vxe.error.reqComp', ['vxe-input'])
-        }
-        if (!VxeUICheckboxComponent) {
-          errLog('vxe.error.reqComp', ['vxe-checkbox'])
-        }
-      })
-    }
+    nextTick(() => {
+      if (!VxeUIModalComponent) {
+        errLog('vxe.error.reqComp', ['vxe-modal'])
+      }
+      if (!VxeUIButtonComponent) {
+        errLog('vxe.error.reqComp', ['vxe-button'])
+      }
+      if (!VxeUISelectComponent) {
+        errLog('vxe.error.reqComp', ['vxe-select'])
+      }
+      if (!VxeUIInputComponent) {
+        errLog('vxe.error.reqComp', ['vxe-input'])
+      }
+      if (!VxeUICheckboxComponent) {
+        errLog('vxe.error.reqComp', ['vxe-checkbox'])
+      }
+    })
 
     return renderVN
   }

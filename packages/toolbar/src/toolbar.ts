@@ -210,9 +210,7 @@ export default defineComponent({
             if (tCommandMethod) {
               tCommandMethod(params)
             } else {
-              if (process.env.VUE_APP_VXE_ENV === 'development') {
-                errLog('vxe.error.notCommands', [code])
-              }
+              errLog('vxe.error.notCommands', [code])
             }
           }
           $xeToolbar.dispatchEvent('button-click', params, evnt)
@@ -235,9 +233,7 @@ export default defineComponent({
             if (tCommandMethod) {
               tCommandMethod(params)
             } else {
-              if (process.env.VUE_APP_VXE_ENV === 'development') {
-                errLog('vxe.error.notCommands', [code])
-              }
+              errLog('vxe.error.notCommands', [code])
             }
           }
           $xeToolbar.dispatchEvent('tool-click', params, evnt)
@@ -598,25 +594,21 @@ export default defineComponent({
         warnLog('vxe.error.notFunc', ['queryMethod'])
       }
       const customOpts = computeCustomOpts.value
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (customOpts.isFooter) {
-          warnLog('vxe.error.delProp', ['toolbar.custom.isFooter', 'table.custom-config.showFooter'])
-        }
-        if (customOpts.showFooter) {
-          warnLog('vxe.error.delProp', ['toolbar.custom.showFooter', 'table.custom-config.showFooter'])
-        }
-        if (customOpts.immediate) {
-          warnLog('vxe.error.delProp', ['toolbar.custom.immediate', 'table.custom-config.immediate'])
-        }
-        if (customOpts.trigger) {
-          warnLog('vxe.error.delProp', ['toolbar.custom.trigger', 'table.custom-config.trigger'])
-        }
+      if (customOpts.isFooter) {
+        warnLog('vxe.error.delProp', ['toolbar.custom.isFooter', 'table.custom-config.showFooter'])
       }
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (props.refresh || props.import || props.export || props.print || props.zoom) {
-          if (!VxeUIButtonComponent) {
-            errLog('vxe.error.reqComp', ['vxe-button'])
-          }
+      if (customOpts.showFooter) {
+        warnLog('vxe.error.delProp', ['toolbar.custom.showFooter', 'table.custom-config.showFooter'])
+      }
+      if (customOpts.immediate) {
+        warnLog('vxe.error.delProp', ['toolbar.custom.immediate', 'table.custom-config.immediate'])
+      }
+      if (customOpts.trigger) {
+        warnLog('vxe.error.delProp', ['toolbar.custom.trigger', 'table.custom-config.trigger'])
+      }
+      if (props.refresh || props.import || props.export || props.print || props.zoom) {
+        if (!VxeUIButtonComponent) {
+          errLog('vxe.error.reqComp', ['vxe-button'])
         }
       }
     })

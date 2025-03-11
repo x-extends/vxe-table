@@ -237,6 +237,9 @@ export default {
       fixedRight: 'замер справа',
       cancelFixed: 'Разморозить столбец'
     },
+    datePicker: {
+      yearTitle: '{0} лет'
+    },
     input: {
       date: {
         m1: 'январь',

@@ -188,6 +188,8 @@ export default {
   resizeConfig: Object as PropType<VxeTablePropTypes.ResizeConfig>,
   // 列配置信息
   columnConfig: Object as PropType<VxeTablePropTypes.ColumnConfig>,
+  // 当前列配置信息
+  currentColumnConfig: Object as PropType<VxeTablePropTypes.CurrentColumnConfig>,
   // 单元格配置信息
   cellConfig: Object as PropType<VxeTablePropTypes.CellConfig>,
   // 表头单元格配置信息
@@ -196,6 +198,8 @@ export default {
   footerCellConfig: Object as PropType<VxeTablePropTypes.FooterCellConfig>,
   // 行配置信息
   rowConfig: Object as PropType<VxeTablePropTypes.RowConfig>,
+  // 当前行配置信息
+  currentRowConfig: Object as PropType<VxeTablePropTypes.CurrentRowConfig>,
   // 已废弃，被 rowDragConfig 替换
   dragConfig: Object as PropType<VxeTablePropTypes.DragConfig>,
   // 行拖拽排序配置项

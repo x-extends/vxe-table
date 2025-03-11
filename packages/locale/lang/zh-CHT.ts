@@ -237,6 +237,9 @@ export default {
       fixedRight: '凍結在右側',
       cancelFixed: '取消凍結列'
     },
+    datePicker: {
+      yearTitle: '{0} 年'
+    },
     input: {
       date: {
         m1: '01 月',
