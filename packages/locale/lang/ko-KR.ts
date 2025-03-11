@@ -237,6 +237,9 @@ export default {
       fixedRight: '오른쪽에 고정',
       cancelFixed: '고정 해제'
     },
+    datePicker: {
+      yearTitle: '{0} 년'
+    },
     input: {
       date: {
         m1: '01 월',

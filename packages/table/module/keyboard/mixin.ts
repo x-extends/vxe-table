@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import { getRefElem } from '../../src/util'
 import { browse, hasClass, getAbsolutePos, addClass, removeClass } from '../../../ui/src/dom'
 
-import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, TableReactData, TableInternalData } from '../../../../types'
 
 function getTargetOffset (target: any, container: any) {
   let offsetTop = 0
@@ -100,13 +100,23 @@ export default {
   methods: {
     // 处理 Tab 键移动
     moveTabSelected (args: any, isLeft: any, evnt: any) {
-      const { afterFullData, visibleColumn, editConfig, editOpts } = this
-      let targetRow
-      let targetRowIndex
-      let targetColumnIndex
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { editConfig } = props
+      const { afterFullData, visibleColumn } = internalData
+      const editOpts = $xeTable.computeEditOpts
+      const rowOpts = $xeTable.computeRowOpts
+      const currentRowOpts = $xeTable.computeCurrentRowOpts
+      const columnOpts = $xeTable.computeColumnOpts
+      const currentColumnOpts = $xeTable.computeCurrentColumnOpts
+      let targetRow: any
+      let targetRowIndex: any
+      let targetColumnIndex: any
       const params = Object.assign({}, args)
-      const _rowIndex = this.getVTRowIndex(params.row)
-      const _columnIndex = this.getVTColumnIndex(params.column)
+      const _rowIndex = $xeTable.getVTRowIndex(params.row)
+      const _columnIndex = $xeTable.getVTColumnIndex(params.column)
       evnt.preventDefault()
       if (isLeft) {
         // 向左
@@ -142,28 +152,45 @@ export default {
         }
         params.columnIndex = targetColumnIndex
         params.column = targetColumn
-        params.cell = this.getCellElement(params.row, params.column)
+        params.cell = $xeTable.getCellElement(params.row, params.column)
+        if (rowOpts.isCurrent && currentRowOpts.isFollowSelected) {
+          $xeTable.triggerCurrentRowEvent(evnt, params)
+        }
+        if (columnOpts.isCurrent && currentColumnOpts.isFollowSelected) {
+          $xeTable.triggerCurrentColumnEvent(evnt, params)
+        }
         if (editConfig) {
           if (editOpts.trigger === 'click' || editOpts.trigger === 'dblclick') {
             if (editOpts.mode === 'row') {
-              this.handleEdit(params, evnt)
+              $xeTable.handleEdit(params, evnt)
             } else {
-              this.scrollToRow(params.row, params.column)
-                .then(() => this.handleSelected(params, evnt))
+              $xeTable.scrollToRow(params.row, params.column)
+                .then(() => {
+                  $xeTable.handleSelected(params, evnt)
+                })
             }
           }
         } else {
-          this.scrollToRow(params.row, params.column)
-            .then(() => this.handleSelected(params, evnt))
+          $xeTable.scrollToRow(params.row, params.column)
+            .then(() => {
+              $xeTable.handleSelected(params, evnt)
+            })
         }
       }
     },
     // 处理当前行方向键移动
-    moveCurrentRow (isUpArrow: any, isDwArrow: any, evnt: any) {
-      const { currentRow, treeConfig, treeOpts, afterFullData } = this
+    moveCurrentRow (isUpArrow: boolean, isDwArrow: boolean, evnt: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { treeConfig } = props
+      const { currentRow } = reactData
+      const { afterFullData } = internalData
+      const treeOpts = $xeTable.computeTreeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       let targetRow
-      evnt.preventDefault()
       if (currentRow) {
         if (treeConfig) {
           const { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, { children: childrenField })
@@ -173,7 +200,7 @@ export default {
             targetRow = items[index + 1]
           }
         } else {
-          const _rowIndex = this.getVTRowIndex(currentRow)
+          const _rowIndex = $xeTable.getVTRowIndex(currentRow)
           if (isUpArrow && _rowIndex > 0) {
             targetRow = afterFullData[_rowIndex - 1]
           } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
@@ -184,17 +211,57 @@ export default {
         targetRow = afterFullData[0]
       }
       if (targetRow) {
-        const params = { $table: this, row: targetRow }
-        this.scrollToRow(targetRow)
-          .then(() => this.triggerCurrentRowEvent(evnt, params))
+        evnt.preventDefault()
+        const params = {
+          $table: $xeTable,
+          row: targetRow,
+          rowIndex: $xeTable.getRowIndex(targetRow),
+          $rowIndex: $xeTable.getVMRowIndex(targetRow)
+        }
+        $xeTable.scrollToRow(targetRow)
+          .then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
+      }
+    },
+    // 处理当前列方向键移动
+    moveCurrentColumn (isLeftArrow: boolean, isRightArrow: boolean, evnt: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { currentColumn } = reactData
+      const { visibleColumn } = internalData
+      let targetCol: VxeTableDefines.ColumnInfo | null = null
+      if (currentColumn) {
+        const _columnIndex = $xeTable.getVTColumnIndex(currentColumn)
+        if (isLeftArrow && _columnIndex > 0) {
+          targetCol = visibleColumn[_columnIndex - 1]
+        } else if (isRightArrow && _columnIndex < visibleColumn.length - 1) {
+          targetCol = visibleColumn[_columnIndex + 1]
+        }
+      } else {
+        targetCol = visibleColumn[0]
+      }
+      if (targetCol) {
+        evnt.preventDefault()
+        const params = {
+          $table: $xeTable,
+          column: targetCol,
+          columnIndex: $xeTable.getColumnIndex(targetCol),
+          $columnIndex: $xeTable.getVMColumnIndex(targetCol)
+        }
+        $xeTable.scrollToColumn(targetCol)
+          .then(() => $xeTable.triggerCurrentColumnEvent(evnt, params))
       }
     },
     // 处理可编辑方向键移动
-    moveSelected (args: any, isLeftArrow: any, isUpArrow: any, isRightArrow: any, isDwArrow: any, evnt: any) {
-      const { afterFullData, visibleColumn } = this
+    moveSelected (args: any, isLeftArrow: boolean, isUpArrow: boolean, isRightArrow: boolean, isDwArrow: boolean, evnt: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { afterFullData, visibleColumn } = internalData
       const params = Object.assign({}, args)
-      const _rowIndex = this.getVTRowIndex(params.row)
-      const _columnIndex = this.getVTColumnIndex(params.column)
+      const _rowIndex = $xeTable.getVTRowIndex(params.row)
+      const _columnIndex = $xeTable.getVTColumnIndex(params.column)
       evnt.preventDefault()
       if (isUpArrow && _rowIndex > 0) {
         // 移动到上一行
@@ -213,9 +280,9 @@ export default {
         params.columnIndex = _columnIndex + 1
         params.column = visibleColumn[params.columnIndex]
       }
-      this.scrollToRow(params.row, params.column).then(() => {
-        params.cell = this.getCellElement(params.row, params.column)
-        this.handleSelected(params, evnt)
+      $xeTable.scrollToRow(params.row, params.column).then(() => {
+        params.cell = $xeTable.getCellElement(params.row, params.column)
+        $xeTable.handleSelected(params, evnt)
       })
     },
     handleCellMousedownEvent (evnt: any, params: any) {

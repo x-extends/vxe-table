@@ -790,7 +790,16 @@ export default {
       return this.computeColumnOpts
     },
     computeColumnOpts () {
-      return Object.assign({}, getConfig().table.columnConfig, this.columnConfig)
+      const $xeTable = this
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.columnConfig, props.columnConfig)
+    },
+    computeCurrentColumnOpts () {
+      const $xeTable = this
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.currentColumnConfig, props.currentColumnConfig)
     },
     computeCellOpts () {
       const $xeTable = this
@@ -814,7 +823,16 @@ export default {
       return this.computeRowOpts
     },
     computeRowOpts () {
-      return Object.assign({}, getConfig().table.rowConfig, this.rowConfig)
+      const $xeTable = this
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.rowConfig, props.rowConfig)
+    },
+    computeCurrentRowOpts () {
+      const $xeTable = this
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.currentRowConfig, props.currentRowConfig)
     },
     computeRowDragOpts () {
       return Object.assign({}, getConfig().table.rowDragConfig, this.rowDragConfig)
@@ -838,25 +856,37 @@ export default {
       return this.computeSeqOpts
     },
     computeSeqOpts () {
-      return Object.assign({ startIndex: 0 }, getConfig().table.seqConfig, this.seqConfig)
+      const $xeTable = this
+      const props = $xeTable
+
+      return Object.assign({ startIndex: 0 }, getConfig().table.seqConfig, props.seqConfig)
     },
     radioOpts () {
       return this.computeRadioOpts
     },
     computeRadioOpts () {
-      return Object.assign({}, getConfig().table.radioConfig, this.radioConfig)
+      const $xeTable = this
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.radioConfig, props.radioConfig)
     },
     checkboxOpts () {
       return this.computeCheckboxOpts
     },
     computeCheckboxOpts () {
-      return Object.assign({}, getConfig().table.checkboxConfig, this.checkboxConfig)
+      const $xeTable = this
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.checkboxConfig, props.checkboxConfig)
     },
     tooltipOpts () {
       return this.computeTooltipOpts
     },
     computeTooltipOpts () {
-      return Object.assign({}, getConfig().tooltip, getConfig().table.tooltipConfig, this.tooltipConfig)
+      const $xeTable = this
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
     },
     tipConfig () {
       return { ...this.tooltipOpts }
@@ -1577,27 +1607,25 @@ export default {
       }
     }
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      // 使用已安装的组件，如果未安装则不渲染
-      const VxeUILoadingComponent = VxeUI.getComponent<VxeLoadingComponent>('VxeLoading')
-      const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
+    // 使用已安装的组件，如果未安装则不渲染
+    const VxeUILoadingComponent = VxeUI.getComponent<VxeLoadingComponent>('VxeLoading')
+    const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
 
-      $xeTable.$nextTick(() => {
-        if (props.loading) {
-          if (!VxeUILoadingComponent && !this.$scopedSlots.loading) {
-            errLog('vxe.error.reqComp', ['vxe-loading'])
-          }
+    $xeTable.$nextTick(() => {
+      if (props.loading) {
+        if (!VxeUILoadingComponent && !this.$scopedSlots.loading) {
+          errLog('vxe.error.reqComp', ['vxe-loading'])
         }
-        if ((props.showOverflow === true || props.showOverflow === 'tooltip') ||
+      }
+      if ((props.showOverflow === true || props.showOverflow === 'tooltip') ||
           (props.showHeaderOverflow === true || props.showHeaderOverflow === 'tooltip') ||
           (props.showFooterOverflow === true || props.showFooterOverflow === 'tooltip') ||
           props.tooltipConfig || props.editRules) {
-          if (!VxeUITooltipComponent) {
-            errLog('vxe.error.reqComp', ['vxe-tooltip'])
-          }
+        if (!VxeUITooltipComponent) {
+          errLog('vxe.error.reqComp', ['vxe-tooltip'])
         }
-      })
-    }
+      }
+    })
     if (this.autoResize) {
       const resizeObserver = globalResize.create(() => {
         if (this.autoResize) {

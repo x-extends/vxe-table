@@ -255,9 +255,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
             if (tCommandMethod) {
               tCommandMethod(params)
             } else {
-              if (process.env.VUE_APP_VXE_ENV === 'development') {
-                errLog('vxe.error.notCommands', [code])
-              }
+              errLog('vxe.error.notCommands', [code])
             }
           }
           $xeToolbar.dispatchEvent('button-click', params, evnt)
@@ -283,9 +281,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
             if (tCommandMethod) {
               tCommandMethod(params)
             } else {
-              if (process.env.VUE_APP_VXE_ENV === 'development') {
-                errLog('vxe.error.notCommands', [code])
-              }
+              errLog('vxe.error.notCommands', [code])
             }
           }
           $xeToolbar.dispatchEvent('tool-click', params, evnt)
@@ -732,30 +728,26 @@ export default /* define-vxe-component start */ defineVxeComponent({
         $xetable.connect(this)
       }
       const customOpts = $xeToolbar.computeCustomOpts
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (customOpts.isFooter) {
-          warnLog('vxe.error.delProp', ['toolbar.custom.isFooter', 'table.custom-config.showFooter'])
-        }
-        if (customOpts.showFooter) {
-          warnLog('vxe.error.delProp', ['toolbar.custom.showFooter', 'table.custom-config.showFooter'])
-        }
-        if (customOpts.immediate) {
-          warnLog('vxe.error.delProp', ['toolbar.custom.immediate', 'table.custom-config.immediate'])
-        }
-        if (customOpts.trigger) {
-          warnLog('vxe.error.delProp', ['toolbar.custom.trigger', 'table.custom-config.trigger'])
-        }
+      if (customOpts.isFooter) {
+        warnLog('vxe.error.delProp', ['toolbar.custom.isFooter', 'table.custom-config.showFooter'])
+      }
+      if (customOpts.showFooter) {
+        warnLog('vxe.error.delProp', ['toolbar.custom.showFooter', 'table.custom-config.showFooter'])
+      }
+      if (customOpts.immediate) {
+        warnLog('vxe.error.delProp', ['toolbar.custom.immediate', 'table.custom-config.immediate'])
+      }
+      if (customOpts.trigger) {
+        warnLog('vxe.error.delProp', ['toolbar.custom.trigger', 'table.custom-config.trigger'])
       }
     })
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      // 使用已安装的组件，如果未安装则不渲染
-      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+    // 使用已安装的组件，如果未安装则不渲染
+    const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
 
-      if (props.refresh || props.import || props.export || props.print || props.zoom) {
-        if (!VxeUIButtonComponent) {
-          errLog('vxe.error.reqComp', ['vxe-button'])
-        }
+    if (props.refresh || props.import || props.export || props.print || props.zoom) {
+      if (!VxeUIButtonComponent) {
+        errLog('vxe.error.reqComp', ['vxe-button'])
       }
     }
   },

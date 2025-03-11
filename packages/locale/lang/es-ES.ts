@@ -237,6 +237,9 @@ export default {
       fixedRight: 'Freeze on the right',
       cancelFixed: 'Unfreeze column'
     },
+    datePicker: {
+      yearTitle: '{0}'
+    },
     input: {
       date: {
         m1: 'Enero',

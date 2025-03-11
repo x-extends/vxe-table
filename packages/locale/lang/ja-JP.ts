@@ -237,6 +237,9 @@ export default {
       fixedRight: '右側に固定',
       cancelFixed: '列固定を取消'
     },
+    datePicker: {
+      yearTitle: '{0} 年'
+    },
     input: {
       date: {
         m1: '1月',

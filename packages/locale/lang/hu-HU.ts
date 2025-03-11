@@ -237,6 +237,9 @@ export default {
       fixedRight: 'lefagyott a jobb oldalon',
       cancelFixed: 'Oldja fel az oszlopot'
     },
+    datePicker: {
+      yearTitle: '{0} év'
+    },
     input: {
       date: {
         m1: 'január',

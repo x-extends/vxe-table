@@ -238,6 +238,9 @@ export default
       fixedRight: 'rechts eingefroren',
       cancelFixed: 'Spalte freigeben'
     },
+    datePicker: {
+      yearTitle: '{0} Jahre'
+    },
     input: {
       date: {
         m1: 'Januar',

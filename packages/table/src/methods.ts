@@ -3,11 +3,11 @@ import { browse, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEv
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, getRefElem } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, updateDeepRowKey, updateFastRowKey, getRefElem } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, VxeToolbarConstructor, TableInternalData, VxeTablePrivateMethods, VxeTooltipInstance, VxeTablePropTypes } from '../../../types'
+import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, VxeToolbarConstructor, TableInternalData, VxeGridConstructor, GridPrivateMethods, VxeTablePrivateMethods, VxeTooltipInstance, VxeTablePropTypes } from '../../../types'
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent } = VxeUI
 
@@ -303,14 +303,12 @@ function cacheColumnMap ($xeTable: VxeTableConstructor) {
     errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
   }
 
-  if (process.env.VUE_APP_VXE_ENV === 'developmeznt') {
-    if (htmlColumn) {
-      if (!columnOpts.useKey) {
-        errLog('vxe.error.reqProp', ['column-config.useKey & column.type=html'])
-      }
-      if (!rowOpts.useKey) {
-        errLog('vxe.error.reqProp', ['row-config.useKey & column.type=html'])
-      }
+  if (htmlColumn) {
+    if (!columnOpts.useKey) {
+      errLog('vxe.error.reqProp', ['column-config.useKey & column.type=html'])
+    }
+    if (!rowOpts.useKey) {
+      errLog('vxe.error.reqProp', ['row-config.useKey & column.type=html'])
     }
   }
 
@@ -793,6 +791,27 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   return $xeTable.$nextTick()
 }
 
+function checkValidate ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, type: any) {
+  if ($xeTable.triggerValidate) {
+    return $xeTable.triggerValidate(type)
+  }
+  return $xeTable.$nextTick()
+}
+
+/**
+ * 当单元格发生改变时
+ * 如果存在规则，则校验
+ */
+function handleChangeCell ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: Event, params: any) {
+  checkValidate($xeTable, 'blur')
+    .catch((e: any) => e)
+    .then(() => {
+      $xeTable.handleEdit(params, evnt)
+        .then(() => checkValidate($xeTable, 'change'))
+        .catch((e: any) => e)
+    })
+}
+
 function handleRadioReserveRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any) {
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -850,6 +869,7 @@ function handleCheckedAllCheckboxRow ($xeTable: VxeTableConstructor & VxeTablePr
   const childrenField = treeOpts.children || treeOpts.childrenField
   const checkboxOpts = $xeTable.computeCheckboxOpts
   const { checkField, reserve, checkMethod } = checkboxOpts
+  // indeterminateField 仅支持读取
   const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
   const selectRowMaps: Record<string, any> = {}
   /**
@@ -2364,6 +2384,11 @@ const Methods = {
     }
     return []
   },
+  getEl () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    return $xeTable.$refs.refElem as HTMLDivElement
+  },
   /**
    * 获取父容器元素
    */
@@ -2375,10 +2400,26 @@ const Methods = {
    * 获取父容器的高度
    */
   getParentHeight () {
-    const { $el, $xegrid, height } = this
-    const parentElem = $el.parentNode
-    const parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
-    return Math.floor($xegrid ? $xegrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(parentElem).height) - parentPaddingSize)
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+    const props = $xeTable
+
+    const { height } = props
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    if (el) {
+      const parentElem = el.parentNode as HTMLElement
+      const parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
+      let parentWrapperHeight = 0
+      if (parentElem) {
+        if ($xeGrid && hasClass(parentElem, 'vxe-grid--table-wrapper')) {
+          parentWrapperHeight = $xeGrid.getParentHeight()
+        } else {
+          parentWrapperHeight = parentElem.clientHeight
+        }
+      }
+      return Math.floor(parentWrapperHeight - parentPaddingSize)
+    }
+    return 0
   },
   /**
    * 获取需要排除的高度
@@ -2471,28 +2512,26 @@ const Methods = {
     if (treeConfig) {
       // 树结构自动转换
       if (treeOpts.transform) {
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (!treeOpts.rowField) {
-            errLog('vxe.error.reqProp', ['table.tree-config.rowField'])
-          }
-          if (!treeOpts.parentField) {
-            errLog('vxe.error.reqProp', ['table.tree-config.parentField'])
-          }
-          if (!childrenField) {
-            errLog('vxe.error.reqProp', ['tree-config.childrenField'])
-          }
-          if (!treeOpts.mapChildrenField) {
-            errLog('vxe.error.reqProp', ['tree-config.mapChildrenField'])
-          }
-          if (childrenField === treeOpts.mapChildrenField) {
-            errLog('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
-          }
-          // fullData.forEach(row => {
-          //   if (row[childrenField] && row[childrenField].length) {
-          //     warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${childrenField}`])
-          //   }
-          // })
+        if (!treeOpts.rowField) {
+          errLog('vxe.error.reqProp', ['table.tree-config.rowField'])
         }
+        if (!treeOpts.parentField) {
+          errLog('vxe.error.reqProp', ['table.tree-config.parentField'])
+        }
+        if (!childrenField) {
+          errLog('vxe.error.reqProp', ['tree-config.childrenField'])
+        }
+        if (!treeOpts.mapChildrenField) {
+          errLog('vxe.error.reqProp', ['tree-config.mapChildrenField'])
+        }
+        if (childrenField === treeOpts.mapChildrenField) {
+          errLog('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
+        }
+        // fullData.forEach(row => {
+        //   if (row[childrenField] && row[childrenField].length) {
+        //     warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${childrenField}`])
+        //   }
+        // })
         treeData = XEUtils.toArrayTree(fullData, {
           key: treeOpts.rowField,
           parentKey: treeOpts.parentField,
@@ -2558,16 +2597,14 @@ const Methods = {
         //   }
         // }
 
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (!(this.height || this.maxHeight)) {
-            errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
-          }
-          // if (!this.showOverflow) {
-          //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
-          // }
-          if (this.spanMethod) {
-            warnLog('vxe.error.scrollErrProp', ['table.span-method'])
-          }
+        if (!(this.height || this.maxHeight)) {
+          errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+        }
+        // if (!this.showOverflow) {
+        //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
+        // }
+        if (this.spanMethod) {
+          errLog('vxe.error.scrollErrProp', ['table.span-method'])
         }
       }
 
@@ -2712,63 +2749,86 @@ const Methods = {
   cacheRowMap () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
     const { treeConfig } = props
-    const treeOpts = $xeTable.computeTreeOpts
+    const { treeExpandedMaps } = reactData
     const { fullAllDataRowIdData, tableFullData, tableFullTreeData } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
+    const { lazy } = treeOpts
     const rowkey = getRowkey($xeTable)
-    const isLazy = treeConfig && treeOpts.lazy
-    const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
+    const isDeepKey = rowkey.indexOf('.') > -1
+    const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = { ...fullAllDataRowIdData } // 存在已删除数据
     const fullDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
-    const handleRow = (row: any, index: number, items: any, path?: any[], parentRow?: any, nodes?: any[]) => {
-      let rowid = getRowid($xeTable, row)
-      const seq = treeConfig && path ? toTreePathSeq(path) : index + 1
-      const level = nodes ? nodes.length - 1 : 0
-      if (eqEmptyValue(rowid)) {
-        rowid = getRowUniqueId()
-        XEUtils.set(row, rowkey, rowid)
-      }
-      if (isLazy && row[hasChildField] && XEUtils.isUndefined(row[childrenField])) {
-        row[childrenField] = null
-      }
-      let rowRest = fullAllDataRowIdData[rowid]
+    const treeTempExpandedMaps = { ...treeExpandedMaps }
+
+    const handleRowId = isDeepKey ? updateDeepRowKey : updateFastRowKey
+    const handleRowCache = (row: any, index: number, items: any, currIndex: number, parentRow: any, rowid: string, level: number, seq: string | number) => {
+      let rowRest = fullAllDataRowIdMaps[rowid]
       if (!rowRest) {
         rowRest = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
       }
+      rowRest.treeLoaded = false
+      rowRest.expandLoaded = false
+
       rowRest.row = row
       rowRest.items = items
       rowRest.parent = parentRow
       rowRest.level = level
-      rowRest.index = treeConfig && parentRow ? -1 : index
+      rowRest.index = currIndex
+      rowRest.treeIndex = index
+
       fullDataRowIdMaps[rowid] = rowRest
       fullAllDataRowIdMaps[rowid] = rowRest
     }
+
+    if (treeConfig) {
+      XEUtils.eachTree(tableFullTreeData, (row, index, items, path, parentRow, nodes) => {
+        const rowid = handleRowId(row, rowkey)
+        if (treeConfig && lazy) {
+          const treeExpRest = treeTempExpandedMaps[rowid]
+          if (row[hasChildField] && row[childrenField] === undefined) {
+            row[childrenField] = null
+          }
+          if (treeExpRest) {
+            if (!row[childrenField] || !row[childrenField].length) {
+              delete treeTempExpandedMaps[rowid]
+            }
+          }
+        }
+        handleRowCache(row, index, items, parentRow ? -1 : index, parentRow, rowid, nodes.length - 1, toTreePathSeq(path))
+      }, { children: childrenField })
+    } else {
+      tableFullData.forEach((row, index, items) => {
+        handleRowCache(row, index, items, index, null, handleRowId(row, rowkey), 0, index + 1)
+      })
+    }
+
     internalData.fullDataRowIdData = fullDataRowIdMaps
     internalData.fullAllDataRowIdData = fullAllDataRowIdMaps
-    if (treeConfig) {
-      XEUtils.eachTree(tableFullTreeData, handleRow, { children: childrenField })
-    } else {
-      tableFullData.forEach(handleRow)
-    }
+    reactData.treeExpandedMaps = treeTempExpandedMaps
   },
   cacheSourceMap (fullData: any[]) {
-    let { treeConfig, treeOpts, sourceDataRowIdData } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeConfig } = props
+    const treeOpts = $xeTable.computeTreeOpts
+    let { sourceDataRowIdData } = internalData
     const sourceData = XEUtils.clone(fullData, true)
-    const rowkey = getRowkey(this)
-    sourceDataRowIdData = this.sourceDataRowIdData = {}
+    const rowkey = getRowkey($xeTable)
+    sourceDataRowIdData = internalData.sourceDataRowIdData = {}
     const handleSourceRow = (row: any) => {
-      let rowid = getRowid(this, row)
+      let rowid = getRowid($xeTable, row)
       if (eqEmptyValue(rowid)) {
         rowid = getRowUniqueId()
         XEUtils.set(row, rowkey, rowid)
       }
-      sourceDataRowIdData[rowid] = {
-        row,
-        rowid
-      }
+      sourceDataRowIdData[rowid] = row
     }
     // 源数据缓存
     if (treeConfig) {
@@ -2777,7 +2837,7 @@ const Methods = {
     } else {
       sourceData.forEach(handleSourceRow)
     }
-    this.tableSourceData = sourceData
+    internalData.tableSourceData = sourceData
   },
   getParams () {
     return this.params
@@ -3063,23 +3123,6 @@ const Methods = {
     }
     return this.createData(records).then((rows: any) => isArr ? rows : rows[0])
   },
-  // toOriginalRecords (rows: any[]) {
-  //   const { treeConfig } = props
-  //   const treeOpts = computeTreeOpts.value
-  //   const { transform, mapChildrenField } = treeOpts
-  //   const rowkey = getRowkey($xeTable)
-  //   if (treeConfig) {
-  //     if (transform) {
-  //       return []
-  //     }
-  //     return []
-  //   }
-  //   return rows.map(item => {
-  //     const obj = Object.assign({}, item)
-  //     delete obj.rowkey
-  //     return obj
-  //   })
-  // },
   /**
    * 还原数据
    * 如果不传任何参数，则还原整个表格
@@ -3088,12 +3131,22 @@ const Methods = {
    * 如果还额外传了 field 则还原指定的单元格数据
    */
   revertData (rows: any, field: any) {
-    const { keepSource, tableSourceData, treeConfig } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { keepSource, treeConfig } = props
+    const { editStore } = reactData
+    const { fullAllDataRowIdData, fullDataRowIdData, tableSourceData, sourceDataRowIdData, tableFullData, afterFullData } = internalData
+    const removeTempMaps = { ...editStore.removeMaps }
+    const treeOpts = $xeTable.computeTreeOpts
+    const { transform } = treeOpts
     if (!keepSource) {
       if (process.env.VUE_APP_VXE_ENV === 'development') {
-        warnLog('vxe.error.reqProp', ['keep-source'])
+        errLog('vxe.error.reqProp', ['keep-source'])
       }
-      return this.$nextTick()
+      return $xeTable.$nextTick()
     }
     let targetRows = rows
     if (rows) {
@@ -3101,30 +3154,54 @@ const Methods = {
         targetRows = [rows]
       }
     } else {
-      targetRows = XEUtils.toArray(this.getUpdateRecords())
+      targetRows = XEUtils.toArray($xeTable.getUpdateRecords())
     }
+    let reDelFlag = false
     if (targetRows.length) {
-      targetRows.forEach((row: any) => {
-        if (!this.isInsertByRow(row)) {
-          const rowIndex = this.getRowIndex(row)
-          if (treeConfig && rowIndex === -1) {
-            errLog('vxe.error.noTree', ['revertData'])
-          }
-          const oRow = tableSourceData[rowIndex]
-          if (oRow && row) {
-            if (field) {
-              XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
-            } else {
-              XEUtils.destructuring(row, XEUtils.clone(oRow, true))
+      targetRows.forEach((item: any) => {
+        const rowid = getRowid($xeTable, item)
+        const rowRest = fullAllDataRowIdData[rowid]
+        if (rowRest) {
+          const row = rowRest.row
+          if (!$xeTable.isInsertByRow(row)) {
+            const oRow = sourceDataRowIdData[rowid]
+            if (oRow && row) {
+              if (field) {
+                XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
+              } else {
+                XEUtils.destructuring(row, XEUtils.clone(oRow, true))
+              }
+              if (!fullDataRowIdData[rowid] && $xeTable.isRemoveByRow(row)) {
+                delete removeTempMaps[rowid]
+                tableFullData.unshift(row)
+                afterFullData.unshift(row)
+                reDelFlag = true
+              }
             }
           }
         }
       })
     }
     if (rows) {
-      return this.$nextTick()
+      if (reDelFlag) {
+        editStore.removeMaps = removeTempMaps
+        $xeTable.updateFooter()
+        $xeTable.cacheRowMap(false)
+        $xeTable.handleTableData(treeConfig && transform)
+        if (!(treeConfig && transform)) {
+          $xeTable.updateAfterDataIndex()
+        }
+        $xeTable.checkSelectionStatus()
+        if (reactData.scrollYLoad) {
+          $xeTable.updateScrollYSpace()
+        }
+      }
+      return $xeTable.$nextTick().then(() => {
+        $xeTable.updateCellAreas()
+        return $xeTable.recalculate()
+      })
     }
-    return this.reloadData(tableSourceData)
+    return $xeTable.reloadData(tableSourceData)
   },
   /**
    * 清空单元格内容
@@ -3191,7 +3268,8 @@ const Methods = {
     return null
   },
   getCellLabel (row: any, fieldOrColumn: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
     const column = handleFieldOrColumn(this, fieldOrColumn)
     if (!column) {
@@ -3202,7 +3280,7 @@ const Methods = {
     let cellLabel = cellValue
     if (formatter) {
       let formatData
-      const { fullAllDataRowIdData } = $xeTable
+      const { fullAllDataRowIdData } = internalData
       const rowid = getRowid($xeTable, row)
       const colid = column.id
       const rowRest = fullAllDataRowIdData[rowid]
@@ -3240,17 +3318,28 @@ const Methods = {
    * @param {Row} row 行对象
    */
   isInsertByRow (row: any) {
-    const { editStore } = this
-    const rowid = getRowid(this, row)
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+
+    const { editStore } = reactData
+    const rowid = getRowid($xeTable, row)
     return !!editStore.insertMaps[rowid]
+  },
+  isRemoveByRow (row: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+
+    const { editStore } = reactData
+    const rowid = getRowid($xeTable, row)
+    return !!editStore.removeMaps[rowid]
   },
   /**
    * 删除所有新增的临时数据
    * @returns
    */
   removeInsertRow () {
-    const $xeTable = this
-    const reactData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
 
     const { editStore } = reactData
     editStore.insertMaps = {}
@@ -3258,22 +3347,28 @@ const Methods = {
   },
   /**
    * 检查行或列数据是否发生改变
-   * @param {Row} row 行对象
+   * @param {Row} rowOrId 行对象
    * @param {String} field 字段名
    */
-  isUpdateByRow (row: any, field: any) {
-    const { tableFullColumn, keepSource, sourceDataRowIdData, fullDataRowIdData } = this
+  isUpdateByRow (rowOrId: any, field?: string | null) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { keepSource } = props
+    const { tableFullColumn, fullDataRowIdData, sourceDataRowIdData } = internalData
     if (keepSource) {
-      const rowid = getRowid(this, row)
+      const rowid = XEUtils.isString(rowOrId) || XEUtils.isNumber(rowOrId) ? rowOrId : getRowid($xeTable, rowOrId)
+      const rowRest = fullDataRowIdData[rowid]
       // 新增的数据不需要检测
-      if (!fullDataRowIdData[rowid]) {
+      if (!rowRest) {
         return false
       }
-      const oldRest = sourceDataRowIdData[rowid]
-      if (oldRest) {
-        const oRow = oldRest.row
+      const row = rowRest.row
+      const oRow = sourceDataRowIdData[rowid]
+      if (oRow) {
         if (arguments.length > 1) {
-          return !eqCellValue(oRow, row, field)
+          return !eqCellValue(oRow, row, field as string)
         }
         for (let index = 0, len = tableFullColumn.length; index < len; index++) {
           const property = tableFullColumn[index].field
@@ -3334,11 +3429,112 @@ const Methods = {
     }
   },
   /**
+   * 移动列到指定列的位置
+   * @param fieldOrColumn
+   * @param targetFieldOrColumn
+   * @param options
+   */
+  moveColumnTo (fieldOrColumn: VxeTableDefines.ColumnInfo, targetFieldOrColumn: VxeTableDefines.ColumnInfo, options?: {
+    isCrossDrag?: boolean
+    dragToChild?: boolean;
+    dragPos?: 'left' | 'right' | '' | null;
+  }) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { fullColumnIdData, visibleColumn } = internalData
+    const { dragToChild, dragPos, isCrossDrag } = Object.assign({}, options)
+    const dragCol = handleFieldOrColumn($xeTable, fieldOrColumn)
+    let prevDragCol: VxeTableDefines.ColumnInfo | null = null
+    const colRest = dragCol ? fullColumnIdData[dragCol.id] : null
+    let defPos: 'left' | 'right' = 'left'
+    if (XEUtils.isNumber(targetFieldOrColumn)) {
+      if (colRest && targetFieldOrColumn) {
+        let currList = colRest.items
+        let offsetIndex = colRest._index + targetFieldOrColumn
+        if (isCrossDrag) {
+          currList = visibleColumn
+          offsetIndex = colRest._index + targetFieldOrColumn
+        }
+        if (offsetIndex > 0 && offsetIndex < currList.length - 1) {
+          prevDragCol = currList[offsetIndex]
+        }
+        if (targetFieldOrColumn > 0) {
+          defPos = 'right'
+        }
+      }
+    } else {
+      prevDragCol = handleFieldOrColumn($xeTable, targetFieldOrColumn)
+      const targetColRest = prevDragCol ? fullColumnIdData[prevDragCol.id] : null
+      if (colRest && targetColRest) {
+        if (targetColRest._index > colRest._index) {
+          defPos = 'right'
+        }
+      }
+    }
+    return $xeTable.handleColDragSwapEvent(null, true, dragCol, prevDragCol, dragPos || defPos, dragToChild === true)
+  },
+  /**
+   * 移动行到指定行的位置
+   * @param rowidOrRow
+   * @param targetRowidOrRow
+   * @param options
+   */
+  moveRowTo (rowidOrRow: any, targetRowidOrRow: any, options?: {
+    isCrossDrag?: boolean
+    dragToChild?: boolean;
+    dragPos?: 'top' | 'bottom' | '' | null;
+  }) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeConfig } = props
+    const { fullAllDataRowIdData, afterFullData } = internalData
+    const { dragToChild, dragPos, isCrossDrag } = Object.assign({}, options)
+    const treeOpts = $xeTable.computeTreeOpts
+    const dragRow = handleRowidOrRow($xeTable, rowidOrRow)
+    let prevDragRow: any = null
+    let defPos: 'top' | 'bottom' = 'top'
+    const rowRest = dragRow ? fullAllDataRowIdData[getRowid($xeTable, dragRow)] : null
+    if (XEUtils.isNumber(targetRowidOrRow)) {
+      if (rowRest && targetRowidOrRow) {
+        let currList = afterFullData
+        let offsetIndex = rowRest._index + targetRowidOrRow
+        if (treeConfig) {
+          currList = rowRest.items
+          if (treeOpts.transform) {
+            offsetIndex = rowRest.treeIndex + targetRowidOrRow
+            if (isCrossDrag) {
+              currList = afterFullData
+              offsetIndex = rowRest._index + targetRowidOrRow
+            }
+          }
+        }
+        if (offsetIndex >= 0 && offsetIndex <= currList.length - 1) {
+          prevDragRow = currList[offsetIndex]
+        }
+        if (targetRowidOrRow > 0) {
+          defPos = 'bottom'
+        }
+      }
+    } else {
+      prevDragRow = handleRowidOrRow($xeTable, targetRowidOrRow)
+      const targetRowRest = prevDragRow ? fullAllDataRowIdData[getRowid($xeTable, prevDragRow)] : null
+      if (rowRest && targetRowRest) {
+        if (targetRowRest._index > rowRest._index) {
+          defPos = 'bottom'
+        }
+      }
+    }
+    return $xeTable.handleRowDragSwapEvent(null, true, dragRow, prevDragRow, dragPos || defPos, dragToChild === true)
+  },
+  /**
    * 获取表格的全量列
    */
   getFullColumns () {
-    const $xeTable = this
-    const internalData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
     const { collectColumn } = internalData
     return collectColumn.slice(0)
@@ -3353,21 +3549,30 @@ const Methods = {
   /**
    * 用于多选行，获取已选中的数据
    */
-  getCheckboxRecords (isFull: any) {
-    const { tableFullData, afterFullData, treeConfig, treeOpts, checkboxOpts, tableFullTreeData, afterTreeFullData, afterFullRowMaps } = this
+  getCheckboxRecords (isFull: boolean) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeConfig } = props
+    const { selectCheckboxMaps } = reactData
+    const { tableFullData, afterFullData, afterTreeFullData, tableFullTreeData, fullDataRowIdData, afterFullRowMaps } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
+    const checkboxOpts = $xeTable.computeCheckboxOpts
     const { transform, mapChildrenField } = treeOpts
     const { checkField } = checkboxOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
-    const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
-    let rowList = []
+    let rowList: any[] = []
     if (checkField) {
       if (treeConfig) {
+        const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
         rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildrenField : childrenField })
       } else {
-        rowList = currTableData.filter((row: any) => XEUtils.get(row, checkField))
+        const currTableData = isFull ? tableFullData : afterFullData
+        rowList = currTableData.filter((row) => XEUtils.get(row, checkField))
       }
     } else {
-      const { selectCheckboxMaps, fullDataRowIdData } = this
       XEUtils.each(selectCheckboxMaps, (row, rowid) => {
         if (isFull) {
           if (fullDataRowIdData[rowid]) {
@@ -4910,7 +5115,8 @@ const Methods = {
     if (this.isActivated) {
       this.preventEvent(evnt, 'event.keydown', null, () => {
         const { afterFullData } = internalData
-        const { filterStore, isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig, mouseOpts, keyboardConfig, keyboardOpts, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu, rowOpts } = this
+        const { filterStore, isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig, mouseOpts, keyboardConfig, keyboardOpts, treeConfig, treeOpts, highlightCurrentRow, highlightCurrentColumn, currentRow, bodyCtxMenu, rowOpts } = this
+        const columnOpts = $xeTable.computeColumnOpts
         const { selected, actived } = editStore
         const { keyCode } = evnt
         const hasBackspaceKey = keyCode === 8
@@ -5051,10 +5257,15 @@ const Methods = {
           if (!isEditStatus) {
             // 如果按下了方向键
             if (selected.row && selected.column) {
-              this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
-            } else if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
-              // 当前行按键上下移动
-              this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
+              $xeTable.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
+            }
+            // 当前行按键上下移动
+            if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
+              $xeTable.moveCurrentRow(isUpArrow, isDwArrow, evnt)
+            }
+            // 当前行按键左右移动
+            if ((isLeftArrow || isRightArrow) && (columnOpts.isCurrent || highlightCurrentColumn)) {
+              $xeTable.moveCurrentColumn(isLeftArrow, isRightArrow, evnt)
             }
           }
         } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
@@ -5508,6 +5719,7 @@ const Methods = {
     const childrenField = treeOpts.children || treeOpts.childrenField
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const { checkField, checkStrictly, checkMethod } = checkboxOpts
+    // indeterminateField 仅支持读取
     const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     if (checkField) {
       // 树结构
@@ -5951,6 +6163,7 @@ const Methods = {
     const { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
     const { checkField, reserve } = checkboxOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
+    // indeterminateField 仅支持读取
     const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     if (checkField) {
       const handleClearChecked = (item: any) => {
@@ -6178,11 +6391,13 @@ const Methods = {
   },
   triggerHeaderCellClickEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
     const internalData = $xeTable as unknown as TableInternalData
 
     const { _lastResizeTime } = internalData
     const sortOpts = $xeTable.computeSortOpts
     const columnOpts = $xeTable.computeColumnOpts
+    const currentColumnOpts = $xeTable.computeCurrentColumnOpts
     const { column } = params
     const cell = evnt.currentTarget
     const triggerResizable = _lastResizeTime && _lastResizeTime > Date.now() - 300
@@ -6192,7 +6407,7 @@ const Methods = {
       $xeTable.triggerSortEvent(evnt, column, getNextSortOrder($xeTable, column))
     }
     $xeTable.dispatchEvent('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell }, params), evnt)
-    if (columnOpts.isCurrent || $xeTable.highlightCurrentColumn) {
+    if ((columnOpts.isCurrent || props.highlightCurrentColumn) && (!currentColumnOpts.trigger || ['header', 'default'].includes(currentColumnOpts.trigger))) {
       $xeTable.triggerCurrentColumnEvent(evnt, params)
     }
     return $xeTable.$nextTick()
@@ -6208,13 +6423,24 @@ const Methods = {
    * @param {ColumnInfo} fieldOrColumn 列配置
    */
   setCurrentColumn (fieldOrColumn: any) {
-    const column = handleFieldOrColumn(this, fieldOrColumn)
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+
+    const { mouseConfig } = props
+    const mouseOpts = $xeTable.computeMouseOpts
+    const isMouseSelected = mouseConfig && mouseOpts.selected
+    const column = handleFieldOrColumn($xeTable, fieldOrColumn)
     if (column) {
-      // this.clearCurrentRow()
-      this.clearCurrentColumn()
-      this.currentColumn = column
+      $xeTable.clearCurrentColumn()
+      reactData.currentColumn = column
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick().then(() => {
+      // 更新状选中态
+      if (isMouseSelected) {
+        $xeTable.addCellSelectedClass()
+      }
+    })
   },
   /**
    * 用于当前列，手动清空当前高亮的状态
@@ -6223,36 +6449,17 @@ const Methods = {
     this.currentColumn = null
     return this.$nextTick()
   },
-  checkValidate (type: any) {
-    if (this.triggerValidate) {
-      return this.triggerValidate(type)
-    }
-    return this.$nextTick()
-  },
-  /**
-   * 当单元格发生改变时
-   * 如果存在规则，则校验
-   */
-  handleChangeCell (evnt: Event, params: any) {
-    this.checkValidate('blur')
-      .catch((e: any) => e)
-      .then(() => {
-        this.handleEdit(params, evnt)
-          .then(() => this.checkValidate('change'))
-          .catch((e: any) => e)
-      })
-  },
   /**
    * 列点击事件
    * 如果是单击模式，则激活为编辑状态
    * 如果是双击模式，则单击后选中状态
    */
   triggerCellClickEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
-    const reactData = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
 
-    const { highlightCurrentRow, editConfig } = props
+    const { highlightCurrentRow, highlightCurrentColumn, editConfig } = props
     const { editStore, isDragResize } = reactData
     if (isDragResize) {
       return
@@ -6264,6 +6471,8 @@ const Methods = {
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const keyboardOpts = $xeTable.computeKeyboardOpts
     const rowOpts = $xeTable.computeRowOpts
+    const columnOpts = $xeTable.computeColumnOpts
+    const currentColumnOpts = $xeTable.computeCurrentColumnOpts
     const { actived, focused } = editStore
     const { row, column } = params
     const { type, treeNode } = column
@@ -6279,11 +6488,11 @@ const Methods = {
     if (!triggerCheckbox && !triggerRadio) {
       // 如果是展开行
       if (!triggerExpandNode && (expandOpts.trigger === 'row' || (isExpandType && expandOpts.trigger === 'cell'))) {
-        this.triggerRowExpandEvent(evnt, params)
+        $xeTable.triggerRowExpandEvent(evnt, params)
       }
       // 如果是树形表格
       if ((treeOpts.trigger === 'row' || (treeNode && treeOpts.trigger === 'cell'))) {
-        this.triggerTreeExpandEvent(evnt, params)
+        $xeTable.triggerTreeExpandEvent(evnt, params)
       }
     }
     // 如果点击了树节点
@@ -6292,16 +6501,22 @@ const Methods = {
         // 如果是高亮行
         if (rowOpts.isCurrent || highlightCurrentRow) {
           if (!triggerCheckbox && !triggerRadio) {
-            this.triggerCurrentRowEvent(evnt, params)
+            $xeTable.triggerCurrentRowEvent(evnt, params)
+          }
+        }
+        // 如果是当前列
+        if ((columnOpts.isCurrent || highlightCurrentColumn) && (!currentColumnOpts.trigger || ['cell', 'default'].includes(currentColumnOpts.trigger))) {
+          if (!triggerCheckbox && !triggerRadio) {
+            $xeTable.triggerCurrentColumnEvent(evnt, params)
           }
         }
         // 如果是单选框
         if (!triggerRadio && (radioOpts.trigger === 'row' || (isRadioType && radioOpts.trigger === 'cell'))) {
-          this.triggerRadioRowEvent(evnt, params)
+          $xeTable.triggerRadioRowEvent(evnt, params)
         }
         // 如果是复选框
         if (!triggerCheckbox && (checkboxOpts.trigger === 'row' || (isCheckboxType && checkboxOpts.trigger === 'cell'))) {
-          this.handleToggleCheckRowEvent(evnt, params)
+          $xeTable.handleToggleCheckRowEvent(evnt, params)
         }
       }
       // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
@@ -6313,14 +6528,14 @@ const Methods = {
         }
         if (editOpts.trigger === 'manual') {
           if (actived.args && actived.row === row && column !== actived.column) {
-            this.handleChangeCell(evnt, params)
+            handleChangeCell($xeTable, evnt, params)
           }
         } else if (!actived.args || row !== actived.row || column !== actived.column) {
           if (editOpts.trigger === 'click') {
-            this.handleChangeCell(evnt, params)
+            handleChangeCell($xeTable, evnt, params)
           } else if (editOpts.trigger === 'dblclick') {
             if (editOpts.mode === 'row' && actived.row === row) {
-              this.handleChangeCell(evnt, params)
+              handleChangeCell($xeTable, evnt, params)
             }
           }
         }
@@ -6340,7 +6555,7 @@ const Methods = {
         }
       }
     }
-    this.emitEvent('cell-click', params, evnt)
+    $xeTable.dispatchEvent('cell-click', params, evnt)
   },
   /**
    * 列双击点击事件
@@ -6363,16 +6578,16 @@ const Methods = {
     if (isEnableConf(editConfig) && editOpts.trigger === 'dblclick') {
       if (!actived.args || evnt.currentTarget !== actived.args.cell) {
         if (editOpts.mode === 'row') {
-          this.checkValidate('blur')
+          checkValidate($xeTable, 'blur')
             .catch((e: any) => e)
             .then(() => {
               this.handleEdit(params, evnt)
-                .then(() => this.checkValidate('change'))
+                .then(() => checkValidate($xeTable, 'change'))
                 .catch((e: any) => e)
             })
         } else if (editOpts.mode === 'cell') {
           this.handleEdit(params, evnt)
-            .then(() => this.checkValidate('change'))
+            .then(() => checkValidate($xeTable, 'change'))
             .catch((e: any) => e)
         }
       }
@@ -6560,7 +6775,7 @@ const Methods = {
       evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
     }
   },
-  handleRowDragSwapEvent (evnt: DragEvent, isSyncRow: boolean | undefined, dragRow: any, prevDragRow: any, prevDragPos: '' | 'top' | 'bottom' | 'left' | 'right' | undefined, prevDragToChild: boolean | undefined) {
+  handleRowDragSwapEvent (evnt: DragEvent | null, isSyncRow: boolean | undefined, dragRow: any, prevDragRow: any, prevDragPos: '' | 'top' | 'bottom' | 'left' | 'right' | undefined, prevDragToChild: boolean | undefined) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
@@ -6576,6 +6791,9 @@ const Methods = {
     const { afterFullData, tableFullData } = internalData
     const dEndMethod = dragEndMethod || (dragConfig ? dragConfig.dragEndMethod : null)
     const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
+    const errRest = {
+      status: false
+    }
     if (prevDragRow && dragRow) {
       // 判断是否有拖动
       if (prevDragRow !== dragRow) {
@@ -6590,7 +6808,7 @@ const Methods = {
         const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
         return Promise.resolve(dEndMethod ? dEndMethod(dragParams) : true).then((status) => {
           if (!status) {
-            return
+            return errRest
           }
 
           let oafIndex = -1
@@ -6621,11 +6839,11 @@ const Methods = {
                   if (isPeerDrag && !isCrossDrag) {
                     if (oldRest.row[parentField] !== newRest.row[parentField]) {
                       // 非同级
-                      return
+                      return errRest
                     }
                   } else {
                     if (!isCrossDrag) {
-                      return
+                      return errRest
                     }
                     if (oldAllMaps[newRowid]) {
                       isSelfToChildStatus = true
@@ -6636,7 +6854,7 @@ const Methods = {
                             content: getI18n('vxe.error.treeDragChild')
                           })
                         }
-                        return
+                        return errRest
                       }
                     }
                   }
@@ -6644,13 +6862,13 @@ const Methods = {
                   // 子到根
 
                   if (!isCrossDrag) {
-                    return
+                    return errRest
                   }
                 } else if (newLevel) {
                   // 根到子
 
                   if (!isCrossDrag) {
-                    return
+                    return errRest
                   }
                   if (oldAllMaps[newRowid]) {
                     isSelfToChildStatus = true
@@ -6661,7 +6879,7 @@ const Methods = {
                           content: getI18n('vxe.error.treeDragChild')
                         })
                       }
-                      return
+                      return errRest
                     }
                   }
                 } else {
@@ -6725,28 +6943,36 @@ const Methods = {
           if (reactData.scrollYLoad) {
             $xeTable.updateScrollYSpace()
           }
-          $xeTable.$nextTick().then(() => {
+
+          if (evnt) {
+            $xeTable.dispatchEvent('row-dragend', {
+              oldRow: dragRow,
+              newRow: prevDragRow,
+              dragRow,
+              dragPos: prevDragPos as any,
+              dragToChild: isDragToChildFlag,
+              offsetIndex: dragOffsetIndex,
+              _index: {
+                newIndex: nafIndex,
+                oldIndex: oafIndex
+              }
+            }, evnt)
+          }
+
+          return $xeTable.$nextTick().then(() => {
             $xeTable.updateCellAreas()
             $xeTable.recalculate()
-          })
-
-          $xeTable.dispatchEvent('row-dragend', {
-            oldRow: dragRow,
-            newRow: prevDragRow,
-            dragRow,
-            dragPos: prevDragPos as any,
-            dragToChild: isDragToChildFlag,
-            offsetIndex: dragOffsetIndex,
-            _index: {
-              newIndex: nafIndex,
-              oldIndex: oafIndex
+          }).then(() => {
+            return {
+              status: true
             }
-          }, evnt)
+          })
         }).catch(() => {
+          return errRest
         })
       }
     }
-    return Promise.resolve()
+    return Promise.resolve(errRest)
   },
   handleRowDragDragendEvent (evnt: DragEvent) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -6885,7 +7111,7 @@ const Methods = {
       $xeTable.saveCustomStore('update:sort')
     })
   },
-  handleColDragSwapEvent (evnt: DragEvent, isSyncColumn: boolean | undefined, dragCol: VxeTableDefines.ColumnInfo | null | undefined, prevDragCol: VxeTableDefines.ColumnInfo | undefined, prevDragPos: '' | 'top' | 'bottom' | 'left' | 'right' | undefined, prevDragToChild: boolean | undefined) {
+  handleColDragSwapEvent (evnt: DragEvent | null, isSyncColumn: boolean | undefined, dragCol: VxeTableDefines.ColumnInfo | null | undefined, prevDragCol: VxeTableDefines.ColumnInfo | undefined, prevDragPos: '' | 'top' | 'bottom' | 'left' | 'right' | undefined, prevDragToChild: boolean | undefined) {
     const $xeTable = this
     const props = $xeTable
     const reactData = $xeTable
@@ -6896,6 +7122,9 @@ const Methods = {
     const { isPeerDrag, isCrossDrag, isSelfToChildDrag, isToChildDrag, dragEndMethod, dragToChildMethod } = columnDragOpts
     const { collectColumn } = internalData
     const dragOffsetIndex = prevDragPos === 'right' ? 1 : 0
+    const errRest = {
+      status: false
+    }
     if (prevDragCol && dragCol) {
       // 判断是否有拖动
       if (prevDragCol !== dragCol) {
@@ -6912,7 +7141,7 @@ const Methods = {
         const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
         return Promise.resolve(dragEndMethod ? dragEndMethod(dragParams) : true).then((status) => {
           if (!status) {
-            return
+            return errRest
           }
 
           let oafIndex = -1
@@ -6931,11 +7160,11 @@ const Methods = {
             if (isPeerDrag && !isCrossDrag) {
               if (dragColumn.parentId !== newColumn.parentId) {
                 // 非同级
-                return
+                return errRest
               }
             } else {
               if (!isCrossDrag) {
-                return
+                return errRest
               }
 
               if (oldAllMaps[newColumn.id]) {
@@ -6947,7 +7176,7 @@ const Methods = {
                       content: getI18n('vxe.error.treeDragChild')
                     })
                   }
-                  return
+                  return errRest
                 }
               }
             }
@@ -6955,13 +7184,13 @@ const Methods = {
             // 子到根
 
             if (!isCrossDrag) {
-              return
+              return errRest
             }
           } else if (newColumn.parentId) {
             // 根到子
 
             if (!isCrossDrag) {
-              return
+              return errRest
             }
             if (oldAllMaps[newColumn.id]) {
               isSelfToChildStatus = true
@@ -6972,7 +7201,7 @@ const Methods = {
                     content: getI18n('vxe.error.treeDragChild')
                   })
                 }
-                return
+                return errRest
               }
             }
           } else {
@@ -7036,27 +7265,34 @@ const Methods = {
             }
           }
 
-          $xeTable.dispatchEvent('column-dragend', {
-            oldColumn: dragColumn,
-            newColumn,
-            dragColumn,
-            dragPos: prevDragPos,
-            dragToChild: isDragToChildFlag,
-            offsetIndex: dragOffsetIndex,
-            _index: {
-              newIndex: nafIndex,
-              oldIndex: oafIndex
-            }
-          }, evnt)
+          if (evnt) {
+            $xeTable.dispatchEvent('column-dragend', {
+              oldColumn: dragColumn,
+              newColumn,
+              dragColumn,
+              dragPos: prevDragPos,
+              dragToChild: isDragToChildFlag,
+              offsetIndex: dragOffsetIndex,
+              _index: {
+                newIndex: nafIndex,
+                oldIndex: oafIndex
+              }
+            }, evnt)
+          }
 
           if (isSyncColumn) {
             $xeTable.handleColDragSwapColumn()
           }
+
+          return {
+            status: true
+          }
         }).catch(() => {
+          return errRest
         })
       }
     }
-    return Promise.resolve()
+    return Promise.resolve(errRest)
   },
   handleHeaderCellDragDragendEvent (evnt: DragEvent) {
     const $xeTable = this
@@ -9143,19 +9379,17 @@ const funcs = 'setFilter,openFilter,clearFilter,saveFilterPanel,resetFilterPanel
 
 funcs.forEach(name => {
   Methods[name] = function (...args: any[]) {
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      if (!this[`_${name}`]) {
-        if ('openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').includes(name)) {
-          errLog('vxe.error.reqModule', ['VxeTableExportModule'])
-        } else if ('fullValidate,validate'.split(',').includes(name)) {
-          errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
-        } else if ('setFilter,openFilter,clearFilter,getCheckedFilters'.split(',').includes(name)) {
-          errLog('vxe.error.reqModule', ['VxeTableFilterModule'])
-        } else if ('insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell'.split(',').includes(name)) {
-          errLog('vxe.error.reqModule', ['VxeTableEditModule'])
-        } else if ('openCustom'.split(',').includes(name)) {
-          errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
-        }
+    if (!this[`_${name}`]) {
+      if ('openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').includes(name)) {
+        errLog('vxe.error.reqModule', ['VxeTableExportModule'])
+      } else if ('fullValidate,validate'.split(',').includes(name)) {
+        errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
+      } else if ('setFilter,openFilter,clearFilter,getCheckedFilters'.split(',').includes(name)) {
+        errLog('vxe.error.reqModule', ['VxeTableFilterModule'])
+      } else if ('insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell'.split(',').includes(name)) {
+        errLog('vxe.error.reqModule', ['VxeTableEditModule'])
+      } else if ('openCustom'.split(',').includes(name)) {
+        errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
       }
     }
     return this[`_${name}`] ? this[`_${name}`](...args) : null

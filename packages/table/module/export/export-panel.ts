@@ -59,31 +59,29 @@ export default {
   created (this: any) {
     const $xeTableExportPanel = this
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
-      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
-      const VxeUISelectComponent = VxeUI.getComponent<VxeSelectComponent>('VxeSelect')
-      const VxeUIInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeInput')
-      const VxeUICheckboxComponent = VxeUI.getComponent<VxeCheckboxComponent>('VxeCheckbox')
+    const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
+    const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+    const VxeUISelectComponent = VxeUI.getComponent<VxeSelectComponent>('VxeSelect')
+    const VxeUIInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeInput')
+    const VxeUICheckboxComponent = VxeUI.getComponent<VxeCheckboxComponent>('VxeCheckbox')
 
-      $xeTableExportPanel.$nextTick(() => {
-        if (!VxeUIModalComponent) {
-          errLog('vxe.error.reqComp', ['vxe-modal'])
-        }
-        if (!VxeUIButtonComponent) {
-          errLog('vxe.error.reqComp', ['vxe-button'])
-        }
-        if (!VxeUISelectComponent) {
-          errLog('vxe.error.reqComp', ['vxe-select'])
-        }
-        if (!VxeUIInputComponent) {
-          errLog('vxe.error.reqComp', ['vxe-input'])
-        }
-        if (!VxeUICheckboxComponent) {
-          errLog('vxe.error.reqComp', ['vxe-checkbox'])
-        }
-      })
-    }
+    $xeTableExportPanel.$nextTick(() => {
+      if (!VxeUIModalComponent) {
+        errLog('vxe.error.reqComp', ['vxe-modal'])
+      }
+      if (!VxeUIButtonComponent) {
+        errLog('vxe.error.reqComp', ['vxe-button'])
+      }
+      if (!VxeUISelectComponent) {
+        errLog('vxe.error.reqComp', ['vxe-select'])
+      }
+      if (!VxeUIInputComponent) {
+        errLog('vxe.error.reqComp', ['vxe-input'])
+      }
+      if (!VxeUICheckboxComponent) {
+        errLog('vxe.error.reqComp', ['vxe-checkbox'])
+      }
+    })
   },
   render (this: any, h: CreateElement) {
     const $xeTable = this.$xeTable

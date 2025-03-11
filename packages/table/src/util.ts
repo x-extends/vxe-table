@@ -2,6 +2,7 @@ import XEUtils from 'xe-utils'
 import { ColumnInfo } from './columnInfo'
 import { isScale, isPx } from '../../ui/src/dom'
 import { warnLog, errLog } from '../../ui/src/log'
+import { eqEmptyValue } from '../../ui/src/utils'
 
 import type { VxeTableDefines, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePrivateMethods } from '../../../types'
 
@@ -102,14 +103,39 @@ export function getRowUniqueId () {
 }
 
 // 行主键 key
-export function getRowkey ($xetable: any) {
-  return $xetable.rowOpts.keyField || $xetable.rowId || '_X_ROW_KEY'
+export function getRowkey ($xeTable: any) {
+  const props = $xeTable
+  const rowOpts = $xeTable.computeRowOpts
+  return `${props.rowId || rowOpts.keyField || '_X_ROW_KEY'}`
 }
 
 // 行主键 value
 export function getRowid ($xetable: any, row: any) {
   const rowid = XEUtils.get(row, getRowkey($xetable))
-  return XEUtils.eqNull(rowid) ? '' : encodeURIComponent(rowid)
+  return encodeRowid(rowid)
+}
+
+// 编码行主键
+export function encodeRowid (rowVal: string) {
+  return XEUtils.eqNull(rowVal) ? '' : encodeURIComponent(rowVal)
+}
+
+export function updateDeepRowKey (row: any, rowkey: string) {
+  let rowid = XEUtils.get(row, rowkey)
+  if (eqEmptyValue(rowid)) {
+    rowid = getRowUniqueId()
+    XEUtils.set(row, rowkey, rowid)
+  }
+  return rowid
+}
+
+export function updateFastRowKey (row: any, rowkey: string) {
+  let rowid = row[rowkey]
+  if (eqEmptyValue(rowid)) {
+    rowid = getRowUniqueId()
+    row[rowkey] = rowid
+  }
+  return rowid
 }
 
 function getPaddingLeftRightSize (elem: any) {
@@ -139,9 +165,17 @@ export function getCellHeight (height: number | 'unset' | undefined | null) {
   return height || 0
 }
 
-export function handleFieldOrColumn (_vm: any, fieldOrColumn: any) {
+export function handleFieldOrColumn ($xeTable: VxeTableConstructor, fieldOrColumn: any) {
   if (fieldOrColumn) {
-    return XEUtils.isString(fieldOrColumn) || XEUtils.isNumber(fieldOrColumn) ? _vm.getColumnByField(`${fieldOrColumn}`) : fieldOrColumn
+    return XEUtils.isString(fieldOrColumn) || XEUtils.isNumber(fieldOrColumn) ? $xeTable.getColumnByField(`${fieldOrColumn}`) : fieldOrColumn
+  }
+  return null
+}
+
+export const handleRowidOrRow = ($xeTable: VxeTableConstructor, rowidOrRow: any) => {
+  if (rowidOrRow) {
+    const rowid = XEUtils.isString(rowidOrRow) || XEUtils.isNumber(rowidOrRow) ? rowidOrRow : getRowid($xeTable, rowidOrRow)
+    return $xeTable.getRowById(rowid)
   }
   return null
 }
@@ -151,12 +185,10 @@ export function assembleColumn (_vm: any) {
   const { $el, $xetable, $xecolumn, columnConfig } = _vm
   const groupConfig = $xecolumn ? $xecolumn.columnConfig : null
   if (groupConfig) {
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      if ($xecolumn.$options._componentTag === 'vxe-table-column') {
-        errLog('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xecolumn.title} ...>`, `<vxe-table-column title=${$xecolumn.title} ...>`])
-      } else if ($xecolumn.$options._componentTag === 'vxe-column') {
-        warnLog('vxe.error.groupTag', [`<vxe-colgroup title=${$xecolumn.title} ...>`, `<vxe-column title=${$xecolumn.title} ...>`])
-      }
+    if ($xecolumn.$options._componentTag === 'vxe-table-column') {
+      errLog('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xecolumn.title} ...>`, `<vxe-table-column title=${$xecolumn.title} ...>`])
+    } else if ($xecolumn.$options._componentTag === 'vxe-column') {
+      warnLog('vxe.error.groupTag', [`<vxe-colgroup title=${$xecolumn.title} ...>`, `<vxe-column title=${$xecolumn.title} ...>`])
     }
     if (!groupConfig.children) {
       groupConfig.children = []

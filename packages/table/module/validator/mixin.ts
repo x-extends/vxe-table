@@ -356,9 +356,7 @@ export default {
                       }
                     }
                   } else {
-                    if (process.env.VUE_APP_VXE_ENV === 'development') {
-                      errLog('vxe.error.notValidators', [validator])
-                    }
+                    errLog('vxe.error.notValidators', [validator])
                   }
                 } else {
                   customValid = validator(validParams)

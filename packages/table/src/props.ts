@@ -164,9 +164,11 @@ export default {
   // 是否自动根据状态属性去更新响应式表格宽高
   syncResize: [Boolean, String, Number],
   // 响应式布局配置项
-  resizeConfig: Object,
+  resizeConfig: Object as PropType<VxeTablePropTypes.ResizeConfig>,
   // 列配置信息
-  columnConfig: Object,
+  columnConfig: Object as PropType<VxeTablePropTypes.ColumnConfig>,
+  // 当前列配置信息
+  currentColumnConfig: Object as PropType<VxeTablePropTypes.CurrentColumnConfig>,
   // 单元格配置信息
   cellConfig: Object as PropType<VxeTablePropTypes.CellConfig>,
   // 表头单元格配置信息
@@ -174,7 +176,9 @@ export default {
   // 表尾单元格配置信息
   footerCellConfig: Object as PropType<VxeTablePropTypes.FooterCellConfig>,
   // 行配置信息
-  rowConfig: Object,
+  rowConfig: Object as PropType<VxeTablePropTypes.RowConfig>,
+  // 当前行配置信息
+  currentRowConfig: Object as PropType<VxeTablePropTypes.CurrentRowConfig>,
   // 已废弃，被 rowDragConfig 替换
   dragConfig: Object as PropType<VxeTablePropTypes.DragConfig>,
   // 行拖拽排序配置项
@@ -182,27 +186,27 @@ export default {
   // 列拖拽排序配置项
   columnDragConfig: Object as PropType<VxeTablePropTypes.ColumnDragConfig>,
   // 列调整配置项
-  resizableConfig: Object,
+  resizableConfig: Object as PropType<VxeTablePropTypes.ResizableConfig>,
   // 序号配置项
-  seqConfig: Object,
+  seqConfig: Object as PropType<VxeTablePropTypes.SeqConfig>,
   // 排序配置项
-  sortConfig: Object,
+  sortConfig: Object as PropType<VxeTablePropTypes.SortConfig>,
   // 筛选配置项
-  filterConfig: Object,
+  filterConfig: Object as PropType<VxeTablePropTypes.FilterConfig>,
   // 单选框配置
-  radioConfig: Object,
+  radioConfig: Object as PropType<VxeTablePropTypes.RadioConfig>,
   // 复选框配置项
-  checkboxConfig: Object,
+  checkboxConfig: Object as PropType<VxeTablePropTypes.CheckboxConfig>,
   // tooltip 配置项
-  tooltipConfig: Object,
+  tooltipConfig: Object as PropType<VxeTablePropTypes.TooltipConfig>,
   // 导出配置项
   exportConfig: [Boolean, Object],
   // 导入配置项
   importConfig: [Boolean, Object],
   // 打印配置项
-  printConfig: Object,
+  printConfig: Object as PropType<VxeTablePropTypes.PrintConfig>,
   // 展开行配置项
-  expandConfig: Object,
+  expandConfig: Object as PropType<VxeTablePropTypes.ExpandConfig>,
   // 树形结构配置项
   treeConfig: [Boolean, Object],
   // 快捷菜单配置项
