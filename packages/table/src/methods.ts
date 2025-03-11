@@ -5168,8 +5168,9 @@ const Methods = {
             // 如果按下了方向键
             if (selected.row && selected.column) {
               this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
-            } else if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
-              // 当前行按键上下移动
+            }
+            // 当前行按键上下移动
+            if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
               this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
             }
           }

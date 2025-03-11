@@ -10,7 +10,7 @@ import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
 import type { VxeFormComponent, VxePagerComponent, VxeComponentStyleType } from 'vxe-pc-ui'
-import type{ GridReactData, VxeGridConstructor, VxeGridPropTypes } from '../../../types'
+import type{ GridReactData, VxeGridConstructor, VxeGridPropTypes, VxeGridPrivateMethods, VxePagerDefines } from '../../../types'
 
 const { getConfig, getI18n, commands, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 
@@ -85,6 +85,26 @@ function getFuncSlot ($xeGrid: any, optSlots: any, slotKey: any) {
   return null
 }
 
+const getConfigSlot = ($xeGrid: VxeGridConstructor, slotConfigs?: Record<string, any>) => {
+  const slots = $xeGrid.$scopedSlots
+
+  const slotConf: Record<string, any> = {}
+  XEUtils.objectMap(slotConfigs, (slotFunc, slotKey) => {
+    if (slotFunc) {
+      if (XEUtils.isString(slotFunc)) {
+        if (slots[slotFunc]) {
+          slotConf[slotKey] = slots[slotFunc]
+        } else {
+          errLog('vxe.error.notSlot', [slotFunc])
+        }
+      } else {
+        slotConf[slotKey] = slotFunc
+      }
+    }
+  })
+  return slotConf
+}
+
 function getToolbarSlots (_vm: any) {
   const { $scopedSlots, toolbarOpts } = _vm
   const toolbarOptSlots = toolbarOpts.slots
@@ -112,25 +132,6 @@ function getToolbarSlots (_vm: any) {
   return slots
 }
 
-function getPagerSlots (_vm: any) {
-  const { pagerOpts } = _vm
-  const pagerOptSlots = pagerOpts.slots
-  const slots: any = {}
-  let leftSlot
-  let rightSlot
-  if (pagerOptSlots) {
-    leftSlot = getFuncSlot(_vm, pagerOptSlots, 'left')
-    rightSlot = getFuncSlot(_vm, pagerOptSlots, 'right')
-    if (leftSlot) {
-      slots.left = leftSlot
-    }
-    if (rightSlot) {
-      slots.right = rightSlot
-    }
-  }
-  return slots
-}
-
 function getTableOns (_vm: any) {
   const { $listeners, proxyConfig, proxyOpts } = _vm
   const ons: any = {}
@@ -148,6 +149,24 @@ function getTableOns (_vm: any) {
     }
   }
   return ons
+}
+
+function pageChangeEvent ($xeGrid: VxeGridConstructor & VxeGridPrivateMethods, params: VxePagerDefines.PageChangeEventParams) {
+  const props = $xeGrid
+  const reactData = $xeGrid as unknown as GridReactData
+
+  const { proxyConfig } = props
+  const { tablePage } = reactData
+  const { $event, currentPage, pageSize } = params
+  const proxyOpts = $xeGrid.computeProxyOpts
+  tablePage.currentPage = currentPage
+  tablePage.pageSize = pageSize
+  $xeGrid.dispatchEvent('page-change', params, $event)
+  if (proxyConfig && isEnableConf(proxyOpts)) {
+    $xeGrid.commitProxy('query').then((rest) => {
+      $xeGrid.dispatchEvent('proxy-query', rest, $event)
+    })
+  }
 }
 
 /**
@@ -271,39 +290,45 @@ function renderBottom (h: CreateElement, _vm: any) {
 /**
  * 渲染分页
  */
-function renderPager (h: CreateElement, $xeGrid: any) {
+function renderPager (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
   const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
   const props = $xeGrid
+  const slots = $xeGrid.$scopedSlots
+  const reactData = $xeGrid as unknown as GridReactData
 
-  const { pagerConfig, proxyConfig } = props
-  const { $scopedSlots, tablePage } = $xeGrid
-  const pagerSlot = $scopedSlots.pager
-  const hasPager = !!(pagerSlot || isEnableConf(pagerConfig))
-
-  if (hasPager) {
+  const { proxyConfig, pagerConfig } = props
+  const proxyOpts = $xeGrid.computeProxyOpts
+  const pagerOpts = $xeGrid.computePagerOpts
+  const pagerSlot = slots.pager
+  if ((pagerConfig && isEnableConf(pagerOpts)) || slots.pager) {
     return h('div', {
-      key: 'pager',
       ref: 'refPagerWrapper',
+      key: 'pager',
       class: 'vxe-grid--pager-wrapper'
     }, pagerSlot
-      ? pagerSlot.call($xeGrid, { $grid: $xeGrid }, h)
+      ? pagerSlot.call($xeGrid, { $grid: $xeGrid })
       : [
           VxeUIPagerComponent
             ? h(VxeUIPagerComponent, {
-              props: { ...$xeGrid.pagerOpts, ...(proxyConfig ? tablePage : {}) },
-              on: {
-                'page-change': $xeGrid.pageChangeEvent
+              ref: 'refPager',
+              props: {
+                ...pagerOpts,
+                ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {})
               },
-              scopedSlots: getPagerSlots($xeGrid)
+              on: {
+                'page-change' (params: any) {
+                  pageChangeEvent($xeGrid, params)
+                }
+              },
+              scopedSlots: getConfigSlot($xeGrid, pagerOpts.slots)
             })
             : renderEmptyElement($xeGrid)
-        ]
-    )
+        ])
   }
   return renderEmptyElement($xeGrid)
 }
 
-function renderChildLayout (h: CreateElement, $xeGrid: VxeGridConstructor, layoutKeys: VxeGridPropTypes.LayoutKey[]) {
+function renderChildLayout (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods, layoutKeys: VxeGridPropTypes.LayoutKey[]) {
   const childVNs: VNode[] = []
   layoutKeys.forEach(key => {
     switch (key) {
@@ -342,7 +367,7 @@ function renderChildLayout (h: CreateElement, $xeGrid: VxeGridConstructor, layou
   return childVNs
 }
 
-function renderLayout (h: CreateElement, $xeGrid: VxeGridConstructor) {
+function renderLayout (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
   const slots = $xeGrid.$scopedSlots
 
   const currLayoutConf = ($xeGrid as any).computeCurrLayoutConf as {
@@ -1138,18 +1163,6 @@ export default {
           }
           VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }
-      }
-    },
-    pageChangeEvent (params: any) {
-      const { proxyConfig, tablePage } = this
-      const { currentPage, pageSize } = params
-      tablePage.currentPage = currentPage
-      tablePage.pageSize = pageSize
-      this.$emit('page-change', Object.assign({ $grid: this }, params))
-      if (proxyConfig) {
-        this.commitProxy('query').then((rest: any) => {
-          this.$emit('proxy-query', { ...rest, $grid: this, $event: params.$event })
-        })
       }
     },
     sortChangeEvent (params: any) {
