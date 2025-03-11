@@ -466,6 +466,24 @@ export default defineComponent({
       return null
     }
 
+    const getConfigSlot = (slotConfigs?: Record<string, any>) => {
+      const slotConf: Record<string, any> = {}
+      XEUtils.objectMap(slotConfigs, (slotFunc, slotKey) => {
+        if (slotFunc) {
+          if (XEUtils.isString(slotFunc)) {
+            if (slots[slotFunc]) {
+              slotConf[slotKey] = slots[slotFunc]
+            } else {
+              errLog('vxe.error.notSlot', [slotFunc])
+            }
+          } else {
+            slotConf[slotKey] = slotFunc
+          }
+        }
+      })
+      return slotConf
+    }
+
     /**
      * 渲染表单
      */
@@ -670,43 +688,26 @@ export default defineComponent({
       const { proxyConfig, pagerConfig } = props
       const proxyOpts = computeProxyOpts.value
       const pagerOpts = computePagerOpts.value
+      const pagerSlot = slots.pager
       if ((pagerConfig && isEnableConf(pagerOpts)) || slots.pager) {
-        let slotVNs: VNode[] = []
-        if (slots.pager) {
-          slotVNs = slots.pager({ $grid: $xeGrid })
-        } else {
-          const pagerOptSlots = pagerOpts.slots
-          const pagerSlots: { [key: string]: () => VNode[] } = {}
-          let leftSlot: any
-          let rightSlot: any
-          if (pagerOptSlots) {
-            leftSlot = getFuncSlot(pagerOptSlots, 'left')
-            rightSlot = getFuncSlot(pagerOptSlots, 'right')
-            if (leftSlot) {
-              pagerSlots.left = leftSlot
-            }
-            if (rightSlot) {
-              pagerSlots.right = rightSlot
-            }
-          }
-          if (VxeUIPagerComponent) {
-            slotVNs.push(
-              h(VxeUIPagerComponent, {
-                ref: refPager,
-                ...pagerOpts,
-                ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {}),
-                onPageChange: pageChangeEvent
-              }, pagerSlots)
-            )
-          }
-        }
         return h('div', {
           ref: refPagerWrapper,
           key: 'pager',
           class: 'vxe-grid--pager-wrapper'
-        }, slotVNs)
+        }, pagerSlot
+          ? pagerSlot({ $grid: $xeGrid })
+          : [
+              VxeUIPagerComponent
+                ? h(VxeUIPagerComponent, {
+                  ref: refPager,
+                  ...pagerOpts,
+                  ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {}),
+                  onPageChange: pageChangeEvent
+                }, getConfigSlot(pagerOpts.slots))
+                : renderEmptyElement($xeGrid)
+            ])
       }
-      return createCommentVNode()
+      return renderEmptyElement($xeGrid)
     }
 
     const renderChildLayout = (layoutKeys: VxeGridPropTypes.LayoutKey[]) => {
@@ -1259,18 +1260,23 @@ export default defineComponent({
       getExcludeHeight () {
         const { isZMax } = reactData
         const el = refElem.value
-        const formWrapper = refFormWrapper.value
-        const toolbarWrapper = refToolbarWrapper.value
-        const topWrapper = refTopWrapper.value
-        const bottomWrapper = refBottomWrapper.value
-        const pagerWrapper = refPagerWrapper.value
-        const parentPaddingSize = isZMax ? 0 : getPaddingTopBottomSize(el.parentNode as HTMLElement)
-        return parentPaddingSize + getPaddingTopBottomSize(el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
+        if (el) {
+          const formWrapper = refFormWrapper.value
+          const toolbarWrapper = refToolbarWrapper.value
+          const topWrapper = refTopWrapper.value
+          const bottomWrapper = refBottomWrapper.value
+          const pagerWrapper = refPagerWrapper.value
+          const parentEl = el.parentElement as HTMLElement
+          const parentPaddingSize = isZMax ? 0 : (parentEl ? getPaddingTopBottomSize(parentEl) : 0)
+          return parentPaddingSize + getPaddingTopBottomSize(el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
+        }
+        return 0
       },
       getParentHeight () {
         const el = refElem.value
         if (el) {
-          return (reactData.isZMax ? getDomNode().visibleHeight : XEUtils.toNumber(getComputedStyle(el.parentNode as HTMLElement).height)) - gridPrivateMethods.getExcludeHeight()
+          const parentEl = el.parentElement as HTMLElement
+          return (reactData.isZMax ? getDomNode().visibleHeight : (parentEl ? XEUtils.toNumber(getComputedStyle(parentEl).height) : 0)) - gridPrivateMethods.getExcludeHeight()
         }
         return 0
       },

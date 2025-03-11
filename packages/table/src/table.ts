@@ -867,7 +867,7 @@ export default defineComponent({
 
       computeSXOpts,
       computeSYOpts
-    }
+    } as any
 
     const $xeTable = {
       xID,
@@ -3844,7 +3844,9 @@ export default defineComponent({
        */
       revertData (rows: any, field) {
         const { keepSource, treeConfig } = props
+        const { editStore } = reactData
         const { fullAllDataRowIdData, fullDataRowIdData, tableSourceData, sourceDataRowIdData, tableFullData, afterFullData } = internalData
+        const removeTempMaps = { ...editStore.removeMaps }
         const treeOpts = computeTreeOpts.value
         const { transform } = treeOpts
         if (!keepSource) {
@@ -3877,6 +3879,7 @@ export default defineComponent({
                     XEUtils.destructuring(row, XEUtils.clone(oRow, true))
                   }
                   if (!fullDataRowIdData[rowid] && $xeTable.isRemoveByRow(row)) {
+                    delete removeTempMaps[rowid]
                     tableFullData.unshift(row)
                     afterFullData.unshift(row)
                     reDelFlag = true
@@ -3888,6 +3891,7 @@ export default defineComponent({
         }
         if (rows) {
           if (reDelFlag) {
+            editStore.removeMaps = removeTempMaps
             $xeTable.updateFooter()
             $xeTable.cacheRowMap(false)
             $xeTable.handleTableData(treeConfig && transform)
@@ -6352,8 +6356,9 @@ export default defineComponent({
               // 如果按下了方向键
               if (selected.row && selected.column) {
                 $xeTable.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
-              } else if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
-                // 当前行按键上下移动
+              }
+              // 当前行按键上下移动
+              if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
                 $xeTable.moveCurrentRow(isUpArrow, isDwArrow, evnt)
               }
             }

@@ -3,7 +3,7 @@ import { VxeUI } from '../../../ui'
 import { getRefElem } from '../../src/util'
 import { browse, hasClass, getAbsolutePos, addClass, removeClass } from '../../../ui/src/dom'
 
-import type { TableKeyboardPrivateMethods } from '../../../../types'
+import type { TableKeyboardPrivateMethods, VxeTableDefines } from '../../../../types'
 
 const { hooks } = VxeUI
 
@@ -347,7 +347,6 @@ hooks.add('tableKeyboardModule', {
         const treeOpts = computeTreeOpts.value
         const childrenField = treeOpts.children || treeOpts.childrenField
         let targetRow
-        evnt.preventDefault()
         if (currentRow) {
           if (treeConfig) {
             const { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, { children: childrenField })
@@ -368,6 +367,7 @@ hooks.add('tableKeyboardModule', {
           targetRow = afterFullData[0]
         }
         if (targetRow) {
+          evnt.preventDefault()
           const params = {
             $table: $xeTable,
             row: targetRow,
@@ -376,6 +376,33 @@ hooks.add('tableKeyboardModule', {
           }
           $xeTable.scrollToRow(targetRow)
             .then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
+        }
+      },
+      // 处理当前列方向键移动
+      moveCurrentColumn (isLeftArrow, isRightArrow, evnt) {
+        const { currentColumn } = reactData
+        const { visibleColumn } = internalData
+        let targetCol: VxeTableDefines.ColumnInfo | null = null
+        if (currentColumn) {
+          const _columnIndex = $xeTable.getVTColumnIndex(currentColumn)
+          if (isLeftArrow && _columnIndex > 0) {
+            targetCol = visibleColumn[_columnIndex - 1]
+          } else if (isRightArrow && _columnIndex < visibleColumn.length - 1) {
+            targetCol = visibleColumn[_columnIndex + 1]
+          }
+        } else {
+          targetCol = visibleColumn[0]
+        }
+        if (targetCol) {
+          evnt.preventDefault()
+          const params = {
+            $table: $xeTable,
+            column: targetCol,
+            columnIndex: $xeTable.getColumnIndex(targetCol),
+            $columnIndex: $xeTable.getVMColumnIndex(targetCol)
+          }
+          $xeTable.scrollToColumn(targetCol)
+            .then(() => $xeTable.triggerCurrentColumnEvent(evnt, params))
         }
       },
       // 处理可编辑方向键移动
