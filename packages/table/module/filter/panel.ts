@@ -61,13 +61,23 @@ export default {
       if (filterSlot) {
         return [
           h('div', {
-            class: 'vxe-table--filter-template'
+            class: 'vxe-table--filter-template',
+            style: maxHeight
+              ? {
+                  maxHeight: `${maxHeight}px`
+                }
+              : {}
           }, $xeTable.callSlot(filterSlot, params, h))
         ]
       } else if (rtFilter) {
         return [
           h('div', {
-            class: 'vxe-table--filter-template'
+            class: 'vxe-table--filter-template',
+            style: maxHeight
+              ? {
+                  maxHeight: `${maxHeight}px`
+                }
+              : {}
           }, getSlotVNs(rtFilter.call($xeTable, h, filterRender, params)))
         ]
       }
