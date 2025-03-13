@@ -219,7 +219,7 @@ function cacheColumnMap ($xeTable: VxeTableConstructor) {
       fullColumnFieldData[field] = rest
     } else {
       if ((storage && !type) || (columnOpts.drag && (isCrossDrag || isSelfToChildDrag))) {
-        errLog('vxe.error.reqProp', [`${column.getTitle() || type || ''} -> column.field`])
+        errLog('vxe.error.reqProp', [`${column.getTitle() || type || ''} -> column.field=?`])
       }
     }
     if (!hasFixed && fixed) {
@@ -4086,13 +4086,25 @@ const Methods = {
     }
   },
   getCustomStoreData () {
-    const { id, customOpts, collectColumn } = this
-    const { checkMethod } = customOpts
-    const resizableData: any = {}
-    const sortData: any = {}
-    const visibleData: any = {}
-    const fixedData: any = {}
-    const storeData: any = {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { id } = props
+    const customOpts = $xeTable.computeCustomOpts
+    const { collectColumn } = internalData
+    const { storage, checkMethod } = customOpts
+    const isAllCustom = storage === true
+    const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {})
+    const isCustomResizable = isAllCustom || storageOpts.resizable
+    const isCustomVisible = isAllCustom || storageOpts.visible
+    const isCustomFixed = isAllCustom || storageOpts.fixed
+    const isCustomSort = isAllCustom || storageOpts.sort
+    const resizableData: Record<string, number> = {}
+    const sortData: Record<string, number> = {}
+    const visibleData: Record<string, boolean> = {}
+    const fixedData: Record<string, VxeColumnPropTypes.Fixed> = {}
+    const storeData: VxeTableDefines.CustomStoreData = {
       resizableData: undefined,
       sortData: undefined,
       visibleData: undefined,
@@ -4104,46 +4116,36 @@ const Methods = {
     }
     let hasResizable = 0
     let hasSort = 0
-    let hasFixedt = 0
+    let hasFixed = 0
     let hasVisible = 0
     XEUtils.eachTree(collectColumn, (column, index, items, path, parentColumn) => {
+      const colKey = column.getKey()
+      if (!colKey) {
+        errLog('vxe.error.reqProp', [`${column.getTitle() || column.type || ''} -> column.field=?`])
+        return
+      }
       // 只支持一级
       if (!parentColumn) {
-        collectColumn.forEach((column: any) => {
-          const colKey = column.getKey()
-          if (colKey) {
-            hasSort = 1
-            sortData[colKey] = column.renderSortNumber
-          }
-        })
-        if (column.fixed !== column.defaultFixed) {
-          const colKey = column.getKey()
-          if (colKey) {
-            hasFixedt = 1
-            fixedData[colKey] = column.fixed
-          }
+        if (isCustomSort) {
+          hasSort = 1
+          sortData[colKey] = column.renderSortNumber
+        }
+        if (isCustomFixed && column.fixed !== column.defaultFixed) {
+          hasFixed = 1
+          fixedData[colKey] = column.fixed
         }
       }
-      if (column.resizeWidth) {
-        const colKey = column.getKey()
-        if (colKey) {
-          hasResizable = 1
-          resizableData[colKey] = column.renderWidth
-        }
+      if (isCustomResizable && column.resizeWidth) {
+        hasResizable = 1
+        resizableData[colKey] = column.renderWidth
       }
-      if (!checkMethod || checkMethod({ column })) {
+      if (isCustomVisible && (!checkMethod || checkMethod({ column }))) {
         if (!column.visible && column.defaultVisible) {
-          const colKey = column.getKey()
-          if (colKey) {
-            hasVisible = 1
-            visibleData[colKey] = false
-          }
+          hasVisible = 1
+          visibleData[colKey] = false
         } else if (column.visible && !column.defaultVisible) {
-          const colKey = column.getKey()
-          if (colKey) {
-            hasVisible = 1
-            visibleData[colKey] = true
-          }
+          hasVisible = 1
+          visibleData[colKey] = true
         }
       }
     })
@@ -4153,7 +4155,7 @@ const Methods = {
     if (hasSort) {
       storeData.sortData = sortData
     }
-    if (hasFixedt) {
+    if (hasFixed) {
       storeData.fixedData = fixedData
     }
     if (hasVisible) {
