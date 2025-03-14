@@ -3,8 +3,8 @@ import './styles/all.scss'
 
 if (typeof window !== 'undefined' && window.Vue) {
   if (window.VXETable) {
-    if (!(window as any).VxeUITable) {
-      (window as any).VxeUITable = VxeTableExport
+    if (!(window as any).VXETable) {
+      (window as any).VXETable = VxeTableExport
     }
   }
   window.Vue.use(VxeTableExport)

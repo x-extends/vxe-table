@@ -574,6 +574,7 @@ export default {
       },
       filterCombination: {
         menus: {
+          sort: '排序',
           clearSort: '清除排序',
           sortAsc: '升序',
           sortDesc: '降序',
@@ -642,6 +643,7 @@ export default {
       },
       combination: {
         menus: {
+          sort: '排序',
           clearSort: 'Limpiar ordenamiento',
           sortAsc: 'Orden ascendente',
           sortDesc: 'Orden descendente',

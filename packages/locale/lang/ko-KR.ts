@@ -570,6 +570,7 @@ export default {
       },
       filterCombination: {
         menus: {
+          sort: '排序',
           clearSort: '정렬 지우기',
           sortAsc: '오름차순',
           sortDesc: '내림차순',
@@ -674,6 +675,7 @@ export default {
       },
       combination: {
         menus: {
+          sort: '排序',
           clearSort: '정렬 지우기',
           sortAsc: '오름차순',
           sortDesc: '내림차순',
