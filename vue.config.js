@@ -49,7 +49,7 @@ module.exports = defineConfig({
       }
     },
     output: {
-      library: 'VXETable'
+      library: 'VxeUITable'
     },
     externals
   }
