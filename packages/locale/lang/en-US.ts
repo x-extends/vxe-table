@@ -237,6 +237,9 @@ export default {
       fixedRight: 'frozen on right',
       cancelFixed: 'Unfreeze column'
     },
+    datePicker: {
+      yearTitle: '{0} years'
+    },
     input: {
       date: {
         m1: 'January',
@@ -567,6 +570,7 @@ export default {
       },
       filterCombination: {
         menus: {
+          sort: 'Sort',
           clearSort: 'Clear sort',
           sortAsc: 'Ascending order',
           sortDesc: 'descending order',
@@ -671,6 +675,7 @@ export default {
       },
       combination: {
         menus: {
+          sort: 'Sort',
           clearSort: 'Clear sort',
           sortAsc: 'Ascending order',
           sortDesc: 'descending order',

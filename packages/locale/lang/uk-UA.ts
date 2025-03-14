@@ -237,6 +237,9 @@ export default {
       fixedRight: 'Зафіксувати праворуч',
       cancelFixed: 'Скасувати фіксацію стовпця'
     },
+    datePicker: {
+      yearTitle: '{0} 年'
+    },
     input: {
       date: {
         m1: '01 місяць',
@@ -567,6 +570,7 @@ export default {
       },
       filterCombination: {
         menus: {
+          sort: '排序',
           clearSort: 'Очистити сортування',
           sortAsc: 'По зростанню',
           sortDesc: 'По спаданню',
@@ -671,6 +675,7 @@ export default {
       },
       combination: {
         menus: {
+          sort: '排序',
           clearSort: 'Очистити сортування',
           sortAsc: 'По зростанню',
           sortDesc: 'По спаданню',

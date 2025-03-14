@@ -237,6 +237,9 @@ export default {
       fixedRight: 'замер справа',
       cancelFixed: 'Разморозить столбец'
     },
+    datePicker: {
+      yearTitle: '{0} лет'
+    },
     input: {
       date: {
         m1: 'январь',
@@ -567,6 +570,7 @@ export default {
       },
       filterCombination: {
         menus: {
+          sort: '排序',
           clearSort: 'Очистить сортировку',
           sortAsc: 'По возрастанию',
           sortDesc: 'порядок убывания',
@@ -671,6 +675,7 @@ export default {
       },
       combination: {
         menus: {
+          sort: '排序',
           clearSort: 'Очистить сортировку',
           sortAsc: 'По возрастанию',
           sortDesc: 'порядок убывания',

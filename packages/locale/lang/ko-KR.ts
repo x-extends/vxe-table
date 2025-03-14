@@ -237,6 +237,9 @@ export default {
       fixedRight: '오른쪽에 고정',
       cancelFixed: '고정 해제'
     },
+    datePicker: {
+      yearTitle: '{0} 년'
+    },
     input: {
       date: {
         m1: '01 월',
@@ -567,6 +570,7 @@ export default {
       },
       filterCombination: {
         menus: {
+          sort: '排序',
           clearSort: '정렬 지우기',
           sortAsc: '오름차순',
           sortDesc: '내림차순',
@@ -671,6 +675,7 @@ export default {
       },
       combination: {
         menus: {
+          sort: '排序',
           clearSort: '정렬 지우기',
           sortAsc: '오름차순',
           sortDesc: '내림차순',
