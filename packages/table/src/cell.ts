@@ -598,7 +598,8 @@ export const Cell = {
     const headerSlot = slots ? slots.header : null
     const titleSlot = slots ? slots.title : null
     const checkboxOpts = computeCheckboxOpts.value
-    const headerTitle = column.getTitle()
+    const { checkStrictly, showHeader, headerTitle } = checkboxOpts
+    const colTitle = column.getTitle()
     const ons: Record<string, any> = {}
     if (!isHidden) {
       ons.onClick = (evnt: MouseEvent) => {
@@ -611,11 +612,11 @@ export const Cell = {
     if (headerSlot) {
       return renderHeaderCellBaseVNs(params, renderTitleContent(checkboxParams, $table.callSlot(headerSlot, checkboxParams)))
     }
-    if (checkboxOpts.checkStrictly ? !checkboxOpts.showHeader : checkboxOpts.showHeader === false) {
+    if (checkStrictly ? !showHeader : showHeader === false) {
       return renderHeaderCellBaseVNs(params, renderTitleContent(checkboxParams, [
         h('span', {
           class: 'vxe-checkbox--label'
-        }, titleSlot ? $table.callSlot(titleSlot, checkboxParams) : headerTitle)
+        }, titleSlot ? $table.callSlot(titleSlot, checkboxParams) : colTitle)
       ]))
     }
     return renderHeaderCellBaseVNs(params,
@@ -626,17 +627,17 @@ export const Cell = {
             'is--disabled': isAllCheckboxDisabled,
             'is--indeterminate': isAllCheckboxIndeterminate
           }],
-          title: getI18n('vxe.table.allTitle'),
+          title: XEUtils.eqNull(headerTitle) ? getI18n('vxe.table.allTitle') : `${headerTitle || ''}`,
           ...ons
         }, [
           h('span', {
             class: ['vxe-checkbox--icon', isAllCheckboxIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllCheckboxSelected ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
           })
-        ].concat(titleSlot || headerTitle
+        ].concat(titleSlot || colTitle
           ? [
               h('span', {
                 class: 'vxe-checkbox--label'
-              }, titleSlot ? $table.callSlot(titleSlot, checkboxParams) : headerTitle)
+              }, titleSlot ? $table.callSlot(titleSlot, checkboxParams) : colTitle)
             ]
           : []))
       ])
@@ -889,7 +890,7 @@ export const Cell = {
     const { $table, column } = params
     const { computeSortOpts } = $table.getComputeMaps()
     const sortOpts = computeSortOpts.value
-    const { showIcon, allowBtn, iconLayout, iconAsc, iconDesc, iconVisibleMethod } = sortOpts
+    const { showIcon, allowBtn, ascTitle, descTitle, iconLayout, iconAsc, iconDesc, iconVisibleMethod } = sortOpts
     const { order } = column
     if (showIcon && (!iconVisibleMethod || iconVisibleMethod(params))) {
       return [
@@ -900,7 +901,7 @@ export const Cell = {
             class: ['vxe-sort--asc-btn', iconAsc || getIcon().TABLE_SORT_ASC, {
               'sort--active': order === 'asc'
             }],
-            title: getI18n('vxe.table.sortAsc'),
+            title: XEUtils.eqNull(ascTitle) ? getI18n('vxe.table.sortAsc') : `${ascTitle || ''}`,
             onClick: allowBtn
               ? (evnt: Event) => {
                   evnt.stopPropagation()
@@ -912,7 +913,7 @@ export const Cell = {
             class: ['vxe-sort--desc-btn', iconDesc || getIcon().TABLE_SORT_DESC, {
               'sort--active': order === 'desc'
             }],
-            title: getI18n('vxe.table.sortDesc'),
+            title: XEUtils.eqNull(descTitle) ? getI18n('vxe.table.sortDesc') : `${descTitle || ''}`,
             onClick: allowBtn
               ? (evnt: Event) => {
                   evnt.stopPropagation()

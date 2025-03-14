@@ -237,6 +237,9 @@ export default {
       fixedRight: 'lefagyott a jobb oldalon',
       cancelFixed: 'Oldja fel az oszlopot'
     },
+    datePicker: {
+      yearTitle: '{0} év'
+    },
     input: {
       date: {
         m1: 'január',
@@ -567,6 +570,7 @@ export default {
       },
       filterCombination: {
         menus: {
+          sort: '排序',
           clearSort: 'Tiszta rendezés',
           sortAsc: 'Növekvő sorrend',
           sortDesc: 'csökkenő sorrendben',
@@ -671,6 +675,7 @@ export default {
       },
       combination: {
         menus: {
+          sort: '排序',
           clearSort: 'Tiszta rendezés',
           sortAsc: 'Növekvő sorrend',
           sortDesc: 'csökkenő sorrendben',

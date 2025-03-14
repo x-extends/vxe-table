@@ -238,6 +238,9 @@ export default
       fixedRight: 'rechts eingefroren',
       cancelFixed: 'Spalte freigeben'
     },
+    datePicker: {
+      yearTitle: '{0} Jahre'
+    },
     input: {
       date: {
         m1: 'Januar',
@@ -568,6 +571,7 @@ export default
       },
       filterCombination: {
         menus: {
+          sort: '排序',
           clearSort: 'Klare Sortierung',
           sortAsc: 'Aufsteigende Reihenfolge',
           sortDesc: 'absteigende Reihenfolge',
@@ -672,6 +676,7 @@ export default
       },
       combination: {
         menus: {
+          sort: '排序',
           clearSort: 'Klare Sortierung',
           sortAsc: 'Aufsteigende Reihenfolge',
           sortDesc: 'absteigende Reihenfolge',

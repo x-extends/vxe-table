@@ -237,6 +237,9 @@ export default {
       fixedRight: '冻结在右侧',
       cancelFixed: '取消冻结列'
     },
+    datePicker: {
+      yearTitle: '{0} 年'
+    },
     input: {
       date: {
         m1: '01 月',
@@ -567,6 +570,7 @@ export default {
       },
       filterCombination: {
         menus: {
+          sort: '排序',
           clearSort: '清除排序',
           sortAsc: '升序',
           sortDesc: '降序',
@@ -671,6 +675,7 @@ export default {
       },
       combination: {
         menus: {
+          sort: '排序',
           clearSort: '清除排序',
           sortAsc: '升序',
           sortDesc: '降序',

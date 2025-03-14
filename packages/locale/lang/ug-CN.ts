@@ -237,6 +237,9 @@ export default {
       fixedRight: 'ئوڭ ياندا توڭلىتىش',
       cancelFixed: 'قۇر توڭلىتىشنى ئەمەلدىن قالدۇرۇش'
     },
+    datePicker: {
+      yearTitle: '{0} يىل'
+    },
     input: {
       date: {
         m1: '01 ئاي',
@@ -567,6 +570,7 @@ export default {
       },
       filterCombination: {
         menus: {
+          sort: '排序',
           clearSort: 'تەرتىپنى تازىلاش',
           sortAsc: 'ئېشىش',
           sortDesc: 'كېمىيىش',
@@ -671,6 +675,7 @@ export default {
       },
       combination: {
         menus: {
+          sort: '排序',
           clearSort: 'تەرتىپنى تازىلاش',
           sortAsc: 'ئېشىش',
           sortDesc: 'كېمىيىش',
