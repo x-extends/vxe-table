@@ -8556,10 +8556,10 @@ const Methods = {
     }
 
     const { highlightHoverRow } = tableProps
-    const { scrollXLoad, scrollYLoad } = reactData
+    const { scrollXLoad, scrollYLoad, expandColumn } = reactData
     const leftFixedWidth = $xeTable.computeLeftFixedWidth
     const rightFixedWidth = $xeTable.computeRightFixedWidth
-    if (!(scrollYLoad || leftFixedWidth || rightFixedWidth)) {
+    if (!(scrollYLoad || leftFixedWidth || rightFixedWidth || expandColumn)) {
       return
     }
 

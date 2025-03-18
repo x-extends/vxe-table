@@ -774,6 +774,9 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (proxyTarget: any, ...args: any[]) {
+      const $xeGrid = this
+      const reactData = $xeGrid
+
       const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, isRespMsg, isActiveMsg, validConfig, pagerOpts } = this
       const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {} } = proxyOpts
       const resConfigs = proxyOpts.response || proxyOpts.props || {}
@@ -830,6 +833,9 @@ export default {
           if (ajaxMethods) {
             const isInited = code === '_init'
             const isReload = code === 'reload'
+            if (!isInited && reactData.tableLoading) {
+              return $xeGrid.$nextTick()
+            }
             let sortList = []
             let filterList = []
             let pageParams = {}
@@ -1195,7 +1201,13 @@ export default {
       this.$emit('filter-change', Object.assign({ $grid: this }, params))
     },
     submitEvent (params: any) {
+      const $xeGrid = this
+      const reactData = $xeGrid
+
       const { proxyConfig } = this
+      if (reactData.tableLoading) {
+        return
+      }
       if (proxyConfig) {
         this.commitProxy('reload').then((rest: any) => {
           this.$emit('proxy-query', { ...rest, isReload: true, $grid: this, $event: params.$event })
