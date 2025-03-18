@@ -9094,10 +9094,10 @@ export default defineComponent({
         }
 
         const { highlightHoverRow } = tableProps
-        const { scrollXLoad, scrollYLoad } = reactData
+        const { scrollXLoad, scrollYLoad, expandColumn } = reactData
         const leftFixedWidth = computeLeftFixedWidth.value
         const rightFixedWidth = computeRightFixedWidth.value
-        if (!(scrollYLoad || leftFixedWidth || rightFixedWidth)) {
+        if (!(scrollYLoad || leftFixedWidth || rightFixedWidth || expandColumn)) {
           return
         }
 

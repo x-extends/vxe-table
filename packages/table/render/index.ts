@@ -9,7 +9,7 @@ import { errLog } from '../../ui/src/log'
 import type { VxeButtonComponent } from 'vxe-pc-ui'
 import type { VxeGlobalRendererHandles, VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
-const { getConfig, renderer, getI18n } = VxeUI
+const { getConfig, renderer, getI18n, getComponent } = VxeUI
 
 const componentDefaultModelProp = 'modelValue'
 
@@ -41,7 +41,7 @@ function getOldComponentName (name: string) {
 }
 
 function getDefaultComponent ({ name }: any) {
-  return resolveComponent(name) as ComponentOptions
+  return getComponent(name)
 }
 
 /**
