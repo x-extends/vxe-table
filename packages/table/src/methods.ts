@@ -4837,8 +4837,21 @@ const Methods = {
     }
     // 兼容老版本
 
-    let rest
-    if (!evntList.some(func => func(Object.assign({ $grid: this.$xegrid, $table: this, $event: evnt }, args)) === false)) {
+    let rest = null
+    let isStop = false
+    for (let i = 0; i < evntList.length; i++) {
+      const func = evntList[i]
+      const fnRest = func(Object.assign({ $grid: this.$xegrid, $table: this, $event: evnt }, args))
+      if (fnRest === false) {
+        isStop = true
+        break
+      } else if (fnRest && fnRest.status === false) {
+        rest = fnRest.result
+        isStop = true
+        break
+      }
+    }
+    if (!isStop) {
       if (next) {
         rest = next()
       }
