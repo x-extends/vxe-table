@@ -662,7 +662,7 @@ export default defineComponent({
         }
       }
 
-      if (fixedType || !overflowX) {
+      if (!isColLoading && (fixedType || !overflowX)) {
         renderColumnList = visibleColumn
       }
 
