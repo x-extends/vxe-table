@@ -8742,7 +8742,7 @@ const Methods = {
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { isGroup, scrollXLoad } = reactData
+    const { isGroup, scrollXLoad, overflowX } = reactData
     const { visibleColumn, scrollXStore, elemStore, tableWidth } = internalData
     const tableHeader = $xeTable.$refs.refTableHeader
     const tableBody = $xeTable.$refs.refTableBody
@@ -8756,7 +8756,7 @@ const Methods = {
       const footerElem = tableFooterElem ? tableFooterElem.querySelector('.vxe-table--footer') as HTMLTableElement : null
       const leftSpaceWidth = visibleColumn.slice(0, scrollXStore.startIndex).reduce((previous, column) => previous + column.renderWidth, 0)
       let marginLeft = ''
-      if (scrollXLoad) {
+      if (scrollXLoad && overflowX) {
         marginLeft = `${leftSpaceWidth}px`
       }
       if (headerElem) {

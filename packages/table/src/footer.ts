@@ -314,7 +314,7 @@ export default {
     const { fixedType, fixedColumn, tableColumn } = props
     const { spanMethod, footerSpanMethod, showFooterOverflow: allColumnFooterOverflow } = tableProps
     const { visibleColumn, fullColumnIdData } = tableInternalData
-    const { isGroup, overflowX, scrollXLoad, scrollYLoad, dragCol } = tableReactData
+    const { isGroup, isColLoading, overflowX, scrollXLoad, scrollYLoad, dragCol } = tableReactData
 
     let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
     let isOptimizeMode = false
@@ -327,7 +327,7 @@ export default {
       }
     }
 
-    if (fixedType || !overflowX) {
+    if (!isColLoading && (fixedType || !overflowX)) {
       renderColumnList = visibleColumn
     }
 
