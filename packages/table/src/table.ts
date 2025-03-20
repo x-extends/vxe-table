@@ -23,6 +23,7 @@ import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, Ta
 
 const { getConfig, getIcon, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
 
+const supportMaxRow = 3e5
 const customStorageKey = 'VXE_CUSTOM_STORE'
 
 export default defineComponent({
@@ -2751,6 +2752,9 @@ export default defineComponent({
       const childrenField = treeOpts.children || treeOpts.childrenField
       let treeData = []
       let fullData = reactive(datas ? datas.slice(0) : []) // 转为响应式
+      if (fullData.length > supportMaxRow) {
+        errLog('vxe.error.errMaxRow', [supportMaxRow])
+      }
       if (treeConfig) {
         if (transform) {
           // 树结构自动转换
