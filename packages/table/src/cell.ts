@@ -415,8 +415,8 @@ export const Cell = {
     const tableReactData = $table.reactData
     const tableInternalData = $table.internalData
     const { computeTreeOpts } = $table.getComputeMaps()
-    const { treeExpandedMaps, treeExpandLazyLoadedMaps } = tableReactData
-    const { fullAllDataRowIdData } = tableInternalData
+    const { treeExpandedFlag } = tableReactData
+    const { fullAllDataRowIdData, treeExpandedMaps, treeExpandLazyLoadedMaps } = tableInternalData
     const treeOpts = computeTreeOpts.value
     const { row, column, level } = params
     const { slots } = column
@@ -436,7 +436,7 @@ export const Cell = {
     }
     if (!isHidden) {
       const rowid = getRowid($table, row)
-      isActive = !!treeExpandedMaps[rowid]
+      isActive = !!treeExpandedFlag && !!treeExpandedMaps[rowid]
       if (lazy) {
         const rest = fullAllDataRowIdData[rowid]
         isLazyLoading = !!treeExpandLazyLoadedMaps[rowid]
@@ -647,8 +647,10 @@ export const Cell = {
     const { $table, row, column, isHidden } = params
     const tableProps = $table.props
     const tableReactData = $table.reactData
+    const tableInternalData = $table.internalData
     const { treeConfig } = tableProps
-    const { selectCheckboxMaps, treeIndeterminateMaps } = tableReactData
+    const { updateCheckboxFlag } = tableReactData
+    const { selectCheckboxMaps, treeIndeterminateRowMaps } = tableInternalData
     const { computeCheckboxOpts } = $table.getComputeMaps()
     const checkboxOpts = computeCheckboxOpts.value
     const { labelField, checkMethod, visibleMethod } = checkboxOpts
@@ -662,7 +664,7 @@ export const Cell = {
     const ons: Record<string, any> = {}
     if (!isHidden) {
       const rowid = getRowid($table, row)
-      isChecked = !!selectCheckboxMaps[rowid]
+      isChecked = !!updateCheckboxFlag && !!selectCheckboxMaps[rowid]
       ons.onClick = (evnt: MouseEvent) => {
         if (!isDisabled && isVisible) {
           $table.triggerCheckRowEvent(evnt, params, !isChecked)
@@ -672,7 +674,7 @@ export const Cell = {
         isDisabled = !checkMethod({ row })
       }
       if (treeConfig) {
-        indeterminate = !!treeIndeterminateMaps[rowid]
+        indeterminate = !!treeIndeterminateRowMaps[rowid]
       }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
@@ -713,8 +715,10 @@ export const Cell = {
     const { $table, row, column, isHidden } = params
     const tableProps = $table.props
     const tableReactData = $table.reactData
+    const tableInternalData = $table.internalData
     const { treeConfig } = tableProps
-    const { treeIndeterminateMaps } = tableReactData
+    const { updateCheckboxFlag } = tableReactData
+    const { treeIndeterminateRowMaps } = tableInternalData
     const { computeCheckboxOpts } = $table.getComputeMaps()
     const checkboxOpts = computeCheckboxOpts.value
     const { labelField, checkField, checkMethod, visibleMethod } = checkboxOpts
@@ -729,7 +733,7 @@ export const Cell = {
     const ons: Record<string, any> = {}
     if (!isHidden) {
       const rowid = getRowid($table, row)
-      isChecked = XEUtils.get(row, checkField as string)
+      isChecked = !!updateCheckboxFlag && XEUtils.get(row, checkField)
       ons.onClick = (evnt: MouseEvent) => {
         if (!isDisabled && isVisible) {
           $table.triggerCheckRowEvent(evnt, params, !isChecked)
@@ -739,7 +743,7 @@ export const Cell = {
         isDisabled = !checkMethod({ row })
       }
       if (treeConfig) {
-        isIndeterminate = !!treeIndeterminateMaps[rowid]
+        isIndeterminate = !!treeIndeterminateRowMaps[rowid]
       }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate: isIndeterminate }
@@ -782,8 +786,8 @@ export const Cell = {
    */
   renderExpandCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, isHidden, row, column } = params
-    const tableReactData = $table.reactData
-    const { rowExpandedMaps, rowExpandLazyLoadedMaps } = tableReactData
+    const tableInternalData = $table.internalData
+    const { rowExpandedMaps, rowExpandLazyLoadedMaps } = tableInternalData
     const { computeExpandOpts } = $table.getComputeMaps()
     const expandOpts = computeExpandOpts.value
     const { lazy, labelField, iconLoaded, showIcon, iconOpen, iconClose, visibleMethod } = expandOpts

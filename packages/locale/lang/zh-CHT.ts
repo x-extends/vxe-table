@@ -51,7 +51,8 @@ export default {
       treeNotImp: '樹表格不支援導入',
       treeCrossDrag: '只能拖曳第一層級',
       treeDragChild: '父級不能拖曳到自己的子級中',
-      reqPlugin: '擴展挿件未安裝 "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '擴展挿件未安裝 "{1}" https://vxeui.com/other{0}/#/{1}/install',
+      errMaxRow: '超过支持的最大数据量 {0} 行，这可能会导致出现错误'
     },
     table: {
       emptyText: '暫無數據',

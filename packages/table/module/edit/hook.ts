@@ -490,15 +490,14 @@ hooks.add('tableEditModule', {
        */
       remove (rows: any) {
         const { treeConfig } = props
-        const { mergeList, editStore, selectCheckboxMaps } = reactData
-        const { tableFullTreeData, afterFullData, tableFullData } = internalData
+        const { mergeList, editStore } = reactData
+        const { tableFullTreeData, selectCheckboxMaps, afterFullData, tableFullData, pendingRowMaps } = internalData
         const checkboxOpts = computeCheckboxOpts.value
         const treeOpts = computeTreeOpts.value
         const { transform, mapChildrenField } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
         const { actived, removeMaps } = editStore
         const insertDataRowMaps = Object.assign({}, editStore.insertMaps)
-        const pendingDataRowMaps = Object.assign({}, reactData.pendingRowMaps)
         const { checkField } = checkboxOpts
         let delList: any[] = []
         if (!rows) {
@@ -515,14 +514,13 @@ hooks.add('tableEditModule', {
         })
         // 如果绑定了多选属性，则更新状态
         if (!checkField) {
-          const selectRowMaps = { ...selectCheckboxMaps }
           rows.forEach((row: any) => {
             const rowid = getRowid($xeTable, row)
-            if (selectRowMaps[rowid]) {
-              delete selectRowMaps[rowid]
+            if (selectCheckboxMaps[rowid]) {
+              delete selectCheckboxMaps[rowid]
             }
           })
-          reactData.selectCheckboxMaps = selectRowMaps
+          reactData.updateCheckboxFlag++
         }
         // 从数据源中移除
         if (tableFullData === rows) {
@@ -582,12 +580,12 @@ hooks.add('tableEditModule', {
           if (insertDataRowMaps[rowid]) {
             delete insertDataRowMaps[rowid]
           }
-          if (pendingDataRowMaps[rowid]) {
-            delete pendingDataRowMaps[rowid]
+          if (pendingRowMaps[rowid]) {
+            delete pendingRowMaps[rowid]
           }
         })
         editStore.insertMaps = insertDataRowMaps
-        reactData.pendingRowMaps = pendingDataRowMaps
+        reactData.pendingRowFlag++
         $xeTable.updateFooter()
         $xeTable.cacheRowMap(false)
         $xeTable.handleTableData(treeConfig && transform)

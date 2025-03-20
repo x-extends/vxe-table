@@ -1,7 +1,7 @@
 import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { getOffsetSize, calcTreeLine, mergeBodyMethod, getRowid } from './util'
+import { getOffsetSize, calcTreeLine, mergeBodyMethod, getRowid, createHandleGetRowId } from './util'
 import { updateCellTitle, getPropClass } from '../../ui/src/dom'
 import { isEnableConf } from '../../ui/src/utils'
 import { getSlotVNs } from '../../ui/src/vn'
@@ -45,7 +45,7 @@ export default defineComponent({
       return !!(isDragResize || (lastScrollTime && Date.now() < lastScrollTime + (delayHover as number)))
     }
 
-    const renderLine = (params: VxeTableDefines.CellRenderBodyParams, cellHeight: number) => {
+    const renderLine = (rowid: string, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number) => {
       const { row, column } = params
       const { afterFullData } = tableInternalData
       const { treeConfig } = tableProps
@@ -55,7 +55,6 @@ export default defineComponent({
       if (slots && (slots as any).line) {
         return $xeTable.callSlot((slots as any).line, params)
       }
-      const rowid = getRowid($xeTable, row)
       const rest = fullAllDataRowIdData[rowid]
       let rLevel = 0
       let prevRow = null
@@ -312,7 +311,7 @@ export default defineComponent({
       } else {
         // 渲染单元格
         tdVNs.push(
-          ...renderLine(cellParams, cellHeight),
+          ...renderLine(rowid, cellParams, cellHeight),
           h('div', {
             key: 'tc',
             class: ['vxe-cell', {
@@ -436,8 +435,8 @@ export default defineComponent({
 
     const renderRows = (fixedType: 'left' | 'right' | '', isOptimizeMode: boolean, tableData: any[], tableColumn: VxeTableDefines.ColumnInfo[]) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
-      const { hasFixedColumn, treeExpandedMaps, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, isDragColMove, rowExpandHeightFlag } = tableReactData
-      const { fullAllDataRowIdData } = tableInternalData
+      const { hasFixedColumn, treeExpandedFlag, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, isDragColMove, rowExpandHeightFlag } = tableReactData
+      const { fullAllDataRowIdData, treeExpandedMaps, pendingRowMaps, rowExpandedMaps } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
       const treeOpts = computeTreeOpts.value
@@ -448,6 +447,7 @@ export default defineComponent({
       const { transform, seqMode } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       const rows: any[] = []
+      const { handleGetRowId } = createHandleGetRowId($xeTable)
       tableData.forEach((row, $rowIndex) => {
         const trOn: Record<string, any> = {}
         let rowIndex = $rowIndex
@@ -468,7 +468,7 @@ export default defineComponent({
             $xeTable.clearHoverRow()
           }
         }
-        const rowid = getRowid($xeTable, row)
+        const rowid = handleGetRowId(row)
         const rowRest = fullAllDataRowIdData[rowid]
         let rowLevel = 0
         let seq: string | number = -1
@@ -484,7 +484,7 @@ export default defineComponent({
         }
         const params = { $table: $xeTable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
         // 行是否被展开
-        const isExpandRow = expandColumn && !!rowExpandedMaps[rowid]
+        const isExpandRow = expandColumn && !!rowExpandedFlag && !!rowExpandedMaps[rowid]
         // 树节点是否被展开
         let isExpandTree = false
         let rowChildren = []
@@ -494,7 +494,7 @@ export default defineComponent({
         }
         if (treeConfig && !scrollYLoad && !transform) {
           rowChildren = row[childrenField]
-          isExpandTree = rowChildren && rowChildren.length > 0 && !!treeExpandedMaps[rowid]
+          isExpandTree = !!treeExpandedFlag && rowChildren && rowChildren.length > 0 && !!treeExpandedMaps[rowid]
         }
         // 拖拽行事件
         if (rowOpts.drag && (!treeConfig || transform)) {
@@ -513,7 +513,7 @@ export default defineComponent({
             'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
             'row--radio': radioOpts.highlight && $xeTable.eqRow(selectRadioRow, row),
             'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
-            'row--pending': !!pendingRowMaps[rowid]
+            'row--pending': !!pendingRowFlag && !!pendingRowMaps[rowid]
           },
           getPropClass(rowClassName, params)
         ]
@@ -662,7 +662,7 @@ export default defineComponent({
         }
       }
 
-      if (fixedType || !overflowX) {
+      if (!isColLoading && (fixedType || !overflowX)) {
         renderColumnList = visibleColumn
       }
 

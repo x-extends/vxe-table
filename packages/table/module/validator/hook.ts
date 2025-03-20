@@ -109,8 +109,8 @@ hooks.add('tableValidatorModule', {
     const beginValidate = (rows: any, cols: VxeTableDefines.ColumnInfo[] | null, cb: any, isFull?: boolean): Promise<any> => {
       const validRest: any = {}
       const { editRules, treeConfig } = props
-      const { editStore, pendingRowMaps } = reactData
-      const { afterFullData } = internalData
+      const { editStore } = reactData
+      const { afterFullData, pendingRowMaps } = internalData
       const { removeMaps } = editStore
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField

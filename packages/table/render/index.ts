@@ -6,10 +6,9 @@ import { getFuncText, formatText, isEmptyValue } from '../../ui/src/utils'
 import { getOnName, getModelEvent, getChangeEvent } from '../../ui/src/vn'
 import { errLog } from '../../ui/src/log'
 
-import type { VxeButtonComponent } from 'vxe-pc-ui'
 import type { VxeGlobalRendererHandles, VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
-const { getConfig, renderer, getI18n } = VxeUI
+const { getConfig, renderer, getI18n, getComponent } = VxeUI
 
 const componentDefaultModelProp = 'modelValue'
 
@@ -41,7 +40,7 @@ function getOldComponentName (name: string) {
 }
 
 function getDefaultComponent ({ name }: any) {
-  return resolveComponent(name) as ComponentOptions
+  return getComponent(name)
 }
 
 /**
@@ -393,7 +392,7 @@ function oldEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOpti
  */
 function oldButtonEditRender (renderOpts: any, params: any) {
   return [
-    h(resolveComponent('vxe-button') as VxeButtonComponent, {
+    h(getComponent('vxe-button'), {
       ...getCellEditProps(renderOpts, params, null),
       ...getComponentOns(renderOpts, params)
     })

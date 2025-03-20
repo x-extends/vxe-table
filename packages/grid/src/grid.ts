@@ -400,6 +400,9 @@ export default defineComponent({
     const submitFormEvent: VxeFormEvents.Submit = (params) => {
       const { proxyConfig } = props
       const proxyOpts = computeProxyOpts.value
+      if (reactData.tableLoading) {
+        return
+      }
       if (proxyConfig && isEnableConf(proxyOpts)) {
         gridMethods.commitProxy('reload').then((rest) => {
           gridMethods.dispatchEvent('proxy-query', { ...rest, isReload: true }, params.$event)
@@ -906,6 +909,9 @@ export default defineComponent({
             if (ajaxMethods) {
               const isInited = code === '_init'
               const isReload = code === 'reload'
+              if (!isInited && reactData.tableLoading) {
+                return nextTick()
+              }
               let sortList: any[] = []
               let filterList: VxeTableDefines.FilterCheckedParams[] = []
               let pageParams: any = {}
