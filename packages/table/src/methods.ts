@@ -11,6 +11,7 @@ import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, Table
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent } = VxeUI
 
+const supportMaxRow = 3e5
 const customStorageKey = 'VXE_CUSTOM_STORE'
 
 function eqCellValue (row1: any, row2: any, field: any) {
@@ -2411,6 +2412,9 @@ const Methods = {
     const childrenField = treeOpts.children || treeOpts.childrenField
     let treeData = []
     let fullData = datas ? datas.slice(0) : []
+    if (fullData.length > supportMaxRow) {
+      errLog('vxe.error.errMaxRow', [supportMaxRow])
+    }
     if (treeConfig) {
       // 树结构自动转换
       if (treeOpts.transform) {
