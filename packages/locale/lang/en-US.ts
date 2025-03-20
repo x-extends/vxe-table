@@ -51,7 +51,8 @@ export default {
       treeNotImp: 'Tree tables do not support importing',
       treeCrossDrag: 'Only the first level can be dragged',
       treeDragChild: 'A parent cannot be dragged into its own children',
-      reqPlugin: 'Extension plugin not installed "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: 'Extension plugin not installed "{1}" https://vxeui.com/other{0}/#/{1}/install',
+      errMaxRow: 'The maximum supported data volume {0} line is exceeded, which may cause an error.'
     },
     table: {
       emptyText: 'No data yet',

@@ -51,7 +51,8 @@ export default {
       treeNotImp: 'ตารางแผนผังไม่รองรับการนำเข้า',
       treeCrossDrag: 'สามารถลากได้เฉพาะระดับแรกเท่านั้น',
       treeDragChild: 'ผู้ปกครองไม่สามารถถูกลากเข้าไปในลูกของตัวเองได้',
-      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install',
+      errMaxRow: '超过支持的最大数据量 {0} 行，这可能会导致出现错误'
     },
     table: {
       emptyText: 'ยังไม่มีข้อมูล',

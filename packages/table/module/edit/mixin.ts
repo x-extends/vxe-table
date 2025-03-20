@@ -494,19 +494,20 @@ export default {
      * 如果为空则删除所有
      */
     _remove (rows: any[]) {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
-      const reactData = $xeTable
-      const internalData = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
 
       const { treeConfig } = props
-      const { mergeList, editStore, selectCheckboxMaps } = reactData
-      const { tableFullTreeData, afterFullData, tableFullData } = internalData
+      const { mergeList, editStore } = reactData
+      const { tableFullTreeData, selectCheckboxMaps, afterFullData, tableFullData, pendingRowMaps } = internalData
       const checkboxOpts = $xeTable.computeCheckboxOpts
       const treeOpts = $xeTable.computeTreeOpts
       const { transform, mapChildrenField } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
-      const { actived, removeMaps, insertMaps } = editStore
+      const { actived, removeMaps } = editStore
+      const insertDataRowMaps = Object.assign({}, editStore.insertMaps)
       const { checkField } = checkboxOpts
       let delList: any[] = []
       if (!rows) {
@@ -523,14 +524,13 @@ export default {
       })
       // 如果绑定了多选属性，则更新状态
       if (!checkField) {
-        const selectRowMaps = { ...selectCheckboxMaps }
         rows.forEach((row) => {
           const rowid = getRowid(this, row)
-          if (selectRowMaps[rowid]) {
-            delete selectRowMaps[rowid]
+          if (selectCheckboxMaps[rowid]) {
+            delete selectCheckboxMaps[rowid]
           }
         })
-        this.selectCheckboxMaps = selectRowMaps
+        reactData.updateCheckboxFlag++
       }
       // 从数据源中移除
       if (tableFullData === rows) {
@@ -587,10 +587,15 @@ export default {
       // 从新增中移除已删除的数据
       rows.forEach((row: any) => {
         const rowid = getRowid($xeTable, row)
-        if (insertMaps[rowid]) {
-          delete insertMaps[rowid]
+        if (insertDataRowMaps[rowid]) {
+          delete insertDataRowMaps[rowid]
+        }
+        if (pendingRowMaps[rowid]) {
+          delete pendingRowMaps[rowid]
         }
       })
+      editStore.insertMaps = insertDataRowMaps
+      reactData.pendingRowFlag++
       $xeTable.updateFooter()
       $xeTable.cacheRowMap(false)
       $xeTable.handleTableData(treeConfig && transform)

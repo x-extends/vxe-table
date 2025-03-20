@@ -2,7 +2,7 @@ import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { isEnableConf, getClass } from '../../ui/src/utils'
-import { getOffsetSize, calcTreeLine, mergeBodyMethod, getRowid } from './util'
+import { getOffsetSize, calcTreeLine, mergeBodyMethod, getRowid, createHandleGetRowId } from './util'
 import { updateCellTitle } from '../../ui/src/dom'
 import { getSlotVNs } from '../../ui/src/vn'
 
@@ -22,7 +22,7 @@ const isVMScrollProcess = ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   return !!(isDragResize || (lastScrollTime && Date.now() < lastScrollTime + (delayHover as number)))
 }
 
-function renderLine (h: CreateElement, _vm: any, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number) {
+function renderLine (h: CreateElement, _vm: any, rowid: string, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number) {
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
   const tableInternalData = $xeTable as unknown as TableInternalData
@@ -36,7 +36,6 @@ function renderLine (h: CreateElement, _vm: any, params: VxeTableDefines.CellRen
   if (slots && (slots as any).line) {
     return $xeTable.callSlot((slots as any).line, params, h)
   }
-  const rowid = getRowid($xeTable, row)
   const rest = fullAllDataRowIdData[rowid]
   let rLevel = 0
   let prevRow = null
@@ -299,7 +298,7 @@ function renderTdColumn (
   } else {
     // 渲染单元格
     tdVNs.push(
-      ...renderLine(h, _vm, cellParams, cellHeight),
+      ...renderLine(h, _vm, rowid, cellParams, cellHeight),
       h('div', {
         key: 'tc',
         class: ['vxe-cell', {
@@ -436,8 +435,8 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
   const tableInternalData = $xeTable as unknown as TableInternalData
 
   const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
-  const { hasFixedColumn, treeExpandedMaps, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, isDragColMove, rowExpandHeightFlag } = tableReactData
-  const { fullAllDataRowIdData } = tableInternalData
+  const { hasFixedColumn, treeExpandedFlag, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, isDragColMove, rowExpandHeightFlag } = tableReactData
+  const { fullAllDataRowIdData, treeExpandedMaps, pendingRowMaps, rowExpandedMaps } = tableInternalData
   const checkboxOpts = $xeTable.computeCheckboxOpts
   const radioOpts = $xeTable.computeRadioOpts
   const treeOpts = $xeTable.computeTreeOpts
@@ -448,6 +447,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
   const { transform, seqMode } = treeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
   const rows: any[] = []
+  const { handleGetRowId } = createHandleGetRowId($xeTable)
   tableData.forEach((row, $rowIndex) => {
     const trOn: Record<string, any> = {}
     let rowIndex = $rowIndex
@@ -468,7 +468,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
         $xeTable.clearHoverRow()
       }
     }
-    const rowid = getRowid($xeTable, row)
+    const rowid = handleGetRowId(row)
     const rowRest = fullAllDataRowIdData[rowid]
     let rowLevel = 0
     let seq: string | number = -1
@@ -484,7 +484,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
     }
     const params = { $table: $xeTable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
     // 行是否被展开
-    const isExpandRow = expandColumn && !!rowExpandedMaps[rowid]
+    const isExpandRow = expandColumn && !!rowExpandedFlag && !!rowExpandedMaps[rowid]
     // 树节点是否被展开
     let isExpandTree = false
     let rowChildren = []
@@ -495,7 +495,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
     }
     if (treeConfig && !scrollYLoad && !transform) {
       rowChildren = row[childrenField]
-      isExpandTree = rowChildren && rowChildren.length && !!treeExpandedMaps[rowid]
+      isExpandTree = !!treeExpandedFlag && rowChildren && rowChildren.length > 0 && !!treeExpandedMaps[rowid]
     }
     // 拖拽行事件
     if (rowOpts.drag && (!treeConfig || transform)) {
@@ -514,7 +514,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
         'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
         'row--radio': radioOpts.highlight && selectRadioRow === row,
         'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
-        'row--pending': !!pendingRowMaps[rowid]
+        'row--pending': !!pendingRowFlag && !!pendingRowMaps[rowid]
       },
       rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''
     ]
@@ -695,7 +695,7 @@ export default {
       }
     }
 
-    if (fixedType || !overflowX) {
+    if (!isColLoading && (fixedType || !overflowX)) {
       renderColumnList = visibleColumn
     }
 

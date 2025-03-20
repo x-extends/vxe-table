@@ -2,7 +2,7 @@ import { CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { getFuncText, isEnableConf } from '../../ui/src/utils'
 import { initTpImg } from '../../ui/src/dom'
-import { getRowid } from './util'
+import { createHandleGetRowId } from './util'
 import { VxeUI } from '../../ui'
 import methods from './methods'
 import TableBodyComponent from './body'
@@ -209,6 +209,7 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
   ]
 
   if (expandColumn) {
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
     tableRowExpandedList.forEach((row) => {
       const expandOpts = $xeTable.computeExpandOpts
       const { height: expandHeight, padding } = expandOpts
@@ -216,7 +217,7 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
       const treeOpts = $xeTable.computeTreeOpts
       const { transform, seqMode } = treeOpts
       const cellStyle: Record<string, string> = {}
-      const rowid = getRowid($xeTable, row)
+      const rowid = handleGetRowId(row)
       const rest = fullAllDataRowIdData[rowid]
       let rowLevel = 0
       let seq: string | number = -1
@@ -471,8 +472,6 @@ export default {
       isAllSelected: false,
       // 复选框属性，有选中且非全选状态
       isIndeterminate: false,
-      // 复选框属性，已选中的行集合
-      selectCheckboxMaps: {},
       // 当前行
       currentRow: null,
       // 单选框属性，选中列
@@ -486,16 +485,6 @@ export default {
       hasFixedColumn: false,
       // 树节点列信息
       treeNodeColumn: null,
-      // 已展开的行集合
-      rowExpandedMaps: {},
-      // 懒加载中的展开行的集合
-      rowExpandLazyLoadedMaps: {},
-      // 已展开树节点集合
-      treeExpandedMaps: {},
-      // 懒加载中的树节点的集合
-      treeExpandLazyLoadedMaps: {},
-      // 树节点不确定状态的集合
-      treeIndeterminateMaps: {},
       // 合并单元格的对象集
       mergeList: [],
       // 合并表尾数据的对象集
@@ -512,8 +501,6 @@ export default {
       upDataFlag: 0,
       // 刷新列标识，当列的特定属性被改变时，触发表格刷新列
       reColumnFlag: 0,
-      // 已标记的对象集
-      pendingRowMaps: {},
       // 自定义列相关的信息
       customStore: {
         btnEl: null,
@@ -649,6 +636,11 @@ export default {
         isFooter: false
       },
 
+      rowExpandedFlag: 1,
+      treeExpandedFlag: 1,
+      updateCheckboxFlag: 1,
+      pendingRowFlag: 1,
+
       rowHeightStore: {
         default: 48,
         medium: 44,
@@ -774,13 +766,13 @@ export default {
       return this.computeRowHeightMaps
     },
     computeRowHeightMaps () {
-      const $xeTable = this
-      const reactData = $xeTable as TableReactData
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       return reactData.rowHeightStore
     },
     computeDefaultRowHeight () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const vSize = $xeTable.computeSize
       const rowHeightMaps = $xeTable.computeRowHeightMaps
@@ -790,13 +782,13 @@ export default {
       return this.computeColumnOpts
     },
     computeColumnOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.columnConfig, props.columnConfig)
     },
     computeCurrentColumnOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.currentColumnConfig, props.currentColumnConfig)
@@ -805,19 +797,31 @@ export default {
       const $xeTable = this
       const props = $xeTable
 
-      return Object.assign({}, getConfig().table.cellConfig, props.cellConfig)
+      const cellOpts = Object.assign({}, getConfig().table.cellConfig, props.cellConfig)
+      if (cellOpts.height) {
+        cellOpts.height = XEUtils.toNumber(cellOpts.height)
+      }
+      return cellOpts
     },
     computeHeaderCellOpts () {
       const $xeTable = this
       const props = $xeTable
 
-      return Object.assign({}, getConfig().table.headerCellConfig, props.headerCellConfig)
+      const headerCellOpts = Object.assign({}, getConfig().table.headerCellConfig, props.headerCellConfig)
+      if (headerCellOpts.height) {
+        headerCellOpts.height = XEUtils.toNumber(headerCellOpts.height)
+      }
+      return headerCellOpts
     },
     computeFooterCellOpts () {
       const $xeTable = this
       const props = $xeTable
 
-      return Object.assign({}, getConfig().table.footerCellConfig, props.footerCellConfig)
+      const footerCellOpts = Object.assign({}, getConfig().table.footerCellConfig, props.footerCellConfig)
+      if (footerCellOpts.height) {
+        footerCellOpts.height = XEUtils.toNumber(footerCellOpts.height)
+      }
+      return footerCellOpts
     },
     rowOpts () {
       return this.computeRowOpts
@@ -1101,13 +1105,16 @@ export default {
     computeTableRowExpandedList () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
 
-      const { rowExpandedMaps, tableData, expandColumn } = reactData
+      const { rowExpandedFlag, tableData, expandColumn } = reactData
+      const { rowExpandedMaps } = internalData
+      const { handleGetRowId } = createHandleGetRowId($xeTable)
       const expandList: any[] = []
-      if (expandColumn) {
+      if (expandColumn && rowExpandedFlag) {
         const rowKeys: Record<string, boolean> = {}
         tableData.forEach(row => {
-          rowKeys[getRowid($xeTable, row)] = true
+          rowKeys[handleGetRowId(row)] = true
         })
         XEUtils.each(rowExpandedMaps, (row, rowid) => {
           if (rowKeys[rowid]) {
@@ -1360,13 +1367,15 @@ export default {
       lastScrollTop: 0,
       // 单选框属性，已选中保留的行
       radioReserveRow: null,
-      // 复选框属性，已选中保留的行
+      // 复选框属性，已选中保留的行集合
       checkboxReserveRowMap: {},
-      // 行数据，已展开保留的行
+      // 行数据，已展开保留的行集合
       rowExpandedReserveRowMap: {},
-      // 树结构数据，已展开保留的行
+      // 树结构数据，已展开保留的行集合
       treeExpandedReserveRowMap: {},
-      // 完整数据、条件处理后
+      // 树结构数据，不确定状态的集合
+      treeIndeterminateRowMaps: {},
+      // 列表完整数据、条件处理后
       tableFullData: [],
       afterFullData: [],
       // 列表条件处理后数据集合
@@ -1384,6 +1393,19 @@ export default {
       fullColumnMap: new Map(),
       fullColumnIdData: {},
       fullColumnFieldData: {},
+
+      // 已展开的行集合
+      rowExpandedMaps: {},
+      // 懒加载中的展开行的集合
+      rowExpandLazyLoadedMaps: {},
+      // 已展开树节点集合
+      treeExpandedMaps: {},
+      // 懒加载中的树节点的集合
+      treeExpandLazyLoadedMaps: {},
+      // 复选框属性，已选中的行集合
+      selectCheckboxMaps: {},
+      // 已标记的对象集
+      pendingRowMaps: {},
 
       swYSize: 0,
       swYInterval: 0,

@@ -8,7 +8,7 @@ import { errLog } from '../../ui/src/log'
 
 import type { VxeGlobalRendererHandles, VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
-const { getConfig, renderer, getI18n } = VxeUI
+const { getConfig, renderer, getI18n, getComponent } = VxeUI
 
 const componentDefaultModelProp = 'value'
 
@@ -48,7 +48,7 @@ function getOldComponent ({ name }: any) {
 }
 
 function getDefaultComponent ({ name }: any) {
-  return name
+  return getComponent(name) || name
 }
 
 function handleConfirmFilter (params: any, checked: any, option: any) {

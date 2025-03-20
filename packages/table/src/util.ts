@@ -103,16 +103,40 @@ export function getRowUniqueId () {
 }
 
 // 行主键 key
-export function getRowkey ($xeTable: any) {
+export function getRowkey ($xeTable: VxeTableConstructor) {
   const props = $xeTable
   const rowOpts = $xeTable.computeRowOpts
   return `${props.rowId || rowOpts.keyField || '_X_ROW_KEY'}`
 }
 
 // 行主键 value
-export function getRowid ($xetable: any, row: any) {
-  const rowid = XEUtils.get(row, getRowkey($xetable))
+export function getRowid ($xeTable: VxeTableConstructor, row: any) {
+  const rowid = XEUtils.get(row, getRowkey($xeTable))
   return encodeRowid(rowid)
+}
+
+export function createHandleUpdateRowId ($xeTable: VxeTableConstructor) {
+  const rowKey = getRowkey($xeTable)
+  const isDeepKey = rowKey.indexOf('.') > -1
+  const updateRId = isDeepKey ? updateDeepRowKey : updateFastRowKey
+  return {
+    rowKey,
+    handleUpdateRowId (row: any) {
+      return row ? updateRId(row, rowKey) : null
+    }
+  }
+}
+
+export function createHandleGetRowId ($xeTable: VxeTableConstructor) {
+  const rowKey = getRowkey($xeTable)
+  const isDeepKey = rowKey.indexOf('.') > -1
+  const getRId = isDeepKey ? getDeepRowIdByKey : getFastRowIdByKey
+  return {
+    rowKey,
+    handleGetRowId (row: any) {
+      return row ? getRId(row, rowKey) : null
+    }
+  }
 }
 
 // 编码行主键
@@ -120,20 +144,28 @@ export function encodeRowid (rowVal: string) {
   return XEUtils.eqNull(rowVal) ? '' : encodeURIComponent(rowVal)
 }
 
-export function updateDeepRowKey (row: any, rowkey: string) {
-  let rowid = XEUtils.get(row, rowkey)
+function getDeepRowIdByKey (row: any, rowKey: string) {
+  return XEUtils.get(row, rowKey)
+}
+
+export function updateDeepRowKey (row: any, rowKey: string) {
+  let rowid = getDeepRowIdByKey(row, rowKey)
   if (eqEmptyValue(rowid)) {
     rowid = getRowUniqueId()
-    XEUtils.set(row, rowkey, rowid)
+    XEUtils.set(row, rowKey, rowid)
   }
   return rowid
 }
 
-export function updateFastRowKey (row: any, rowkey: string) {
-  let rowid = row[rowkey]
+function getFastRowIdByKey (row: any, rowKey: string) {
+  return row[rowKey]
+}
+
+export function updateFastRowKey (row: any, rowKey: string) {
+  let rowid = getFastRowIdByKey(row, rowKey)
   if (eqEmptyValue(rowid)) {
     rowid = getRowUniqueId()
-    row[rowkey] = rowid
+    row[rowKey] = rowid
   }
   return rowid
 }

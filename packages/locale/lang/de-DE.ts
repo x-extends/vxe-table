@@ -52,7 +52,8 @@ export default
       treeNotImp: 'Baumtabellen unterstützen den Import nicht',
       treeCrossDrag: 'Nur die erste Ebene kann gezogen werden',
       treeDragChild: 'Ein übergeordnetes Element kann nicht in seine eigenen untergeordneten Elemente gezogen werden',
-      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install',
+      errMaxRow: '超过支持的最大数据量 {0} 行，这可能会导致出现错误'
     },
     table: {
       emptyText: 'Noch keine Daten',

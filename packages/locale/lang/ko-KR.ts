@@ -51,7 +51,8 @@ export default {
       treeNotImp: '트리 테이블은 가져오기를 지원하지 않습니다.',
       treeCrossDrag: '첫 번째 계층만 드래그할 수 있습니다.',
       treeDragChild: '부모 항목은 자신의 하위 항목으로 드래그할 수 없습니다.',
-      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install',
+      errMaxRow: '超过支持的最大数据量 {0} 行，这可能会导致出现错误'
     },
     table: {
       emptyText: '데이터가 없습니다.',

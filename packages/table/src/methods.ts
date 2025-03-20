@@ -3,7 +3,7 @@ import { browse, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEv
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, updateDeepRowKey, updateFastRowKey, getRefElem } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
@@ -11,6 +11,7 @@ import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, Table
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent } = VxeUI
 
+const supportMaxRow = 5e6
 const customStorageKey = 'VXE_CUSTOM_STORE'
 const maxYHeight = 5e6
 const maxXWidth = 5e6
@@ -340,9 +341,10 @@ function updateAfterListIndex ($xeTable: VxeTableConstructor) {
 
   const { treeConfig } = props
   const { afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+  const { handleGetRowId } = createHandleGetRowId($xeTable)
   const fullMaps: Record<string, any> = {}
   afterFullData.forEach((row, index) => {
-    const rowid = getRowid($xeTable, row)
+    const rowid = handleGetRowId(row)
     const rowRest = fullAllDataRowIdData[rowid]
     const seq = index + 1
     if (rowRest) {
@@ -375,8 +377,9 @@ function updateAfterDataIndex ($xeTable: VxeTableConstructor) {
   const childrenField = treeOpts.children || treeOpts.childrenField
   const fullMaps: Record<string, any> = {}
   if (treeConfig) {
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
     XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
-      const rowid = getRowid($xeTable, row)
+      const rowid = handleGetRowId(row)
       const rowRest = fullAllDataRowIdData[rowid]
       const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
       if (rowRest) {
@@ -402,22 +405,21 @@ function updateAfterDataIndex ($xeTable: VxeTableConstructor) {
  */
 function handleVirtualTreeToList ($xeTable: VxeTableConstructor) {
   const props = $xeTable
-  const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
   const { treeConfig } = props
-  const { treeExpandedMaps } = reactData
-  const { fullAllDataRowIdData } = internalData
+  const { fullAllDataRowIdData, treeExpandedMaps } = internalData
   const treeOpts = $xeTable.computeTreeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
   if (treeConfig && treeOpts.transform) {
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
     const fullData: any[] = []
     const expandMaps: {
       [key: string]: number
     } = {}
     XEUtils.eachTree(internalData.afterTreeFullData, (row, index, items, path, parentRow) => {
-      const rowid = getRowid($xeTable, row)
-      const parentRowid = getRowid($xeTable, parentRow)
+      const rowid = handleGetRowId(row)
+      const parentRowid = handleGetRowId(parentRow)
       if (!parentRow || (expandMaps[parentRowid] && treeExpandedMaps[parentRowid])) {
         const rowRest = fullAllDataRowIdData[rowid]
         if (rowRest) {
@@ -863,12 +865,12 @@ function handleCheckedAllCheckboxRow ($xeTable: VxeTableConstructor & VxeTablePr
   const internalData = $xeTable as unknown as TableInternalData
 
   const { treeConfig } = props
-  const { selectCheckboxMaps } = reactData
-  const { afterFullData, checkboxReserveRowMap } = internalData
+  const { afterFullData, checkboxReserveRowMap, selectCheckboxMaps } = internalData
   const treeOpts = $xeTable.computeTreeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
   const checkboxOpts = $xeTable.computeCheckboxOpts
   const { checkField, reserve, checkMethod } = checkboxOpts
+  const { handleGetRowId } = createHandleGetRowId($xeTable)
   // indeterminateField 仅支持读取
   const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
   const selectRowMaps: Record<string, any> = {}
@@ -880,7 +882,7 @@ function handleCheckedAllCheckboxRow ($xeTable: VxeTableConstructor & VxeTablePr
     const checkValFn = (row: any) => {
       if (isForce || (!checkMethod || checkMethod({ row }))) {
         if (checked) {
-          selectRowMaps[getRowid($xeTable, row)] = row
+          selectRowMaps[handleGetRowId(row)] = row
         }
         XEUtils.set(row, checkField, checked)
       }
@@ -908,7 +910,8 @@ function handleCheckedAllCheckboxRow ($xeTable: VxeTableConstructor & VxeTablePr
            */
         XEUtils.eachTree(afterFullData, (row) => {
           if (isForce || (!checkMethod || checkMethod({ row }))) {
-            selectRowMaps[getRowid($xeTable, row)] = row
+            const rowid = handleGetRowId(row)
+            selectRowMaps[rowid] = row
           }
         }, { children: childrenField })
       } else {
@@ -918,7 +921,7 @@ function handleCheckedAllCheckboxRow ($xeTable: VxeTableConstructor & VxeTablePr
            */
         if (!isForce && checkMethod) {
           XEUtils.eachTree(afterFullData, (row) => {
-            const rowid = getRowid($xeTable, row)
+            const rowid = handleGetRowId(row)
             if (checkMethod({ row }) ? 0 : selectCheckboxMaps[rowid]) {
               selectRowMaps[rowid] = row
             }
@@ -934,14 +937,15 @@ function handleCheckedAllCheckboxRow ($xeTable: VxeTableConstructor & VxeTablePr
            */
         if (!isForce && checkMethod) {
           afterFullData.forEach((row) => {
-            const rowid = getRowid($xeTable, row)
+            const rowid = handleGetRowId(row)
             if (selectCheckboxMaps[rowid] || checkMethod({ row })) {
               selectRowMaps[rowid] = row
             }
           })
         } else {
           afterFullData.forEach(row => {
-            selectRowMaps[getRowid($xeTable, row)] = row
+            const rowid = handleGetRowId(row)
+            selectRowMaps[rowid] = row
           })
         }
       } else {
@@ -952,7 +956,7 @@ function handleCheckedAllCheckboxRow ($xeTable: VxeTableConstructor & VxeTablePr
            */
         if (!isForce && checkMethod) {
           afterFullData.forEach((row) => {
-            const rowid = getRowid($xeTable, row)
+            const rowid = handleGetRowId(row)
             if (checkMethod({ row }) ? 0 : selectCheckboxMaps[rowid]) {
               selectRowMaps[rowid] = row
             }
@@ -970,11 +974,11 @@ function handleCheckedAllCheckboxRow ($xeTable: VxeTableConstructor & VxeTablePr
       afterFullData.forEach((row) => handleCheckboxReserveRow($xeTable, row, false))
     }
   }
-  reactData.selectCheckboxMaps = checkField ? {} : selectRowMaps
+  reactData.updateCheckboxFlag++
+  internalData.selectCheckboxMaps = checkField ? {} : selectRowMaps
 
   reactData.isAllSelected = checked
   reactData.isIndeterminate = false
-  reactData.treeIndeterminateMaps = {}
   internalData.treeIndeterminateRowMaps = {}
   $xeTable.checkSelectionStatus()
   return $xeTable.$nextTick()
@@ -987,8 +991,8 @@ function handleReserveStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const internalData = $xeTable as unknown as TableInternalData
 
   const { treeConfig } = props
-  const { expandColumn, currentRow, selectCheckboxMaps, selectRadioRow, rowExpandedMaps, treeExpandedMaps } = reactData
-  const { fullDataRowIdData, fullAllDataRowIdData, radioReserveRow } = internalData
+  const { expandColumn, currentRow, selectRadioRow } = reactData
+  const { fullDataRowIdData, fullAllDataRowIdData, radioReserveRow, selectCheckboxMaps, treeExpandedMaps, rowExpandedMaps } = internalData
   const expandOpts = $xeTable.computeExpandOpts
   const treeOpts = $xeTable.computeTreeOpts
   const radioOpts = $xeTable.computeRadioOpts
@@ -1005,7 +1009,8 @@ function handleReserveStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     }
   }
   // 复选框
-  reactData.selectCheckboxMaps = getRecoverRowMaps($xeTable, selectCheckboxMaps) // 刷新多选行状态
+  internalData.selectCheckboxMaps = getRecoverRowMaps($xeTable, selectCheckboxMaps) // 刷新多选行状态
+  reactData.updateCheckboxFlag++
   // 还原保留选中状态
   if (checkboxOpts.reserve) {
     handleCheckedCheckboxRow($xeTable, handleReserveRow($xeTable, internalData.checkboxReserveRowMap), true, true)
@@ -1014,16 +1019,166 @@ function handleReserveStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     reactData.currentRow = null // 刷新当前行状态
   }
   // 行展开
-  reactData.rowExpandedMaps = expandColumn ? getRecoverRowMaps($xeTable, rowExpandedMaps) : {} // 刷新行展开状态
+  internalData.rowExpandedMaps = expandColumn ? getRecoverRowMaps($xeTable, rowExpandedMaps) : {} // 刷新行展开状态
+  reactData.rowExpandedFlag++
   // 还原保留状态
   if (expandColumn && expandOpts.reserve) {
     $xeTable.setRowExpand(handleReserveRow($xeTable, internalData.rowExpandedReserveRowMap), true)
   }
   // 树展开
-  reactData.treeExpandedMaps = treeConfig ? getRecoverRowMaps($xeTable, treeExpandedMaps) : {} // 刷新树展开状态
+  internalData.treeExpandedMaps = treeConfig ? getRecoverRowMaps($xeTable, treeExpandedMaps) : {} // 刷新树展开状态
+  reactData.treeExpandedFlag++
   if (treeConfig && treeOpts.reserve) {
     $xeTable.setTreeExpand(handleReserveRow($xeTable, internalData.treeExpandedReserveRowMap), true)
   }
+}
+
+/**
+ * 处理默认展开树节点
+ */
+const handleDefaultTreeExpand = ($xeTable: VxeTableConstructor) => {
+  const props = $xeTable
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { treeConfig } = props
+  if (treeConfig) {
+    const { tableFullData } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
+    const { expandAll, expandRowKeys } = treeOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
+    if (expandAll) {
+      $xeTable.setAllTreeExpand(true)
+    } else if (expandRowKeys) {
+      const defExpandeds: any[] = []
+      const rowkey = getRowkey($xeTable)
+      expandRowKeys.forEach((rowid: any) => {
+        const matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), { children: childrenField })
+        if (matchObj) {
+          defExpandeds.push(matchObj.item)
+        }
+      })
+      $xeTable.setTreeExpand(defExpandeds, true)
+    }
+  }
+}
+
+const handleAsyncTreeExpandChilds = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any): Promise<void> => {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const treeOpts = $xeTable.computeTreeOpts
+  const checkboxOpts = $xeTable.computeCheckboxOpts
+  const { transform, loadMethod } = treeOpts
+  const { checkStrictly } = checkboxOpts
+  return new Promise<void>(resolve => {
+    if (loadMethod) {
+      const { fullAllDataRowIdData, treeExpandLazyLoadedMaps } = internalData
+      const rowid = getRowid($xeTable, row)
+      const rowRest = fullAllDataRowIdData[rowid]
+      treeExpandLazyLoadedMaps[rowid] = row
+      Promise.resolve(
+        loadMethod({ $table: $xeTable, row })
+      ).then((childRecords: any) => {
+        if (rowRest) {
+          rowRest.treeLoaded = true
+        }
+        if (treeExpandLazyLoadedMaps[rowid]) {
+          delete treeExpandLazyLoadedMaps[rowid]
+        }
+        if (!XEUtils.isArray(childRecords)) {
+          childRecords = []
+        }
+        if (childRecords) {
+          return $xeTable.loadTreeChildren(row, childRecords).then(childRows => {
+            const { treeExpandedMaps } = internalData
+            if (childRows.length && !treeExpandedMaps[rowid]) {
+              treeExpandedMaps[rowid] = row
+            }
+            reactData.treeExpandedFlag++
+            // 如果当前节点已选中，则展开后子节点也被选中
+            if (!checkStrictly && $xeTable.isCheckedByCheckboxRow(row)) {
+              handleCheckedCheckboxRow($xeTable, childRows, true)
+            }
+            return $xeTable.$nextTick().then(() => {
+              if (transform) {
+                $xeTable.handleTableData()
+                updateAfterDataIndex($xeTable)
+                return $xeTable.$nextTick()
+              }
+            })
+          })
+        }
+      }).catch(() => {
+        const { treeExpandLazyLoadedMaps } = internalData
+        if (rowRest) {
+          rowRest.treeLoaded = false
+        }
+        if (treeExpandLazyLoadedMaps[rowid]) {
+          delete treeExpandLazyLoadedMaps[rowid]
+        }
+      }).finally(() => {
+        reactData.treeExpandedFlag++
+        $xeTable.$nextTick().then(() => $xeTable.recalculate()).then(() => resolve())
+      })
+    } else {
+      resolve()
+    }
+  })
+}
+
+const handleTreeExpandReserve = ($xeTable: VxeTableConstructor, row: any, expanded: boolean) => {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { treeExpandedReserveRowMap } = internalData
+  const treeOpts = $xeTable.computeTreeOpts
+  if (treeOpts.reserve) {
+    const rowid = getRowid($xeTable, row)
+    if (expanded) {
+      treeExpandedReserveRowMap[rowid] = row
+    } else if (treeExpandedReserveRowMap[rowid]) {
+      delete treeExpandedReserveRowMap[rowid]
+    }
+  }
+}
+
+const handleAsyncRowExpand = ($xeTable: VxeTableConstructor, row: any): Promise<void> => {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  return new Promise<void>(resolve => {
+    const expandOpts = $xeTable.computeExpandOpts
+    const { loadMethod } = expandOpts
+    if (loadMethod) {
+      const { fullAllDataRowIdData, rowExpandLazyLoadedMaps } = internalData
+      const rowid = getRowid($xeTable, row)
+      const rowRest = fullAllDataRowIdData[rowid]
+      rowExpandLazyLoadedMaps[rowid] = row
+      loadMethod({ $table: $xeTable, row, rowIndex: $xeTable.getRowIndex(row), $rowIndex: $xeTable.getVMRowIndex(row) }).then(() => {
+        const { rowExpandedMaps } = internalData
+        if (rowRest) {
+          rowRest.expandLoaded = true
+        }
+        rowExpandedMaps[rowid] = row
+        reactData.rowExpandedFlag++
+      }).catch(() => {
+        if (rowRest) {
+          rowRest.expandLoaded = false
+        }
+      }).finally(() => {
+        const { rowExpandLazyLoadedMaps } = internalData
+        if (rowExpandLazyLoadedMaps[rowid]) {
+          delete rowExpandLazyLoadedMaps[rowid]
+        }
+        reactData.rowExpandedFlag++
+        $xeTable.$nextTick()
+          .then(() => $xeTable.recalculate())
+          .then(() => $xeTable.updateCellAreas())
+          .then(() => resolve())
+      })
+    } else {
+      resolve()
+    }
+  })
 }
 
 function calcVarRowHeightConfig ($xeTable: VxeTableConstructor, sizeKey: 'default' | 'medium' | 'small' | 'mini', sizeEl: Element) {
@@ -1091,12 +1246,13 @@ function handleVirtualYVisible ($xeTable: VxeTableConstructor) {
       toVisibleIndex = Math.floor(startTop / defaultRowHeight) - 1
       visibleSize = Math.ceil(clientHeight / defaultRowHeight) + 1
     } else {
+      const { handleGetRowId } = createHandleGetRowId($xeTable)
       let leftIndex = 0
       let rightIndex = afterFullData.length
       while (leftIndex < rightIndex) {
         const rIndex = Math.floor((leftIndex + rightIndex) / 2)
         const row = afterFullData[rIndex]
-        const rowid = getRowid($xeTable, row)
+        const rowid = handleGetRowId(row)
         const rowRest = fullAllDataRowIdData[rowid] || {}
         if (rowRest.oTop <= startTop) {
           leftIndex = rIndex + 1
@@ -1107,7 +1263,7 @@ function handleVirtualYVisible ($xeTable: VxeTableConstructor) {
       toVisibleIndex = Math.max(0, leftIndex < afterFullData.length ? leftIndex - 2 : 0)
       for (let rIndex = toVisibleIndex, rLen = afterFullData.length; rIndex < rLen; rIndex++) {
         const row = afterFullData[rIndex]
-        const rowid = getRowid($xeTable, row)
+        const rowid = handleGetRowId(row)
         const rowRest = fullAllDataRowIdData[rowid] || {}
         visibleSize++
         if (rowRest.oTop > endTop || visibleSize >= 100) {
@@ -1139,16 +1295,20 @@ function calculateMergerOffsetIndex (list: any, offsetItem: any, type: any) {
   }
 }
 
-function setMerges (_vm: any, merges: any, mList: any, rowList: any) {
+function setMerges ($xeTable: VxeTableConstructor, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[], mList: VxeTableDefines.MergeItem[], rowList?: any[]) {
+  const props = $xeTable
+  const internalData = $xeTable as unknown as TableInternalData
+
   if (merges) {
-    const { treeConfig, visibleColumn } = _vm
+    const { treeConfig } = props
+    const { visibleColumn } = internalData
     if (!XEUtils.isArray(merges)) {
       merges = [merges]
     }
     if (treeConfig && merges.length) {
       errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
     }
-    merges.forEach((item: any) => {
+    merges.forEach((item) => {
       let { row, col, rowspan, colspan } = item
       if (rowList && XEUtils.isNumber(row)) {
         row = rowList[row]
@@ -1187,10 +1347,14 @@ function setMerges (_vm: any, merges: any, mList: any, rowList: any) {
   }
 }
 
-function removeMerges (_vm: any, merges: any, mList: any, rowList: any) {
+function removeMerges ($xeTable: VxeTableConstructor, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[], mList: VxeTableDefines.MergeItem[], rowList?: any) {
+  const props = $xeTable
+  const internalData = $xeTable as unknown as TableInternalData
+
   const rest: any[] = []
   if (merges) {
-    const { treeConfig, visibleColumn } = _vm
+    const { treeConfig } = props
+    const { visibleColumn } = internalData
     if (!XEUtils.isArray(merges)) {
       merges = [merges]
     }
@@ -1403,8 +1567,9 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const el = $xeTable.$refs.refElem as HTMLDivElement
   if (!isAllOverflow && scrollYLoad && el) {
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
     tableData.forEach(row => {
-      const rowid = getRowid($xeTable, row)
+      const rowid = handleGetRowId(row)
       const rowRest = fullAllDataRowIdData[rowid]
       if (rowRest) {
         const height = calcCellAutoHeight(rowRest, el)
@@ -2076,6 +2241,39 @@ function loadScrollYData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   }
 }
 
+const createGetRowCacheProp = (prop: 'seq' | 'index' | '_index' | '$index') => {
+  return function (this: VxeTableConstructor & VxeTablePrivateMethods, row: any) {
+    const $xeTable = this
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { fullAllDataRowIdData } = internalData
+    if (row) {
+      const rowid = getRowid($xeTable, row)
+      const rowRest = fullAllDataRowIdData[rowid]
+      if (rowRest) {
+        return rowRest[prop]
+      }
+    }
+    return -1
+  }
+}
+
+const createGetColumnCacheProp = (prop: 'index' | '_index' | '$index') => {
+  return function (this: VxeTableConstructor & VxeTablePrivateMethods, column: VxeTableDefines.ColumnInfo) {
+    const $xeTable = this
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { fullColumnIdData } = internalData
+    if (column) {
+      const colRest = fullColumnIdData[column.id]
+      if (colRest) {
+        return colRest[prop]
+      }
+    }
+    return -1
+  }
+}
+
 function lazyScrollXData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -2242,7 +2440,7 @@ function calcCellWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
 
 function handleUpdateColResize ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: MouseEvent, params: any) {
   $xeTable.analyColumnWidth()
-  $xeTable.recalculate(true).then(() => {
+  $xeTable.recalculate().then(() => {
     $xeTable.saveCustomStore('update:width')
     $xeTable.updateCellAreas()
     $xeTable.dispatchEvent('column-resizable-change', params, evnt)
@@ -2256,7 +2454,7 @@ function handleUpdateRowResize ($xeTable: VxeTableConstructor & VxeTablePrivateM
   const reactData = $xeTable as unknown as TableReactData
 
   reactData.resizeHeightFlag++
-  $xeTable.recalculate(true).then(() => {
+  $xeTable.recalculate().then(() => {
     $xeTable.updateCellAreas()
     $xeTable.dispatchEvent('row-resizable-change', params, evnt)
     setTimeout(() => $xeTable.recalculate(true), 300)
@@ -2281,16 +2479,17 @@ function updateRowOffsetTop ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { expandColumn, rowExpandedMaps } = reactData
-  const { afterFullData, fullAllDataRowIdData } = internalData
+  const { expandColumn } = reactData
+  const { afterFullData, fullAllDataRowIdData, rowExpandedMaps } = internalData
   const expandOpts = $xeTable.computeExpandOpts
   const rowOpts = $xeTable.computeRowOpts
   const cellOpts = $xeTable.computeCellOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
+  const { handleGetRowId } = createHandleGetRowId($xeTable)
   let offsetTop = 0
   for (let rIndex = 0, rLen = afterFullData.length; rIndex < rLen; rIndex++) {
     const row = afterFullData[rIndex]
-    const rowid = getRowid($xeTable, row)
+    const rowid = handleGetRowId(row)
     const rowRest = fullAllDataRowIdData[rowid] || {}
     rowRest.oTop = offsetTop
     offsetTop += rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
@@ -2305,46 +2504,42 @@ function updateRowExpandStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { expandColumn, scrollYLoad, rowExpandedMaps } = reactData
+  const { expandColumn, scrollYLoad, scrollYTop, isScrollYBig } = reactData
   const expandOpts = $xeTable.computeExpandOpts
   const rowOpts = $xeTable.computeRowOpts
   const cellOpts = $xeTable.computeCellOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const { mode } = expandOpts
   if (expandColumn && mode === 'fixed') {
-    const { elemStore, afterFullData, fullAllDataRowIdData } = internalData
+    const { elemStore, fullAllDataRowIdData } = internalData
     const rowExpandEl = $xeTable.$refs.refRowExpandElem as HTMLDivElement
     const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
     if (rowExpandEl && bodyScrollElem) {
       let isUpdateHeight = false
-      if (scrollYLoad) {
-        let offsetTop = 0
-        for (let rIndex = 0, rLen = afterFullData.length; rIndex < rLen; rIndex++) {
-          const row = afterFullData[rIndex]
-          const rowid = getRowid($xeTable, row)
-          const rowRest = fullAllDataRowIdData[rowid] || {}
-          rowRest.oTop = offsetTop
-          offsetTop += rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
-          // 是否展开行
-          if (expandColumn && rowExpandedMaps[rowid]) {
-            offsetTop += rowRest.expandHeight || expandOpts.height || 0
-          }
-        }
-      }
       XEUtils.arrayEach(rowExpandEl.children, reEl => {
         const expandEl = reEl as HTMLDivElement
         const rowid = expandEl.getAttribute('rowid') || ''
         const rowRest = fullAllDataRowIdData[rowid]
         if (rowRest) {
           const expandHeight = expandEl.offsetHeight + 1
+          const trEl = bodyScrollElem.querySelector(`.vxe-body--row[rowid="${rowid}"]`) as HTMLTableCellElement
+          let offsetTop = 0
           if (scrollYLoad) {
-            expandEl.style.top = toCssUnit(rowRest.oTop + (rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight))
+            if (isScrollYBig && trEl) {
+              offsetTop = trEl.offsetTop + trEl.offsetHeight
+            } else {
+              offsetTop = rowRest.oTop + (rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight)
+            }
           } else {
-            const trEl = bodyScrollElem.querySelector(`.vxe-body--row[rowid="${rowid}"]`) as HTMLTableCellElement
             if (trEl) {
-              expandEl.style.top = toCssUnit(trEl.offsetTop + trEl.offsetHeight)
+              offsetTop = trEl.offsetTop + trEl.offsetHeight
             }
           }
+          if (isScrollYBig) {
+            offsetTop += scrollYTop
+          }
+          expandEl.style.top = toCssUnit(offsetTop)
+
           if (!isUpdateHeight) {
             if (rowRest.expandHeight !== expandHeight) {
               isUpdateHeight = true
@@ -2355,6 +2550,9 @@ function updateRowExpandStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMe
       })
       if (isUpdateHeight) {
         reactData.rowExpandHeightFlag++
+        $xeTable.$nextTick(() => {
+          updateRowOffsetTop($xeTable)
+        })
       }
     }
   }
@@ -2509,6 +2707,9 @@ const Methods = {
     const childrenField = treeOpts.children || treeOpts.childrenField
     let treeData = []
     let fullData = datas ? datas.slice(0) : []
+    if (fullData.length > supportMaxRow) {
+      errLog('vxe.error.errMaxRow', [supportMaxRow])
+    }
     if (treeConfig) {
       // 树结构自动转换
       if (treeOpts.transform) {
@@ -2753,19 +2954,15 @@ const Methods = {
     const internalData = $xeTable as unknown as TableInternalData
 
     const { treeConfig } = props
-    const { treeExpandedMaps } = reactData
-    const { fullAllDataRowIdData, tableFullData, tableFullTreeData } = internalData
+    const { fullAllDataRowIdData, tableFullData, tableFullTreeData, treeExpandedMaps } = internalData
     const treeOpts = $xeTable.computeTreeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const { lazy } = treeOpts
-    const rowkey = getRowkey($xeTable)
-    const isDeepKey = rowkey.indexOf('.') > -1
     const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = { ...fullAllDataRowIdData } // 存在已删除数据
     const fullDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
-    const treeTempExpandedMaps = { ...treeExpandedMaps }
 
-    const handleRowId = isDeepKey ? updateDeepRowKey : updateFastRowKey
+    const { handleUpdateRowId } = createHandleUpdateRowId($xeTable)
     const handleRowCache = (row: any, index: number, items: any, currIndex: number, parentRow: any, rowid: string, level: number, seq: string | number) => {
       let rowRest = fullAllDataRowIdMaps[rowid]
       if (!rowRest) {
@@ -2787,15 +2984,14 @@ const Methods = {
 
     if (treeConfig) {
       XEUtils.eachTree(tableFullTreeData, (row, index, items, path, parentRow, nodes) => {
-        const rowid = handleRowId(row, rowkey)
+        const rowid = handleUpdateRowId(row)
         if (treeConfig && lazy) {
-          const treeExpRest = treeTempExpandedMaps[rowid]
           if (row[hasChildField] && row[childrenField] === undefined) {
             row[childrenField] = null
           }
-          if (treeExpRest) {
+          if (treeExpandedMaps[rowid]) {
             if (!row[childrenField] || !row[childrenField].length) {
-              delete treeTempExpandedMaps[rowid]
+              delete treeExpandedMaps[rowid]
             }
           }
         }
@@ -2803,13 +2999,13 @@ const Methods = {
       }, { children: childrenField })
     } else {
       tableFullData.forEach((row, index, items) => {
-        handleRowCache(row, index, items, index, null, handleRowId(row, rowkey), 0, index + 1)
+        handleRowCache(row, index, items, index, null, handleUpdateRowId(row), 0, index + 1)
       })
     }
 
     internalData.fullDataRowIdData = fullDataRowIdMaps
     internalData.fullAllDataRowIdData = fullAllDataRowIdMaps
-    reactData.treeExpandedMaps = treeTempExpandedMaps
+    reactData.treeExpandedFlag++
   },
   cacheSourceMap (fullData: any[]) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -2818,17 +3014,12 @@ const Methods = {
 
     const { treeConfig } = props
     const treeOpts = $xeTable.computeTreeOpts
-    let { sourceDataRowIdData } = internalData
     const sourceData = XEUtils.clone(fullData, true)
-    const rowkey = getRowkey($xeTable)
-    sourceDataRowIdData = internalData.sourceDataRowIdData = {}
+    const { handleUpdateRowId } = createHandleUpdateRowId($xeTable)
+    const sourceRowIdData: Record<string, any> = {}
     const handleSourceRow = (row: any) => {
-      let rowid = getRowid($xeTable, row)
-      if (eqEmptyValue(rowid)) {
-        rowid = getRowUniqueId()
-        XEUtils.set(row, rowkey, rowid)
-      }
-      sourceDataRowIdData[rowid] = row
+      const rowid = handleUpdateRowId(row)
+      sourceRowIdData[rowid] = row
     }
     // 源数据缓存
     if (treeConfig) {
@@ -2837,6 +3028,7 @@ const Methods = {
     } else {
       sourceData.forEach(handleSourceRow)
     }
+    internalData.sourceDataRowIdData = sourceRowIdData
     internalData.tableSourceData = sourceData
   },
   getParams () {
@@ -2925,68 +3117,28 @@ const Methods = {
    * 根据 row 获取序号
    * @param {Row} row 行对象
    */
-  getRowSeq (row: any) {
-    const { fullAllDataRowIdData } = this
-    if (row) {
-      const rowid = getRowid(this, row)
-      const rest = fullAllDataRowIdData[rowid]
-      if (rest) {
-        return rest.seq
-      }
-    }
-    return -1
-  },
+  getRowSeq: createGetRowCacheProp('seq'),
   /**
    * 根据 row 获取相对于 data 中的索引
    * @param {Row} row 行对象
    */
-  getRowIndex (row: any) {
-    const { fullAllDataRowIdData } = this
-    if (row) {
-      const rowid = getRowid(this, row)
-      const rest = fullAllDataRowIdData[rowid]
-      if (rest) {
-        return rest.index
-      }
-    }
-    return -1
-  },
+  getRowIndex: createGetRowCacheProp('index') as ((row: any) => number),
   /**
    * 根据 row 获取相对于当前数据中的索引
    * @param {Row} row 行对象
    */
-  getVTRowIndex (row: any) {
-    const { fullAllDataRowIdData } = this
-    if (row) {
-      const rowid = getRowid(this, row)
-      const rest = fullAllDataRowIdData[rowid]
-      if (rest) {
-        return rest._index
-      }
-    }
-    return -1
-  },
+  getVTRowIndex: createGetRowCacheProp('_index') as ((row: any) => number),
+  /**
+   * 根据 row 获取渲染中的虚拟索引
+   * @param {Row} row 行对象
+   */
+  getVMRowIndex: createGetRowCacheProp('$index') as ((row: any) => number),
   // 在 v3 中废弃
   _getRowIndex (row: any) {
     if (process.env.VUE_APP_VXE_ENV === 'development') {
       warnLog('vxe.error.delFunc', ['_getRowIndex', 'getVTRowIndex'])
     }
     return this.getVTRowIndex(row)
-  },
-  /**
-   * 根据 row 获取渲染中的虚拟索引
-   * @param {Row} row 行对象
-   */
-  getVMRowIndex (row: any) {
-    const { fullAllDataRowIdData } = this
-    if (row) {
-      const rowid = getRowid(this, row)
-      const rest = fullAllDataRowIdData[rowid]
-      if (rest) {
-        return rest.$index
-      }
-    }
-    return -1
   },
   // 在 v3 中废弃
   $getRowIndex (row: any) {
@@ -2999,50 +3151,23 @@ const Methods = {
    * 根据 column 获取相对于 columns 中的索引
    * @param {ColumnInfo} column 列配置
    */
-  getColumnIndex (column: any) {
-    const { fullColumnIdData } = this
-    if (column) {
-      const rest = fullColumnIdData[column.id]
-      if (rest) {
-        return rest.index
-      }
-    }
-    return -1
-  },
+  getColumnIndex: createGetColumnCacheProp('index'),
   /**
    * 根据 column 获取相对于当前表格列中的索引
    * @param {ColumnInfo} column 列配置
    */
-  getVTColumnIndex (column: any) {
-    const { fullColumnIdData } = this
-    if (column) {
-      const rest = fullColumnIdData[column.id]
-      if (rest) {
-        return rest._index
-      }
-    }
-    return -1
-  },
+  getVTColumnIndex: createGetColumnCacheProp('_index'),
+  /**
+   * 根据 column 获取渲染中的虚拟索引
+   * @param {ColumnInfo} column 列配置
+   */
+  getVMColumnIndex: createGetColumnCacheProp('$index'),
   // 在 v3 中废弃
   _getColumnIndex (column: any) {
     if (process.env.VUE_APP_VXE_ENV === 'development') {
       warnLog('vxe.error.delFunc', ['_getColumnIndex', 'getVTColumnIndex'])
     }
     return this.getVTColumnIndex(column)
-  },
-  /**
-   * 根据 column 获取渲染中的虚拟索引
-   * @param {ColumnInfo} column 列配置
-   */
-  getVMColumnIndex (column: any) {
-    const { fullColumnIdData } = this
-    if (column) {
-      const rest = fullColumnIdData[column.id]
-      if (rest) {
-        return rest.$index
-      }
-    }
-    return -1
   },
   // 在 v3 中废弃
   $getColumnIndex (column: any) {
@@ -3142,6 +3267,7 @@ const Methods = {
     const removeTempMaps = { ...editStore.removeMaps }
     const treeOpts = $xeTable.computeTreeOpts
     const { transform } = treeOpts
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
     if (!keepSource) {
       if (process.env.VUE_APP_VXE_ENV === 'development') {
         errLog('vxe.error.reqProp', ['keep-source'])
@@ -3159,7 +3285,7 @@ const Methods = {
     let reDelFlag = false
     if (targetRows.length) {
       targetRows.forEach((item: any) => {
-        const rowid = getRowid($xeTable, item)
+        const rowid = handleGetRowId(item)
         const rowRest = fullAllDataRowIdData[rowid]
         if (rowRest) {
           const row = rowRest.row
@@ -3552,12 +3678,10 @@ const Methods = {
   getCheckboxRecords (isFull: boolean) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
-    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
     const { treeConfig } = props
-    const { selectCheckboxMaps } = reactData
-    const { tableFullData, afterFullData, afterTreeFullData, tableFullTreeData, fullDataRowIdData, afterFullRowMaps } = internalData
+    const { tableFullData, afterFullData, afterTreeFullData, tableFullTreeData, fullDataRowIdData, afterFullRowMaps, selectCheckboxMaps } = internalData
     const treeOpts = $xeTable.computeTreeOpts
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const { transform, mapChildrenField } = treeOpts
@@ -3894,6 +4018,8 @@ const Methods = {
    * 默认执行一次，除非被重置
    */
   handleLoadDefaults () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     if (this.checkboxConfig) {
       this.handleDefaultSelectionChecked()
     }
@@ -3904,7 +4030,7 @@ const Methods = {
       this.handleDefaultRowExpand()
     }
     if (this.treeConfig) {
-      this.handleDefaultTreeExpand()
+      handleDefaultTreeExpand($xeTable)
     }
     if (this.mergeCells) {
       this.handleDefaultMergeCells()
@@ -3928,7 +4054,7 @@ const Methods = {
    * 设置为固定列
    */
   setColumnFixed (fieldOrColumn: any, fixed: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     let status = false
     const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
@@ -4732,12 +4858,13 @@ const Methods = {
     const internalData = $xeTable as unknown as TableInternalData
 
     const { fullAllDataRowIdData, afterFullData } = internalData
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
     const rowOpts = $xeTable.computeRowOpts
     const cellOpts = $xeTable.computeCellOpts
     const defaultRowHeight = $xeTable.computeDefaultRowHeight
     const rest: Record<string, number> = {}
     afterFullData.forEach(row => {
-      const rowid = getRowid($xeTable, row)
+      const rowid = handleGetRowId(row)
       const rowRest = fullAllDataRowIdData[rowid]
       if (rowRest) {
         const resizeHeight = rowRest.resizeHeight
@@ -4765,8 +4892,9 @@ const Methods = {
       rHeight = Math.floor(rHeight * bodyHeight)
     }
     if (rHeight) {
+      const { handleGetRowId } = createHandleGetRowId($xeTable)
       rows.forEach(row => {
-        const rowid = XEUtils.isString(row) || XEUtils.isNumber(row) ? row : getRowid($xeTable, row)
+        const rowid = XEUtils.isString(row) || XEUtils.isNumber(row) ? row : handleGetRowId(row)
         const rowRest = fullAllDataRowIdData[rowid]
         if (rowRest) {
           rowRest.resizeHeight = rHeight
@@ -4926,8 +5054,21 @@ const Methods = {
     }
     // 兼容老版本
 
-    let rest
-    if (!evntList.some(func => func(Object.assign({ $grid: this.$xegrid, $table: this, $event: evnt }, args)) === false)) {
+    let rest = null
+    let isStop = false
+    for (let i = 0; i < evntList.length; i++) {
+      const func = evntList[i]
+      const fnRest = func(Object.assign({ $grid: this.$xegrid, $table: this, $event: evnt }, args))
+      if (fnRest === false) {
+        isStop = true
+        break
+      } else if (fnRest && fnRest.status === false) {
+        rest = fnRest.result
+        isStop = true
+        break
+      }
+    }
+    if (!isStop) {
       if (next) {
         rest = next()
       }
@@ -5586,11 +5727,16 @@ const Methods = {
    * 获取复选框半选状态的行数据
    */
   getCheckboxIndeterminateRecords (isFull: any) {
-    const { treeConfig, treeIndeterminateMaps, fullDataRowIdData } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeConfig } = props
+    const { fullDataRowIdData, treeIndeterminateRowMaps } = internalData
     if (treeConfig) {
       const fullRest: any[] = []
       const defRest: any[] = []
-      XEUtils.each(treeIndeterminateMaps, (item, rowid) => {
+      XEUtils.each(treeIndeterminateRowMaps, (item, rowid) => {
         if (item) {
           fullRest.push(item)
           if (fullDataRowIdData[rowid]) {
@@ -5645,7 +5791,7 @@ const Methods = {
   },
   setCheckboxRowKey (keys: any, checked: boolean) {
     const $xeTable = this
-    const internalData = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
 
     const { fullAllDataRowIdData } = internalData
     if (keys && !XEUtils.isArray(keys)) {
@@ -5662,23 +5808,25 @@ const Methods = {
   },
   isCheckedByCheckboxRow (row: any) {
     const $xeTable = this
-    const reactData = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { selectCheckboxMaps } = reactData
+    const { updateCheckboxFlag } = reactData
+    const { selectCheckboxMaps } = internalData
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const { checkField } = checkboxOpts
     if (checkField) {
       return XEUtils.get(row, checkField)
     }
-    return !!selectCheckboxMaps[getRowid($xeTable, row)]
+    return !!updateCheckboxFlag && !!selectCheckboxMaps[getRowid($xeTable, row)]
   },
   isCheckedByCheckboxRowKey (rowid: string) {
-    const $xeTable = this
-    const reactData = $xeTable
-    const internalData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { selectCheckboxMaps } = reactData
-    const { fullAllDataRowIdData } = internalData
+    const { updateCheckboxFlag } = reactData
+    const { fullAllDataRowIdData, selectCheckboxMaps } = internalData
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const { checkField } = checkboxOpts
     if (checkField) {
@@ -5688,21 +5836,21 @@ const Methods = {
       }
       return false
     }
-    return !!selectCheckboxMaps[rowid]
+    return !!updateCheckboxFlag && !!selectCheckboxMaps[rowid]
   },
   isIndeterminateByCheckboxRow (row: any) {
-    const $xeTable = this
-    const reactData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { treeIndeterminateMaps } = reactData
-    return !!treeIndeterminateMaps[getRowid($xeTable, row)] && !$xeTable.isCheckedByCheckboxRow(row)
+    const { treeIndeterminateRowMaps } = internalData
+    return !!treeIndeterminateRowMaps[getRowid($xeTable, row)] && !$xeTable.isCheckedByCheckboxRow(row)
   },
   isIndeterminateByCheckboxRowKey (rowid: string) {
     const $xeTable = this
-    const reactData = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { treeIndeterminateMaps } = reactData
-    return !!treeIndeterminateMaps[rowid] && !$xeTable.isCheckedByCheckboxRowKey(rowid)
+    const { treeIndeterminateRowMaps } = internalData
+    return !!treeIndeterminateRowMaps[rowid] && !$xeTable.isCheckedByCheckboxRowKey(rowid)
   },
   /**
    * 切换选中
@@ -5712,15 +5860,16 @@ const Methods = {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
     const { treeConfig } = props
-    const { selectCheckboxMaps } = reactData
-    const selectRowMaps = Object.assign({}, selectCheckboxMaps)
+    const { selectCheckboxMaps } = internalData
     const treeOpts = $xeTable.computeTreeOpts
     const { transform, mapChildrenField } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const { checkField, checkStrictly, checkMethod } = checkboxOpts
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
     // indeterminateField 仅支持读取
     const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     if (checkField) {
@@ -5736,18 +5885,17 @@ const Methods = {
             handleCheckboxReserveRow($xeTable, row, checked)
           }
         }, { children: transform ? mapChildrenField : childrenField })
-        reactData.selectCheckboxMaps = selectRowMaps
+        reactData.updateCheckboxFlag++
         return
-      } else {
-        // 列表
-        rows.forEach(row => {
-          if (isForce || (!checkMethod || checkMethod({ row }))) {
-            XEUtils.set(row, checkField, checked)
-            handleCheckboxReserveRow($xeTable, row, checked)
-          }
-        })
       }
-      reactData.selectCheckboxMaps = selectRowMaps
+      // 列表
+      rows.forEach(row => {
+        if (isForce || (!checkMethod || checkMethod({ row }))) {
+          XEUtils.set(row, checkField, checked)
+          handleCheckboxReserveRow($xeTable, row, checked)
+        }
+      })
+      reactData.updateCheckboxFlag++
       return
     }
 
@@ -5755,51 +5903,55 @@ const Methods = {
     if (treeConfig && !checkStrictly) {
       // 更新子节点状态
       XEUtils.eachTree(rows, (row) => {
-        const rowid = getRowid($xeTable, row)
+        const rowid = handleGetRowId(row)
         if (isForce || (!checkMethod || checkMethod({ row }))) {
           if (checked) {
-            selectRowMaps[rowid] = row
+            selectCheckboxMaps[rowid] = row
           } else {
-            if (selectRowMaps[rowid]) {
-              delete selectRowMaps[rowid]
+            if (selectCheckboxMaps[rowid]) {
+              delete selectCheckboxMaps[rowid]
             }
           }
           handleCheckboxReserveRow($xeTable, row, checked)
         }
       }, { children: transform ? mapChildrenField : childrenField })
-      reactData.selectCheckboxMaps = selectRowMaps
+      reactData.updateCheckboxFlag++
       return
     }
 
     // 列表
     rows.forEach(row => {
-      const rowid = getRowid($xeTable, row)
+      const rowid = handleGetRowId(row)
       if (isForce || (!checkMethod || checkMethod({ row }))) {
         if (checked) {
-          if (!selectRowMaps[rowid]) {
-            selectRowMaps[rowid] = row
+          if (!selectCheckboxMaps[rowid]) {
+            selectCheckboxMaps[rowid] = row
           }
         } else {
-          if (selectRowMaps[rowid]) {
-            delete selectRowMaps[rowid]
+          if (selectCheckboxMaps[rowid]) {
+            delete selectCheckboxMaps[rowid]
           }
         }
         handleCheckboxReserveRow($xeTable, row, checked)
+        reactData.updateCheckboxFlag++
       }
     })
-    reactData.selectCheckboxMaps = selectRowMaps
   },
   /**
    * 即将移除
    * @deprecated
    */
   handleSelectRow ({ row }: any, checked: boolean, isForce?: boolean) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     $xeTable.handleBatchSelectRows([row], checked, isForce)
   },
   handleToggleCheckRowEvent (evnt: any, params: any) {
-    const { selectCheckboxMaps, checkboxOpts } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { selectCheckboxMaps } = internalData
+    const checkboxOpts = $xeTable.computeCheckboxOpts
     const { checkField, trigger } = checkboxOpts
     const { row } = params
     if (trigger === 'manual') {
@@ -5809,47 +5961,52 @@ const Methods = {
     if (checkField) {
       checked = !XEUtils.get(row, checkField)
     } else {
-      checked = !selectCheckboxMaps[getRowid(this, row)]
+      checked = !selectCheckboxMaps[getRowid($xeTable, row)]
     }
     if (evnt) {
-      this.triggerCheckRowEvent(evnt, params, checked)
+      $xeTable.triggerCheckRowEvent(evnt, params, checked)
     } else {
-      this.handleSelectRow(params, checked)
-      this.checkSelectionStatus()
+      $xeTable.handleBatchSelectRows([row], checked)
+      $xeTable.checkSelectionStatus()
     }
   },
   triggerCheckRowEvent (evnt: any, params: any, checked: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { checkboxOpts, afterFullData } = this
-    const { checkMethod, trigger } = checkboxOpts
     const { row } = params
+    const { afterFullData } = internalData
+    const checkboxOpts = $xeTable.computeCheckboxOpts
+    const { checkMethod, trigger } = checkboxOpts
     if (trigger === 'manual') {
       return
     }
     evnt.stopPropagation()
-    if (checkboxOpts.isShiftKey && evnt.shiftKey && !this.treeConfig) {
-      const checkboxRecords = this.getCheckboxRecords()
+    if (checkboxOpts.isShiftKey && evnt.shiftKey && !props.treeConfig) {
+      const checkboxRecords = $xeTable.getCheckboxRecords()
       if (checkboxRecords.length) {
         const firstRow = checkboxRecords[0]
-        const _rowIndex = this.getVTRowIndex(row)
-        const _firstRowIndex = this.getVTRowIndex(firstRow)
+        const _rowIndex = $xeTable.getVTRowIndex(row)
+        const _firstRowIndex = $xeTable.getVTRowIndex(firstRow)
         if (_rowIndex !== _firstRowIndex) {
-          this.setAllCheckboxRow(false)
+          $xeTable.setAllCheckboxRow(false)
           const rangeRows = _rowIndex < _firstRowIndex ? afterFullData.slice(_rowIndex, _firstRowIndex + 1) : afterFullData.slice(_firstRowIndex, _rowIndex + 1)
-          handleCheckedCheckboxRow($xeTable, rangeRows, true, false)
-          this.emitEvent('checkbox-range-select', Object.assign({ rangeRecords: rangeRows }, params), evnt)
+          $xeTable.$nextTick(() => {
+            handleCheckedCheckboxRow($xeTable, rangeRows, true, false)
+          })
+          $xeTable.dispatchEvent('checkbox-range-select', Object.assign({ rangeRecords: rangeRows }, params), evnt)
           return
         }
       }
     }
     if (!checkMethod || checkMethod({ row })) {
-      this.handleSelectRow(params, checked)
-      this.checkSelectionStatus()
-      this.emitEvent('checkbox-change', Object.assign({
-        records: this.getCheckboxRecords(),
-        reserves: this.getCheckboxReserveRecords(),
-        indeterminates: this.getCheckboxIndeterminateRecords(),
+      $xeTable.handleBatchSelectRows([row], checked)
+      $xeTable.checkSelectionStatus()
+      $xeTable.dispatchEvent('checkbox-change', Object.assign({
+        records: () => $xeTable.getCheckboxRecords(),
+        reserves: () => $xeTable.getCheckboxReserveRecords(),
+        indeterminates: () => $xeTable.getCheckboxIndeterminateRecords(),
         checked
       }, params), evnt)
     }
@@ -5858,9 +6015,11 @@ const Methods = {
    * 多选，切换某一行的选中状态
    */
   toggleCheckboxRow (row: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { selectCheckboxMaps, checkboxOpts } = this
+    const { selectCheckboxMaps } = internalData
+    const checkboxOpts = $xeTable.computeCheckboxOpts
     const { checkField } = checkboxOpts
     const checked = checkField ? !XEUtils.get(row, checkField) : !selectCheckboxMaps[getRowid($xeTable, row)]
     $xeTable.handleBatchSelectRows([row], checked, true)
@@ -5883,9 +6042,7 @@ const Methods = {
     const internalData = $xeTable as unknown as TableInternalData
 
     const { treeConfig } = props
-    const { selectCheckboxMaps, treeIndeterminateMaps } = reactData
-    const selectRowMaps = Object.assign({}, selectCheckboxMaps)
-    const halfRowMaps = Object.assign({}, treeIndeterminateMaps)
+    const { selectCheckboxMaps, treeIndeterminateRowMaps } = internalData
     const treeOpts = $xeTable.computeTreeOpts
     const { transform, mapChildrenField } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
@@ -5897,10 +6054,11 @@ const Methods = {
     }
     // 树结构
     if (treeConfig) {
+      const { handleGetRowId } = createHandleGetRowId($xeTable)
       const childRowMaps: Record<string, number> = {}
       const childRowList: any[][] = []
       XEUtils.eachTree(afterTreeFullData, (row: any) => {
-        const rowid = getRowid($xeTable, row)
+        const rowid = handleGetRowId(row)
         const childList = row[transform ? mapChildrenField : childrenField]
         if (childList && childList.length && !childRowMaps[rowid]) {
           childRowMaps[rowid] = 1
@@ -5917,29 +6075,29 @@ const Methods = {
         childList.forEach(
           checkMethod
             ? (item) => {
-                const childRowid = getRowid($xeTable, item)
-                const isSelect = checkField ? XEUtils.get(item, checkField) : selectRowMaps[childRowid]
+                const childRowid = handleGetRowId(item)
+                const isSelect = checkField ? XEUtils.get(item, checkField) : selectCheckboxMaps[childRowid]
                 if (checkMethod({ row: item })) {
                   if (isSelect) {
                     sLen++
-                  } else if (halfRowMaps[childRowid]) {
+                  } else if (treeIndeterminateRowMaps[childRowid]) {
                     hLen++
                   }
                   vLen++
                 } else {
                   if (isSelect) {
                     sLen++
-                  } else if (halfRowMaps[childRowid]) {
+                  } else if (treeIndeterminateRowMaps[childRowid]) {
                     hLen++
                   }
                 }
               }
             : item => {
-              const childRowid = getRowid($xeTable, item)
-              const isSelect = checkField ? XEUtils.get(item, checkField) : selectRowMaps[childRowid]
+              const childRowid = handleGetRowId(item)
+              const isSelect = checkField ? XEUtils.get(item, checkField) : selectCheckboxMaps[childRowid]
               if (isSelect) {
                 sLen++
-              } else if (halfRowMaps[childRowid]) {
+              } else if (treeIndeterminateRowMaps[childRowid]) {
                 hLen++
               }
               vLen++
@@ -5952,29 +6110,28 @@ const Methods = {
         }
         if (isSelected) {
           if (!checkField) {
-            selectRowMaps[rowid] = row
+            selectCheckboxMaps[rowid] = row
           }
-          if (halfRowMaps[rowid]) {
-            delete halfRowMaps[rowid]
+          if (treeIndeterminateRowMaps[rowid]) {
+            delete treeIndeterminateRowMaps[rowid]
           }
         } else {
           if (!checkField) {
-            if (selectRowMaps[rowid]) {
-              delete selectRowMaps[rowid]
+            if (selectCheckboxMaps[rowid]) {
+              delete selectCheckboxMaps[rowid]
             }
           }
           if (halfSelect) {
-            halfRowMaps[rowid] = row
+            treeIndeterminateRowMaps[rowid] = row
           } else {
-            if (halfRowMaps[rowid]) {
-              delete halfRowMaps[rowid]
+            if (treeIndeterminateRowMaps[rowid]) {
+              delete treeIndeterminateRowMaps[rowid]
             }
           }
         }
       })
     }
-    reactData.selectCheckboxMaps = selectRowMaps
-    reactData.treeIndeterminateMaps = halfRowMaps
+    reactData.updateCheckboxFlag++
   },
   updateAllCheckboxStatus () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -5983,10 +6140,10 @@ const Methods = {
     const internalData = $xeTable as unknown as TableInternalData
 
     const { treeConfig } = props
-    const { selectCheckboxMaps, treeIndeterminateMaps } = reactData
+    const { afterFullData, afterTreeFullData, checkboxReserveRowMap, selectCheckboxMaps, treeIndeterminateRowMaps } = internalData
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const { checkField, checkMethod, showReserveStatus } = checkboxOpts
-    const { afterFullData, afterTreeFullData, checkboxReserveRowMap } = internalData
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
 
     let sLen = 0 // 已选
     let hLen = 0 // 半选
@@ -5995,29 +6152,29 @@ const Methods = {
     const rootList: any[] = (treeConfig ? afterTreeFullData : afterFullData)
     rootList.forEach(checkMethod
       ? row => {
-        const childRowid = getRowid($xeTable, row)
+        const childRowid = handleGetRowId(row)
         const selected = checkField ? XEUtils.get(row, checkField) : selectCheckboxMaps[childRowid]
         if (checkMethod({ row })) {
           if (selected) {
             sLen++
-          } else if (treeIndeterminateMaps[childRowid]) {
+          } else if (treeIndeterminateRowMaps[childRowid]) {
             hLen++
           }
           vLen++
         } else {
           if (selected) {
             sLen++
-          } else if (treeIndeterminateMaps[childRowid]) {
+          } else if (treeIndeterminateRowMaps[childRowid]) {
             hLen++
           }
         }
       }
       : row => {
-        const childRowid = getRowid($xeTable, row)
+        const childRowid = handleGetRowId(row)
         const selected = checkField ? XEUtils.get(row, checkField) : selectCheckboxMaps[childRowid]
         if (selected) {
           sLen++
-        } else if (treeIndeterminateMaps[childRowid]) {
+        } else if (treeIndeterminateRowMaps[childRowid]) {
           hLen++
         }
         vLen++
@@ -6076,18 +6233,26 @@ const Methods = {
    * 获取复选框保留选中的行
    */
   getCheckboxReserveRecords (isFull: any) {
-    const { fullDataRowIdData, afterFullData, checkboxReserveRowMap, checkboxOpts, treeConfig, treeOpts } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeConfig } = props
+    const { afterFullData, fullDataRowIdData, checkboxReserveRowMap } = internalData
+    const checkboxOpts = $xeTable.computeCheckboxOpts
+    const treeOpts = $xeTable.computeTreeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const reserveSelection: any[] = []
     if (checkboxOpts.reserve) {
-      const afterFullIdMaps: any = {}
+      const { handleGetRowId } = createHandleGetRowId($xeTable)
+      const afterFullIdMaps: { [key: string]: number } = {}
       if (treeConfig) {
         XEUtils.eachTree(afterFullData, row => {
-          afterFullIdMaps[getRowid(this, row)] = 1
+          afterFullIdMaps[handleGetRowId(row)] = 1
         }, { children: childrenField })
       } else {
         afterFullData.forEach((row: any) => {
-          afterFullIdMaps[getRowid(this, row)] = 1
+          afterFullIdMaps[handleGetRowId(row)] = 1
         })
       }
       XEUtils.each(checkboxReserveRowMap, (oldRow, oldRowid) => {
@@ -6127,9 +6292,9 @@ const Methods = {
     handleCheckedAllCheckboxRow($xeTable, value)
     if (evnt) {
       $xeTable.dispatchEvent('checkbox-all', {
-        records: $xeTable.getCheckboxRecords(),
-        reserves: $xeTable.getCheckboxReserveRecords(),
-        indeterminates: $xeTable.getCheckboxIndeterminateRecords(),
+        records: () => $xeTable.getCheckboxRecords(),
+        reserves: () => $xeTable.getCheckboxReserveRecords(),
+        indeterminates: () => $xeTable.getCheckboxIndeterminateRecords(),
         checked: value
       }, evnt)
     }
@@ -6162,9 +6327,17 @@ const Methods = {
    * 清空行为不管是否被禁用还是保留记录，都将彻底清空选中状态
    */
   clearCheckboxRow () {
-    const { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
-    const { checkField, reserve } = checkboxOpts
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeConfig } = props
+    const { tableFullData } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
+    const checkboxOpts = $xeTable.computeCheckboxOpts
+    const { checkField, reserve } = checkboxOpts
     // indeterminateField 仅支持读取
     const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     if (checkField) {
@@ -6181,12 +6354,13 @@ const Methods = {
       }
     }
     if (reserve) {
-      tableFullData.forEach((row: any) => this.handleCheckboxReserveRow(row, false))
+      tableFullData.forEach((row) => this.handleCheckboxReserveRow(row, false))
     }
-    this.isAllSelected = false
-    this.isIndeterminate = false
-    this.selectCheckboxMaps = {}
-    this.treeIndeterminateMaps = {}
+    reactData.isAllSelected = false
+    reactData.isIndeterminate = false
+    internalData.selectCheckboxMaps = {}
+    internalData.treeIndeterminateRowMaps = {}
+    reactData.updateCheckboxFlag++
     return this.$nextTick()
   },
   /**
@@ -6785,12 +6959,11 @@ const Methods = {
 
     const { treeConfig, dragConfig } = props
     const rowDragOpts = $xeTable.computeRowDragOpts
-    const { fullAllDataRowIdData } = internalData
+    const { afterFullData, tableFullData, fullAllDataRowIdData } = internalData
     const { isPeerDrag, isCrossDrag, isSelfToChildDrag, dragEndMethod, dragToChildMethod } = rowDragOpts
     const treeOpts = $xeTable.computeTreeOpts
     const { transform, rowField, mapChildrenField, parentField } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
-    const { afterFullData, tableFullData } = internalData
     const dEndMethod = dragEndMethod || (dragConfig ? dragConfig.dragEndMethod : null)
     const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
     const errRest = {
@@ -7386,8 +7559,8 @@ const Methods = {
     }
   },
   handleHeaderCellDragMousedownEvent (evnt: MouseEvent, params: any) {
-    const $xeTable = this
-    const reactData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
 
     evnt.stopPropagation()
     const columnDragOpts = $xeTable.computeColumnDragOpts
@@ -7412,8 +7585,8 @@ const Methods = {
     $xeTable.dispatchEvent('column-dragstart', params, evnt)
   },
   handleHeaderCellDragMouseupEvent () {
-    const $xeTable = this
-    const reactData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
 
     clearColDropOrigin($xeTable)
     hideDropTip($xeTable)
@@ -7422,54 +7595,58 @@ const Methods = {
     reactData.isDragColMove = false
   },
   setPendingRow (rows: any, status: any) {
-    const $xeTable = this
-    const reactData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const pendingMaps = Object.assign({}, reactData.pendingRowMaps)
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
+    const { pendingRowMaps } = internalData
     if (rows && !XEUtils.isArray(rows)) {
       rows = [rows]
     }
     if (status) {
       rows.forEach((row: any) => {
-        const rowid = getRowid($xeTable, row)
-        if (rowid && !pendingMaps[rowid]) {
-          pendingMaps[rowid] = row
+        const rowid = handleGetRowId(row)
+        if (rowid && !pendingRowMaps[rowid]) {
+          pendingRowMaps[rowid] = row
         }
       })
     } else {
       rows.forEach((row: any) => {
-        const rowid = getRowid($xeTable, row)
-        if (rowid && pendingMaps[rowid]) {
-          delete pendingMaps[rowid]
+        const rowid = handleGetRowId(row)
+        if (rowid && pendingRowMaps[rowid]) {
+          delete pendingRowMaps[rowid]
         }
       })
     }
-    reactData.pendingRowMaps = pendingMaps
+    reactData.pendingRowFlag++
     return $xeTable.$nextTick()
   },
   togglePendingRow (rows: any) {
-    const $xeTable = this
-    const reactData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const pendingMaps = Object.assign({}, reactData.pendingRowMaps)
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
+    const { pendingRowMaps } = internalData
     if (rows && !XEUtils.isArray(rows)) {
       rows = [rows]
     }
     rows.forEach((row: any) => {
-      const rowid = getRowid($xeTable, row)
+      const rowid = handleGetRowId(row)
       if (rowid) {
-        if (pendingMaps[rowid]) {
-          delete pendingMaps[rowid]
+        if (pendingRowMaps[rowid]) {
+          delete pendingRowMaps[rowid]
         } else {
-          pendingMaps[rowid] = row
+          pendingRowMaps[rowid] = row
         }
       }
     })
-    reactData.pendingRowMaps = pendingMaps
+    reactData.pendingRowFlag++
     return $xeTable.$nextTick()
   },
   hasPendingByRow (row: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     return $xeTable.isPendingByRow(row)
   },
@@ -7482,12 +7659,10 @@ const Methods = {
     return !!pendingRowMaps[rowid]
   },
   getPendingRecords () {
-    const $xeTable = this
-    const reactData = $xeTable
-    const internalData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { pendingRowMaps } = reactData
-    const { fullAllDataRowIdData } = internalData
+    const { fullAllDataRowIdData, pendingRowMaps } = internalData
     const insertRecords: any[] = []
     XEUtils.each(pendingRowMaps, (row, rowid) => {
       if (fullAllDataRowIdData[rowid]) {
@@ -7497,11 +7672,16 @@ const Methods = {
     return insertRecords
   },
   clearPendingRow () {
-    this.pendingRowMaps = {}
-    return this.$nextTick()
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    internalData.pendingRowMaps = {}
+    reactData.pendingRowFlag++
+    return $xeTable.$nextTick()
   },
   sort (sortConfs: any, sortOrder: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     const { sortOpts } = this
     const { multiple, remote, orders } = sortOpts
@@ -7651,7 +7831,10 @@ const Methods = {
    * @param {Event} evnt 事件
    */
   closeFilter () {
-    const { filterStore } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+
+    const { filterStore } = reactData
     const { column, visible } = filterStore
     Object.assign(filterStore, {
       isAllSelected: false,
@@ -7660,9 +7843,15 @@ const Methods = {
       visible: false
     })
     if (visible) {
-      this.emitEvent('filter-visible', { column, field: column.field, property: column.field, filterList: this.getCheckedFilters(), visible: false }, null)
+      $xeTable.dispatchEvent('filter-visible', {
+        column,
+        field: column.field,
+        property: column.field,
+        filterList: () => $xeTable.getCheckedFilters(),
+        visible: false
+      }, null)
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   /**
    * 判断指定列是否为筛选状态，如果为空则判断所有列
@@ -7695,17 +7884,16 @@ const Methods = {
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const rExpandLazyLoadedMaps = { ...reactData.rowExpandLazyLoadedMaps }
-    const { fullAllDataRowIdData } = internalData
+    const { fullAllDataRowIdData, rowExpandLazyLoadedMaps } = internalData
     const expandOpts = $xeTable.computeExpandOpts
     const { lazy } = expandOpts
     const rowid = getRowid($xeTable, row)
     const rowRest = fullAllDataRowIdData[rowid]
     if (lazy && rowRest) {
       rowRest.expandLoaded = false
-      delete rExpandLazyLoadedMaps[rowid]
+      delete rowExpandLazyLoadedMaps[rowid]
     }
-    reactData.rowExpandLazyLoadedMaps = rExpandLazyLoadedMaps
+    reactData.rowExpandedFlag++
     return $xeTable.$nextTick()
   },
   /**
@@ -7713,14 +7901,18 @@ const Methods = {
    * @param {Row} row 行对象
    */
   reloadRowExpand (row: any) {
-    const { expandOpts, rowExpandLazyLoadedMaps } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { rowExpandLazyLoadedMaps } = internalData
+    const expandOpts = $xeTable.computeExpandOpts
     const { lazy } = expandOpts
     const rowid = getRowid(this, row)
     if (lazy && !rowExpandLazyLoadedMaps[rowid]) {
-      this.clearRowExpandLoaded(row)
-        .then(() => this.handleAsyncRowExpand(row))
+      $xeTable.clearRowExpandLoaded(row)
+        .then(() => handleAsyncRowExpand($xeTable, row))
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   reloadExpandContent (row: any) {
     if (process.env.VUE_APP_VXE_ENV === 'development') {
@@ -7733,20 +7925,34 @@ const Methods = {
    * 展开行事件
    */
   triggerRowExpandEvent (evnt: any, params: any) {
-    const { expandOpts, rowExpandLazyLoadedMaps, expandColumn: column } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { expandColumn: column } = reactData
+    const { rowExpandLazyLoadedMaps } = internalData
+    const expandOpts = $xeTable.computeExpandOpts
     const { row } = params
     const { lazy, trigger } = expandOpts
     if (trigger === 'manual') {
       return
     }
     evnt.stopPropagation()
-    const rowid = getRowid(this, row)
+    const rowid = getRowid($xeTable, row)
     if (!lazy || !rowExpandLazyLoadedMaps[rowid]) {
-      const expanded = !this.isRowExpandByRow(row)
-      const columnIndex = this.getColumnIndex(column)
-      const $columnIndex = this.getVMColumnIndex(column)
-      this.setRowExpand(row, expanded)
-      this.emitEvent('toggle-row-expand', { expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) }, evnt)
+      const expanded = !$xeTable.isRowExpandByRow(row)
+      const columnIndex = $xeTable.getColumnIndex(column)
+      const $columnIndex = $xeTable.getVMColumnIndex(column)
+      $xeTable.setRowExpand(row, expanded)
+      $xeTable.dispatchEvent('toggle-row-expand', {
+        expanded,
+        column,
+        columnIndex,
+        $columnIndex,
+        row,
+        rowIndex: $xeTable.getRowIndex(row),
+        $rowIndex: $xeTable.getVMRowIndex(row)
+      }, evnt)
     }
   },
   /**
@@ -7790,48 +7996,6 @@ const Methods = {
     }
     return this.setRowExpand(expandedRows, expanded)
   },
-  handleAsyncRowExpand (row: any) {
-    const $xeTable = this
-    const reactData = $xeTable as TableReactData
-    const internalData = $xeTable as TableInternalData
-
-    return new Promise<void>(resolve => {
-      const { expandOpts } = this
-      const { loadMethod } = expandOpts
-      if (loadMethod) {
-        const { fullAllDataRowIdData } = internalData
-        const rExpandLazyLoadedMaps = { ...reactData.rowExpandLazyLoadedMaps }
-        const rowid = getRowid($xeTable, row)
-        const rowRest = fullAllDataRowIdData[rowid]
-        rExpandLazyLoadedMaps[rowid] = row
-        reactData.rowExpandLazyLoadedMaps = rExpandLazyLoadedMaps
-        loadMethod({ $table: $xeTable, row, rowIndex: $xeTable.getRowIndex(row), $rowIndex: $xeTable.getVMRowIndex(row) }).then(() => {
-          const rExpandedMaps = { ...reactData.rowExpandedMaps }
-          if (rowRest) {
-            rowRest.expandLoaded = true
-          }
-          rExpandedMaps[rowid] = row
-          reactData.rowExpandedMaps = rExpandedMaps
-        }).catch(() => {
-          if (rowRest) {
-            rowRest.expandLoaded = false
-          }
-        }).finally(() => {
-          const rExpandLazyLoadedMaps = { ...reactData.rowExpandLazyLoadedMaps }
-          if (rExpandLazyLoadedMaps[rowid]) {
-            delete rExpandLazyLoadedMaps[rowid]
-          }
-          reactData.rowExpandLazyLoadedMaps = rExpandLazyLoadedMaps
-          $xeTable.$nextTick()
-            .then(() => $xeTable.recalculate())
-            .then(() => $xeTable.updateCellAreas())
-            .then(() => resolve())
-        })
-      } else {
-        resolve()
-      }
-    })
-  },
   /**
    * 设置展开行，二个参数设置这一行展开与否
    * 支持单行
@@ -7840,10 +8004,14 @@ const Methods = {
    * @param {Boolean} expanded 是否展开
    */
   setRowExpand (rows: any, expanded: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { rowExpandedMaps, fullAllDataRowIdData, rowExpandLazyLoadedMaps, expandOpts, expandColumn } = this
-    let rExpandedMaps = { ...rowExpandedMaps }
+    const { expandColumn } = reactData
+    let { fullAllDataRowIdData, rowExpandedMaps, rowExpandLazyLoadedMaps } = internalData
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
+    const expandOpts = $xeTable.computeExpandOpts
     const { reserve, lazy, accordion, toggleMethod } = expandOpts
     const lazyRests: any[] = []
     const columnIndex = $xeTable.getColumnIndex(expandColumn)
@@ -7854,28 +8022,29 @@ const Methods = {
       }
       if (accordion) {
         // 只能同时展开一个
-        rExpandedMaps = {}
+        rowExpandedMaps = {}
+        internalData.rowExpandedMaps = rowExpandedMaps
         rows = rows.slice(rows.length - 1, rows.length)
       }
-      const validRows: any[] = toggleMethod ? rows.filter((row: any) => toggleMethod({ expanded, column: expandColumn, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) })) : rows
+      const validRows: any[] = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column: expandColumn, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) })) : rows
       if (expanded) {
         validRows.forEach((row: any) => {
-          const rowid = getRowid(this, row)
-          if (!rExpandedMaps[rowid]) {
+          const rowid = handleGetRowId(row)
+          if (!rowExpandedMaps[rowid]) {
             const rowRest = fullAllDataRowIdData[rowid]
             const isLoad = lazy && !rowRest.expandLoaded && !rowExpandLazyLoadedMaps[rowid]
             if (isLoad) {
-              lazyRests.push(this.handleAsyncRowExpand(row))
+              lazyRests.push(handleAsyncRowExpand($xeTable, row))
             } else {
-              rExpandedMaps[rowid] = row
+              rowExpandedMaps[rowid] = row
             }
           }
         })
       } else {
         validRows.forEach((item) => {
-          const rowid = getRowid(this, item)
-          if (rExpandedMaps[rowid]) {
-            delete rExpandedMaps[rowid]
+          const rowid = handleGetRowId(item)
+          if (rowExpandedMaps[rowid]) {
+            delete rowExpandedMaps[rowid]
           }
         })
       }
@@ -7883,7 +8052,7 @@ const Methods = {
         validRows.forEach((row) => handleRowExpandReserve($xeTable, row, expanded))
       }
     }
-    this.rowExpandedMaps = rExpandedMaps
+    reactData.rowExpandedFlag++
     return Promise.all(lazyRests)
       .then(() => $xeTable.$nextTick())
       .then(() => $xeTable.recalculate(true))
@@ -7899,9 +8068,14 @@ const Methods = {
    * @param {Row} row 行对象
    */
   isRowExpandByRow (row: any) {
-    const { rowExpandedMaps } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { rowExpandedFlag } = reactData
+    const { rowExpandedMaps } = internalData
     const rowid = getRowid(this, row)
-    return !!rowExpandedMaps[rowid]
+    return !!rowExpandedFlag && !!rowExpandedMaps[rowid]
   },
   isExpandByRow (row: any) {
     if (process.env.VUE_APP_VXE_ENV === 'development') {
@@ -7922,7 +8096,8 @@ const Methods = {
     const expandOpts = $xeTable.computeExpandOpts
     const { reserve } = expandOpts
     const expList = $xeTable.getRowExpandRecords()
-    reactData.rowExpandedMaps = {}
+    internalData.rowExpandedMaps = {}
+    reactData.rowExpandedFlag++
     if (reserve) {
       tableFullData.forEach((row) => handleRowExpandReserve($xeTable, row, false))
     }
@@ -7942,8 +8117,11 @@ const Methods = {
     return this.$nextTick()
   },
   getRowExpandRecords () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
     const rest: any[] = []
-    XEUtils.each(this.rowExpandedMaps, item => {
+    XEUtils.each(internalData.rowExpandedMaps, item => {
       if (item) {
         rest.push(item)
       }
@@ -7951,8 +8129,11 @@ const Methods = {
     return rest
   },
   getTreeExpandRecords () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
     const rest: any[] = []
-    XEUtils.each(this.treeExpandedMaps, item => {
+    XEUtils.each(internalData.treeExpandedMaps, item => {
       if (item) {
         rest.push(item)
       }
@@ -7987,12 +8168,10 @@ const Methods = {
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { fullAllDataRowIdData } = internalData
+    const { fullAllDataRowIdData, treeExpandedMaps } = internalData
     const treeOpts = $xeTable.computeTreeOpts
     const { transform } = treeOpts
-    let tExpandedMaps: Record<string, any> = {}
     if (rows) {
-      tExpandedMaps = { ...reactData.treeExpandedMaps }
       if (!XEUtils.isArray(rows)) {
         rows = [rows]
       }
@@ -8001,8 +8180,8 @@ const Methods = {
         const rowRest = fullAllDataRowIdData[rowid]
         if (rowRest) {
           rowRest.treeLoaded = false
-          if (tExpandedMaps[rowid]) {
-            delete tExpandedMaps[rowid]
+          if (treeExpandedMaps[rowid]) {
+            delete treeExpandedMaps[rowid]
           }
         }
       })
@@ -8011,7 +8190,8 @@ const Methods = {
         rowRest.treeLoaded = false
       })
     }
-    reactData.treeExpandedMaps = {}
+    internalData.treeExpandedMaps = {}
+    reactData.treeExpandedFlag++
     if (transform) {
       handleVirtualTreeToList($xeTable)
       return $xeTable.handleTableData()
@@ -8024,37 +8204,45 @@ const Methods = {
    */
   reloadTreeExpand (row: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { treeOpts, treeExpandLazyLoadedMaps } = this
+    const { treeExpandLazyLoadedMaps } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
     const { transform, lazy } = treeOpts
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
-    const rowid = getRowid(this, row)
+    const rowid = getRowid($xeTable, row)
     if (lazy && row[hasChildField] && !treeExpandLazyLoadedMaps[rowid]) {
-      return this.clearTreeExpandLoaded(row).then(() => {
-        return this.handleAsyncTreeExpandChilds(row)
+      return $xeTable.clearTreeExpandLoaded(row).then(() => {
+        return handleAsyncTreeExpandChilds($xeTable, row)
       }).then(() => {
         if (transform) {
           handleVirtualTreeToList($xeTable)
-          return this.handleTableData()
+          return $xeTable.handleTableData()
         }
       }).then(() => {
-        return this.recalculate()
+        return $xeTable.recalculate()
       })
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   reloadTreeChilds (row: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     if (process.env.VUE_APP_VXE_ENV === 'development') {
       warnLog('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
     }
     // 即将废弃
-    return this.reloadTreeExpand(row)
+    return $xeTable.reloadTreeExpand(row)
   },
   /**
    * 展开树节点事件
    */
   triggerTreeExpandEvent (evnt: any, params: any) {
-    const { treeOpts, treeExpandLazyLoadedMaps } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeExpandLazyLoadedMaps } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
     const { row, column } = params
     const { lazy, trigger } = treeOpts
     if (trigger === 'manual') {
@@ -8063,11 +8251,11 @@ const Methods = {
     evnt.stopPropagation()
     const rowid = getRowid(this, row)
     if (!lazy || !treeExpandLazyLoadedMaps[rowid]) {
-      const expanded = !this.isTreeExpandByRow(row)
-      const columnIndex = this.getColumnIndex(column)
-      const $columnIndex = this.getVMColumnIndex(column)
-      this.setTreeExpand(row, expanded)
-      this.emitEvent('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row }, evnt)
+      const expanded = !$xeTable.isTreeExpandByRow(row)
+      const columnIndex = $xeTable.getColumnIndex(column)
+      const $columnIndex = $xeTable.getVMColumnIndex(column)
+      $xeTable.setTreeExpand(row, expanded)
+      $xeTable.dispatchEvent('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row }, evnt)
     }
   },
   /**
@@ -8075,88 +8263,6 @@ const Methods = {
    */
   toggleTreeExpand (row: any) {
     return this.setTreeExpand(row, !this.isTreeExpandByRow(row))
-  },
-  /**
-   * 处理默认展开树节点
-   */
-  handleDefaultTreeExpand () {
-    const { treeConfig, treeOpts, tableFullData } = this
-    if (treeConfig) {
-      const { expandAll, expandRowKeys } = treeOpts
-      const childrenField = treeOpts.children || treeOpts.childrenField
-      if (expandAll) {
-        this.setAllTreeExpand(true)
-      } else if (expandRowKeys) {
-        const defExpandeds: any[] = []
-        const rowkey = getRowkey(this)
-        expandRowKeys.forEach((rowid: any) => {
-          const matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), { children: childrenField })
-          if (matchObj) {
-            defExpandeds.push(matchObj.item)
-          }
-        })
-        this.setTreeExpand(defExpandeds, true)
-      }
-    }
-  },
-  handleAsyncTreeExpandChilds (row: any) {
-    const $xeTable = this
-
-    const { treeOpts, checkboxOpts } = this
-    const { transform, loadMethod } = treeOpts
-    const { checkStrictly } = checkboxOpts
-    return new Promise<void>(resolve => {
-      if (loadMethod) {
-        const { treeExpandLazyLoadedMaps, fullAllDataRowIdData } = this
-        const rowid = getRowid($xeTable, row)
-        const rowRest = fullAllDataRowIdData[rowid]
-        treeExpandLazyLoadedMaps[rowid] = row
-        Promise.resolve(
-          loadMethod({ $table: $xeTable, row })
-        ).then((childRecords: any) => {
-          if (rowRest) {
-            rowRest.treeLoaded = true
-          }
-          if (treeExpandLazyLoadedMaps[rowid]) {
-            delete treeExpandLazyLoadedMaps[rowid]
-          }
-          if (!XEUtils.isArray(childRecords)) {
-            childRecords = []
-          }
-          if (childRecords) {
-            return this.loadTreeChildren(row, childRecords).then((childRows: any[]) => {
-              const { treeExpandedMaps } = this
-              if (childRows.length && !treeExpandedMaps[rowid]) {
-                treeExpandedMaps[rowid] = row
-              }
-              // 如果当前节点已选中，则展开后子节点也被选中
-              if (!checkStrictly && this.isCheckedByCheckboxRow(row)) {
-                handleCheckedCheckboxRow($xeTable, childRows, true)
-              }
-              return this.$nextTick().then(() => {
-                if (transform) {
-                  this.handleTableData()
-                  updateAfterDataIndex($xeTable)
-                  return this.$nextTick()
-                }
-              })
-            })
-          }
-        }).catch(() => {
-          const { treeExpandLazyLoadedMaps } = this
-          if (rowRest) {
-            rowRest.treeLoaded = false
-          }
-          if (treeExpandLazyLoadedMaps[rowid]) {
-            delete treeExpandLazyLoadedMaps[rowid]
-          }
-        }).finally(() => {
-          this.$nextTick().then(() => this.recalculate()).then(() => resolve())
-        })
-      } else {
-        resolve()
-      }
-    })
   },
   /**
    * 设置所有树节点的展开与否
@@ -8182,41 +8288,47 @@ const Methods = {
    * @returns
    */
   handleBaseTreeExpand (rows: any, expanded: any) {
-    const { fullAllDataRowIdData, tableFullData, treeExpandedMaps, treeOpts, treeExpandLazyLoadedMaps, treeNodeColumn } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeNodeColumn } = reactData
+    const { fullAllDataRowIdData, tableFullData, treeExpandedMaps, treeExpandLazyLoadedMaps } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
     const { reserve, lazy, accordion, toggleMethod } = treeOpts
-    const treeTempExpandedMaps = { ...treeExpandedMaps }
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const result: any[] = []
-    const columnIndex = this.getColumnIndex(treeNodeColumn)
-    const $columnIndex = this.getVMColumnIndex(treeNodeColumn)
-    let validRows = toggleMethod ? rows.filter((row: any) => toggleMethod({ expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
+    const columnIndex = $xeTable.getColumnIndex(treeNodeColumn)
+    const $columnIndex = $xeTable.getVMColumnIndex(treeNodeColumn)
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
+    let validRows = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
     if (accordion) {
       validRows = validRows.length ? [validRows[validRows.length - 1]] : []
       // 同一级只能展开一个
       const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], { children: childrenField })
       if (matchObj) {
         matchObj.items.forEach(item => {
-          const rowid = getRowid(this, item)
-          if (treeTempExpandedMaps[rowid]) {
-            delete treeTempExpandedMaps[rowid]
+          const rowid = handleGetRowId(item)
+          if (treeExpandedMaps[rowid]) {
+            delete treeExpandedMaps[rowid]
           }
         })
       }
     }
     if (expanded) {
       validRows.forEach((row: any) => {
-        const rowid = getRowid(this, row)
-        if (!treeTempExpandedMaps[rowid]) {
+        const rowid = handleGetRowId(row)
+        if (!treeExpandedMaps[rowid]) {
           const rowRest = fullAllDataRowIdData[rowid]
           if (rowRest) {
             const isLoad = lazy && row[hasChildField] && !rowRest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
             // 是否使用懒加载
             if (isLoad) {
-              result.push(this.handleAsyncTreeExpandChilds(row))
+              result.push(handleAsyncTreeExpandChilds($xeTable, row))
             } else {
               if (row[childrenField] && row[childrenField].length) {
-                treeTempExpandedMaps[rowid] = row
+                treeExpandedMaps[rowid] = row
               }
             }
           }
@@ -8224,18 +8336,18 @@ const Methods = {
       })
     } else {
       validRows.forEach((item: any) => {
-        const rowid = getRowid(this, item)
-        if (treeTempExpandedMaps[rowid]) {
-          delete treeTempExpandedMaps[rowid]
+        const rowid = handleGetRowId(item)
+        if (treeExpandedMaps[rowid]) {
+          delete treeExpandedMaps[rowid]
         }
       })
     }
     if (reserve) {
-      validRows.forEach((row: any) => this.handleTreeExpandReserve(row, expanded))
+      validRows.forEach((row: any) => handleTreeExpandReserve($xeTable, row, expanded))
     }
-    this.treeExpandedMaps = treeTempExpandedMaps
+    reactData.treeExpandedFlag++
     return Promise.all(result).then(() => {
-      return this.recalculate()
+      return $xeTable.recalculate()
     })
   },
   /**
@@ -8289,48 +8401,46 @@ const Methods = {
    * @param {Row} row 行对象
    */
   isTreeExpandByRow (row: any) {
-    const { treeExpandedMaps } = this
-    return !!treeExpandedMaps[getRowid(this, row)]
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeExpandedFlag } = reactData
+    const { treeExpandedMaps } = internalData
+    return !!treeExpandedFlag && !!treeExpandedMaps[getRowid($xeTable, row)]
   },
   /**
    * 手动清空树形节点的展开状态，数据会恢复成未展开的状态
    */
   clearTreeExpand () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { treeOpts, tableFullData } = this
-    const { transform, reserve } = treeOpts
+    const { tableFullTreeData } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
-    const expList = this.getTreeExpandRecords()
-    this.treeExpandedMaps = {}
+    const { transform, reserve } = treeOpts
+    const expList = $xeTable.getTreeExpandRecords()
+    internalData.treeExpandedMaps = {}
+    reactData.treeExpandedFlag++
     if (reserve) {
-      XEUtils.eachTree(tableFullData, row => this.handleTreeExpandReserve(row, false), { children: childrenField })
+      XEUtils.eachTree(tableFullTreeData, row => handleTreeExpandReserve($xeTable, row, false), { children: childrenField })
     }
-    return this.handleTableData().then(() => {
+    return $xeTable.handleTableData().then(() => {
       if (transform) {
         handleVirtualTreeToList($xeTable)
-        return this.handleTableData()
+        return $xeTable.handleTableData()
       }
     }).then(() => {
       if (expList.length) {
-        this.recalculate()
+        $xeTable.recalculate()
       }
     })
   },
   clearTreeExpandReserve () {
     this.treeExpandedReserveRowMap = {}
     return this.$nextTick()
-  },
-  handleTreeExpandReserve (row: any, expanded: any) {
-    const { treeExpandedReserveRowMap, treeOpts } = this
-    if (treeOpts.reserve) {
-      const rowid = getRowid(this, row)
-      if (expanded) {
-        treeExpandedReserveRowMap[rowid] = row
-      } else if (treeExpandedReserveRowMap[rowid]) {
-        delete treeExpandedReserveRowMap[rowid]
-      }
-    }
   },
   /**
    * 获取表格的滚动状态
@@ -8656,10 +8766,10 @@ const Methods = {
     }
 
     const { highlightHoverRow } = tableProps
-    const { scrollXLoad, scrollYLoad } = reactData
+    const { scrollXLoad, scrollYLoad, expandColumn } = reactData
     const leftFixedWidth = $xeTable.computeLeftFixedWidth
     const rightFixedWidth = $xeTable.computeRightFixedWidth
-    if (!(scrollYLoad || leftFixedWidth || rightFixedWidth)) {
+    if (!(scrollYLoad || leftFixedWidth || rightFixedWidth || expandColumn)) {
       return
     }
 
@@ -8928,8 +9038,8 @@ const Methods = {
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { isAllOverflow, scrollYLoad, expandColumn, rowExpandedMaps } = reactData
-    const { scrollYStore, elemStore, isResizeCellHeight, afterFullData, fullAllDataRowIdData } = internalData
+    const { isAllOverflow, scrollYLoad, expandColumn } = reactData
+    const { scrollYStore, elemStore, isResizeCellHeight, afterFullData, fullAllDataRowIdData, rowExpandedMaps } = internalData
     const { startIndex } = scrollYStore
     const expandOpts = $xeTable.computeExpandOpts
     const rowOpts = $xeTable.computeRowOpts
@@ -9264,7 +9374,7 @@ const Methods = {
     if (this.footerSpanMethod) {
       errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
     }
-    setMerges(this, merges, this.mergeFooterList, null)
+    setMerges(this, merges, this.mergeFooterList)
     return this.$nextTick().then(() => {
       this.updateCellAreas()
       return updateStyle($xeTable)

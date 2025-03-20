@@ -161,8 +161,8 @@ export default {
 
       const validRest: any = {}
       const { editRules, treeConfig } = props
-      const { editStore, pendingRowMaps } = reactData
-      const { afterFullData } = internalData
+      const { editStore } = reactData
+      const { afterFullData, pendingRowMaps } = internalData
       const { removeMaps } = editStore
       const treeOpts = $xeTable.computeTreeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField

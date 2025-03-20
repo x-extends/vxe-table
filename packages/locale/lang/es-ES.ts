@@ -51,7 +51,8 @@ export default {
       treeNotImp: 'La tabla de árbol no soporta importación.',
       treeCrossDrag: 'Only drag and drop the first level',
       treeDragChild: 'The parent cannot be dragged into its own child',
-      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install',
+      errMaxRow: '超过支持的最大数据量 {0} 行，这可能会导致出现错误'
     },
     table: {
       emptyText: 'No hay datos',
