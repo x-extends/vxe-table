@@ -1807,7 +1807,7 @@ export default defineComponent({
             // 筛选虚拟树
             tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, {
               original: true,
-              isEvery: true,
+              isEvery: false,
               children: mapChildrenField,
               mapChildren: childrenField
             })
