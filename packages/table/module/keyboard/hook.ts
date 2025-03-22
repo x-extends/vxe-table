@@ -276,6 +276,36 @@ hooks.add('tableKeyboardModule', {
       }
     }
 
+    const handleMoveSelected = (evnt: any, args: any, isLeftArrow: boolean, isUpArrow: boolean, isRightArrow: boolean, isDwArrow: boolean) => {
+      const { afterFullData, visibleColumn } = internalData
+      const params = Object.assign({}, args)
+      const _rowIndex = $xeTable.getVTRowIndex(params.row)
+      const _columnIndex = $xeTable.getVTColumnIndex(params.column)
+      evnt.preventDefault()
+      if (isUpArrow && _rowIndex > 0) {
+        // 移动到上一行
+        params.rowIndex = _rowIndex - 1
+        params.row = afterFullData[params.rowIndex]
+      } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
+        // 移动到下一行
+        params.rowIndex = _rowIndex + 1
+        params.row = afterFullData[params.rowIndex]
+      } else if (isLeftArrow && _columnIndex) {
+        // 移动到左侧单元格
+        params.columnIndex = _columnIndex - 1
+        params.column = visibleColumn[params.columnIndex]
+      } else if (isRightArrow && _columnIndex < visibleColumn.length - 1) {
+        // 移动到右侧单元格
+        params.columnIndex = _columnIndex + 1
+        params.column = visibleColumn[params.columnIndex]
+      }
+      $xeTable.scrollToRow(params.row, params.column).then(() => {
+        params.cell = $xeTable.getCellElement(params.row, params.column)
+        $xeTable.handleSelected(params, evnt)
+      })
+      return params
+    }
+
     const keyboardMethods: TableKeyboardPrivateMethods = {
       // 处理 Tab 键移动
       moveTabSelected (args, isLeft, evnt) {
@@ -420,33 +450,36 @@ hooks.add('tableKeyboardModule', {
         }
       },
       // 处理可编辑方向键移动
-      moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
-        const { afterFullData, visibleColumn } = internalData
-        const params = Object.assign({}, args)
-        const _rowIndex = $xeTable.getVTRowIndex(params.row)
-        const _columnIndex = $xeTable.getVTColumnIndex(params.column)
-        evnt.preventDefault()
-        if (isUpArrow && _rowIndex > 0) {
-          // 移动到上一行
-          params.rowIndex = _rowIndex - 1
-          params.row = afterFullData[params.rowIndex]
-        } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
-          // 移动到下一行
-          params.rowIndex = _rowIndex + 1
-          params.row = afterFullData[params.rowIndex]
-        } else if (isLeftArrow && _columnIndex) {
-          // 移动到左侧单元格
-          params.columnIndex = _columnIndex - 1
-          params.column = visibleColumn[params.columnIndex]
-        } else if (isRightArrow && _columnIndex < visibleColumn.length - 1) {
-          // 移动到右侧单元格
-          params.columnIndex = _columnIndex + 1
-          params.column = visibleColumn[params.columnIndex]
+      moveArrowSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
+        const { highlightCurrentRow, highlightCurrentColumn } = props
+        const rowOpts = computeRowOpts.value
+        const columnOpts = computeColumnOpts.value
+        handleMoveSelected(evnt, args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow)
+        // 当前行按键上下移动
+        if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
+          $xeTable.moveCurrentRow(isUpArrow, isDwArrow, evnt)
         }
-        $xeTable.scrollToRow(params.row, params.column).then(() => {
-          params.cell = $xeTable.getCellElement(params.row, params.column)
-          $xeTable.handleSelected(params, evnt)
-        })
+        // 当前行按键左右移动
+        if ((isLeftArrow || isRightArrow) && (columnOpts.isCurrent || highlightCurrentColumn)) {
+          $xeTable.moveCurrentColumn(isLeftArrow, isRightArrow, evnt)
+        }
+      },
+      moveEnterSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
+        const rowOpts = computeRowOpts.value
+        const currentRowOpts = computeCurrentRowOpts.value
+        const columnOpts = computeColumnOpts.value
+        const currentColumnOpts = computeCurrentColumnOpts.value
+        const params = handleMoveSelected(evnt, args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow)
+        if ((rowOpts.isCurrent && currentRowOpts.isFollowSelected)) {
+          $xeTable.triggerCurrentRowEvent(evnt, params)
+        }
+        if (columnOpts.isCurrent && currentColumnOpts.isFollowSelected) {
+          $xeTable.triggerCurrentColumnEvent(evnt, params)
+        }
+      },
+      // 已废弃，待删除
+      moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
+        handleMoveSelected(evnt, args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow)
       },
       handleCellMousedownEvent
     }

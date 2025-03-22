@@ -1,16 +1,10 @@
 <template>
-  <div class="demo-page-wrapper">
-    <vxe-grid ref="gridRef" v-bind="gridOptions" v-on="gridEvents">
-      <template #toolbarButtons>
-        <span>数据：</span>
-        <vxe-select v-model="selectSize" :options="dataOptions" @change="changeRowSizeEvent"></vxe-select>
-      </template>
-
-      <template #emailDefault="{ row }">
-        <vxe-text :content="row.email" click-to-copy></vxe-text>
-      </template>
-    </vxe-grid>
-  </div>
+  <vxe-column>
+    <template #edit>
+      const abc = ref({})
+      <xxx ref="abc"></xxx>
+    </template>
+  </vxe-column>
 </template>
 
 <script lang="ts" setup>

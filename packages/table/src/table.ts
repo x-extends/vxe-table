@@ -910,6 +910,7 @@ export default defineComponent({
       getRefMaps: () => refMaps,
       getComputeMaps: () => computeMaps,
 
+      xeGrid: $xeGrid,
       xegrid: $xeGrid
     } as unknown as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods
 
@@ -1745,7 +1746,7 @@ export default defineComponent({
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const { transform, rowField, parentField, mapChildrenField } = treeOpts
-      const { remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
+      const { isEvery, remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
       const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple, chronological } = sortOpts
       let tableData: any[] = []
       let tableTree: any[] = []
@@ -1807,7 +1808,7 @@ export default defineComponent({
             // 筛选虚拟树
             tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, {
               original: true,
-              isEvery: true,
+              isEvery,
               children: mapChildrenField,
               mapChildren: childrenField
             })
@@ -1821,7 +1822,7 @@ export default defineComponent({
             // 还原虚拟树
             tableTree = XEUtils.searchTree(tableFullTreeData, () => true, {
               original: true,
-              isEvery: true,
+              isEvery,
               children: mapChildrenField,
               mapChildren: childrenField
             })
@@ -1870,7 +1871,7 @@ export default defineComponent({
           // 还原虚拟树
           tableTree = XEUtils.searchTree(tableFullTreeData, () => true, {
             original: true,
-            isEvery: true,
+            isEvery,
             children: treeOpts.mapChildrenField,
             mapChildren: childrenField
           })
@@ -6303,7 +6304,7 @@ export default defineComponent({
       // 该行为只对当前激活的表格有效
       if (internalData.isActivated) {
         tablePrivateMethods.preventEvent(evnt, 'event.keydown', null, () => {
-          const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow, highlightCurrentColumn } = props
+          const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow } = props
           const { ctxMenuStore, editStore, currentRow } = reactData
           const { afterFullData } = internalData
           const isMenu = computeIsMenu.value
@@ -6314,7 +6315,6 @@ export default defineComponent({
           const treeOpts = computeTreeOpts.value
           const menuList = computeMenuList.value
           const rowOpts = computeRowOpts.value
-          const columnOpts = computeColumnOpts.value
           const { selected, actived } = editStore
           const childrenField = treeOpts.children || treeOpts.childrenField
           const keyCode = evnt.keyCode
@@ -6411,7 +6411,7 @@ export default defineComponent({
                   if (keyboardOpts.enterToTab) {
                     $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
                   } else {
-                    $xeTable.moveSelected(activeParams, isLeftArrow, true, isRightArrow, false, evnt)
+                    $xeTable.moveEnterSelected(activeParams, isLeftArrow, true, isRightArrow, false, evnt)
                   }
                 } else {
                   if (keyboardOpts.enterToTab) {
@@ -6443,7 +6443,7 @@ export default defineComponent({
                           return
                         }
                       }
-                      $xeTable.moveSelected(activeParams, isLeftArrow, false, isRightArrow, true, evnt)
+                      $xeTable.moveEnterSelected(activeParams, isLeftArrow, false, isRightArrow, true, evnt)
                       if (enterMethod) {
                         enterMethod(etrParams)
                       }
@@ -6472,15 +6472,7 @@ export default defineComponent({
             if (!isEditStatus) {
               // 如果按下了方向键
               if (selected.row && selected.column) {
-                $xeTable.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
-              }
-              // 当前行按键上下移动
-              if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
-                $xeTable.moveCurrentRow(isUpArrow, isDwArrow, evnt)
-              }
-              // 当前行按键左右移动
-              if ((isLeftArrow || isRightArrow) && (columnOpts.isCurrent || highlightCurrentColumn)) {
-                $xeTable.moveCurrentColumn(isLeftArrow, isRightArrow, evnt)
+                $xeTable.moveArrowSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
               }
             }
           } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
