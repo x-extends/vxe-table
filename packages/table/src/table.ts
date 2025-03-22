@@ -434,6 +434,9 @@ export default {
     },
     $xegrid: {
       default: null
+    },
+    xeGrid: {
+      default: null
     }
   },
   data () {
@@ -1707,7 +1710,7 @@ export default {
     const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
 
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const $xeGrid = $xeTable.$xeGrid
+    const $xeGrid = $xeTable.xeGrid
     const props = $xeTable
     const slots = $xeTable.$scopedSlots
     const reactData = $xeTable as unknown as TableReactData

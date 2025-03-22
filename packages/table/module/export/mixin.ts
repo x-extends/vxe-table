@@ -1063,7 +1063,7 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
-  const $xeGrid = $xeTable.$xeGrid
+  const $xeGrid = $xeTable.xeGrid
 
   const { treeConfig, showHeader, showFooter } = props
   const { initStore, mergeList, mergeFooterList, isGroup, footerTableData, exportStore, exportParams } = reactData
