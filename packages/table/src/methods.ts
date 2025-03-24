@@ -1807,8 +1807,8 @@ function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, i
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { showOverflow } = props
-  const rowOpts = $xeTable.computeRowOpts
+  // const { showOverflow } = props
+  // const rowOpts = $xeTable.computeRowOpts
   const leftList: VxeTableDefines.ColumnInfo[] = []
   const centerList: VxeTableDefines.ColumnInfo[] = []
   const rightList: VxeTableDefines.ColumnInfo[] = []
@@ -1873,28 +1873,28 @@ function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, i
   reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
   Object.assign(columnStore, { leftList, centerList, rightList })
   if (scrollXLoad) {
-    if (showOverflow) {
-      if (!rowOpts.height) {
-        const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
-        if (errColumn) {
-          errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
-        }
-      }
+    // if (showOverflow) {
+    //   if (!rowOpts.height) {
+    //     const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
+    //     if (errColumn) {
+    //       errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+    //     }
+    //   }
+    // }
+    // if (process.env.VUE_APP_VXE_ENV === 'development') {
+    // if (props.showHeader && !props.showHeaderOverflow) {
+    //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
+    // }
+    // if (props.showFooter && !props.showFooterOverflow) {
+    //   warnLog('vxe.error.reqProp', ['show-footer-overflow'])
+    // }
+    if (props.spanMethod) {
+      warnLog('vxe.error.scrollErrProp', ['span-method'])
     }
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      // if (props.showHeader && !props.showHeaderOverflow) {
-      //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
-      // }
-      // if (props.showFooter && !props.showFooterOverflow) {
-      //   warnLog('vxe.error.reqProp', ['show-footer-overflow'])
-      // }
-      if (props.spanMethod) {
-        warnLog('vxe.error.scrollErrProp', ['span-method'])
-      }
-      if (props.footerSpanMethod) {
-        warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
-      }
+    if (props.footerSpanMethod) {
+      warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
     }
+    // }
     if (isReset) {
       const { visibleSize } = handleVirtualXVisible($xeTable)
       scrollXStore.startIndex = 0
@@ -8576,7 +8576,7 @@ const Methods = {
     const { scrollXLoad, scrollYLoad, expandColumn } = reactData
     const leftFixedWidth = $xeTable.computeLeftFixedWidth
     const rightFixedWidth = $xeTable.computeRightFixedWidth
-    if (!(scrollYLoad || leftFixedWidth || rightFixedWidth || expandColumn)) {
+    if (!(leftFixedWidth || rightFixedWidth || expandColumn)) {
       return
     }
 
