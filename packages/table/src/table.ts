@@ -9114,7 +9114,7 @@ export default defineComponent({
         const { scrollXLoad, scrollYLoad, expandColumn } = reactData
         const leftFixedWidth = computeLeftFixedWidth.value
         const rightFixedWidth = computeRightFixedWidth.value
-        if (!(scrollYLoad || leftFixedWidth || rightFixedWidth || expandColumn)) {
+        if (!(leftFixedWidth || rightFixedWidth || expandColumn)) {
           return
         }
 
