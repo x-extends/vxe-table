@@ -27,7 +27,7 @@ export default defineComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeDefaultRowHeight, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeColumnDragOpts, computeResizableOpts } = $xeTable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeCellOffsetWidth, computeAreaOpts, computeDefaultRowHeight, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeColumnDragOpts, computeResizableOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refBodyScroll = ref() as Ref<HTMLDivElement>
@@ -101,9 +101,9 @@ export default defineComponent({
       columns: VxeTableDefines.ColumnInfo[],
       items: any[]
     ) => {
-      const { fullAllDataRowIdData } = tableInternalData
+      const { fullAllDataRowIdData, visibleColumn } = tableInternalData
       const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
-      const { tableData, dragRow, overflowX, currentColumn, scrollXLoad, scrollYLoad, calcCellHeightFlag, resizeHeightFlag, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
+      const { tableData, dragRow, overflowX, currentColumn, scrollXLoad, scrollYLoad, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
       const { afterFullData, scrollXStore, scrollYStore } = tableInternalData
       const cellOpts = computeCellOpts.value
       const validOpts = computeValidOpts.value
@@ -120,6 +120,7 @@ export default defineComponent({
       const columnOpts = computeColumnOpts.value
       const mouseOpts = computeMouseOpts.value
       const areaOpts = computeAreaOpts.value
+      const cellOffsetWidth = computeCellOffsetWidth.value
       const { selectCellToRow } = areaOpts
       const { type, cellRender, editRender, align, showOverflow, className, treeNode, rowResize, padding, verticalAlign, slots } = column
       const { verticalAlign: allVerticalAlign } = cellOpts
@@ -289,6 +290,18 @@ export default defineComponent({
       }
 
       const tcStyle: Record<string, string> = {}
+      if (hasEllipsis && resizeWidthFlag) {
+        let tsColspan = tdAttrs.colspan || 0
+        if (tsColspan > 1) {
+          for (let index = 1; index < tsColspan; index++) {
+            const nextColumn = visibleColumn[columnIndex + index]
+            if (nextColumn) {
+              tsColspan += nextColumn.renderWidth
+            }
+          }
+        }
+        tcStyle.width = `${column.renderWidth - (cellOffsetWidth * tsColspan)}px`
+      }
       if (scrollYLoad || hasEllipsis || isCsHeight || isRsHeight) {
         tcStyle.height = `${cellHeight}px`
       } else {

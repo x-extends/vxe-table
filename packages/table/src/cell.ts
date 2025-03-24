@@ -228,15 +228,27 @@ function getFooterContent (params: VxeTableDefines.CellRenderFooterParams & { $t
   })
   if (footerFormatter) {
     if (XEUtils.isFunction(footerFormatter)) {
-      return `${footerFormatter(footParams)}`
+      return [
+        h('span', {
+          class: 'vxe-cell--label'
+        }, `${footerFormatter(footParams)}`)
+      ]
     }
     const isArr = XEUtils.isArray(footerFormatter)
     const gFormatOpts = isArr ? formats.get(footerFormatter[0]) : formats.get(footerFormatter)
     const footerFormatMethod = gFormatOpts ? gFormatOpts.tableFooterCellFormatMethod : null
     if (footerFormatMethod) {
-      return `${isArr ? footerFormatMethod(footParams, ...footerFormatter.slice(1)) : footerFormatMethod(footParams)}`
+      return [
+        h('span', {
+          class: 'vxe-cell--label'
+        }, `${isArr ? footerFormatMethod(footParams, ...footerFormatter.slice(1)) : footerFormatMethod(footParams)}`)
+      ]
     }
-    return ''
+    return [
+      h('span', {
+        class: 'vxe-cell--label'
+      }, '')
+    ]
   }
   if (renderOpts) {
     const compConf = renderer.get(renderOpts.name)
@@ -248,7 +260,9 @@ function getFooterContent (params: VxeTableDefines.CellRenderFooterParams & { $t
     }
   }
   return [
-    formatText(itemValue, 1)
+    h('span', {
+      class: 'vxe-cell--label'
+    }, formatText(itemValue, 1))
   ]
 }
 

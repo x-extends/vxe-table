@@ -267,6 +267,7 @@ export default defineComponent({
       rowExpandHeightFlag: 1,
       calcCellHeightFlag: 1,
       resizeHeightFlag: 1,
+      resizeWidthFlag: 1,
 
       isCustomStatus: false,
 
@@ -1580,6 +1581,7 @@ export default defineComponent({
       internalData.headerHeight = headerHeight
       internalData.footerHeight = footerHeight
       reactData.overflowX = overflowX
+      reactData.resizeWidthFlag++
       updateColumnOffsetLeft()
       updateHeight()
       reactData.parentHeight = Math.max(internalData.headerHeight + footerHeight + 20, $xeTable.getParentHeight())
@@ -1889,7 +1891,7 @@ export default defineComponent({
     const updateStyle = () => {
       const { border, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
       const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isAllOverflow, expandColumn } = reactData
-      const { visibleColumn, fullColumnIdData, tableHeight, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
+      const { visibleColumn, tableHeight, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
       const el = refElem.value
       if (!el) {
         return
@@ -1898,7 +1900,6 @@ export default defineComponent({
       const osbWidth = overflowY ? scrollbarWidth : 0
       const osbHeight = overflowX ? scrollbarHeight : 0
       const emptyPlaceholderElem = refEmptyPlaceholder.value
-      const cellOffsetWidth = computeCellOffsetWidth.value
       const mouseOpts = computeMouseOpts.value
       const expandOpts = computeExpandOpts.value
       const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
@@ -2179,54 +2180,6 @@ export default defineComponent({
             if (tableElem) {
               tableElem.style.width = tWidth ? `${tWidth}px` : ''
             }
-          }
-          const colgroupElem = getRefElem(elemStore[`${name}-${layout}-colgroup`])
-          if (colgroupElem) {
-            XEUtils.arrayEach(colgroupElem.children, (colElem: any) => {
-              const colid = colElem.getAttribute('name')
-              if (fullColumnIdData[colid]) {
-                const colRest = fullColumnIdData[colid]
-                const column = colRest.column
-                const { showHeaderOverflow, showFooterOverflow, showOverflow } = column
-                let cellOverflow
-                colElem.style.width = `${column.renderWidth}px`
-                if (layout === 'header') {
-                  cellOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
-                } else if (layout === 'footer') {
-                  cellOverflow = XEUtils.isUndefined(showFooterOverflow) || XEUtils.isNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
-                } else {
-                  cellOverflow = XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow) ? isAllOverflow : showOverflow
-                }
-                const showEllipsis = cellOverflow === 'ellipsis'
-                const showTitle = cellOverflow === 'title'
-                const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-                let hasEllipsis = showTitle || showTooltip || showEllipsis
-                const listElem = getRefElem(elemStore[`${name}-${layout}-list`])
-                // 纵向虚拟滚动不支持动态行高
-                if (scrollYLoad && !hasEllipsis) {
-                  hasEllipsis = true
-                }
-                if (listElem) {
-                  XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), (elem: any) => {
-                    const colspan = parseInt(elem.getAttribute('colspan') || 1)
-                    const cellElem = elem.querySelector('.vxe-cell')
-                    let colWidth = column.renderWidth
-                    if (cellElem) {
-                      if (colspan > 1) {
-                        const columnIndex = $xeTable.getColumnIndex(column)
-                        for (let index = 1; index < colspan; index++) {
-                          const nextColumn = $xeTable.getColumns(columnIndex + index)
-                          if (nextColumn) {
-                            colWidth += nextColumn.renderWidth
-                          }
-                        }
-                      }
-                      cellElem.style.width = hasEllipsis ? `${colWidth - (cellOffsetWidth * colspan)}px` : ''
-                    }
-                  })
-                }
-              }
-            })
           }
         })
       })
@@ -3037,8 +2990,8 @@ export default defineComponent({
     }
 
     const parseColumns = (isReset: boolean) => {
-      const { showOverflow } = props
-      const rowOpts = computeRowOpts.value
+      // const { showOverflow } = props
+      // const rowOpts = computeRowOpts.value
       const leftList: VxeTableDefines.ColumnInfo[] = []
       const centerList: VxeTableDefines.ColumnInfo[] = []
       const rightList: VxeTableDefines.ColumnInfo[] = []
@@ -3103,28 +3056,28 @@ export default defineComponent({
       reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
       Object.assign(columnStore, { leftList, centerList, rightList })
       if (scrollXLoad) {
-        if (showOverflow) {
-          if (!rowOpts.height) {
-            const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
-            if (errColumn) {
-              errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
-            }
-          }
+        // if (showOverflow) {
+        //   if (!rowOpts.height) {
+        //     const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
+        //     if (errColumn) {
+        //       errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+        //     }
+        //   }
+        // }
+        // if (process.env.VUE_APP_VXE_ENV === 'development') {
+        // if (props.showHeader && !props.showHeaderOverflow) {
+        //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
+        // }
+        // if (props.showFooter && !props.showFooterOverflow) {
+        //   warnLog('vxe.error.reqProp', ['show-footer-overflow'])
+        // }
+        if (props.spanMethod) {
+          warnLog('vxe.error.scrollErrProp', ['span-method'])
         }
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          // if (props.showHeader && !props.showHeaderOverflow) {
-          //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
-          // }
-          // if (props.showFooter && !props.showFooterOverflow) {
-          //   warnLog('vxe.error.reqProp', ['show-footer-overflow'])
-          // }
-          if (props.spanMethod) {
-            warnLog('vxe.error.scrollErrProp', ['span-method'])
-          }
-          if (props.footerSpanMethod) {
-            warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
-          }
+        if (props.footerSpanMethod) {
+          warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
         }
+        // }
         if (isReset) {
           const { visibleSize } = handleVirtualXVisible()
           scrollXStore.startIndex = 0
@@ -3332,7 +3285,9 @@ export default defineComponent({
       const { scrollYStore } = internalData
       const { preloadSize, startIndex, endIndex, offsetSize } = scrollYStore
       const autoOffsetYSize = isAllOverflow ? offsetSize : offsetSize + 1
-      const { toVisibleIndex, visibleSize } = handleVirtualYVisible()
+      console.log('--', Date.now())
+      const { toVisibleIndex, visibleSize } = { toVisibleIndex: 1, visibleSize: 25 }// handleVirtualYVisible()
+      console.log(Date.now())
       const offsetItem = {
         startIndex: Math.max(0, isScrollYBig ? toVisibleIndex - 1 : toVisibleIndex - 1 - offsetSize - preloadSize),
         endIndex: isScrollYBig ? (toVisibleIndex + visibleSize) : (toVisibleIndex + visibleSize + autoOffsetYSize + preloadSize)
@@ -6850,8 +6805,9 @@ export default defineComponent({
      * @param {Event} evnt 事件
      * @param {Row} row 行对象
      */
-    const handleTooltip = (evnt: MouseEvent, tdEl: HTMLTableCellElement, overflowElem: HTMLElement, tipElem: HTMLElement | null, params: any) => {
-      if (!overflowElem) {
+    const handleTooltip = (evnt: MouseEvent, tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, params: any) => {
+      const tipOverEl = overflowElem || tdEl
+      if (!tipOverEl) {
         return nextTick()
       }
       params.cell = tdEl
@@ -6861,9 +6817,8 @@ export default defineComponent({
       const { showAll, contentMethod } = tooltipOpts
       const customContent = contentMethod ? contentMethod(params) : null
       const useCustom = contentMethod && !XEUtils.eqNull(customContent)
-      const content = useCustom ? customContent : XEUtils.toString(column.type === 'html' ? overflowElem.innerText : overflowElem.textContent).trim()
-      const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
-      if (content && (showAll || useCustom || isCellOverflow)) {
+      const content = useCustom ? customContent : XEUtils.toString(column.type === 'html' ? tipOverEl.innerText : tipOverEl.textContent).trim()
+      if (content && (showAll || useCustom || (tipOverEl.scrollWidth > tipOverEl.clientWidth))) {
         Object.assign(tooltipStore, {
           row,
           column,
@@ -6873,7 +6828,7 @@ export default defineComponent({
         nextTick(() => {
           const $tooltip = refTooltip.value
           if ($tooltip && $tooltip.open) {
-            $tooltip.open(isCellOverflow ? overflowElem : (tipElem || overflowElem), formatText(content))
+            $tooltip.open(tipOverEl, formatText(content))
           }
         })
       }
@@ -7834,7 +7789,7 @@ export default defineComponent({
           return
         }
         if (tooltipStore.column !== column || !tooltipStore.visible) {
-          handleTooltip(evnt, thEl, cellEl, null, params)
+          handleTooltip(evnt, thEl, thEl.querySelector<HTMLElement>('.vxe-cell--title') || cellEl, params)
         }
       },
       /**
@@ -7861,7 +7816,7 @@ export default defineComponent({
           }
         }
         if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
-          handleTooltip(evnt, tdEl, tdEl.querySelector('.vxe-cell--wrapper') as HTMLElement, null, params)
+          handleTooltip(evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), params)
         }
       },
       /**
@@ -7870,10 +7825,10 @@ export default defineComponent({
       triggerFooterTooltipEvent (evnt, params) {
         const { column } = params
         const { tooltipStore } = reactData
-        const cell = evnt.currentTarget as HTMLTableCellElement
+        const tdEl = evnt.currentTarget as HTMLTableCellElement
         handleTargetEnterEvent(tooltipStore.column !== column || !!tooltipStore.row)
         if (tooltipStore.column !== column || !tooltipStore.visible) {
-          handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--wrapper') as HTMLElement || cell.children[0], null, params)
+          handleTooltip(evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector('.vxe-cell--wrapper') as HTMLElement, params)
         }
       },
       handleTargetLeaveEvent () {
@@ -9109,6 +9064,7 @@ export default defineComponent({
             return
           }
         }
+
         let scrollTop = yHandleEl.scrollTop
         let scrollLeft = xHandleEl.scrollLeft
         if (leftScrollElem && fixedType === 'left') {
@@ -9241,7 +9197,7 @@ export default defineComponent({
         const { scrollXLoad, scrollYLoad, expandColumn } = reactData
         const leftFixedWidth = computeLeftFixedWidth.value
         const rightFixedWidth = computeRightFixedWidth.value
-        if (!(scrollYLoad || leftFixedWidth || rightFixedWidth || expandColumn)) {
+        if (!(leftFixedWidth || rightFixedWidth || expandColumn)) {
           return
         }
 
@@ -9275,7 +9231,6 @@ export default defineComponent({
         if (isTopWheel ? currScrollTop <= 0 : currScrollTop >= bodyScrollElem.scrollHeight - bodyScrollElem.clientHeight) {
           return
         }
-
         const scrollTop = currScrollTop + deltaTop
         const scrollLeft = bodyScrollElem.scrollLeft + deltaLeft
         const isRollX = scrollLeft !== lastScrollLeft
