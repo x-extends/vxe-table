@@ -162,6 +162,8 @@ export default defineComponent({
     }
 
     const renderVN = () => {
+      const $xeGrid = $xeTable.xeGrid
+
       const { defaultOptions, storeData } = props
       const { isAll: isAllChecked, isIndeterminate: isAllIndeterminate } = reactData
       const { hasTree, hasMerge, isPrint, hasColgroup, columns } = storeData
@@ -242,7 +244,7 @@ export default defineComponent({
           default: () => {
             const params = {
               $table: $xeTable,
-              $grid: $xeTable.xegrid,
+              $grid: $xeGrid,
               options: defaultOptions,
               columns,
               params: defaultOptions.params as any
@@ -487,7 +489,7 @@ export default defineComponent({
           footer () {
             const params = {
               $table: $xeTable,
-              $grid: $xeTable.xegrid,
+              $grid: $xeGrid,
               options: defaultOptions,
               columns,
               params: defaultOptions.params as any

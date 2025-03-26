@@ -43,10 +43,12 @@ export default defineComponent({
     }
 
     const renderRows = (isGroup: boolean, isOptimizeMode: boolean, cols: VxeTableDefines.ColumnInfo[], $rowIndex: number) => {
+      const $xeGrid = $xeTable.xeGrid
+
       const { fixedType } = props
       const { resizable: allResizable, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
       const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX } = tableReactData
-      const { scrollXStore } = tableInternalData
+      const { fullColumnIdData, scrollXStore } = tableInternalData
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
       const cellOpts = computeCellOpts.value
@@ -57,6 +59,7 @@ export default defineComponent({
       return cols.map((column, $columnIndex) => {
         const { type, showHeaderOverflow, headerAlign, align, filters, headerClassName, editRender, cellRender } = column
         const colid = column.id
+        const colRest = fullColumnIdData[colid] || {}
         const renderOpts = editRender || cellRender
         const compConf = renderOpts ? renderer.get(renderOpts.name) : null
         const isColGroup = column.children && column.children.length
@@ -74,11 +77,11 @@ export default defineComponent({
           firstFilterOption = filters[0]
           hasFilter = filters.some((item) => item.checked)
         }
-        const columnIndex = $xeTable.getColumnIndex(column)
-        const _columnIndex = $xeTable.getVTColumnIndex(column)
+        const columnIndex = colRest.index
+        const _columnIndex = colRest._index
         const cellParams: VxeTableDefines.CellRenderHeaderParams & {
           $table: VxeTableConstructor & VxeTablePrivateMethods
-        } = { $table: $xeTable, $grid: $xeTable.xegrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, firstFilterOption, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
+        } = { $table: $xeTable, $grid: $xeGrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, firstFilterOption, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
         const thAttrs: Record<string, string | number | null> = {
           colid,
           colspan: column.colSpan > 1 ? column.colSpan : null,
@@ -317,7 +320,10 @@ export default defineComponent({
             }, renderColumnList.map((column, $columnIndex) => {
               return h('col', {
                 name: column.id,
-                key: $columnIndex
+                key: $columnIndex,
+                style: {
+                  width: `${column.renderWidth}px`
+                }
               })
             })),
             /**

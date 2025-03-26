@@ -101,7 +101,9 @@ export default defineComponent({
       columns: VxeTableDefines.ColumnInfo[],
       items: any[]
     ) => {
-      const { fullAllDataRowIdData, visibleColumn } = tableInternalData
+      const $xeGrid = $xeTable.xeGrid
+
+      const { fullAllDataRowIdData, fullColumnIdData, visibleColumn } = tableInternalData
       const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
       const { tableData, dragRow, overflowX, currentColumn, scrollXLoad, scrollYLoad, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
       const { afterFullData, scrollXStore, scrollYStore } = tableInternalData
@@ -125,15 +127,16 @@ export default defineComponent({
       const { type, cellRender, editRender, align, showOverflow, className, treeNode, rowResize, padding, verticalAlign, slots } = column
       const { verticalAlign: allVerticalAlign } = cellOpts
       const { actived } = editStore
-      const rowRest = fullAllDataRowIdData[rowid]
+      const rowRest = fullAllDataRowIdData[rowid] || {}
       const colid = column.id
+      const colRest = fullColumnIdData[colid] || {}
       const renderOpts = editRender || cellRender
       const compConf = renderOpts ? renderer.get(renderOpts.name) : null
       const compCellClassName = compConf ? (compConf.tableCellClassName || compConf.cellClassName) : null
       const compCellStyle = compConf ? (compConf.tableCellStyle || compConf.cellStyle) : ''
       const showAllTip = tooltipOpts.showAll
-      const columnIndex = $xeTable.getColumnIndex(column)
-      const _columnIndex = $xeTable.getVTColumnIndex(column)
+      const columnIndex = colRest.index
+      const _columnIndex = colRest._index
       const isEdit = isEnableConf(editRender)
       const resizeHeight = resizeHeightFlag ? rowRest.resizeHeight : 0
       let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
@@ -157,7 +160,7 @@ export default defineComponent({
         $table: VxeTableConstructor<any> & VxeTablePrivateMethods
       } = {
         $table: $xeTable,
-        $grid: $xeTable.xegrid,
+        $grid: $xeGrid,
         isEdit: false,
         seq,
         rowid,
@@ -482,7 +485,7 @@ export default defineComponent({
           }
         }
         const rowid = handleGetRowId(row)
-        const rowRest = fullAllDataRowIdData[rowid]
+        const rowRest = fullAllDataRowIdData[rowid] || {}
         let rowLevel = 0
         let seq: string | number = -1
         let _rowIndex = 0
@@ -652,6 +655,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { slots } = tableContext
+      const $xeGrid = $xeTable.xeGrid
 
       const { fixedColumn, fixedType, tableColumn } = props
       const { spanMethod, footerSpanMethod, mouseConfig } = tableProps
@@ -736,7 +740,7 @@ export default defineComponent({
       let emptyContent: string | VxeComponentSlotType | VxeComponentSlotType[]
       const emptySlot = slots ? slots.empty : null
       if (emptySlot) {
-        emptyContent = $xeTable.callSlot(emptySlot, { $table: $xeTable, $grid: $xeTable.xegrid })
+        emptyContent = $xeTable.callSlot(emptySlot, { $table: $xeTable, $grid: $xeGrid })
       } else {
         const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
         const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
@@ -789,7 +793,10 @@ export default defineComponent({
             }, renderColumnList.map((column, $columnIndex) => {
               return h('col', {
                 name: column.id,
-                key: $columnIndex
+                key: $columnIndex,
+                style: {
+                  width: `${column.renderWidth}px`
+                }
               })
             })),
             /**

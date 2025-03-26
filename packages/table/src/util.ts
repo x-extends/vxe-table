@@ -388,6 +388,7 @@ export function destroyColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMe
 
 export function getRootColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: ColumnInfo) {
   const { internalData } = $xeTable
+
   const { fullColumnIdData } = internalData
   if (!column) {
     return null

@@ -93,6 +93,8 @@ export default defineComponent({
     }
 
     const renderVN = () => {
+      const $xeGrid = $xeTable.xeGrid
+
       const { defaultOptions, storeData } = props
       const selectName = computeSelectName.value
       const hasFile = computeHasFile.value
@@ -127,7 +129,7 @@ export default defineComponent({
           default: () => {
             const params = {
               $table: $xeTable,
-              $grid: $xeTable.xegrid,
+              $grid: $xeGrid,
               options: defaultOptions,
               params: defaultOptions.params as any
             }
@@ -204,7 +206,7 @@ export default defineComponent({
           footer () {
             const params = {
               $table: $xeTable,
-              $grid: $xeTable.xegrid,
+              $grid: $xeGrid,
               options: defaultOptions,
               params: defaultOptions.params as any
             }

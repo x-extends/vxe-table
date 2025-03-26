@@ -324,6 +324,8 @@ hooks.add('tableEditModule', {
     }
 
     const handleEditActive = (params: any, evnt: Event | null, isFocus: boolean, isPos: boolean) => {
+      const $xeGrid = $xeTable.xeGrid
+
       const { editConfig, mouseConfig } = props
       const { editStore, tableColumn } = reactData
       const editOpts = computeEditOpts.value
@@ -340,7 +342,7 @@ hooks.add('tableEditModule', {
           if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
             // 判断是否禁用编辑
             let type: 'edit-disabled' | 'edit-activated' = 'edit-disabled'
-            if (!beforeEditMethod || beforeEditMethod({ ...params, $table: $xeTable, $grid: $xeTable.xegrid })) {
+            if (!beforeEditMethod || beforeEditMethod({ ...params, $table: $xeTable, $grid: $xeGrid })) {
               if (mouseConfig) {
                 $xeTable.clearSelected()
                 if ($xeTable.clearCellAreas) {
@@ -368,7 +370,7 @@ hooks.add('tableEditModule', {
                   $xeTable.handleFocus(params, evnt)
                 }
                 if (afterEditMethod) {
-                  afterEditMethod({ ...params, $table: $xeTable, $grid: $xeTable.xegrid })
+                  afterEditMethod({ ...params, $table: $xeTable, $grid: $xeGrid })
                 }
               })
             }

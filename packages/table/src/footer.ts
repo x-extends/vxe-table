@@ -58,10 +58,12 @@ export default defineComponent({
     const refFooterXSpace = ref() as Ref<HTMLDivElement>
 
     const renderRows = (tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) => {
+      const $xeGrid = $xeTable.xeGrid
+
       const { fixedType } = props
       const { resizable: allResizable, border, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
       const { scrollXLoad, scrollYLoad, overflowX, currentColumn, mergeFooterList } = tableReactData
-      const { scrollXStore } = tableInternalData
+      const { fullColumnIdData, scrollXStore } = tableInternalData
       const tooltipOpts = computeTooltipOpts.value
       const resizableOpts = computeResizableOpts.value
       const { isAllColumnDrag } = resizableOpts
@@ -74,6 +76,7 @@ export default defineComponent({
       return tableColumn.map((column, $columnIndex) => {
         const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
         const colid = column.id
+        const colRest = fullColumnIdData[colid] || {}
         const renderOpts = editRender || cellRender
         const compConf = renderOpts ? renderer.get(renderOpts.name) : null
         const showAllTip = tooltipOpts.showAll
@@ -89,14 +92,14 @@ export default defineComponent({
         const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
         const attrs: any = { colid }
         const tfOns: any = {}
-        const columnIndex = $xeTable.getColumnIndex(column)
-        const _columnIndex = $xeTable.getVTColumnIndex(column)
+        const columnIndex = colRest.index
+        const _columnIndex = colRest._index
         const itemIndex = _columnIndex
         const cellParams: VxeTableDefines.CellRenderFooterParams & {
           $table: VxeTableConstructor<any> & VxeTablePrivateMethods
         } = {
           $table: $xeTable,
-          $grid: $xeTable.xegrid,
+          $grid: $xeGrid,
           row,
           rowIndex: _rowIndex,
           _rowIndex,
@@ -354,7 +357,10 @@ export default defineComponent({
             }, renderColumnList.map((column, $columnIndex) => {
               return h('col', {
                 name: column.id,
-                key: $columnIndex
+                key: $columnIndex,
+                style: {
+                  width: `${column.renderWidth}px`
+                }
               })
             })),
             /**

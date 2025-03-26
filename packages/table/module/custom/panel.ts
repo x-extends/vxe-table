@@ -508,6 +508,8 @@ export default defineComponent({
     }
 
     const renderSimplePanel = () => {
+      const $xeGrid = $xeTable.xeGrid
+
       const { customStore } = props
       const { isCustomStatus, customColumnList } = reactData
       const customOpts = computeCustomOpts.value
@@ -534,7 +536,7 @@ export default defineComponent({
       }
       const params = {
         $table: $xeTable,
-        $grid: $xeTable.xegrid,
+        $grid: $xeGrid,
         columns: customColumnList,
         isAllChecked,
         isAllIndeterminate,
@@ -774,6 +776,8 @@ export default defineComponent({
     }
 
     const renderPopupPanel = () => {
+      const $xeGrid = $xeTable.xeGrid
+
       const { customStore } = props
       const { resizable: allResizable } = tableProps
       const { isCustomStatus, customColumnList } = reactData
@@ -800,7 +804,7 @@ export default defineComponent({
       const isAllIndeterminate = customStore.isIndeterminate
       const params = {
         $table: $xeTable,
-        $grid: $xeTable.xegrid,
+        $grid: $xeGrid,
         columns: customColumnList,
         isAllChecked,
         isAllIndeterminate,

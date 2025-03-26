@@ -382,6 +382,8 @@ hooks.add('tableValidatorModule', {
        *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
        */
       validCellRules (validType, row, column, val) {
+        const $xeGrid = $xeTable.xeGrid
+
         const { editRules } = props
         const { field } = column
         const errorRules: Rule[] = []
@@ -404,7 +406,7 @@ hooks.add('tableValidatorModule', {
                     columnIndex: $xeTable.getColumnIndex(column),
                     field: column.field,
                     $table: $xeTable,
-                    $grid: $xeTable.xegrid
+                    $grid: $xeGrid
                   }
                   let customValid: any
                   if (XEUtils.isString(validator)) {

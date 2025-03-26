@@ -3285,9 +3285,7 @@ export default defineComponent({
       const { scrollYStore } = internalData
       const { preloadSize, startIndex, endIndex, offsetSize } = scrollYStore
       const autoOffsetYSize = isAllOverflow ? offsetSize : offsetSize + 1
-      console.log('--', Date.now())
-      const { toVisibleIndex, visibleSize } = { toVisibleIndex: 1, visibleSize: 25 }// handleVirtualYVisible()
-      console.log(Date.now())
+      const { toVisibleIndex, visibleSize } = handleVirtualYVisible()
       const offsetItem = {
         startIndex: Math.max(0, isScrollYBig ? toVisibleIndex - 1 : toVisibleIndex - 1 - offsetSize - preloadSize),
         endIndex: isScrollYBig ? (toVisibleIndex + visibleSize) : (toVisibleIndex + visibleSize + autoOffsetYSize + preloadSize)

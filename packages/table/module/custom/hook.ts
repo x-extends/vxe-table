@@ -12,7 +12,7 @@ VxeUI.hooks.add('tableCustomModule', {
     const { computeCustomOpts } = $xeTable.getComputeMaps()
     const { refElem } = $xeTable.getRefMaps()
 
-    const $xeGrid = $xeTable.xegrid
+    const $xeGrid = $xeTable.xeGrid
 
     const calcMaxHeight = () => {
       const { customStore } = reactData

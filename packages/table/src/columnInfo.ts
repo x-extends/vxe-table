@@ -10,10 +10,11 @@ const { getI18n, formats } = VxeUI
 export class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   constructor ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
-    const $xeGrid = $xeTable.xegrid
+    const tableProps = $xeTable.props
+    const $xeGrid = $xeTable.xeGrid
+
     const formatter: string | any[] = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
-    const { props: tableProps } = $xeTable
 
     const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
     if (_vm.type && types.indexOf(_vm.type) === -1) {
