@@ -5,6 +5,7 @@ import { formatText } from '../../../ui/src/utils'
 import { errLog } from '../../../ui/src/log'
 
 import type { VxeModalComponent, VxeInputComponent, VxeCheckboxComponent, VxeSelectComponent, VxeButtonComponent } from 'vxe-pc-ui'
+import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../../types'
 
 const { getI18n, getIcon, globalMixins, renderEmptyElement } = VxeUI
 
@@ -84,7 +85,8 @@ export default {
     })
   },
   render (this: any, h: CreateElement) {
-    const $xeTable = this.$xeTable
+    const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGrid = $xeTable.$xeGrid
 
     const { _e, checkedAll, isAll: isAllChecked, isIndeterminate: isAllIndeterminate, showSheet, supportMerge, supportStyle, defaultOptions, storeData } = this
     const { hasTree, hasMerge, isPrint, hasColgroup, columns } = storeData
@@ -168,7 +170,7 @@ export default {
         default: () => {
           const params = {
             $table: $xeTable,
-            $grid: $xeTable.xegrid,
+            $grid: $xeGrid,
             options: defaultOptions,
             columns,
             params: defaultOptions.params as any
@@ -437,7 +439,7 @@ export default {
         footer: () => {
           const params = {
             $table: $xeTable,
-            $grid: $xeTable.xegrid,
+            $grid: $xeGrid,
             options: defaultOptions,
             columns,
             params: defaultOptions.params as any
@@ -541,9 +543,10 @@ export default {
       }
     },
     printEvent () {
-      const $xetable = this.$parent
+      const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+
       this.storeData.visible = false
-      $xetable.print(Object.assign({}, $xetable.printOpts, this.getExportOption()))
+      $xeTable.print(Object.assign({}, $xeTable.printOpts, this.getExportOption()))
     },
     exportEvent () {
       const $xeTable = this.$xeTable

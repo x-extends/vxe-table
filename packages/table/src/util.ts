@@ -214,34 +214,44 @@ export const handleRowidOrRow = ($xeTable: VxeTableConstructor, rowidOrRow: any)
 
 // 组装列配置
 export function assembleColumn (_vm: any) {
-  const { $el, $xetable, $xecolumn, columnConfig } = _vm
-  const groupConfig = $xecolumn ? $xecolumn.columnConfig : null
+  const $xeTable = _vm.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+  const reactData = $xeTable as unknown as TableReactData
+  const { staticColumns } = reactData
+
+  const { $el, $xeColumn, columnConfig } = _vm
+  const groupConfig = $xeColumn ? $xeColumn.columnConfig : null
   if (groupConfig) {
-    if ($xecolumn.$options._componentTag === 'vxe-table-column') {
-      errLog('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xecolumn.title} ...>`, `<vxe-table-column title=${$xecolumn.title} ...>`])
-    } else if ($xecolumn.$options._componentTag === 'vxe-column') {
-      warnLog('vxe.error.groupTag', [`<vxe-colgroup title=${$xecolumn.title} ...>`, `<vxe-column title=${$xecolumn.title} ...>`])
+    if ($xeColumn.$options._componentTag === 'vxe-table-column') {
+      errLog('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xeColumn.title} ...>`, `<vxe-table-column title=${$xeColumn.title} ...>`])
+    } else if ($xeColumn.$options._componentTag === 'vxe-column') {
+      warnLog('vxe.error.groupTag', [`<vxe-colgroup title=${$xeColumn.title} ...>`, `<vxe-column title=${$xeColumn.title} ...>`])
     }
     if (!groupConfig.children) {
       groupConfig.children = []
     }
-    groupConfig.children.splice(XEUtils.arrayIndexOf($xecolumn.$el.children, $el), 0, columnConfig)
+    groupConfig.children.splice(XEUtils.arrayIndexOf($xeColumn.$el.children, $el), 0, columnConfig)
   } else {
-    $xetable.staticColumns.splice(XEUtils.arrayIndexOf($xetable.$refs.hideColumn.children, $el), 0, columnConfig)
+    staticColumns.splice(XEUtils.arrayIndexOf(($xeTable.$refs.hideColumn as any).children, $el), 0, columnConfig)
   }
 }
 
 // 销毁列
 export function destroyColumn (_vm: any) {
-  const { $xetable, columnConfig } = _vm
-  const matchObj = XEUtils.findTree($xetable.staticColumns, column => column === columnConfig)
+  const $xeTable = _vm.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+  const reactData = $xeTable as unknown as TableReactData
+  const { staticColumns } = reactData
+
+  const { columnConfig } = _vm
+  const matchObj = XEUtils.findTree(staticColumns, column => column === columnConfig)
   if (matchObj) {
     matchObj.items.splice(matchObj.index, 1)
   }
 }
 
-export function getRootColumn ($xetable: any, column: any) {
-  const fullColumnIdData = $xetable.fullColumnIdData
+export function getRootColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: any) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { fullColumnIdData } = internalData
   if (!column) {
     return null
   }

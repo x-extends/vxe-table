@@ -88,10 +88,11 @@ function renderTdColumn (
   const tableProps = $xeTable
   const tableReactData = $xeTable as unknown as TableReactData
   const tableInternalData = $xeTable as unknown as TableInternalData
+  const $xeGrid = $xeTable.$xeGrid
 
-  const { fullAllDataRowIdData } = tableInternalData
+  const { fullAllDataRowIdData, fullColumnIdData, visibleColumn } = tableInternalData
   const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
-  const { tableData, dragRow, overflowX, currentColumn, scrollXLoad, scrollYLoad, calcCellHeightFlag, resizeHeightFlag, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
+  const { tableData, dragRow, overflowX, currentColumn, scrollXLoad, scrollYLoad, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
   const { afterFullData, scrollXStore, scrollYStore } = tableInternalData
   const cellOpts = $xeTable.computeCellOpts
   const validOpts = $xeTable.computeValidOpts
@@ -107,19 +108,21 @@ function renderTdColumn (
   const columnOpts = $xeTable.computeColumnOpts
   const mouseOpts = $xeTable.computeMouseOpts
   const areaOpts = $xeTable.computeAreaOpts
+  const cellOffsetWidth = $xeTable.computeCellOffsetWidth
   const { selectCellToRow } = areaOpts
   const { type, cellRender, editRender, align, showOverflow, className, treeNode, rowResize, padding, verticalAlign, slots } = column
   const { verticalAlign: allVerticalAlign } = cellOpts
   const { actived } = editStore
-  const rowRest = fullAllDataRowIdData[rowid]
+  const rowRest = fullAllDataRowIdData[rowid] || {}
   const colid = column.id
+  const colRest = fullColumnIdData[colid] || {}
   const renderOpts = editRender || cellRender
   const compConf = renderOpts ? renderer.get(renderOpts.name) : null
   const compCellClassName = compConf ? (compConf.tableCellClassName || compConf.cellClassName) : null
   const compCellStyle = compConf ? (compConf.tableCellStyle || compConf.cellStyle) : ''
   const showAllTip = tooltipOpts.showAll
-  const columnIndex = $xeTable.getColumnIndex(column)
-  const _columnIndex = $xeTable.getVTColumnIndex(column)
+  const columnIndex = colRest.index
+  const _columnIndex = colRest._index
   const isEdit = isEnableConf(editRender)
   const resizeHeight = resizeHeightFlag ? rowRest.resizeHeight : 0
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
@@ -143,7 +146,7 @@ function renderTdColumn (
     $table: VxeTableConstructor<any> & VxeTablePrivateMethods
   } = {
     $table: $xeTable,
-    $grid: $xeTable.xegrid,
+    $grid: $xeGrid,
     isEdit: false,
     seq,
     rowid,
@@ -276,6 +279,18 @@ function renderTdColumn (
   }
 
   const tcStyle: Record<string, string> = {}
+  if (hasEllipsis && resizeWidthFlag) {
+    let tsColspan = tdAttrs.colspan || 0
+    if (tsColspan > 1) {
+      for (let index = 1; index < tsColspan; index++) {
+        const nextColumn = visibleColumn[columnIndex + index]
+        if (nextColumn) {
+          tsColspan += nextColumn.renderWidth
+        }
+      }
+    }
+    tcStyle.width = `${column.renderWidth - (cellOffsetWidth * tsColspan)}px`
+  }
   if (scrollYLoad || hasEllipsis || isCsHeight || isRsHeight) {
     tcStyle.height = `${cellHeight}px`
   } else {
@@ -469,7 +484,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
       }
     }
     const rowid = handleGetRowId(row)
-    const rowRest = fullAllDataRowIdData[rowid]
+    const rowRest = fullAllDataRowIdData[rowid] || {}
     let rowLevel = 0
     let seq: string | number = -1
     let _rowIndex = 0
@@ -670,6 +685,7 @@ export default {
     const tableProps = $xeTable
     const tableReactData = $xeTable as unknown as TableReactData
     const tableInternalData = $xeTable as unknown as TableInternalData
+    const $xeGrid = $xeTable.$xeGrid
 
     const { xID, $scopedSlots } = $xeTable
     const { fixedColumn, fixedType, tableColumn } = props
@@ -755,7 +771,7 @@ export default {
 
     let emptyContent
     if ($scopedSlots.empty) {
-      emptyContent = $scopedSlots.empty.call(this, { $table: $xeTable, $grid: $xeTable.xegrid })
+      emptyContent = $scopedSlots.empty.call(this, { $table: $xeTable, $grid: $xeGrid })
     } else {
       const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
       const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
@@ -814,7 +830,10 @@ export default {
               attrs: {
                 name: column.id
               },
-              key: $columnIndex
+              key: $columnIndex,
+              style: {
+                width: `${column.renderWidth}px`
+              }
             })
           })),
           /**

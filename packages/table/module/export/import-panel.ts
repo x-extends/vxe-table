@@ -5,6 +5,7 @@ import { parseFile } from '../../../ui/src/utils'
 import { errLog } from '../../../ui/src/log'
 
 import type { VxeModalComponent, VxeSelectComponent, VxeButtonComponent } from 'vxe-pc-ui'
+import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../../types'
 
 const { getI18n, getIcon, globalMixins, renderEmptyElement } = VxeUI
 
@@ -68,7 +69,8 @@ export default {
     })
   },
   render (this: any, h: CreateElement) {
-    const $xeTable = this.$xeTable
+    const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGrid = $xeTable.$xeGrid
 
     const { hasFile, loading, parseTypeLabel, defaultOptions, storeData, selectName } = this
     const slots = defaultOptions.slots || {}
@@ -105,7 +107,7 @@ export default {
         default: () => {
           const params = {
             $table: $xeTable,
-            $grid: $xeTable.xegrid,
+            $grid: $xeGrid,
             options: defaultOptions,
             params: defaultOptions.params as any
           }
@@ -196,7 +198,7 @@ export default {
         footer: () => {
           const params = {
             $table: $xeTable,
-            $grid: $xeTable.xegrid,
+            $grid: $xeGrid,
             options: defaultOptions,
             params: defaultOptions.params as any
           }
@@ -238,8 +240,9 @@ export default {
       })
     },
     selectFileEvent () {
-      const $xetable = this.$parent
-      $xetable.readFile(this.defaultOptions).then((params: any) => {
+      const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+
+      $xeTable.readFile(this.defaultOptions).then((params: any) => {
         const { file } = params
         Object.assign(this.storeData, parseFile(file), { file })
       }).catch((e: any) => e)
@@ -257,9 +260,10 @@ export default {
       this.storeData.visible = false
     },
     importEvent () {
-      const $xetable = this.$parent
+      const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+
       this.loading = true
-      $xetable.importByFile(this.storeData.file, Object.assign({}, $xetable.importOpts, this.defaultOptions)).then(() => {
+      $xeTable.importByFile(this.storeData.file, Object.assign({}, $xeTable.importOpts, this.defaultOptions)).then(() => {
         this.loading = false
         this.storeData.visible = false
       }).catch(() => {

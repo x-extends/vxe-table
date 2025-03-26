@@ -13,7 +13,7 @@ const cellType = 'header'
 const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode: boolean, cols: VxeTableDefines.ColumnInfo[], $rowIndex: number) => {
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
-  const $xeGrid = $xeTable.xegrid
+  const $xeGrid = $xeTable.$xeGrid
   const tableProps = $xeTable
   const tableReactData = $xeTable as unknown as TableReactData
   const tableInternalData = $xeTable as unknown as TableInternalData
@@ -21,7 +21,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
   const { fixedType } = props
   const { resizable: allResizable, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
   const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX } = tableReactData
-  const { scrollXStore } = tableInternalData
+  const { fullColumnIdData, scrollXStore } = tableInternalData
   const columnOpts = $xeTable.computeColumnOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
   const cellOpts = $xeTable.computeCellOpts
@@ -33,6 +33,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     const { type, showHeaderOverflow, headerAlign, align, filters, headerClassName, editRender, cellRender } = column
     // const { enabled } = tooltipOpts
     const colid = column.id
+    const colRest = fullColumnIdData[colid] || {}
     const renderOpts = editRender || cellRender
     const compConf = renderOpts ? renderer.get(renderOpts.name) : null
     const isColGroup = column.children && column.children.length
@@ -50,8 +51,8 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
       firstFilterOption = filters[0]
       hasFilter = filters.some((item: VxeColumnPropTypes.FilterItem) => item.checked)
     }
-    const columnIndex = $xeTable.getColumnIndex(column)
-    const _columnIndex = $xeTable.getVTColumnIndex(column)
+    const columnIndex = colRest.index
+    const _columnIndex = colRest._index
     const cellParams = { $table: $xeTable, $grid: $xeGrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, firstFilterOption, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
     const thAttrs: Record<string, string | number | null> = {
       colid,
@@ -374,7 +375,10 @@ export default {
               attrs: {
                 name: column.id
               },
-              key: $columnIndex
+              key: $columnIndex,
+              style: {
+                width: `${column.renderWidth}px`
+              }
             })
           })),
           /**
@@ -413,8 +417,11 @@ export default {
   },
   methods: {
     uploadColumn () {
-      const { $parent: $xetable } = this
-      this.headerColumn = $xetable.isGroup ? convertHeaderColumnToRows(this.tableGroupColumn) : []
+      const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+      const tableReactData = $xeTable as unknown as TableReactData
+
+      const { isGroup } = tableReactData
+      this.headerColumn = isGroup ? convertHeaderColumnToRows(this.tableGroupColumn) : []
     }
   } as any
 } as any

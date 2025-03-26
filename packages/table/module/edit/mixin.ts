@@ -323,6 +323,7 @@ function handleClearEdit ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
 function handleEditActive ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, params: any, evnt: Event | null, isFocus: boolean, isPos: boolean) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
+  const $xeGrid = $xeTable.$xeGrid
 
   const { editConfig, mouseConfig } = props
   const { editStore, tableColumn } = reactData
@@ -340,7 +341,7 @@ function handleEditActive ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
       if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
         // 判断是否禁用编辑
         let type: 'edit-disabled' | 'edit-activated' = 'edit-disabled'
-        if (!beforeEditMethod || beforeEditMethod({ ...params, $table: $xeTable, $grid: $xeTable.xegrid })) {
+        if (!beforeEditMethod || beforeEditMethod({ ...params, $table: $xeTable, $grid: $xeGrid })) {
           if (mouseConfig) {
             $xeTable.clearSelected()
             if ($xeTable.clearCellAreas) {
@@ -368,7 +369,7 @@ function handleEditActive ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
               $xeTable.handleFocus(params, evnt)
             }
             if (afterEditMethod) {
-              afterEditMethod({ ...params, $table: $xeTable, $grid: $xeTable.xegrid })
+              afterEditMethod({ ...params, $table: $xeTable, $grid: $xeGrid })
             }
           })
         }

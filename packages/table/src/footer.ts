@@ -31,11 +31,12 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
   const tableProps = $xeTable
   const tableReactData = $xeTable as unknown as TableReactData
   const tableInternalData = $xeTable as unknown as TableInternalData
+  const $xeGrid = $xeTable.$xeGrid
 
   const { fixedType } = props
   const { resizable: allResizable, border, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
   const { scrollXLoad, scrollYLoad, overflowX, currentColumn, mergeFooterList } = tableReactData
-  const { scrollXStore } = tableInternalData
+  const { fullColumnIdData, scrollXStore } = tableInternalData
   const tooltipOpts = $xeTable.computeTooltipOpts
   const { isAllColumnDrag } = $xeTable.resizableOpts
   const columnOpts = $xeTable.computeColumnOpts
@@ -47,6 +48,7 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
   return tableColumn.map((column: any, $columnIndex: any) => {
     const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
     const colid = column.id
+    const colRest = fullColumnIdData[colid] || {}
     const renderOpts = editRender || cellRender
     const compConf = renderOpts ? renderer.get(renderOpts.name) : null
     const showAllTip = tooltipOpts.showAll
@@ -62,14 +64,14 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
     const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
     const attrs: any = { colid }
     const tfOns: any = {}
-    const columnIndex = $xeTable.getColumnIndex(column)
-    const _columnIndex = $xeTable.getVTColumnIndex(column)
+    const columnIndex = colRest.index
+    const _columnIndex = colRest._index
     const itemIndex = _columnIndex
     const cellParams: VxeTableDefines.CellRenderFooterParams & {
       $table: VxeTableConstructor<any> & VxeTablePrivateMethods
     } = {
       $table: $xeTable,
-      $grid: $xeTable.xegrid,
+      $grid: $xeGrid,
       row,
       rowIndex: _rowIndex,
       _rowIndex,
@@ -404,7 +406,10 @@ export default {
               attrs: {
                 name: column.id
               },
-              key: $columnIndex
+              key: $columnIndex,
+              style: {
+                width: `${column.renderWidth}px`
+              }
             })
           })),
           /**

@@ -99,8 +99,9 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
 
   const props = _vm
 
-  const $xeTable = _vm.$xeTable
-  const reactData = $xeTable
+  const $xeTable = _vm.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+  const reactData = $xeTable as unknown as TableReactData
+  const $xeGrid = $xeTable.$xeGrid
 
   const { customStore } = props
   const { isCustomStatus, customColumnList } = reactData
@@ -128,7 +129,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
   }
   const params = {
     $table: $xeTable,
-    $grid: $xeTable.xegrid,
+    $grid: $xeGrid,
     columns: customColumnList,
     isAllChecked,
     isAllIndeterminate,
@@ -268,7 +269,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
     class: ['vxe-table-custom-wrapper', `placement--${placement}`, {
       'is--active': customStore.visible
     }],
-    style: maxHeight && !['left', 'right'].includes(placement)
+    style: maxHeight && !['left', 'right'].includes(placement || '')
       ? {
           maxHeight: `${maxHeight}px`
         }
@@ -406,9 +407,10 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
 
   const props = _vm
 
-  const $xeTable = _vm.$xeTable
+  const $xeTable = _vm.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
-  const reactData = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const $xeGrid = $xeTable.$xeGrid
 
   const { customStore } = props
   const { resizable: allResizable } = tableProps
@@ -436,7 +438,7 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
   const isAllIndeterminate = customStore.isIndeterminate
   const params = {
     $table: $xeTable,
-    $grid: $xeTable.xegrid,
+    $grid: $xeGrid,
     columns: customColumnList,
     isAllChecked,
     isAllIndeterminate,
@@ -829,9 +831,6 @@ export default {
   inject: {
     $xeTable: {
       default: null
-    },
-    $xetable: {
-      default: null
     }
   },
   data () {
@@ -851,8 +850,9 @@ export default {
     const VxeUIRadioGroupComponent = VxeUI.getComponent<VxeRadioGroupComponent>('VxeRadioGroup')
 
     this.$nextTick(() => {
-      const { $xetable } = this
-      const { customOpts } = $xetable
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+
+      const { customOpts } = $xeTable
       const { mode } = customOpts
       if (!VxeUIModalComponent) {
         errLog('vxe.error.reqComp', ['vxe-modal'])
@@ -882,16 +882,20 @@ export default {
   },
   methods: {
     handleWrapperMouseenterEvent (evnt: any) {
-      const { $xetable, customStore } = this
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+
+      const { customStore } = this
       customStore.activeWrapper = true
-      $xetable.customOpenEvent(evnt)
+      $xeTable.customOpenEvent(evnt)
     },
     handleWrapperMouseleaveEvent  (evnt: any) {
-      const { $xetable, customStore } = this
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+
+      const { customStore } = this
       customStore.activeWrapper = false
       setTimeout(() => {
         if (!customStore.activeBtn && !customStore.activeWrapper) {
-          $xetable.customCloseEvent(evnt)
+          $xeTable.customCloseEvent(evnt)
         }
       }, 300)
     },
@@ -899,8 +903,8 @@ export default {
       return {}
     },
     confirmCustomEvent ({ $event }: any) {
-      const $xeTable = this.$xeTable
-      const reactData = $xeTable
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       reactData.isCustomStatus = true
       $xeTable.saveCustom()
@@ -908,23 +912,24 @@ export default {
       $xeTable.emitCustomEvent('confirm', $event)
     },
     cancelCloseEvent ({ $event }: any) {
-      const $xeTable = this.$xeTable
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
 
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('close', $event)
     },
     cancelCustomEvent ({ $event }: any) {
-      const $xeTable = this.$xeTable
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
 
       $xeTable.cancelCustom()
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('cancel', $event)
     },
     handleResetCustomEvent (evnt: any) {
-      const { $xetable } = this
-      $xetable.resetCustom(true)
-      $xetable.closeCustom()
-      $xetable.emitCustomEvent('reset', evnt)
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+
+      $xeTable.resetCustom(true)
+      $xeTable.closeCustom()
+      $xeTable.emitCustomEvent('reset', evnt)
     },
     resetCustomEvent  (evnt: any) {
       if (VxeUI.modal) {
@@ -957,8 +962,8 @@ export default {
       }
     },
     handleOptionCheck (column: any) {
-      const $xeTable = this.$xeTable
-      const reactData = $xeTable
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const { customColumnList } = reactData
       const matchObj = XEUtils.findTree(customColumnList, item => item === column) as any
@@ -972,8 +977,8 @@ export default {
       }
     },
     changeCheckboxOption (column: any) {
-      const $xeTable = this.$xeTable
-      const reactData = $xeTable
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const customOpts = $xeTable.computeCustomOpts
       const isChecked = !column.renderVisible
@@ -996,8 +1001,8 @@ export default {
       $xeTable.checkCustomStatus()
     },
     changeColumnWidth (column: VxeTableDefines.ColumnInfo) {
-      const $xeTable = this.$xetable
-      const reactData = $xeTable
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const customOpts = $xeTable.computeCustomOpts
       if (customOpts.immediate) {
@@ -1011,8 +1016,8 @@ export default {
       }
     },
     changeFixedOption  (column: any, colFixed: any) {
-      const $xeTable = this.$xetable
-      const reactData = $xeTable
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const isMaxFixedColumn = $xeTable.computeIsMaxFixedColumn
       const customOpts = $xeTable.computeCustomOpts
@@ -1048,12 +1053,12 @@ export default {
       }
     },
     allOptionEvent () {
-      const { $xetable } = this
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
 
-      $xetable.toggleCustomAllCheckbox()
+      $xeTable.toggleCustomAllCheckbox()
     },
     sortMousedownEvent (evnt: MouseEvent) {
-      const $xeTable = this.$xetable
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
 
       const btnEl = evnt.currentTarget as HTMLElement
       const cellEl = btnEl.parentElement as HTMLElement
@@ -1081,7 +1086,7 @@ export default {
       }
     },
     sortDragendEvent (evnt: any) {
-      const $xeTable = this.$xetable as VxeTableConstructor & VxeTablePrivateMethods
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
       const tableProps = $xeTable
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -1269,7 +1274,7 @@ export default {
       removeClass(trEl, 'active--drag-origin')
     },
     sortDragoverEvent  (evnt: any) {
-      const $xeTable = this.$xetable
+      const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
 
       const { dragCol } = this
 

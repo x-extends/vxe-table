@@ -443,7 +443,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
 
   const { border, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
   const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isAllOverflow, expandColumn } = reactData
-  const { visibleColumn, fullColumnIdData, tableHeight, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
+  const { visibleColumn, tableHeight, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
   const el = $xeTable.$refs.refElem as HTMLDivElement
   if (!el) {
     return
@@ -452,7 +452,6 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const osbWidth = overflowY ? scrollbarWidth : 0
   const osbHeight = overflowX ? scrollbarHeight : 0
   const emptyPlaceholderElem = $xeTable.$refs.refEmptyPlaceholder as HTMLDivElement
-  const cellOffsetWidth = $xeTable.computeCellOffsetWidth
   const mouseOpts = $xeTable.computeMouseOpts
   const expandOpts = $xeTable.computeExpandOpts
   const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
@@ -733,54 +732,6 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
         if (tableElem) {
           tableElem.style.width = tWidth ? `${tWidth}px` : ''
         }
-      }
-      const colgroupElem = getRefElem(elemStore[`${name}-${layout}-colgroup`])
-      if (colgroupElem) {
-        XEUtils.arrayEach(colgroupElem.children, (colElem: any) => {
-          const colid = colElem.getAttribute('name')
-          if (fullColumnIdData[colid]) {
-            const colRest = fullColumnIdData[colid]
-            const column = colRest.column
-            const { showHeaderOverflow, showFooterOverflow, showOverflow } = column
-            let cellOverflow
-            colElem.style.width = `${column.renderWidth}px`
-            if (layout === 'header') {
-              cellOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
-            } else if (layout === 'footer') {
-              cellOverflow = XEUtils.isUndefined(showFooterOverflow) || XEUtils.isNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
-            } else {
-              cellOverflow = XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow) ? isAllOverflow : showOverflow
-            }
-            const showEllipsis = cellOverflow === 'ellipsis'
-            const showTitle = cellOverflow === 'title'
-            const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-            let hasEllipsis = showTitle || showTooltip || showEllipsis
-            const listElem = getRefElem(elemStore[`${name}-${layout}-list`])
-            // 纵向虚拟滚动不支持动态行高
-            if (scrollYLoad && !hasEllipsis) {
-              hasEllipsis = true
-            }
-            if (listElem) {
-              XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), (elem: any) => {
-                const colspan = parseInt(elem.getAttribute('colspan') || 1)
-                const cellElem = elem.querySelector('.vxe-cell')
-                let colWidth = column.renderWidth
-                if (cellElem) {
-                  if (colspan > 1) {
-                    const columnIndex = $xeTable.getColumnIndex(column)
-                    for (let index = 1; index < colspan; index++) {
-                      const nextColumn = $xeTable.getColumns(columnIndex + index)
-                      if (nextColumn) {
-                        colWidth += nextColumn.renderWidth
-                      }
-                    }
-                  }
-                  cellElem.style.width = hasEllipsis ? `${colWidth - (cellOffsetWidth * colspan)}px` : ''
-                }
-              })
-            }
-          }
-        })
       }
     })
   })
@@ -1537,6 +1488,7 @@ function autoCellWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
   internalData.headerHeight = headerHeight
   internalData.footerHeight = footerHeight
   reactData.overflowX = overflowX
+  reactData.resizeWidthFlag++
   updateColumnOffsetLeft($xeTable)
   updateHeight($xeTable)
   reactData.parentHeight = Math.max(internalData.headerHeight + footerHeight + 20, $xeTable.getParentHeight())
@@ -1817,10 +1769,11 @@ function hideDropTip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
  * @param {Event} evnt 事件
  * @param {Row} row 行对象
  */
-function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: MouseEvent, tdEl: HTMLTableCellElement, overflowElem: HTMLElement, tipElem: HTMLElement | null, params: any) {
+function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: MouseEvent, tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, params: any) {
   const reactData = $xeTable as unknown as TableReactData
 
-  if (!overflowElem) {
+  const tipOverEl = overflowElem || tdEl
+  if (!tipOverEl) {
     return $xeTable.$nextTick()
   }
   params.cell = tdEl
@@ -1830,9 +1783,8 @@ function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   const { showAll, contentMethod } = tooltipOpts
   const customContent = contentMethod ? contentMethod(params) : null
   const useCustom = contentMethod && !XEUtils.eqNull(customContent)
-  const content = useCustom ? customContent : XEUtils.toString(column.type === 'html' ? overflowElem.innerText : overflowElem.textContent).trim()
-  const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
-  if (content && (showAll || useCustom || isCellOverflow)) {
+  const content = useCustom ? customContent : XEUtils.toString(column.type === 'html' ? tipOverEl.innerText : tipOverEl.textContent).trim()
+  if (content && (showAll || useCustom || (tipOverEl.scrollWidth > tipOverEl.clientWidth))) {
     Object.assign(tooltipStore, {
       row,
       column,
@@ -1842,7 +1794,7 @@ function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
     $xeTable.$nextTick(() => {
       const $tooltip = $xeTable.$refs.refTooltip as VxeTooltipInstance
       if ($tooltip && $tooltip.open) {
-        $tooltip.open(isCellOverflow ? overflowElem : (tipElem || overflowElem), formatText(content))
+        $tooltip.open(tipOverEl, formatText(content))
       }
     })
   }
@@ -2031,8 +1983,8 @@ function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, i
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { showOverflow } = props
-  const rowOpts = $xeTable.computeRowOpts
+  // const { showOverflow } = props
+  // const rowOpts = $xeTable.computeRowOpts
   const leftList: VxeTableDefines.ColumnInfo[] = []
   const centerList: VxeTableDefines.ColumnInfo[] = []
   const rightList: VxeTableDefines.ColumnInfo[] = []
@@ -2097,28 +2049,28 @@ function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, i
   reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
   Object.assign(columnStore, { leftList, centerList, rightList })
   if (scrollXLoad) {
-    if (showOverflow) {
-      if (!rowOpts.height) {
-        const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
-        if (errColumn) {
-          errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
-        }
-      }
+    // if (showOverflow) {
+    //   if (!rowOpts.height) {
+    //     const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
+    //     if (errColumn) {
+    //       errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+    //     }
+    //   }
+    // }
+    // if (process.env.VUE_APP_VXE_ENV === 'development') {
+    // if (props.showHeader && !props.showHeaderOverflow) {
+    //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
+    // }
+    // if (props.showFooter && !props.showFooterOverflow) {
+    //   warnLog('vxe.error.reqProp', ['show-footer-overflow'])
+    // }
+    if (props.spanMethod) {
+      warnLog('vxe.error.scrollErrProp', ['span-method'])
     }
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      // if (props.showHeader && !props.showHeaderOverflow) {
-      //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
-      // }
-      // if (props.showFooter && !props.showFooterOverflow) {
-      //   warnLog('vxe.error.reqProp', ['show-footer-overflow'])
-      // }
-      if (props.spanMethod) {
-        warnLog('vxe.error.scrollErrProp', ['span-method'])
-      }
-      if (props.footerSpanMethod) {
-        warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
-      }
+    if (props.footerSpanMethod) {
+      warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
     }
+    // }
     if (isReset) {
       const { visibleSize } = handleVirtualXVisible($xeTable)
       scrollXStore.startIndex = 0
@@ -2571,10 +2523,12 @@ function handleRowExpandScroll ($xeTable: VxeTableConstructor & VxeTablePrivateM
 
 const Methods = {
   callSlot (slotFunc: any, params: any, h: any, vNodes: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+
     if (slotFunc) {
-      const { $xegrid } = this
-      if ($xegrid) {
-        return $xegrid.callSlot(slotFunc, params, h, vNodes)
+      if ($xeGrid) {
+        return $xeGrid.callSlot(slotFunc, params, h, vNodes)
       }
       if (XEUtils.isFunction(slotFunc)) {
         return getSlotVNs(slotFunc.call(this, params, h, vNodes))
@@ -2591,15 +2545,18 @@ const Methods = {
    * 获取父容器元素
    */
   getParentElem () {
-    const { $el, $xegrid } = this
-    return $xegrid ? $xegrid.$el.parentNode : $el.parentNode
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+
+    const { $el } = this
+    return $xeGrid ? $xeGrid.$el.parentNode : $el.parentNode
   },
   /**
    * 获取父容器的高度
    */
   getParentHeight () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const $xeGrid = $xeTable.xeGrid as VxeGridConstructor & GridPrivateMethods
+    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
     const props = $xeTable
 
     const { height } = props
@@ -2625,8 +2582,10 @@ const Methods = {
    * 如果存在表尾合计滚动条，则需要排除滚动条高度
    */
   getExcludeHeight () {
-    const { $xegrid } = this
-    return $xegrid ? $xegrid.getExcludeHeight() : 0
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+
+    return $xeGrid ? $xeGrid.getExcludeHeight() : 0
   },
   /**
    * 重置表格的一切数据状态
@@ -4228,9 +4187,9 @@ const Methods = {
     return this.refreshColumn(true)
   },
   handleCustomRestore (storeData: any) {
-    const $xetable = this
-    const reactData = $xetable
-    const internalData = $xetable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
     let { collectColumn } = internalData
     const { resizableData, sortData, visibleData, fixedData } = storeData
@@ -5041,6 +5000,9 @@ const Methods = {
     }
   },
   preventEvent (evnt: any, type: any, args: any, next: any, end: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+
     let evntList = interceptor.get(type)
 
     // 兼容老版本
@@ -5058,7 +5020,7 @@ const Methods = {
     let isStop = false
     for (let i = 0; i < evntList.length; i++) {
       const func = evntList[i]
-      const fnRest = func(Object.assign({ $grid: this.$xegrid, $table: this, $event: evnt }, args))
+      const fnRest = func(Object.assign({ $grid: $xeGrid, $table: $xeTable, $event: evnt }, args))
       if (fnRest === false) {
         isStop = true
         break
@@ -5082,7 +5044,10 @@ const Methods = {
    * 全局按下事件处理
    */
   handleGlobalMousedownEvent (evnt: any) {
-    const { $el, $refs, $xegrid, $toolbar, mouseConfig, editStore, ctxMenuStore, editRules, editOpts, validOpts, areaOpts, filterStore, customStore, getRowNode } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+
+    const { $el, $refs, $toolbar, mouseConfig, editStore, ctxMenuStore, editRules, editOpts, validOpts, areaOpts, filterStore, customStore, getRowNode } = this
     const { actived } = editStore
     const { customWrapper, refValidTooltip } = $refs
     const tableFilter = $refs.refTableFilter
@@ -5168,7 +5133,7 @@ const Methods = {
         }
       }
     } else if (mouseConfig) {
-      if (!getEventTargetNode(evnt, $el).flag && !($xegrid && getEventTargetNode(evnt, $xegrid.$el).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.$el).flag) && !($toolbar && getEventTargetNode(evnt, $toolbar.$el).flag)) {
+      if (!getEventTargetNode(evnt, $el).flag && !($xeGrid && getEventTargetNode(evnt, $xeGrid.$el).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.$el).flag) && !($toolbar && getEventTargetNode(evnt, $toolbar.$el).flag)) {
         if (this.clearSelected) {
           this.clearSelected()
         }
@@ -5190,7 +5155,7 @@ const Methods = {
     if (ctxMenuStore.visible && tableMenu && !getEventTargetNode(evnt, tableMenu.$el).flag) {
       this.closeMenu()
     }
-    const isActivated = getEventTargetNode(evnt, ($xegrid || this).$el).flag
+    const isActivated = getEventTargetNode(evnt, ($xeGrid || this).$el).flag
     // 如果存在校验，点击了表格之外则清除
     if (!isActivated && editRules && validOpts.autoClear) {
       this.validErrorMaps = {}
@@ -5251,8 +5216,9 @@ const Methods = {
    * 全局键盘事件
    */
   handleGlobalKeydownEvent (evnt: any) {
-    const $xeTable = this
-    const internalData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
 
     // 该行为只对当前激活的表格有效
     if (this.isActivated) {
@@ -5419,7 +5385,7 @@ const Methods = {
               column: selected.column,
               columnIndex: this.getColumnIndex(selected.column),
               $table: this,
-              $grid: this.$xegrid
+              $grid: $xeGrid
             }
             // 是否被禁用
             if (!beforeEditMethod || beforeEditMethod(params)) {
@@ -5444,7 +5410,7 @@ const Methods = {
                 column: selected.column,
                 columnIndex: this.getColumnIndex(selected.column),
                 $table: this,
-                $grid: this.$xegrid
+                $grid: $xeGrid
               }
               // 是否被禁用
               if (!beforeEditMethod || beforeEditMethod(params)) {
@@ -5471,7 +5437,7 @@ const Methods = {
               rowIndex: this.getRowIndex(parentRow),
               $rowIndex: this.getVMRowIndex(parentRow),
               $table: this,
-              $grid: this.$xegrid
+              $grid: $xeGrid
             }
             this.setTreeExpand(parentRow, false)
               .then(() => this.scrollToRow(parentRow))
@@ -5492,7 +5458,7 @@ const Methods = {
               column: selected.column,
               columnIndex: this.getColumnIndex(selected.column),
               $table: this,
-              $grid: this.$xegrid
+              $grid: $xeGrid
             }
             if (!beforeEditMethod || beforeEditMethod(params)) {
               if (editMethod) {
@@ -5614,7 +5580,7 @@ const Methods = {
       return
     }
     if (tooltipStore.column !== column || !tooltipStore.visible) {
-      handleTooltip($xeTable, evnt, thEl, cellEl, null, params)
+      handleTooltip($xeTable, evnt, thEl, thEl.querySelector<HTMLElement>('.vxe-cell--title') || cellEl, params)
     }
   },
   /**
@@ -5645,7 +5611,7 @@ const Methods = {
       }
     }
     if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
-      handleTooltip($xeTable, evnt, tdEl, tdEl.querySelector('.vxe-cell--wrapper') as HTMLElement, null, params)
+      handleTooltip($xeTable, evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), params)
     }
   },
   /**
@@ -5657,10 +5623,10 @@ const Methods = {
 
     const { column } = params
     const { tooltipStore } = reactData
-    const cell = evnt.currentTarget as HTMLTableCellElement
+    const tdEl = evnt.currentTarget as HTMLTableCellElement
     handleTargetEnterEvent($xeTable, tooltipStore.column !== column || !!tooltipStore.row)
     if (tooltipStore.column !== column || !tooltipStore.visible) {
-      handleTooltip($xeTable, evnt, cell, cell.querySelector('.vxe-cell--wrapper') as HTMLElement || cell.children[0], null, params)
+      handleTooltip($xeTable, evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector('.vxe-cell--wrapper') as HTMLElement, params)
     }
   },
   openTooltip (target: any, content: any) {
@@ -8760,7 +8726,7 @@ const Methods = {
     const { scrollXLoad, scrollYLoad, expandColumn } = reactData
     const leftFixedWidth = $xeTable.computeLeftFixedWidth
     const rightFixedWidth = $xeTable.computeRightFixedWidth
-    if (!(scrollYLoad || leftFixedWidth || rightFixedWidth || expandColumn)) {
+    if (!(leftFixedWidth || rightFixedWidth || expandColumn)) {
       return
     }
 
@@ -9277,12 +9243,15 @@ const Methods = {
    * 更新表尾合计
    */
   updateFooter () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+
     const { showFooter, visibleColumn, footerData, footerMethod } = this
     let footData = []
     if (showFooter && footerData && footerData.length) {
       footData = footerData.slice(0)
     } else if (showFooter && footerMethod) {
-      footData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: this.afterFullData, $table: this, $grid: this.$xegrid }) : []
+      footData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: this.afterFullData, $table: $xeTable, $grid: $xeGrid }) : []
     }
     this.footerTableData = footData
     return this.$nextTick()
@@ -9420,12 +9389,17 @@ const Methods = {
     return $xeTable.$nextTick()
   },
   dispatchEvent (type: ValueOf<VxeTableEmits>, params: Record<string, any>, evnt: Event | null) {
-    const $xeTable = this
-    $xeTable.$emit(type, createEvent(evnt, { $table: $xeTable, $grid: $xeTable.$xegrid }, params))
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+
+    $xeTable.$emit(type, createEvent(evnt, { $table: $xeTable, $grid: $xeGrid }, params))
   },
   // 已废弃，使用 dispatchEvent
   emitEvent (type: any, params: any, evnt: any) {
-    this.$emit(type, Object.assign({ $table: this, $grid: this.$xegrid, $event: evnt }, params))
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+
+    this.$emit(type, Object.assign({ $table: $xeTable, $grid: $xeGrid, $event: evnt }, params))
   },
   focus () {
     this.isActivated = true

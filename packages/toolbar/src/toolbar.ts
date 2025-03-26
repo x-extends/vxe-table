@@ -719,13 +719,13 @@ export default /* define-vxe-component start */ defineVxeComponent({
     $xeToolbar.$nextTick(() => {
       const { refresh } = props
       const refreshOpts = $xeToolbar.computeRefreshOpts
-      const $xetable = this.fintTable() as any
+      const $xeTable = this.fintTable() as any
       const queryMethod = refreshOpts.queryMethod || refreshOpts.query
       if (refresh && !$xeGrid && !queryMethod) {
         warnLog('vxe.error.notFunc', ['queryMethod'])
       }
-      if ($xetable) {
-        $xetable.connect(this)
+      if ($xeTable) {
+        $xeTable.connect(this)
       }
       const customOpts = $xeToolbar.computeCustomOpts
       if (customOpts.isFooter) {

@@ -323,7 +323,7 @@ function renderFooterHandle (h: CreateElement, params: VxeTableDefines.CellRende
 }
 
 export const Cell = {
-  createColumn ($xetable: any, _vm: any) {
+  createColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any) {
     const { type } = _vm
     const renConfs: any = {
       renderHeader: renderHeaderHandle,
@@ -333,7 +333,7 @@ export const Cell = {
     if (type === 'expand') {
       renConfs.renderData = Cell.renderExpandData
     }
-    return createColumn($xetable, _vm, renConfs)
+    return createColumn($xeTable, _vm, renConfs)
   },
   /**
    * 列头标题

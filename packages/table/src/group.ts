@@ -3,26 +3,30 @@ import { defineVxeComponent } from '../../ui/src/comp'
 import { assembleColumn, destroyColumn } from './util'
 import { columnProps, columnWatch } from './column'
 
+import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
+
 export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeColgroup',
   props: columnProps,
   provide () {
     return {
-      $xecolumn: this,
-      $xegrid: null
+      $xeColumn: this,
+      $xeGrid: null
     }
   },
   inject: {
-    $xetable: {
+    $xeTable: {
       default: null
     },
-    $xecolumn: {
+    $xeColumn: {
       default: null
     }
   },
   watch: columnWatch,
   created (this: any) {
-    this.columnConfig = this.createColumn(this.$xetable, this)
+    const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+
+    this.columnConfig = this.createColumn($xeTable, this)
   },
   mounted () {
     const { $scopedSlots } = this

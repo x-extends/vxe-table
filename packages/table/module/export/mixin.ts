@@ -204,27 +204,27 @@ function getBodyLabelData ($xeTable: VxeTableConstructor, opts: VxeTablePropType
   })
 }
 
-function getExportData ($xetable: any, opts: VxeTablePropTypes.ExportHandleOptions) {
+function getExportData ($xeTable: any, opts: VxeTablePropTypes.ExportHandleOptions) {
   const { columns, dataFilterMethod } = opts
   let datas = opts.data
   if (dataFilterMethod) {
     datas = datas.filter((row: any, index: any) => dataFilterMethod({ row, $rowIndex: index }))
   }
-  return getBodyLabelData($xetable, opts, columns, datas)
+  return getBodyLabelData($xeTable, opts, columns, datas)
 }
 
 function getBooleanValue (cellValue: any) {
   return cellValue === 'TRUE' || cellValue === 'true' || cellValue === true
 }
 
-function getHeaderTitle ($xetable: any, opts: any, column: any) {
-  const { columnOpts } = $xetable
+function getHeaderTitle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: any, column: any) {
+  const columnOpts = $xeTable.computeColumnOpts
   const headExportMethod = column.headerExportMethod || columnOpts.headerExportMethod
-  return headExportMethod ? headExportMethod({ column, options: opts, $table: $xetable }) : ((opts.original ? column.field : column.getTitle()) || '')
+  return headExportMethod ? headExportMethod({ column, options: opts, $table: $xeTable }) : ((opts.original ? column.field : column.getTitle()) || '')
 }
 
-function getFooterCellValue ($xetable: any, opts: any, row: any, column: any) {
-  const { columnOpts } = $xetable
+function getFooterCellValue ($xeTable: any, opts: any, row: any, column: any) {
+  const columnOpts = $xeTable.computeColumnOpts
   const renderOpts = column.editRender || column.cellRender
   let footLabelMethod = column.footerExportMethod
   if (!footLabelMethod && renderOpts && renderOpts.name) {
@@ -236,9 +236,9 @@ function getFooterCellValue ($xetable: any, opts: any, row: any, column: any) {
   if (!footLabelMethod) {
     footLabelMethod = columnOpts.footerExportMethod
   }
-  const _columnIndex = $xetable.getVTColumnIndex(column)
+  const _columnIndex = $xeTable.getVTColumnIndex(column)
   if (footLabelMethod) {
-    return footLabelMethod({ $table: $xetable, items: row, itemIndex: _columnIndex, row, _columnIndex, column, options: opts })
+    return footLabelMethod({ $table: $xeTable, items: row, itemIndex: _columnIndex, row, _columnIndex, column, options: opts })
   }
   // 兼容老模式
   if (XEUtils.isArray(row)) {
@@ -282,7 +282,7 @@ function toTxtCellLabel (val: any) {
   return val
 }
 
-function toCsv ($xeTable: VxeTableConstructor, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
+function toCsv ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
   const reactData = $xeTable as unknown as TableReactData
 
   let content = csvBOM
@@ -302,7 +302,7 @@ function toCsv ($xeTable: VxeTableConstructor, opts: VxeTablePropTypes.ExportHan
   return content
 }
 
-function toTxt ($xeTable: VxeTableConstructor, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
+function toTxt ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
   const reactData = $xeTable as unknown as TableReactData
 
   let content = ''
@@ -322,7 +322,7 @@ function toTxt ($xeTable: VxeTableConstructor, opts: VxeTablePropTypes.ExportHan
   return content
 }
 
-function hasEllipsis ($xeTable: VxeTableConstructor, column: VxeTableDefines.ColumnInfo, property: 'showOverflow' | 'showHeaderOverflow', allColumnOverflow: VxeTablePropTypes.ShowOverflow | undefined) {
+function hasEllipsis ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: VxeTableDefines.ColumnInfo, property: 'showOverflow' | 'showHeaderOverflow', allColumnOverflow: VxeTablePropTypes.ShowOverflow | undefined) {
   const reactData = $xeTable as unknown as TableReactData
 
   const columnOverflow = column[property]
@@ -339,7 +339,7 @@ function hasEllipsis ($xeTable: VxeTableConstructor, column: VxeTableDefines.Col
   return isEllipsis
 }
 
-function toHtml ($xeTable: VxeTableConstructor, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
+function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
 
@@ -506,7 +506,9 @@ function toHtml ($xeTable: VxeTableConstructor, opts: VxeTablePropTypes.ExportHa
   return isPrint ? tables.join('') : createHtmlPage(opts, tables.join(''))
 }
 
-function toXML ($xetable: any, opts: any, columns: any[], datas: any[]) {
+function toXML ($xeTable: any, opts: any, columns: any[], datas: any[]) {
+  const reactData = $xeTable as unknown as TableReactData
+
   let xml = [
     '<?xml version="1.0"?>',
     '<?mso-application progid="Excel.Sheet"?>',
@@ -527,22 +529,22 @@ function toXML ($xetable: any, opts: any, columns: any[], datas: any[]) {
     columns.map(column => `<Column ss:Width="${column.renderWidth}"/>`).join('')
   ].join('')
   if (opts.isHeader) {
-    xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getHeaderTitle($xetable, opts, column)}</Data></Cell>`).join('')}</Row>`
+    xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getHeaderTitle($xeTable, opts, column)}</Data></Cell>`).join('')}</Row>`
   }
   datas.forEach(row => {
     xml += '<Row>' + columns.map(column => `<Cell><Data ss:Type="String">${row[column.id]}</Data></Cell>`).join('') + '</Row>'
   })
   if (opts.isFooter) {
-    const footerTableData = $xetable.footerTableData
+    const { footerTableData } = reactData
     const footers = getFooterData(opts, footerTableData)
     footers.forEach((row: any) => {
-      xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getFooterCellValue($xetable, opts, row, column)}</Data></Cell>`).join('')}</Row>`
+      xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getFooterCellValue($xeTable, opts, row, column)}</Data></Cell>`).join('')}</Row>`
     })
   }
   return `${xml}</Table></Worksheet></Workbook>`
 }
 
-function getContent ($xeTable: VxeTableConstructor, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
+function getContent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
   if (columns.length) {
     switch (opts.type) {
       case 'csv':
@@ -590,7 +592,7 @@ export function saveLocalFile (options: any) {
   return Promise.reject(new Error(getI18n('vxe.error.notExp')))
 }
 
-function downloadFile ($xetable: any, opts: any, content: any) {
+function downloadFile ($xeTable: any, opts: any, content: any) {
   const { filename, type, download } = opts
   if (!download) {
     const blob = getExportBlobByContent(content, opts)
@@ -886,8 +888,10 @@ function handleImport ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
   }
 }
 
-function handleFileImport ($xetable: any, file: any, opts: any) {
-  const { importOpts } = $xetable
+function handleFileImport ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, file: any, opts: any) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const importOpts = $xeTable.computeImportOpts
   const { importMethod, afterImportMethod } = opts
   const { type, filename } = parseFile(file)
 
@@ -907,21 +911,21 @@ function handleFileImport ($xetable: any, file: any, opts: any) {
   const rest = new Promise((resolve, reject) => {
     const _importResolve = (params: any) => {
       resolve(params)
-      $xetable._importResolve = null
-      $xetable._importReject = null
+      ;($xeTable as any)._importResolve = null
+      ;($xeTable as any)._importReject = null
     }
     const _importReject = (params: any) => {
       reject(params)
-      $xetable._importResolve = null
-      $xetable._importReject = null
+      ;($xeTable as any)._importResolve = null
+      ;($xeTable as any)._importReject = null
     }
-    $xetable._importResolve = _importResolve
-    $xetable._importReject = _importReject
+    ;($xeTable as any)._importResolve = _importResolve
+    ;($xeTable as any)._importReject = _importReject
     if (window.FileReader) {
       const options = Object.assign({ mode: 'insertTop' }, opts, { type, filename })
       if (options.remote) {
         if (importMethod) {
-          Promise.resolve(importMethod({ file, options, $table: $xetable })).then(() => {
+          Promise.resolve(importMethod({ file, options, $table: $xeTable })).then(() => {
             _importResolve({ status: true })
           }).catch(() => {
             _importResolve({ status: true })
@@ -930,14 +934,15 @@ function handleFileImport ($xetable: any, file: any, opts: any) {
           _importResolve({ status: true })
         }
       } else {
-        $xetable.preventEvent(null, 'event.import', { file, options, columns: $xetable.tableFullColumn }, () => {
+        const { tableFullColumn } = internalData
+        $xeTable.preventEvent(null, 'event.import', { file, options, columns: tableFullColumn }, () => {
           const reader = new FileReader()
           reader.onerror = () => {
             errLog('vxe.error.notType', [type])
             _importReject({ status: false })
           }
           reader.onload = (e: any) => {
-            handleImport($xetable, e.target.result, options)
+            handleImport($xeTable, e.target.result, options)
           }
           reader.readAsText(file, options.encoding || 'UTF-8')
         })
@@ -951,11 +956,11 @@ function handleFileImport ($xetable: any, file: any, opts: any) {
 
   return rest.then(() => {
     if (afterImportMethod) {
-      afterImportMethod({ status: true, options: opts, $table: $xetable })
+      afterImportMethod({ status: true, options: opts, $table: $xeTable })
     }
   }).catch((e) => {
     if (afterImportMethod) {
-      afterImportMethod({ status: false, options: opts, $table: $xetable })
+      afterImportMethod({ status: false, options: opts, $table: $xeTable })
     }
     return Promise.reject(e)
   })
@@ -1063,7 +1068,7 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
-  const $xeGrid = $xeTable.xeGrid
+  const $xeGrid = $xeTable.$xeGrid
 
   const { treeConfig, showHeader, showFooter } = props
   const { initStore, mergeList, mergeFooterList, isGroup, footerTableData, exportStore, exportParams } = reactData

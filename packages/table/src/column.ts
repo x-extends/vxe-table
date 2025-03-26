@@ -3,7 +3,7 @@ import Cell from './cell'
 import { defineVxeComponent } from '../../ui/src/comp'
 import { assembleColumn, destroyColumn } from './util'
 
-import type { VxeColumnPropTypes } from '../../../types'
+import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
 export const columnProps = {
   // 列唯一主键
@@ -136,13 +136,15 @@ export const columnProps = {
 export const columnWatch: Record<string, any> = {}
 Object.keys(columnProps).forEach(name => {
   columnWatch[name] = function (value: any) {
+    const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+
     this.columnConfig.update(name, value)
-    if (this.$xetable) {
+    if ($xeTable) {
       if (name === 'filters') {
-        this.$xetable.setFilter(this.columnConfig, value)
-        this.$xetable.handleUpdateDataQueue()
+        $xeTable.setFilter(this.columnConfig, value)
+        $xeTable.handleUpdateDataQueue()
       } else if (['visible', 'fixed', 'width', 'minWidth', 'maxWidth'].includes(name)) {
-        this.$xetable.handleRefreshColumnQueue()
+        $xeTable.handleRefreshColumnQueue()
       }
     }
   }
@@ -153,21 +155,23 @@ export default /* define-vxe-component start */ defineVxeComponent({
   props: columnProps,
   provide () {
     return {
-      $xecolumn: this,
-      $xegrid: null
+      $xeColumn: this,
+      $xeGrid: null
     }
   },
   inject: {
-    $xetable: {
+    $xeTable: {
       default: null
     },
-    $xecolumn: {
+    $xeColumn: {
       default: null
     }
   },
   watch: columnWatch,
   created (this: any) {
-    this.columnConfig = this.createColumn(this.$xetable, this)
+    const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
+
+    this.columnConfig = this.createColumn($xeTable, this)
   },
   mounted () {
     this.columnConfig.slots = this.$scopedSlots

@@ -198,19 +198,22 @@ export default {
      *************************/
     // （单选）筛选发生改变
     changeRadioOption (evnt: any, checked: any, item: any) {
-      const { $parent: $xetable, filterStore } = this
+      const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+
+      const { filterStore } = this
       filterStore.options.forEach((option: any) => {
         option._checked = false
       })
       item._checked = checked
-      $xetable.checkFilterOptions()
+      $xeTable.checkFilterOptions()
       this.confirmFilter(evnt)
     },
     // （多选）筛选发生改变
     changeMultipleOption (evnt: any, checked: any, item: any) {
-      const { $parent: $xetable } = this
+      const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+
       item._checked = checked
-      $xetable.checkFilterOptions()
+      $xeTable.checkFilterOptions()
     },
     changeAllOption (evnt: any, checked: any) {
       if (this.filterStore.multiple) {
@@ -229,13 +232,15 @@ export default {
     },
     // 确认筛选
     confirmFilter (evnt: any) {
-      const { $parent: $xetable } = this
-      $xetable.handleFilterConfirmFilter(evnt)
+      const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+
+      $xeTable.handleFilterConfirmFilter(evnt)
     },
     // 重置筛选
     resetFilter (evnt: any) {
-      const { $parent: $xetable } = this
-      $xetable.handleFilterResetFilter(evnt)
+      const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+
+      $xeTable.handleFilterResetFilter(evnt)
     }
     /*************************
      * Publish methods

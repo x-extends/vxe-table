@@ -34,14 +34,15 @@ const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, globa
  * 渲染浮固定列
  * 分别渲染左边固定列和右边固定列
  * 如果宽度足够情况下，则不需要渲染固定列
- * @param {Function} h 创建 VNode 函数
- * @param {Object} $xetable 表格实例
- * @param {String} fixedType 固定列类型
  */
-function renderFixed (h: CreateElement, $xetable: any, fixedType: any) {
-  const { _e, tableData, tableColumn, tableGroupColumn, vSize, showHeader, showFooter, columnStore, footerTableData } = $xetable
+function renderFixed (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods, fixedType: any) {
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+
+  const { showHeader, showFooter } = props
+  const { tableData, tableColumn, tableGroupColumn, columnStore, footerTableData } = reactData
   const isFixedLeft = fixedType === 'left'
-  const fixedColumn = columnStore[`${fixedType}List`]
+  const fixedColumn = isFixedLeft ? columnStore.leftList : columnStore.rightList
   return h('div', {
     ref: isFixedLeft ? 'refLeftContainer' : 'refRightContainer',
     class: `vxe-table--fixed-${fixedType}-wrapper`
@@ -53,19 +54,17 @@ function renderFixed (h: CreateElement, $xetable: any, fixedType: any) {
           tableData,
           tableColumn,
           tableGroupColumn,
-          size: vSize,
           fixedColumn
         },
         ref: `${fixedType}Header`
       })
-      : _e(),
+      : renderEmptyElement($xeTable),
     h(TableBodyComponent, {
       props: {
         fixedType,
         tableData,
         tableColumn,
-        fixedColumn,
-        size: vSize
+        fixedColumn
       },
       ref: `${fixedType}Body`
     }),
@@ -75,12 +74,11 @@ function renderFixed (h: CreateElement, $xetable: any, fixedType: any) {
           footerTableData,
           tableColumn,
           fixedColumn,
-          fixedType,
-          size: vSize
+          fixedType
         },
         ref: `${fixedType}Footer`
       })
-      : _e()
+      : renderEmptyElement($xeTable)
   ])
 }
 
@@ -420,7 +418,6 @@ export default {
   props: tableProps,
   provide () {
     return {
-      $xetable: this,
       $xeTable: this,
       xecolgroup: null
     }
@@ -430,12 +427,6 @@ export default {
       default: null
     },
     $xeGrid: {
-      default: null
-    },
-    $xegrid: {
-      default: null
-    },
-    xeGrid: {
       default: null
     }
   },
@@ -662,6 +653,7 @@ export default {
       rowExpandHeightFlag: 1,
       calcCellHeightFlag: 1,
       resizeHeightFlag: 1,
+      resizeWidthFlag: 1,
 
       isCustomStatus: false,
 
@@ -1710,7 +1702,7 @@ export default {
     const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
 
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const $xeGrid = $xeTable.xeGrid
+    const $xeGrid = $xeTable.$xeGrid
     const props = $xeTable
     const slots = $xeTable.$scopedSlots
     const reactData = $xeTable as unknown as TableReactData

@@ -4,16 +4,19 @@ import { toFilters } from './util'
 import { getFuncText } from '../../ui/src/utils'
 import { warnLog, errLog } from '../../ui/src/log'
 
+import type { VxeTableConstructor, VxeTablePrivateMethods, VxeGridConstructor, GridPrivateMethods } from '../../../types'
+
 const { getI18n, formats } = VxeUI
 
 export class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
-  constructor ($xetable: any, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
-    const $xegrid = $xetable.$xegrid
-    const proxyOpts = $xegrid ? $xegrid.proxyOpts : null
+  constructor ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
+    const tableProps = $xeTable
+    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+
+    const proxyOpts = $xeGrid ? $xeGrid.proxyOpts : null
     const formatter = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
-    const tableProps = $xetable
 
     const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
     if (_vm.type && types.indexOf(_vm.type) === -1) {
@@ -27,7 +30,7 @@ export class ColumnInfo {
     }
     if (_vm.type === 'expand') {
       const { treeConfig } = tableProps
-      if (treeConfig && ($xetable.treeOpts.showLine || $xetable.treeOpts.line)) {
+      if (treeConfig && ($xeTable.treeOpts.showLine || $xeTable.treeOpts.line)) {
         errLog('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
       }
     }
@@ -144,7 +147,7 @@ export class ColumnInfo {
       slots: _vm.slots
     })
     if (proxyOpts && proxyOpts.beforeColumn) {
-      proxyOpts.beforeColumn({ $grid: $xegrid, column: this })
+      proxyOpts.beforeColumn({ $grid: $xeGrid, column: this })
     }
   }
 

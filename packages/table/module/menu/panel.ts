@@ -2,6 +2,8 @@ import { CreateElement } from 'vue'
 import { VxeUI } from '../../../ui'
 import { getFuncText } from '../../../ui/src/utils'
 
+import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../../types'
+
 const { getIcon } = VxeUI
 
 export default {
@@ -20,7 +22,8 @@ export default {
     }
   },
   render (this: any, h: CreateElement) {
-    const $xetable = this.$parent
+    const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+
     const { _e, ctxMenuOpts, ctxMenuStore } = this
     return h('div', {
       class: ['vxe-table--context-menu-wrapper', ctxMenuOpts.className, {
@@ -50,13 +53,13 @@ export default {
                 class: 'vxe-context-menu--link',
                 on: {
                   click (evnt: any) {
-                    $xetable.ctxMenuLinkEvent(evnt, item)
+                    $xeTable.ctxMenuLinkEvent(evnt, item)
                   },
                   mouseover (evnt: any) {
-                    $xetable.ctxMenuMouseoverEvent(evnt, item)
+                    $xeTable.ctxMenuMouseoverEvent(evnt, item)
                   },
                   mouseout (evnt: any) {
-                    $xetable.ctxMenuMouseoutEvent(evnt, item)
+                    $xeTable.ctxMenuMouseoutEvent(evnt, item)
                   }
                 }
               }, [
@@ -101,13 +104,13 @@ export default {
                         class: 'vxe-context-menu--link',
                         on: {
                           click (evnt: any) {
-                            $xetable.ctxMenuLinkEvent(evnt, child)
+                            $xeTable.ctxMenuLinkEvent(evnt, child)
                           },
                           mouseover (evnt: any) {
-                            $xetable.ctxMenuMouseoverEvent(evnt, item, child)
+                            $xeTable.ctxMenuMouseoverEvent(evnt, item, child)
                           },
                           mouseout (evnt: any) {
-                            $xetable.ctxMenuMouseoutEvent(evnt, item, child)
+                            $xeTable.ctxMenuMouseoutEvent(evnt, item)
                           }
                         }
                       }, [

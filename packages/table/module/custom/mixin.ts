@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 
-import type { VxeColumnPropTypes } from '../../../../types'
+import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeGridConstructor, GridPrivateMethods } from '../../../../types'
 
 export default {
   methods: {
@@ -183,8 +183,11 @@ export default {
       customStore.isIndeterminate = !customStore.isAll && collectColumn.some((column: any) => (!checkMethod || checkMethod({ column })) && (column.renderVisible || column.halfVisible))
     },
     emitCustomEvent (type: any, evnt: any) {
-      const comp = this.$xegrid || this
-      comp.$emit('custom', { type, $table: this, $grid: this.$xegrid, $event: evnt })
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+
+      const comp = $xeGrid || $xeTable
+      comp.$emit('custom', { type, $table: $xeTable, $grid: $xeGrid, $event: evnt })
     },
     triggerCustomEvent (evnt: any) {
       const { customStore } = this

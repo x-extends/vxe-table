@@ -430,8 +430,7 @@ export default {
   },
   provide () {
     return {
-      $xeGrid: this,
-      $xegrid: this
+      $xeGrid: this
     }
   },
   data () {
