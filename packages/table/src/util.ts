@@ -69,8 +69,8 @@ export const convertHeaderColumnToRows = (originColumns: any) => {
   return rows
 }
 
-export function restoreScrollLocation ($xeTable: any, scrollLeft: any, scrollTop: any) {
-  const internalData = $xeTable
+export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft: number, scrollTop: number) {
+  const internalData = $xeTable as unknown as TableInternalData
 
   return $xeTable.clearScroll().then(() => {
     if (scrollLeft || scrollTop) {

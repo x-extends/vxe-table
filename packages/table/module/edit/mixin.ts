@@ -26,7 +26,7 @@ function setEditColumnModel (row: any, column: VxeTableDefines.ColumnInfo) {
   }
 }
 
-function removeCellSelectedClass ($xeTable: VxeTableConstructor) {
+function removeCellSelectedClass ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const el = $xeTable.$refs.refElem as HTMLDivElement
   if (el) {
     const cell = el.querySelector('.col--selected')
@@ -36,7 +36,7 @@ function removeCellSelectedClass ($xeTable: VxeTableConstructor) {
   }
 }
 
-function syncActivedCell ($xeTable: VxeTableConstructor) {
+function syncActivedCell ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const reactData = $xeTable as unknown as TableReactData
 
   const { editStore, tableColumn } = reactData
@@ -52,18 +52,21 @@ function syncActivedCell ($xeTable: VxeTableConstructor) {
   }
 }
 
-function insertTreeRow (_vm: any, newRecords: any[], isAppend: any) {
-  const { tableFullTreeData, afterFullData, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = _vm
+function insertTreeRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, newRecords: any[], isAppend: boolean) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { tableFullTreeData, afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+  const treeOpts = $xeTable.computeTreeOpts
   const { rowField, parentField, mapChildrenField } = treeOpts
-  const childrenField: any = treeOpts.children || treeOpts.childrenField
+  const childrenField = treeOpts.children || treeOpts.childrenField
   const funcName = isAppend ? 'push' : 'unshift'
-  newRecords.forEach((item: any) => {
-    const parentRowId: any = item[parentField]
-    const rowid = getRowid(_vm, item)
-    const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, (item: any) => parentRowId === item[rowField], { children: mapChildrenField }) : null
+  newRecords.forEach((item) => {
+    const parentRowId = item[parentField]
+    const rowid = getRowid($xeTable, item)
+    const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, (item) => parentRowId === item[rowField], { children: mapChildrenField }) : null
     if (matchObj) {
-      const { item: parentRow } = matchObj as any
-      const parentRest = fullAllDataRowIdData[getRowid(_vm, parentRow)]
+      const { item: parentRow } = matchObj
+      const parentRest = fullAllDataRowIdData[getRowid($xeTable, parentRow)]
       const parentLevel = parentRest ? parentRest.level : 0
       let parentChilds = parentRow[childrenField]
       let mapChilds = parentRow[mapChildrenField]
@@ -93,14 +96,14 @@ function insertTreeRow (_vm: any, newRecords: any[], isAppend: any) {
   })
 }
 
-function handleInsertRowAt ($xeTable: any, records: any[], targetRow: any, isInsertNextRow?: any) {
+function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, records: any[], targetRow: any, isInsertNextRow?: any) {
   const props = $xeTable
-  const reactData = $xeTable
-  const internalData = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
 
   const { treeConfig } = props
-  const { mergeList, editStore } = reactData
-  const { tableFullTreeData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+  const { mergeList } = reactData
+  const { tableFullTreeData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData, insertRowMaps } = internalData
   const treeOpts = $xeTable.computeTreeOpts
   const { transform, rowField, mapChildrenField } = treeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
@@ -239,11 +242,11 @@ function handleInsertRowAt ($xeTable: any, records: any[], targetRow: any, isIns
       }
     }
   }
-  const { insertMaps } = editStore
   newRecords.forEach(newRow => {
     const rowid = getRowid($xeTable, newRow)
-    insertMaps[rowid] = newRow
+    insertRowMaps[rowid] = newRow
   })
+  reactData.insertRowFlag++
   $xeTable.cacheRowMap(false)
   $xeTable.updateScrollYStatus()
   $xeTable.handleTableData(treeConfig && transform)
@@ -252,7 +255,7 @@ function handleInsertRowAt ($xeTable: any, records: any[], targetRow: any, isIns
   }
   $xeTable.updateFooter()
   $xeTable.checkSelectionStatus()
-  if ($xeTable.scrollYLoad) {
+  if (reactData.scrollYLoad) {
     $xeTable.updateScrollYSpace()
   }
   return $xeTable.$nextTick().then(() => {
@@ -266,7 +269,7 @@ function handleInsertRowAt ($xeTable: any, records: any[], targetRow: any, isIns
   })
 }
 
-function handleInsertChildRowAt ($xeTable: VxeTableConstructor, records: any, parentRow: any, targetRow: any, isInsertNextRow?: boolean) {
+function handleInsertChildRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, records: any, parentRow: any, targetRow: any, isInsertNextRow?: boolean) {
   const props = $xeTable
 
   const { treeConfig } = props
@@ -502,13 +505,12 @@ export default {
 
       const { treeConfig } = props
       const { mergeList, editStore } = reactData
-      const { tableFullTreeData, selectCheckboxMaps, afterFullData, tableFullData, pendingRowMaps } = internalData
+      const { tableFullTreeData, selectCheckboxMaps, afterFullData, tableFullData, pendingRowMaps, insertRowMaps, removeRowMaps } = internalData
       const checkboxOpts = $xeTable.computeCheckboxOpts
       const treeOpts = $xeTable.computeTreeOpts
       const { transform, mapChildrenField } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
-      const { actived, removeMaps } = editStore
-      const insertDataRowMaps = Object.assign({}, editStore.insertMaps)
+      const { actived } = editStore
       const { checkField } = checkboxOpts
       let delList: any[] = []
       if (!rows) {
@@ -520,7 +522,7 @@ export default {
       rows.forEach(row => {
         if (!$xeTable.isInsertByRow(row)) {
           const rowid = getRowid($xeTable, row)
-          removeMaps[rowid] = row
+          removeRowMaps[rowid] = row
         }
       })
       // 如果绑定了多选属性，则更新状态
@@ -588,14 +590,15 @@ export default {
       // 从新增中移除已删除的数据
       rows.forEach((row: any) => {
         const rowid = getRowid($xeTable, row)
-        if (insertDataRowMaps[rowid]) {
-          delete insertDataRowMaps[rowid]
+        if (insertRowMaps[rowid]) {
+          delete insertRowMaps[rowid]
         }
         if (pendingRowMaps[rowid]) {
           delete pendingRowMaps[rowid]
         }
       })
-      editStore.insertMaps = insertDataRowMaps
+      reactData.removeRowFlag++
+      reactData.insertRowFlag++
       reactData.pendingRowFlag++
       $xeTable.updateFooter()
       $xeTable.cacheRowMap(false)
@@ -665,15 +668,12 @@ export default {
      * 获取新增的临时数据
      */
     _getInsertRecords () {
-      const $xeTable = this
-      const reactData = $xeTable
-      const internalData = $xeTable
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const internalData = $xeTable as unknown as TableInternalData
 
-      const { editStore } = reactData
-      const { fullAllDataRowIdData } = internalData
-      const { insertMaps } = editStore
+      const { fullAllDataRowIdData, insertRowMaps } = internalData
       const insertRecords: any[] = []
-      XEUtils.each(insertMaps, (row, rowid) => {
+      XEUtils.each(insertRowMaps, (row, rowid) => {
         if (fullAllDataRowIdData[rowid]) {
           insertRecords.push(row)
         }
@@ -684,13 +684,12 @@ export default {
      * 获取已删除的数据
      */
     _getRemoveRecords () {
-      const $xeTable = this
-      const reactData = $xeTable
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const internalData = $xeTable as unknown as TableInternalData
 
-      const { editStore } = reactData
-      const { removeMaps } = editStore
+      const { removeRowMaps } = internalData
       const removeRecords: any[] = []
-      XEUtils.each(removeMaps, (row) => {
+      XEUtils.each(removeRowMaps, (row) => {
         removeRecords.push(row)
       })
       return removeRecords
@@ -701,19 +700,19 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     _getUpdateRecords () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+      const internalData = $xeTable as unknown as TableInternalData
 
-      const { keepSource, tableFullData, isUpdateByRow, treeConfig, treeOpts, editStore } = this
+      const { keepSource, treeConfig } = props
+      const { tableFullData } = internalData
+      const treeOpts = $xeTable.computeTreeOpts
       if (keepSource) {
-        const { actived } = editStore
-        const { row, column } = actived
-        if (row || column) {
-          syncActivedCell($xeTable)
-        }
+        syncActivedCell($xeTable)
         if (treeConfig) {
-          return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
+          return XEUtils.filterTree(tableFullData, row => $xeTable.isUpdateByRow(row), treeOpts)
         }
-        return tableFullData.filter((row: any) => isUpdateByRow(row))
+        return tableFullData.filter((row) => $xeTable.isUpdateByRow(row))
       }
       return []
     },
@@ -721,7 +720,7 @@ export default {
      * 处理激活编辑
      */
     handleEdit (params: any, evnt: any) {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       return handleEditActive($xeTable, params, evnt, true, true)
     },
@@ -753,7 +752,7 @@ export default {
      * 清除激活的编辑
      */
     _clearEdit (row: any) {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       return handleClearEdit($xeTable, null, row)
     },
@@ -766,42 +765,57 @@ export default {
       return handleClearEdit($xeTable, evnt, targetRow)
     },
     _getActiveRecord () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       if (process.env.VUE_APP_VXE_ENV === 'development') {
         warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
       }
       // 即将废弃
-      return this.getEditRecord()
+      return $xeTable.getEditRecord()
     },
     _getEditRecord () {
-      const { $el, editStore, afterFullData } = this
-      const { actived } = editStore
-      const { args, row } = actived
-      if (args && this.findRowIndexOf(afterFullData, row) > -1 && $el.querySelectorAll('.vxe-body--column.col--active').length) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { editStore } = reactData
+      const { afterFullData } = internalData
+      const el = $xeTable.$refs.refElem as HTMLDivElement
+      const { args, row } = editStore.actived
+      if (args && $xeTable.findRowIndexOf(afterFullData, row) > -1 && el.querySelectorAll('.vxe-body--column.col--active').length) {
         return Object.assign({}, args)
       }
       return null
     },
     _isActiveByRow (row: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       if (process.env.VUE_APP_VXE_ENV === 'development') {
         warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
       }
       // 即将废弃
-      return this.isEditByRow(row)
+      return $xeTable.isEditByRow(row)
     },
     /**
      * 判断行是否为激活编辑状态
      * @param {Row} row 行对象
      */
     _isEditByRow (row: any) {
-      return this.editStore.actived.row === row
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { editStore } = reactData
+      return editStore.actived.row === row
     },
     /**
      * 处理聚焦
      */
     handleFocus (params: any) {
-      const { editOpts } = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       const { row, column, cell } = params
       const { editRender } = column
+      const editOpts = $xeTable.computeEditOpts
       if (isEnableConf(editRender)) {
         const compRender = renderer.get(editRender.name)
         let autoFocus = editRender.autofocus || editRender.autoFocus
@@ -817,7 +831,7 @@ export default {
           }
           // 如果指定了聚焦 class
           if (XEUtils.isFunction(autoFocus)) {
-            inputElem = autoFocus.call(this, params)
+            inputElem = autoFocus.call($xeTable, params)
           } else if (autoFocus) {
             if (autoFocus === true) {
               // 自动匹配模式，会自动匹配第一个可输入元素
@@ -846,31 +860,33 @@ export default {
           if (editOpts.autoPos) {
             if (!column.fixed) {
               // 显示到可视区中
-              this.scrollToRow(row, column)
+              $xeTable.scrollToRow(row, column)
             }
           }
         }
       }
     },
     _setActiveRow (row: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       if (process.env.VUE_APP_VXE_ENV === 'development') {
         warnLog('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
       }
       // 即将废弃
-      return this.setEditRow(row)
+      return $xeTable.setEditRow(row)
     },
     /**
      * 激活行编辑
      */
     _setEditRow (row: any, fieldOrColumn: any) {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       let column = XEUtils.find(this.visibleColumn, column => isEnableConf(column.editRender))
       let isPos = false
       if (fieldOrColumn) {
         isPos = true
         if (fieldOrColumn !== true) {
-          column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+          column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
         }
       }
       return handleEditCell($xeTable, row, column, isPos)
@@ -886,33 +902,48 @@ export default {
      * 激活单元格编辑
      */
     _setEditCell (row: any, fieldOrColumn: any) {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       return handleEditCell($xeTable, row, fieldOrColumn, true)
     },
     /**
      * 只对 trigger=dblclick 有效，选中单元格
      */
-    _setSelectCell (row: any, fieldOrColumn: any) {
-      const { tableData, editOpts, visibleColumn } = this
-      const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+    _setSelectCell (row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { tableData } = reactData
+      const editOpts = $xeTable.computeEditOpts
+      const column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
       if (row && column && editOpts.trigger !== 'manual') {
-        const rowIndex = this.findRowIndexOf(tableData, row)
+        const rowIndex = $xeTable.findRowIndexOf(tableData, row)
         if (rowIndex > -1) {
-          const cell = this.getCellElement(row, column)
-          const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
-          this.handleSelected(params, {})
+          const cell = $xeTable.getCellElement(row, column)
+          const params = {
+            row,
+            rowIndex,
+            column,
+            columnIndex: $xeTable.getColumnIndex(column),
+            cell
+          }
+          $xeTable.handleSelected(params, {})
         }
       }
-      return this.$nextTick()
+      return $xeTable.$nextTick()
     },
     /**
      * 处理选中源
      */
     handleSelected (params: any, evnt: any) {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
 
-      const { mouseConfig, mouseOpts, editOpts, editStore } = this
+      const { mouseConfig } = props
+      const { editStore } = reactData
+      const mouseOpts = $xeTable.computeMouseOpts
+      const editOpts = $xeTable.computeEditOpts
       const { actived, selected } = editStore
       const { row, column } = params
       const isMouseSelected = mouseConfig && mouseOpts.selected
@@ -920,22 +951,24 @@ export default {
         if (isMouseSelected && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
             handleClearEdit($xeTable, evnt)
-            this.clearSelected(evnt)
-            this.clearCellAreas(evnt)
-            this.clearCopyCellArea(evnt)
+            $xeTable.clearSelected()
+            if ($xeTable.clearCellAreas) {
+              $xeTable.clearCellAreas()
+              $xeTable.clearCopyCellArea()
+            }
             selected.args = params
             selected.row = row
             selected.column = column
             if (isMouseSelected) {
               this.addCellSelectedClass()
             }
-            this.focus()
+            $xeTable.focus()
             if (evnt) {
-              this.emitEvent('cell-selected', params, evnt)
+              $xeTable.dispatchEvent('cell-selected', params, evnt)
             }
           }
         }
-        return this.$nextTick()
+        return $xeTable.$nextTick()
       }
       return selectMethod()
     },
@@ -943,7 +976,11 @@ export default {
      * 获取选中的单元格
      */
     _getSelectedCell () {
-      const { args, column } = this.editStore.selected
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { editStore } = reactData
+      const { args, column } = editStore.selected
       if (args && column) {
         return Object.assign({}, args)
       }
@@ -953,14 +990,15 @@ export default {
      * 清除所选中源状态
      */
     _clearSelected () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
-      const { selected } = this.editStore
+      const { editStore } = reactData
+      const { selected } = editStore
       selected.row = null
       selected.column = null
-      this.reColTitleSdCls()
       removeCellSelectedClass($xeTable)
-      return this.$nextTick()
+      return $xeTable.$nextTick()
     },
     reColTitleSdCls () {
       const headerElem = this.elemStore['main-header-list']
@@ -969,8 +1007,8 @@ export default {
       }
     },
     addCellSelectedClass () {
-      const $xeTable = this
-      const reactData = $xeTable as TableReactData
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const { editStore } = reactData
       const { selected } = editStore

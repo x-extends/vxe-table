@@ -570,9 +570,7 @@ export default {
         focused: {
           row: null,
           column: null
-        },
-        insertMaps: {},
-        removeMaps: {}
+        }
       },
       // 存放 tooltip 相关信息
       tooltipStore: {
@@ -696,7 +694,7 @@ export default {
       return Object.assign({ message: 'default' }, getConfig().table.validConfig, this.validConfig)
     },
     sXOpts () {
-      return this.computeSXOpts
+      return this.computeVirtualXOpts
     },
     computeSXOpts () {
       return this.computeVirtualXOpts
@@ -704,15 +702,15 @@ export default {
     computeScrollXThreshold () {
       const $xeTable = this
 
-      const sXOpts = $xeTable.computeSXOpts
-      const { threshold } = sXOpts
+      const virtualXOpts = $xeTable.computeVirtualXOpts
+      const { threshold } = virtualXOpts
       if (threshold) {
         return XEUtils.toNumber(threshold)
       }
       return 0
     },
     sYOpts () {
-      return this.computeSYOpts
+      return this.computeVirtualYOpts
     },
     computeSYOpts () {
       return this.computeVirtualYOpts
@@ -750,8 +748,8 @@ export default {
     computeScrollYThreshold () {
       const $xeTable = this
 
-      const sYOpts = $xeTable.computeSYOpts
-      const { threshold } = sYOpts
+      const virtualYOpts = $xeTable.computeVirtualYOpts
+      const { threshold } = virtualYOpts
       if (threshold) {
         return XEUtils.toNumber(threshold)
       }
@@ -1202,7 +1200,7 @@ export default {
       }
     },
     tabsResizeFlag () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const $xeTabs = $xeTable.$xeTabs
 
       return $xeTabs ? $xeTabs.reactData.resizeFlag : null
@@ -1210,8 +1208,8 @@ export default {
   } as any,
   watch: {
     data (value: any) {
-      const $xeTable = this
-      const reactData = $xeTable
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const { initStatus } = this
       if (value && value.length >= 50000) {
@@ -1381,11 +1379,11 @@ export default {
       tableFullColumn: [],
       // 渲染所有列
       visibleColumn: [],
-      // 缓存数据集
+      // 总的缓存数据集
       fullAllDataRowIdData: {},
-      fullDataRowMap: new Map(),
+      // 渲染中缓存数据
+      sourceDataRowIdData: {},
       fullDataRowIdData: {},
-      fullColumnMap: new Map(),
       fullColumnIdData: {},
       fullColumnFieldData: {},
 
@@ -1401,6 +1399,10 @@ export default {
       selectCheckboxMaps: {},
       // 已标记的对象集
       pendingRowMaps: {},
+      // 已新增的临时行
+      insertRowMaps: {},
+      // 已删除行
+      removeRowMaps: {},
 
       swYSize: 0,
       swYInterval: 0,
@@ -1409,7 +1411,6 @@ export default {
 
     const { data, exportConfig, importConfig, treeConfig, showOverflow } = props
     const { scrollXStore, scrollYStore } = internalData
-    const sYOpts = $xeTable.computeSYOpts
     const editOpts = $xeTable.computeEditOpts
     const treeOpts = $xeTable.computeTreeOpts
     const radioOpts = $xeTable.computeRadioOpts
@@ -1574,8 +1575,7 @@ export default {
     Object.assign(scrollYStore, {
       startIndex: 0,
       endIndex: 1,
-      visibleSize: 0,
-      adaptive: sYOpts.adaptive !== false
+      visibleSize: 0
     })
     Object.assign(scrollXStore, {
       startIndex: 0,

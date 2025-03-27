@@ -465,9 +465,12 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
   const { handleGetRowId } = createHandleGetRowId($xeTable)
   tableData.forEach((row, $rowIndex) => {
     const trOn: Record<string, any> = {}
+    const rowid = handleGetRowId(row)
+    const rowRest = fullAllDataRowIdData[rowid] || {}
     let rowIndex = $rowIndex
-    // 确保任何情况下 rowIndex 都精准指向真实 data 索引
-    rowIndex = $xeTable.getRowIndex(row)
+    let rowLevel = 0
+    let seq: string | number = -1
+    let _rowIndex = -1
     // 当前行事件
     if (rowOpts.isHover || highlightHoverRow) {
       trOn.mouseenter = (evnt: MouseEvent) => {
@@ -483,11 +486,6 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
         $xeTable.clearHoverRow()
       }
     }
-    const rowid = handleGetRowId(row)
-    const rowRest = fullAllDataRowIdData[rowid] || {}
-    let rowLevel = 0
-    let seq: string | number = -1
-    let _rowIndex = 0
     if (rowRest) {
       rowLevel = rowRest.level
       if (treeConfig && transform && seqMode === 'increasing') {
@@ -495,6 +493,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
       } else {
         seq = rowRest.seq
       }
+      rowIndex = rowRest.index
       _rowIndex = rowRest._index
     }
     const params = { $table: $xeTable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }

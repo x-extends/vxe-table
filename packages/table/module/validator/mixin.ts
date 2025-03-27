@@ -5,7 +5,7 @@ import { scrollToView } from '../../../ui/src/dom'
 import { handleFieldOrColumn, getRowid } from '../../src/util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
-import type { VxeTableDefines, TableReactData, TableInternalData } from '../../../../types'
+import type { VxeTableDefines, TableInternalData } from '../../../../types'
 
 const { getConfig, validators } = VxeUI
 
@@ -156,14 +156,11 @@ export default {
     beginValidate (rows: any, cols: VxeTableDefines.ColumnInfo[] | null, cb: any, isFull: any) {
       const $xeTable = this
       const props = $xeTable
-      const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
 
       const validRest: any = {}
       const { editRules, treeConfig } = props
-      const { editStore } = reactData
-      const { afterFullData, pendingRowMaps } = internalData
-      const { removeMaps } = editStore
+      const { afterFullData, pendingRowMaps, removeRowMaps } = internalData
       const treeOpts = $xeTable.computeTreeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       let validList
@@ -189,7 +186,7 @@ export default {
         const handleVaild = (row: any) => {
           const rowid = getRowid($xeTable, row)
           // 是否删除
-          if (removeMaps[rowid]) {
+          if (removeRowMaps[rowid]) {
             return
           }
           // 是否标记删除
