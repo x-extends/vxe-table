@@ -106,8 +106,8 @@ hooks.add('tableEditModule', {
 
     const handleInsertRowAt = (records: any, targetRow: any, isInsertNextRow?: boolean) => {
       const { treeConfig } = props
-      const { mergeList, editStore } = reactData
-      const { tableFullTreeData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+      const { mergeList } = reactData
+      const { tableFullTreeData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData, insertRowMaps } = internalData
       const treeOpts = computeTreeOpts.value
       const { transform, rowField, mapChildrenField } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
@@ -246,11 +246,11 @@ hooks.add('tableEditModule', {
           }
         }
       }
-      const { insertMaps } = editStore
       newRecords.forEach(newRow => {
         const rowid = getRowid($xeTable, newRow)
-        insertMaps[rowid] = newRow
+        insertRowMaps[rowid] = newRow
       })
+      reactData.insertRowFlag++
       $xeTable.cacheRowMap(false)
       $xeTable.updateScrollYStatus()
       $xeTable.handleTableData(treeConfig && transform)
@@ -493,13 +493,12 @@ hooks.add('tableEditModule', {
       remove (rows: any) {
         const { treeConfig } = props
         const { mergeList, editStore } = reactData
-        const { tableFullTreeData, selectCheckboxMaps, afterFullData, tableFullData, pendingRowMaps } = internalData
+        const { tableFullTreeData, selectCheckboxMaps, afterFullData, tableFullData, pendingRowMaps, insertRowMaps, removeRowMaps } = internalData
         const checkboxOpts = computeCheckboxOpts.value
         const treeOpts = computeTreeOpts.value
         const { transform, mapChildrenField } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
-        const { actived, removeMaps } = editStore
-        const insertDataRowMaps = Object.assign({}, editStore.insertMaps)
+        const { actived } = editStore
         const { checkField } = checkboxOpts
         let delList: any[] = []
         if (!rows) {
@@ -511,7 +510,7 @@ hooks.add('tableEditModule', {
         rows.forEach((row: any) => {
           if (!$xeTable.isInsertByRow(row)) {
             const rowid = getRowid($xeTable, row)
-            removeMaps[rowid] = row
+            removeRowMaps[rowid] = row
           }
         })
         // 如果绑定了多选属性，则更新状态
@@ -579,14 +578,15 @@ hooks.add('tableEditModule', {
         // 从新增中移除已删除的数据
         rows.forEach((row: any) => {
           const rowid = getRowid($xeTable, row)
-          if (insertDataRowMaps[rowid]) {
-            delete insertDataRowMaps[rowid]
+          if (insertRowMaps[rowid]) {
+            delete insertRowMaps[rowid]
           }
           if (pendingRowMaps[rowid]) {
             delete pendingRowMaps[rowid]
           }
         })
-        editStore.insertMaps = insertDataRowMaps
+        reactData.removeRowFlag++
+        reactData.insertRowFlag++
         reactData.pendingRowFlag++
         $xeTable.updateFooter()
         $xeTable.cacheRowMap(false)
@@ -656,11 +656,9 @@ hooks.add('tableEditModule', {
        * 获取新增的临时数据
        */
       getInsertRecords () {
-        const { editStore } = reactData
-        const { fullAllDataRowIdData } = internalData
-        const { insertMaps } = editStore
+        const { fullAllDataRowIdData, insertRowMaps } = internalData
         const insertRecords: any[] = []
-        XEUtils.each(insertMaps, (row, rowid) => {
+        XEUtils.each(insertRowMaps, (row, rowid) => {
           if (fullAllDataRowIdData[rowid]) {
             insertRecords.push(row)
           }
@@ -671,10 +669,9 @@ hooks.add('tableEditModule', {
        * 获取已删除的数据
        */
       getRemoveRecords () {
-        const { editStore } = reactData
-        const { removeMaps } = editStore
+        const { removeRowMaps } = internalData
         const removeRecords: any[] = []
-        XEUtils.each(removeMaps, (row) => {
+        XEUtils.each(removeRowMaps, (row) => {
           removeRecords.push(row)
         })
         return removeRecords
@@ -701,7 +698,7 @@ hooks.add('tableEditModule', {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
         }
-        return this.getEditRecord()
+        return $xeTable.getEditRecord()
       },
       getEditRecord () {
         const { editStore } = reactData
@@ -729,7 +726,7 @@ hooks.add('tableEditModule', {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
         }
-        return this.clearEdit(row)
+        return $xeTable.clearEdit(row)
       },
       /**
        * 清除激活的编辑
@@ -753,7 +750,7 @@ hooks.add('tableEditModule', {
           warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
         }
         // 即将废弃
-        return this.isEditByRow(row)
+        return $xeTable.isEditByRow(row)
       },
       /**
        * 判断行是否为激活编辑状态
@@ -914,7 +911,7 @@ hooks.add('tableEditModule', {
           if (isMouseSelected && (selected.row !== row || selected.column !== column)) {
             if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
               handleClearEdit(evnt)
-              editMethods.clearSelected()
+              $xeTable.clearSelected()
               if ($xeTable.clearCellAreas) {
                 $xeTable.clearCellAreas()
                 $xeTable.clearCopyCellArea()

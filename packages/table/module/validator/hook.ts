@@ -109,9 +109,7 @@ hooks.add('tableValidatorModule', {
     const beginValidate = (rows: any, cols: VxeTableDefines.ColumnInfo[] | null, cb: any, isFull?: boolean): Promise<any> => {
       const validRest: any = {}
       const { editRules, treeConfig } = props
-      const { editStore } = reactData
-      const { afterFullData, pendingRowMaps } = internalData
-      const { removeMaps } = editStore
+      const { afterFullData, pendingRowMaps, removeRowMaps } = internalData
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const validOpts = computeValidOpts.value
@@ -147,7 +145,7 @@ hooks.add('tableValidatorModule', {
         const handleVaild = (row: any) => {
           const rowid = getRowid($xeTable, row)
           // 是否删除
-          if (removeMaps[rowid]) {
+          if (removeRowMaps[rowid]) {
             return
           }
           // 是否标记删除

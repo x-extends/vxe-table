@@ -183,9 +183,7 @@ export default defineComponent({
         focused: {
           row: null,
           column: null
-        },
-        insertMaps: {},
-        removeMaps: {}
+        }
       },
       // 存放 tooltip 相关信息
       tooltipStore: {
@@ -248,6 +246,8 @@ export default defineComponent({
       treeExpandedFlag: 1,
       updateCheckboxFlag: 1,
       pendingRowFlag: 1,
+      insertRowFlag: 1,
+      removeRowFlag: 1,
 
       rowHeightStore: {
         default: 48,
@@ -354,7 +354,6 @@ export default defineComponent({
       fullDataRowIdData: {},
       fullColumnIdData: {},
       fullColumnFieldData: {},
-      // prevDragRow: null,
 
       // 已展开的行集合
       rowExpandedMaps: {},
@@ -368,6 +367,10 @@ export default defineComponent({
       selectCheckboxMaps: {},
       // 已标记的对象集
       pendingRowMaps: {},
+      // 已新增的临时行
+      insertRowMaps: {},
+      // 已删除行
+      removeRowMaps: {},
 
       inited: false,
       tooltipTimeout: null,
@@ -439,7 +442,7 @@ export default defineComponent({
     })
 
     const computeValidOpts = computed(() => {
-      return Object.assign({}, getConfig().table.validConfig, props.validConfig) as VxeTablePropTypes.ValidOpts
+      return Object.assign({}, getConfig().table.validConfig, props.validConfig)
     })
 
     /**
@@ -447,12 +450,12 @@ export default defineComponent({
      */
     const computeSXOpts = computed(() => {
       const virtualXOpts = computeVirtualXOpts.value
-      return virtualXOpts as VxeTablePropTypes.SXOpts
+      return virtualXOpts
     })
 
     const computeScrollXThreshold = computed(() => {
-      const sXOpts = computeSXOpts.value
-      const { threshold } = sXOpts
+      const virtualXOpts = computeVirtualXOpts.value
+      const { threshold } = virtualXOpts
       if (threshold) {
         return XEUtils.toNumber(threshold)
       }
@@ -464,15 +467,15 @@ export default defineComponent({
      */
     const computeSYOpts = computed(() => {
       const virtualYOpts = computeVirtualYOpts.value
-      return virtualYOpts as VxeTablePropTypes.SYOpts
+      return virtualYOpts
     })
 
     const computeVirtualXOpts = computed(() => {
-      return Object.assign({}, getConfig().table.scrollX, getConfig().table.virtualXConfig, props.scrollX, props.virtualXConfig) as VxeTablePropTypes.VirtualXConfig
+      return Object.assign({}, getConfig().table.scrollX, getConfig().table.virtualXConfig, props.scrollX, props.virtualXConfig) as VxeTablePropTypes.VirtualXConfig & { gt: number }
     })
 
     const computeVirtualYOpts = computed(() => {
-      return Object.assign({}, getConfig().table.scrollY, getConfig().table.virtualYConfig, props.scrollY, props.virtualYConfig) as VxeTablePropTypes.VirtualYConfig
+      return Object.assign({}, getConfig().table.scrollY, getConfig().table.virtualYConfig, props.scrollY, props.virtualYConfig) as VxeTablePropTypes.VirtualYConfig & { gt: number }
     })
 
     const computeScrollbarOpts = computed(() => {
@@ -490,8 +493,8 @@ export default defineComponent({
     })
 
     const computeScrollYThreshold = computed(() => {
-      const sYOpts = computeSYOpts.value
-      const { threshold } = sYOpts
+      const virtualYOpts = computeVirtualYOpts.value
+      const { threshold } = virtualYOpts
       if (threshold) {
         return XEUtils.toNumber(threshold)
       }
@@ -509,7 +512,7 @@ export default defineComponent({
     })
 
     const computeColumnOpts = computed(() => {
-      return Object.assign({}, getConfig().table.columnConfig, props.columnConfig) as VxeTablePropTypes.ColumnOpts
+      return Object.assign({}, getConfig().table.columnConfig, props.columnConfig)
     })
 
     const computeCurrentColumnOpts = computed(() => {
@@ -1124,14 +1127,14 @@ export default defineComponent({
 
     const setMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[], mList: VxeTableDefines.MergeItem[], rowList?: any[]) => {
       if (merges) {
-        const { treeConfig } = props
+        // const { treeConfig } = props
         const { visibleColumn } = internalData
         if (!XEUtils.isArray(merges)) {
           merges = [merges]
         }
-        if (treeConfig && merges.length) {
-          errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
-        }
+        // if (treeConfig && merges.length) {
+        //   errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
+        // }
         merges.forEach((item) => {
           let { row, col, rowspan, colspan } = item
           if (rowList && XEUtils.isNumber(row)) {
@@ -1174,14 +1177,14 @@ export default defineComponent({
     const removeMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[], mList: VxeTableDefines.MergeItem[], rowList?: any) => {
       const rest: VxeTableDefines.MergeItem[] = []
       if (merges) {
-        const { treeConfig } = props
+        // const { treeConfig } = props
         const { visibleColumn } = internalData
         if (!XEUtils.isArray(merges)) {
           merges = [merges]
         }
-        if (treeConfig && merges.length) {
-          errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
-        }
+        // if (treeConfig && merges.length) {
+        //   errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
+        // }
         merges.forEach((item) => {
           let { row, col } = item
           if (rowList && XEUtils.isNumber(row)) {
@@ -1889,7 +1892,7 @@ export default defineComponent({
     }
 
     const updateStyle = () => {
-      const { border, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
+      const { showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
       const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isAllOverflow, expandColumn } = reactData
       const { visibleColumn, tableHeight, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
       const el = refElem.value
@@ -2050,33 +2053,6 @@ export default defineComponent({
             if (tableElem) {
               tableElem.style.width = tWidth ? `${tWidth}px` : ''
             }
-
-            const listElem = getRefElem(elemStore[`${name}-${layout}-list`])
-            if (isGroup && listElem) {
-              XEUtils.arrayEach(listElem.querySelectorAll('.col--group'), (thElem: any) => {
-                const colNode = $xeTable.getColumnNode(thElem)
-                if (colNode) {
-                  const column = colNode.item
-                  const { showHeaderOverflow } = column
-                  const cellOverflow = XEUtils.isBoolean(showHeaderOverflow) ? showHeaderOverflow : allColumnHeaderOverflow
-                  const showEllipsis = cellOverflow === 'ellipsis'
-                  const showTitle = cellOverflow === 'title'
-                  const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-                  const hasEllipsis = showTitle || showTooltip || showEllipsis
-                  let childWidth = 0
-                  let countChild = 0
-                  if (hasEllipsis) {
-                    XEUtils.eachTree(column.children, (item) => {
-                      if (!item.children || !column.children.length) {
-                        countChild++
-                      }
-                      childWidth += item.renderWidth
-                    }, { children: 'children' })
-                  }
-                  thElem.style.width = hasEllipsis ? `${childWidth - countChild - (border ? 2 : 0)}px` : ''
-                }
-              })
-            }
           } else if (layout === 'body') {
             if (currScrollElem) {
               currScrollElem.style.maxHeight = customMaxHeight ? `${bodyMaxHeight}px` : ''
@@ -2226,7 +2202,7 @@ export default defineComponent({
             (sortConfig.multiple ? defaultSort : defaultSort.slice(0, 1)).forEach((item: any, index: number) => {
               const { field, order } = item
               if (field && order) {
-                const column = tableMethods.getColumnByField(field)
+                const column = $xeTable.getColumnByField(field)
                 if (column && column.sortable) {
                   column.order = order
                   column.sortTime = Date.now() + index
@@ -2234,7 +2210,7 @@ export default defineComponent({
               }
             })
             if (!sortOpts.remote) {
-              tablePrivateMethods.handleTableData(true).then(updateStyle)
+              $xeTable.handleTableData(true).then(updateStyle)
             }
           }
         }
@@ -2295,7 +2271,7 @@ export default defineComponent({
         const expandOpts = computeExpandOpts.value
         const { expandAll, expandRowKeys } = expandOpts
         if (expandAll) {
-          tableMethods.setAllRowExpand(true)
+          $xeTable.setAllRowExpand(true)
         } else if (expandRowKeys) {
           const defExpandeds: any[] = []
           expandRowKeys.forEach((rowid: any) => {
@@ -2303,7 +2279,7 @@ export default defineComponent({
               defExpandeds.push(fullDataRowIdData[rowid].row)
             }
           })
-          tableMethods.setRowExpand(defExpandeds, true)
+          $xeTable.setRowExpand(defExpandeds, true)
         }
       }
     }
@@ -2667,14 +2643,14 @@ export default defineComponent({
     const handleDefaultMergeCells = () => {
       const { mergeCells } = props
       if (mergeCells) {
-        tableMethods.setMergeCells(mergeCells)
+        $xeTable.setMergeCells(mergeCells)
       }
     }
 
     const handleDefaultMergeFooterItems = () => {
       const { mergeFooterItems } = props
       if (mergeFooterItems) {
-        tableMethods.setMergeFooterItems(mergeFooterItems)
+        $xeTable.setMergeFooterItems(mergeFooterItems)
       }
     }
 
@@ -2765,7 +2741,7 @@ export default defineComponent({
      */
     const loadTableData = (datas: any[], isReset: boolean) => {
       const { keepSource, treeConfig } = props
-      const { editStore, scrollYLoad: oldScrollYLoad } = reactData
+      const { scrollYLoad: oldScrollYLoad } = reactData
       const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
       const treeOpts = computeTreeOpts.value
       const { transform } = treeOpts
@@ -2815,8 +2791,8 @@ export default defineComponent({
       scrollXStore.endIndex = 1
       reactData.isRowLoading = true
       reactData.scrollVMLoading = false
-      editStore.insertMaps = {}
-      editStore.removeMaps = {}
+      internalData.insertRowMaps = {}
+      internalData.removeRowMaps = {}
       const sYLoad = updateScrollYStatus(fullData)
       reactData.isDragColMove = false
       reactData.isDragRowMove = false
@@ -2838,10 +2814,10 @@ export default defineComponent({
         $xeTable.clearCellAreas()
         $xeTable.clearCopyCellArea()
       }
-      tableMethods.clearMergeCells()
-      tableMethods.clearMergeFooterItems()
-      tablePrivateMethods.handleTableData(true)
-      tableMethods.updateFooter()
+      $xeTable.clearMergeCells()
+      $xeTable.clearMergeFooterItems()
+      $xeTable.handleTableData(true)
+      $xeTable.updateFooter()
       return nextTick().then(() => {
         updateHeight()
         updateStyle()
@@ -2875,20 +2851,20 @@ export default defineComponent({
         }
 
         handleReserveStatus()
-        tablePrivateMethods.checkSelectionStatus()
+        $xeTable.checkSelectionStatus()
         return new Promise<void>(resolve => {
           nextTick()
-            .then(() => tableMethods.recalculate())
+            .then(() => $xeTable.recalculate())
             .then(() => {
               let targetScrollLeft = lastScrollLeft
               let targetScrollTop = lastScrollTop
-              const sXOpts = computeSXOpts.value
-              const sYOpts = computeSYOpts.value
+              const virtualXOpts = computeVirtualXOpts.value
+              const virtualYOpts = computeVirtualYOpts.value
               // 是否在更新数据之后自动滚动重置滚动条
-              if (sXOpts.scrollToLeftOnChange) {
+              if (virtualXOpts.scrollToLeftOnChange) {
                 targetScrollLeft = 0
               }
-              if (sYOpts.scrollToTopOnChange) {
+              if (virtualYOpts.scrollToTopOnChange) {
                 targetScrollTop = 0
               }
               reactData.isRowLoading = false
@@ -2924,7 +2900,7 @@ export default defineComponent({
       handleDefaultTreeExpand()
       handleDefaultMergeCells()
       handleDefaultMergeFooterItems()
-      nextTick(() => setTimeout(() => tableMethods.recalculate()))
+      nextTick(() => setTimeout(() => $xeTable.recalculate()))
     }
 
     /**
@@ -2996,7 +2972,7 @@ export default defineComponent({
       const centerList: VxeTableDefines.ColumnInfo[] = []
       const rightList: VxeTableDefines.ColumnInfo[] = []
       const { isGroup, columnStore } = reactData
-      const sXOpts = computeSXOpts.value
+      const virtualXOpts = computeVirtualXOpts.value
       const { collectColumn, tableFullColumn, scrollXStore, fullColumnIdData } = internalData
       // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
       if (isGroup) {
@@ -3052,7 +3028,7 @@ export default defineComponent({
       }
       const visibleColumn = leftList.concat(centerList).concat(rightList)
       // 如果gt为0，则总是启用
-      const scrollXLoad = !!sXOpts.enabled && sXOpts.gt > -1 && (sXOpts.gt === 0 || sXOpts.gt < tableFullColumn.length)
+      const scrollXLoad = !!virtualXOpts.enabled && virtualXOpts.gt > -1 && (virtualXOpts.gt === 0 || virtualXOpts.gt < tableFullColumn.length)
       reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
       Object.assign(columnStore, { leftList, centerList, rightList })
       if (scrollXLoad) {
@@ -3168,12 +3144,12 @@ export default defineComponent({
 
     const updateScrollYStatus = (fullData?: any[]) => {
       const { treeConfig } = props
-      const sYOpts = computeSYOpts.value
+      const virtualYOpts = computeVirtualYOpts.value
       const treeOpts = computeTreeOpts.value
       const { transform } = treeOpts
       const allList = fullData || internalData.tableFullData
       // 如果gt为0，则总是启用
-      const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt < allList.length)
+      const scrollYLoad = (transform || !treeConfig) && !!virtualYOpts.enabled && virtualYOpts.gt > -1 && (virtualYOpts.gt === 0 || virtualYOpts.gt < allList.length)
       reactData.scrollYLoad = scrollYLoad
       return scrollYLoad
     }
@@ -3888,9 +3864,7 @@ export default defineComponent({
        */
       revertData (rows: any, field) {
         const { keepSource, treeConfig } = props
-        const { editStore } = reactData
-        const { fullAllDataRowIdData, fullDataRowIdData, tableSourceData, sourceDataRowIdData, tableFullData, afterFullData } = internalData
-        const removeTempMaps = { ...editStore.removeMaps }
+        const { fullAllDataRowIdData, fullDataRowIdData, tableSourceData, sourceDataRowIdData, tableFullData, afterFullData, removeRowMaps } = internalData
         const treeOpts = computeTreeOpts.value
         const { transform } = treeOpts
         const { handleGetRowId } = createHandleGetRowId($xeTable)
@@ -3924,7 +3898,9 @@ export default defineComponent({
                     XEUtils.destructuring(row, XEUtils.clone(oRow, true))
                   }
                   if (!fullDataRowIdData[rowid] && $xeTable.isRemoveByRow(row)) {
-                    delete removeTempMaps[rowid]
+                    if (removeRowMaps[rowid]) {
+                      delete removeRowMaps[rowid]
+                    }
                     tableFullData.unshift(row)
                     afterFullData.unshift(row)
                     reDelFlag = true
@@ -3936,7 +3912,7 @@ export default defineComponent({
         }
         if (rows) {
           if (reDelFlag) {
-            editStore.removeMaps = removeTempMaps
+            reactData.removeRowFlag++
             $xeTable.updateFooter()
             $xeTable.cacheRowMap(false)
             $xeTable.handleTableData(treeConfig && transform)
@@ -4064,22 +4040,19 @@ export default defineComponent({
        * @param {Row} row 行对象
        */
       isInsertByRow (row) {
-        const { editStore } = reactData
         const rowid = getRowid($xeTable, row)
-        return !!editStore.insertMaps[rowid]
+        return !!reactData.insertRowFlag && !!internalData.insertRowMaps[rowid]
       },
       isRemoveByRow (row) {
-        const { editStore } = reactData
         const rowid = getRowid($xeTable, row)
-        return !!editStore.removeMaps[rowid]
+        return !!reactData.removeRowFlag && !!internalData.removeRowMaps[rowid]
       },
       /**
        * 删除所有新增的临时数据
        * @returns
        */
       removeInsertRow () {
-        const { editStore } = reactData
-        editStore.insertMaps = {}
+        internalData.insertRowMaps = {}
         return $xeTable.remove($xeTable.getInsertRecords())
       },
       /**
@@ -4118,8 +4091,8 @@ export default defineComponent({
        * @param {Number} columnIndex 索引
        */
       getColumns (columnIndex?: number): any {
-        const columns = internalData.visibleColumn
-        return XEUtils.isUndefined(columnIndex) ? columns.slice(0) : columns[columnIndex]
+        const { visibleColumn } = internalData
+        return XEUtils.isUndefined(columnIndex) ? visibleColumn.slice(0) : visibleColumn[columnIndex]
       },
       /**
        * 根据列获取列的唯一主键
@@ -4133,7 +4106,7 @@ export default defineComponent({
        * @param {String} colid 列主键
        */
       getColumnById (colid) {
-        const fullColumnIdData = internalData.fullColumnIdData
+        const { fullColumnIdData } = internalData
         return colid && fullColumnIdData[colid] ? fullColumnIdData[colid].column : null
       },
       /**
@@ -4145,7 +4118,7 @@ export default defineComponent({
         return field && fullColumnFieldData[field] ? fullColumnFieldData[field].column : null
       },
       getParentColumn (fieldOrColumn) {
-        const fullColumnIdData = internalData.fullColumnIdData
+        const { fullColumnIdData } = internalData
         const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         return column && column.parentId && fullColumnIdData[column.parentId] ? fullColumnIdData[column.parentId].column : null
       },
@@ -9013,8 +8986,8 @@ export default defineComponent({
        * 横向 X 可视渲染事件处理
        */
       triggerScrollXEvent () {
-        const sXOpts = computeSXOpts.value
-        if (sXOpts.immediate) {
+        const virtualXOpts = computeVirtualXOpts.value
+        if (virtualXOpts.immediate) {
           loadScrollXData()
         } else {
           lazyScrollXData()
@@ -9024,8 +8997,8 @@ export default defineComponent({
        * 纵向 Y 可视渲染事件处理
        */
       triggerScrollYEvent () {
-        const sYOpts = computeSYOpts.value
-        if (sYOpts.immediate) {
+        const virtualYOpts = computeVirtualYOpts.value
+        if (virtualYOpts.immediate) {
           loadScrollYData()
         } else {
           lazyScrollYData()
@@ -9218,10 +9191,9 @@ export default defineComponent({
         if (!bodyScrollElem) {
           return
         }
-
         const wheelSpeed = getWheelSpeed(reactData.lastScrollTime)
-        const deltaTop = Math.ceil((shiftKey ? deltaX : deltaY) * wheelSpeed)
-        const deltaLeft = Math.ceil((shiftKey ? deltaY : deltaX) * wheelSpeed)
+        const deltaTop = shiftKey ? 0 : Math.ceil(deltaY * wheelSpeed)
+        const deltaLeft = shiftKey ? Math.ceil((shiftKey ? (deltaY || deltaX) : deltaX) * wheelSpeed) : 0
 
         const isTopWheel = deltaTop < 0
         const currScrollTop = bodyScrollElem.scrollTop
@@ -9242,6 +9214,7 @@ export default defineComponent({
           evnt.preventDefault()
           internalData.inWheelScroll = true
           wheelScrollLeftTo(scrollLeft, (offsetLeft: number) => {
+            internalData.inWheelScroll = true
             const currLeftNum = offsetLeft
             setScrollLeft(xHandleEl, currLeftNum)
             setScrollLeft(bodyScrollElem, currLeftNum)
@@ -9258,9 +9231,10 @@ export default defineComponent({
         }
         if (isRollY) {
           evnt.preventDefault()
+          internalData.inWheelScroll = true
           wheelScrollTopTo(scrollTop - currScrollTop, (offsetTop: number) => {
-            const currTopNum = bodyScrollElem.scrollTop + offsetTop
             internalData.inWheelScroll = true
+            const currTopNum = bodyScrollElem.scrollTop + offsetTop
             setScrollTop(yHandleEl, currTopNum)
             setScrollTop(bodyScrollElem, currTopNum)
             setScrollTop(leftScrollElem, currTopNum)
@@ -10441,7 +10415,6 @@ export default defineComponent({
       nextTick(() => {
         const { data, exportConfig, importConfig, treeConfig, showOverflow } = props
         const { scrollXStore, scrollYStore } = internalData
-        const sYOpts = computeSYOpts.value
         const editOpts = computeEditOpts.value
         const treeOpts = computeTreeOpts.value
         const radioOpts = computeRadioOpts.value
@@ -10571,8 +10544,7 @@ export default defineComponent({
         Object.assign(scrollYStore, {
           startIndex: 0,
           endIndex: 0,
-          visibleSize: 0,
-          adaptive: sYOpts.adaptive !== false
+          visibleSize: 0
         })
         Object.assign(scrollXStore, {
           startIndex: 0,
