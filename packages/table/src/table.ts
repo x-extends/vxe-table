@@ -1204,6 +1204,9 @@ export default {
       const $xeTabs = $xeTable.$xeTabs
 
       return $xeTabs ? $xeTabs.reactData.resizeFlag : null
+    },
+    computeVxeLanguage () {
+      return VxeUI.getLanguage()
     }
   } as any,
   watch: {
@@ -1279,6 +1282,9 @@ export default {
       this.reLayoutFlag++
     },
     computeScrollbarYToLeft () {
+      this.reLayoutFlag++
+    },
+    computeVxeLanguage () {
       this.reLayoutFlag++
     },
     reLayoutFlag () {

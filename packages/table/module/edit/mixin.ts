@@ -2,12 +2,14 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { isEnableConf } from '../../../ui/src/utils'
 import { getCellValue, setCellValue, getRowid } from '../../src/util'
-import { browse, removeClass, addClass } from '../../../ui/src/dom'
+import { removeClass, addClass } from '../../../ui/src/dom'
 import { warnLog, errLog } from '../../../ui/src/log'
 
 import type { VxeTableConstructor, TableInternalData, VxeTableDefines, TableReactData, VxeTablePrivateMethods } from '../../../../types'
 
 const { getConfig, renderer, getI18n } = VxeUI
+
+const browseObj = XEUtils.browse()
 
 function getEditColumnModel (row: any, column: VxeTableDefines.ColumnInfo) {
   const { model, editRender } = column
@@ -849,7 +851,7 @@ export default {
             inputElem.select()
           } else {
             // 保持一致行为，光标移到末端
-            if (browse.msie) {
+            if (browseObj.msie) {
               const textRange = inputElem.createTextRange()
               textRange.collapse(false)
               textRange.select()

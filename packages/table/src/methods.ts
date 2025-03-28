@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { browse, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, getOffsetPos, setScrollTop, setScrollLeft, toCssUnit } from '../../ui/src/dom'
+import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, getOffsetPos, setScrollTop, setScrollLeft, toCssUnit } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
@@ -10,6 +10,8 @@ import { warnLog, errLog } from '../../ui/src/log'
 import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, VxeToolbarConstructor, TableInternalData, VxeGridConstructor, GridPrivateMethods, VxeTablePrivateMethods, VxeTooltipInstance, VxeTablePropTypes } from '../../../types'
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent } = VxeUI
+
+const browseObj = XEUtils.browse()
 
 const supportMaxRow = 5e6
 const customStorageKey = 'VXE_CUSTOM_STORE'
@@ -654,7 +656,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
         if (tableElem) {
           tableElem.style.width = tWidth ? `${tWidth}px` : ''
           // 兼容性处理
-          tableElem.style.paddingRight = osbWidth && fixedType && (browse['-moz'] || browse.safari) ? `${osbWidth}px` : ''
+          tableElem.style.paddingRight = osbWidth && fixedType && (browseObj['-moz'] || browseObj.safari) ? `${osbWidth}px` : ''
         }
         const emptyBlockElem = getRefElem(elemStore[`${name}-${layout}-emptyBlock`])
         if (emptyBlockElem) {
@@ -1848,7 +1850,7 @@ function hideDropTip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
  * @param {Event} evnt 事件
  * @param {Row} row 行对象
  */
-function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: MouseEvent, tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, params: any) {
+function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: MouseEvent, tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, tipElem: HTMLElement | null, params: any) {
   const reactData = $xeTable as unknown as TableReactData
 
   const tipOverEl = overflowElem || tdEl
@@ -1863,7 +1865,8 @@ function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   const customContent = contentMethod ? contentMethod(params) : null
   const useCustom = contentMethod && !XEUtils.eqNull(customContent)
   const content = useCustom ? customContent : XEUtils.toString(column.type === 'html' ? tipOverEl.innerText : tipOverEl.textContent).trim()
-  if (content && (showAll || useCustom || (tipOverEl.scrollWidth > tipOverEl.clientWidth))) {
+  const isOver = tipOverEl.scrollWidth > tipOverEl.clientWidth
+  if (content && (showAll || useCustom || isOver)) {
     Object.assign(tooltipStore, {
       row,
       column,
@@ -1873,7 +1876,7 @@ function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
     $xeTable.$nextTick(() => {
       const $tooltip = $xeTable.$refs.refTooltip as VxeTooltipInstance
       if ($tooltip && $tooltip.open) {
-        $tooltip.open(tipOverEl, formatText(content))
+        $tooltip.open(isOver ? tipOverEl : tipElem, formatText(content))
       }
     })
   }
@@ -5709,7 +5712,7 @@ const Methods = {
       return
     }
     if (tooltipStore.column !== column || !tooltipStore.visible) {
-      handleTooltip($xeTable, evnt, thEl, thEl.querySelector<HTMLElement>('.vxe-cell--title') || cellEl, params)
+      handleTooltip($xeTable, evnt, thEl, thEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), thEl.querySelector<HTMLElement>('.vxe-cell--title') || cellEl, params)
     }
   },
   /**
@@ -5740,7 +5743,7 @@ const Methods = {
       }
     }
     if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
-      handleTooltip($xeTable, evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), params)
+      handleTooltip($xeTable, evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), params)
     }
   },
   /**
@@ -5755,7 +5758,7 @@ const Methods = {
     const tdEl = evnt.currentTarget as HTMLTableCellElement
     handleTargetEnterEvent($xeTable, tooltipStore.column !== column || !!tooltipStore.row)
     if (tooltipStore.column !== column || !tooltipStore.visible) {
-      handleTooltip($xeTable, evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector('.vxe-cell--wrapper') as HTMLElement, params)
+      handleTooltip($xeTable, evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector('.vxe-cell--wrapper') as HTMLElement, params)
     }
   },
   openTooltip (target: any, content: any) {
