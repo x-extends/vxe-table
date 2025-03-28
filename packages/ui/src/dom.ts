@@ -2,8 +2,6 @@ import XEUtils from 'xe-utils'
 
 const reClsMap: { [key: string]: any } = {}
 
-export const browse = XEUtils.browse()
-
 let tpImgEl: HTMLImageElement | undefined
 
 export function initTpImg () {

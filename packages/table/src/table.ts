@@ -1,6 +1,6 @@
 import { defineComponent, h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
-import { browse, initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, getOffsetPos, setScrollTop, setScrollLeft, toCssUnit } from '../../ui/src/dom'
+import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, getOffsetPos, setScrollTop, setScrollLeft, toCssUnit } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
@@ -36,6 +36,8 @@ export default defineComponent({
     const { slots, emit } = context
 
     const xID = XEUtils.uniqueId()
+
+    const browseObj = XEUtils.browse()
 
     // 使用已安装的组件，如果未安装则不渲染
     const VxeUILoadingComponent = VxeUI.getComponent<VxeLoadingComponent>('VxeLoading')
@@ -2105,7 +2107,7 @@ export default defineComponent({
             if (tableElem) {
               tableElem.style.width = tWidth ? `${tWidth}px` : ''
               // 兼容性处理
-              tableElem.style.paddingRight = osbWidth && fixedType && (browse['-moz'] || browse.safari) ? `${osbWidth}px` : ''
+              tableElem.style.paddingRight = osbWidth && fixedType && (browseObj['-moz'] || browseObj.safari) ? `${osbWidth}px` : ''
             }
             const emptyBlockElem = getRefElem(elemStore[`${name}-${layout}-emptyBlock`])
             if (emptyBlockElem) {
@@ -6776,7 +6778,7 @@ export default defineComponent({
      * @param {Event} evnt 事件
      * @param {Row} row 行对象
      */
-    const handleTooltip = (evnt: MouseEvent, tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, params: any) => {
+    const handleTooltip = (evnt: MouseEvent, tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, tipElem: HTMLElement | null, params: any) => {
       const tipOverEl = overflowElem || tdEl
       if (!tipOverEl) {
         return nextTick()
@@ -6789,7 +6791,8 @@ export default defineComponent({
       const customContent = contentMethod ? contentMethod(params) : null
       const useCustom = contentMethod && !XEUtils.eqNull(customContent)
       const content = useCustom ? customContent : XEUtils.toString(column.type === 'html' ? tipOverEl.innerText : tipOverEl.textContent).trim()
-      if (content && (showAll || useCustom || (tipOverEl.scrollWidth > tipOverEl.clientWidth))) {
+      const isOver = tipOverEl.scrollWidth > tipOverEl.clientWidth
+      if (content && (showAll || useCustom || isOver)) {
         Object.assign(tooltipStore, {
           row,
           column,
@@ -6799,7 +6802,7 @@ export default defineComponent({
         nextTick(() => {
           const $tooltip = refTooltip.value
           if ($tooltip && $tooltip.open) {
-            $tooltip.open(tipOverEl, formatText(content))
+            $tooltip.open(isOver ? tipOverEl : tipElem, formatText(content))
           }
         })
       }
@@ -7760,7 +7763,7 @@ export default defineComponent({
           return
         }
         if (tooltipStore.column !== column || !tooltipStore.visible) {
-          handleTooltip(evnt, thEl, thEl.querySelector<HTMLElement>('.vxe-cell--title') || cellEl, params)
+          handleTooltip(evnt, thEl, thEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), thEl.querySelector<HTMLElement>('.vxe-cell--title') || cellEl, params)
         }
       },
       /**
@@ -7787,7 +7790,7 @@ export default defineComponent({
           }
         }
         if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
-          handleTooltip(evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), params)
+          handleTooltip(evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), params)
         }
       },
       /**
@@ -7799,7 +7802,7 @@ export default defineComponent({
         const tdEl = evnt.currentTarget as HTMLTableCellElement
         handleTargetEnterEvent(tooltipStore.column !== column || !!tooltipStore.row)
         if (tooltipStore.column !== column || !tooltipStore.visible) {
-          handleTooltip(evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector('.vxe-cell--wrapper') as HTMLElement, params)
+          handleTooltip(evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector('.vxe-cell--wrapper') as HTMLElement, params)
         }
       },
       handleTargetLeaveEvent () {
@@ -10314,6 +10317,9 @@ export default defineComponent({
       reLayoutFlag.value++
     })
     watch(computeScrollbarYToLeft, () => {
+      reLayoutFlag.value++
+    })
+    watch(() => VxeUI.getLanguage(), () => {
       reLayoutFlag.value++
     })
     watch(reLayoutFlag, () => {

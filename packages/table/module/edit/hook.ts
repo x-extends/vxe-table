@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { isEnableConf } from '../../../ui/src/utils'
 import { getCellValue, setCellValue, getRowid } from '../../src/util'
-import { browse, removeClass, addClass } from '../../../ui/src/dom'
+import { removeClass, addClass } from '../../../ui/src/dom'
 import { warnLog, errLog } from '../../../ui/src/log'
 
 import type { TableEditMethods, TableEditPrivateMethods, VxeTableDefines } from '../../../../types'
@@ -17,6 +17,8 @@ hooks.add('tableEditModule', {
     const { props, reactData, internalData } = $xeTable
     const { refElem } = $xeTable.getRefMaps()
     const { computeMouseOpts, computeEditOpts, computeCheckboxOpts, computeTreeOpts, computeValidOpts } = $xeTable.getComputeMaps()
+
+    const browseObj = XEUtils.browse()
 
     let editMethods = {} as TableEditMethods
     let editPrivateMethods = {} as TableEditPrivateMethods
@@ -879,7 +881,7 @@ hooks.add('tableEditModule', {
               inputElem.select()
             } else {
               // 保持一致行为，光标移到末端
-              if (browse.msie) {
+              if (browseObj.msie) {
                 const textRange = inputElem.createTextRange()
                 textRange.collapse(false)
                 textRange.select()

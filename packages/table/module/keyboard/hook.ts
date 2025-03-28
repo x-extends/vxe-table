@@ -1,16 +1,18 @@
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { getRefElem } from '../../src/util'
-import { browse, hasClass, getAbsolutePos, addClass, removeClass } from '../../../ui/src/dom'
+import { hasClass, getAbsolutePos, addClass, removeClass } from '../../../ui/src/dom'
 
 import type { TableKeyboardPrivateMethods, VxeTableDefines } from '../../../../types'
 
 const { hooks } = VxeUI
 
+const browseObj = XEUtils.browse()
+
 function getTargetOffset (target: any, container: any) {
   let offsetTop = 0
   let offsetLeft = 0
-  const triggerCheckboxLabel = !browse.firefox && hasClass(target, 'vxe-checkbox--label')
+  const triggerCheckboxLabel = !browseObj.firefox && hasClass(target, 'vxe-checkbox--label')
   if (triggerCheckboxLabel) {
     const checkboxLabelStyle = getComputedStyle(target)
     offsetTop -= XEUtils.toNumber(checkboxLabelStyle.paddingTop)
