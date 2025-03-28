@@ -10215,6 +10215,9 @@ export default defineComponent({
     watch(computeScrollbarYToLeft, () => {
       reLayoutFlag.value++
     })
+    watch(() => VxeUI.getLanguage(), () => {
+      reLayoutFlag.value++
+    })
     watch(reLayoutFlag, () => {
       nextTick(() => tableMethods.recalculate(true))
     })
