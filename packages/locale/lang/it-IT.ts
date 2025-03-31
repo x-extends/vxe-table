@@ -18,6 +18,7 @@ export default {
       scrollErrProp: 'Il parametro "{0}" non è supportato quando è abilitato lo scorrimento virtuale',
       errConflicts: 'I parametri "{0}" sono in conflitto con "{1}"',
       notSupportProp: '当启用参数 "{0}" 时不支持 "{1}"，应该为 "{2}"，否则将会出现错误',
+      notConflictProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会存在功能冲突',
       unableInsert: 'Impossibile inserire nella posizione specificata, verificare se i parametri sono corretti',
       useErr: "Si è verificato un errore durante l'installazione del modulo \"{0}\". L'ordine potrebbe essere errato. I moduli dipendenti devono essere installati prima della Tabella.",
       barUnableLink: 'La barra degli strumenti non può essere associata alla tabella',

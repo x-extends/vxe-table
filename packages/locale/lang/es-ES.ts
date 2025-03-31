@@ -18,6 +18,7 @@ export default {
       scrollErrProp: 'El parámetro "{0}" no es compatible cuando el desplazamiento virtual está habilitado.',
       errConflicts: 'El argumento "{0}" entra en conflicto con "{1}"',
       notSupportProp: '当启用参数 "{0}" 时不支持 "{1}"，应该为 "{2}"，否则将会出现错误',
+      notConflictProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会存在功能冲突',
       unableInsert: 'No se puede insertar en la ubicación especificada.',
       useErr: 'Error al instalar el módulo "{0}", posiblemente en el orden equivocado, los módulos dependientes deben ser instalados antes de la tabla.',
       barUnableLink: 'La barra de herramientas no puede asociarse con la tabla.',

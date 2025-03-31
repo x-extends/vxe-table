@@ -18,6 +18,7 @@ export default {
       scrollErrProp: '启用虚拟滚动后不支持该参数 "{0}"',
       errConflicts: '参数 "{0}" 与 "{1}" 有冲突',
       notSupportProp: '当启用参数 "{0}" 时不支持 "{1}"，应该为 "{2}"，否则将会出现错误',
+      notConflictProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会存在功能冲突',
       unableInsert: '无法插入到指定位置，请检查参数是否正确',
       useErr: '安装 "{0}" 模块时发生错误，可能顺序不正确，依赖的模块需要在 Table 之前安装',
       barUnableLink: '工具栏无法关联表格',

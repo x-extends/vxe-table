@@ -886,6 +886,7 @@ export default defineComponent({
       computeBodyMenu,
       computeFooterMenu,
       computeIsMenu,
+      computeMenuList,
       computeMenuOpts,
       computeExportOpts,
       computeImportOpts,
@@ -10439,7 +10440,7 @@ export default defineComponent({
       }
 
       nextTick(() => {
-        const { data, exportConfig, importConfig, treeConfig, showOverflow } = props
+        const { data, exportConfig, importConfig, treeConfig, showOverflow, highlightCurrentRow, highlightCurrentColumn } = props
         const { scrollXStore, scrollYStore } = internalData
         const editOpts = computeEditOpts.value
         const treeOpts = computeTreeOpts.value
@@ -10451,6 +10452,10 @@ export default defineComponent({
         const mouseOpts = computeMouseOpts.value
         const exportOpts = computeExportOpts.value
         const importOpts = computeImportOpts.value
+        const currentRowOpts = computeCurrentRowOpts.value
+        const currentColumnOpts = computeCurrentColumnOpts.value
+        const virtualXOpts = computeVirtualXOpts.value
+        const virtualYOpts = computeVirtualYOpts.value
 
         if (props.rowId) {
           warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
@@ -10551,6 +10556,28 @@ export default defineComponent({
         }
         if (checkboxOpts.halfField) {
           warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
+        }
+
+        if ((rowOpts.isCurrent || highlightCurrentRow) && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
+          warnLog('vxe.error.notConflictProp', ['row-config.isCurrent', 'current-row-config.isFollowSelected'])
+        }
+        if ((columnOpts.isCurrent || highlightCurrentColumn) && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
+          warnLog('vxe.error.notConflictProp', ['column-config.isCurrent', 'current-column-config.isFollowSelected'])
+        }
+
+        // 如果不支持虚拟滚动
+        if (props.spanMethod) {
+          if (virtualXOpts.enabled) {
+            warnLog('vxe.error.notConflictProp', ['span-method', 'virtual-x-config.enabled=false'])
+          }
+          if (virtualYOpts.enabled) {
+            warnLog('vxe.error.notConflictProp', ['span-method', 'virtual-y-config.enabled=false'])
+          }
+        }
+        if (props.footerSpanMethod) {
+          if (virtualXOpts.enabled) {
+            warnLog('vxe.error.notConflictProp', ['footer-span-method', 'virtual-x-config.enabled=false'])
+          }
         }
 
         // 检查是否有安装需要的模块

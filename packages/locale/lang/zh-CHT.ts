@@ -18,6 +18,7 @@ export default {
       scrollErrProp: '啟用虛擬滾動後不支援此參數 "{0}"',
       errConflicts: '參數 "{0}" 與 "{1}" 有衝突',
       notSupportProp: '当启用参数 "{0}" 时不支持 "{1}"，应该为 "{2}"，否则将会出现错误',
+      notConflictProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会存在功能冲突',
       unableInsert: '無法插入指定位置，請檢查參數是否正確',
       useErr: '安裝 "{0}" 模組時發生錯誤，可能順序不正確，依賴的模組需要在 Table 之前安裝',
       barUnableLink: '工具列無法關聯表格',

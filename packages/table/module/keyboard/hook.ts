@@ -455,27 +455,42 @@ hooks.add('tableKeyboardModule', {
       moveArrowSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
         const { highlightCurrentRow, highlightCurrentColumn } = props
         const rowOpts = computeRowOpts.value
+        const currentRowOpts = computeCurrentRowOpts.value
         const columnOpts = computeColumnOpts.value
-        handleMoveSelected(evnt, args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow)
-        // 当前行按键上下移动
-        if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
-          $xeTable.moveCurrentRow(isUpArrow, isDwArrow, evnt)
+        const currentColumnOpts = computeCurrentColumnOpts.value
+        const params = handleMoveSelected(evnt, args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow)
+        if (rowOpts.isCurrent || highlightCurrentRow) {
+          if (currentRowOpts.isFollowSelected) {
+            $xeTable.triggerCurrentRowEvent(evnt, params)
+          } else {
+            // 当前行按键上下移动
+            if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
+              $xeTable.moveCurrentRow(isUpArrow, isDwArrow, evnt)
+            }
+          }
         }
-        // 当前行按键左右移动
-        if ((isLeftArrow || isRightArrow) && (columnOpts.isCurrent || highlightCurrentColumn)) {
-          $xeTable.moveCurrentColumn(isLeftArrow, isRightArrow, evnt)
+        if (columnOpts.isCurrent || highlightCurrentColumn) {
+          if (currentColumnOpts.isFollowSelected) {
+            $xeTable.triggerCurrentColumnEvent(evnt, params)
+          } else {
+            // 当前行按键左右移动
+            if ((isLeftArrow || isRightArrow) && (columnOpts.isCurrent || highlightCurrentColumn)) {
+              $xeTable.moveCurrentColumn(isLeftArrow, isRightArrow, evnt)
+            }
+          }
         }
       },
       moveEnterSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
+        const { highlightCurrentRow, highlightCurrentColumn } = props
         const rowOpts = computeRowOpts.value
         const currentRowOpts = computeCurrentRowOpts.value
         const columnOpts = computeColumnOpts.value
         const currentColumnOpts = computeCurrentColumnOpts.value
         const params = handleMoveSelected(evnt, args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow)
-        if ((rowOpts.isCurrent && currentRowOpts.isFollowSelected)) {
+        if (((rowOpts.isCurrent || highlightCurrentRow) && currentRowOpts.isFollowSelected)) {
           $xeTable.triggerCurrentRowEvent(evnt, params)
         }
-        if (columnOpts.isCurrent && currentColumnOpts.isFollowSelected) {
+        if ((columnOpts.isCurrent || highlightCurrentColumn) && currentColumnOpts.isFollowSelected) {
           $xeTable.triggerCurrentColumnEvent(evnt, params)
         }
       },
