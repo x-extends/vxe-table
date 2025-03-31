@@ -500,11 +500,11 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   }
   if (xLeftCornerEl) {
     xLeftCornerEl.style.width = scrollbarXToTop ? `${osbWidth}px` : ''
-    xLeftCornerEl.style.display = scrollbarXToTop ? (osbWidth && osbHeight ? 'block' : '') : ''
+    xLeftCornerEl.style.display = scrollbarXToTop ? (overflowX && osbHeight ? 'block' : '') : ''
   }
   if (xRightCornerEl) {
     xRightCornerEl.style.width = scrollbarXToTop ? '' : `${osbWidth}px`
-    xRightCornerEl.style.display = scrollbarXToTop ? '' : (osbWidth && osbHeight ? 'block' : '')
+    xRightCornerEl.style.display = scrollbarXToTop ? '' : (overflowX && osbHeight ? 'block' : '')
   }
 
   const scrollYVirtualEl = $xeTable.$refs.refScrollYVirtualElem as HTMLDivElement
@@ -516,7 +516,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const yTopCornerEl = $xeTable.$refs.refScrollYTopCornerElem as HTMLDivElement
   if (yTopCornerEl) {
     yTopCornerEl.style.height = `${headerHeight}px`
-    yTopCornerEl.style.display = headerHeight ? 'block' : ''
+    yTopCornerEl.style.display = overflowY && headerHeight ? 'block' : ''
   }
   const yWrapperEl = $xeTable.$refs.refScrollYWrapperElem as HTMLDivElement
   if (yWrapperEl) {
@@ -527,7 +527,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   if (yBottomCornerEl) {
     yBottomCornerEl.style.height = `${footerHeight}px`
     yBottomCornerEl.style.top = `${headerHeight + bodyHeight}px`
-    yBottomCornerEl.style.display = footerHeight ? 'block' : ''
+    yBottomCornerEl.style.display = overflowY && footerHeight ? 'block' : ''
   }
 
   const rowExpandEl = $xeTable.$refs.refRowExpandElem as HTMLDivElement
@@ -5349,14 +5349,26 @@ const Methods = {
    */
   handleGlobalKeydownEvent (evnt: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
     const internalData = $xeTable as unknown as TableInternalData
+    const reactData = $xeTable as unknown as TableReactData
     const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
 
     // 该行为只对当前激活的表格有效
-    if (this.isActivated) {
-      this.preventEvent(evnt, 'event.keydown', null, () => {
+    if (internalData.isActivated) {
+      $xeTable.preventEvent(evnt, 'event.keydown', null, () => {
+        const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow, highlightCurrentColumn } = props
+        const { ctxMenuStore, editStore, currentRow } = reactData
         const { afterFullData } = internalData
-        const { filterStore, isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig, mouseOpts, keyboardConfig, keyboardOpts, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu, rowOpts } = this
+        const isMenu = $xeTable.computeIsMenu
+        const bodyMenu = $xeTable.computeBodyMenu
+        const keyboardOpts = $xeTable.computeKeyboardOpts
+        const mouseOpts = $xeTable.computeMouseOpts
+        const editOpts = $xeTable.computeEditOpts
+        const treeOpts = $xeTable.computeTreeOpts
+        const menuList = $xeTable.computeMenuList
+        const rowOpts = $xeTable.computeRowOpts
+        const columnOpts = $xeTable.computeColumnOpts
         const { selected, actived } = editStore
         const { keyCode } = evnt
         const hasBackspaceKey = keyCode === 8
@@ -5376,33 +5388,44 @@ const Methods = {
         const hasShiftKey = evnt.shiftKey
         const hasAltKey = evnt.altKey
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
-        const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
+        const operCtxMenu = isMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
         const childrenField = treeOpts.children || treeOpts.childrenField
         const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
-        if (filterStore.visible) {
-          if (isEsc) {
-            this.closeFilter()
-          }
-          return
-        }
         if (operCtxMenu) {
           // 如果配置了右键菜单; 支持方向键操作、回车
           evnt.preventDefault()
           if (ctxMenuStore.showChild && hasChildrenList(ctxMenuStore.selected)) {
-            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
+            $xeTable.moveCtxMenu(evnt, ctxMenuStore, 'selectChild', isLeftArrow, false, ctxMenuStore.selected.children)
           } else {
-            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
+            $xeTable.moveCtxMenu(evnt, ctxMenuStore, 'selected', isRightArrow, true, menuList)
           }
-        } else if (keyboardConfig && mouseConfig && mouseOpts.area && this.handleKeyboardCellAreaEvent) {
-          this.handleKeyboardCellAreaEvent(evnt)
+        } else if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKeyboardCellAreaEvent) {
+          $xeTable.handleKeyboardCellAreaEvent(evnt)
+        } else if (isEsc) {
+          // 如果按下了 Esc 键，关闭快捷菜单、筛选
+          if ($xeTable.closeMenu) {
+            $xeTable.closeMenu()
+          }
+          $xeTable.closeFilter()
+          if (keyboardConfig && keyboardOpts.isEsc) {
+            // 如果是激活编辑状态，则取消编辑
+            if (actived.row) {
+              const params = actived.args
+              $xeTable.handleClearEdit(evnt)
+              // 如果配置了选中功能，则为选中状态
+              if (mouseOpts.selected) {
+                $xeTable.$nextTick(() => $xeTable.handleSelected(params, evnt))
+              }
+            }
+          }
         } else if (keyboardConfig && isSpacebar && keyboardOpts.isChecked && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'radio')) {
           // 空格键支持选中复选框
           evnt.preventDefault()
           if (selected.column.type === 'checkbox') {
-            this.handleToggleCheckRowEvent(evnt, selected.args)
+            $xeTable.handleToggleCheckRowEvent(evnt, selected.args)
           } else {
-            this.triggerRadioRowEvent(evnt, selected.args)
+            $xeTable.triggerRadioRowEvent(evnt, selected.args)
           }
         } else if (isF2 && isEnableConf(editConfig)) {
           if (!isEditStatus) {
@@ -5410,12 +5433,12 @@ const Methods = {
             if (selected.row && selected.column) {
               evnt.stopPropagation()
               evnt.preventDefault()
-              this.handleEdit(selected.args, evnt)
+              $xeTable.handleEdit(selected.args, evnt)
             }
           }
         } else if (isContextMenu) {
           // 如果按下上下文键
-          internalData._keyCtx = selected.row && selected.column && bodyCtxMenu.length
+          internalData._keyCtx = selected.row && selected.column && bodyMenu.length
           clearTimeout(internalData.keyCtxTimeout)
           internalData.keyCtxTimeout = setTimeout(() => {
             internalData._keyCtx = false
@@ -5427,10 +5450,10 @@ const Methods = {
             // 如果是激活编辑状态，则取消编辑
             if (actived.row) {
               const params = actived.args
-              this.handleClearEdit(evnt)
+              $xeTable.handleClearEdit(evnt)
               // 如果配置了选中功能，则为选中状态
               if (mouseConfig && mouseOpts.selected) {
-                this.$nextTick(() => this.handleSelected(params, evnt))
+                $xeTable.$nextTick(() => $xeTable.handleSelected(params, evnt))
               }
             }
           } else {
@@ -5439,13 +5462,13 @@ const Methods = {
               const activeParams = selected.row ? selected.args : actived.args
               if (hasShiftKey) {
                 if (keyboardOpts.enterToTab) {
-                  this.moveTabSelected(activeParams, hasShiftKey, evnt)
+                  $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
                 } else {
-                  this.moveEnterSelected(activeParams, isLeftArrow, true, isRightArrow, false, evnt)
+                  $xeTable.moveEnterSelected(activeParams, isLeftArrow, true, isRightArrow, false, evnt)
                 }
               } else {
                 if (keyboardOpts.enterToTab) {
-                  this.moveTabSelected(activeParams, hasShiftKey, evnt)
+                  $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
                 } else {
                   const activeRow = selected.row || actived.row
                   const activeColumn = selected.column || actived.column
@@ -5473,7 +5496,7 @@ const Methods = {
                         return
                       }
                     }
-                    this.moveEnterSelected(activeParams, isLeftArrow, false, isRightArrow, true, evnt)
+                    $xeTable.moveEnterSelected(activeParams, isLeftArrow, false, isRightArrow, true, evnt)
                     if (enterMethod) {
                       enterMethod(etrParams)
                     }
@@ -5486,26 +5509,40 @@ const Methods = {
               if (childrens && childrens.length) {
                 evnt.preventDefault()
                 const targetRow = childrens[0]
-                const params = { $table: this, row: targetRow }
-                this.setTreeExpand(currentRow, true)
-                  .then(() => this.scrollToRow(targetRow))
-                  .then(() => this.triggerCurrentRowEvent(evnt, params))
+                const params = {
+                  $table: $xeTable,
+                  row: targetRow,
+                  rowIndex: $xeTable.getRowIndex(targetRow),
+                  $rowIndex: $xeTable.getVMRowIndex(targetRow)
+                }
+                $xeTable.setTreeExpand(currentRow, true)
+                  .then(() => $xeTable.scrollToRow(targetRow))
+                  .then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
               }
             }
           }
         } else if (operArrow && keyboardConfig && keyboardOpts.isArrow) {
           if (!isEditStatus) {
             // 如果按下了方向键
-            if (selected.row && selected.column) {
+            if (mouseOpts.selected && selected.row && selected.column) {
               $xeTable.moveArrowSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
+            } else {
+              // 当前行按键上下移动
+              if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
+                $xeTable.moveCurrentRow(isUpArrow, isDwArrow, evnt)
+              }
+              // 当前行按键左右移动
+              if ((isLeftArrow || isRightArrow) && (columnOpts.isCurrent || highlightCurrentColumn)) {
+                $xeTable.moveCurrentColumn(isLeftArrow, isRightArrow, evnt)
+              }
             }
           }
         } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
           // 如果按下了 Tab 键切换
           if (selected.row || selected.column) {
-            this.moveTabSelected(selected.args, hasShiftKey, evnt)
+            $xeTable.moveTabSelected(selected.args, hasShiftKey, evnt)
           } else if (actived.row || actived.column) {
-            this.moveTabSelected(actived.args, hasShiftKey, evnt)
+            $xeTable.moveTabSelected(actived.args, hasShiftKey, evnt)
           }
         } else if (keyboardConfig && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selected.row || selected.column)) {
           // 如果是删除键
@@ -5513,10 +5550,10 @@ const Methods = {
             const { delMethod } = keyboardOpts
             const params = {
               row: selected.row,
-              rowIndex: this.getRowIndex(selected.row),
+              rowIndex: $xeTable.getRowIndex(selected.row),
               column: selected.column,
-              columnIndex: this.getColumnIndex(selected.column),
-              $table: this,
+              columnIndex: $xeTable.getColumnIndex(selected.column),
+              $table: $xeTable,
               $grid: $xeGrid
             }
             // 是否被禁用
@@ -5527,8 +5564,8 @@ const Methods = {
                 setCellValue(selected.row, selected.column, null)
               }
               // 如果按下 del 键，更新表尾数据
-              this.updateFooter()
-              this.emitEvent('cell-delete-value', params, evnt)
+              $xeTable.updateFooter()
+              $xeTable.dispatchEvent('cell-delete-value', params, evnt)
             }
           }
         } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selected.row || selected.column)) {
@@ -5538,10 +5575,10 @@ const Methods = {
             if (keyboardOpts.isDel && isEnableConf(editConfig) && (selected.row || selected.column)) {
               const params = {
                 row: selected.row,
-                rowIndex: this.getRowIndex(selected.row),
+                rowIndex: $xeTable.getRowIndex(selected.row),
                 column: selected.column,
-                columnIndex: this.getColumnIndex(selected.column),
-                $table: this,
+                columnIndex: $xeTable.getColumnIndex(selected.column),
+                $table: $xeTable,
                 $grid: $xeGrid
               }
               // 是否被禁用
@@ -5553,27 +5590,27 @@ const Methods = {
                   if (editMode !== 'insert') {
                     setCellValue(selected.row, selected.column, null)
                   }
-                  this.handleEdit(selected.args, evnt)
+                  $xeTable.handleEdit(selected.args, evnt)
                 }
-                this.emitEvent('cell-backspace-value', params, evnt)
+                $xeTable.dispatchEvent('cell-backspace-value', params, evnt)
               }
             }
           }
         } else if (hasBackspaceKey && keyboardConfig && treeConfig && keyboardOpts.isBack && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
           // 如果树形表格回退键关闭当前行返回父节点
-          const { parent: parentRow } = XEUtils.findTree(this.afterTreeFullData, item => item === currentRow, { children: childrenField })
+          const { parent: parentRow } = XEUtils.findTree(internalData.afterTreeFullData, item => item === currentRow, { children: childrenField })
           if (parentRow) {
             evnt.preventDefault()
             const params = {
               row: parentRow,
-              rowIndex: this.getRowIndex(parentRow),
-              $rowIndex: this.getVMRowIndex(parentRow),
-              $table: this,
+              rowIndex: $xeTable.getRowIndex(parentRow),
+              $rowIndex: $xeTable.getVMRowIndex(parentRow),
+              $table: $xeTable,
               $grid: $xeGrid
             }
-            this.setTreeExpand(parentRow, false)
-              .then(() => this.scrollToRow(parentRow))
-              .then(() => this.triggerCurrentRowEvent(evnt, params))
+            $xeTable.setTreeExpand(parentRow, false)
+              .then(() => $xeTable.scrollToRow(parentRow))
+              .then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
           }
         } else if (keyboardConfig && keyboardOpts.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
           const { editMethod } = keyboardOpts
@@ -5586,10 +5623,10 @@ const Methods = {
             const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
             const params = {
               row: selected.row,
-              rowIndex: this.getRowIndex(selected.row),
+              rowIndex: $xeTable.getRowIndex(selected.row),
               column: selected.column,
-              columnIndex: this.getColumnIndex(selected.column),
-              $table: this,
+              columnIndex: $xeTable.getColumnIndex(selected.column),
+              $table: $xeTable,
               $grid: $xeGrid
             }
             if (!beforeEditMethod || beforeEditMethod(params)) {
@@ -5597,12 +5634,12 @@ const Methods = {
                 editMethod(params)
               } else {
                 setCellValue(selected.row, selected.column, null)
-                this.handleEdit(selected.args, evnt)
+                $xeTable.handleEdit(selected.args, evnt)
               }
             }
           }
         }
-        this.emitEvent('keydown', {}, evnt)
+        $xeTable.dispatchEvent('keydown', {}, evnt)
       })
     }
   },
@@ -8961,6 +8998,7 @@ const Methods = {
 
     const { isGroup, scrollXLoad, overflowX, scrollXWidth } = reactData
     const { visibleColumn, scrollXStore, elemStore, fullColumnIdData } = internalData
+    const mouseOpts = $xeTable.computeMouseOpts
     const tableBody = $xeTable.$refs.refTableBody
     const tableBodyElem = tableBody ? (tableBody as any).$el as HTMLDivElement : null
     if (tableBodyElem) {
@@ -9024,6 +9062,10 @@ const Methods = {
       if (scrollXSpaceEl) {
         scrollXSpaceEl.style.width = `${ySpaceWidth}px`
       }
+
+      if (isScrollXBig && mouseOpts.area) {
+        errLog('vxe.error.notProp', ['mouse-config.area'])
+      }
       $xeTable.$nextTick(() => {
         updateStyle($xeTable)
       })
@@ -9048,6 +9090,7 @@ const Methods = {
     const { isAllOverflow, scrollYLoad, expandColumn } = reactData
     const { scrollYStore, elemStore, isResizeCellHeight, afterFullData, fullAllDataRowIdData, rowExpandedMaps } = internalData
     const { startIndex } = scrollYStore
+    const mouseOpts = $xeTable.computeMouseOpts
     const expandOpts = $xeTable.computeExpandOpts
     const rowOpts = $xeTable.computeRowOpts
     const cellOpts = $xeTable.computeCellOpts
@@ -9129,6 +9172,10 @@ const Methods = {
     reactData.scrollYTop = scrollYTop
     reactData.scrollYHeight = scrollYHeight
     reactData.isScrollYBig = isScrollYBig
+
+    if (isScrollYBig && mouseOpts.area) {
+      errLog('vxe.error.notProp', ['mouse-config.area'])
+    }
     return $xeTable.$nextTick().then(() => {
       updateStyle($xeTable)
     })

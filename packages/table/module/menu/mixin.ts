@@ -6,7 +6,7 @@ import { warnLog } from '../../../ui/src/log'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods, VxeGridConstructor, GridPrivateMethods, TableInternalData } from '../../../../types'
 
-const { menus } = VxeUI
+const { menus, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
 
 export default {
   methods: {
@@ -23,17 +23,19 @@ export default {
       return this.$nextTick()
     },
     // 处理菜单的移动
-    moveCtxMenu (evnt: any, keyCode: any, ctxMenuStore: any, property: any, operKey: any, operRest: any, menuList: any) {
+    moveCtxMenu (evnt: KeyboardEvent, ctxMenuStore: any, property: 'selectChild' | 'selected', hasOper: boolean, operRest: any, menuList: any[]) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       let selectItem
       const selectIndex = XEUtils.findIndexOf(menuList, item => ctxMenuStore[property] === item)
-      if (keyCode === operKey) {
+      if (hasOper) {
         if (operRest && hasChildrenList(ctxMenuStore.selected)) {
           ctxMenuStore.showChild = true
         } else {
           ctxMenuStore.showChild = false
           ctxMenuStore.selectChild = null
         }
-      } else if (keyCode === 38) {
+      } else if (globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ARROW_UP)) {
         for (let len = selectIndex - 1; len >= 0; len--) {
           if (menuList[len].visible !== false) {
             selectItem = menuList[len]
@@ -41,7 +43,7 @@ export default {
           }
         }
         ctxMenuStore[property] = selectItem || menuList[menuList.length - 1]
-      } else if (keyCode === 40) {
+      } else if (globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ARROW_DOWN)) {
         for (let index = selectIndex + 1; index < menuList.length; index++) {
           if (menuList[index].visible !== false) {
             selectItem = menuList[index]
@@ -49,8 +51,8 @@ export default {
           }
         }
         ctxMenuStore[property] = selectItem || menuList[0]
-      } else if (ctxMenuStore[property] && (keyCode === 13 || keyCode === 32)) {
-        this.ctxMenuLinkEvent(evnt, ctxMenuStore[property])
+      } else if (ctxMenuStore[property] && (globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ENTER) || globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.SPACEBAR))) {
+        $xeTable.ctxMenuLinkEvent(evnt, ctxMenuStore[property])
       }
     },
     /**
