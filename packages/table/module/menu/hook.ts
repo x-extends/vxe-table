@@ -140,7 +140,7 @@ hooks.add('tableMenuModule', {
           }
           ctxMenuStore[property] = selectItem || menuList[0]
         } else if (ctxMenuStore[property] && (globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ENTER) || globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.SPACEBAR))) {
-          menuPrivateMethods.ctxMenuLinkEvent(evnt, ctxMenuStore[property])
+          $xeTable.ctxMenuLinkEvent(evnt, ctxMenuStore[property])
         }
       },
       handleOpenMenuEvent,

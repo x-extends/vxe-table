@@ -1951,11 +1951,11 @@ export default defineComponent({
       }
       if (xLeftCornerEl) {
         xLeftCornerEl.style.width = scrollbarXToTop ? `${osbWidth}px` : ''
-        xLeftCornerEl.style.display = scrollbarXToTop ? (osbWidth && osbHeight ? 'block' : '') : ''
+        xLeftCornerEl.style.display = scrollbarXToTop ? (overflowX && osbHeight ? 'block' : '') : ''
       }
       if (xRightCornerEl) {
         xRightCornerEl.style.width = scrollbarXToTop ? '' : `${osbWidth}px`
-        xRightCornerEl.style.display = scrollbarXToTop ? '' : (osbWidth && osbHeight ? 'block' : '')
+        xRightCornerEl.style.display = scrollbarXToTop ? '' : (overflowX && osbHeight ? 'block' : '')
       }
 
       const scrollYVirtualEl = refScrollYVirtualElem.value
@@ -1967,7 +1967,7 @@ export default defineComponent({
       const yTopCornerEl = refScrollYTopCornerElem.value
       if (yTopCornerEl) {
         yTopCornerEl.style.height = `${headerHeight}px`
-        yTopCornerEl.style.display = headerHeight ? 'block' : ''
+        yTopCornerEl.style.display = overflowY && headerHeight ? 'block' : ''
       }
       const yWrapperEl = refScrollYWrapperElem.value
       if (yWrapperEl) {
@@ -1978,7 +1978,7 @@ export default defineComponent({
       if (yBottomCornerEl) {
         yBottomCornerEl.style.height = `${footerHeight}px`
         yBottomCornerEl.style.top = `${headerHeight + bodyHeight}px`
-        yBottomCornerEl.style.display = footerHeight ? 'block' : ''
+        yBottomCornerEl.style.display = overflowY && footerHeight ? 'block' : ''
       }
 
       const rowExpandEl = refRowExpandElem.value
@@ -6231,8 +6231,8 @@ export default defineComponent({
     const handleGlobalKeydownEvent = (evnt: KeyboardEvent) => {
       // 该行为只对当前激活的表格有效
       if (internalData.isActivated) {
-        tablePrivateMethods.preventEvent(evnt, 'event.keydown', null, () => {
-          const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow } = props
+        $xeTable.preventEvent(evnt, 'event.keydown', null, () => {
+          const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow, highlightCurrentColumn } = props
           const { ctxMenuStore, editStore, currentRow } = reactData
           const { afterFullData } = internalData
           const isMenu = computeIsMenu.value
@@ -6243,6 +6243,7 @@ export default defineComponent({
           const treeOpts = computeTreeOpts.value
           const menuList = computeMenuList.value
           const rowOpts = computeRowOpts.value
+          const columnOpts = computeColumnOpts.value
           const { selected, actived } = editStore
           const childrenField = treeOpts.children || treeOpts.childrenField
           const keyCode = evnt.keyCode
@@ -6281,7 +6282,7 @@ export default defineComponent({
             if ($xeTable.closeMenu) {
               $xeTable.closeMenu()
             }
-            tableMethods.closeFilter()
+            $xeTable.closeFilter()
             if (keyboardConfig && keyboardOpts.isEsc) {
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
@@ -6387,20 +6388,29 @@ export default defineComponent({
                   const params = {
                     $table: $xeTable,
                     row: targetRow,
-                    rowIndex: tableMethods.getRowIndex(targetRow),
-                    $rowIndex: tableMethods.getVMRowIndex(targetRow)
+                    rowIndex: $xeTable.getRowIndex(targetRow),
+                    $rowIndex: $xeTable.getVMRowIndex(targetRow)
                   }
-                  tableMethods.setTreeExpand(currentRow, true)
-                    .then(() => tableMethods.scrollToRow(targetRow))
-                    .then(() => tablePrivateMethods.triggerCurrentRowEvent(evnt, params))
+                  $xeTable.setTreeExpand(currentRow, true)
+                    .then(() => $xeTable.scrollToRow(targetRow))
+                    .then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
                 }
               }
             }
           } else if (operArrow && keyboardConfig && keyboardOpts.isArrow) {
             if (!isEditStatus) {
               // 如果按下了方向键
-              if (selected.row && selected.column) {
+              if (mouseOpts.selected && selected.row && selected.column) {
                 $xeTable.moveArrowSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
+              } else {
+                // 当前行按键上下移动
+                if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
+                  $xeTable.moveCurrentRow(isUpArrow, isDwArrow, evnt)
+                }
+                // 当前行按键左右移动
+                if ((isLeftArrow || isRightArrow) && (columnOpts.isCurrent || highlightCurrentColumn)) {
+                  $xeTable.moveCurrentColumn(isLeftArrow, isRightArrow, evnt)
+                }
               }
             }
           } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
@@ -6441,9 +6451,9 @@ export default defineComponent({
               if (keyboardOpts.isDel && isEnableConf(editConfig) && (selected.row || selected.column)) {
                 const params = {
                   row: selected.row,
-                  rowIndex: tableMethods.getRowIndex(selected.row),
+                  rowIndex: $xeTable.getRowIndex(selected.row),
                   column: selected.column,
-                  columnIndex: tableMethods.getColumnIndex(selected.column),
+                  columnIndex: $xeTable.getColumnIndex(selected.column),
                   $table: $xeTable,
                   $grid: $xeGrid
                 }
@@ -6466,14 +6476,14 @@ export default defineComponent({
               evnt.preventDefault()
               const params = {
                 row: parentRow,
-                rowIndex: tableMethods.getRowIndex(parentRow),
-                $rowIndex: tableMethods.getVMRowIndex(parentRow),
+                rowIndex: $xeTable.getRowIndex(parentRow),
+                $rowIndex: $xeTable.getVMRowIndex(parentRow),
                 $table: $xeTable,
                 $grid: $xeGrid
               }
-              tableMethods.setTreeExpand(parentRow, false)
-                .then(() => tableMethods.scrollToRow(parentRow))
-                .then(() => tablePrivateMethods.triggerCurrentRowEvent(evnt, params))
+              $xeTable.setTreeExpand(parentRow, false)
+                .then(() => $xeTable.scrollToRow(parentRow))
+                .then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
             }
           } else if (keyboardConfig && isEnableConf(editConfig) && keyboardOpts.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
             const { editMode, editMethod } = keyboardOpts
@@ -6486,9 +6496,9 @@ export default defineComponent({
               const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
               const params = {
                 row: selected.row,
-                rowIndex: tableMethods.getRowIndex(selected.row),
+                rowIndex: $xeTable.getRowIndex(selected.row),
                 column: selected.column,
-                columnIndex: tableMethods.getColumnIndex(selected.column),
+                columnIndex: $xeTable.getColumnIndex(selected.column),
                 $table: $xeTable,
                 $grid: $xeGrid
               }
@@ -9354,6 +9364,7 @@ export default defineComponent({
       updateScrollXSpace () {
         const { isGroup, scrollXLoad, overflowX, scrollXWidth } = reactData
         const { visibleColumn, scrollXStore, elemStore, fullColumnIdData } = internalData
+        const mouseOpts = computeMouseOpts.value
         const tableBody = refTableBody.value
         const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
         if (tableBodyElem) {
@@ -9417,6 +9428,10 @@ export default defineComponent({
           if (scrollXSpaceEl) {
             scrollXSpaceEl.style.width = `${ySpaceWidth}px`
           }
+
+          if (isScrollXBig && mouseOpts.area) {
+            errLog('vxe.error.notProp', ['mouse-config.area'])
+          }
           nextTick(() => {
             updateStyle()
           })
@@ -9427,6 +9442,7 @@ export default defineComponent({
         const { isAllOverflow, scrollYLoad, expandColumn } = reactData
         const { scrollYStore, elemStore, isResizeCellHeight, afterFullData, fullAllDataRowIdData, rowExpandedMaps } = internalData
         const { startIndex } = scrollYStore
+        const mouseOpts = computeMouseOpts.value
         const expandOpts = computeExpandOpts.value
         const rowOpts = computeRowOpts.value
         const cellOpts = computeCellOpts.value
@@ -9508,6 +9524,10 @@ export default defineComponent({
         reactData.scrollYTop = scrollYTop
         reactData.scrollYHeight = scrollYHeight
         reactData.isScrollYBig = isScrollYBig
+
+        if (isScrollYBig && mouseOpts.area) {
+          errLog('vxe.error.notProp', ['mouse-config.area'])
+        }
         return nextTick().then(() => {
           updateStyle()
         })
