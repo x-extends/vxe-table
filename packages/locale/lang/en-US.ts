@@ -18,6 +18,7 @@ export default {
       scrollErrProp: 'The parameter "{0}" is not supported when virtual scrolling is enabled',
       errConflicts: '"{1}" is not supported when parameter "{0}", it should be "{2}", otherwise an error will occur',
       notSupportProp: '"{1}" is not supported when parameter "{0}" is enabled, it should be "{2}", otherwise an error will occur',
+      notConflictProp: 'When using "{0}", you should set "{1}", otherwise there may be a functional conflict',
       unableInsert: 'Unable to insert into the specified position, please check whether the parameters are correct',
       useErr: 'An error occurred while installing the "{0}" module. The order may be incorrect. The dependent modules need to be installed before Table.',
       barUnableLink: 'The toolbar cannot be associated with the table',

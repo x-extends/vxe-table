@@ -19,6 +19,7 @@ export default
       scrollErrProp: 'Der Parameter „{0}“ wird nicht unterstützt, wenn virtuelles Scrollen aktiviert ist',
       errConflicts: 'Parameter „{0}“ stehen im Konflikt mit „{1}“',
       notSupportProp: '当启用参数 "{0}" 时不支持 "{1}"，应该为 "{2}"，否则将会出现错误',
+      notConflictProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会存在功能冲突',
       unableInsert: 'Das Einfügen an der angegebenen Position ist nicht möglich. Bitte überprüfen Sie, ob die Parameter korrekt sind',
       useErr: 'Bei der Installation des Moduls „{0}“ ist möglicherweise die falsche Reihenfolge aufgetreten. Die abhängigen Module müssen vor der Tabelle installiert werden.',
       barUnableLink: 'Die Symbolleiste kann nicht mit der Tabelle verknüpft werden',

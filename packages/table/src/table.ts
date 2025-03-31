@@ -1415,8 +1415,9 @@ export default {
       swYTotal: 0
     })
 
-    const { data, exportConfig, importConfig, treeConfig, showOverflow } = props
+    const { data, exportConfig, importConfig, treeConfig, showOverflow, highlightCurrentRow, highlightCurrentColumn } = props
     const { scrollXStore, scrollYStore } = internalData
+    const columnOpts = $xeTable.computeColumnOpts
     const editOpts = $xeTable.computeEditOpts
     const treeOpts = $xeTable.computeTreeOpts
     const radioOpts = $xeTable.computeRadioOpts
@@ -1427,6 +1428,10 @@ export default {
     const mouseOpts = $xeTable.computeMouseOpts
     const exportOpts = $xeTable.computeExportOpts
     const importOpts = $xeTable.computeImportOpts
+    const currentRowOpts = $xeTable.computeCurrentRowOpts
+    const currentColumnOpts = $xeTable.computeCurrentColumnOpts
+    const virtualXOpts = $xeTable.computeVirtualXOpts
+    const virtualYOpts = $xeTable.computeVirtualYOpts
 
     if (props.rowId) {
       warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
@@ -1539,29 +1544,51 @@ export default {
         warnLog('vxe.error.errProp', [`table.context-menu=${this.contextMenu}`, 'table.context-menu={}'])
       }
     }
-    if (this.menuConfig && !XEUtils.isObject(this.menuConfig)) {
-      warnLog('vxe.error.errProp', [`table.menu-config=${this.menuConfig}`, 'table.menu-config={}'])
+    if (props.menuConfig && !XEUtils.isObject(props.menuConfig)) {
+      warnLog('vxe.error.errProp', [`table.menu-config=${props.menuConfig}`, 'table.menu-config={}'])
     }
-    if (this.exportConfig && !XEUtils.isObject(this.exportConfig)) {
-      warnLog('vxe.error.errProp', [`table.export-config=${this.exportConfig}`, 'table.export-config={}'])
+    if (props.exportConfig && !XEUtils.isObject(props.exportConfig)) {
+      warnLog('vxe.error.errProp', [`table.export-config=${props.exportConfig}`, 'table.export-config={}'])
     }
-    if (this.importConfig && !XEUtils.isObject(this.importConfig)) {
-      warnLog('vxe.error.errProp', [`table.import-config=${this.importConfig}`, 'table.import-config={}'])
+    if (props.importConfig && !XEUtils.isObject(props.importConfig)) {
+      warnLog('vxe.error.errProp', [`table.import-config=${props.importConfig}`, 'table.import-config={}'])
     }
-    if (this.printConfig && !XEUtils.isObject(this.printConfig)) {
-      warnLog('vxe.error.errProp', [`table.print-config=${this.printConfig}`, 'table.print-config={}'])
+    if (props.printConfig && !XEUtils.isObject(props.printConfig)) {
+      warnLog('vxe.error.errProp', [`table.print-config=${props.printConfig}`, 'table.print-config={}'])
     }
-    if (this.treeConfig && !XEUtils.isObject(this.treeConfig)) {
-      warnLog('vxe.error.errProp', [`table.tree-config=${this.treeConfig}`, 'table.tree-config={}'])
+    if (props.treeConfig && !XEUtils.isObject(props.treeConfig)) {
+      warnLog('vxe.error.errProp', [`table.tree-config=${props.treeConfig}`, 'table.tree-config={}'])
     }
-    if (this.customConfig && !XEUtils.isObject(this.customConfig)) {
-      warnLog('vxe.error.errProp', [`table.custom-config=${this.customConfig}`, 'table.custom-config={}'])
+    if (props.customConfig && !XEUtils.isObject(props.customConfig)) {
+      warnLog('vxe.error.errProp', [`table.custom-config=${props.customConfig}`, 'table.custom-config={}'])
     }
-    if (this.editConfig && !XEUtils.isObject(this.editConfig)) {
-      warnLog('vxe.error.errProp', [`table.edit-config=${this.editConfig}`, 'table.edit-config={}'])
+    if (props.editConfig && !XEUtils.isObject(props.editConfig)) {
+      warnLog('vxe.error.errProp', [`table.edit-config=${props.editConfig}`, 'table.edit-config={}'])
     }
-    if (this.emptyRender && !XEUtils.isObject(this.emptyRender)) {
-      warnLog('vxe.error.errProp', [`table.empty-render=${this.emptyRender}`, 'table.empty-render={}'])
+    if (props.emptyRender && !XEUtils.isObject(props.emptyRender)) {
+      warnLog('vxe.error.errProp', [`table.empty-render=${props.emptyRender}`, 'table.empty-render={}'])
+    }
+
+    if ((rowOpts.isCurrent || highlightCurrentRow) && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
+      warnLog('vxe.error.notConflictProp', ['row-config.isCurrent', 'current-row-config.isFollowSelected'])
+    }
+    if ((columnOpts.isCurrent || highlightCurrentColumn) && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
+      warnLog('vxe.error.notConflictProp', ['column-config.isCurrent', 'current-column-config.isFollowSelected'])
+    }
+
+    // 如果不支持虚拟滚动
+    if (props.spanMethod) {
+      if (virtualXOpts.enabled) {
+        warnLog('vxe.error.notConflictProp', ['span-method', 'virtual-x-config.enabled=false'])
+      }
+      if (virtualYOpts.enabled) {
+        warnLog('vxe.error.notConflictProp', ['span-method', 'virtual-y-config.enabled=false'])
+      }
+    }
+    if (props.footerSpanMethod) {
+      if (virtualXOpts.enabled) {
+        warnLog('vxe.error.notConflictProp', ['footer-span-method', 'virtual-x-config.enabled=false'])
+      }
     }
 
     // 检查是否有安装需要的模块
