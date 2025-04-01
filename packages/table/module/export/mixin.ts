@@ -220,7 +220,7 @@ function getBooleanValue (cellValue: any) {
 function getHeaderTitle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: any, column: any) {
   const columnOpts = $xeTable.computeColumnOpts
   const headExportMethod = column.headerExportMethod || columnOpts.headerExportMethod
-  return headExportMethod ? headExportMethod({ column, options: opts, $table: $xeTable }) : ((opts.original ? column.field : column.getTitle()) || '')
+  return headExportMethod ? headExportMethod({ column, options: opts, $table: $xeTable }) : ((opts.isTitle ? column.getTitle() : column.field) || '')
 }
 
 function getFooterCellValue ($xeTable: any, opts: any, row: any, column: any) {
@@ -1083,6 +1083,7 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
   const defOpts = Object.assign({
     message: true,
     isHeader: showHeader,
+    isTitle: showHeader,
     isFooter: showFooter,
     isColgroup: isGroup,
     isMerge: hasMerge,
@@ -1261,6 +1262,7 @@ export default {
       const opts = Object.assign({
         message: true,
         isHeader: showHeader,
+        isTitle: showHeader,
         isFooter: showFooter,
         isColgroup: isGroup,
         isMerge: hasMerge,

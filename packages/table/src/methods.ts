@@ -249,39 +249,33 @@ function cacheColumnMap ($xeTable: VxeTableConstructor) {
       htmlColumn = column
     }
     if (treeNode) {
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (treeNodeColumn) {
-          warnLog('vxe.error.colRepet', ['tree-node', treeNode])
-        }
+      if (treeNodeColumn) {
+        warnLog('vxe.error.colRepet', ['tree-node', treeNode])
       }
       if (!treeNodeColumn) {
         treeNodeColumn = column
       }
     } else if (type === 'expand') {
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (expandColumn) {
-          warnLog('vxe.error.colRepet', ['type', type])
-        }
+      if (expandColumn) {
+        warnLog('vxe.error.colRepet', ['type', type])
       }
       if (!expandColumn) {
         expandColumn = column
       }
     }
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      if (type === 'checkbox') {
-        if (checkboxColumn) {
-          warnLog('vxe.error.colRepet', ['type', type])
-        }
-        if (!checkboxColumn) {
-          checkboxColumn = column
-        }
-      } else if (type === 'radio') {
-        if (radioColumn) {
-          warnLog('vxe.error.colRepet', ['type', type])
-        }
-        if (!radioColumn) {
-          radioColumn = column
-        }
+    if (type === 'checkbox') {
+      if (checkboxColumn) {
+        warnLog('vxe.error.colRepet', ['type', type])
+      }
+      if (!checkboxColumn) {
+        checkboxColumn = column
+      }
+    } else if (type === 'radio') {
+      if (radioColumn) {
+        warnLog('vxe.error.colRepet', ['type', type])
+      }
+      if (!radioColumn) {
+        radioColumn = column
       }
     }
     if (isAllOverflow && column.showOverflow === false) {
@@ -2789,6 +2783,7 @@ const Methods = {
     const { scrollYLoad: oldScrollYLoad } = reactData
     const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
     const treeOpts = $xeTable.computeTreeOpts
+    const expandOpts = $xeTable.computeExpandOpts
     const { transform } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     let treeData = []
@@ -2875,6 +2870,9 @@ const Methods = {
       }
 
       if (sYLoad) {
+        if (reactData.expandColumn && expandOpts.mode !== 'fixed') {
+          errLog('vxe.error.notConflictProp', ['column.type="expand', 'expand-config.mode="fixed"'])
+        }
         // if (showOverflow) {
         //   if (!rowOpts.height) {
         //     const errColumn = internalData.tableFullColumn.find((column: any) => column.showOverflow === false)
@@ -3814,9 +3812,11 @@ const Methods = {
   getCheckboxRecords (isFull: boolean) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
     const { treeConfig } = props
+    const { updateCheckboxFlag } = reactData
     const { tableFullData, afterFullData, afterTreeFullData, tableFullTreeData, fullDataRowIdData, afterFullRowMaps, selectCheckboxMaps } = internalData
     const treeOpts = $xeTable.computeTreeOpts
     const checkboxOpts = $xeTable.computeCheckboxOpts
@@ -3824,26 +3824,28 @@ const Methods = {
     const { checkField } = checkboxOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     let rowList: any[] = []
-    if (checkField) {
-      if (treeConfig) {
-        const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
-        rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildrenField : childrenField })
-      } else {
-        const currTableData = isFull ? tableFullData : afterFullData
-        rowList = currTableData.filter((row) => XEUtils.get(row, checkField))
-      }
-    } else {
-      XEUtils.each(selectCheckboxMaps, (row, rowid) => {
-        if (isFull) {
-          if (fullDataRowIdData[rowid]) {
-            rowList.push(fullDataRowIdData[rowid].row)
-          }
+    if (updateCheckboxFlag) {
+      if (checkField) {
+        if (treeConfig) {
+          const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
+          rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildrenField : childrenField })
         } else {
-          if (afterFullRowMaps[rowid]) {
-            rowList.push(afterFullRowMaps[rowid])
-          }
+          const currTableData = isFull ? tableFullData : afterFullData
+          rowList = currTableData.filter((row) => XEUtils.get(row, checkField))
         }
-      })
+      } else {
+        XEUtils.each(selectCheckboxMaps, (row, rowid) => {
+          if (isFull) {
+            if (fullDataRowIdData[rowid]) {
+              rowList.push(fullDataRowIdData[rowid].row)
+            }
+          } else {
+            if (afterFullRowMaps[rowid]) {
+              rowList.push(afterFullRowMaps[rowid])
+            }
+          }
+        })
+      }
     }
     return rowList
   },

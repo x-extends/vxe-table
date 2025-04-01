@@ -625,6 +625,7 @@ export default {
         original: false,
         message: true,
         isHeader: false,
+        isTitle: false,
         isFooter: false
       },
 
@@ -1432,6 +1433,7 @@ export default {
     const currentColumnOpts = $xeTable.computeCurrentColumnOpts
     const virtualXOpts = $xeTable.computeVirtualXOpts
     const virtualYOpts = $xeTable.computeVirtualYOpts
+    const keyboardOpts = $xeTable.computeKeyboardOpts
 
     if (props.rowId) {
       warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
@@ -1475,6 +1477,12 @@ export default {
     if (this.highlightHoverColumn) {
       warnLog('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
     }
+    // if (props.scrollY) {
+    //   warnLog('vxe.error.delProp', ['scroll-y', 'virtual-y-config'])
+    // }
+    // if (props.scrollX) {
+    //   warnLog('vxe.error.delProp', ['scroll-x', 'virtual-x-config'])
+    // }
     // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
     if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), importOpts.types)) {
       warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)).join(',') || XEUtils.keys(importOpts._typeMaps).join(',')])
@@ -1569,10 +1577,10 @@ export default {
       warnLog('vxe.error.errProp', [`table.empty-render=${props.emptyRender}`, 'table.empty-render={}'])
     }
 
-    if ((rowOpts.isCurrent || highlightCurrentRow) && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
+    if ((rowOpts.isCurrent || highlightCurrentRow) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
       warnLog('vxe.error.notConflictProp', ['row-config.isCurrent', 'current-row-config.isFollowSelected'])
     }
-    if ((columnOpts.isCurrent || highlightCurrentColumn) && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
+    if ((columnOpts.isCurrent || highlightCurrentColumn) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
       warnLog('vxe.error.notConflictProp', ['column-config.isCurrent', 'current-column-config.isFollowSelected'])
     }
 

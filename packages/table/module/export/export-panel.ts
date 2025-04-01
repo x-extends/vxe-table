@@ -338,17 +338,34 @@ export default {
                                 }),
                                 h('vxe-checkbox', {
                                   props: {
-                                    value: defaultOptions.isFooter,
-                                    disabled: !storeData.hasFooter,
-                                    title: getI18n('vxe.export.expFooterTitle'),
-                                    content: getI18n('vxe.export.expOptFooter')
+                                    value: isHeader ? defaultOptions.isTitle : false,
+                                    disabled: !isHeader,
+                                    title: getI18n('vxe.export.expTitleTitle'),
+                                    content: getI18n('vxe.export.expOptTitle')
                                   },
                                   on: {
                                     input (value: any) {
-                                      defaultOptions.isFooter = value
+                                      defaultOptions.isTitle = value
                                     }
                                   }
                                 }),
+                                h('vxe-checkbox', {
+                                  props: {
+                                    value: isHeader && hasColgroup && supportMerge ? defaultOptions.isColgroup : false,
+                                    disabled: !isHeader || !hasColgroup || !supportMerge,
+                                    title: getI18n('vxe.export.expColgroupTitle'),
+                                    content: getI18n('vxe.export.expOptColgroup')
+                                  },
+                                  on: {
+                                    input (value: any) {
+                                      defaultOptions.isColgroup = value
+                                    }
+                                  }
+                                })
+                              ]),
+                              h('div', {
+                                class: 'vxe-table-export--panel-option-row'
+                              }, [
                                 h('vxe-checkbox', {
                                   props: {
                                     value: hasEmptyData ? false : defaultOptions.original,
@@ -359,25 +376,6 @@ export default {
                                   on: {
                                     input (value: any) {
                                       defaultOptions.original = value
-                                    }
-                                  }
-                                })
-                              ]),
-                              h('div', {
-                                class: 'vxe-table-export--panel-option-row'
-                              }, [
-                                h('vxe-checkbox', {
-                                  props: {
-                                    // value: supportGroup || (isHeader && hasColgroup && supportMerge) ? defaultOptions.isColgroup : false,
-                                    // disabled: !supportGroup && (!isHeader || !hasColgroup || !supportMerge),
-                                    value: isHeader && hasColgroup && supportMerge ? defaultOptions.isColgroup : false,
-                                    disabled: !isHeader || !hasColgroup || !supportMerge,
-                                    title: getI18n('vxe.export.expColgroupTitle'),
-                                    content: getI18n('vxe.export.expOptColgroup')
-                                  },
-                                  on: {
-                                    input (value: any) {
-                                      defaultOptions.isColgroup = value
                                     }
                                   }
                                 }),
@@ -419,6 +417,24 @@ export default {
                                   on: {
                                     input (value: any) {
                                       defaultOptions.isAllExpand = value
+                                    }
+                                  }
+                                })
+                              ]),
+
+                              h('div', {
+                                class: 'vxe-table-export--panel-option-row'
+                              }, [
+                                h('vxe-checkbox', {
+                                  props: {
+                                    value: defaultOptions.isFooter,
+                                    disabled: !storeData.hasFooter,
+                                    title: getI18n('vxe.export.expFooterTitle'),
+                                    content: getI18n('vxe.export.expOptFooter')
+                                  },
+                                  on: {
+                                    input (value: any) {
+                                      defaultOptions.isFooter = value
                                     }
                                   }
                                 })
