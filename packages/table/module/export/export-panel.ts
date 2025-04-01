@@ -390,7 +390,7 @@ export default defineComponent({
                                 }, [
                                   VxeUICheckboxComponent
                                     ? h(VxeUICheckboxComponent, {
-                                      modelValue: hasEmptyData || defaultOptions.isHeader,
+                                      modelValue: hasEmptyData || isHeader,
                                       disabled: hasEmptyData,
                                       title: getI18n('vxe.export.expHeaderTitle'),
                                       content: getI18n('vxe.export.expOptHeader'),
@@ -401,23 +401,23 @@ export default defineComponent({
                                     : createCommentVNode(),
                                   VxeUICheckboxComponent
                                     ? h(VxeUICheckboxComponent, {
-                                      modelValue: defaultOptions.isFooter,
-                                      disabled: !storeData.hasFooter,
-                                      title: getI18n('vxe.export.expFooterTitle'),
-                                      content: getI18n('vxe.export.expOptFooter'),
+                                      modelValue: isHeader ? defaultOptions.isTitle : false,
+                                      disabled: !isHeader,
+                                      title: getI18n('vxe.export.expTitleTitle'),
+                                      content: getI18n('vxe.export.expOptTitle'),
                                       'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.isFooter = value
+                                        defaultOptions.isTitle = value
                                       }
                                     })
                                     : createCommentVNode(),
                                   VxeUICheckboxComponent
                                     ? h(VxeUICheckboxComponent, {
-                                      modelValue: hasEmptyData ? false : defaultOptions.original,
-                                      disabled: hasEmptyData,
-                                      title: getI18n('vxe.export.expOriginalTitle'),
-                                      content: getI18n('vxe.export.expOptOriginal'),
+                                      modelValue: isHeader && hasColgroup && supportMerge ? defaultOptions.isColgroup : false,
+                                      title: getI18n('vxe.export.expColgroupTitle'),
+                                      disabled: !isHeader || !hasColgroup || !supportMerge,
+                                      content: getI18n('vxe.export.expOptColgroup'),
                                       'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.original = value
+                                        defaultOptions.isColgroup = value
                                       }
                                     })
                                     : createCommentVNode()
@@ -427,15 +427,12 @@ export default defineComponent({
                                 }, [
                                   VxeUICheckboxComponent
                                     ? h(VxeUICheckboxComponent, {
-                                      // modelValue: supportGroup || (isHeader && hasColgroup && supportMerge) ? defaultOptions.isColgroup : false,
-                                      // title: getI18n('vxe.export.expColgroupTitle'),
-                                      // disabled: !supportGroup && (!isHeader || !hasColgroup || !supportMerge),
-                                      modelValue: isHeader && hasColgroup && supportMerge ? defaultOptions.isColgroup : false,
-                                      title: getI18n('vxe.export.expColgroupTitle'),
-                                      disabled: !isHeader || !hasColgroup || !supportMerge,
-                                      content: getI18n('vxe.export.expOptColgroup'),
+                                      modelValue: hasEmptyData ? false : defaultOptions.original,
+                                      disabled: hasEmptyData,
+                                      title: getI18n('vxe.export.expOriginalTitle'),
+                                      content: getI18n('vxe.export.expOptOriginal'),
                                       'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.isColgroup = value
+                                        defaultOptions.original = value
                                       }
                                     })
                                     : createCommentVNode(),
@@ -469,6 +466,21 @@ export default defineComponent({
                                       content: getI18n('vxe.export.expOptAllExpand'),
                                       'onUpdate:modelValue' (value: any) {
                                         defaultOptions.isAllExpand = value
+                                      }
+                                    })
+                                    : createCommentVNode()
+                                ]),
+                                h('div', {
+                                  class: 'vxe-table-export--panel-option-row'
+                                }, [
+                                  VxeUICheckboxComponent
+                                    ? h(VxeUICheckboxComponent, {
+                                      modelValue: defaultOptions.isFooter,
+                                      disabled: !storeData.hasFooter,
+                                      title: getI18n('vxe.export.expFooterTitle'),
+                                      content: getI18n('vxe.export.expOptFooter'),
+                                      'onUpdate:modelValue' (value: any) {
+                                        defaultOptions.isFooter = value
                                       }
                                     })
                                     : createCommentVNode()

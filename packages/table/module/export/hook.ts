@@ -328,7 +328,7 @@ hooks.add('tableExportModule', {
     function getHeaderTitle (opts: any, column: any) {
       const columnOpts = computeColumnOpts.value
       const headExportMethod = column.headerExportMethod || columnOpts.headerExportMethod
-      return headExportMethod ? headExportMethod({ column, options: opts, $table: $xeTable }) : ((opts.original ? column.field : column.getTitle()) || '')
+      return headExportMethod ? headExportMethod({ column, options: opts, $table: $xeTable }) : ((opts.isTitle ? column.getTitle() : column.field) || '')
     }
 
     const toBooleanValue = (cellValue: any) => {
@@ -1026,6 +1026,7 @@ hooks.add('tableExportModule', {
       const defOpts = Object.assign({
         message: true,
         isHeader: showHeader,
+        isTitle: showHeader,
         isFooter: showFooter,
         isColgroup: isGroup,
         isMerge: hasMerge,
@@ -1146,6 +1147,7 @@ hooks.add('tableExportModule', {
         const opts = Object.assign({
           message: true,
           isHeader: showHeader,
+          isTitle: showHeader,
           isFooter: showFooter,
           isColgroup: isGroup,
           isMerge: hasMerge,

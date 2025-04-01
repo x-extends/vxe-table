@@ -241,6 +241,7 @@ export default defineComponent({
         original: false,
         message: true,
         isHeader: false,
+        isTitle: false,
         isFooter: false
       },
 
@@ -1317,6 +1318,7 @@ export default defineComponent({
       const expandOpts = computeExpandOpts.value
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
+      const virtualYOpts = computeVirtualYOpts.value
       const { isCrossDrag, isSelfToChildDrag } = columnDragOpts
       const customOpts = computeCustomOpts.value
       const { storage } = customOpts
@@ -1349,39 +1351,33 @@ export default defineComponent({
           htmlColumn = column
         }
         if (treeNode) {
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (treeNodeColumn) {
-              warnLog('vxe.error.colRepet', ['tree-node', treeNode])
-            }
+          if (treeNodeColumn) {
+            warnLog('vxe.error.colRepet', ['tree-node', treeNode])
           }
           if (!treeNodeColumn) {
             treeNodeColumn = column
           }
         } else if (type === 'expand') {
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (expandColumn) {
-              warnLog('vxe.error.colRepet', ['type', type])
-            }
+          if (expandColumn) {
+            warnLog('vxe.error.colRepet', ['type', type])
           }
           if (!expandColumn) {
             expandColumn = column
           }
         }
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (type === 'checkbox') {
-            if (checkboxColumn) {
-              warnLog('vxe.error.colRepet', ['type', type])
-            }
-            if (!checkboxColumn) {
-              checkboxColumn = column
-            }
-          } else if (type === 'radio') {
-            if (radioColumn) {
-              warnLog('vxe.error.colRepet', ['type', type])
-            }
-            if (!radioColumn) {
-              radioColumn = column
-            }
+        if (type === 'checkbox') {
+          if (checkboxColumn) {
+            warnLog('vxe.error.colRepet', ['type', type])
+          }
+          if (!checkboxColumn) {
+            checkboxColumn = column
+          }
+        } else if (type === 'radio') {
+          if (radioColumn) {
+            warnLog('vxe.error.colRepet', ['type', type])
+          }
+          if (!radioColumn) {
+            radioColumn = column
           }
         }
         if (isAllOverflow && column.showOverflow === false) {
@@ -1401,6 +1397,9 @@ export default defineComponent({
         tableFullColumn.forEach(handleFunc)
       }
 
+      if (expandColumn && expandOpts.mode !== 'fixed' && virtualYOpts.enabled) {
+        warnLog('vxe.error.notConflictProp', ['column.type="expand', 'virtual-y-config.enabled=false'])
+      }
       if ((expandColumn && expandOpts.mode !== 'fixed') && mouseOpts.area) {
         errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
       }
@@ -2747,6 +2746,7 @@ export default defineComponent({
       const { scrollYLoad: oldScrollYLoad } = reactData
       const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
       const treeOpts = computeTreeOpts.value
+      const expandOpts = computeExpandOpts.value
       const { transform } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       let treeData = []
@@ -2833,6 +2833,9 @@ export default defineComponent({
         }
 
         if (sYLoad) {
+          if (reactData.expandColumn && expandOpts.mode !== 'fixed') {
+            errLog('vxe.error.notConflictProp', ['column.type="expand', 'expand-config.mode="fixed"'])
+          }
           // if (showOverflow) {
           //   if (!rowOpts.height) {
           //     const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
@@ -4242,6 +4245,7 @@ export default defineComponent({
        */
       getCheckboxRecords (isFull) {
         const { treeConfig } = props
+        const { updateCheckboxFlag } = reactData
         const { tableFullData, afterFullData, afterTreeFullData, tableFullTreeData, fullDataRowIdData, afterFullRowMaps, selectCheckboxMaps } = internalData
         const treeOpts = computeTreeOpts.value
         const checkboxOpts = computeCheckboxOpts.value
@@ -4249,26 +4253,28 @@ export default defineComponent({
         const { checkField } = checkboxOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
         let rowList: any[] = []
-        if (checkField) {
-          if (treeConfig) {
-            const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
-            rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildrenField : childrenField })
-          } else {
-            const currTableData = isFull ? tableFullData : afterFullData
-            rowList = currTableData.filter((row) => XEUtils.get(row, checkField))
-          }
-        } else {
-          XEUtils.each(selectCheckboxMaps, (row, rowid) => {
-            if (isFull) {
-              if (fullDataRowIdData[rowid]) {
-                rowList.push(fullDataRowIdData[rowid].row)
-              }
+        if (updateCheckboxFlag) {
+          if (checkField) {
+            if (treeConfig) {
+              const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
+              rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildrenField : childrenField })
             } else {
-              if (afterFullRowMaps[rowid]) {
-                rowList.push(afterFullRowMaps[rowid])
-              }
+              const currTableData = isFull ? tableFullData : afterFullData
+              rowList = currTableData.filter((row) => XEUtils.get(row, checkField))
             }
-          })
+          } else {
+            XEUtils.each(selectCheckboxMaps, (row, rowid) => {
+              if (isFull) {
+                if (fullDataRowIdData[rowid]) {
+                  rowList.push(fullDataRowIdData[rowid].row)
+                }
+              } else {
+                if (afterFullRowMaps[rowid]) {
+                  rowList.push(afterFullRowMaps[rowid])
+                }
+              }
+            })
+          }
         }
         return rowList
       },
@@ -10456,6 +10462,7 @@ export default defineComponent({
         const currentColumnOpts = computeCurrentColumnOpts.value
         const virtualXOpts = computeVirtualXOpts.value
         const virtualYOpts = computeVirtualYOpts.value
+        const keyboardOpts = computeKeyboardOpts.value
 
         if (props.rowId) {
           warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
@@ -10496,6 +10503,12 @@ export default defineComponent({
         if (props.highlightHoverColumn) {
           warnLog('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
         }
+        // if (props.scrollY) {
+        //   warnLog('vxe.error.delProp', ['scroll-y', 'virtual-y-config'])
+        // }
+        // if (props.scrollX) {
+        //   warnLog('vxe.error.delProp', ['scroll-x', 'virtual-x-config'])
+        // }
         // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
         if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), importOpts.types)) {
           warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)).join(',') || XEUtils.keys(importOpts._typeMaps).join(',')])
@@ -10558,10 +10571,10 @@ export default defineComponent({
           warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
         }
 
-        if ((rowOpts.isCurrent || highlightCurrentRow) && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
+        if ((rowOpts.isCurrent || highlightCurrentRow) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
           warnLog('vxe.error.notConflictProp', ['row-config.isCurrent', 'current-row-config.isFollowSelected'])
         }
-        if ((columnOpts.isCurrent || highlightCurrentColumn) && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
+        if ((columnOpts.isCurrent || highlightCurrentColumn) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
           warnLog('vxe.error.notConflictProp', ['column-config.isCurrent', 'current-column-config.isFollowSelected'])
         }
 
