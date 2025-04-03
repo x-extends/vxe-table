@@ -1,7 +1,7 @@
 import { inject, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
-import { isColumnInfo, mergeBodyMethod, getCellValue } from '../../src/util'
+import { isColumnInfo, getCellValue } from '../../src/util'
 import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
 import { hasClass } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
@@ -564,7 +564,8 @@ hooks.add('tableExportModule', {
 
     const toHtml = (opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) => {
       const { id, border, treeConfig, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow } = props
-      const { isAllSelected, isIndeterminate, mergeList } = reactData
+      const { isAllSelected, isIndeterminate } = reactData
+      const { mergeBodyCellMaps } = internalData
       const treeOpts = computeTreeOpts.value
       const { print: isPrint, isHeader, isFooter, isColgroup, isMerge, colgroups, original } = opts
       const allCls = 'check-all'
@@ -630,9 +631,10 @@ hooks.add('tableExportModule', {
           datas.forEach((item: any) => {
             tables.push(
               '<tr>' + columns.map((column: any) => {
+                const colid = column.id
                 const cellAlign = column.align || allAlign
                 const classNames = hasEllipsis(column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-                const cellValue = item[column.id]
+                const cellValue = item[colid]
                 if (cellAlign) {
                   classNames.push(`col--${cellAlign}`)
                 }
@@ -659,18 +661,18 @@ hooks.add('tableExportModule', {
             )
           })
         } else {
-          datas.forEach((item: any) => {
+          datas.forEach((item) => {
             tables.push(
-              '<tr>' + columns.map((column: any) => {
+              '<tr>' + columns.map((column) => {
                 const cellAlign = column.align || allAlign
                 const classNames = hasEllipsis(column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
                 const cellValue = item[column.id]
                 let rowSpan = 1
                 let colSpan = 1
-                if (isMerge && mergeList.length) {
+                if (isMerge) {
                   const _rowIndex = $xeTable.getVTRowIndex(item._row)
                   const _columnIndex = $xeTable.getVTColumnIndex(column)
-                  const spanRest = mergeBodyMethod(mergeList, _rowIndex, _columnIndex)
+                  const spanRest = mergeBodyCellMaps[`${_rowIndex}:${_columnIndex}`]
                   if (spanRest) {
                     const { rowspan, colspan } = spanRest
                     if (!rowspan || !colspan) {
@@ -1014,15 +1016,15 @@ hooks.add('tableExportModule', {
 
     const handleExportAndPrint = (options: VxeTablePropTypes.ExportOpts | VxeTablePropTypes.ExportConfig, isPrint?: boolean) => {
       const { treeConfig, showHeader, showFooter } = props
-      const { initStore, mergeList, mergeFooterList, isGroup, footerTableData, exportStore, exportParams } = reactData
-      const { collectColumn } = internalData
+      const { initStore, isGroup, footerTableData, exportStore, exportParams } = reactData
+      const { collectColumn, mergeBodyList, mergeFooterList } = internalData
       const exportOpts = computeExportOpts.value
       const hasTree = treeConfig
       const customOpts = computeCustomOpts.value
       const selectRecords = $xeTable.getCheckboxRecords()
       const proxyOpts = $xeGrid ? $xeGrid.getComputeMaps().computeProxyOpts.value : {} as VxeGridPropTypes.ProxyOpts
       const hasFooter = !!footerTableData.length
-      const hasMerge = !!(mergeList.length || mergeFooterList.length)
+      const hasMerge = !!(mergeBodyList.length || mergeFooterList.length)
       const defOpts = Object.assign({
         message: true,
         isHeader: showHeader,
@@ -1138,12 +1140,12 @@ hooks.add('tableExportModule', {
        */
       exportData (options) {
         const { treeConfig, showHeader, showFooter } = props
-        const { mergeList, mergeFooterList, isGroup } = reactData
-        const { tableFullColumn, afterFullData, collectColumn } = internalData
+        const { isGroup } = reactData
+        const { tableFullColumn, afterFullData, collectColumn, mergeBodyList, mergeFooterList } = internalData
         const exportOpts = computeExportOpts.value
         const treeOpts = computeTreeOpts.value
         const proxyOpts = $xeGrid ? $xeGrid.getComputeMaps().computeProxyOpts.value : {} as VxeGridPropTypes.ProxyOpts
-        const hasMerge = !!(mergeList.length || mergeFooterList.length)
+        const hasMerge = !!(mergeBodyList.length || mergeFooterList.length)
         const opts = Object.assign({
           message: true,
           isHeader: showHeader,

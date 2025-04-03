@@ -108,8 +108,7 @@ hooks.add('tableEditModule', {
 
     const handleInsertRowAt = (records: any, targetRow: any, isInsertNextRow?: boolean) => {
       const { treeConfig } = props
-      const { mergeList } = reactData
-      const { tableFullTreeData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData, insertRowMaps } = internalData
+      const { tableFullTreeData, afterFullData, mergeBodyList, tableFullData, fullDataRowIdData, fullAllDataRowIdData, insertRowMaps } = internalData
       const treeOpts = computeTreeOpts.value
       const { transform, rowField, mapChildrenField } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
@@ -131,7 +130,7 @@ hooks.add('tableEditModule', {
             tableFullData.unshift(item)
           })
           // 刷新单元格合并
-          mergeList.forEach((mergeItem: any) => {
+          mergeBodyList.forEach((mergeItem: any) => {
             const { row: mergeRowIndex } = mergeItem
             if (mergeRowIndex > 0) {
               mergeItem.row = mergeRowIndex + newRecords.length
@@ -153,7 +152,7 @@ hooks.add('tableEditModule', {
               tableFullData.push(item)
             })
             // 刷新单元格合并
-            mergeList.forEach((mergeItem: any) => {
+            mergeBodyList.forEach((mergeItem: any) => {
               const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
               if (mergeRowIndex + mergeRowspan > afterFullData.length) {
                 mergeItem.rowspan = mergeRowspan + newRecords.length
@@ -237,7 +236,7 @@ hooks.add('tableEditModule', {
               tableFullData.push(...newRecords)
             }
             // 刷新单元格合并
-            mergeList.forEach((mergeItem: any) => {
+            mergeBodyList.forEach((mergeItem: any) => {
               const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
               if (mergeRowIndex > afIndex) {
                 mergeItem.row = mergeRowIndex + newRecords.length
@@ -260,6 +259,7 @@ hooks.add('tableEditModule', {
         $xeTable.updateAfterDataIndex()
       }
       $xeTable.updateFooter()
+      $xeTable.handleUpdateBodyMerge()
       $xeTable.checkSelectionStatus()
       if (reactData.scrollYLoad) {
         $xeTable.updateScrollYSpace()
@@ -494,8 +494,8 @@ hooks.add('tableEditModule', {
        */
       remove (rows: any) {
         const { treeConfig } = props
-        const { mergeList, editStore } = reactData
-        const { tableFullTreeData, selectCheckboxMaps, afterFullData, tableFullData, pendingRowMaps, insertRowMaps, removeRowMaps } = internalData
+        const { editStore } = reactData
+        const { tableFullTreeData, selectCheckboxMaps, afterFullData, mergeBodyList, tableFullData, pendingRowMaps, insertRowMaps, removeRowMaps } = internalData
         const checkboxOpts = computeCheckboxOpts.value
         const treeOpts = computeTreeOpts.value
         const { transform, mapChildrenField } = treeOpts
@@ -560,7 +560,7 @@ hooks.add('tableEditModule', {
               const afIndex = $xeTable.findRowIndexOf(afterFullData, row)
               if (afIndex > -1) {
                 // 刷新单元格合并
-                mergeList.forEach((mergeItem: any) => {
+                mergeBodyList.forEach((mergeItem: any) => {
                   const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
                   if (mergeRowIndex > afIndex) {
                     mergeItem.row = mergeRowIndex - 1
@@ -590,9 +590,10 @@ hooks.add('tableEditModule', {
         reactData.removeRowFlag++
         reactData.insertRowFlag++
         reactData.pendingRowFlag++
-        $xeTable.updateFooter()
         $xeTable.cacheRowMap(false)
         $xeTable.handleTableData(treeConfig && transform)
+        $xeTable.updateFooter()
+        $xeTable.handleUpdateBodyMerge()
         if (!(treeConfig && transform)) {
           $xeTable.updateAfterDataIndex()
         }

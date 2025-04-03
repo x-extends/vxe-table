@@ -468,20 +468,6 @@ export function calcTreeLine (params: VxeTableDefines.CellRenderBodyParams, prev
   return cellHeight * expandSize - (prevRow ? 1 : (12 - getOffsetSize($table)))
 }
 
-export function mergeBodyMethod (mergeList: VxeTableDefines.MergeItem[], _rowIndex: number, _columnIndex: number) {
-  for (let mIndex = 0; mIndex < mergeList.length; mIndex++) {
-    const { row: mergeRowIndex, col: mergeColIndex, rowspan: mergeRowspan, colspan: mergeColspan } = mergeList[mIndex]
-    if (mergeColIndex > -1 && mergeRowIndex > -1 && mergeRowspan && mergeColspan) {
-      if (mergeRowIndex === _rowIndex && mergeColIndex === _columnIndex) {
-        return { rowspan: mergeRowspan, colspan: mergeColspan }
-      }
-      if (_rowIndex >= mergeRowIndex && _rowIndex < mergeRowIndex + mergeRowspan && _columnIndex >= mergeColIndex && _columnIndex < mergeColIndex + mergeColspan) {
-        return { rowspan: 0, colspan: 0 }
-      }
-    }
-  }
-}
-
 export function clearTableDefaultStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const { props, internalData } = $xeTable
   internalData.initStatus = false

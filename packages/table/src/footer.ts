@@ -10,20 +10,6 @@ const { renderer, renderEmptyElement } = VxeUI
 
 const renderType = 'footer'
 
-function mergeFooterMethod (mergeFooterList: VxeTableDefines.MergeItem[], _rowIndex: number, _columnIndex: number) {
-  for (let mIndex = 0; mIndex < mergeFooterList.length; mIndex++) {
-    const { row: mergeRowIndex, col: mergeColIndex, rowspan: mergeRowspan, colspan: mergeColspan } = mergeFooterList[mIndex]
-    if (mergeColIndex > -1 && mergeRowIndex > -1 && mergeRowspan && mergeColspan) {
-      if (mergeRowIndex === _rowIndex && mergeColIndex === _columnIndex) {
-        return { rowspan: mergeRowspan, colspan: mergeColspan }
-      }
-      if (_rowIndex >= mergeRowIndex && _rowIndex < mergeRowIndex + mergeRowspan && _columnIndex >= mergeColIndex && _columnIndex < mergeColIndex + mergeColspan) {
-        return { rowspan: 0, colspan: 0 }
-      }
-    }
-  }
-}
-
 export default defineComponent({
   name: 'VxeTableFooter',
   props: {
@@ -62,8 +48,8 @@ export default defineComponent({
 
       const { fixedType } = props
       const { resizable: allResizable, border, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
-      const { scrollXLoad, scrollYLoad, overflowX, currentColumn, mergeFooterList } = tableReactData
-      const { fullColumnIdData, scrollXStore } = tableInternalData
+      const { scrollXLoad, scrollYLoad, overflowX, currentColumn } = tableReactData
+      const { fullColumnIdData, mergeFooterList, mergeFooterCellMaps, scrollXStore } = tableInternalData
       const tooltipOpts = computeTooltipOpts.value
       const resizableOpts = computeResizableOpts.value
       const { isAllColumnDrag } = resizableOpts
@@ -143,7 +129,7 @@ export default defineComponent({
         let isMergeCell = false
         // 合并行或列
         if (mergeFooterList.length) {
-          const spanRest = mergeFooterMethod(mergeFooterList, _rowIndex, _columnIndex)
+          const spanRest = mergeFooterCellMaps[`${_rowIndex}:${_columnIndex}`]
           if (spanRest) {
             const { rowspan, colspan } = spanRest
             if (!rowspan || !colspan) {
