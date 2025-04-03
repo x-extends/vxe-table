@@ -390,20 +390,6 @@ export function calcTreeLine (params: VxeTableDefines.CellRenderBodyParams, prev
   return cellHeight * expandSize - (prevRow ? 1 : (12 - getOffsetSize($table)))
 }
 
-export function mergeBodyMethod (mergeList: any, _rowIndex: any, _columnIndex: any) {
-  for (let mIndex = 0; mIndex < mergeList.length; mIndex++) {
-    const { row: mergeRowIndex, col: mergeColIndex, rowspan: mergeRowspan, colspan: mergeColspan } = mergeList[mIndex]
-    if (mergeColIndex > -1 && mergeRowIndex > -1 && mergeRowspan && mergeColspan) {
-      if (mergeRowIndex === _rowIndex && mergeColIndex === _columnIndex) {
-        return { rowspan: mergeRowspan, colspan: mergeColspan }
-      }
-      if (_rowIndex >= mergeRowIndex && _rowIndex < mergeRowIndex + mergeRowspan && _columnIndex >= mergeColIndex && _columnIndex < mergeColIndex + mergeColspan) {
-        return { rowspan: 0, colspan: 0 }
-      }
-    }
-  }
-}
-
 export function getCellValue (row: any, column: any) {
   return XEUtils.get(row, column.field)
 }

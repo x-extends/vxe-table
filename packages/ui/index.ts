@@ -199,7 +199,7 @@ VxeUI.setConfig({
     },
     virtualXConfig: {
       enabled: true,
-      gt: 60,
+      gt: 28,
       preSize: 0,
       oSize: 1
     },

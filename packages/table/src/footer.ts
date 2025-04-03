@@ -11,20 +11,6 @@ const renderType = 'footer'
 
 const { renderer, renderEmptyElement } = VxeUI
 
-function mergeFooterMethod (mergeFooterList: VxeTableDefines.MergeItem[], _rowIndex: number, _columnIndex: number) {
-  for (let mIndex = 0; mIndex < mergeFooterList.length; mIndex++) {
-    const { row: mergeRowIndex, col: mergeColIndex, rowspan: mergeRowspan, colspan: mergeColspan } = mergeFooterList[mIndex]
-    if (mergeColIndex > -1 && mergeRowIndex > -1 && mergeRowspan && mergeColspan) {
-      if (mergeRowIndex === _rowIndex && mergeColIndex === _columnIndex) {
-        return { rowspan: mergeRowspan, colspan: mergeColspan }
-      }
-      if (_rowIndex >= mergeRowIndex && _rowIndex < mergeRowIndex + mergeRowspan && _columnIndex >= mergeColIndex && _columnIndex < mergeColIndex + mergeColspan) {
-        return { rowspan: 0, colspan: 0 }
-      }
-    }
-  }
-}
-
 function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) {
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
@@ -35,8 +21,8 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
 
   const { fixedType } = props
   const { resizable: allResizable, border, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
-  const { scrollXLoad, scrollYLoad, overflowX, currentColumn, mergeFooterList } = tableReactData
-  const { fullColumnIdData, scrollXStore } = tableInternalData
+  const { scrollXLoad, scrollYLoad, overflowX, currentColumn } = tableReactData
+  const { fullColumnIdData, mergeFooterList, mergeFooterCellMaps, scrollXStore } = tableInternalData
   const tooltipOpts = $xeTable.computeTooltipOpts
   const { isAllColumnDrag } = $xeTable.resizableOpts
   const columnOpts = $xeTable.computeColumnOpts
@@ -115,7 +101,7 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
     let isMergeCell = false
     // 合并行或列
     if (mergeFooterList.length) {
-      const spanRest = mergeFooterMethod(mergeFooterList, _rowIndex, _columnIndex)
+      const spanRest = mergeFooterCellMaps[`${_rowIndex}:${_columnIndex}`]
       if (spanRest) {
         const { rowspan, colspan } = spanRest
         if (!rowspan || !colspan) {

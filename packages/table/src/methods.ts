@@ -1321,51 +1321,85 @@ function calculateMergerOffsetIndex (list: any, offsetItem: any, type: any) {
   }
 }
 
-function setMerges ($xeTable: VxeTableConstructor, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[], mList: VxeTableDefines.MergeItem[], rowList?: any[]) {
-  // const props = $xeTable
+function buildMergeData (mergeConfigs: VxeTableDefines.MergeItem[]) {
+  const mergeMaps: Record<string, VxeTableDefines.MergeCacheItem> = {}
+  if (mergeConfigs && mergeConfigs.length) {
+    for (let mIndex = 0; mIndex < mergeConfigs.length; mIndex++) {
+      const { row: _rowIndex, col: _columnIndex, rowspan: mergeRowspan, colspan: mergeColspan } = mergeConfigs[mIndex]
+      for (let i = 0; i < mergeRowspan; i++) {
+        for (let j = 0; j < mergeColspan; j++) {
+          mergeMaps[`${_rowIndex + i}:${_columnIndex + j}`] = !i && !j
+            ? {
+                rowspan: mergeRowspan,
+                colspan: mergeColspan
+              }
+            : {
+                rowspan: 0,
+                colspan: 0
+              }
+        }
+      }
+    }
+  }
+  return mergeMaps
+}
+
+const handleBodyMerge = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
   const internalData = $xeTable as unknown as TableInternalData
 
+  const { fullAllDataRowIdData, fullColumnIdData, visibleColumn, afterFullData, mergeBodyList, mergeBodyMaps } = internalData
   if (merges) {
-    // const { treeConfig } = props
-    const { visibleColumn } = internalData
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
     if (!XEUtils.isArray(merges)) {
       merges = [merges]
     }
-    // if (treeConfig && merges.length) {
-    //   errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
-    // }
     merges.forEach((item) => {
       let { row, col, rowspan, colspan } = item
-      if (rowList && XEUtils.isNumber(row)) {
-        row = rowList[row]
+      let mergeRowIndex = -1
+      let mergeColumnIndex = -1
+      if (XEUtils.isNumber(row)) {
+        mergeRowIndex = row
+      } else {
+        const rowid = row ? handleGetRowId(row) : null
+        const rowRest = rowid ? fullAllDataRowIdData[rowid] : null
+        if (rowRest) {
+          mergeRowIndex = rowRest._index
+        }
       }
       if (XEUtils.isNumber(col)) {
-        col = visibleColumn[col]
+        mergeColumnIndex = col
+      } else {
+        const colid = col ? col.id : null
+        const colRest = colid ? fullColumnIdData[colid] : null
+        if (colRest) {
+          mergeColumnIndex = colRest._index
+        }
       }
-      if ((rowList ? row : XEUtils.isNumber(row)) && col && (rowspan || colspan)) {
+      if (mergeRowIndex > -1 && mergeColumnIndex > -1 && (rowspan || colspan)) {
         rowspan = XEUtils.toNumber(rowspan) || 1
         colspan = XEUtils.toNumber(colspan) || 1
         if (rowspan > 1 || colspan > 1) {
-          const mcIndex = XEUtils.findIndexOf(mList, item => item._row === row && item._col === col)
-          const mergeItem = mList[mcIndex]
+          const row = afterFullData[mergeRowIndex]
+          const column = visibleColumn[mergeColumnIndex]
+          let mergeItem = mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
           if (mergeItem) {
             mergeItem.rowspan = rowspan
             mergeItem.colspan = colspan
             mergeItem._rowspan = rowspan
             mergeItem._colspan = colspan
           } else {
-            const mergeRowIndex = rowList ? rowList.indexOf(row) : row
-            const mergeColIndex = visibleColumn.indexOf(col)
-            mList.push({
+            mergeItem = {
               row: mergeRowIndex,
-              col: mergeColIndex,
+              col: mergeColumnIndex,
               rowspan,
               colspan,
               _row: row,
-              _col: col,
+              _col: column,
               _rowspan: rowspan,
               _colspan: colspan
-            })
+            }
+            mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`] = mergeItem
+            mergeBodyList.push(mergeItem)
           }
         }
       }
@@ -1373,7 +1407,57 @@ function setMerges ($xeTable: VxeTableConstructor, merges: VxeTableDefines.Merge
   }
 }
 
-function removeMerges ($xeTable: VxeTableConstructor, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[], mList: VxeTableDefines.MergeItem[], rowList?: any) {
+const handleFooterMerge = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { footerTableData } = reactData
+  const { mergeFooterList, mergeFooterMaps } = internalData
+  if (merges) {
+    const { visibleColumn } = internalData
+    if (!XEUtils.isArray(merges)) {
+      merges = [merges]
+    }
+    merges.forEach((item) => {
+      let { row: margeRow, col: margeCol, rowspan, colspan } = item
+      const mergeRowIndex = XEUtils.isNumber(margeRow) ? margeRow : -1
+      let mergeColumnIndex = -1
+      if (XEUtils.isNumber(margeCol)) {
+        mergeColumnIndex = margeCol
+      }
+      if (mergeRowIndex > -1 && mergeColumnIndex > -1 && (rowspan || colspan)) {
+        rowspan = XEUtils.toNumber(rowspan) || 1
+        colspan = XEUtils.toNumber(colspan) || 1
+        if (rowspan > 1 || colspan > 1) {
+          const row = footerTableData[mergeRowIndex]
+          const column = visibleColumn[mergeColumnIndex]
+          let mergeItem = mergeFooterMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
+          if (mergeItem) {
+            mergeItem.rowspan = rowspan
+            mergeItem.colspan = colspan
+            mergeItem._rowspan = rowspan
+            mergeItem._colspan = colspan
+          } else {
+            mergeItem = {
+              row: mergeRowIndex,
+              col: mergeColumnIndex,
+              rowspan,
+              colspan,
+              _row: row,
+              _col: column,
+              _rowspan: rowspan,
+              _colspan: colspan
+            }
+            mergeFooterMaps[`${mergeRowIndex}:${mergeColumnIndex}`] = mergeItem
+            mergeFooterList.push(mergeItem)
+          }
+        }
+      }
+    })
+  }
+}
+
+function removeMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[], mList: VxeTableDefines.MergeItem[], rowList?: any) {
   // const props = $xeTable
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -2063,8 +2147,8 @@ function loadScrollXData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { mergeList, mergeFooterList, isScrollXBig } = reactData
-  const { scrollXStore } = internalData
+  const { isScrollXBig } = reactData
+  const { mergeBodyList, mergeFooterList, scrollXStore } = internalData
   const { preloadSize, startIndex, endIndex, offsetSize } = scrollXStore
   const { toVisibleIndex, visibleSize } = handleVirtualXVisible($xeTable)
   const offsetItem = {
@@ -2073,7 +2157,7 @@ function loadScrollXData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   }
   scrollXStore.visibleStartIndex = toVisibleIndex - 1
   scrollXStore.visibleEndIndex = toVisibleIndex + visibleSize + 1
-  calculateMergerOffsetIndex(mergeList.concat(mergeFooterList), offsetItem, 'col')
+  calculateMergerOffsetIndex(mergeBodyList.concat(mergeFooterList), offsetItem, 'col')
   const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
   if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
     if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
@@ -2287,8 +2371,8 @@ function loadScrollYData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { mergeList, isAllOverflow, isScrollYBig } = reactData
-  const { scrollYStore } = internalData
+  const { isAllOverflow, isScrollYBig } = reactData
+  const { mergeBodyList, scrollYStore } = internalData
   const { preloadSize, startIndex, endIndex, offsetSize } = scrollYStore
   const autoOffsetYSize = isAllOverflow ? offsetSize : offsetSize + 1
   const { toVisibleIndex, visibleSize } = handleVirtualYVisible($xeTable)
@@ -2298,7 +2382,7 @@ function loadScrollYData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   }
   scrollYStore.visibleStartIndex = toVisibleIndex - 1
   scrollYStore.visibleEndIndex = toVisibleIndex + visibleSize + 1
-  calculateMergerOffsetIndex(mergeList, offsetItem, 'row')
+  calculateMergerOffsetIndex(mergeBodyList, offsetItem, 'row')
   const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
   if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
     if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
@@ -2715,7 +2799,7 @@ const Methods = {
    * 对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到
    */
   syncData () {
-    warnLog('vxe.error.delFunc', ['syncData', 'getData'])
+    errLog('vxe.error.delFunc', ['syncData', 'getData'])
     return this.$nextTick().then(() => {
       this.tableData = []
       return this.$nextTick().then(() => this.loadTableData(this.tableFullData, true))
@@ -2726,31 +2810,37 @@ const Methods = {
    * 对于手动更改了排序、筛选...等条件后需要重新处理数据时可能会用到
    */
   updateData () {
-    const { scrollXLoad, scrollYLoad } = this
-    return this.handleTableData(true).then(() => {
-      this.updateFooter()
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+
+    const { scrollXLoad, scrollYLoad } = reactData
+    return $xeTable.handleTableData(true).then(() => {
+      $xeTable.updateFooter()
       if (scrollXLoad || scrollYLoad) {
         if (scrollXLoad) {
-          this.updateScrollXSpace()
+          $xeTable.updateScrollXSpace()
         }
         if (scrollYLoad) {
-          this.updateScrollYSpace()
+          $xeTable.updateScrollYSpace()
         }
-        return this.refreshScroll()
+        return $xeTable.refreshScroll()
       }
     }).then(() => {
-      this.updateCellAreas()
-      return this.recalculate(true)
+      $xeTable.updateCellAreas()
+      return $xeTable.recalculate(true)
     }).then(() => {
       // 存在滚动行为未结束情况
-      setTimeout(() => this.recalculate(), 50)
+      setTimeout(() => $xeTable.recalculate(), 50)
     })
   },
   handleTableData (force: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { scrollYLoad, scrollYStore, fullDataRowIdData, afterFullData } = this
-    let fullList = afterFullData
+    const { scrollYLoad } = reactData
+    const { scrollYStore, fullDataRowIdData } = internalData
+    let fullList: any[] = internalData.afterFullData
     // 是否进行数据处理
     if (force) {
       // 更新数据，处理筛选和排序
@@ -2759,14 +2849,17 @@ const Methods = {
       fullList = handleVirtualTreeToList($xeTable)
     }
     const tableData = scrollYLoad ? fullList.slice(scrollYStore.startIndex, scrollYStore.endIndex) : fullList.slice(0)
+    const visibleDataRowIdMaps: Record<string, any> = {}
     tableData.forEach((row: any, $index: any) => {
       const rowid = getRowid(this, row)
       const rest = fullDataRowIdData[rowid]
       if (rest) {
         rest.$index = $index
       }
+      visibleDataRowIdMaps[rowid] = row
     })
     this.tableData = tableData
+    internalData.visibleDataRowIdData = visibleDataRowIdMaps
     return this.$nextTick()
   },
   /**
@@ -2840,7 +2933,7 @@ const Methods = {
     internalData.tableFullData = fullData
     internalData.tableFullTreeData = treeData
     // 缓存数据
-    $xeTable.cacheRowMap(true)
+    $xeTable.cacheRowMap(isReset)
     // 原始数据
     internalData.tableSynchData = datas
     if (isReset) {
@@ -2858,6 +2951,7 @@ const Methods = {
     $xeTable.clearMergeFooterItems()
     $xeTable.handleTableData(true)
     $xeTable.updateFooter()
+    $xeTable.handleUpdateBodyMerge()
     return $xeTable.$nextTick().then(() => {
       updateHeight($xeTable)
       updateStyle($xeTable)
@@ -3037,7 +3131,7 @@ const Methods = {
   /**
    * 更新数据行的 Map
    */
-  cacheRowMap () {
+  cacheRowMap (isReset: boolean) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
@@ -3049,7 +3143,7 @@ const Methods = {
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const { lazy } = treeOpts
-    const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = { ...fullAllDataRowIdData } // 存在已删除数据
+    const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = isReset ? {} : { ...fullAllDataRowIdData } // 存在已删除数据
     const fullDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
 
     const { handleUpdateRowId } = createHandleUpdateRowId($xeTable)
@@ -5685,6 +5779,27 @@ const Methods = {
     this.closeMenu()
     this.updateCellAreas()
     this.recalculate(true)
+  },
+  /**
+   * 处理合并
+   */
+  handleUpdateBodyMerge () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { mergeBodyList } = internalData
+    internalData.mergeBodyCellMaps = buildMergeData(mergeBodyList)
+    reactData.mergeBodyFlag++
+  },
+  handleUpdateFooterMerge () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { mergeFooterList } = internalData
+    internalData.mergeFooterCellMaps = buildMergeData(mergeFooterList)
+    reactData.mergeFootFlag++
   },
   handleTargetLeaveEvent () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -9272,7 +9387,7 @@ const Methods = {
    * @param {ColumnInfo} column 列配置
    */
   scrollToColumn (fieldOrColumn: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     return handleScrollToRowColumn($xeTable, fieldOrColumn)
   },
@@ -9302,8 +9417,8 @@ const Methods = {
    * 手动清除滚动相关信息，还原到初始状态
    */
   clearScroll () {
-    const $xeTable = this
-    const internalData = $xeTable
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
     const { elemStore, scrollXStore, scrollYStore } = internalData
     const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
@@ -9343,17 +9458,22 @@ const Methods = {
    */
   updateFooter () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
     const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
 
-    const { showFooter, visibleColumn, footerData, footerMethod } = this
+    const { showFooter, footerData, footerMethod } = props
+    const { visibleColumn, afterFullData } = internalData
     let footData = []
     if (showFooter && footerData && footerData.length) {
       footData = footerData.slice(0)
     } else if (showFooter && footerMethod) {
-      footData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: this.afterFullData, $table: $xeTable, $grid: $xeGrid }) : []
+      footData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: afterFullData, $table: $xeTable, $grid: $xeGrid }) : []
     }
-    this.footerTableData = footData
-    return this.$nextTick()
+    reactData.footerTableData = footData
+    $xeTable.handleUpdateFooterMerge()
+    return $xeTable.$nextTick()
   },
   /**
    * 更新列状态 updateStatus({ row, column }, cellValue)
@@ -9361,7 +9481,7 @@ const Methods = {
    * 如果单元格配置了校验规则，则会进行校验
    */
   updateStatus (slotParams: any, cellValue: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
 
     return this.$nextTick().then(() => {
@@ -9376,14 +9496,16 @@ const Methods = {
    * @param {TableMergeConfig[]} merges { row: Row|number, column: ColumnInfo|number, rowspan: number, colspan: number }
    */
   setMergeCells (merges: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
 
-    if (this.spanMethod) {
+    if (props.spanMethod) {
       errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
     }
-    setMerges(this, merges, this.mergeList, this.afterFullData)
-    return this.$nextTick().then(() => {
-      this.updateCellAreas()
+    handleBodyMerge($xeTable, merges)
+    $xeTable.handleUpdateBodyMerge()
+    return $xeTable.$nextTick().then(() => {
+      $xeTable.updateCellAreas()
       return updateStyle($xeTable)
     })
   },
@@ -9392,14 +9514,16 @@ const Methods = {
    * @param {TableMergeConfig[]} merges 多个或数组 [{row:Row|number, col:ColumnInfo|number}]
    */
   removeMergeCells (merges: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
 
-    if (this.spanMethod) {
+    if (props.spanMethod) {
       errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
     }
-    const rest = removeMerges(this, merges, this.mergeList, this.afterFullData)
-    return this.$nextTick().then(() => {
-      this.updateCellAreas()
+    const rest = removeMerges($xeTable, merges, internalData.mergeBodyList, internalData.afterFullData)
+    return $xeTable.$nextTick().then(() => {
+      $xeTable.updateCellAreas()
       updateStyle($xeTable)
       return rest
     })
@@ -9408,40 +9532,50 @@ const Methods = {
    * 获取所有被合并的单元格
    */
   getMergeCells () {
-    return this.mergeList.slice(0)
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    return internalData.mergeBodyList.slice(0)
   },
   /**
    * 清除所有单元格合并
    */
   clearMergeCells () {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
-    this.mergeList = []
-    return this.$nextTick().then(() => {
+    internalData.mergeBodyList = []
+    internalData.mergeBodyMaps = {}
+    internalData.mergeBodyCellMaps = {}
+    return $xeTable.$nextTick().then(() => {
       return updateStyle($xeTable)
     })
   },
   setMergeFooterItems (merges: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
 
-    if (this.footerSpanMethod) {
+    if (props.footerSpanMethod) {
       errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
     }
-    setMerges(this, merges, this.mergeFooterList)
-    return this.$nextTick().then(() => {
-      this.updateCellAreas()
+    handleFooterMerge($xeTable, merges)
+    $xeTable.handleUpdateFooterMerge()
+    return $xeTable.$nextTick().then(() => {
+      $xeTable.updateCellAreas()
       return updateStyle($xeTable)
     })
   },
   removeMergeFooterItems (merges: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
 
-    if (this.footerSpanMethod) {
+    if (props.footerSpanMethod) {
       errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
     }
-    const rest = removeMerges(this, merges, this.mergeFooterList, null)
-    return this.$nextTick().then(() => {
-      this.updateCellAreas()
+    const rest = removeMerges($xeTable, merges, internalData.mergeFooterList)
+    return $xeTable.$nextTick().then(() => {
+      $xeTable.updateCellAreas()
       updateStyle($xeTable)
       return rest
     })
@@ -9450,16 +9584,22 @@ const Methods = {
    * 获取所有被合并的表尾
    */
   getMergeFooterItems () {
-    return this.mergeFooterList.slice(0)
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    return internalData.mergeFooterList.slice(0)
   },
   /**
    * 清除所有表尾合并
    */
   clearMergeFooterItems () {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
-    this.mergeFooterList = []
-    return this.$nextTick().then(() => {
+    internalData.mergeFooterList = []
+    internalData.mergeFooterMaps = {}
+    internalData.mergeFooterCellMaps = {}
+    return $xeTable.$nextTick().then(() => {
       return updateStyle($xeTable)
     })
   },

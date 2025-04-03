@@ -2,7 +2,7 @@ import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { isEnableConf, getClass } from '../../ui/src/utils'
-import { getOffsetSize, calcTreeLine, mergeBodyMethod, getRowid, createHandleGetRowId } from './util'
+import { getOffsetSize, calcTreeLine, getRowid, createHandleGetRowId } from './util'
 import { updateCellTitle } from '../../ui/src/dom'
 import { getSlotVNs } from '../../ui/src/vn'
 
@@ -36,14 +36,13 @@ function renderLine (h: CreateElement, _vm: any, rowid: string, params: VxeTable
   if (slots && (slots as any).line) {
     return $xeTable.callSlot((slots as any).line, params, h)
   }
-  const rest = fullAllDataRowIdData[rowid]
+  const rowRest = fullAllDataRowIdData[rowid]
   let rLevel = 0
   let prevRow = null
-  if (rest) {
-    rLevel = rest.level
-    prevRow = rest.items[rest.treeIndex - 1]
+  if (rowRest) {
+    rLevel = rowRest.level
+    prevRow = rowRest.items[rowRest.treeIndex - 1]
   }
-  const isFirstRow = $xeTable.eqRow(afterFullData[0], row)
   if (treeConfig && treeNode && (treeOpts.showLine || treeOpts.line)) {
     return [
       h('div', {
@@ -53,7 +52,7 @@ function renderLine (h: CreateElement, _vm: any, rowid: string, params: VxeTable
         h('div', {
           class: 'vxe-tree--line',
           style: {
-            height: `${isFirstRow ? 1 : calcTreeLine(params, prevRow)}px`,
+            height: `${$xeTable.eqRow(afterFullData[0], row) ? 1 : calcTreeLine(params, prevRow)}px`,
             bottom: `-${Math.floor(cellHeight / 2)}px`,
             left: `${(rLevel * treeOpts.indent) + (rLevel ? 2 - getOffsetSize($xeTable) : 0) + 16}px`
           }
@@ -90,10 +89,9 @@ function renderTdColumn (
   const tableInternalData = $xeTable as unknown as TableInternalData
   const $xeGrid = $xeTable.$xeGrid
 
-  const { fullAllDataRowIdData, fullColumnIdData, visibleColumn } = tableInternalData
   const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
-  const { tableData, dragRow, overflowX, currentColumn, scrollXLoad, scrollYLoad, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
-  const { afterFullData, scrollXStore, scrollYStore } = tableInternalData
+  const { tableData, dragRow, overflowX, currentColumn, scrollXLoad, scrollYLoad, mergeBodyFlag, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, editStore, isAllOverflow, validErrorMaps } = tableReactData
+  const { fullAllDataRowIdData, fullColumnIdData, mergeBodyCellMaps, visibleColumn, afterFullData, mergeBodyList, scrollXStore, scrollYStore } = tableInternalData
   const cellOpts = $xeTable.computeCellOpts
   const validOpts = $xeTable.computeValidOpts
   const checkboxOpts = $xeTable.computeCheckboxOpts
@@ -221,8 +219,8 @@ function renderTdColumn (
   }
   let isMergeCell = false
   // 合并行或列
-  if (mergeList.length) {
-    const spanRest = mergeBodyMethod(mergeList, _rowIndex, _columnIndex)
+  if (mergeBodyFlag && mergeBodyList.length) {
+    const spanRest = mergeBodyCellMaps[`${_rowIndex}:${_columnIndex}`]
     if (spanRest) {
       const { rowspan, colspan } = spanRest
       if (!rowspan || !colspan) {
@@ -251,7 +249,7 @@ function renderTdColumn (
     }
   }
   // 如果被合并不可隐藏
-  if (fixedHiddenColumn && mergeList) {
+  if (fixedHiddenColumn && isMergeCell) {
     if (tdAttrs.colspan > 1 || tdAttrs.rowspan > 1) {
       fixedHiddenColumn = false
     }

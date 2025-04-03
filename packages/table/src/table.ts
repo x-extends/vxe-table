@@ -216,20 +216,22 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
       const { transform, seqMode } = treeOpts
       const cellStyle: Record<string, string> = {}
       const rowid = handleGetRowId(row)
-      const rest = fullAllDataRowIdData[rowid]
+      const rowRest = fullAllDataRowIdData[rowid]
       let rowLevel = 0
       let seq: string | number = -1
-      let _rowIndex = 0
-      const rowIndex = $xeTable.getRowIndex(row)
-      const $rowIndex = $xeTable.getVMRowIndex(row)
-      if (rest) {
-        rowLevel = rest.level
+      let _rowIndex = -1
+      let rowIndex = -1
+      let $rowIndex = -1
+      if (rowRest) {
+        rowLevel = rowRest.level
         if (treeConfig && transform && seqMode === 'increasing') {
-          seq = rest._index + 1
+          seq = rowRest._index + 1
         } else {
-          seq = rest.seq
+          seq = rowRest.seq
         }
-        _rowIndex = rest._index
+        rowIndex = rowRest.index
+        $rowIndex = rowRest.$index
+        _rowIndex = rowRest._index
       }
       if (expandHeight) {
         cellStyle.height = `${expandHeight}px`
@@ -479,10 +481,6 @@ export default {
       hasFixedColumn: false,
       // 树节点列信息
       treeNodeColumn: null,
-      // 合并单元格的对象集
-      mergeList: [],
-      // 合并表尾数据的对象集
-      mergeFooterList: [],
       // 初始化标识
       initStore: {
         filter: false,
@@ -633,6 +631,10 @@ export default {
       treeExpandedFlag: 1,
       updateCheckboxFlag: 1,
       pendingRowFlag: 1,
+      insertRowFlag: 1,
+      removeRowFlag: 1,
+      mergeBodyFlag: 1,
+      mergeFootFlag: 1,
 
       rowHeightStore: {
         default: 48,
@@ -1098,20 +1100,22 @@ export default {
     },
     computeTableRowExpandedList () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
 
-      const { rowExpandedFlag, tableData, expandColumn } = reactData
-      const { rowExpandedMaps } = internalData
-      const { handleGetRowId } = createHandleGetRowId($xeTable)
+      const { treeConfig } = props
+      const { rowExpandedFlag, expandColumn } = reactData
+      const { visibleDataRowIdData, rowExpandedMaps } = internalData
+      const treeOpts = $xeTable.computeTreeOpts
+      const { transform } = treeOpts
       const expandList: any[] = []
       if (expandColumn && rowExpandedFlag) {
-        const rowKeys: Record<string, boolean> = {}
-        tableData.forEach(row => {
-          rowKeys[handleGetRowId(row)] = true
-        })
+        if (treeConfig && !transform) {
+          return XEUtils.values(rowExpandedMaps)
+        }
         XEUtils.each(rowExpandedMaps, (row, rowid) => {
-          if (rowKeys[rowid]) {
+          if (visibleDataRowIdData[rowid]) {
             expandList.push(row)
           }
         })
@@ -1386,14 +1390,27 @@ export default {
       tableFullColumn: [],
       // 渲染所有列
       visibleColumn: [],
-      // 总的缓存数据集
+      // 全量数据集（包括当前和已删除）
       fullAllDataRowIdData: {},
+      // 数据集（仅当前）
+      fullDataRowIdData: {},
+      // 数据集（仅可视）
+      visibleDataRowIdData: {},
       // 渲染中缓存数据
       sourceDataRowIdData: {},
-      fullDataRowIdData: {},
       fullColumnIdData: {},
       fullColumnFieldData: {},
 
+      // 合并单元格的数据
+      mergeBodyList: [],
+      mergeBodyMaps: {},
+      // 合并表尾的数据
+      mergeFooterList: [],
+      mergeFooterMaps: {},
+      // 已合并单元格数据集合
+      mergeBodyCellMaps: {},
+      // 已合并表尾数据集合
+      mergeFooterCellMaps: {},
       // 已展开的行集合
       rowExpandedMaps: {},
       // 懒加载中的展开行的集合
@@ -1502,7 +1519,7 @@ export default {
     if (rowOpts.height && !this.showOverflow) {
       warnLog('vxe.error.notProp', ['table.show-overflow'])
     }
-    if (!$xeTable.handleCellAreaMousedownEvent) {
+    if (!$xeTable.triggerCellAreaMousedownEvent) {
       if (props.areaConfig) {
         warnLog('vxe.error.notProp', ['area-config'])
       }

@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
-import { isColumnInfo, mergeBodyMethod, getCellValue } from '../../src/util'
+import { isColumnInfo, getCellValue } from '../../src/util'
 import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
 import { hasClass } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
@@ -342,9 +342,11 @@ function hasEllipsis ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, co
 function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
 
   const { id, border, treeConfig, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow } = props
-  const { isAllSelected, isIndeterminate, mergeList } = reactData
+  const { isAllSelected, isIndeterminate } = reactData
+  const { mergeBodyCellMaps } = internalData
   const treeOpts = $xeTable.computeTreeOpts
   const { print: isPrint, isHeader, isFooter, isColgroup, isMerge, colgroups, original } = opts
   const allCls = 'check-all'
@@ -442,15 +444,16 @@ function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: V
       datas.forEach(item => {
         tables.push(
           '<tr>' + columns.map(column => {
+            const colid = column.id
             const cellAlign = column.align || allAlign
             const classNames = hasEllipsis($xeTable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-            const cellValue = item[column.id]
+            const cellValue = item[colid]
             let rowSpan = 1
             let colSpan = 1
-            if (isMerge && mergeList.length) {
+            if (isMerge) {
               const _rowIndex = $xeTable.getVTRowIndex(item._row)
               const _columnIndex = $xeTable.getVTColumnIndex(column)
-              const spanRest = mergeBodyMethod(mergeList, _rowIndex, _columnIndex)
+              const spanRest = mergeBodyCellMaps[`${_rowIndex}:${_columnIndex}`]
               if (spanRest) {
                 const { rowspan, colspan } = spanRest
                 if (!rowspan || !colspan) {
@@ -1071,15 +1074,15 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
   const $xeGrid = $xeTable.$xeGrid
 
   const { treeConfig, showHeader, showFooter } = props
-  const { initStore, mergeList, mergeFooterList, isGroup, footerTableData, exportStore, exportParams } = reactData
-  const { collectColumn } = internalData
+  const { initStore, isGroup, footerTableData, exportStore, exportParams } = reactData
+  const { collectColumn, mergeBodyList, mergeFooterList } = internalData
   const exportOpts = $xeTable.computeExportOpts
   const hasTree = treeConfig
   const customOpts = $xeTable.computeCustomOpts
   const selectRecords = $xeTable.getCheckboxRecords()
   const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : {}
   const hasFooter = !!footerTableData.length
-  const hasMerge = !!(mergeList.length || mergeFooterList.length)
+  const hasMerge = !!(mergeBodyList.length || mergeFooterList.length)
   const defOpts = Object.assign({
     message: true,
     isHeader: showHeader,
@@ -1253,12 +1256,12 @@ export default {
       const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor
 
       const { treeConfig, showHeader, showFooter } = props
-      const { mergeList, mergeFooterList, isGroup } = reactData
-      const { tableFullColumn, afterFullData, collectColumn } = internalData
+      const { mergeFooterList, isGroup } = reactData
+      const { tableFullColumn, afterFullData, mergeBodyList, collectColumn } = internalData
       const exportOpts = $xeTable.computeExportOpts
       const treeOpts = $xeTable.computeTreeOpts
       const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : {}
-      const hasMerge = !!(mergeList.length || mergeFooterList.length)
+      const hasMerge = !!(mergeBodyList.length || mergeFooterList.length)
       const opts = Object.assign({
         message: true,
         isHeader: showHeader,
