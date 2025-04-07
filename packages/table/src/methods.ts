@@ -2724,12 +2724,16 @@ function handleRowExpandScroll ($xeTable: VxeTableConstructor & VxeTablePrivateM
 const Methods = {
   callSlot (slotFunc: any, params: any, h: any, vNodes: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    // const slots = $xeTable.$scopedSlots
     const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
 
     if (slotFunc) {
       if ($xeGrid) {
         return $xeGrid.callSlot(slotFunc, params, h, vNodes)
       }
+      // if (XEUtils.isString(slotFunc)) {
+      //   slotFunc = slots[slotFunc] || null
+      // }
       if (XEUtils.isFunction(slotFunc)) {
         return getSlotVNs(slotFunc.call(this, params, h, vNodes))
       }

@@ -204,7 +204,7 @@ function renderToolbar (h: CreateElement, _vm: any) {
       ? toolbarSlot.call(_vm, { $grid: _vm }, h)
       : [
           h(VxeToolbarComponent, {
-            props: _vm.toolbarOpts,
+            props: Object.assign({}, _vm.toolbarOpts, { slots: undefined }),
             ref: 'xToolbar',
             scopedSlots: getToolbarSlots(_vm)
           })
@@ -668,10 +668,12 @@ export default {
   methods: {
     ...methods,
     callSlot (slotFunc: any, params: any, h: any, vNodes: any) {
+      const $xeGrid = this
+      const slots = $xeGrid.$scopedSlots
+
       if (slotFunc) {
-        const { $scopedSlots } = this
         if (XEUtils.isString(slotFunc)) {
-          slotFunc = $scopedSlots[slotFunc] || null
+          slotFunc = slots[slotFunc] || null
         }
         if (XEUtils.isFunction(slotFunc)) {
           return getSlotVNs(slotFunc.call(this, params, h, vNodes))
