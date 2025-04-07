@@ -573,7 +573,8 @@ export default defineComponent({
           slotVNs.push(
             h(VxeToolbarComponent, {
               ref: refToolbar,
-              ...toolbarOpts
+              ...toolbarOpts,
+              slots: undefined
             }, toolbarSlots)
           )
         }

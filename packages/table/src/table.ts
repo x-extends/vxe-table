@@ -6933,6 +6933,9 @@ export default defineComponent({
         if ($xeGrid) {
           return $xeGrid.callSlot(slotFunc, params)
         }
+        // if (XEUtils.isString(slotFunc)) {
+        //   slotFunc = slots[slotFunc] || null
+        // }
         if (XEUtils.isFunction(slotFunc)) {
           return getSlotVNs(slotFunc(params))
         }
