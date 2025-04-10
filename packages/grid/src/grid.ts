@@ -936,7 +936,7 @@ export default defineComponent({
                   if (!XEUtils.isArray(defaultSort)) {
                     defaultSort = [defaultSort]
                   }
-                  sortList = defaultSort.map((item: any) => {
+                  sortList = defaultSort.map((item) => {
                     return {
                       field: item.field,
                       property: item.field,

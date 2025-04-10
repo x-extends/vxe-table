@@ -820,10 +820,24 @@
     }
   }
 }
+.vxe-header--column {
+  &:last-child {
+    & > .vxe-cell--col-resizable {
+      right: 0;
+    }
+  }
+}
 .vxe-table--fixed-right-wrapper {
   .vxe-cell--col-resizable {
     right: auto;
     left: -0.3em;
+  }
+  .vxe-header--column {
+    &:last-child {
+      & > .vxe-cell--col-resizable {
+        left: 0;
+      }
+    }
   }
 }
 
@@ -1022,6 +1036,11 @@
           background-color: var(--vxe-ui-table-column-hover-background-color);
         }
       }
+    }
+  }
+  &.header-cell--area {
+    .vxe-table--header-wrapper {
+      user-select: none;
     }
   }
   &.body-cell--area {

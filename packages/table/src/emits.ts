@@ -8,7 +8,13 @@ export default [
   'paste',
   'copy',
   'cut',
-  'current-change',
+
+  'current-change', // 已废弃
+
+  'current-row-change',
+  'current-row-disabled',
+  'current-column-change',
+  'current-column-disabled',
   'radio-change',
   'checkbox-change',
   'checkbox-all',

@@ -1564,10 +1564,8 @@ export default defineComponent({
      */
     const autoCellWidth = () => {
       const { elemStore } = internalData
-      const scrollbarOpts = computeScrollbarOpts.value
-      const tableBody = refTableBody.value
-      const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
-      if (!bodyElem) {
+      const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
+      if (!bodyWrapperElem) {
         return
       }
       const yHandleEl = refScrollYHandleElem.value
@@ -1580,7 +1578,7 @@ export default defineComponent({
       }
       let tWidth = 0
       const minCellWidth = 40 // 列宽最少限制 40px
-      const bodyWidth = bodyElem.clientWidth
+      const bodyWidth = bodyWrapperElem.clientWidth
       let remainWidth = bodyWidth
       let meanWidth = remainWidth / 100
       const { fit } = props
@@ -1664,29 +1662,10 @@ export default defineComponent({
           }
         }
       }
-      const tableHeight = bodyElem.offsetHeight
-      const overflowY = yHandleEl.scrollHeight > yHandleEl.clientHeight
-      reactData.scrollbarWidth = Math.max(scrollbarOpts.width || 0, yHandleEl.offsetWidth - yHandleEl.clientWidth)
-      reactData.overflowY = overflowY
       reactData.scrollXWidth = tWidth
-      internalData.tableHeight = tableHeight
-
-      const headerTableElem = getRefElem(elemStore['main-header-table'])
-      const footerTableElem = getRefElem(elemStore['main-footer-table'])
-      const headerHeight = headerTableElem ? headerTableElem.clientHeight : 0
-      const overflowX = tWidth > bodyWidth
-      const footerHeight = footerTableElem ? footerTableElem.clientHeight : 0
-      reactData.scrollbarHeight = Math.max(scrollbarOpts.height || 0, xHandleEl.offsetHeight - xHandleEl.clientHeight)
-      internalData.headerHeight = headerHeight
-      internalData.footerHeight = footerHeight
-      reactData.overflowX = overflowX
       reactData.resizeWidthFlag++
       updateColumnOffsetLeft()
       updateHeight()
-      reactData.parentHeight = Math.max(internalData.headerHeight + footerHeight + 20, $xeTable.getParentHeight())
-      if (overflowX) {
-        $xeTable.checkScrolling()
-      }
     }
 
     const calcCellAutoHeight = (rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
@@ -2775,7 +2754,9 @@ export default defineComponent({
         }
         // 计算 Y 逻辑
         const rowHeight = computeRowHeight()
-        ;(scrollYStore as any).rowHeight = rowHeight
+
+        ;(scrollYStore as any).rowHeight = rowHeight // 已废弃
+
         reactData.rowHeight = rowHeight
         const { toVisibleIndex: toYVisibleIndex, visibleSize: visibleYSize } = handleVirtualYVisible()
         if (scrollYLoad) {
@@ -2792,10 +2773,44 @@ export default defineComponent({
         } else {
           $xeTable.updateScrollYSpace()
         }
-        nextTick(() => {
-          updateStyle()
-        })
       })
+    }
+
+    const calcScrollbar = () => {
+      const { scrollXWidth, scrollYHeight } = reactData
+      const { elemStore } = internalData
+      const scrollbarOpts = computeScrollbarOpts.value
+      const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
+      const headerTableElem = getRefElem(elemStore['main-header-table'])
+      const footerTableElem = getRefElem(elemStore['main-footer-table'])
+      const xHandleEl = refScrollXHandleElem.value
+      const yHandleEl = refScrollYHandleElem.value
+      let overflowY = false
+      let overflowX = false
+      if (bodyWrapperElem) {
+        overflowY = scrollYHeight > bodyWrapperElem.clientHeight
+        if (yHandleEl) {
+          reactData.scrollbarWidth = Math.max(scrollbarOpts.width || 0, yHandleEl.offsetWidth - yHandleEl.clientWidth)
+        }
+        reactData.overflowY = overflowY
+
+        overflowX = scrollXWidth > bodyWrapperElem.clientWidth
+        if (xHandleEl) {
+          reactData.scrollbarHeight = Math.max(scrollbarOpts.height || 0, xHandleEl.offsetHeight - xHandleEl.clientHeight)
+        }
+
+        const headerHeight = headerTableElem ? headerTableElem.clientHeight : 0
+        const footerHeight = footerTableElem ? footerTableElem.clientHeight : 0
+        internalData.tableHeight = bodyWrapperElem.offsetHeight
+        internalData.headerHeight = headerHeight
+        internalData.footerHeight = footerHeight
+
+        reactData.overflowX = overflowX
+        reactData.parentHeight = Math.max(internalData.headerHeight + footerHeight + 20, $xeTable.getParentHeight())
+      }
+      if (overflowX) {
+        $xeTable.checkScrolling()
+      }
     }
 
     const handleRecalculateLayout = (reFull: boolean) => {
@@ -2814,18 +2829,22 @@ export default defineComponent({
       }
       calcCellWidth()
       autoCellWidth()
+      calcScrollbar()
       updateStyle()
       updateRowExpandStyle()
       return computeScrollLoad().then(() => {
-        if (reFull === true) {
-          // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
-          calcCellWidth()
+        // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
+        calcCellWidth()
+        if (reFull) {
           autoCellWidth()
-          updateStyle()
-          if (reFull) {
-            updateRowOffsetTop()
-          }
-          updateRowExpandStyle()
+        }
+        calcScrollbar()
+        updateStyle()
+        if (reFull) {
+          updateRowOffsetTop()
+        }
+        updateRowExpandStyle()
+        if (reFull) {
           return computeScrollLoad()
         }
       })
@@ -8210,7 +8229,7 @@ export default defineComponent({
           isChange = oldValue === newValue
           if (isChange) {
             newValue = null
-            tableMethods.clearRadioRow()
+            $xeTable.clearRadioRow()
           }
         }
         if (isChange) {
@@ -8218,24 +8237,37 @@ export default defineComponent({
         }
       },
       triggerCurrentColumnEvent (evnt, params) {
+        const { currentColumn: oldValue } = reactData
         const columnOpts = computeColumnOpts.value
-        const { currentMethod } = columnOpts
-        const { column } = params
-        if (!currentMethod || currentMethod({ column })) {
-          tableMethods.setCurrentColumn(column)
+        const currentColumnOpts = computeCurrentColumnOpts.value
+        const beforeRowMethod = currentColumnOpts.beforeSelectMethod || columnOpts.currentMethod as any
+        const { column: newValue } = params
+        const isChange = oldValue !== newValue
+        if (!beforeRowMethod || beforeRowMethod({ column: newValue, $table: $xeTable })) {
+          $xeTable.setCurrentColumn(newValue)
+          if (isChange) {
+            dispatchEvent('current-column-change', { oldValue, newValue, ...params }, evnt)
+          }
+        } else {
+          dispatchEvent('current-column-disabled', params, evnt)
         }
       },
       triggerCurrentRowEvent (evnt, params) {
         const { currentRow: oldValue } = reactData
         const rowOpts = computeRowOpts.value
-        const { currentMethod } = rowOpts
+        const currentRowOpts = computeCurrentRowOpts.value
+        const beforeRowMethod = currentRowOpts.beforeSelectMethod || rowOpts.currentMethod as any
         const { row: newValue } = params
         const isChange = oldValue !== newValue
-        if (!currentMethod || currentMethod({ row: newValue })) {
-          tableMethods.setCurrentRow(newValue)
+        if (!beforeRowMethod || beforeRowMethod({ row: newValue, $table: $xeTable })) {
+          $xeTable.setCurrentRow(newValue)
           if (isChange) {
+            dispatchEvent('current-row-change', { oldValue, newValue, ...params }, evnt)
+            // 已废弃
             dispatchEvent('current-change', { oldValue, newValue, ...params }, evnt)
           }
+        } else {
+          dispatchEvent('current-row-disabled', params, evnt)
         }
       },
       /**
@@ -9593,12 +9625,12 @@ export default defineComponent({
             const firstRow = afterFullData[startIndex]
             let rowid = getRowid($xeTable, firstRow)
             let rowRest = fullAllDataRowIdData[rowid] || {}
-            ySpaceTop = rowRest.oTop
+            ySpaceTop = (rowRest.oTop || 0)
 
             const lastRow = afterFullData[afterFullData.length - 1]
             rowid = getRowid($xeTable, lastRow)
             rowRest = fullAllDataRowIdData[rowid] || {}
-            scrollYHeight = rowRest.oTop + (rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight)
+            scrollYHeight = (rowRest.oTop || 0) + (rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight)
             // 是否展开行
             if (expandColumn && rowExpandedMaps[rowid]) {
               scrollYHeight += rowRest.expandHeight || expandOpts.height || 0
@@ -9663,7 +9695,7 @@ export default defineComponent({
       updateScrollXData () {
         const { isAllOverflow } = reactData
         handleTableColumn()
-        $xeTable.updateScrollYSpace()
+        $xeTable.updateScrollXSpace()
         return nextTick().then(() => {
           handleTableColumn()
           $xeTable.updateScrollXSpace()
@@ -10343,7 +10375,8 @@ export default defineComponent({
               theme: tableTipConfig.theme,
               enterable: tableTipConfig.enterable,
               enterDelay: tableTipConfig.enterDelay,
-              leaveDelay: tableTipConfig.leaveDelay
+              leaveDelay: tableTipConfig.leaveDelay,
+              useHTML: tableTipConfig.useHTML
             }),
             /**
               * 校验提示
@@ -10694,6 +10727,12 @@ export default defineComponent({
           warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
         }
 
+        if (rowOpts.currentMethod) {
+          warnLog('vxe.error.delProp', ['row-config.currentMethod', 'current-row-config.beforeSelectMethod'])
+        }
+        if (columnOpts.currentMethod) {
+          warnLog('vxe.error.delProp', ['row-config.currentMethod', 'current-column-config.beforeSelectMethod'])
+        }
         if ((rowOpts.isCurrent || highlightCurrentRow) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
           warnLog('vxe.error.notConflictProp', ['row-config.isCurrent', 'current-row-config.isFollowSelected'])
         }

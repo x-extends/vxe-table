@@ -2,7 +2,7 @@ import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { toFilters, handleFieldOrColumn, getRefElem } from '../../src/util'
-import { getDomNode, triggerEvent } from '../../../ui/src/dom'
+import { toCssUnit, triggerEvent } from '../../../ui/src/dom'
 import { isEnableConf } from '../../../ui/src/utils'
 
 import type { TableFilterMethods, TableFilterPrivateMethods } from '../../../../types'
@@ -75,11 +75,9 @@ hooks.add('tableFilterModule', {
         if (filterStore.column === column && filterStore.visible) {
           filterStore.visible = false
         } else {
-          const { clientY, pageX } = evnt
           const el = refElem.value
           const tableRect = el.getBoundingClientRect()
-          const targetElem = evnt.target as HTMLDivElement
-          const { visibleWidth } = getDomNode()
+          const btnElem = evnt.currentTarget as HTMLDivElement
           const { filters, filterMultiple, filterRender } = column
           const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
           const frMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
@@ -113,41 +111,19 @@ hooks.add('tableFilterModule', {
             if (!filterWrapperElem) {
               return
             }
+            const btnRect = btnElem.getBoundingClientRect()
             const filterWidth = filterWrapperElem.offsetWidth
             const filterHeadElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-header')
             const filterFootElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-footer')
             const centerWidth = filterWidth / 2
-            const minMargin = 10
-            const maxLeft = el.clientWidth - filterWidth - minMargin
-            let left, right
-            const thEl = targetElem.offsetParent as HTMLTableCellElement
-            const trEl = thEl.offsetParent as HTMLTableCellElement
-            const style: any = {
-              top: `${targetElem.offsetTop + thEl.offsetTop + targetElem.offsetHeight}px`
-            }
+            const left = btnRect.left - tableRect.left - centerWidth
+            const top = btnRect.top - tableRect.top + btnElem.clientHeight
             // 判断面板不能大于表格高度
-            const maxHeight = Math.max(40, el.clientHeight - (clientY - tableRect.y) - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
-            if (column.fixed === 'left') {
-              left = targetElem.offsetLeft + thEl.offsetLeft - centerWidth
-            } else if (column.fixed === 'right') {
-              right = (thEl.offsetWidth - targetElem.offsetLeft) + (trEl.offsetWidth - trEl.offsetLeft) - column.renderWidth - centerWidth
-            } else {
-              left = targetElem.offsetLeft + thEl.offsetLeft - centerWidth - headerScrollElem.scrollLeft
+            const maxHeight = Math.max(40, el.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
+            filterStore.style = {
+              top: toCssUnit(top),
+              left: toCssUnit(left)
             }
-            if (left) {
-              const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
-              if (overflowWidth > 0) {
-                left -= overflowWidth
-              }
-              style.left = `${Math.min(maxLeft, Math.max(minMargin, left))}px`
-            } else if (right) {
-              const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
-              if (overflowWidth > 0) {
-                right += overflowWidth
-              }
-              style.right = `${Math.max(minMargin, right)}px`
-            }
-            filterStore.style = style
             filterStore.maxHeight = maxHeight
           })
         }
@@ -257,7 +233,7 @@ hooks.add('tableFilterModule', {
           return $xeTable.scrollToColumn(column).then(() => {
             const headerWrapperElem = getRefElem(elemStore[`${fixed || 'main'}-header-wrapper`] || elemStore['main-header-wrapper'])
             if (headerWrapperElem) {
-              const filterBtnElem = headerWrapperElem.querySelector(`.vxe-header--column.${column.id} .vxe-filter--btn`) as HTMLElement
+              const filterBtnElem = headerWrapperElem.querySelector(`.vxe-header--column.${column.id} .vxe-cell--filter`) as HTMLElement
               triggerEvent(filterBtnElem, 'click')
             }
           })

@@ -963,16 +963,16 @@ export const Cell = {
         h('span', {
           class: ['vxe-cell--filter', {
             'is--active': filterStore.visible && filterStore.column === column
-          }]
+          }],
+          onClick (evnt) {
+            if ($table.triggerFilterEvent) {
+              $table.triggerFilterEvent(evnt, params.column, params)
+            }
+          }
         }, [
           h('i', {
             class: ['vxe-filter--btn', hasFilter ? (iconMatch || getIcon().TABLE_FILTER_MATCH) : (iconNone || getIcon().TABLE_FILTER_NONE)],
-            title: getI18n('vxe.table.filter'),
-            onClick (evnt) {
-              if ($table.triggerFilterEvent) {
-                $table.triggerFilterEvent(evnt, params.column, params)
-              }
-            }
+            title: getI18n('vxe.table.filter')
           })
         ])
       ]
