@@ -790,7 +790,7 @@ export default {
       return Object.assign({}, getConfig().table.currentColumnConfig, props.currentColumnConfig)
     },
     computeCellOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       const cellOpts = Object.assign({}, getConfig().table.cellConfig, props.cellConfig)
@@ -800,7 +800,7 @@ export default {
       return cellOpts
     },
     computeHeaderCellOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       const headerCellOpts = Object.assign({}, getConfig().table.headerCellConfig, props.headerCellConfig)
@@ -810,7 +810,7 @@ export default {
       return headerCellOpts
     },
     computeFooterCellOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       const footerCellOpts = Object.assign({}, getConfig().table.footerCellConfig, props.footerCellConfig)
@@ -856,7 +856,7 @@ export default {
       return this.computeSeqOpts
     },
     computeSeqOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({ startIndex: 0 }, getConfig().table.seqConfig, props.seqConfig)
@@ -865,7 +865,7 @@ export default {
       return this.computeRadioOpts
     },
     computeRadioOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.radioConfig, props.radioConfig)
@@ -874,7 +874,7 @@ export default {
       return this.computeCheckboxOpts
     },
     computeCheckboxOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.checkboxConfig, props.checkboxConfig)
@@ -883,7 +883,7 @@ export default {
       return this.computeTooltipOpts
     },
     computeTooltipOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
@@ -892,15 +892,15 @@ export default {
       return { ...this.tooltipOpts }
     },
     computeTableTipConfig () {
-      const $xeTable = this
-      const reactData = $xeTable
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const { tooltipStore } = reactData
       const tooltipOpts = $xeTable.computeTooltipOpts
       return Object.assign({}, tooltipOpts, tooltipStore.currOpts)
     },
     computeValidTipConfig () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const tooltipOpts = $xeTable.computeTooltipOpts
       return Object.assign({}, tooltipOpts)
@@ -960,7 +960,7 @@ export default {
       return this.computeHeaderMenu
     },
     computeHeaderMenu () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const menuOpts = $xeTable.computeMenuOpts
       const headerOpts = menuOpts.header
@@ -970,7 +970,7 @@ export default {
       return this.computeBodyMenu
     },
     computeBodyMenu () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const menuOpts = $xeTable.computeMenuOpts
       const bodyOpts = menuOpts.body
@@ -980,7 +980,7 @@ export default {
       return this.computeFooterMenu
     },
     computeFooterMenu () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const menuOpts = $xeTable.computeMenuOpts
       const footerOpts = menuOpts.footer
@@ -990,21 +990,21 @@ export default {
       return this.computeIsMenu
     },
     computeIsMenu () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       const menuOpts = $xeTable.computeMenuOpts
       const headerMenu = $xeTable.computeHeaderMenu
       const bodyMenu = $xeTable.computeBodyMenu
       const footerMenu = $xeTable.computeFooterMenu
-      return !!((props.contextMenu || props.menuConfig) && isEnableConf(menuOpts) && (headerMenu.length || bodyMenu.length || footerMenu.length))
+      return !!(((props as any).contextMenu || props.menuConfig) && isEnableConf(menuOpts) && (headerMenu.length || bodyMenu.length || footerMenu.length))
     },
     ctxMenuList () {
       return this.computeMenuList
     },
     computeMenuList () {
-      const $xeTable = this
-      const reactData = $xeTable as TableReactData
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const { ctxMenuStore } = reactData
       const rest: any[] = []
@@ -1022,8 +1022,8 @@ export default {
       return Object.assign({}, getConfig().table.menuConfig, this.contextMenu, this.menuConfig)
     },
     computeLeftFixedWidth () {
-      const $xeTable = this
-      const reactData = $xeTable as TableReactData
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const { columnStore } = reactData
       const { leftList } = columnStore
@@ -1035,8 +1035,8 @@ export default {
       return leftWidth
     },
     computeRightFixedWidth () {
-      const $xeTable = this
-      const reactData = $xeTable as TableReactData
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const { columnStore } = reactData
       const { rightList } = columnStore
@@ -1594,6 +1594,12 @@ export default {
       warnLog('vxe.error.errProp', [`table.empty-render=${props.emptyRender}`, 'table.empty-render={}'])
     }
 
+    if (rowOpts.currentMethod) {
+      warnLog('vxe.error.delProp', ['row-config.currentMethod', 'current-row-config.beforeSelectMethod'])
+    }
+    if (columnOpts.currentMethod) {
+      warnLog('vxe.error.delProp', ['row-config.currentMethod', 'current-column-config.beforeSelectMethod'])
+    }
     if ((rowOpts.isCurrent || highlightCurrentRow) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
       warnLog('vxe.error.notConflictProp', ['row-config.isCurrent', 'current-row-config.isFollowSelected'])
     }
@@ -2028,7 +2034,8 @@ export default {
               theme: tableTipConfig.theme,
               enterable: tableTipConfig.enterable,
               enterDelay: tableTipConfig.enterDelay,
-              leaveDelay: tableTipConfig.leaveDelay
+              leaveDelay: tableTipConfig.leaveDelay,
+              useHTML: tableTipConfig.useHTML
             }
           })
           : renderEmptyElement($xeTable),

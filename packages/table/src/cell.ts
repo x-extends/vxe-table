@@ -937,19 +937,19 @@ export const Cell = {
         h('span', {
           class: ['vxe-cell--filter', {
             'is--active': filterStore.visible && filterStore.column === column
-          }]
+          }],
+          on: {
+            click (evnt: MouseEvent) {
+              if ($table.triggerFilterEvent) {
+                $table.triggerFilterEvent(evnt, params.column, params)
+              }
+            }
+          }
         }, [
           h('i', {
             class: ['vxe-filter--btn', hasFilter ? (iconMatch || getIcon().TABLE_FILTER_MATCH) : (iconNone || getIcon().TABLE_FILTER_NONE)],
             attrs: {
               title: getI18n('vxe.table.filter')
-            },
-            on: {
-              click (evnt: MouseEvent) {
-                if ($table.triggerFilterEvent) {
-                  $table.triggerFilterEvent(evnt, params.column, params)
-                }
-              }
             }
           })
         ])

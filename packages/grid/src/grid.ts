@@ -10,7 +10,7 @@ import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
 import type { VxeFormComponent, VxePagerComponent, VxeComponentStyleType } from 'vxe-pc-ui'
-import type{ GridReactData, VxeGridConstructor, VxeGridPropTypes, VxeGridPrivateMethods, VxePagerDefines } from '../../../types'
+import type{ GridReactData, VxeGridConstructor, VxeGridPropTypes, VxeGridPrivateMethods, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types'
 
 const { getConfig, getI18n, commands, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 
@@ -67,7 +67,7 @@ function renderDefaultForm (h: CreateElement, $xeGrid: any) {
   return []
 }
 
-function getFuncSlot ($xeGrid: VxeGridConstructor, optSlots: any, slotKey: any) {
+function getFuncSlot ($xeGrid: VxeGridConstructor & VxeGridPrivateMethods, optSlots: any, slotKey: any) {
   const slots = $xeGrid.$scopedSlots
 
   const funcSlot = optSlots[slotKey]
@@ -85,7 +85,7 @@ function getFuncSlot ($xeGrid: VxeGridConstructor, optSlots: any, slotKey: any) 
   return null
 }
 
-const getConfigSlot = ($xeGrid: VxeGridConstructor, slotConfigs?: Record<string, any>) => {
+const getConfigSlot = ($xeGrid: VxeGridConstructor & VxeGridPrivateMethods, slotConfigs?: Record<string, any>) => {
   const slots = $xeGrid.$scopedSlots
 
   const slotConf: Record<string, any> = {}
@@ -708,8 +708,8 @@ export default {
       return 0
     },
     getParentHeight () {
-      const $xeGrid = this
-      const reactData = $xeGrid as GridReactData
+      const $xeGrid = this as VxeGridConstructor & VxeGridPrivateMethods
+      const reactData = $xeGrid as unknown as GridReactData
 
       const el = $xeGrid.$refs.refElem as HTMLDivElement
       if (el) {
@@ -779,13 +779,13 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (proxyTarget: any, ...args: any[]) {
-      const $xeGrid = this
-      const reactData = $xeGrid
+      const $xeGrid = this as VxeGridConstructor & VxeGridPrivateMethods
+      const reactData = $xeGrid as unknown as GridReactData
 
       const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, isRespMsg, isActiveMsg, validConfig, pagerOpts } = this
       const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {} } = proxyOpts
       const resConfigs = proxyOpts.response || proxyOpts.props || {}
-      const $xeTable = $refs.xTable
+      const $xeTable = $refs.xTable as VxeTableConstructor & VxeTablePrivateMethods
       const formData = this.getFormData()
       let button: any
       let code: string
@@ -800,13 +800,13 @@ export default {
       const btnParams = button ? button.params : null
       switch (code) {
         case 'insert':
-          return this.insert()
+          return $xeTable.insert({})
         case 'insert_edit':
-          return this.insert().then(({ row }: any) => this.setEditRow(row))
+          return $xeTable.insert({}).then(({ row }) => $xeTable.setEditRow(row))
 
           // 已废弃
         case 'insert_actived':
-          return this.insert().then(({ row }: any) => this.setEditRow(row))
+          return $xeTable.insert({}).then(({ row }) => $xeTable.setEditRow(row))
           // 已废弃
 
         case 'mark_cancel':
@@ -815,19 +815,19 @@ export default {
         case 'remove':
           return this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeCheckboxRow())
         case 'import':
-          this.importData(btnParams)
+          $xeTable.importData(btnParams)
           break
         case 'open_import':
-          this.openImport(btnParams)
+          $xeTable.openImport(btnParams)
           break
         case 'export':
-          this.exportData(btnParams)
+          $xeTable.exportData(btnParams)
           break
         case 'open_export':
-          this.openExport(btnParams)
+          $xeTable.openExport(btnParams)
           break
         case 'reset_custom':
-          this.resetCustom(true)
+          $xeTable.resetCustom(true)
           break
         case '_init':
         case 'reload':
@@ -841,9 +841,9 @@ export default {
             if (!isInited && reactData.tableLoading) {
               return $xeGrid.$nextTick()
             }
-            let sortList = []
-            let filterList = []
-            let pageParams = {}
+            let sortList: any[] = []
+            let filterList: VxeTableDefines.FilterCheckedParams[] = []
+            let pageParams: any = {}
             if (pagerConfig) {
               if (isInited || isReload) {
                 tablePage.currentPage = 1
@@ -863,7 +863,7 @@ export default {
                 if (!XEUtils.isArray(defaultSort)) {
                   defaultSort = [defaultSort]
                 }
-                sortList = defaultSort.map((item: any) => {
+                sortList = defaultSort.map((item) => {
                   return {
                     field: item.field,
                     property: item.field,
@@ -956,7 +956,7 @@ export default {
           const deleteErrorMethods = ajax.deleteError
           if (ajaxMethods) {
             const selectRecords = $xeTable.getCheckboxRecords()
-            const removeRecords = selectRecords.filter((row: any) => !$xeTable.isInsertByRow(row))
+            const removeRecords = selectRecords.filter((row) => !$xeTable.isInsertByRow(row))
             const body = { removeRecords }
             const commitParams = { $grid: this, code, button, body, form: formData, options: ajaxMethods }
             const applyArgs = [commitParams].concat(args)
