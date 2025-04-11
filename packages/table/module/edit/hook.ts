@@ -300,6 +300,11 @@ hooks.add('tableEditModule', {
           return nextTick()
         }
         syncActivedCell()
+        // 解决 issue#2864：在特定场景下确保输入框失焦
+        const focusedElement = document.activeElement
+        if (focusedElement instanceof HTMLInputElement) {
+          focusedElement.blur()
+        }
         actived.args = null
         actived.row = null
         actived.column = null
