@@ -637,6 +637,7 @@ export default {
       mergeFootFlag: 1,
 
       rowHeightStore: {
+        large: 52,
         default: 48,
         medium: 44,
         small: 40,

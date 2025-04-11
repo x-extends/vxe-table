@@ -332,7 +332,8 @@ export function getColReMinWidth (params: any) {
 const lineOffsetSizes: Record<string, any> = {
   mini: 3,
   small: 2,
-  medium: 1
+  medium: 1,
+  large: 0
 }
 
 function countTreeExpand (prevRow: any, params: VxeTableDefines.CellRenderBodyParams) {

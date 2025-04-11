@@ -8056,12 +8056,10 @@ const Methods = {
 
     const { filterStore } = reactData
     const { column, visible } = filterStore
-    Object.assign(filterStore, {
-      isAllSelected: false,
-      isIndeterminate: false,
-      options: [],
-      visible: false
-    })
+    filterStore.isAllSelected = false
+    filterStore.isIndeterminate = false
+    filterStore.options = []
+    filterStore.visible = false
     if (visible) {
       $xeTable.dispatchEvent('filter-visible', {
         column,
@@ -8751,6 +8749,9 @@ const Methods = {
     }
     updateRowExpandStyle($xeTable)
     checkLastSyncScroll($xeTable, isRollX, isRollY)
+    if (isRollX) {
+      $xeTable.closeFilter()
+    }
     if (rowOpts.isHover || highlightHoverRow) {
       $xeTable.clearHoverRow()
     }
