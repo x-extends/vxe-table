@@ -407,7 +407,8 @@ export function getRootColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMe
 const lineOffsetSizes = {
   mini: 3,
   small: 2,
-  medium: 1
+  medium: 1,
+  large: 0
 }
 
 const countTreeExpand = (prevRow: any, params: VxeTableDefines.CellRenderBodyParams) => {

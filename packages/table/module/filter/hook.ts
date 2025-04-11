@@ -116,10 +116,15 @@ hooks.add('tableFilterModule', {
             const filterHeadElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-header')
             const filterFootElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-footer')
             const centerWidth = filterWidth / 2
-            const left = btnRect.left - tableRect.left - centerWidth
+            let left = btnRect.left - tableRect.left - centerWidth
             const top = btnRect.top - tableRect.top + btnElem.clientHeight
             // 判断面板不能大于表格高度
             const maxHeight = Math.max(40, el.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
+            if (left < 1) {
+              left = 1
+            } else if (left > (el.clientWidth - filterWidth - 1)) {
+              left = el.clientWidth - filterWidth - 1
+            }
             filterStore.style = {
               top: toCssUnit(top),
               left: toCssUnit(left)

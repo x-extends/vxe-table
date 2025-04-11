@@ -431,7 +431,6 @@ export default defineComponent({
 
     const collapseEvent: VxeFormEvents.Collapse = (params) => {
       const { $event } = params
-      nextTick(() => gridExtendTableMethods.recalculate(true))
       gridMethods.dispatchEvent('form-toggle-collapse', params, $event)
       gridMethods.dispatchEvent('form-collapse', params, $event)
     }

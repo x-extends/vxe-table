@@ -251,6 +251,7 @@ export default defineComponent({
       mergeFootFlag: 1,
 
       rowHeightStore: {
+        large: 52,
         default: 48,
         medium: 44,
         small: 40,
@@ -5419,12 +5420,10 @@ export default defineComponent({
       closeFilter () {
         const { filterStore } = reactData
         const { column, visible } = filterStore
-        Object.assign(filterStore, {
-          isAllSelected: false,
-          isIndeterminate: false,
-          options: [],
-          visible: false
-        })
+        filterStore.isAllSelected = false
+        filterStore.isIndeterminate = false
+        filterStore.options = []
+        filterStore.visible = false
         if (visible) {
           dispatchEvent('filter-visible', {
             column,
@@ -9141,6 +9140,9 @@ export default defineComponent({
         }
         updateRowExpandStyle()
         checkLastSyncScroll(isRollX, isRollY)
+        if (isRollX) {
+          $xeTable.closeFilter()
+        }
         if (rowOpts.isHover || highlightHoverRow) {
           $xeTable.clearHoverRow()
         }
