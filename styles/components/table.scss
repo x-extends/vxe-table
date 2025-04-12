@@ -1617,10 +1617,12 @@
     height: 1em;
     text-align: center;
     transform: translateY(-50%);
-    // background-color: var(--vxe-ui-layout-background-color);
     z-index: 1;
     user-select: none;
     cursor: pointer;
+    & > i {
+      background-color: var(--vxe-ui-layout-background-color);
+    }
   }
   .vxe-tree--node-btn {
     display: block;
@@ -1650,6 +1652,9 @@
     &.col--rs-height,
     &.col--auto-height {
       overflow: hidden;
+      &.col--tree-node {
+        overflow: unset;
+      }
       & > .vxe-cell {
         overflow: hidden;
       }

@@ -6,12 +6,15 @@
     <vxe-table
       border
       stripe
+      round
       resizable
       show-footer
       highlight-hover-row
+      size="mini"
       height="400"
       ref="tableRef"
       id="bbbbb"
+      :filter-config="{transfer:true}"
       :row-config="{useKey: true,drag:true}"
       :row-drag-config="{trigger:'row',disabledMethod:disabledRowMethod}"
       :column-config="{useKey: true,drag: true}"
@@ -31,17 +34,17 @@
       <vxe-column field="checkbox" type="checkbox" title="ID" width="140" drag-sort></vxe-column>
       <vxe-colgroup field="group1" title="分组1">
         <vxe-colgroup field="group2" title="分组2">
-          <vxe-column type="expand" field="role" title="Role" drag-sort>
+          <vxe-column type="expand" field="role" title="Role"  drag-sort>
             <template #content="{ row }">
               <div>{{ row.name }}</div>
             </template>
           </vxe-column>
-          <vxe-column field="name" title="Name" drag-sort sortable></vxe-column>
+          <vxe-column field="name" title="Name" width="100" drag-sort sortable></vxe-column>
         </vxe-colgroup>
       </vxe-colgroup>
-      <vxe-column field="sex11" title="<span style='color:red;'>Sex222</span>" type="html"></vxe-column>
-      <vxe-column field="sex22" title="<span style='color:red;'>Sex1111</span>" type="html" :visible="false"></vxe-column>
-      <vxe-column field="name1" title="Name1" sortable drag-sort ></vxe-column>
+      <vxe-column field="sex11" title="<span style='color:red;'>Sex222</span>" type="html" drag-sort></vxe-column>
+      <vxe-column field="sex22" title="<span style='color:red;'>Sex1111</span>" type="html" drag-sort :visible="false"></vxe-column>
+      <vxe-column field="name1" title="Name1" sortable ></vxe-column>
       <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
       <vxe-column
         field="age"

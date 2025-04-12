@@ -3014,7 +3014,12 @@ const Methods = {
       $xeTable.checkSelectionStatus()
       return new Promise<void>(resolve => {
         this.$nextTick()
-          .then(() => $xeTable.recalculate())
+          .then(() => handleRecalculateLayout($xeTable, false))
+          .then(() => {
+            calcCellHeight($xeTable)
+            updateRowOffsetTop($xeTable)
+            return handleRecalculateLayout($xeTable, false)
+          })
           .then(() => {
             let targetScrollLeft = lastScrollLeft
             let targetScrollTop = lastScrollTop
@@ -3028,8 +3033,7 @@ const Methods = {
               targetScrollTop = 0
             }
             reactData.isRowLoading = false
-            calcCellHeight($xeTable)
-            updateRowOffsetTop($xeTable)
+            handleRecalculateLayout($xeTable, false)
             // 是否变更虚拟滚动
             if (oldScrollYLoad === sYLoad) {
               restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
@@ -6654,6 +6658,10 @@ const Methods = {
     const currentColumnOpts = $xeTable.computeCurrentColumnOpts
     const beforeRowMethod = currentColumnOpts.beforeSelectMethod || columnOpts.currentMethod as any
     const { column: newValue } = params
+    const { trigger } = currentColumnOpts
+    if (trigger === 'manual') {
+      return
+    }
     const isChange = oldValue !== newValue
     if (!beforeRowMethod || beforeRowMethod({ column: newValue, $table: $xeTable })) {
       $xeTable.setCurrentColumn(newValue)
@@ -6673,6 +6681,10 @@ const Methods = {
     const currentRowOpts = $xeTable.computeCurrentRowOpts
     const beforeRowMethod = currentRowOpts.beforeSelectMethod || rowOpts.currentMethod as any
     const { row: newValue } = params
+    const { trigger } = currentRowOpts
+    if (trigger === 'manual') {
+      return
+    }
     const isChange = oldValue !== newValue
     if (!beforeRowMethod || beforeRowMethod({ row: newValue, $table: $xeTable })) {
       $xeTable.setCurrentRow(newValue)
@@ -8441,10 +8453,10 @@ const Methods = {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { treeExpandLazyLoadedMaps } = internalData
+    const { treeExpandLazyLoadedMaps, treeEATime } = internalData
     const treeOpts = $xeTable.computeTreeOpts
     const { row, column } = params
-    const { lazy, trigger } = treeOpts
+    const { lazy, trigger, accordion } = treeOpts
     if (trigger === 'manual') {
       return
     }
@@ -8454,7 +8466,17 @@ const Methods = {
       const expanded = !$xeTable.isTreeExpandByRow(row)
       const columnIndex = $xeTable.getColumnIndex(column)
       const $columnIndex = $xeTable.getVMColumnIndex(column)
-      $xeTable.setTreeExpand(row, expanded)
+      if (treeEATime) {
+        clearTimeout(treeEATime)
+      }
+      $xeTable.setTreeExpand(row, expanded).then(() => {
+        if (accordion) {
+          internalData.treeEATime = setTimeout(() => {
+            internalData.treeEATime = undefined
+            $xeTable.scrollToRow(row)
+          }, 20)
+        }
+      })
       $xeTable.dispatchEvent('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row }, evnt)
     }
   },
@@ -9225,7 +9247,8 @@ const Methods = {
       if (isScrollXBig && mouseOpts.area) {
         errLog('vxe.error.notProp', ['mouse-config.area'])
       }
-      $xeTable.$nextTick(() => {
+      calcScrollbar($xeTable)
+      return $xeTable.$nextTick(() => {
         updateStyle($xeTable)
       })
     }
@@ -9335,6 +9358,7 @@ const Methods = {
     if (isScrollYBig && mouseOpts.area) {
       errLog('vxe.error.notProp', ['mouse-config.area'])
     }
+    calcScrollbar($xeTable)
     return $xeTable.$nextTick().then(() => {
       updateStyle($xeTable)
     })
