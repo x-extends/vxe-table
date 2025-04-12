@@ -14,6 +14,7 @@
       height="400"
       ref="tableRef"
       id="bbbbb"
+      :filter-config="{transfer:true}"
       :row-config="{useKey: true,drag:true}"
       :row-drag-config="{trigger:'row',disabledMethod:disabledRowMethod}"
       :column-config="{useKey: true,drag: true}"

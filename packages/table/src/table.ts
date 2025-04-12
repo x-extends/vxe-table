@@ -402,7 +402,7 @@ export default defineComponent({
     const refCommTooltip = ref() as Ref<VxeTooltipInstance>
     const refValidTooltip = ref() as Ref<VxeTooltipInstance>
     const refTableMenu = ref() as Ref<any>
-    const refTableFilter = ref() as Ref<ComponentPublicInstance>
+    const refTableFilter = ref() as Ref<any>
     const refTableCustom = ref() as Ref<ComponentPublicInstance>
 
     const refTableViewportElem = ref<HTMLDivElement>()
@@ -2975,7 +2975,12 @@ export default defineComponent({
         $xeTable.checkSelectionStatus()
         return new Promise<void>(resolve => {
           nextTick()
-            .then(() => $xeTable.recalculate())
+            .then(() => handleRecalculateLayout(false))
+            .then(() => {
+              calcCellHeight()
+              updateRowOffsetTop()
+              return handleRecalculateLayout(false)
+            })
             .then(() => {
               let targetScrollLeft = lastScrollLeft
               let targetScrollTop = lastScrollTop
@@ -2989,8 +2994,7 @@ export default defineComponent({
                 targetScrollTop = 0
               }
               reactData.isRowLoading = false
-              calcCellHeight()
-              updateRowOffsetTop()
+              handleRecalculateLayout(false)
               // 是否变更虚拟滚动
               if (oldScrollYLoad === sYLoad) {
                 restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
@@ -6176,7 +6180,7 @@ export default defineComponent({
       if (tableFilter) {
         if (getEventTargetNode(evnt, el, 'vxe-cell--filter').flag) {
           // 如果点击了筛选按钮
-        } else if (getEventTargetNode(evnt, tableFilter.$el as HTMLDivElement).flag) {
+        } else if (getEventTargetNode(evnt, tableFilter.getRefMaps().refElem.value as HTMLDivElement).flag) {
           // 如果点击筛选容器
         } else {
           if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
@@ -8241,6 +8245,10 @@ export default defineComponent({
         const currentColumnOpts = computeCurrentColumnOpts.value
         const beforeRowMethod = currentColumnOpts.beforeSelectMethod || columnOpts.currentMethod as any
         const { column: newValue } = params
+        const { trigger } = currentColumnOpts
+        if (trigger === 'manual') {
+          return
+        }
         const isChange = oldValue !== newValue
         if (!beforeRowMethod || beforeRowMethod({ column: newValue, $table: $xeTable })) {
           $xeTable.setCurrentColumn(newValue)
@@ -8257,6 +8265,10 @@ export default defineComponent({
         const currentRowOpts = computeCurrentRowOpts.value
         const beforeRowMethod = currentRowOpts.beforeSelectMethod || rowOpts.currentMethod as any
         const { row: newValue } = params
+        const { trigger } = currentRowOpts
+        if (trigger === 'manual') {
+          return
+        }
         const isChange = oldValue !== newValue
         if (!beforeRowMethod || beforeRowMethod({ row: newValue, $table: $xeTable })) {
           $xeTable.setCurrentRow(newValue)
@@ -8303,10 +8315,10 @@ export default defineComponent({
        * 展开树节点事件
        */
       triggerTreeExpandEvent (evnt, params) {
-        const { treeExpandLazyLoadedMaps } = internalData
+        const { treeExpandLazyLoadedMaps, treeEATime } = internalData
         const treeOpts = computeTreeOpts.value
         const { row, column } = params
-        const { lazy, trigger } = treeOpts
+        const { lazy, trigger, accordion } = treeOpts
         if (trigger === 'manual') {
           return
         }
@@ -8316,7 +8328,17 @@ export default defineComponent({
           const expanded = !$xeTable.isTreeExpandByRow(row)
           const columnIndex = $xeTable.getColumnIndex(column)
           const $columnIndex = $xeTable.getVMColumnIndex(column)
-          $xeTable.setTreeExpand(row, expanded)
+          if (treeEATime) {
+            clearTimeout(treeEATime)
+          }
+          $xeTable.setTreeExpand(row, expanded).then(() => {
+            if (accordion) {
+              internalData.treeEATime = setTimeout(() => {
+                internalData.treeEATime = undefined
+                $xeTable.scrollToRow(row)
+              }, 20)
+            }
+          })
           dispatchEvent('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row }, evnt)
         }
       },
@@ -9483,7 +9505,6 @@ export default defineComponent({
         }
         const isRollX = scrollLeft !== lastScrollLeft
         const isRollY = true
-
         internalData.inVirtualScroll = true
         setScrollTop(bodyScrollElem, scrollTop)
         setScrollTop(leftScrollElem, scrollTop)
@@ -9594,7 +9615,8 @@ export default defineComponent({
           if (isScrollXBig && mouseOpts.area) {
             errLog('vxe.error.notProp', ['mouse-config.area'])
           }
-          nextTick(() => {
+          calcScrollbar()
+          return nextTick().then(() => {
             updateStyle()
           })
         }
@@ -9690,6 +9712,7 @@ export default defineComponent({
         if (isScrollYBig && mouseOpts.area) {
           errLog('vxe.error.notProp', ['mouse-config.area'])
         }
+        calcScrollbar()
         return nextTick().then(() => {
           updateStyle()
         })
@@ -10602,7 +10625,6 @@ export default defineComponent({
         initTpImg()
       }
 
-      ;(window as any).aa = $xeTable
       nextTick(() => {
         const { data, exportConfig, importConfig, treeConfig, showOverflow, highlightCurrentRow, highlightCurrentColumn } = props
         const { scrollXStore, scrollYStore } = internalData
