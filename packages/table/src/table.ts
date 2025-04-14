@@ -1495,6 +1495,9 @@ export default {
     if (this.highlightHoverColumn) {
       warnLog('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
     }
+    if (props.resizable) {
+      warnLog('vxe.error.delProp', ['resizable', 'column-config.resizable'])
+    }
     // if (props.scrollY) {
     //   warnLog('vxe.error.delProp', ['scroll-y', 'virtual-y-config'])
     // }

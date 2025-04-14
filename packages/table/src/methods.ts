@@ -205,7 +205,7 @@ function restoreCustomStorage ($xeTable: VxeTableConstructor & VxeTablePrivateMe
  * 更新数据列的 Map
  * 牺牲数据组装的耗时，用来换取使用过程中的流畅
  */
-function cacheColumnMap ($xeTable: VxeTableConstructor) {
+function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -315,7 +315,7 @@ function cacheColumnMap ($xeTable: VxeTableConstructor) {
   reactData.isAllOverflow = isAllOverflow
 }
 
-const updateScrollYStatus = ($xeTable: VxeTableConstructor, fullData?: any[]) => {
+const updateScrollYStatus = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, fullData?: any[]) => {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -331,7 +331,97 @@ const updateScrollYStatus = ($xeTable: VxeTableConstructor, fullData?: any[]) =>
   return scrollYLoad
 }
 
-function updateAfterListIndex ($xeTable: VxeTableConstructor) {
+/**
+ * 展开与收起树节点
+ * @param rows
+ * @param expanded
+ * @returns
+ */
+function handleBaseTreeExpand ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, rows: any[], expanded: boolean) {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { treeNodeColumn } = reactData
+  const { fullAllDataRowIdData, tableFullData, treeExpandedMaps, treeExpandLazyLoadedMaps } = internalData
+  const treeOpts = $xeTable.computeTreeOpts
+  const { reserve, lazy, accordion, toggleMethod } = treeOpts
+  const childrenField = treeOpts.children || treeOpts.childrenField
+  const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
+  const result: any[] = []
+  const columnIndex = $xeTable.getColumnIndex(treeNodeColumn)
+  const $columnIndex = $xeTable.getVMColumnIndex(treeNodeColumn)
+  const { handleGetRowId } = createHandleGetRowId($xeTable)
+  let validRows = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
+  if (accordion) {
+    validRows = validRows.length ? [validRows[validRows.length - 1]] : []
+    // 同一级只能展开一个
+    const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], { children: childrenField })
+    if (matchObj) {
+      matchObj.items.forEach(item => {
+        const rowid = handleGetRowId(item)
+        if (treeExpandedMaps[rowid]) {
+          delete treeExpandedMaps[rowid]
+        }
+      })
+    }
+  }
+  if (expanded) {
+    validRows.forEach((row: any) => {
+      const rowid = handleGetRowId(row)
+      if (!treeExpandedMaps[rowid]) {
+        const rowRest = fullAllDataRowIdData[rowid]
+        if (rowRest) {
+          const isLoad = lazy && row[hasChildField] && !rowRest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
+          // 是否使用懒加载
+          if (isLoad) {
+            result.push(handleAsyncTreeExpandChilds($xeTable, row))
+          } else {
+            if (row[childrenField] && row[childrenField].length) {
+              treeExpandedMaps[rowid] = row
+            }
+          }
+        }
+      }
+    })
+  } else {
+    validRows.forEach(item => {
+      const rowid = handleGetRowId(item)
+      if (treeExpandedMaps[rowid]) {
+        delete treeExpandedMaps[rowid]
+      }
+    })
+  }
+  if (reserve) {
+    validRows.forEach((row: any) => handleTreeExpandReserve($xeTable, row, expanded))
+  }
+  reactData.treeExpandedFlag++
+  return Promise.all(result).then(() => {
+    return $xeTable.recalculate()
+  })
+}
+
+/**
+ * 虚拟树的展开与收起
+ * @param rows
+ * @param expanded
+ * @returns
+ */
+function handleVirtualTreeExpand ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, rows: any[], expanded: boolean) {
+  return handleBaseTreeExpand($xeTable, rows, expanded).then(() => {
+    handleVirtualTreeToList($xeTable)
+    $xeTable.handleTableData()
+    updateAfterDataIndex($xeTable)
+    return $xeTable.$nextTick()
+  }).then(() => {
+    return $xeTable.recalculate(true)
+  }).then(() => {
+    setTimeout(() => {
+      $xeTable.updateCellAreas()
+    }, 30)
+  })
+}
+
+function updateAfterListIndex ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const props = $xeTable
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -362,7 +452,7 @@ function updateAfterListIndex ($xeTable: VxeTableConstructor) {
  * 预编译
  * 对渲染中的数据提前解析序号及索引。牺牲提前编译耗时换取渲染中额外损耗，使运行时更加流畅
  */
-function updateAfterDataIndex ($xeTable: VxeTableConstructor) {
+function updateAfterDataIndex ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const props = $xeTable
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -399,7 +489,7 @@ function updateAfterDataIndex ($xeTable: VxeTableConstructor) {
  * 如果为虚拟树，将树结构拍平
  * @returns
  */
-function handleVirtualTreeToList ($xeTable: VxeTableConstructor) {
+function handleVirtualTreeToList ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const props = $xeTable
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -8238,7 +8328,7 @@ const Methods = {
         internalData.rowExpandedMaps = rowExpandedMaps
         rows = rows.slice(rows.length - 1, rows.length)
       }
-      const validRows: any[] = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column: expandColumn, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) })) : rows
+      const validRows: any[] = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column: expandColumn, columnIndex, $columnIndex, row, rowIndex: $xeTable.getRowIndex(row), $rowIndex: $xeTable.getVMRowIndex(row) })) : rows
       if (expanded) {
         validRows.forEach((row: any) => {
           const rowid = handleGetRowId(row)
@@ -8253,7 +8343,7 @@ const Methods = {
           }
         })
       } else {
-        validRows.forEach((item) => {
+        validRows.forEach(item => {
           const rowid = handleGetRowId(item)
           if (rowExpandedMaps[rowid]) {
             delete rowExpandedMaps[rowid]
@@ -8474,7 +8564,7 @@ const Methods = {
           internalData.treeEATime = setTimeout(() => {
             internalData.treeEATime = undefined
             $xeTable.scrollToRow(row)
-          }, 20)
+          }, 30)
         }
       })
       $xeTable.dispatchEvent('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row }, evnt)
@@ -8504,96 +8594,6 @@ const Methods = {
     return this.setTreeExpand(expandeds, expanded)
   },
   /**
-   * 默认，展开与收起树节点
-   * @param rows
-   * @param expanded
-   * @returns
-   */
-  handleBaseTreeExpand (rows: any, expanded: any) {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const reactData = $xeTable as unknown as TableReactData
-    const internalData = $xeTable as unknown as TableInternalData
-
-    const { treeNodeColumn } = reactData
-    const { fullAllDataRowIdData, tableFullData, treeExpandedMaps, treeExpandLazyLoadedMaps } = internalData
-    const treeOpts = $xeTable.computeTreeOpts
-    const { reserve, lazy, accordion, toggleMethod } = treeOpts
-    const childrenField = treeOpts.children || treeOpts.childrenField
-    const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
-    const result: any[] = []
-    const columnIndex = $xeTable.getColumnIndex(treeNodeColumn)
-    const $columnIndex = $xeTable.getVMColumnIndex(treeNodeColumn)
-    const { handleGetRowId } = createHandleGetRowId($xeTable)
-    let validRows = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
-    if (accordion) {
-      validRows = validRows.length ? [validRows[validRows.length - 1]] : []
-      // 同一级只能展开一个
-      const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], { children: childrenField })
-      if (matchObj) {
-        matchObj.items.forEach(item => {
-          const rowid = handleGetRowId(item)
-          if (treeExpandedMaps[rowid]) {
-            delete treeExpandedMaps[rowid]
-          }
-        })
-      }
-    }
-    if (expanded) {
-      validRows.forEach((row: any) => {
-        const rowid = handleGetRowId(row)
-        if (!treeExpandedMaps[rowid]) {
-          const rowRest = fullAllDataRowIdData[rowid]
-          if (rowRest) {
-            const isLoad = lazy && row[hasChildField] && !rowRest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
-            // 是否使用懒加载
-            if (isLoad) {
-              result.push(handleAsyncTreeExpandChilds($xeTable, row))
-            } else {
-              if (row[childrenField] && row[childrenField].length) {
-                treeExpandedMaps[rowid] = row
-              }
-            }
-          }
-        }
-      })
-    } else {
-      validRows.forEach((item: any) => {
-        const rowid = handleGetRowId(item)
-        if (treeExpandedMaps[rowid]) {
-          delete treeExpandedMaps[rowid]
-        }
-      })
-    }
-    if (reserve) {
-      validRows.forEach((row: any) => handleTreeExpandReserve($xeTable, row, expanded))
-    }
-    reactData.treeExpandedFlag++
-    return Promise.all(result).then(() => {
-      return $xeTable.recalculate()
-    })
-  },
-  /**
-   * 虚拟树的展开与收起
-   * @param rows
-   * @param expanded
-   * @returns
-   */
-  handleVirtualTreeExpand (rows: any[], expanded: boolean) {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-
-    return this.handleBaseTreeExpand(rows, expanded).then(() => {
-      handleVirtualTreeToList($xeTable)
-      this.handleTableData()
-      updateAfterDataIndex($xeTable)
-    }).then(() => {
-      return this.recalculate()
-    }).then(() => {
-      setTimeout(() => {
-        this.updateCellAreas()
-      }, 30)
-    })
-  },
-  /**
    * 设置展开树形节点，二个参数设置这一行展开与否
    * 支持单行
    * 支持多行
@@ -8601,6 +8601,8 @@ const Methods = {
    * @param {Boolean} expanded 是否展开
    */
   setTreeExpand (rows: any | any[], expanded: boolean) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     const { treeOpts } = this
     const { transform } = treeOpts
     if (rows) {
@@ -8610,9 +8612,9 @@ const Methods = {
       if (rows.length) {
         // 如果为虚拟树
         if (transform) {
-          return this.handleVirtualTreeExpand(rows, expanded)
+          return handleVirtualTreeExpand($xeTable, rows, expanded)
         } else {
-          return this.handleBaseTreeExpand(rows, expanded)
+          return handleBaseTreeExpand($xeTable, rows, expanded)
         }
       }
     }

@@ -22,6 +22,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
   const { resizable: allResizable, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
   const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX } = tableReactData
   const { fullColumnIdData, scrollXStore } = tableInternalData
+  const virtualXOpts = $xeTable.computeVirtualXOpts
   const columnOpts = $xeTable.computeColumnOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
   const cellOpts = $xeTable.computeCellOpts
@@ -92,7 +93,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     let isVNPreEmptyStatus = false
     if (!isGroup) {
       if (!dragCol || dragCol.id !== colid) {
-        if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+        if (scrollXLoad && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
           isVNPreEmptyStatus = true
         }
       }

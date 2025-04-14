@@ -89,7 +89,7 @@ function renderTdColumn (
   const tableInternalData = $xeTable as unknown as TableInternalData
   const $xeGrid = $xeTable.$xeGrid
 
-  const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
+  const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, treeConfig, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
   const { tableData, dragRow, overflowX, currentColumn, scrollXLoad, scrollYLoad, mergeBodyFlag, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, editStore, isAllOverflow, validErrorMaps } = tableReactData
   const { fullAllDataRowIdData, fullColumnIdData, mergeBodyCellMaps, visibleColumn, afterFullData, mergeBodyList, scrollXStore, scrollYStore } = tableInternalData
   const cellOpts = $xeTable.computeCellOpts
@@ -97,6 +97,8 @@ function renderTdColumn (
   const checkboxOpts = $xeTable.computeCheckboxOpts
   const editOpts = $xeTable.computeEditOpts
   const tooltipOpts = $xeTable.computeTooltipOpts
+  const virtualXOpts = $xeTable.computeVirtualXOpts
+  const virtualYOpts = $xeTable.computeVirtualYOpts
   const { isAllColumnDrag, isAllRowDrag } = $xeTable.resizableOpts
   const rowOpts = $xeTable.computeRowOpts
   const rowDragOpts = $xeTable.computeRowDragOpts
@@ -268,9 +270,9 @@ function renderTdColumn (
   let isVNPreEmptyStatus = false
   if (!isMergeCell) {
     if (!dragRow || getRowid($xeTable, dragRow) !== rowid) {
-      if (scrollYLoad && (_rowIndex < scrollYStore.visibleStartIndex - scrollYStore.preloadSize || _rowIndex > scrollYStore.visibleEndIndex + scrollYStore.preloadSize)) {
+      if (scrollYLoad && !treeConfig && !virtualYOpts.immediate && (_rowIndex < scrollYStore.visibleStartIndex - scrollYStore.preloadSize || _rowIndex > scrollYStore.visibleEndIndex + scrollYStore.preloadSize)) {
         isVNPreEmptyStatus = true
-      } else if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+      } else if (scrollXLoad && !virtualXOpts.immediate && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
         isVNPreEmptyStatus = true
       }
     }

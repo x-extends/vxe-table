@@ -23,8 +23,10 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
   const { resizable: allResizable, border, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
   const { scrollXLoad, scrollYLoad, overflowX, currentColumn } = tableReactData
   const { fullColumnIdData, mergeFooterList, mergeFooterCellMaps, scrollXStore } = tableInternalData
+  const virtualXOpts = $xeTable.computeVirtualXOpts
   const tooltipOpts = $xeTable.computeTooltipOpts
-  const { isAllColumnDrag } = $xeTable.resizableOpts
+  const resizableOpts = $xeTable.resizableOpts
+  const { isAllColumnDrag } = resizableOpts
   const columnOpts = $xeTable.computeColumnOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const cellOpts = $xeTable.computeCellOpts
@@ -134,7 +136,7 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
 
     let isVNPreEmptyStatus = false
     if (!isMergeCell) {
-      if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+      if (scrollXLoad && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
         isVNPreEmptyStatus = true
       }
     }
