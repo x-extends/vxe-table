@@ -34,7 +34,7 @@ export default defineComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeTooltipOpts, computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeFooterCellOpts, computeDefaultRowHeight, computeResizableOpts } = $xeTable.getComputeMaps()
+    const { computeTooltipOpts, computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeFooterCellOpts, computeDefaultRowHeight, computeResizableOpts, computeVirtualXOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refFooterScroll = ref() as Ref<HTMLDivElement>
@@ -50,6 +50,7 @@ export default defineComponent({
       const { resizable: allResizable, border, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
       const { scrollXLoad, scrollYLoad, overflowX, currentColumn } = tableReactData
       const { fullColumnIdData, mergeFooterList, mergeFooterCellMaps, scrollXStore } = tableInternalData
+      const virtualXOpts = computeVirtualXOpts.value
       const tooltipOpts = computeTooltipOpts.value
       const resizableOpts = computeResizableOpts.value
       const { isAllColumnDrag } = resizableOpts
@@ -162,7 +163,7 @@ export default defineComponent({
 
         let isVNPreEmptyStatus = false
         if (!isMergeCell) {
-          if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+          if (scrollXLoad && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
             isVNPreEmptyStatus = true
           }
         }

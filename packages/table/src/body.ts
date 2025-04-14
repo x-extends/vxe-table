@@ -27,7 +27,7 @@ export default defineComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeEditOpts, computeMouseOpts, computeCellOffsetWidth, computeAreaOpts, computeDefaultRowHeight, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeColumnDragOpts, computeResizableOpts } = $xeTable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeCellOffsetWidth, computeAreaOpts, computeDefaultRowHeight, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeColumnDragOpts, computeResizableOpts, computeVirtualXOpts, computeVirtualYOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refBodyScroll = ref() as Ref<HTMLDivElement>
@@ -102,7 +102,7 @@ export default defineComponent({
     ) => {
       const $xeGrid = $xeTable.xeGrid
 
-      const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
+      const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, treeConfig, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
       const { tableData, dragRow, overflowX, currentColumn, scrollXLoad, scrollYLoad, mergeBodyFlag, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, editStore, isAllOverflow, validErrorMaps } = tableReactData
       const { fullAllDataRowIdData, fullColumnIdData, mergeBodyCellMaps, visibleColumn, afterFullData, mergeBodyList, scrollXStore, scrollYStore } = tableInternalData
       const cellOpts = computeCellOpts.value
@@ -111,6 +111,8 @@ export default defineComponent({
       const editOpts = computeEditOpts.value
       const tooltipOpts = computeTooltipOpts.value
       const resizableOpts = computeResizableOpts.value
+      const virtualXOpts = computeVirtualXOpts.value
+      const virtualYOpts = computeVirtualYOpts.value
       const { isAllColumnDrag, isAllRowDrag } = resizableOpts
       const rowOpts = computeRowOpts.value
       const rowDragOpts = computeRowDragOpts.value
@@ -282,9 +284,9 @@ export default defineComponent({
       let isVNPreEmptyStatus = false
       if (!isMergeCell) {
         if (!dragRow || getRowid($xeTable, dragRow) !== rowid) {
-          if (scrollYLoad && (_rowIndex < scrollYStore.visibleStartIndex - scrollYStore.preloadSize || _rowIndex > scrollYStore.visibleEndIndex + scrollYStore.preloadSize)) {
+          if (scrollYLoad && !treeConfig && !virtualYOpts.immediate && (_rowIndex < scrollYStore.visibleStartIndex - scrollYStore.preloadSize || _rowIndex > scrollYStore.visibleEndIndex + scrollYStore.preloadSize)) {
             isVNPreEmptyStatus = true
-          } else if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+          } else if (scrollXLoad && !virtualXOpts.immediate && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
             isVNPreEmptyStatus = true
           }
         }
