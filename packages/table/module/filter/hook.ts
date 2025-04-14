@@ -2,7 +2,7 @@ import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { toFilters, handleFieldOrColumn, getRefElem } from '../../src/util'
-import { toCssUnit, triggerEvent } from '../../../ui/src/dom'
+import { toCssUnit, triggerEvent, getDomNode } from '../../../ui/src/dom'
 import { isEnableConf } from '../../../ui/src/utils'
 
 import type { TableFilterMethods, TableFilterPrivateMethods } from '../../../../types'
@@ -76,6 +76,9 @@ hooks.add('tableFilterModule', {
           filterStore.visible = false
         } else {
           const el = refElem.value
+          const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
+          const filterOpts = computeFilterOpts.value
+          const { transfer } = filterOpts
           const tableRect = el.getBoundingClientRect()
           const btnElem = evnt.currentTarget as HTMLDivElement
           const { filters, filterMultiple, filterRender } = column
@@ -107,28 +110,42 @@ hooks.add('tableFilterModule', {
               return
             }
             const tableFilter = refTableFilter.value
-            const filterWrapperElem = tableFilter ? tableFilter.$el as HTMLDivElement : null
+            const filterWrapperElem = tableFilter ? tableFilter.getRefMaps().refElem.value as HTMLDivElement : null
             if (!filterWrapperElem) {
               return
             }
             const btnRect = btnElem.getBoundingClientRect()
-            const filterWidth = filterWrapperElem.offsetWidth
             const filterHeadElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-header')
             const filterFootElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-footer')
+            const filterWidth = filterWrapperElem.offsetWidth
             const centerWidth = filterWidth / 2
-            let left = btnRect.left - tableRect.left - centerWidth
-            const top = btnRect.top - tableRect.top + btnElem.clientHeight
-            // 判断面板不能大于表格高度
-            const maxHeight = Math.max(40, el.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
-            if (left < 1) {
-              left = 1
-            } else if (left > (el.clientWidth - filterWidth - 1)) {
-              left = el.clientWidth - filterWidth - 1
+            let left = 0
+            let top = 0
+            let maxHeight = 0
+            if (transfer) {
+              left = btnRect.left - centerWidth + scrollLeft
+              top = btnRect.top + btnElem.clientHeight + scrollTop
+              maxHeight = Math.min(Math.max(tableRect.height, Math.floor(visibleHeight / 2)), Math.max(80, visibleHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 28))
+              if (left < 16) {
+                left = 16
+              } else if (left > (visibleWidth - filterWidth - 16)) {
+                left = visibleWidth - filterWidth - 16
+              }
+            } else {
+              left = btnRect.left - tableRect.left - centerWidth
+              top = btnRect.top - tableRect.top + btnElem.clientHeight
+              maxHeight = Math.max(40, el.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
+              if (left < 1) {
+                left = 1
+              } else if (left > (el.clientWidth - filterWidth - 1)) {
+                left = el.clientWidth - filterWidth - 1
+              }
             }
             filterStore.style = {
               top: toCssUnit(top),
               left: toCssUnit(left)
             }
+            // 判断面板不能大于表格高度
             filterStore.maxHeight = maxHeight
           })
         }

@@ -33,9 +33,11 @@
   position: absolute;
   top: 0;
   min-width: 100px;
+  font-size: var(--vxe-ui-font-size-default);
   border-radius: var(--vxe-ui-border-radius);
   background-color: var(--vxe-ui-layout-background-color);
   border: 1px solid var(--vxe-ui-base-popup-border-color);
+  color: var(--vxe-ui-font-color);
   box-shadow: var(--vxe-ui-base-popup-box-shadow);
   z-index: 10;
   &:not(.is--multiple) {
@@ -109,4 +111,18 @@
 
 .vxe-table--filter-option {
   @include baseMixin.createCheckboxIcon();
+}
+
+
+
+.vxe-table--filter-wrapper {
+  &.size--medium {
+    font-size: var(--vxe-ui-font-size-medium);
+  }
+  &.size--small {
+    font-size: var(--vxe-ui-font-size-small);
+  }
+  &.size--mini {
+    font-size: var(--vxe-ui-font-size-mini);
+  }
 }

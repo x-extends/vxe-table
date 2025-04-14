@@ -1,8 +1,9 @@
-import { defineComponent, h, computed, inject } from 'vue'
+import { defineComponent, h, ref, computed, inject, Teleport } from 'vue'
 import { VxeUI } from '../../../ui'
 import { formatText, isEnableConf } from '../../../ui/src/utils'
 import { getPropClass } from '../../../ui/src/dom'
 import { getSlotVNs } from '../../../ui/src/vn'
+import XEUtils from 'xe-utils'
 
 import type { VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from '../../../../types'
 
@@ -13,10 +14,25 @@ export default defineComponent({
   props: {
     filterStore: Object as any
   },
-  setup (props) {
+  setup (props, context) {
+    const xID = XEUtils.uniqueId()
+
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
     const { reactData: tableReactData, internalData: tableInternalData, getComputeMaps } = $xeTable
     const { computeFilterOpts } = getComputeMaps()
+
+    const refElem = ref<HTMLDivElement>()
+
+    const refMaps = {
+      refElem
+    }
+
+    const $xeFilterPanel: any = {
+      xID,
+      props,
+      context,
+      getRefMaps: () => refMaps
+    }
 
     const computeHasCheckOption = computed(() => {
       const { filterStore } = props
@@ -78,7 +94,7 @@ export default defineComponent({
      * Publish methods
      *************************/
 
-    const $panel = {
+    const filterPanelMethods = {
       changeRadioOption,
       changeMultipleOption,
       changeAllOption,
@@ -86,13 +102,14 @@ export default defineComponent({
       confirmFilter,
       resetFilter
     }
+    Object.assign($xeFilterPanel, filterPanelMethods)
 
     const renderOptions = (filterRender: any, compConf: any) => {
       const { filterStore } = props
       const { column, multiple, maxHeight } = filterStore
       const slots = column ? column.slots : null
       const filterSlot = slots ? slots.filter : null
-      const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xeTable })
+      const params = Object.assign({}, tableInternalData._currFilterParams, { $panel: $xeFilterPanel, $table: $xeTable })
       const rtFilter = compConf ? (compConf.renderTableFilter || compConf.renderFilter) : null
       if (filterSlot) {
         return [
@@ -212,24 +229,39 @@ export default defineComponent({
       const filterRender = column ? column.filterRender : null
       const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
       const filterClassName = compConf ? (compConf.tableFilterClassName || compConf.filterClassName) : ''
-      const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xeTable })
+      const params = Object.assign({}, tableInternalData._currFilterParams, { $panel: $xeFilterPanel, $table: $xeTable })
+      const tableProps = $xeTable.props
+      const { computeSize } = $xeTable.getComputeMaps()
+      const vSize = computeSize.value
       const filterOpts = computeFilterOpts.value
-      const { destroyOnClose } = filterOpts
-      return h('div', {
-        class: [
-          'vxe-table--filter-wrapper',
-          'filter--prevent-default',
-          getPropClass(filterClassName, params),
-          {
-            'is--animat': $xeTable.props.animat,
-            'is--multiple': multiple,
-            'is--active': visible
-          }
-        ],
-        style: filterStore.style
-      }, initStore.filter && (destroyOnClose ? visible : true) && column ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
+      const { transfer, destroyOnClose } = filterOpts
+      return h(Teleport, {
+        to: 'body',
+        disabled: !transfer
+      }, [
+        h('div', {
+          ref: refElem,
+          class: [
+            'vxe-table--filter-wrapper',
+            'filter--prevent-default',
+            getPropClass(filterClassName, params),
+            {
+              [`size--${vSize}`]: vSize,
+              'is--animat': tableProps.animat,
+              'is--multiple': multiple,
+              'is--active': visible
+            }
+          ],
+          style: filterStore.style
+        }, initStore.filter && (destroyOnClose ? visible : true) && column ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
+      ])
     }
 
-    return renderVN
+    $xeFilterPanel.renderVN = renderVN
+
+    return $xeFilterPanel
+  },
+  render () {
+    return this.renderVN()
   }
 })

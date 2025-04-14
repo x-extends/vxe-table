@@ -224,7 +224,7 @@ hooks.add('tableMenuModule', {
             }
           }
         }
-        if (tableFilter && !getEventTargetNode(evnt, tableFilter.$el).flag) {
+        if (tableFilter && !getEventTargetNode(evnt, tableFilter.getRefMaps().refElem.value).flag) {
           $xeTable.closeFilter()
         }
         menuMethods.closeMenu()
