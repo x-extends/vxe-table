@@ -3293,8 +3293,8 @@ export default defineComponent({
       const childrenField = treeOpts.children || treeOpts.childrenField
       const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
       const result: any[] = []
-      const columnIndex = tableMethods.getColumnIndex(treeNodeColumn)
-      const $columnIndex = tableMethods.getVMColumnIndex(treeNodeColumn)
+      const columnIndex = $xeTable.getColumnIndex(treeNodeColumn)
+      const $columnIndex = $xeTable.getVMColumnIndex(treeNodeColumn)
       const { handleGetRowId } = createHandleGetRowId($xeTable)
       let validRows = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
       if (accordion) {
@@ -3341,7 +3341,7 @@ export default defineComponent({
       }
       reactData.treeExpandedFlag++
       return Promise.all(result).then(() => {
-        return tableMethods.recalculate()
+        return $xeTable.recalculate()
       })
     }
 
@@ -3354,14 +3354,14 @@ export default defineComponent({
     const handleVirtualTreeExpand = (rows: any[], expanded: boolean) => {
       return handleBaseTreeExpand(rows, expanded).then(() => {
         handleVirtualTreeToList()
-        tablePrivateMethods.handleTableData()
+        $xeTable.handleTableData()
         updateAfterDataIndex()
         return nextTick()
       }).then(() => {
-        return tableMethods.recalculate(true)
+        return $xeTable.recalculate(true)
       }).then(() => {
         setTimeout(() => {
-          tableMethods.updateCellAreas()
+          $xeTable.updateCellAreas()
         }, 30)
       })
     }
@@ -5547,7 +5547,7 @@ export default defineComponent({
             internalData.rowExpandedMaps = rowExpandedMaps
             rows = rows.slice(rows.length - 1, rows.length)
           }
-          const validRows: any[] = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column: expandColumn, columnIndex, $columnIndex, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) })) : rows
+          const validRows: any[] = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column: expandColumn, columnIndex, $columnIndex, row, rowIndex: $xeTable.getRowIndex(row), $rowIndex: $xeTable.getVMRowIndex(row) })) : rows
           if (expanded) {
             validRows.forEach((row: any) => {
               const rowid = handleGetRowId(row)
@@ -8336,7 +8336,7 @@ export default defineComponent({
               internalData.treeEATime = setTimeout(() => {
                 internalData.treeEATime = undefined
                 $xeTable.scrollToRow(row)
-              }, 20)
+              }, 30)
             }
           })
           dispatchEvent('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row }, evnt)
@@ -10682,6 +10682,9 @@ export default defineComponent({
         }
         if (props.highlightHoverColumn) {
           warnLog('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
+        }
+        if (props.resizable) {
+          warnLog('vxe.error.delProp', ['resizable', 'column-config.resizable'])
         }
         // if (props.scrollY) {
         //   warnLog('vxe.error.delProp', ['scroll-y', 'virtual-y-config'])

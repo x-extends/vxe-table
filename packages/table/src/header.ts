@@ -25,7 +25,7 @@ export default defineComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeMouseOpts, computeHeaderCellOpts, computeDefaultRowHeight } = $xeTable.getComputeMaps()
+    const { computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeMouseOpts, computeHeaderCellOpts, computeDefaultRowHeight, computeVirtualXOpts } = $xeTable.getComputeMaps()
 
     const headerColumn = ref([] as VxeTableDefines.ColumnInfo[][])
 
@@ -49,6 +49,7 @@ export default defineComponent({
       const { resizable: allResizable, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
       const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX } = tableReactData
       const { fullColumnIdData, scrollXStore } = tableInternalData
+      const virtualXOpts = computeVirtualXOpts.value
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
       const cellOpts = computeCellOpts.value
@@ -120,7 +121,7 @@ export default defineComponent({
         let isVNPreEmptyStatus = false
         if (!isGroup) {
           if (!dragCol || dragCol.id !== colid) {
-            if (scrollXLoad && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+            if (scrollXLoad && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
               isVNPreEmptyStatus = true
             }
           }
