@@ -1620,9 +1620,9 @@
     z-index: 1;
     user-select: none;
     cursor: pointer;
-    & > i {
-      background-color: var(--vxe-ui-layout-background-color);
-    }
+    // & > i {
+    //   background-color: var(--vxe-ui-layout-background-color); // 影响选择行相关
+    // }
   }
   .vxe-tree--node-btn {
     display: block;
