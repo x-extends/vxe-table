@@ -4029,7 +4029,7 @@ const Methods = {
 
     const { treeConfig } = props
     const { updateCheckboxFlag } = reactData
-    const { tableFullData, afterFullData, afterTreeFullData, tableFullTreeData, fullDataRowIdData, afterFullRowMaps, selectCheckboxMaps } = internalData
+    const { tableFullData, afterFullData, tableFullTreeData, fullDataRowIdData, afterFullRowMaps, selectCheckboxMaps } = internalData
     const treeOpts = $xeTable.computeTreeOpts
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const { transform, mapChildrenField } = treeOpts
@@ -4039,7 +4039,7 @@ const Methods = {
     if (updateCheckboxFlag) {
       if (checkField) {
         if (treeConfig) {
-          const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
+          const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? tableFullTreeData : afterFullData)
           rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildrenField : childrenField })
         } else {
           const currTableData = isFull ? tableFullData : afterFullData
