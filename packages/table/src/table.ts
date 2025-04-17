@@ -4365,7 +4365,7 @@ export default defineComponent({
       getCheckboxRecords (isFull) {
         const { treeConfig } = props
         const { updateCheckboxFlag } = reactData
-        const { tableFullData, afterFullData, afterTreeFullData, tableFullTreeData, fullDataRowIdData, afterFullRowMaps, selectCheckboxMaps } = internalData
+        const { tableFullData, afterFullData, tableFullTreeData, fullDataRowIdData, afterFullRowMaps, selectCheckboxMaps } = internalData
         const treeOpts = computeTreeOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const { transform, mapChildrenField } = treeOpts
@@ -4375,7 +4375,8 @@ export default defineComponent({
         if (updateCheckboxFlag) {
           if (checkField) {
             if (treeConfig) {
-              const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
+              // 如果开启 transform 默认就是完整数据
+              const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? tableFullTreeData : afterFullData)
               rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildrenField : childrenField })
             } else {
               const currTableData = isFull ? tableFullData : afterFullData

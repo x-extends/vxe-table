@@ -1652,7 +1652,8 @@
     &.col--rs-height,
     &.col--auto-height {
       overflow: hidden;
-      &.col--tree-node {
+      &.col--tree-node,
+      &.col--valid-error {
         overflow: unset;
       }
       & > .vxe-cell {
