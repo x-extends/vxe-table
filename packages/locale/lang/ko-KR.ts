@@ -81,7 +81,8 @@ export default {
       maxFixedCol: '최대 고정 열 수는 {0}을(를) 초과할 수 없습니다.',
       dragTip: '이동: {0}',
       resizeColTip: '宽：{0} 像素',
-      resizeRowTip: '高：{0} 像素'
+      resizeRowTip: '高：{0} 像素',
+      rowGroupContentTotal: '{0}（{1}）'
     },
     grid: {
       selectOneRecord: '최소한 하나의 레코드를 선택해주세요!',

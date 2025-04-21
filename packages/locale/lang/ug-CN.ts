@@ -81,7 +81,8 @@ export default {
       maxFixedCol: 'توڭلىتىشقا بولىدىغان ئەڭ چوڭ قۇر سانى  {0} دانە',
       dragTip: 'يۆتكەش：{0}',
       resizeColTip: '宽：{0} 像素',
-      resizeRowTip: '高：{0} 像素'
+      resizeRowTip: '高：{0} 像素',
+      rowGroupContentTotal: '{0}（{1}）'
     },
     grid: {
       selectOneRecord: 'كەم بولغاندا بىر تال ئۇچۇر تاللاڭ',

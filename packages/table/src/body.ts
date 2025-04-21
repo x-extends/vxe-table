@@ -22,8 +22,7 @@ const isVMScrollProcess = ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   return !!(isDragResize || (lastScrollTime && Date.now() < lastScrollTime + (delayHover as number)))
 }
 
-function renderLine (h: CreateElement, _vm: any, rowid: string, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number) {
-  const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
+function renderLine (h: CreateElement, $xeTable : VxeTableConstructor & VxeTablePrivateMethods, rowid: string, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number) {
   const tableProps = $xeTable
   const tableInternalData = $xeTable as unknown as TableInternalData
 
@@ -68,7 +67,7 @@ function renderLine (h: CreateElement, _vm: any, rowid: string, params: VxeTable
  */
 function renderTdColumn (
   h: CreateElement,
-  _vm: any,
+  $xeTable: VxeTableConstructor & VxeTablePrivateMethods,
   seq: number | string,
   rowid: string,
   fixedType: 'left' | 'right' | '',
@@ -83,7 +82,6 @@ function renderTdColumn (
   columns: VxeTableDefines.ColumnInfo[],
   items: any[]
 ) {
-  const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
   const tableReactData = $xeTable as unknown as TableReactData
   const tableInternalData = $xeTable as unknown as TableInternalData
@@ -313,7 +311,7 @@ function renderTdColumn (
   } else {
     // 渲染单元格
     tdVNs.push(
-      ...renderLine(h, _vm, rowid, cellParams, cellHeight),
+      ...renderLine(h, $xeTable, rowid, cellParams, cellHeight),
       h('div', {
         key: 'tc',
         class: ['vxe-cell', {
@@ -448,10 +446,11 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
   const tableProps = $xeTable
   const tableReactData = $xeTable as unknown as TableReactData
   const tableInternalData = $xeTable as unknown as TableInternalData
+  const $xeGrid = $xeTable.$xeGrid
 
   const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
-  const { hasFixedColumn, treeExpandedFlag, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, isDragColMove, rowExpandHeightFlag } = tableReactData
-  const { fullAllDataRowIdData, treeExpandedMaps, pendingRowMaps, rowExpandedMaps } = tableInternalData
+  const { hasFixedColumn, treeExpandedFlag, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, isDragColMove, rowExpandHeightFlag, isRowGroupStatus } = tableReactData
+  const { fullAllDataRowIdData, fullColumnIdData, treeExpandedMaps, pendingRowMaps, rowExpandedMaps } = tableInternalData
   const checkboxOpts = $xeTable.computeCheckboxOpts
   const radioOpts = $xeTable.computeRadioOpts
   const treeOpts = $xeTable.computeTreeOpts
@@ -463,6 +462,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
   const childrenField = treeOpts.children || treeOpts.childrenField
   const rows: any[] = []
   const { handleGetRowId } = createHandleGetRowId($xeTable)
+  const isDeepRow = treeConfig || isRowGroupStatus
   tableData.forEach((row, $rowIndex) => {
     const trOn: Record<string, any> = {}
     const rowid = handleGetRowId(row)
@@ -471,6 +471,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
     let rowLevel = 0
     let seq: string | number = -1
     let _rowIndex = -1
+    const hasRowGroupAggregate = isRowGroupStatus && row.isAggregate
     // 当前行事件
     if (rowOpts.isHover || highlightHoverRow) {
       trOn.mouseenter = (evnt: MouseEvent) => {
@@ -488,7 +489,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
     }
     if (rowRest) {
       rowLevel = rowRest.level
-      if (treeConfig && transform && seqMode === 'increasing') {
+      if (hasRowGroupAggregate || (treeConfig && transform && seqMode === 'increasing')) {
         seq = rowRest._index + 1
       } else {
         seq = rowRest.seq
@@ -512,14 +513,14 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
       isExpandTree = !!treeExpandedFlag && rowChildren && rowChildren.length > 0 && !!treeExpandedMaps[rowid]
     }
     // 拖拽行事件
-    if (rowOpts.drag && (!treeConfig || transform)) {
+    if (rowOpts.drag && !isRowGroupStatus && (!treeConfig || transform)) {
       trOn.dragstart = $xeTable.handleRowDragDragstartEvent
       trOn.dragend = $xeTable.handleRowDragDragendEvent
       trOn.dragover = $xeTable.handleRowDragDragoverEvent
     }
     const trClass = [
       'vxe-body--row',
-      treeConfig ? `row--level-${rowLevel}` : '',
+      isDeepRow ? `row--level-${rowLevel}` : '',
       {
         'row--stripe': stripe && (_rowIndex + 1) % 2 === 0,
         'is--new': isNewRow,
@@ -528,12 +529,13 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
         'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
         'row--radio': radioOpts.highlight && selectRadioRow === row,
         'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
-        'row--pending': !!pendingRowFlag && !!pendingRowMaps[rowid]
+        'row--pending': !!pendingRowFlag && !!pendingRowMaps[rowid],
+        'row--group': hasRowGroupAggregate
       },
       rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''
     ]
-    const tdVNs = tableColumn.map((column: any, $columnIndex: any) => {
-      return renderTdColumn(h, _vm, seq, rowid, fixedType, isOptimizeMode, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
+    const tdVNs = tableColumn.map((column, $columnIndex) => {
+      return renderTdColumn(h, $xeTable, seq, rowid, fixedType, isOptimizeMode, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
     })
     rows.push(
       !isColLoading && (columnOpts.drag && columnDragOpts.animation)
@@ -547,7 +549,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
             rowid
           },
           style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) as VxeComponentStyleType : undefined,
-          key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || treeConfig ? rowid : $rowIndex,
+          key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || isRowGroupStatus || treeConfig ? rowid : $rowIndex,
           nativeOn: trOn
         }, tdVNs)
         : h('tr', {
@@ -556,7 +558,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
             rowid
           },
           style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) as VxeComponentStyleType : undefined,
-          key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || treeConfig ? rowid : $rowIndex,
+          key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || isRowGroupStatus || treeConfig ? rowid : $rowIndex,
           on: trOn
         }, tdVNs)
     )
@@ -592,9 +594,40 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
         if (treeConfig) {
           cellStyle.paddingLeft = `${(rowLevel * treeOpts.indent) + 30}px`
         }
-        const { showOverflow } = expandColumn
+        const { showOverflow } = expandColumn || {}
+        const colid = expandColumn.id
+        const colRest = fullColumnIdData[colid] || {}
         const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? isAllOverflow : showOverflow
-        const expandParams = { $table: $xeTable, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+        let columnIndex = -1
+        let $columnIndex = -1
+        let _columnIndex = -1
+        if (colRest) {
+          columnIndex = colRest.index
+          $columnIndex = colRest.$index
+          _columnIndex = colRest._index
+        }
+        const expandParams: VxeTableDefines.CellRenderDataParams = {
+          $grid: $xeGrid,
+          $table: $xeTable,
+          seq,
+          column: expandColumn as VxeTableDefines.ColumnInfo,
+          columnIndex,
+          $columnIndex,
+          _columnIndex,
+          fixed: fixedType,
+          type: renderType,
+          level: rowLevel,
+          row,
+          rowid,
+          rowIndex,
+          $rowIndex,
+          _rowIndex,
+          isHidden: false,
+          isEdit: false,
+          visibleData: [],
+          data: [],
+          items: []
+        }
         rows.push(
           h('tr', {
             class: ['vxe-body--expanded-row', {

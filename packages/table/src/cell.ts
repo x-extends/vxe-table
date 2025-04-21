@@ -92,7 +92,7 @@ function renderCellBaseVNs (h: CreateElement, params: VxeTableDefines.CellRender
   const treeOpts = $table.computeTreeOpts
   const { showIcon, isPeerDrag, isCrossDrag, visibleMethod } = rowDragOpts
   const rVisibleMethod = visibleMethod || (dragConfig ? dragConfig.rowVisibleMethod : null)
-  const vns: any[] = XEUtils.isArray(content) ? content : [content]
+  const vns: VxeComponentSlotType[] = []
   if (dragSort && rowOpts.drag && ((showIcon || (dragConfig ? dragConfig.showRowIcon : false)) && (!rVisibleMethod || rVisibleMethod(params)))) {
     if (treeConfig) {
       if (treeOpts.transform && (isPeerDrag || isCrossDrag || !level)) {
@@ -106,7 +106,7 @@ function renderCellBaseVNs (h: CreateElement, params: VxeTableDefines.CellRender
       )
     }
   }
-  return vns
+  return vns.concat(XEUtils.isArray(content) ? content : [content])
 }
 
 function renderHeaderCellDragIcon (h: CreateElement, params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
@@ -259,25 +259,26 @@ function renderCellHandle (h: CreateElement, params: VxeTableDefines.CellRenderB
   const { column, $table } = params
   const tableProps = $table
   const { editConfig } = tableProps
-  const { type, treeNode, editRender } = column
+  const { type, treeNode, rowGroupNode, editRender } = column
   const checkboxOpts = $table.computeCheckboxOpts
   const editOpts = $table.computeEditOpts
+  const isDeepCell = treeNode || rowGroupNode
   switch (type) {
     case 'seq':
-      return treeNode ? Cell.renderTreeIndexCell(h, params) : Cell.renderSeqCell(h, params)
+      return isDeepCell ? Cell.renderDeepIndexCell(h, params) : Cell.renderSeqCell(h, params)
     case 'radio':
-      return treeNode ? Cell.renderTreeRadioCell(h, params) : Cell.renderRadioCell(h, params)
+      return isDeepCell ? Cell.renderDeepRadioCell(h, params) : Cell.renderRadioCell(h, params)
     case 'checkbox':
-      return checkboxOpts.checkField ? (treeNode ? Cell.renderTreeSelectionCellByProp(h, params) : Cell.renderCheckboxCellByProp(h, params)) : (treeNode ? Cell.renderTreeSelectionCell(h, params) : Cell.renderCheckboxCell(h, params))
+      return checkboxOpts.checkField ? (isDeepCell ? Cell.renderDeepSelectionCellByProp(h, params) : Cell.renderCheckboxCellByProp(h, params)) : (isDeepCell ? Cell.renderDeepSelectionCell(h, params) : Cell.renderCheckboxCell(h, params))
     case 'expand':
       return Cell.renderExpandCell(h, params)
     case 'html':
-      return treeNode ? Cell.renderTreeHTMLCell(h, params) : Cell.renderHTMLCell(h, params)
+      return isDeepCell ? Cell.renderDeepHTMLCell(h, params) : Cell.renderHTMLCell(h, params)
   }
   if (isEnableConf(editConfig) && editRender) {
-    return editOpts.mode === 'cell' ? (treeNode ? Cell.renderTreeCellEdit(h, params) : Cell.renderCellEdit(h, params)) : (treeNode ? Cell.renderTreeRowEdit(h, params) : Cell.renderRowEdit(h, params))
+    return editOpts.mode === 'cell' ? (isDeepCell ? Cell.renderDeepCellEdit(h, params) : Cell.renderCellEdit(h, params)) : (isDeepCell ? Cell.renderDeepRowEdit(h, params) : Cell.renderRowEdit(h, params))
   }
-  return treeNode ? Cell.renderTreeCell(h, params) : Cell.renderDefaultCell(h, params)
+  return isDeepCell ? Cell.renderDeepCell(h, params) : Cell.renderDefaultCell(h, params)
 }
 
 function renderHeaderHandle (h: CreateElement, params: VxeTableDefines.CellRenderHeaderParams & {
@@ -359,7 +360,10 @@ export const Cell = {
   },
   renderDefaultCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, row, column } = params
-    const { slots, editRender, cellRender } = column
+    const tableReactData = $table as unknown as TableReactData
+    const tableInternalData = $table as unknown as TableInternalData
+    const { isRowGroupStatus } = tableReactData
+    const { slots, editRender, cellRender, rowGroupNode } = column
     const renderOpts = editRender || cellRender
     if (slots && slots.default) {
       return renderCellBaseVNs(h, params, $table.callSlot(slots.default, params, h))
@@ -373,7 +377,34 @@ export const Cell = {
         return renderCellBaseVNs(h, params, getSlotVNs(renderFn.call($table, h, renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params))))
       }
     }
-    const cellValue = $table.getCellLabel(row, column)
+    let cellValue: string | number | null = ''
+    if (isRowGroupStatus && rowGroupNode && row.isAggregate) {
+      const { fullColumnFieldData } = tableInternalData
+      const rowGroupOpts = $table.computeRowGroupOpts
+      const { showTotal, totalMethod, contentMethod, mapChildrenField } = rowGroupOpts
+      const groupField = row.groupField
+      cellValue = row.groupContent
+      const childList = mapChildrenField ? (row[mapChildrenField] || []) : []
+      const totalValue = childList.length
+      const colRest = fullColumnFieldData[groupField] || {}
+      const params = {
+        $table,
+        groupField,
+        groupColumn: (colRest ? colRest.column : null) as VxeTableDefines.ColumnInfo,
+        column,
+        groupValue: cellValue,
+        children: childList,
+        totalValue: totalValue
+      }
+      if (contentMethod) {
+        cellValue = `${contentMethod(params)}`
+      }
+      if (showTotal) {
+        cellValue = getI18n('vxe.table.rowGroupContentTotal', [cellValue, totalMethod ? totalMethod(params) : totalValue, totalValue])
+      }
+    } else if (!(isRowGroupStatus && row.isAggregate)) {
+      cellValue = $table.getCellLabel(row, column)
+    }
     const cellPlaceholder = editRender ? editRender.placeholder : ''
     return renderCellBaseVNs(h, params, [
       h('span', {
@@ -388,17 +419,58 @@ export const Cell = {
       ])
     ])
   },
-  renderTreeCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-    return Cell.renderTreeIcon(h, params, Cell.renderDefaultCell.call(this, h, params))
+  renderDeepCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+    return Cell.renderDeepNodeBtn(h, params, Cell.renderDefaultCell.call(this, h, params))
   },
   renderDefaultFooter (h: CreateElement, params: VxeTableDefines.CellRenderFooterParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return getFooterContent(h, params)
   },
 
   /**
-   * 树节点
+   * 行分组
    */
-  renderTreeIcon (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, cellVNodes: VxeComponentSlotType[]) {
+  renderRowGroupBtn (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, cellVNodes: VxeComponentSlotType[]) {
+    const { $table } = params
+    const tableReactData = $table as unknown as TableReactData
+    const tableInternalData = $table as unknown as TableInternalData
+    const { row, level } = params
+    const { rowGroupExpandedFlag } = tableReactData
+    const { rowGroupExpandedMaps } = tableInternalData
+    const rowGroupOpts = $table.computeRowGroupOpts
+    const { padding, indent } = rowGroupOpts
+    const rowid = getRowid($table, row)
+    const isExpand = !!rowGroupExpandedFlag && !!rowGroupExpandedMaps[rowid]
+    return h('div', {
+      class: ['vxe-row-group--tree-node', {
+        'is--expanded': isExpand
+      }],
+      style: padding && indent
+        ? {
+            paddingLeft: `${level * indent}px`
+          }
+        : undefined
+    }, [
+      h('span', {
+        class: 'vxe-row-group--node-btn',
+        on: {
+          click (evnt: MouseEvent) {
+            $table.triggerRowGroupExpandEvent(evnt, params)
+          }
+        }
+      }, [
+        h('i', {
+          class: isExpand ? getIcon().TABLE_ROW_GROUP_OPEN : getIcon().TABLE_ROW_GROUP_CLOSE
+        })
+      ]),
+      h('div', {
+        class: 'vxe-row-group-cell'
+      }, cellVNodes)
+    ])
+  },
+  /**
+   * 树
+   */
+  renderTreeNodeBtn (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, cellVNodes: VxeComponentSlotType[]) {
     const { $table, isHidden } = params
     const tableReactData = $table as unknown as TableReactData
     const tableInternalData = $table as unknown as TableInternalData
@@ -407,7 +479,7 @@ export const Cell = {
     const treeOpts = $table.computeTreeOpts
     const { row, column, level } = params
     const { slots } = column
-    const { indent, lazy, trigger, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
+    const { padding, indent, lazy, trigger, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowChilds = row[childrenField]
@@ -441,18 +513,20 @@ export const Cell = {
         class: ['vxe-cell--tree-node', {
           'is--active': isActive
         }],
-        style: {
-          paddingLeft: `${level * indent}px`
-        }
+        style: padding && indent
+          ? {
+              paddingLeft: `${level * indent}px`
+            }
+          : undefined
       }, [
         showIcon && (lazy ? (isLazyLoaded ? hasChild : (hasChild || hasLazyChilds)) : hasChild)
           ? [
               h('div', {
-                class: 'vxe-tree--btn-wrapper',
+                class: 'vxe-cell--tree-btn',
                 on: ons
               }, [
                 h('i', {
-                  class: ['vxe-tree--node-btn', isLazyLoading ? (iconLoaded || getIcon().TABLE_TREE_LOADED) : (isActive ? (iconOpen || getIcon().TABLE_TREE_OPEN) : (iconClose || getIcon().TABLE_TREE_CLOSE))]
+                  class: isLazyLoading ? (iconLoaded || getIcon().TABLE_TREE_LOADED) : (isActive ? (iconOpen || getIcon().TABLE_TREE_OPEN) : (iconClose || getIcon().TABLE_TREE_CLOSE))
                 })
               ])
             ]
@@ -462,6 +536,18 @@ export const Cell = {
         }, cellVNodes)
       ])
     ]
+  },
+  /**
+   * 层级节点。
+   * 行分组、树结构
+   */
+  renderDeepNodeBtn (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, cellVNodes: VxeComponentSlotType[]) {
+    const { row, column } = params
+    const { rowGroupNode } = column
+    if (rowGroupNode && row.isAggregate) {
+      return [Cell.renderRowGroupBtn(h, params, cellVNodes)]
+    }
+    return [Cell.renderTreeNodeBtn(h, params, cellVNodes)]
   },
 
   /**
@@ -487,8 +573,8 @@ export const Cell = {
       h('span', `${formatText(seqMethod ? seqMethod(params) : treeConfig ? seq : (seqOpts.startIndex || 0) + (seq as number), 1)}`)
     ])
   },
-  renderTreeIndexCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-    return Cell.renderTreeIcon(h, params, Cell.renderSeqCell(h, params))
+  renderDeepIndexCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+    return Cell.renderDeepNodeBtn(h, params, Cell.renderSeqCell(h, params))
   },
 
   /**
@@ -520,7 +606,7 @@ export const Cell = {
     const defaultSlot = slots ? slots.default : null
     const radioSlot = slots ? slots.radio : null
     const isChecked = row === selectRadioRow
-    const isVisible = !visibleMethod || visibleMethod({ row })
+    const isVisible = !visibleMethod || visibleMethod({ $table, row })
     let isDisabled = !!checkMethod
     let on: any
     if (!isHidden) {
@@ -532,7 +618,7 @@ export const Cell = {
         }
       }
       if (checkMethod) {
-        isDisabled = !checkMethod({ row })
+        isDisabled = !checkMethod({ $table, row })
       }
     }
     const radioParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible }
@@ -564,8 +650,8 @@ export const Cell = {
       }, radioVNs)
     ])
   },
-  renderTreeRadioCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-    return Cell.renderTreeIcon(h, params, Cell.renderRadioCell(h, params))
+  renderDeepRadioCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+    return Cell.renderDeepNodeBtn(h, params, Cell.renderRadioCell(h, params))
   },
 
   /**
@@ -633,7 +719,7 @@ export const Cell = {
     const tableReactData = $table as unknown as TableReactData
     const tableInternalData = $table as unknown as TableInternalData
     const { treeConfig } = tableProps
-    const { updateCheckboxFlag } = tableReactData
+    const { updateCheckboxFlag, isRowGroupStatus } = tableReactData
     const { selectCheckboxMaps, treeIndeterminateRowMaps } = tableInternalData
     const checkboxOpts = $table.computeCheckboxOpts
     const { labelField, checkMethod, visibleMethod } = checkboxOpts
@@ -642,7 +728,7 @@ export const Cell = {
     const checkboxSlot = slots ? slots.checkbox : null
     let indeterminate = false
     let isChecked = false
-    const isVisible = !visibleMethod || visibleMethod({ row })
+    const isVisible = !visibleMethod || visibleMethod({ $table, row })
     let isDisabled = !!checkMethod
     const ons: Record<string, any> = {}
     if (!isHidden) {
@@ -654,9 +740,9 @@ export const Cell = {
         }
       }
       if (checkMethod) {
-        isDisabled = !checkMethod({ row })
+        isDisabled = !checkMethod({ $table, row })
       }
-      if (treeConfig) {
+      if (treeConfig || isRowGroupStatus) {
         indeterminate = !!treeIndeterminateRowMaps[rowid]
       }
     }
@@ -691,8 +777,8 @@ export const Cell = {
       }, checkVNs)
     ])
   },
-  renderTreeSelectionCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-    return Cell.renderTreeIcon(h, params, Cell.renderCheckboxCell(h, params))
+  renderDeepSelectionCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+    return Cell.renderDeepNodeBtn(h, params, Cell.renderCheckboxCell(h, params))
   },
   renderCheckboxCellByProp (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, row, column, isHidden } = params
@@ -700,7 +786,7 @@ export const Cell = {
     const tableReactData = $table as unknown as TableReactData
     const tableInternalData = $table as unknown as TableInternalData
     const { treeConfig } = tableProps
-    const { updateCheckboxFlag } = tableReactData
+    const { updateCheckboxFlag, isRowGroupStatus } = tableReactData
     const { treeIndeterminateRowMaps } = tableInternalData
     const checkboxOpts = $table.computeCheckboxOpts
     const { labelField, checkField, checkMethod, visibleMethod } = checkboxOpts
@@ -710,7 +796,7 @@ export const Cell = {
     const checkboxSlot = slots ? slots.checkbox : null
     let isIndeterminate = false
     let isChecked = false
-    const isVisible = !visibleMethod || visibleMethod({ row })
+    const isVisible = !visibleMethod || visibleMethod({ $table, row })
     let isDisabled = !!checkMethod
     const ons: Record<string, any> = {}
     if (!isHidden) {
@@ -722,9 +808,9 @@ export const Cell = {
         }
       }
       if (checkMethod) {
-        isDisabled = !checkMethod({ row })
+        isDisabled = !checkMethod({ $table, row })
       }
-      if (treeConfig) {
+      if (treeConfig || isRowGroupStatus) {
         isIndeterminate = !!treeIndeterminateRowMaps[rowid]
       }
     }
@@ -759,8 +845,8 @@ export const Cell = {
       }, checkVNs)
     ])
   },
-  renderTreeSelectionCellByProp (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-    return Cell.renderTreeIcon(h, params, Cell.renderCheckboxCellByProp(h, params))
+  renderDeepSelectionCellByProp (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+    return Cell.renderDeepNodeBtn(h, params, Cell.renderCheckboxCellByProp(h, params))
   },
 
   /**
@@ -768,7 +854,9 @@ export const Cell = {
    */
   renderExpandCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, isHidden, row, column } = params
+    const tableReactData = $table as unknown as TableReactData
     const tableInternalData = $table as unknown as TableInternalData
+    const { isRowGroupStatus } = tableReactData
     const { rowExpandedMaps, rowExpandLazyLoadedMaps } = tableInternalData
     const expandOpts = $table.computeExpandOpts
     const { lazy, labelField, iconLoaded, showIcon, iconOpen, iconClose, visibleMethod } = expandOpts
@@ -777,6 +865,9 @@ export const Cell = {
     const iconSlot = slots ? slots.icon : null
     let isActive = false
     let isLazyLoading = false
+    if (isRowGroupStatus && row.isAggregate) {
+      return renderCellBaseVNs(h, params, [])
+    }
     if (iconSlot) {
       return renderCellBaseVNs(h, params, $table.callSlot(iconSlot, params, h))
     }
@@ -848,8 +939,8 @@ export const Cell = {
       })
     ])
   },
-  renderTreeHTMLCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-    return Cell.renderTreeIcon(h, params, Cell.renderHTMLCell(h, params))
+  renderDeepHTMLCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+    return Cell.renderDeepNodeBtn(h, params, Cell.renderHTMLCell(h, params))
   },
 
   /**
@@ -1004,8 +1095,8 @@ export const Cell = {
     const { editRender } = column
     return Cell.runRenderer(h, params, this, isEnableConf(editRender) && actived && actived.row === params.row)
   },
-  renderTreeRowEdit (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-    return Cell.renderTreeIcon(h, params, Cell.renderRowEdit(h, params))
+  renderDeepRowEdit (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+    return Cell.renderDeepNodeBtn(h, params, Cell.renderRowEdit(h, params))
   },
   // 单元格编辑模式
   renderCellEdit (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
@@ -1016,8 +1107,8 @@ export const Cell = {
     const { editRender } = column
     return Cell.runRenderer(h, params, this, isEnableConf(editRender) && actived && actived.row === params.row && actived.column === params.column)
   },
-  renderTreeCellEdit (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-    return Cell.renderTreeIcon(h, params, Cell.renderCellEdit(h, params))
+  renderDeepCellEdit (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+    return Cell.renderDeepNodeBtn(h, params, Cell.renderCellEdit(h, params))
   },
   runRenderer (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, _vm: any, isEdit: boolean) {
     const { $table, column } = params

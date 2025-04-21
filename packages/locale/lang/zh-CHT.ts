@@ -81,7 +81,8 @@ export default {
       maxFixedCol: '最大凍結列的數量不能超過 {0} 個',
       dragTip: '移動：{0}',
       resizeColTip: '宽：{0} 像素',
-      resizeRowTip: '高：{0} 像素'
+      resizeRowTip: '高：{0} 像素',
+      rowGroupContentTotal: '{0}（{1}）'
     },
     grid: {
       selectOneRecord: '請至少選擇一筆記錄！',

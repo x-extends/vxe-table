@@ -25,11 +25,12 @@ function hasTreeChildren ($xeTable: VxeTableConstructor, row: any) {
   return row[childrenField] && row[childrenField].length
 }
 
-function getSeq ($xeTable: VxeTableConstructor, cellValue: any, row: any, $rowIndex: any, column: any, $columnIndex: any) {
+function getSeq ($xeTable: VxeTableConstructor, cellValue: any, row: any, $rowIndex: number, column: VxeTableDefines.ColumnInfo, $columnIndex: number) {
   const seqOpts = $xeTable.computeSeqOpts
-  const seqMethod = seqOpts.seqMethod || column.seqMethod
+  const seqMethod = seqOpts.seqMethod || (column as any).seqMethod
   if (seqMethod) {
     return seqMethod({
+      $table: $xeTable,
       row,
       rowIndex: $xeTable.getRowIndex(row),
       $rowIndex,
@@ -116,12 +117,12 @@ function getBodyLabelData ($xeTable: VxeTableConstructor, opts: VxeTablePropType
               case 'checkbox':
                 cellValue = toBooleanValue($xeTable.isCheckedByCheckboxRow(row))
                 item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
-                item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
+                item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ $table: $xeTable, row })
                 break
               case 'radio':
                 cellValue = toBooleanValue($xeTable.isCheckedByRadioRow(row))
                 item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
-                item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
+                item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ $table: $xeTable, row })
                 break
               default:
                 if (opts.original) {
@@ -174,12 +175,12 @@ function getBodyLabelData ($xeTable: VxeTableConstructor, opts: VxeTablePropType
           case 'checkbox':
             cellValue = toBooleanValue($xeTable.isCheckedByCheckboxRow(row))
             item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
-            item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
+            item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ $table: $xeTable, row })
             break
           case 'radio':
             cellValue = toBooleanValue($xeTable.isCheckedByRadioRow(row))
             item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
-            item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
+            item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ $table: $xeTable, row })
             break
           default:
             if (opts.original) {
@@ -204,11 +205,11 @@ function getBodyLabelData ($xeTable: VxeTableConstructor, opts: VxeTablePropType
   })
 }
 
-function getExportData ($xeTable: any, opts: VxeTablePropTypes.ExportHandleOptions) {
+function getExportData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions) {
   const { columns, dataFilterMethod } = opts
   let datas = opts.data
   if (dataFilterMethod) {
-    datas = datas.filter((row: any, index: any) => dataFilterMethod({ row, $rowIndex: index }))
+    datas = datas.filter((row, index) => dataFilterMethod({ $table: $xeTable, row, $rowIndex: index }))
   }
   return getBodyLabelData($xeTable, opts, columns, datas)
 }
@@ -217,16 +218,16 @@ function getBooleanValue (cellValue: any) {
   return cellValue === 'TRUE' || cellValue === 'true' || cellValue === true
 }
 
-function getHeaderTitle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: any, column: any) {
+function getHeaderTitle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, column: VxeTableDefines.ColumnInfo) {
   const columnOpts = $xeTable.computeColumnOpts
   const headExportMethod = column.headerExportMethod || columnOpts.headerExportMethod
   return headExportMethod ? headExportMethod({ column, options: opts, $table: $xeTable }) : ((opts.isTitle ? column.getTitle() : column.field) || '')
 }
 
-function getFooterCellValue ($xeTable: any, opts: any, row: any, column: any) {
+function getFooterCellValue ($xeTable: any, opts: VxeTablePropTypes.ExportHandleOptions, row: any, column: VxeTableDefines.ColumnInfo) {
   const columnOpts = $xeTable.computeColumnOpts
   const renderOpts = column.editRender || column.cellRender
-  let footLabelMethod = column.footerExportMethod
+  let footLabelMethod: VxeColumnPropTypes.FooterExportMethod | undefined = column.footerExportMethod
   if (!footLabelMethod && renderOpts && renderOpts.name) {
     const compConf = renderer.get(renderOpts.name)
     if (compConf) {
@@ -247,9 +248,9 @@ function getFooterCellValue ($xeTable: any, opts: any, row: any, column: any) {
   return XEUtils.get(row, column.field)
 }
 
-function getFooterData (opts: VxeTablePropTypes.ExportHandleOptions, footerTableData: any[]) {
+function getFooterData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, footerTableData: any[]) {
   const { footerFilterMethod } = opts
-  return footerFilterMethod ? footerTableData.filter((items: any, index: any) => footerFilterMethod({ items, $rowIndex: index })) : footerTableData
+  return footerFilterMethod ? footerTableData.filter((items: any, index: any) => footerFilterMethod({ $table: $xeTable, items, $rowIndex: index })) : footerTableData
 }
 
 function getCsvCellTypeLabel (column: any, cellValue: any) {
@@ -294,7 +295,7 @@ function toCsv ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: Vx
   })
   if (opts.isFooter) {
     const { footerTableData } = reactData
-    const footers = getFooterData(opts, footerTableData)
+    const footers = getFooterData($xeTable, opts, footerTableData)
     footers.forEach((row) => {
       content += columns.map(column => toTxtCellLabel(getFooterCellValue($xeTable, opts, row, column))).join(',') + enterSymbol
     })
@@ -314,7 +315,7 @@ function toTxt ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: Vx
   })
   if (opts.isFooter) {
     const { footerTableData } = reactData
-    const footers = getFooterData(opts, footerTableData)
+    const footers = getFooterData($xeTable, opts, footerTableData)
     footers.forEach((row) => {
       content += columns.map(column => toTxtCellLabel(getFooterCellValue($xeTable, opts, row, column))).join('\t') + enterSymbol
     })
@@ -484,7 +485,7 @@ function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: V
   }
   if (isFooter) {
     const { footerTableData } = reactData
-    const footers = getFooterData(opts, footerTableData)
+    const footers = getFooterData($xeTable, opts, footerTableData)
     if (footers.length) {
       tables.push('<tfoot>')
       footers.forEach((row: any) => {
@@ -539,7 +540,7 @@ function toXML ($xeTable: any, opts: any, columns: any[], datas: any[]) {
   })
   if (opts.isFooter) {
     const { footerTableData } = reactData
-    const footers = getFooterData(opts, footerTableData)
+    const footers = getFooterData($xeTable, opts, footerTableData)
     footers.forEach((row: any) => {
       xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getFooterCellValue($xeTable, opts, row, column)}</Data></Cell>`).join('')}</Row>`
     })
@@ -1131,7 +1132,7 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
     }
     column.checked = isChecked
     column.halfChecked = false
-    column.disabled = (parent && parent.disabled) || (checkMethod ? !checkMethod({ column }) : false)
+    column.disabled = (parent && parent.disabled) || (checkMethod ? !checkMethod({ $table: $xeTable, column }) : false)
   })
   // 更新条件
   Object.assign(exportStore, {

@@ -26,7 +26,7 @@ import validatorMixin from '../module/validator/mixin'
 import customMixin from '../module/custom/mixin'
 
 import type { VxeLoadingComponent, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods } from 'vxe-pc-ui'
-import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, TableReactData } from '../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, TableReactData, VxeTableDefines } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 
@@ -190,9 +190,10 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
+  const $xeGrid = $xeTable.$xeGrid
 
   const { treeConfig } = props
-  const { expandColumn } = reactData
+  const { expandColumn, isRowGroupStatus } = reactData
   const tableRowExpandedList: any[] = ($xeTable as any).computeTableRowExpandedList
   const expandOpts = $xeTable.computeExpandOpts
   const { mode } = expandOpts
@@ -210,13 +211,15 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
     const { handleGetRowId } = createHandleGetRowId($xeTable)
     tableRowExpandedList.forEach((row) => {
       const expandOpts = $xeTable.computeExpandOpts
-      const { height: expandHeight, padding } = expandOpts
-      const { fullAllDataRowIdData } = internalData
+      const { height: expandHeight, padding, indent } = expandOpts
+      const { fullAllDataRowIdData, fullColumnIdData } = internalData
       const treeOpts = $xeTable.computeTreeOpts
       const { transform, seqMode } = treeOpts
       const cellStyle: Record<string, string> = {}
       const rowid = handleGetRowId(row)
       const rowRest = fullAllDataRowIdData[rowid]
+      const colid = expandColumn.id
+      const colRest = fullColumnIdData[colid] || {}
       let rowLevel = 0
       let seq: string | number = -1
       let _rowIndex = -1
@@ -224,7 +227,7 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
       let $rowIndex = -1
       if (rowRest) {
         rowLevel = rowRest.level
-        if (treeConfig && transform && seqMode === 'increasing') {
+        if (isRowGroupStatus || (treeConfig && transform && seqMode === 'increasing')) {
           seq = rowRest._index + 1
         } else {
           seq = rowRest.seq
@@ -236,10 +239,39 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
       if (expandHeight) {
         cellStyle.height = `${expandHeight}px`
       }
-      if (treeConfig) {
-        cellStyle.paddingLeft = `${(rowLevel * treeOpts.indent) + 30}px`
+      if (isRowGroupStatus || treeConfig) {
+        cellStyle.paddingLeft = `${(rowLevel * (XEUtils.isNumber(indent) ? indent : treeOpts.indent)) + 30}px`
       }
-      const expandParams = { $table: $xeTable, seq, column: expandColumn, fixed: '', type: 'body', level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+      let columnIndex = -1
+      let $columnIndex = -1
+      let _columnIndex = -1
+      if (colRest) {
+        columnIndex = colRest.index
+        $columnIndex = colRest.$index
+        _columnIndex = colRest._index
+      }
+      const expandParams: VxeTableDefines.CellRenderDataParams = {
+        $grid: $xeGrid,
+        $table: $xeTable,
+        seq,
+        column: expandColumn,
+        columnIndex,
+        $columnIndex,
+        _columnIndex,
+        fixed: '',
+        type: 'body',
+        level: rowLevel,
+        rowid,
+        row,
+        rowIndex,
+        $rowIndex,
+        _rowIndex,
+        isHidden: false,
+        isEdit: false,
+        visibleData: [],
+        data: [],
+        items: []
+      }
       expandVNs.push(
         h('div', {
           key: rowid,
@@ -476,6 +508,8 @@ export default {
       selectRadioRow: null,
       // 表尾合计数据
       footerTableData: [],
+      // 行分组列信息
+      rowGroupColumn: null,
       // 展开列信息
       expandColumn: null,
       hasFixedColumn: false,
@@ -627,6 +661,11 @@ export default {
         isFooter: false
       },
 
+      visiblwRowsFlag: 1,
+
+      isRowGroupStatus: false,
+
+      rowGroupExpandedFlag: 1,
       rowExpandedFlag: 1,
       treeExpandedFlag: 1,
       updateCheckboxFlag: 1,
@@ -824,34 +863,52 @@ export default {
       return this.computeRowOpts
     },
     computeRowOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.rowConfig, props.rowConfig)
     },
+    computeRowGroupOpts () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.rowGroupConfig, props.rowGroupConfig)
+    },
     computeCurrentRowOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.currentRowConfig, props.currentRowConfig)
     },
     computeRowDragOpts () {
-      return Object.assign({}, getConfig().table.rowDragConfig, this.rowDragConfig)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.rowDragConfig, props.rowDragConfig)
     },
     computeColumnDragOpts () {
-      return Object.assign({}, getConfig().table.columnDragConfig, this.columnDragConfig)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.columnDragConfig, props.columnDragConfig)
     },
     resizeOpts () {
       return this.computeResizeOpts
     },
     computeResizeOpts () {
-      return Object.assign({}, getConfig().table.resizeConfig, this.resizeConfig)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.resizeConfig, props.resizeConfig)
     },
     resizableOpts () {
       return this.computeResizableOpts
     },
     computeResizableOpts () {
-      return Object.assign({}, getConfig().table.resizableConfig, this.resizableConfig)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.resizableConfig, props.resizableConfig)
     },
     seqOpts () {
       return this.computeSeqOpts
@@ -1106,20 +1163,21 @@ export default {
       const internalData = $xeTable as unknown as TableInternalData
 
       const { treeConfig } = props
-      const { rowExpandedFlag, expandColumn } = reactData
+      const { rowExpandedFlag, expandColumn, rowGroupExpandedFlag, treeExpandedFlag, isRowGroupStatus } = reactData
       const { visibleDataRowIdData, rowExpandedMaps } = internalData
       const treeOpts = $xeTable.computeTreeOpts
       const { transform } = treeOpts
       const expandList: any[] = []
-      if (expandColumn && rowExpandedFlag) {
-        if (treeConfig && !transform) {
+      if (expandColumn && rowExpandedFlag && rowGroupExpandedFlag && treeExpandedFlag) {
+        if (isRowGroupStatus || (treeConfig && transform)) {
+          XEUtils.each(rowExpandedMaps, (row, rowid) => {
+            if (visibleDataRowIdData[rowid]) {
+              expandList.push(row)
+            }
+          })
+        } else {
           return XEUtils.values(rowExpandedMaps)
         }
-        XEUtils.each(rowExpandedMaps, (row, rowid) => {
-          if (visibleDataRowIdData[rowid]) {
-            expandList.push(row)
-          }
-        })
       }
       return expandList
     },
@@ -1204,6 +1262,12 @@ export default {
         x: overflowX && scrollXLoad,
         y: overflowY && scrollYLoad
       }
+    },
+    computeRowGroupFields () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      const rowGroupOpts = $xeTable.computeRowGroupOpts
+      return rowGroupOpts.groupFields
     },
     tabsResizeFlag () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -1327,6 +1391,12 @@ export default {
     mergeFooterItems (value: any) {
       this.clearMergeFooterItems()
       this.$nextTick(() => this.setMergeFooterItems(value))
+    },
+
+    computeRowGroupFields (val: any) {
+      const $xeTable = this
+
+      $xeTable.handleUpdateRowGroup(val)
     }
   } as any,
   created () {
@@ -1383,8 +1453,16 @@ export default {
       // 列表完整数据、条件处理后
       tableFullData: [],
       afterFullData: [],
+      afterTreeFullData: [],
+      afterGroupFullData: [],
       // 列表条件处理后数据集合
       afterFullRowMaps: {},
+      // 树结构完整数据、条件处理后
+      tableFullTreeData: [],
+      // 行分组全量数据、条件处理后
+      tableFullGroupData: [],
+      tableSynchData: [],
+      tableSourceData: [],
       // 收集的列配置（带分组）
       collectColumn: [],
       // 完整所有列（不带分组）
@@ -1416,6 +1494,8 @@ export default {
       rowExpandedMaps: {},
       // 懒加载中的展开行的集合
       rowExpandLazyLoadedMaps: {},
+      // 已展开的分组行
+      rowGroupExpandedMaps: {},
       // 已展开树节点集合
       treeExpandedMaps: {},
       // 懒加载中的树节点的集合
@@ -1449,9 +1529,9 @@ export default {
     const importOpts = $xeTable.computeImportOpts
     const currentRowOpts = $xeTable.computeCurrentRowOpts
     const currentColumnOpts = $xeTable.computeCurrentColumnOpts
-    const virtualXOpts = $xeTable.computeVirtualXOpts
-    const virtualYOpts = $xeTable.computeVirtualYOpts
     const keyboardOpts = $xeTable.computeKeyboardOpts
+    const rowGroupOpts = $xeTable.computeRowGroupOpts
+    const { groupFields } = rowGroupOpts
 
     if (props.rowId) {
       warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
@@ -1612,19 +1692,19 @@ export default {
     }
 
     // 如果不支持虚拟滚动
-    if (props.spanMethod) {
-      if (virtualXOpts.enabled) {
-        warnLog('vxe.error.notConflictProp', ['span-method', 'virtual-x-config.enabled=false'])
-      }
-      if (virtualYOpts.enabled) {
-        warnLog('vxe.error.notConflictProp', ['span-method', 'virtual-y-config.enabled=false'])
-      }
-    }
-    if (props.footerSpanMethod) {
-      if (virtualXOpts.enabled) {
-        warnLog('vxe.error.notConflictProp', ['footer-span-method', 'virtual-x-config.enabled=false'])
-      }
-    }
+    // if (props.spanMethod) {
+    //   if (virtualXOpts.enabled) {
+    //     warnLog('vxe.error.notConflictProp', ['span-method', 'virtual-x-config.enabled=false'])
+    //   }
+    //   if (virtualYOpts.enabled) {
+    //     warnLog('vxe.error.notConflictProp', ['span-method', 'virtual-y-config.enabled=false'])
+    //   }
+    // }
+    // if (props.footerSpanMethod) {
+    //   if (virtualXOpts.enabled) {
+    //     warnLog('vxe.error.notConflictProp', ['footer-span-method', 'virtual-x-config.enabled=false'])
+    //   }
+    // }
 
     // 检查是否有安装需要的模块
     if (props.editConfig && !$xeTable.insert) {
@@ -1650,6 +1730,9 @@ export default {
       endIndex: 1,
       visibleSize: 0
     })
+
+    this.handleUpdateRowGroup(groupFields)
+
     this.loadTableData(data, true).then(() => {
       if (data && data.length) {
         this.inited = true
@@ -1778,7 +1861,7 @@ export default {
     const { xID } = $xeTable
 
     const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
-    const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, columnStore, filterStore, customStore } = reactData
+    const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, isRowGroupStatus, columnStore, filterStore, customStore } = reactData
     const { leftList, rightList } = columnStore
     const loadingSlot = slots.loading
     const tableTipConfig = $xeTable.computeTableTipConfig
@@ -1819,6 +1902,7 @@ export default {
         'is--header': showHeader,
         'is--footer': showFooter,
         'is--group': isGroup,
+        'is-row-group': isRowGroupStatus,
         'is--tree-line': treeConfig && (treeOpts.showLine || treeOpts.line),
         'is--fixed-left': leftList.length,
         'is--fixed-right': rightList.length,

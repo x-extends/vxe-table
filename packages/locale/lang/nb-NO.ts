@@ -81,7 +81,8 @@ export default {
       maxFixedCol: 'Maksimalt antall frosne kolonner kan ikke overstige {0}',
       dragTip: 'Flytt: {0}',
       resizeColTip: '宽：{0} 像素',
-      resizeRowTip: '高：{0} 像素'
+      resizeRowTip: '高：{0} 像素',
+      rowGroupContentTotal: '{0}（{1}）'
     },
     grid: {
       selectOneRecord: '请至少选择一条记录！',

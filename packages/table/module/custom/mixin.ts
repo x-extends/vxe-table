@@ -1,34 +1,58 @@
 import XEUtils from 'xe-utils'
 
-import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeGridConstructor, GridPrivateMethods } from '../../../../types'
+import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeGridConstructor, VxeTableDefines, GridPrivateMethods, TableReactData, TableInternalData } from '../../../../types'
+
+function calcMaxHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const reactData = $xeTable as unknown as TableReactData
+
+  const { customStore } = reactData
+  const el = $xeTable.$refs.refElem as HTMLDivElement
+  // 判断面板不能大于表格高度
+  let tableHeight = 0
+  if (el) {
+    tableHeight = el.clientHeight - 28
+  }
+  customStore.maxHeight = Math.max(88, tableHeight)
+}
+
+function emitCustomEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, type: VxeTableDefines.CustomType, evnt: Event) {
+  const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+
+  const comp = $xeGrid || $xeTable
+  comp.dispatchEvent('custom', { type }, evnt)
+}
 
 export default {
   methods: {
     _openCustom () {
-      const $xeTable = this
-      const reactData = $xeTable
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const { initStore, customStore } = reactData
       customStore.visible = true
       initStore.custom = true
       $xeTable.handleUpdateCustomColumn()
       $xeTable.checkCustomStatus()
-      $xeTable.calcMaxHeight()
-      return this.$nextTick().then(() => this.calcMaxHeight())
+      calcMaxHeight($xeTable)
+      return $xeTable.$nextTick().then(() => calcMaxHeight($xeTable))
     },
     _closeCustom () {
-      const { customStore, customOpts } = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { customStore } = reactData
+      const customOpts = $xeTable.computeCustomOpts
       if (customStore.visible) {
         customStore.visible = false
         if (!customOpts.immediate) {
-          this.handleCustom()
+          $xeTable.handleCustom()
         }
       }
-      return this.$nextTick()
+      return $xeTable.$nextTick()
     },
     _saveCustom () {
-      const $xeTable = this
-      const reactData = $xeTable
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const { customOpts, customColumnList } = this
       const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
@@ -65,10 +89,12 @@ export default {
       return $xeTable.saveCustomStore('confirm')
     },
     _cancelCustom () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
-      const { customStore, customOpts, customColumnList } = $xeTable
+      const { customColumnList, customStore } = reactData
       const { oldSortMaps, oldFixedMaps, oldVisibleMaps } = customStore
+      const customOpts = $xeTable.computeCustomOpts
       const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
       XEUtils.eachTree(customColumnList, column => {
         const colid = column.getKey()
@@ -92,11 +118,12 @@ export default {
       return $xeTable.$nextTick()
     },
     _resetCustom (options: any) {
-      const $xeTable = this
-      const reactData = $xeTable
-      const internalData = $xeTable
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
 
-      const { collectColumn, customOpts } = internalData
+      const { collectColumn } = internalData
+      const customOpts = $xeTable.computeCustomOpts
       const { checkMethod } = customOpts
       const opts = Object.assign({
         visible: true,
@@ -114,7 +141,7 @@ export default {
         if (opts.sort) {
           column.renderSortNumber = column.sortNumber
         }
-        if (!checkMethod || checkMethod({ column })) {
+        if (!checkMethod || checkMethod({ $table: $xeTable, column })) {
           column.visible = column.defaultVisible
         }
         column.renderResizeWidth = column.renderWidth
@@ -129,19 +156,20 @@ export default {
       return this.setCustomAllCheckbox(isAll)
     },
     _setCustomAllCheckbox (checked: boolean) {
-      const $xeTable = this
-      const reactData = $xeTable
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
-      const { customStore } = this
-      const { customColumnList, customOpts } = this
+      const { customStore } = reactData
+      const { customColumnList } = reactData
+      const customOpts = $xeTable.computeCustomOpts
       const { checkMethod, visibleMethod } = customOpts
       const isAll = !!checked
       if (customOpts.immediate) {
         XEUtils.eachTree(customColumnList, (column) => {
-          if (visibleMethod && !visibleMethod({ column })) {
+          if (visibleMethod && !visibleMethod({ $table: $xeTable, column })) {
             return
           }
-          if (checkMethod && !checkMethod({ column })) {
+          if (checkMethod && !checkMethod({ $table: $xeTable, column })) {
             return
           }
           column.visible = isAll
@@ -154,10 +182,10 @@ export default {
         $xeTable.saveCustomStore('update:visible')
       } else {
         XEUtils.eachTree(customColumnList, (column) => {
-          if (visibleMethod && !visibleMethod({ column })) {
+          if (visibleMethod && !visibleMethod({ $table: $xeTable, column })) {
             return
           }
-          if (checkMethod && !checkMethod({ column })) {
+          if (checkMethod && !checkMethod({ $table: $xeTable, column })) {
             return
           }
           column.renderVisible = isAll
@@ -167,60 +195,66 @@ export default {
       }
       $xeTable.checkCustomStatus()
     },
-    calcMaxHeight  () {
-      const { $el, customStore } = this
-      // 判断面板不能大于表格高度
-      let tableHeight = 0
-      if ($el) {
-        tableHeight = $el.clientHeight - 28
-      }
-      customStore.maxHeight = Math.max(88, tableHeight)
-    },
     checkCustomStatus () {
-      const { customStore, collectColumn, customOpts } = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { customStore } = reactData
+      const { collectColumn } = internalData
+      const customOpts = $xeTable.computeCustomOpts
       const { checkMethod } = customOpts
-      customStore.isAll = collectColumn.every((column: any) => (checkMethod ? !checkMethod({ column }) : false) || column.renderVisible)
-      customStore.isIndeterminate = !customStore.isAll && collectColumn.some((column: any) => (!checkMethod || checkMethod({ column })) && (column.renderVisible || column.halfVisible))
+      customStore.isAll = collectColumn.every((column) => (checkMethod ? !checkMethod({ $table: $xeTable, column }) : false) || column.renderVisible)
+      customStore.isIndeterminate = !customStore.isAll && collectColumn.some((column) => (!checkMethod || checkMethod({ $table: $xeTable, column })) && (column.renderVisible || column.halfVisible))
     },
     emitCustomEvent (type: any, evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
 
       const comp = $xeGrid || $xeTable
-      comp.$emit('custom', { type, $table: $xeTable, $grid: $xeGrid, $event: evnt })
+      comp.dispatchEvent('custom', { type }, evnt)
     },
     triggerCustomEvent (evnt: any) {
-      const { customStore } = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { customStore } = reactData
       if (customStore.visible) {
         this.closeCustom()
-        this.emitCustomEvent('close', evnt)
+        emitCustomEvent($xeTable, 'close', evnt)
       } else {
         customStore.btnEl = evnt.target
         this.openCustom()
-        this.emitCustomEvent('open', evnt)
+        emitCustomEvent($xeTable, 'open', evnt)
       }
     },
     customOpenEvent (evnt: any) {
-      const { customStore } = this
-      if (!customStore.visible) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { customStore } = reactData
+      if (customStore.visible) {
         customStore.activeBtn = true
         customStore.btnEl = evnt.target
-        this.openCustom()
-        this.emitCustomEvent('open', evnt)
+        $xeTable.openCustom()
+        emitCustomEvent($xeTable, 'open', evnt)
       }
     },
     customCloseEvent (evnt: any) {
-      const { customStore } = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { customStore } = reactData
       if (customStore.visible) {
         customStore.activeBtn = false
-        this.closeCustom()
-        this.emitCustomEvent('close', evnt)
+        $xeTable.closeCustom()
+        emitCustomEvent($xeTable, 'close', evnt)
       }
     },
     handleUpdateCustomColumn () {
-      const $xeTable = this
-      const reactData = $xeTable
-      const internalData = $xeTable
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
 
       const { customStore } = reactData
       const { collectColumn } = internalData
