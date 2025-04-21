@@ -135,6 +135,7 @@
         & > .vxe-ico-picker {
           width: 100%;
         }
+        & > .vxe-row-group--tree-node,
         & > .vxe-cell--tree-node {
           .vxe-default-input,
           .vxe-default-textarea,
@@ -221,6 +222,7 @@
   & > .vxe-default-textarea {
     resize: none;
   }
+  & > .vxe-row-group--tree-node,
   & > .vxe-cell--tree-node {
     .vxe-input > .vxe-input--inner,
     .vxe-textarea > .vxe-textarea--inner {
@@ -896,84 +898,6 @@
       }
     }
   }
-  .vxe-body--row {
-    &.row--stripe {
-      background-color: var(--vxe-ui-table-row-striped-background-color);
-    }
-    &.row--radio {
-      background-color: var(--vxe-ui-table-row-radio-checked-background-color);
-    }
-    &.row--checked {
-      background-color: var(--vxe-ui-table-row-checkbox-checked-background-color);
-    }
-    &.row--current {
-      background-color: var(--vxe-ui-table-row-current-background-color);
-    }
-    &.row--hover {
-      background-color: var(--vxe-ui-table-row-hover-background-color);
-      &.row--stripe {
-        background-color: var(--vxe-ui-table-row-hover-striped-background-color);
-      }
-      &.row--radio {
-        background-color: var(--vxe-ui-table-row-hover-radio-checked-background-color);
-      }
-      &.row--checked {
-        background-color: var(--vxe-ui-table-row-hover-checkbox-checked-background-color);
-      }
-      &.row--current {
-        background-color: var(--vxe-ui-table-row-hover-current-background-color);
-      }
-    }
-  }
-  // &.is--tree-line {
-  //   .vxe-body--row {
-  //     &.row--stripe {
-  //       .vxe-tree--btn-wrapper {
-  //         background-color: var(--vxe-ui-table-row-striped-background-color);
-  //       }
-  //     }
-  //     &.row--radio {
-  //       .vxe-tree--btn-wrapper {
-  //         background-color: var(--vxe-ui-table-row-radio-checked-background-color);
-  //       }
-  //     }
-  //     &.row--checked {
-  //       .vxe-tree--btn-wrapper {
-  //         background-color: var(--vxe-ui-table-row-checkbox-checked-background-color);
-  //       }
-  //     }
-  //     &.row--current {
-  //       .vxe-tree--btn-wrapper {
-  //         background-color: var(--vxe-ui-table-row-current-background-color);
-  //       }
-  //     }
-  //     &.row--hover {
-  //       .vxe-tree--btn-wrapper {
-  //         background-color: var(--vxe-ui-table-row-hover-background-color);
-  //       }
-  //       &.row--stripe {
-  //         .vxe-tree--btn-wrapper {
-  //           background-color: var(--vxe-ui-table-row-hover-striped-background-color);
-  //         }
-  //       }
-  //       &.row--radio {
-  //         .vxe-tree--btn-wrapper {
-  //           background-color: var(--vxe-ui-table-row-hover-radio-checked-background-color);
-  //         }
-  //       }
-  //       &.row--checked {
-  //         .vxe-tree--btn-wrapper {
-  //           background-color: var(--vxe-ui-table-row-hover-checkbox-checked-background-color);
-  //         }
-  //       }
-  //       &.row--current {
-  //         .vxe-tree--btn-wrapper {
-  //           background-color: var(--vxe-ui-table-row-hover-current-background-color);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
   &.col-drag--resize {
     .vxe-table--main-wrapper,
     .vxe-table--fixed-left-wrapper,
@@ -1068,7 +992,7 @@
     text-align: left;
     &.col--current {
       background-color: var(--vxe-ui-table-column-current-background-color);
-      // .vxe-tree--btn-wrapper {
+      // .vxe-cell--tree-btn {
       //   background-color: var(--vxe-ui-table-column-current-background-color);
       // }
     }
@@ -1090,7 +1014,7 @@
   //   .vxe-body--column,
   //   .vxe-footer--column {
   //     &.col--current {
-  //       .vxe-tree--btn-wrapper {
+  //       .vxe-cell--tree-btn {
   //         background-color: var(--vxe-ui-table-column-current-background-color);
   //       }
   //     }
@@ -1111,6 +1035,104 @@
       }
     }
   }
+
+  // 行高亮
+  .vxe-body--row {
+    &.row--stripe {
+      & > .vxe-body--column {
+        background-color: var(--vxe-ui-table-row-striped-background-color);
+      }
+    }
+    &.row--radio {
+      & > .vxe-body--column {
+        background-color: var(--vxe-ui-table-row-radio-checked-background-color);
+      }
+    }
+    &.row--checked {
+      & > .vxe-body--column {
+        background-color: var(--vxe-ui-table-row-checkbox-checked-background-color);
+      }
+    }
+    &.row--current {
+      & > .vxe-body--column {
+        background-color: var(--vxe-ui-table-row-current-background-color);
+      }
+    }
+    &.row--hover {
+      & > .vxe-body--column {
+        background-color: var(--vxe-ui-table-row-hover-background-color);
+      }
+      &.row--stripe {
+        & > .vxe-body--column {
+          background-color: var(--vxe-ui-table-row-hover-striped-background-color);
+        }
+      }
+      &.row--radio {
+        & > .vxe-body--column {
+          background-color: var(--vxe-ui-table-row-hover-radio-checked-background-color);
+        }
+      }
+      &.row--checked {
+        & > .vxe-body--column {
+          background-color: var(--vxe-ui-table-row-hover-checkbox-checked-background-color);
+        }
+      }
+      &.row--current {
+        & > .vxe-body--column {
+          background-color: var(--vxe-ui-table-row-hover-current-background-color);
+        }
+      }
+    }
+  }
+  // &.is--tree-line {
+  //   .vxe-body--row {
+  //     &.row--stripe {
+  //       .vxe-cell--tree-btn {
+  //         background-color: var(--vxe-ui-table-row-striped-background-color);
+  //       }
+  //     }
+  //     &.row--radio {
+  //       .vxe-cell--tree-btn {
+  //         background-color: var(--vxe-ui-table-row-radio-checked-background-color);
+  //       }
+  //     }
+  //     &.row--checked {
+  //       .vxe-cell--tree-btn {
+  //         background-color: var(--vxe-ui-table-row-checkbox-checked-background-color);
+  //       }
+  //     }
+  //     &.row--current {
+  //       .vxe-cell--tree-btn {
+  //         background-color: var(--vxe-ui-table-row-current-background-color);
+  //       }
+  //     }
+  //     &.row--hover {
+  //       .vxe-cell--tree-btn {
+  //         background-color: var(--vxe-ui-table-row-hover-background-color);
+  //       }
+  //       &.row--stripe {
+  //         .vxe-cell--tree-btn {
+  //           background-color: var(--vxe-ui-table-row-hover-striped-background-color);
+  //         }
+  //       }
+  //       &.row--radio {
+  //         .vxe-cell--tree-btn {
+  //           background-color: var(--vxe-ui-table-row-hover-radio-checked-background-color);
+  //         }
+  //       }
+  //       &.row--checked {
+  //         .vxe-cell--tree-btn {
+  //           background-color: var(--vxe-ui-table-row-hover-checkbox-checked-background-color);
+  //         }
+  //       }
+  //       &.row--current {
+  //         .vxe-cell--tree-btn {
+  //           background-color: var(--vxe-ui-table-row-hover-current-background-color);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
   
   /*边框*/
   .vxe-table--footer-wrapper {
@@ -1607,10 +1629,28 @@
     border-color: var(--vxe-ui-table-tree-node-line-color);
     pointer-events: none;
   }
+  .vxe-row-group--tree-node,
   .vxe-cell--tree-node {
     position: relative;
   }
-  .vxe-tree--btn-wrapper {
+  .vxe-cell--tree-btn {
+    &:hover {
+      color: var(--vxe-ui-font-color);
+    }
+    & > i {
+      display: block;
+      color: var(--vxe-ui-font-lighten-color);
+      @include baseMixin.createAnimationTransition(transform);
+     // background-color: var(--vxe-ui-layout-background-color); // 影响选择行相关
+    }
+  }
+  .vxe-row-group-cell,
+  .vxe-tree-cell {
+    display: block;
+    padding-left: 1.5em;
+  }
+  .vxe-cell--tree-btn,
+  .vxe-row-group--node-btn{
     position: absolute;
     top: 50%;
     width: 1em;
@@ -1620,27 +1660,25 @@
     z-index: 1;
     user-select: none;
     cursor: pointer;
-    // & > i {
-    //   background-color: var(--vxe-ui-layout-background-color); // 影响选择行相关
-    // }
   }
-  .vxe-tree--node-btn {
-    display: block;
-    color: var(--vxe-ui-font-lighten-color);
-    @include baseMixin.createAnimationTransition(transform);
+
+  /*行分组*/
+  .vxe-row-group--node-btn {
     &:hover {
       color: var(--vxe-ui-font-color);
     }
-  }
-  .vxe-tree-cell {
-    display: block;
-    padding-left: 1.5em;
+    & > i {
+      display: block;
+      color: var(--vxe-ui-font-lighten-color);
+      @include baseMixin.createAnimationTransition(transform);
+    }
   }
 
   /*单元格高度*/
   .vxe-body--column {
     &.col--ellipsis {
       & > .vxe-cell {
+        .vxe-row-group-cell,
         .vxe-tree-cell {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -1681,6 +1719,7 @@
           }
         }
       }
+      &.vxe-row-group-cell,
       &.vxe-tree-cell,
       &.col--vertical-top {
         & > .vxe-cell {

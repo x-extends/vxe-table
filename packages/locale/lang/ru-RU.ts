@@ -81,7 +81,8 @@ export default {
       maxFixedCol: 'Максимальное количество замороженных столбцов не может превышать {0}.',
       dragTip: 'Переместить: {0}',
       resizeColTip: '宽：{0} 像素',
-      resizeRowTip: '高：{0} 像素'
+      resizeRowTip: '高：{0} 像素',
+      rowGroupContentTotal: '{0}（{1}）'
     },
     grid: {
       selectOneRecord: 'Пожалуйста, выберите хотя бы одну запись!',

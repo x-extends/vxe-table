@@ -1,7 +1,7 @@
 import { defineComponent, h, inject, ref, Ref, VNode, PropType, nextTick, TransitionGroup, createCommentVNode } from 'vue'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
-import { getTpImg, addClass, removeClass } from '../../../ui/src/dom'
+import { getTpImg, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
 import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
@@ -444,7 +444,7 @@ export default defineComponent({
       const columnDragOpts = computeColumnDragOpts.value
       const { isCrossDrag, isToChildDrag } = columnDragOpts
       const optEl = evnt.currentTarget as HTMLElement
-      const hasCtrlKey = evnt.ctrlKey
+      const isControlKey = hasControlKey(evnt)
       const colid = optEl.getAttribute('colid')
       const column = $xeTable.getColumnById(colid)
       const dragCol = dragColumnRef.value
@@ -462,7 +462,7 @@ export default defineComponent({
           showDropTip(evnt, optEl, false, dragPos)
           return
         }
-        prevDragToChild = !!((isCrossDrag && isToChildDrag) && hasCtrlKey && immediate)
+        prevDragToChild = !!((isCrossDrag && isToChildDrag) && isControlKey && immediate)
         prevDragCol = column
         prevDragPos = dragPos
         showDropTip(evnt, optEl, true, dragPos)
@@ -543,13 +543,13 @@ export default defineComponent({
         isCustomStatus
       }
       XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
-        const isVisible = visibleMethod ? visibleMethod({ column }) : true
+        const isVisible = visibleMethod ? visibleMethod({ $table: $xeTable, column }) : true
         if (isVisible) {
           const isChecked = column.renderVisible
           const isIndeterminate = column.halfVisible
           const isColGroup = column.children && column.children.length
           const colTitle = formatText(column.getTitle(), 1)
-          const isDisabled = checkMethod ? !checkMethod({ column }) : false
+          const isDisabled = checkMethod ? !checkMethod({ $table: $xeTable, column }) : false
           const isHidden = !isChecked
           colVNs.push(
             h('li', {
@@ -811,7 +811,7 @@ export default defineComponent({
         isCustomStatus
       }
       XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
-        const isVisible = visibleMethod ? visibleMethod({ column }) : true
+        const isVisible = visibleMethod ? visibleMethod({ $table: $xeTable, column }) : true
         if (isVisible) {
           // 默认继承调整宽度
           let customMinWidth = 0
@@ -836,7 +836,7 @@ export default defineComponent({
           const isIndeterminate = column.halfVisible
           const colTitle = formatText(column.getTitle(), 1)
           const isColGroup = column.children && column.children.length
-          const isDisabled = checkMethod ? !checkMethod({ column }) : false
+          const isDisabled = checkMethod ? !checkMethod({ $table: $xeTable, column }) : false
           const isHidden = !isChecked
           trVNs.push(
             h('tr', {

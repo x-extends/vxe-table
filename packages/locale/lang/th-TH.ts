@@ -81,7 +81,8 @@ export default {
       maxFixedCol: 'จำนวนคอลัมน์ที่ตรึงไว้สูงสุดต้องไม่เกิน {0}',
       dragTip: 'ย้าย: {0}',
       resizeColTip: '宽：{0} 像素',
-      resizeRowTip: '高：{0} 像素'
+      resizeRowTip: '高：{0} 像素',
+      rowGroupContentTotal: '{0}（{1}）'
     },
     grid: {
       selectOneRecord: 'โปรดเลือกอย่างน้อยหนึ่งรายการ!',

@@ -81,7 +81,8 @@ export default {
       maxFixedCol: 'The maximum number of frozen columns cannot exceed {0}',
       dragTip: 'Move: {0}',
       resizeColTip: 'Width: {0} Pixels',
-      resizeRowTip: 'Height: {0} Pixels'
+      resizeRowTip: 'Height: {0} Pixels',
+      rowGroupContentTotal: '{0} ({1})'
     },
     grid: {
       selectOneRecord: 'Please select at least one record!',

@@ -47,6 +47,7 @@ export default [
 
   'column-resizable-change',
   'row-resizable-change',
+  'toggle-row-group-expand',
   'toggle-row-expand',
   'toggle-tree-expand',
   'menu-click',

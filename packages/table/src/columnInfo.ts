@@ -81,6 +81,7 @@ export class ColumnInfo {
       filterResetMethod: _vm.filterResetMethod,
       filterRecoverMethod: _vm.filterRecoverMethod,
       filterRender: _vm.filterRender,
+      rowGroupNode: _vm.rowGroupNode,
       treeNode: _vm.treeNode,
       dragSort: _vm.dragSort,
       rowResize: _vm.rowResize,

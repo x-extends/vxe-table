@@ -91,6 +91,8 @@ export const columnProps = {
   filterRecoverMethod: Function as PropType<VxeColumnPropTypes.FilterRecoverMethod>,
   // 筛选模板配置项
   filterRender: Object as PropType<VxeColumnPropTypes.FilterRender>,
+  // 设置为分组节点
+  rowGroupNode: Boolean as PropType<VxeColumnPropTypes.RowGroupNode>,
   // 设置为树节点
   treeNode: Boolean as PropType<VxeColumnPropTypes.TreeNode>,
   // 设置为拖拽排序

@@ -450,9 +450,11 @@ export default defineComponent({
     }
 
     const renderRows = (fixedType: 'left' | 'right' | '', isOptimizeMode: boolean, tableData: any[], tableColumn: VxeTableDefines.ColumnInfo[]) => {
+      const $xeGrid = $xeTable.xeGrid
+
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
-      const { hasFixedColumn, treeExpandedFlag, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, isDragColMove, rowExpandHeightFlag } = tableReactData
-      const { fullAllDataRowIdData, treeExpandedMaps, pendingRowMaps, rowExpandedMaps } = tableInternalData
+      const { hasFixedColumn, treeExpandedFlag, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, isDragColMove, rowExpandHeightFlag, isRowGroupStatus } = tableReactData
+      const { fullAllDataRowIdData, fullColumnIdData, treeExpandedMaps, pendingRowMaps, rowExpandedMaps } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
       const treeOpts = computeTreeOpts.value
@@ -464,6 +466,7 @@ export default defineComponent({
       const childrenField = treeOpts.children || treeOpts.childrenField
       const rows: any[] = []
       const { handleGetRowId } = createHandleGetRowId($xeTable)
+      const isDeepRow = treeConfig || isRowGroupStatus
       tableData.forEach((row, $rowIndex) => {
         const rowid = handleGetRowId(row)
         const rowRest = fullAllDataRowIdData[rowid] || {}
@@ -471,6 +474,7 @@ export default defineComponent({
         let rowLevel = 0
         let seq: string | number = -1
         let _rowIndex = -1
+        const hasRowGroupAggregate = isRowGroupStatus && row.isAggregate
         const trOn: Record<string, any> = {}
         // 当前行事件
         if (rowOpts.isHover || highlightHoverRow) {
@@ -489,7 +493,7 @@ export default defineComponent({
         }
         if (rowRest) {
           rowLevel = rowRest.level
-          if (treeConfig && transform && seqMode === 'increasing') {
+          if (hasRowGroupAggregate || (treeConfig && transform && seqMode === 'increasing')) {
             seq = rowRest._index + 1
           } else {
             seq = rowRest.seq
@@ -512,14 +516,14 @@ export default defineComponent({
           isExpandTree = !!treeExpandedFlag && rowChildren && rowChildren.length > 0 && !!treeExpandedMaps[rowid]
         }
         // 拖拽行事件
-        if (rowOpts.drag && (!treeConfig || transform)) {
+        if (rowOpts.drag && !isRowGroupStatus && (!treeConfig || transform)) {
           trOn.onDragstart = $xeTable.handleRowDragDragstartEvent
           trOn.onDragend = $xeTable.handleRowDragDragendEvent
           trOn.onDragover = $xeTable.handleRowDragDragoverEvent
         }
         const trClass = [
           'vxe-body--row',
-          treeConfig ? `row--level-${rowLevel}` : '',
+          isDeepRow ? `row--level-${rowLevel}` : '',
           {
             'row--stripe': stripe && (_rowIndex + 1) % 2 === 0,
             'is--new': isNewRow,
@@ -528,7 +532,8 @@ export default defineComponent({
             'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
             'row--radio': radioOpts.highlight && $xeTable.eqRow(selectRadioRow, row),
             'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
-            'row--pending': !!pendingRowFlag && !!pendingRowMaps[rowid]
+            'row--pending': !!pendingRowFlag && !!pendingRowMaps[rowid],
+            'row--group': hasRowGroupAggregate
           },
           getPropClass(rowClassName, params)
         ]
@@ -543,7 +548,7 @@ export default defineComponent({
               class: trClass,
               rowid: rowid,
               style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-              key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || treeConfig ? rowid : $rowIndex,
+              key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || isRowGroupStatus || treeConfig ? rowid : $rowIndex,
               ...trOn
             }, {
               default: () => tdVNs
@@ -552,7 +557,7 @@ export default defineComponent({
               class: trClass,
               rowid: rowid,
               style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-              key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || treeConfig ? rowid : $rowIndex,
+              key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || isRowGroupStatus || treeConfig ? rowid : $rowIndex,
               ...trOn
             }, tdVNs)
         )
@@ -584,9 +589,40 @@ export default defineComponent({
             if (treeConfig) {
               cellStyle.paddingLeft = `${(rowLevel * treeOpts.indent) + 30}px`
             }
-            const { showOverflow } = expandColumn
+            const { showOverflow } = expandColumn || {}
+            const colid = expandColumn.id
+            const colRest = fullColumnIdData[colid] || {}
             const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? isAllOverflow : showOverflow
-            const expandParams = { $table: $xeTable, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+            let columnIndex = -1
+            let $columnIndex = -1
+            let _columnIndex = -1
+            if (colRest) {
+              columnIndex = colRest.index
+              $columnIndex = colRest.$index
+              _columnIndex = colRest._index
+            }
+            const expandParams: VxeTableDefines.CellRenderDataParams = {
+              $grid: $xeGrid,
+              $table: $xeTable,
+              seq,
+              column: expandColumn as VxeTableDefines.ColumnInfo,
+              columnIndex,
+              $columnIndex,
+              _columnIndex,
+              fixed: fixedType,
+              type: renderType,
+              level: rowLevel,
+              row,
+              rowid,
+              rowIndex,
+              $rowIndex,
+              _rowIndex,
+              isHidden: false,
+              isEdit: false,
+              visibleData: [],
+              data: [],
+              items: []
+            }
             rows.push(
               h('tr', {
                 class: ['vxe-body--expanded-row', {

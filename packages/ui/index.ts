@@ -132,7 +132,17 @@ VxeUI.setConfig({
       // isEvery: false,
       showIcon: true
     },
+    rowGroupConfig: {
+      padding: true,
+      rowField: 'id',
+      parentField: '_X_ROW_PARENT_KEY',
+      childrenField: '_X_ROW_CHILDREN',
+      mapChildrenField: '_X_ROW_CHILD_LIST',
+      indent: 20,
+      showIcon: true
+    },
     treeConfig: {
+      padding: true,
       rowField: 'id',
       parentField: 'parentId',
       childrenField: 'children',
@@ -295,6 +305,8 @@ VxeUI.setIcon({
   TABLE_DRAG_STATUS_SUB_ROW: iconPrefix + 'add-sub',
   TABLE_DRAG_STATUS_COLUMN: iconPrefix + 'swap',
   TABLE_DRAG_DISABLED: iconPrefix + 'no-drop',
+  TABLE_ROW_GROUP_OPEN: iconPrefix + 'arrow-right rotate90',
+  TABLE_ROW_GROUP_CLOSE: iconPrefix + 'arrow-right',
 
   // toolbar
   TOOLBAR_TOOLS_REFRESH: iconPrefix + 'repeat',

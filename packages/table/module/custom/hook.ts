@@ -142,10 +142,10 @@ VxeUI.hooks.add('tableCustomModule', {
       const isAll = !!checked
       if (customOpts.immediate) {
         XEUtils.eachTree(customColumnList, (column) => {
-          if (visibleMethod && !visibleMethod({ column })) {
+          if (visibleMethod && !visibleMethod({ $table: $xeTable, column })) {
             return
           }
-          if (checkMethod && !checkMethod({ column })) {
+          if (checkMethod && !checkMethod({ $table: $xeTable, column })) {
             return
           }
           column.visible = isAll
@@ -158,10 +158,10 @@ VxeUI.hooks.add('tableCustomModule', {
         $xeTable.saveCustomStore('update:visible')
       } else {
         XEUtils.eachTree(customColumnList, (column) => {
-          if (visibleMethod && !visibleMethod({ column })) {
+          if (visibleMethod && !visibleMethod({ $table: $xeTable, column })) {
             return
           }
-          if (checkMethod && !checkMethod({ column })) {
+          if (checkMethod && !checkMethod({ $table: $xeTable, column })) {
             return
           }
           column.renderVisible = isAll
@@ -198,7 +198,7 @@ VxeUI.hooks.add('tableCustomModule', {
           if (opts.sort) {
             column.renderSortNumber = column.sortNumber
           }
-          if (!checkMethod || checkMethod({ column })) {
+          if (!checkMethod || checkMethod({ $table: $xeTable, column })) {
             column.visible = column.defaultVisible
           }
           column.renderResizeWidth = column.renderWidth
@@ -220,8 +220,8 @@ VxeUI.hooks.add('tableCustomModule', {
       const { collectColumn } = internalData
       const customOpts = computeCustomOpts.value
       const { checkMethod } = customOpts
-      customStore.isAll = collectColumn.every((column) => (checkMethod ? !checkMethod({ column }) : false) || column.renderVisible)
-      customStore.isIndeterminate = !customStore.isAll && collectColumn.some((column) => (!checkMethod || checkMethod({ column })) && (column.renderVisible || column.halfVisible))
+      customStore.isAll = collectColumn.every((column) => (checkMethod ? !checkMethod({ $table: $xeTable, column }) : false) || column.renderVisible)
+      customStore.isIndeterminate = !customStore.isAll && collectColumn.some((column) => (!checkMethod || checkMethod({ $table: $xeTable, column })) && (column.renderVisible || column.halfVisible))
     }
 
     const emitCustomEvent = (type: VxeTableDefines.CustomType, evnt: Event) => {
@@ -233,7 +233,9 @@ VxeUI.hooks.add('tableCustomModule', {
       checkCustomStatus,
       emitCustomEvent,
       triggerCustomEvent (evnt) {
-        const { customStore } = $xeTable.reactData
+        const reactData = $xeTable.reactData
+
+        const { customStore } = reactData
         if (customStore.visible) {
           closeCustom()
           emitCustomEvent('close', evnt)
@@ -244,6 +246,8 @@ VxeUI.hooks.add('tableCustomModule', {
         }
       },
       customOpenEvent (evnt) {
+        const reactData = $xeTable.reactData
+
         const { customStore } = reactData
         if (!customStore.visible) {
           customStore.activeBtn = true
@@ -253,6 +257,8 @@ VxeUI.hooks.add('tableCustomModule', {
         }
       },
       customCloseEvent (evnt) {
+        const reactData = $xeTable.reactData
+
         const { customStore } = reactData
         if (customStore.visible) {
           customStore.activeBtn = false

@@ -186,19 +186,21 @@ export default {
   syncResize: [Boolean, String, Number],
   // 响应式布局配置项
   resizeConfig: Object as PropType<VxeTablePropTypes.ResizeConfig>,
-  // 列配置信息
+  // 列配置项
   columnConfig: Object as PropType<VxeTablePropTypes.ColumnConfig>,
-  // 当前列配置信息
+  // 当前列配置项
   currentColumnConfig: Object as PropType<VxeTablePropTypes.CurrentColumnConfig>,
-  // 单元格配置信息
+  // 单元格配置项
   cellConfig: Object as PropType<VxeTablePropTypes.CellConfig>,
-  // 表头单元格配置信息
+  // 表头单元格配置项
   headerCellConfig: Object as PropType<VxeTablePropTypes.HeaderCellConfig>,
-  // 表尾单元格配置信息
+  // 表尾单元格配置项
   footerCellConfig: Object as PropType<VxeTablePropTypes.FooterCellConfig>,
-  // 行配置信息
+  // 行配置项
   rowConfig: Object as PropType<VxeTablePropTypes.RowConfig>,
-  // 当前行配置信息
+  // 行分组配置项
+  rowGroupConfig: Object as PropType<VxeTablePropTypes.RowGroupConfig>,
+  // 当前行配置项
   currentRowConfig: Object as PropType<VxeTablePropTypes.CurrentRowConfig>,
   // 已废弃，被 rowDragConfig 替换
   dragConfig: Object as PropType<VxeTablePropTypes.DragConfig>,

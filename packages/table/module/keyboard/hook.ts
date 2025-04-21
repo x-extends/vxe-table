@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { getRefElem } from '../../src/util'
-import { hasClass, getAbsolutePos, addClass, removeClass } from '../../../ui/src/dom'
+import { hasClass, getAbsolutePos, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
 
 import type { TableKeyboardPrivateMethods, VxeTableDefines } from '../../../../types'
 
@@ -179,8 +179,9 @@ hooks.add('tableKeyboardModule', {
           const rangeRows = getCheckboxRangeRows(evnt, params, trElem, trRect, offsetClientTop, offsetTop < marginSize ? -rangeHeight : rangeHeight)
           // 至少滑动 10px 才能有效匹配
           if (rangeHeight > 10 && rangeRows.length !== lastRangeRows.length) {
+            const isControlKey = hasControlKey(evnt)
             lastRangeRows = rangeRows
-            if (evnt.ctrlKey) {
+            if (isControlKey) {
               rangeRows.forEach((row: any) => {
                 $xeTable.handleBatchSelectRows([row], selectRecords.indexOf(row) === -1)
               })
