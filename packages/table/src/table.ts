@@ -3130,8 +3130,14 @@ export default defineComponent({
       scrollXStore.endIndex = 1
       reactData.isRowLoading = true
       reactData.scrollVMLoading = false
+      internalData.treeExpandedMaps = {}
+      reactData.treeExpandedFlag++
+      internalData.rowExpandedMaps = {}
+      reactData.rowExpandedFlag++
       internalData.insertRowMaps = {}
+      reactData.insertRowFlag++
       internalData.removeRowMaps = {}
+      reactData.removeRowFlag++
       const sYLoad = updateScrollYStatus(fullData)
       reactData.isDragColMove = false
       reactData.isDragRowMove = false
