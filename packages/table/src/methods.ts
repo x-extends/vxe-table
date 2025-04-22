@@ -2720,8 +2720,14 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   scrollXStore.endIndex = 1
   reactData.isRowLoading = true
   reactData.scrollVMLoading = false
+  internalData.treeExpandedMaps = {}
+  reactData.treeExpandedFlag++
+  internalData.rowExpandedMaps = {}
+  reactData.rowExpandedFlag++
   internalData.insertRowMaps = {}
+  reactData.insertRowFlag++
   internalData.removeRowMaps = {}
+  reactData.removeRowFlag++
   const sYLoad = updateScrollYStatus($xeTable, fullData)
   reactData.isDragColMove = false
   reactData.isDragRowMove = false
