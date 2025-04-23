@@ -360,7 +360,18 @@ function defaultEditRender (h: CreateElement, renderOpts: VxeGlobalRendererHandl
   ]
 }
 
-function radioAndCheckboxEditRender (h: CreateElement, renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+function checkboxEditRender (h: CreateElement, renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+  const { row, column } = params
+  const cellValue = getCellValue(row, column)
+  return [
+    h(getDefaultComponent(renderOpts), {
+      props: getCellEditProps(renderOpts, params, cellValue),
+      on: getEditOns(renderOpts, params)
+    })
+  ]
+}
+
+function radioAndCheckboxGroupEditRender (h: CreateElement, renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { options } = renderOpts
   const { row, column } = params
   const cellValue = getCellValue(row, column)
@@ -957,10 +968,13 @@ renderer.mixin({
     }
   },
   VxeRadioGroup: {
-    renderTableDefault: radioAndCheckboxEditRender
+    renderTableDefault: radioAndCheckboxGroupEditRender
+  },
+  VxeCheckbox: {
+    renderTableDefault: checkboxEditRender
   },
   VxeCheckboxGroup: {
-    renderTableDefault: radioAndCheckboxEditRender
+    renderTableDefault: radioAndCheckboxGroupEditRender
   },
   VxeSwitch: {
     tableAutoFocus: 'button',
