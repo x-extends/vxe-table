@@ -2075,7 +2075,7 @@ export default defineComponent({
 
     const updateStyle = () => {
       const { showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
-      const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isAllOverflow, expandColumn } = reactData
+      const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isAllOverflow, expandColumn, isColLoading } = reactData
       const { visibleColumn, tableHeight, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
       const el = refElem.value
       if (!el) {
@@ -2191,7 +2191,7 @@ export default defineComponent({
               renderColumnList = visibleColumn
             } else {
               // 如果是使用优化模式
-              if (scrollXLoad || scrollYLoad || allColumnHeaderOverflow) {
+              if (scrollXLoad && allColumnHeaderOverflow) {
                 if (spanMethod || footerSpanMethod) {
                   // 如果不支持优化模式
                 } else {
@@ -2199,8 +2199,11 @@ export default defineComponent({
                 }
               }
 
-              if (fixedType) {
+              if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
                 renderColumnList = visibleColumn
+              }
+
+              if (fixedType) {
                 // 如果是使用优化模式
                 if (isOptimizeMode) {
                   renderColumnList = fixedColumn || []
@@ -2297,7 +2300,7 @@ export default defineComponent({
             let renderColumnList = tableColumn
             let isOptimizeMode = false
             // 如果是使用优化模式
-            if (scrollXLoad || scrollYLoad || allColumnFooterOverflow) {
+            if (scrollXLoad && allColumnFooterOverflow) {
               if (spanMethod || footerSpanMethod) {
                 // 如果不支持优化模式
               } else {

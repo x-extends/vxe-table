@@ -43,7 +43,7 @@ export default defineComponent({
     const refFooterTFoot = ref() as Ref<HTMLTableSectionElement>
     const refFooterXSpace = ref() as Ref<HTMLDivElement>
 
-    const renderRows = (tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) => {
+    const renderRows = (isOptimizeMode: boolean, tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) => {
       const $xeGrid = $xeTable.xeGrid
 
       const { fixedType } = props
@@ -72,10 +72,10 @@ export default defineComponent({
         const isPadding = XEUtils.isBoolean(footerCellOpts.padding) ? footerCellOpts.padding : cellOpts.padding
         const footOverflow = XEUtils.eqNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
         const footAlign = footerAlign || (compConf ? compConf.tableFooterCellAlign : '') || allFooterAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
-        let showEllipsis = footOverflow === 'ellipsis'
+        const showEllipsis = footOverflow === 'ellipsis'
         const showTitle = footOverflow === 'title'
         const showTooltip = footOverflow === true || footOverflow === 'tooltip'
-        let hasEllipsis = showTitle || showTooltip || showEllipsis
+        const hasEllipsis = showTitle || showTooltip || showEllipsis
         const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
         const attrs: any = { colid }
         const tfOns: any = {}
@@ -100,10 +100,6 @@ export default defineComponent({
           fixed: fixedType,
           type: renderType,
           data: footerTableData
-        }
-        // 纵向虚拟滚动不支持动态行高
-        if (scrollXLoad && !hasEllipsis) {
-          showEllipsis = hasEllipsis = true
         }
         if (showTitle || showTooltip || showAllTip) {
           tfOns.onMouseenter = (evnt: MouseEvent) => {
@@ -162,7 +158,7 @@ export default defineComponent({
         const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
         let isVNPreEmptyStatus = false
-        if (!isMergeCell) {
+        if (isOptimizeMode && !isMergeCell) {
           if (scrollXLoad && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
             isVNPreEmptyStatus = true
           }
@@ -222,7 +218,7 @@ export default defineComponent({
       })
     }
 
-    const renderHeads = (renderColumnList: VxeTableDefines.ColumnInfo[]) => {
+    const renderHeads = (isOptimizeMode: boolean, renderColumnList: VxeTableDefines.ColumnInfo[]) => {
       const { fixedType, footerTableData } = props
       const { footerRowClassName, footerRowStyle } = tableProps
       const { isColLoading, isDragColMove } = tableReactData
@@ -244,7 +240,7 @@ export default defineComponent({
             ],
             style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
           }, {
-            default: () => renderRows(renderColumnList, footerTableData, row, $rowIndex, _rowIndex)
+            default: () => renderRows(isOptimizeMode, renderColumnList, footerTableData, row, $rowIndex, _rowIndex)
           })
         }
         return h('tr', {
@@ -254,7 +250,7 @@ export default defineComponent({
             footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''
           ],
           style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
-        }, renderRows(renderColumnList, footerTableData, row, $rowIndex, _rowIndex))
+        }, renderRows(isOptimizeMode, renderColumnList, footerTableData, row, $rowIndex, _rowIndex))
       })
     }
 
@@ -262,12 +258,12 @@ export default defineComponent({
       const { fixedType, fixedColumn, tableColumn } = props
       const { spanMethod, footerSpanMethod, showFooterOverflow: allColumnFooterOverflow } = tableProps
       const { visibleColumn, fullColumnIdData } = tableInternalData
-      const { isGroup, isColLoading, overflowX, scrollXLoad, scrollYLoad, dragCol } = tableReactData
+      const { isGroup, isColLoading, overflowX, scrollXLoad, dragCol } = tableReactData
 
       let renderColumnList = tableColumn
       let isOptimizeMode = false
       // 如果是使用优化模式
-      if (scrollXLoad || scrollYLoad || allColumnFooterOverflow) {
+      if (scrollXLoad && allColumnFooterOverflow) {
         if (spanMethod || footerSpanMethod) {
           // 如果不支持优化模式
         } else {
@@ -275,7 +271,7 @@ export default defineComponent({
         }
       }
 
-      if (!isColLoading && (fixedType || !overflowX)) {
+      if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
         renderColumnList = visibleColumn
       }
 
@@ -355,7 +351,7 @@ export default defineComponent({
          */
             h('tfoot', {
               ref: refFooterTFoot
-            }, renderHeads(renderColumnList))
+            }, renderHeads(isOptimizeMode, renderColumnList))
           ])
         ])
       ])

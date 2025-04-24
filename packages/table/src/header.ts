@@ -57,6 +57,7 @@ export default defineComponent({
       const headerCellOpts = computeHeaderCellOpts.value
       const currCellHeight = getCellHeight(headerCellOpts.height || cellOpts.height) || defaultRowHeight
       const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
+
       return cols.map((column, $columnIndex) => {
         const { type, showHeaderOverflow, headerAlign, align, filters, headerClassName, editRender, cellRender } = column
         const colid = column.id
@@ -68,10 +69,10 @@ export default defineComponent({
         const isPadding = XEUtils.isBoolean(headerCellOpts.padding) ? headerCellOpts.padding : cellOpts.padding
         const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
         const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
-        let showEllipsis = headOverflow === 'ellipsis'
+        const showEllipsis = headOverflow === 'ellipsis'
         const showTitle = headOverflow === 'title'
         const showTooltip = headOverflow === true || headOverflow === 'tooltip'
-        let hasEllipsis = showTitle || showTooltip || showEllipsis
+        const hasEllipsis = showTitle || showTooltip || showEllipsis
         let hasFilter = false
         let firstFilterOption: VxeColumnPropTypes.FilterItem | null = null
         if (filters) {
@@ -82,7 +83,20 @@ export default defineComponent({
         const _columnIndex = colRest._index
         const cellParams: VxeTableDefines.CellRenderHeaderParams & {
           $table: VxeTableConstructor & VxeTablePrivateMethods
-        } = { $table: $xeTable, $grid: $xeGrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, firstFilterOption, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
+        } = {
+          $table: $xeTable,
+          $grid: $xeGrid,
+          $rowIndex,
+          column,
+          columnIndex,
+          $columnIndex,
+          _columnIndex,
+          firstFilterOption,
+          fixed: fixedType,
+          type: renderType,
+          isHidden: fixedHiddenColumn,
+          hasFilter
+        }
         const thAttrs: Record<string, string | number | null> = {
           colid,
           colspan: column.colSpan > 1 ? column.colSpan : null,
@@ -91,10 +105,6 @@ export default defineComponent({
         const thOns: any = {
           onClick: (evnt: MouseEvent) => $xeTable.triggerHeaderCellClickEvent(evnt, cellParams),
           onDblclick: (evnt: MouseEvent) => $xeTable.triggerHeaderCellDblclickEvent(evnt, cellParams)
-        }
-        // 横向虚拟滚动不支持动态行高
-        if (scrollXLoad && !hasEllipsis) {
-          showEllipsis = hasEllipsis = true
         }
         const isColDragCell = columnOpts.drag && columnDragOpts.trigger === 'cell'
         let isDisabledDrag = false
@@ -119,7 +129,7 @@ export default defineComponent({
         const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
         let isVNPreEmptyStatus = false
-        if (!isGroup) {
+        if (isOptimizeMode && !isGroup) {
           if (!dragCol || dragCol.id !== colid) {
             if (scrollXLoad && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
               isVNPreEmptyStatus = true
@@ -227,7 +237,7 @@ export default defineComponent({
     const renderVN = () => {
       const { fixedType, fixedColumn, tableColumn } = props
       const { mouseConfig, showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
-      const { isGroup, isColLoading, overflowX, scrollXLoad, scrollYLoad, dragCol } = tableReactData
+      const { isGroup, isColLoading, overflowX, scrollXLoad, dragCol } = tableReactData
       const { visibleColumn, fullColumnIdData } = tableInternalData
 
       const mouseOpts = computeMouseOpts.value
@@ -239,7 +249,7 @@ export default defineComponent({
         renderColumnList = visibleColumn
       } else {
         // 如果是使用优化模式
-        if (scrollXLoad || scrollYLoad || allColumnHeaderOverflow) {
+        if (scrollXLoad && allColumnHeaderOverflow) {
           if (spanMethod || footerSpanMethod) {
             // 如果不支持优化模式
           } else {
@@ -247,7 +257,7 @@ export default defineComponent({
           }
         }
 
-        if (!isColLoading && (fixedType || !overflowX)) {
+        if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
           renderColumnList = visibleColumn
         }
 
