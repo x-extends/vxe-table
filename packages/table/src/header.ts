@@ -42,10 +42,10 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     const isPadding = XEUtils.isBoolean(headerCellOpts.padding) ? headerCellOpts.padding : cellOpts.padding
     const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
     const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
-    let showEllipsis = headOverflow === 'ellipsis'
+    const showEllipsis = headOverflow === 'ellipsis'
     const showTitle = headOverflow === 'title'
     const showTooltip = headOverflow === true || headOverflow === 'tooltip'
-    let hasEllipsis = showTitle || showTooltip || showEllipsis
+    const hasEllipsis = showTitle || showTooltip || showEllipsis
     let hasFilter = false
     let firstFilterOption: VxeColumnPropTypes.FilterItem | null = null
     if (filters) {
@@ -54,7 +54,20 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     }
     const columnIndex = colRest.index
     const _columnIndex = colRest._index
-    const cellParams = { $table: $xeTable, $grid: $xeGrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, firstFilterOption, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
+    const cellParams = {
+      $table: $xeTable,
+      $grid: $xeGrid,
+      $rowIndex,
+      column,
+      columnIndex,
+      $columnIndex,
+      _columnIndex,
+      firstFilterOption,
+      fixed: fixedType,
+      type: cellType,
+      isHidden: fixedHiddenColumn,
+      hasFilter
+    }
     const thAttrs: Record<string, string | number | null> = {
       colid,
       colspan: column.colSpan > 1 ? column.colSpan : null,
@@ -63,10 +76,6 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     const thOns: any = {
       click: (evnt: MouseEvent) => $xeTable.triggerHeaderCellClickEvent(evnt, cellParams),
       dblclick: (evnt: MouseEvent) => $xeTable.triggerHeaderCellDblclickEvent(evnt, cellParams)
-    }
-    // 虚拟滚动不支持动态高度
-    if (scrollXLoad && !hasEllipsis) {
-      showEllipsis = hasEllipsis = true
     }
     const isColDragCell = columnOpts.drag && columnDragOpts.trigger === 'cell'
     let isDisabledDrag = false
@@ -91,7 +100,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
     let isVNPreEmptyStatus = false
-    if (!isGroup) {
+    if (isOptimizeMode && !isGroup) {
       if (!dragCol || dragCol.id !== colid) {
         if (scrollXLoad && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
           isVNPreEmptyStatus = true
@@ -274,7 +283,7 @@ export default {
     const { headerColumn } = this
 
     const { mouseConfig, showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
-    const { isGroup, isColLoading, overflowX, scrollXLoad, scrollYLoad, dragCol } = tableReactData
+    const { isGroup, isColLoading, overflowX, scrollXLoad, dragCol } = tableReactData
     const { visibleColumn, fullColumnIdData } = tableInternalData
 
     const mouseOpts = $xeTable.computeMouseOpts
@@ -286,7 +295,7 @@ export default {
       renderColumnList = visibleColumn
     } else {
       // 如果是使用优化模式
-      if (scrollXLoad || scrollYLoad || allColumnHeaderOverflow) {
+      if (scrollXLoad && allColumnHeaderOverflow) {
         if (spanMethod || footerSpanMethod) {
           // 如果不支持优化模式
         } else {
@@ -294,7 +303,7 @@ export default {
         }
       }
 
-      if (!isColLoading && (fixedType || !overflowX)) {
+      if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
         renderColumnList = visibleColumn
       }
 

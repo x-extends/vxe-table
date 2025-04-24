@@ -11,7 +11,7 @@ const renderType = 'footer'
 
 const { renderer, renderEmptyElement } = VxeUI
 
-function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) {
+function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) {
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
@@ -45,10 +45,10 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
     const isPadding = XEUtils.isBoolean(footerCellOpts.padding) ? footerCellOpts.padding : cellOpts.padding
     const footOverflow = XEUtils.eqNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
     const footAlign = footerAlign || (compConf ? compConf.tableFooterCellAlign : '') || allFooterAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
-    let showEllipsis = footOverflow === 'ellipsis'
+    const showEllipsis = footOverflow === 'ellipsis'
     const showTitle = footOverflow === 'title'
     const showTooltip = footOverflow === true || footOverflow === 'tooltip'
-    let hasEllipsis = showTitle || showTooltip || showEllipsis
+    const hasEllipsis = showTitle || showTooltip || showEllipsis
     const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
     const attrs: any = { colid }
     const tfOns: any = {}
@@ -73,10 +73,6 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
       fixed: fixedType,
       type: renderType,
       data: footerTableData
-    }
-    // 纵向虚拟滚动不支持动态行高
-    if (scrollXLoad && !hasEllipsis) {
-      showEllipsis = hasEllipsis = true
     }
     if (showTitle || showTooltip || showAllTip) {
       tfOns.mouseenter = (evnt: MouseEvent) => {
@@ -135,7 +131,7 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
     const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
     let isVNPreEmptyStatus = false
-    if (!isMergeCell) {
+    if (isOptimizeMode && !isMergeCell) {
       if (scrollXLoad && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
         isVNPreEmptyStatus = true
       }
@@ -199,7 +195,7 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
   })
 }
 
-function renderHeads (h: CreateElement, _vm: any, renderColumnList: VxeTableDefines.ColumnInfo[]) {
+function renderHeads (h: CreateElement, _vm: any, isOptimizeMode: boolean, renderColumnList: VxeTableDefines.ColumnInfo[]) {
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
@@ -228,7 +224,7 @@ function renderHeads (h: CreateElement, _vm: any, renderColumnList: VxeTableDefi
           ],
           style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) as VxeComponentStyleType : undefined
         }
-      }, renderRows(h, _vm, renderColumnList, footerTableData, row, $rowIndex, _rowIndex))
+      }, renderRows(h, _vm, isOptimizeMode, renderColumnList, footerTableData, row, $rowIndex, _rowIndex))
     }
     return h('tr', {
       key: $rowIndex,
@@ -237,7 +233,7 @@ function renderHeads (h: CreateElement, _vm: any, renderColumnList: VxeTableDefi
         footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''
       ],
       style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) as VxeComponentStyleType : undefined
-    }, renderRows(h, _vm, renderColumnList, footerTableData, row, $rowIndex, _rowIndex))
+    }, renderRows(h, _vm, isOptimizeMode, renderColumnList, footerTableData, row, $rowIndex, _rowIndex))
   })
 }
 
@@ -304,12 +300,12 @@ export default {
     const { fixedType, fixedColumn, tableColumn } = props
     const { spanMethod, footerSpanMethod, showFooterOverflow: allColumnFooterOverflow } = tableProps
     const { visibleColumn, fullColumnIdData } = tableInternalData
-    const { isGroup, isColLoading, overflowX, scrollXLoad, scrollYLoad, dragCol } = tableReactData
+    const { isGroup, isColLoading, overflowX, scrollXLoad, dragCol } = tableReactData
 
     let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
     let isOptimizeMode = false
     // 如果是使用优化模式
-    if (scrollXLoad || scrollYLoad || allColumnFooterOverflow) {
+    if (scrollXLoad && allColumnFooterOverflow) {
       if (spanMethod || footerSpanMethod) {
         // 如果不支持优化模式
       } else {
@@ -317,7 +313,7 @@ export default {
       }
     }
 
-    if (!isColLoading && (fixedType || !overflowX)) {
+    if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
       renderColumnList = visibleColumn
     }
 
@@ -405,7 +401,7 @@ export default {
          */
           h('tfoot', {
             ref: 'refFooterTFoot'
-          }, renderHeads(h, this, renderColumnList))
+          }, renderHeads(h, this, isOptimizeMode, renderColumnList))
         ])
       ])
     ])

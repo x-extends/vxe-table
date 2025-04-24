@@ -861,7 +861,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
-  const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isAllOverflow, expandColumn } = reactData
+  const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isAllOverflow, expandColumn, isColLoading } = reactData
   const { visibleColumn, tableHeight, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
   const el = $xeTable.$refs.refElem as HTMLDivElement
   if (!el) {
@@ -977,7 +977,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
           renderColumnList = visibleColumn
         } else {
           // 如果是使用优化模式
-          if (scrollXLoad || scrollYLoad || allColumnHeaderOverflow) {
+          if (scrollXLoad && allColumnHeaderOverflow) {
             if (spanMethod || footerSpanMethod) {
               // 如果不支持优化模式
             } else {
@@ -985,8 +985,11 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
             }
           }
 
-          if (fixedType) {
+          if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
             renderColumnList = visibleColumn
+          }
+
+          if (fixedType) {
             // 如果是使用优化模式
             if (isOptimizeMode) {
               renderColumnList = fixedColumn || []
@@ -1083,7 +1086,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
         let renderColumnList = tableColumn
         let isOptimizeMode = false
         // 如果是使用优化模式
-        if (scrollXLoad || scrollYLoad || allColumnFooterOverflow) {
+        if (scrollXLoad && allColumnFooterOverflow) {
           if (spanMethod || footerSpanMethod) {
             // 如果不支持优化模式
           } else {
@@ -1091,8 +1094,11 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
           }
         }
 
-        if (fixedType) {
+        if (!isOptimizeMode) {
           renderColumnList = visibleColumn
+        }
+
+        if (fixedType) {
           if (isOptimizeMode) {
             renderColumnList = fixedColumn || []
           }
