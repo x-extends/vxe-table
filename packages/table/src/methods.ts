@@ -7463,9 +7463,9 @@ const Methods = {
    * 如果是双击模式，则激活为编辑状态
    */
   triggerCellDblclickEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
-    const reactData = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
 
     const { editConfig } = props
     const { editStore, isDragResize } = reactData
@@ -7482,12 +7482,12 @@ const Methods = {
           checkValidate($xeTable, 'blur')
             .catch((e: any) => e)
             .then(() => {
-              this.handleEdit(params, evnt)
+              $xeTable.handleEdit(params, evnt)
                 .then(() => checkValidate($xeTable, 'change'))
                 .catch((e: any) => e)
             })
         } else if (editOpts.mode === 'cell') {
-          this.handleEdit(params, evnt)
+          $xeTable.handleEdit(params, evnt)
             .then(() => checkValidate($xeTable, 'change'))
             .catch((e: any) => e)
         }
@@ -7496,7 +7496,7 @@ const Methods = {
     this.emitEvent('cell-dblclick', params, evnt)
   },
   handleColumnSortEvent (evnt: any, column: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
 
     const { mouseConfig } = props
@@ -7514,7 +7514,7 @@ const Methods = {
    * 点击排序事件
    */
   triggerSortEvent (evnt: Event, column: VxeTableDefines.ColumnInfo, order: VxeTablePropTypes.SortOrder) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     const sortOpts = $xeTable.computeSortOpts
     const { multiple, allowClear } = sortOpts
@@ -7534,7 +7534,7 @@ const Methods = {
     row: any
     column: VxeTableDefines.ColumnInfo
   }, cellValue?: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
 
     const { validStore } = reactData
@@ -7566,7 +7566,7 @@ const Methods = {
    * 表头单元格按下事件
    */
   triggerHeaderCellMousedownEvent (evnt: any, params: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
 
     const { mouseConfig } = props
@@ -7600,7 +7600,7 @@ const Methods = {
    * 单元格按下事件
    */
   triggerCellMousedownEvent (evnt: any, params: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     const { column } = params
     const { type, treeNode } = column
@@ -8382,7 +8382,7 @@ const Methods = {
   sort (sortConfs: any, sortOrder: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    const { sortOpts } = this
+    const sortOpts = $xeTable.computeSortOpts
     const { multiple, remote, orders } = sortOpts
     if (sortConfs) {
       if (XEUtils.isString(sortConfs)) {
@@ -8397,20 +8397,20 @@ const Methods = {
     if (sortConfs.length) {
       let firstSortColumn: any
       if (!multiple) {
-        clearAllSort(this)
+        clearAllSort($xeTable)
       }
       (multiple ? sortConfs : [sortConfs[0]]).forEach((confs: any, index: any) => {
         let { field, order } = confs
         let column = field
         if (XEUtils.isString(field)) {
-          column = this.getColumnByField(field)
+          column = $xeTable.getColumnByField(field)
         }
         if (column && (column.sortable || column.remoteSort)) {
           if (!firstSortColumn) {
             firstSortColumn = column
           }
-          if (orders.indexOf(order) === -1) {
-            order = getNextSortOrder(this, column)
+          if (orders && orders.indexOf(order) === -1) {
+            order = getNextSortOrder($xeTable, column)
           }
           if (column.order !== order) {
             column.order = order
@@ -8420,17 +8420,18 @@ const Methods = {
       })
       // 如果是服务端排序，则跳过本地排序处理
       if (!remote || (firstSortColumn && firstSortColumn.remoteSort)) {
-        this.handleTableData(true)
+        $xeTable.handleTableData(true)
       }
-      return this.$nextTick().then(() => {
-        this.updateCellAreas()
+      return $xeTable.$nextTick().then(() => {
+        updateRowOffsetTop($xeTable)
+        $xeTable.updateCellAreas()
         return updateStyle($xeTable)
       })
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   setSort (sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     const sortOpts = $xeTable.computeSortOpts
     const { multiple, remote, orders } = sortOpts
@@ -8453,7 +8454,7 @@ const Methods = {
           firstColumn = column
         }
         if (column && column.sortable) {
-          if (orders.indexOf(order) === -1) {
+          if (orders && orders.indexOf(order) === -1) {
             order = getNextSortOrder($xeTable, column)
           }
           if (column.order !== order) {
@@ -8469,6 +8470,7 @@ const Methods = {
         $xeTable.handleColumnSortEvent(new Event('click'), firstColumn)
       }
       return $xeTable.$nextTick().then(() => {
+        updateRowOffsetTop($xeTable)
         $xeTable.updateCellAreas()
         return updateStyle($xeTable)
       })
@@ -8481,21 +8483,24 @@ const Methods = {
    * @param {String} column 列或字段名
    */
   clearSort (fieldOrColumn: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    const { sortOpts } = this
+    const sortOpts = $xeTable.computeSortOpts
     if (fieldOrColumn) {
-      const column = handleFieldOrColumn(this, fieldOrColumn)
+      const column = handleFieldOrColumn($xeTable, fieldOrColumn)
       if (column) {
         column.order = null
       }
     } else {
-      clearAllSort(this)
+      clearAllSort($xeTable)
     }
     if (!sortOpts.remote) {
-      this.handleTableData(true)
+      $xeTable.handleTableData(true)
     }
-    return this.$nextTick().then(() => updateStyle($xeTable))
+    return $xeTable.$nextTick().then(() => {
+      updateRowOffsetTop($xeTable)
+      return updateStyle($xeTable)
+    })
   },
   // 在 v3 中废弃
   getSortColumn () {
