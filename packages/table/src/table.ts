@@ -5620,7 +5620,7 @@ export default defineComponent({
               column = tableMethods.getColumnByField(field)
             }
             if (column && column.sortable) {
-              if (orders.indexOf(order) === -1) {
+              if (orders && orders.indexOf(order) === -1) {
                 order = getNextSortOrder(column)
               }
               if (column.order !== order) {
@@ -5634,6 +5634,7 @@ export default defineComponent({
             tablePrivateMethods.handleTableData(true)
           }
           return nextTick().then(() => {
+            updateRowOffsetTop()
             tableMethods.updateCellAreas()
             return updateStyle()
           })
@@ -5662,7 +5663,7 @@ export default defineComponent({
               firstColumn = column
             }
             if (column && column.sortable) {
-              if (orders.indexOf(order) === -1) {
+              if (orders && orders.indexOf(order) === -1) {
                 order = getNextSortOrder(column)
               }
               if (column.order !== order) {
@@ -5678,6 +5679,7 @@ export default defineComponent({
             $xeTable.handleColumnSortEvent(new Event('click'), firstColumn)
           }
           return nextTick().then(() => {
+            updateRowOffsetTop()
             tableMethods.updateCellAreas()
             return updateStyle()
           })
@@ -5702,7 +5704,10 @@ export default defineComponent({
         if (!sortOpts.remote) {
           $xeTable.handleTableData(true)
         }
-        return nextTick().then(updateStyle)
+        return nextTick().then(() => {
+          updateRowOffsetTop()
+          return updateStyle()
+        })
       },
       isSort (fieldOrColumn) {
         if (fieldOrColumn) {
