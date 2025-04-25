@@ -1094,7 +1094,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
           }
         }
 
-        if (!isOptimizeMode) {
+        if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
           renderColumnList = visibleColumn
         }
 
@@ -9680,7 +9680,7 @@ const Methods = {
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { isGroup, scrollXLoad, overflowX, scrollXWidth } = reactData
+    const { scrollXLoad, overflowX, scrollXWidth } = reactData
     const { visibleColumn, scrollXStore, elemStore, fullColumnIdData } = internalData
     const mouseOpts = $xeTable.computeMouseOpts
     const tableBody = $xeTable.$refs.refTableBody
@@ -9721,13 +9721,13 @@ const Methods = {
         marginLeft = `${xSpaceLeft}px`
       }
       if (headerTableElem) {
-        headerTableElem.style.marginLeft = isGroup ? '' : marginLeft
+        headerTableElem.style.marginLeft = headerTableElem.getAttribute('xvm') ? marginLeft : ''
       }
       if (bodyTableElem) {
         bodyTableElem.style.marginLeft = marginLeft
       }
       if (footerTableElem) {
-        footerTableElem.style.marginLeft = marginLeft
+        footerTableElem.style.marginLeft = footerTableElem.getAttribute('xvm') ? marginLeft : ''
       }
 
       reactData.isScrollXBig = isScrollXBig
