@@ -2308,8 +2308,11 @@ export default defineComponent({
               }
             }
 
-            if (fixedType) {
+            if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
               renderColumnList = visibleColumn
+            }
+
+            if (fixedType) {
               if (isOptimizeMode) {
                 renderColumnList = fixedColumn || []
               }
@@ -9999,7 +10002,7 @@ export default defineComponent({
       updateScrollYStatus,
       // 更新横向 X 可视渲染上下剩余空间大小
       updateScrollXSpace () {
-        const { isGroup, scrollXLoad, overflowX, scrollXWidth } = reactData
+        const { scrollXLoad, overflowX, scrollXWidth } = reactData
         const { visibleColumn, scrollXStore, elemStore, fullColumnIdData } = internalData
         const mouseOpts = computeMouseOpts.value
         const tableBody = refTableBody.value
@@ -10040,13 +10043,13 @@ export default defineComponent({
             marginLeft = `${xSpaceLeft}px`
           }
           if (headerTableElem) {
-            headerTableElem.style.marginLeft = isGroup ? '' : marginLeft
+            headerTableElem.style.marginLeft = headerTableElem.getAttribute('xvm') ? marginLeft : ''
           }
           if (bodyTableElem) {
             bodyTableElem.style.marginLeft = marginLeft
           }
           if (footerTableElem) {
-            footerTableElem.style.marginLeft = marginLeft
+            footerTableElem.style.marginLeft = footerTableElem.getAttribute('xvm') ? marginLeft : ''
           }
 
           reactData.isScrollXBig = isScrollXBig

@@ -15,6 +15,8 @@
       round
       show-footer
       show-overflow
+      show-header-overflow
+      show-footer-overflow
       height="800"
       :loading="loading"
       :column-config="{resizable: true,drag: true}"
