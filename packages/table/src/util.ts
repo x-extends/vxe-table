@@ -72,23 +72,18 @@ export const convertHeaderColumnToRows = (originColumns: any) => {
 export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft: number, scrollTop: number) {
   const internalData = $xeTable as unknown as TableInternalData
 
-  return $xeTable.clearScroll().then(() => {
-    if (scrollLeft || scrollTop) {
-      // 重置最后滚动状态
-      internalData.lastScrollLeft = 0
-      internalData.lastScrollTop = 0
-
-      internalData.intoRunScroll = false
-      internalData.inVirtualScroll = false
-      internalData.inWheelScroll = false
-      internalData.inHeaderScroll = false
-      internalData.inBodyScroll = false
-      internalData.inFooterScroll = false
-      internalData.scrollRenderType = ''
-      // 还原滚动状态
-      return $xeTable.scrollTo(scrollLeft, scrollTop)
-    }
-  })
+  if (scrollLeft || scrollTop) {
+    internalData.intoRunScroll = false
+    internalData.inVirtualScroll = false
+    internalData.inWheelScroll = false
+    internalData.inHeaderScroll = false
+    internalData.inBodyScroll = false
+    internalData.inFooterScroll = false
+    internalData.scrollRenderType = ''
+    // 还原滚动状态
+    return $xeTable.scrollTo(scrollLeft, scrollTop)
+  }
+  return $xeTable.$nextTick()
 }
 
 export function toTreePathSeq (path: any) {

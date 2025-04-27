@@ -9883,47 +9883,45 @@ const Methods = {
    */
   scrollTo (scrollLeft: number | null, scrollTop?: number | null) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { $refs } = this
-    const { refTableBody, refTableHeader, leftBody, rightBody, refTableFooter } = $refs
-    const tableBodyElem = refTableBody ? refTableBody.$el : null
-    const leftBodyElem = leftBody ? leftBody.$el : null
-    const rightBodyElem = rightBody ? rightBody.$el : null
-    const tableHeaderElem = refTableHeader ? refTableHeader.$el : null
-    const tableFooterElem = refTableFooter ? refTableFooter.$el : null
+    const { elemStore } = internalData
+    const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
+    const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+    const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
+    const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
+    const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
+    const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
+    const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
+
     internalData.intoRunScroll = true
+
     if (XEUtils.isNumber(scrollLeft)) {
-      const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
-      if (xHandleEl) {
-        setScrollLeft(xHandleEl, scrollLeft)
-      } else {
-        setScrollLeft(tableBodyElem, scrollLeft)
-        setScrollLeft(tableHeaderElem, scrollLeft)
-        setScrollLeft(tableFooterElem, scrollLeft)
-      }
+      setScrollLeft(xHandleEl, scrollLeft)
+      setScrollLeft(bodyScrollElem, scrollLeft)
+      setScrollLeft(headerScrollElem, scrollLeft)
+      setScrollLeft(footerScrollElem, scrollLeft)
+      loadScrollXData($xeTable)
     }
     if (XEUtils.isNumber(scrollTop)) {
-      const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
-      if (yHandleEl) {
-        setScrollTop(yHandleEl, scrollTop)
-      } else {
-        setScrollTop(tableBodyElem, scrollTop)
-        setScrollTop(leftBodyElem, scrollTop)
-        setScrollTop(rightBodyElem, scrollTop)
-      }
+      setScrollTop(yHandleEl, scrollTop)
+      setScrollTop(bodyScrollElem, scrollTop)
+      setScrollTop(leftScrollElem, scrollTop)
+      setScrollTop(rightScrollElem, scrollTop)
+      loadScrollYData($xeTable)
     }
-    if (this.scrollXLoad || this.scrollYLoad) {
+    if (reactData.scrollXLoad || reactData.scrollYLoad) {
       return new Promise<void>(resolve => {
         setTimeout(() => {
           $xeTable.$nextTick(() => {
             internalData.intoRunScroll = false
             resolve()
           })
-        })
+        }, 30)
       })
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   /**
    * 如果有滚动条，则滚动到对应的行
@@ -9932,15 +9930,16 @@ const Methods = {
    */
   scrollToRow (row: any, fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
 
     const { isAllOverflow, scrollYLoad, scrollXLoad } = reactData
     const rest = []
     if (row) {
-      if (this.treeConfig) {
-        rest.push(this.scrollToTreeRow(row))
+      if (props.treeConfig) {
+        rest.push($xeTable.scrollToTreeRow(row))
       } else {
-        rest.push(rowToVisible(this, row))
+        rest.push(rowToVisible($xeTable, row))
       }
     }
     if (fieldOrColumn) {

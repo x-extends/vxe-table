@@ -1,249 +1,249 @@
 export default {
   vxe: {
     base: {
-      pleaseInput: 'Please input',
-      pleaseSelect: 'Select',
-      comma: ',',
-      fullStop: '.'
+      pleaseInput: 'Por favor ingrese',
+      pleaseSelect: 'Seleccione',
+      comma: '，',
+      fullStop: '。'
     },
     loading: {
-      text: 'Cargando...'
+      text: 'cargando...'
     },
     error: {
-      downErr: 'Download failed.',
-      errLargeData: '当绑定的数据量过大时，应该请使用 {0}，否则可能会出现卡顿',
-      groupFixed: 'If you use group headers, the freeze columns must be set by group.',
-      groupMouseRange: 'Los encabezados de agrupación y "{0}" no pueden ser utilizados al mismo tiempo, lo que puede causar errores.',
-      groupTag: 'El encabezado de columna de agrupación debería utilizar "{0}" en lugar de "{1}", lo que puede causar errores.',
-      scrollErrProp: 'El parámetro "{0}" no es compatible cuando el desplazamiento virtual está habilitado.',
-      errConflicts: 'El argumento "{0}" entra en conflicto con "{1}"',
-      notSupportProp: '当启用参数 "{0}" 时不支持 "{1}"，应该为 "{2}"，否则将会出现错误',
-      notConflictProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会存在功能冲突',
-      unableInsert: 'No se puede insertar en la ubicación especificada.',
-      useErr: 'Error al instalar el módulo "{0}", posiblemente en el orden equivocado, los módulos dependientes deben ser instalados antes de la tabla.',
-      barUnableLink: 'La barra de herramientas no puede asociarse con la tabla.',
-      expandContent: 'La ranura de fila expandible debería ser "contenido", por favor revise si está correcta.',
-      reqComp: 'Require "{0}" component, check whether the install is correct. https://vxeui.com/#/start/useGlobal',
-      reqModule: 'Requerir el módulo "{0}".',
-      reqProp: 'Falta el parámetro necesario "{0}", lo que puede causar errores.',
-      emptyProp: 'La propiedad "{0}" no se permite estar vacía.',
-      errProp: 'Parámetro no compatible "{0}", posiblemente "{1}".',
-      colRepet: 'columna.{0}="{0}" está duplicado, lo que puede hacer que algunas funciones sean inutilizables',
-      notFunc: 'El método "{0}" no existe.',
-      errFunc: 'The argument "{0}" is not a method',
-      notValidators: 'Global validators "{0}" no existe.',
-      notFormats: 'Global formats "{0}" no existe.',
-      notCommands: 'Global commands "{0}" no existe.',
-      notSlot: 'La ranura "{0}" no existe.',
-      noTree: 'La estructura de árbol no soporta "{0}".',
-      notProp: 'Parámetros no compatibles "{0}"',
-      checkProp: 'La casilla de verificación puede detenerse cuando la cantidad de datos es demasiado grande, se recomienda establecer el parámetro "{0}" para aumentar la velocidad de representación',
-      coverProp: 'The parameter "{1}" to "{0}" is repeatedly defined. This may cause an error.',
-      uniField: 'The field "{0}" is repeatedly defined, which may cause an error.',
-      repeatKey: 'The primary key repeats {0}="{1}", which may cause an error',
-      delFunc: 'La función "{0}" está en desuso, por favor use "{1}".',
-      delProp: 'La propiedad "{0}" está en desuso, por favor use "{1}".',
+      downErr: 'Descargar fallido',
+      errLargeData: 'Cuando la cantidad de datos unidos es demasiado grande, use {0}, de lo contrario puede causar retraso',
+      groupFixed: 'Si se usa encabezados agrupados, la columna congelada debe ser establecida por grupo',
+      groupMouseRange: 'El encabezado de agrupación no se puede usar al mismo tiempo que "{0}" y esto puede causar un error',
+      groupTag: 'Los encabezados de la columna de agrupación deben usar "{0}" en lugar de "{1}", lo que puede causar errores',
+      scrollErrProp: 'Este parámetro "{0}" no es compatible después de que el desplazamiento virtual esté habilitado',
+      errConflicts: 'Parámetro "{0}" En conflicto con "{1}"',
+      notSupportProp: '"{1}" no se admite cuando el parámetro "{0}" está habilitado, debería ser "{2}", de lo contrario ocurrirá un error',
+      notConflictProp: 'Cuando se usa "{0}", "{1}" debe establecerse, de lo contrario puede haber conflictos funcionales',
+      unableInsert: 'No se puede insertar en la ubicación especificada, verifique si los parámetros son correctos',
+      useErr: 'Se produjo un error al instalar el módulo "{0}". El pedido puede ser incorrecto. El módulo dependiente debe instalarse antes de la tabla',
+      barUnableLink: 'La barra de herramientas no puede asociar tablas',
+      expandContent: 'La ranura para la línea expandida debe ser "contenido", verifique si es correcto',
+      reqComp: 'Falta el componente "{0}", verifique si está instalado correctamente. https://vxeui.com/#/start/useglobal',
+      reqModule: 'Falta módulo "{0}"',
+      reqProp: 'Falta el parámetro "{0}" necesario, lo que puede causar un error',
+      emptyProp: 'El parámetro "{0}" no puede estar vacío',
+      errProp: 'Parámetro no compatible "{0}", posiblemente "{1}"',
+      colRepet: 'columna. {0} = "{1}" se repite, lo que puede hacer que algunas funciones se vuelvan inutilizables',
+      notFunc: 'El método "{0}" no existe',
+      errFunc: 'El parámetro "{0}" no es un método',
+      notValidators: 'La verificación global "{0}" no existe',
+      notFormats: 'El formato global "{0}" no existe',
+      notCommands: 'La directiva global "{0}" no existe',
+      notSlot: 'La ranura "{0}" no existe',
+      noTree: '"{0}" no es compatible con la estructura del árbol',
+      notProp: 'Parámetro no compatible "{0}"',
+      checkProp: 'Cuando el volumen de datos es demasiado grande, la casilla de verificación puede tartamudear. Se recomienda establecer el parámetro "{0}" para mejorar la velocidad de renderización',
+      coverProp: 'El parámetro "{1}" de "{0}" se define repetidamente, lo que puede causar un error',
+      uniField: 'El nombre de campo "{0}" se define repetidamente, lo que puede causar un error',
+      repeatKey: 'Repita la clave primaria {0} = "{1}", que puede causar un error',
+      delFunc: 'El método "{0}" está en desuso, use "{1}"',
+      delProp: 'Parámetro "{0}" está en desuso, use "{1}"',
       delEvent: 'El evento "{0}" está en desuso, por favor use "{1}"',
-      removeProp: 'La propiedad "{0}" está en desuso y no se recomienda, lo que puede causar un error.',
-      errFormat: 'El contenido formateado global debería ser definido con "VXETable.formats". No se recomienda montar "formatter={0}".',
-      notType: 'Tipos de archivo no compatibles "{0}"',
-      notExp: 'El navegador no es compatible con la importación / exportación.',
-      impFields: 'Error de importación, por favor revise que el nombre del campo y el formato de datos sean correctos.',
-      treeNotImp: 'La tabla de árbol no soporta importación.',
-      treeCrossDrag: 'Only drag and drop the first level',
-      treeDragChild: 'The parent cannot be dragged into its own child',
-      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install',
-      errMaxRow: '超过支持的最大数据量 {0} 行，这可能会导致出现错误'
+      removeProp: 'El parámetro "{0}" está en desuso y no se recomienda, lo que puede causar un error',
+      errFormat: 'El contenido formateado global debe definirse utilizando "vxetable.formats" y el método de montaje "formatter = {0}" ya no se recomienda.',
+      notType: 'Tipo de archivo no compatible "{0}"',
+      notExp: 'Este navegador no admite la función de importación/exportación',
+      impFields: 'La importación falló. Compruebe si el nombre del campo y el formato de datos son correctos.',
+      treeNotImp: 'Las tablas de árboles no admiten la importación',
+      treeCrossDrag: 'Solo arrastre el primer nivel',
+      treeDragChild: 'Los padres no pueden arrastrar a sus propios hijos',
+      reqPlugin: '"{1}" no está instalado en https://vxeui.com/other{0 /#/{1}/install',
+      errMaxRow: 'Al exceder las filas de volumen de datos máximos admitidos, esto puede causar un error'
     },
     table: {
-      emptyText: 'No hay datos',
-      allTitle: 'Seleccionar todo / cancelar',
-      seqTitle: 'N/S',
-      actionTitle: 'Action',
-      confirmFilter: 'Confirmar',
-      resetFilter: 'Restablecer',
-      allFilter: 'Todo',
-      sortAsc: 'Ascendente: de menor a mayor',
-      sortDesc: 'Descendente: de mayor a menor',
-      filter: 'Habilitar filtro en columnas seleccionadas',
-      impSuccess: 'Se importaron {0} registros con éxito',
-      expLoading: 'Exportando',
-      expSuccess: 'Éxito al exportar',
-      expError: 'Export failure',
-      expFilename: 'Exportar_{0}',
-      expOriginFilename: 'Exportar_original_{0}',
-      customTitle: 'Configuraciones de columna',
-      customAll: 'Todo',
-      customConfirm: 'Confirm',
-      customClose: 'Close',
-      customCancel: 'Cancel',
-      customRestore: 'Restore',
-      maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}',
-      dragTip: 'Moving: {0}',
-      resizeColTip: 'Width：{0} Pixels',
-      resizeRowTip: 'Height：{0} Pixels',
+      emptyText: 'Aún no hay datos',
+      allTitle: 'Seleccionar todo/Cancelar',
+      seqTitle: 'Número de serie',
+      actionTitle: 'funcionar',
+      confirmFilter: 'filtrar',
+      resetFilter: 'Reiniciar',
+      allFilter: 'todo',
+      sortAsc: 'Orden ascendente: más bajo a más alto',
+      sortDesc: 'Orden descendente: más alto a más bajo',
+      filter: 'Habilitar el filtrado para columnas seleccionadas',
+      impSuccess: 'Registros {0} importados con éxito',
+      expLoading: 'Exportador',
+      expSuccess: 'Exportar con éxito',
+      expError: 'Exportación fallida',
+      expFilename: 'Export_ {0}',
+      expOriginFilename: 'Export_source_ {0}',
+      customTitle: 'Configuración de columna',
+      customAll: 'todo',
+      customConfirm: 'confirmar',
+      customClose: 'cierre',
+      customCancel: 'Cancelar',
+      customRestore: 'Restaurar predeterminado',
+      maxFixedCol: 'El número máximo de columnas congeladas no puede exceder {0}',
+      dragTip: 'Mover: {0}',
+      resizeColTip: 'Ancho: {0} píxeles',
+      resizeRowTip: 'Altura: {0} píxeles',
       rowGroupContentTotal: '{0} ({1})'
     },
     grid: {
       selectOneRecord: '¡Seleccione al menos un registro!',
-      deleteSelectRecord: '¿Seguro que desea eliminar el registro seleccionado?',
-      removeSelectRecord: '¿Seguro que desea quitar el registro seleccionado?',
-      dataUnchanged: '¡Datos sin cambios!',
-      delSuccess: '¡Se eliminó con éxito el registro seleccionado!',
-      saveSuccess: '¡Guardado con éxito!',
-      operError: 'Se produjo un error, ¡operación fallida!'
+      deleteSelectRecord: '¿Estás seguro de que quieres eliminar el registro seleccionado?',
+      removeSelectRecord: '¿Estás seguro de que quieres eliminar el registro seleccionado?',
+      dataUnchanged: '¡Los datos no cambiaron!',
+      delSuccess: '¡El registro seleccionado se eliminó con éxito!',
+      saveSuccess: '¡Ahorre con éxito!',
+      operError: '¡Se produjo un error y la operación falló!'
     },
     select: {
-      search: 'Buscar',
-      loadingText: 'Cargando',
-      emptyText: 'No hay datos'
+      search: 'buscar',
+      loadingText: 'cargando',
+      emptyText: 'Aún no hay datos'
     },
     pager: {
-      goto: 'Ir a',
-      gotoTitle: 'Number',
-      pagesize: '{0}/página',
-      total: 'Total {0} registro',
-      pageClassifier: '',
-      homePage: 'Home',
-      homePageTitle: 'Home page',
+      goto: 'Ir',
+      gotoTitle: 'Número de páginas',
+      pagesize: '{0} elementos/página',
+      total: 'Total {0} registros',
+      pageClassifier: 'Página',
+      homePage: 'página delantera',
+      homePageTitle: 'página delantera',
       prevPage: 'Página anterior',
-      prevPageTitle: 'Previous page',
-      nextPage: 'Siguiente página',
-      nextPageTitle: 'next page',
-      prevJump: 'Saltar página anterior',
-      prevJumpTitle: 'Jump previous page',
-      nextJump: 'Saltar siguiente página',
-      nextJumpTitle: 'Jump next page',
-      endPage: 'End page',
-      endPageTitle: 'End'
+      prevPageTitle: 'Página anterior',
+      nextPage: 'Página siguiente',
+      nextPageTitle: 'Página siguiente',
+      prevJump: 'Página de salto',
+      prevJumpTitle: 'Página de salto',
+      nextJump: 'Página de salto',
+      nextJumpTitle: 'Página de salto',
+      endPage: 'Última página',
+      endPageTitle: 'Última página'
     },
     alert: {
-      title: 'System messages'
+      title: 'Indica el sistema'
     },
     button: {
-      confirm: 'Confirmar',
+      confirm: 'confirmar',
       cancel: 'Cancelar',
-      clear: '清除'
+      clear: 'Claro'
     },
     filter: {
-      search: '搜索'
+      search: 'buscar'
     },
     custom: {
-      cstmTitle: 'Column Settings',
-      cstmRestore: 'Restore default',
+      cstmTitle: 'Configuración de columna',
+      cstmRestore: 'Restaurar predeterminado',
       cstmCancel: 'Cancelar',
-      cstmConfirm: 'Confirm',
-      cstmConfirmRestore: 'Please confirm whether to restore the default column configuration?',
-      cstmDragTarget: 'Moving: {0}',
+      cstmConfirm: 'Seguro',
+      cstmConfirmRestore: '¿Confirma si se restaura a la configuración de columna predeterminada?',
+      cstmDragTarget: 'Mover: {0}',
       setting: {
-        colSort: 'Sort',
-        sortHelpTip: 'Click and drag the icon to adjust the order of the columns.',
-        colTitle: '列标题',
-        colResizable: 'Column width (px)',
-        colVisible: 'Display',
-        colFixed: 'Freeze columns',
-        colFixedMax: 'Freeze columns (Max {0})',
-        fixedLeft: 'Left',
-        fixedUnset: 'Unset',
-        fixedRight: 'Right'
+        colSort: 'Clasificar',
+        sortHelpTip: 'Haga clic y arrastre el icono para ajustar el tipo de columnas',
+        colTitle: 'Título de columna',
+        colResizable: 'Ancho de columna (píxeles)',
+        colVisible: 'Si mostrar',
+        colFixed: 'Columna de congelación',
+        colFixedMax: 'Columnas de congelación (hasta {0} columnas)',
+        fixedLeft: 'Lado izquierdo',
+        fixedUnset: 'No establecido',
+        fixedRight: 'Lado derecho'
       }
     },
     import: {
       modes: {
-        covering: 'Overwrite mode (directly overwrite table data)',
-        insert: 'Bottom append (appends new data to the bottom of the table)',
-        insertTop: 'Top append (appends new data to the top of the table)',
-        insertBottom: 'Bottom append (appends new data to the bottom of the table)'
+        covering: 'Método de sobrescribencia (sobrescribir directamente los datos de la tabla)',
+        insert: 'Agregar en la parte inferior (Agregar nuevos datos en la parte inferior de la tabla)',
+        insertTop: 'Agregar en la parte superior (Agregar nuevos datos en la parte superior de la tabla)',
+        insertBottom: 'Agregar en la parte inferior (Agregar nuevos datos en la parte inferior de la tabla)'
       },
       impTitle: 'Importar datos',
       impFile: 'Nombre del archivo',
       impSelect: 'Seleccionar archivo',
       impType: 'Tipo de archivo',
-      impOpts: 'Configuración',
-      impMode: 'Import mode',
+      impOpts: 'Configuración de parámetros',
+      impMode: 'Modo de importación',
       impConfirm: 'Importar',
       impCancel: 'Cancelar'
     },
     export: {
       types: {
-        csv: 'CSV (Separado por comas) (.csv)',
-        html: 'Página web (.html)',
-        xml: 'Datos XML (.xml)',
-        txt: 'Texto (Separado por tabulaciones) (.txt)',
-        xls: 'Libro de Excel 97-2003 (.xls)',
-        xlsx: 'Libro de Excel (.xlsx)',
+        csv: 'CSV (coma separado) (*. CSV)',
+        html: 'Página web (*.html)',
+        xml: 'Datos XML (*.xml)',
+        txt: 'Archivo de texto (pestaña separado) (*. Txt)',
+        xls: 'Excel 97-2003 Workbook (*.xls)',
+        xlsx: 'Excel Workbook (*.xlsx)',
         pdf: 'PDF (*.pdf)'
       },
       modes: {
-        empty: '空数据',
-        current: 'Datos actuales (datos de la página actual)',
+        empty: 'Datos vacíos',
+        current: 'Datos actuales (datos en la página actual)',
         selected: 'Datos seleccionados (datos seleccionados en la página actual)',
-        all: 'Todos los datos (incluidos todos los datos de paginación)'
+        all: 'Datos completos (incluidos todos los datos pagados)'
       },
       printTitle: 'Imprimir datos',
-      expTitle: 'Exportar datos',
+      expTitle: 'Exportación de datos',
       expName: 'Nombre del archivo',
-      expNamePlaceholder: 'Por favor, introduzca un nombre de archivo',
-      expSheetName: 'Título',
-      expSheetNamePlaceholder: 'Por favor, introduzca un título',
-      expType: 'Guardar el tipo',
+      expNamePlaceholder: 'Ingrese un nombre de archivo',
+      expSheetName: 'título',
+      expSheetNamePlaceholder: 'Por favor ingrese un título',
+      expType: 'Tipo de guardado',
       expMode: 'Seleccionar datos',
       expCurrentColumn: 'Todos los campos',
-      expColumn: 'Seleccionar campos',
-      expOpts: 'Configuración',
-      expOptHeader: 'Encabezado',
-      expHeaderTitle: '¿Necesita un encabezado?',
-      expOptFooter: 'Pie de página',
-      expFooterTitle: '¿Necesita el pie de página de la tabla?',
-      expOptColgroup: 'Encabezado de grupo',
-      expOptTitle: '列标题',
-      expTitleTitle: '是否为列标题，否则显示为列的字段名',
-      expColgroupTitle: 'Si existe, se admiten encabezados con estructura de agrupación',
-      expOptMerge: 'Combinar',
-      expMergeTitle: 'Si existe, se admiten celdas con estructuras combinadas',
-      expOptAllExpand: 'Expandir tree',
-      expAllExpandTitle: 'Si existe, se pueden expandir todos los datos con estructura de árbol',
-      expOptUseStyle: 'Estilos',
-      expUseStyleTitle: 'Si existe, se admiten celdas con estilos',
+      expColumn: 'Campo de selección',
+      expOpts: 'Configuración de parámetros',
+      expOptHeader: 'Encabezamiento',
+      expHeaderTitle: '¿Se requiere el encabezado de la tabla?',
+      expOptFooter: 'Final de la mesa',
+      expFooterTitle: '¿Se requiere el final de la tabla?',
+      expOptColgroup: 'Encabezado de agrupación',
+      expOptTitle: 'Título de columna',
+      expTitleTitle: 'Si es el título de la columna, de lo contrario se mostrará como el nombre del campo de la columna',
+      expColgroupTitle: 'Si está presente, se admite un encabezado con una estructura de agrupación',
+      expOptMerge: 'unir',
+      expMergeTitle: 'Si está presente, las células con estructuras fusionadas son compatibles',
+      expOptAllExpand: 'Expandir el árbol',
+      expAllExpandTitle: 'Si existe, es compatible para expandir todos los datos con estructuras jerárquicas',
+      expOptUseStyle: 'estilo',
+      expUseStyleTitle: 'Si está presente, las celdas con estilo son compatibles',
       expOptOriginal: 'Datos de origen',
-      expOriginalTitle: 'Si son datos de origen, se admite la importación en la tabla',
+      expOriginalTitle: 'Si son datos de origen, la importación en tablas es compatible',
       expPrint: 'Imprimir',
       expConfirm: 'Exportar',
       expCancel: 'Cancelar'
     },
     modal: {
-      errTitle: 'Error',
-      zoomMin: 'Minimize',
-      zoomIn: 'Maximize',
-      zoomOut: 'Reducir',
-      close: 'Cerrar',
-      miniMaxSize: 'The number of minimized Windows cannot exceed {0}.',
-      footPropErr: '"show-footer" is only used to enable table tails and needs to be used in conjunction with "show-confirm-button" | "show-cancel-button" | slots'
+      errTitle: 'Mensaje de error',
+      zoomMin: 'Minimizar',
+      zoomIn: 'maximizar',
+      zoomOut: 'reducción',
+      close: 'cierre',
+      miniMaxSize: 'El número de ventanas minimizadas no puede exceder {0}',
+      footPropErr: 'Show-Footer solo se usa para habilitar la cola de la mesa, y debe usarse con Show-Confirm-Button | Show-Cancel-Button | ranura'
     },
     drawer: {
-      close: 'Cerrar'
+      close: 'cierre'
     },
     form: {
-      folding: 'Plegar',
-      unfolding: 'Desplegar'
+      folding: 'Cerca',
+      unfolding: 'Expandir'
     },
     toolbar: {
-      importar: 'Importar',
-      exportar: 'Exportar',
-      imprimir: 'Imprimir',
-      actualizar: 'Actualizar',
-      zoomIn: 'Pantalla completa',
-      zoomOut: 'Reducción',
+      import: 'Importar',
+      export: 'Exportar',
+      print: 'Imprimir',
+      refresh: 'refrescar',
+      zoomIn: 'pantalla completa',
+      zoomOut: 'reducción',
       custom: 'Configuración de columna',
-      customAll: 'Todo',
-      customConfirm: 'Confirmar',
-      customRestore: 'Restaurar',
-      fixedLeft: 'Freeze on the left',
-      fixedRight: 'Freeze on the right',
-      cancelFixed: 'Unfreeze column'
+      customAll: 'todo',
+      customConfirm: 'confirmar',
+      customRestore: 'Reiniciar',
+      fixedLeft: 'Congelarse a la izquierda',
+      fixedRight: 'Congelarse a la derecha',
+      cancelFixed: 'Descongelar'
     },
     datePicker: {
-      yearTitle: '{0}'
+      yearTitle: '{0} años'
     },
     input: {
       date: {
@@ -251,7 +251,7 @@ export default {
         m2: 'Febrero',
         m3: 'Marzo',
         m4: 'Abril',
-        m5: 'Mayo',
+        m5: 'Puede',
         m6: 'Junio',
         m7: 'Julio',
         m8: 'Agosto',
@@ -259,41 +259,41 @@ export default {
         m10: 'Octubre',
         m11: 'Noviembre',
         m12: 'Diciembre',
-        quarterLabel: '{0}',
-        monthLabel: '{0}',
-        dayLabel: '{1} {0}',
+        quarterLabel: '{0} años',
+        monthLabel: '{0} años',
+        dayLabel: '{0} year {1}',
         labelFormat: {
-          date: 'dd/MM/yyyy',
+          date: 'yyyy-MM-dd',
           time: 'HH:mm:ss',
           datetime: 'yyyy-MM-dd HH:mm:ss',
-          week: '[Semana] WW, yyyy',
-          month: 'MM/yyyy',
-          quarter: '[Trimestre] q, yyyy',
+          week: 'Week WW of year yyyy',
+          month: 'yyyy-MM',
+          quarter: 'quarter q of year yyyy',
           year: 'yyyy'
         },
         weeks: {
           w: 'Semana',
-          w0: 'Dom',
+          w0: 'Sol',
           w1: 'Lun',
           w2: 'Mar',
-          w3: 'Mié',
+          w3: 'Casarse',
           w4: 'Jue',
           w5: 'Vie',
-          w6: 'Sáb'
+          w6: 'Se sentó'
         },
         months: {
-          m0: 'Ene',
-          m1: 'Feb',
-          m2: 'Mar',
-          m3: 'Abr',
-          m4: 'May',
-          m5: 'Jun',
-          m6: 'Jul',
-          m7: 'Ago',
-          m8: 'Sep',
-          m9: 'Oct',
-          m10: 'Nov',
-          m11: 'Dic'
+          m0: 'Enero',
+          m1: 'Febrero',
+          m2: 'Marzo',
+          m3: 'Abril',
+          m4: 'Puede',
+          m5: 'Junio',
+          m6: 'Julio',
+          m7: 'Agosto',
+          m8: 'Septiembre',
+          m9: 'Octubre',
+          m10: 'Noviembre',
+          m11: 'Diciembre'
         },
         quarters: {
           q1: 'Primer trimestre',
@@ -307,410 +307,401 @@ export default {
       currencySymbol: '$'
     },
     imagePreview: {
-      popupTitle: 'Preview',
+      popupTitle: 'Avance',
       operBtn: {
-        zoomOut: 'Reduce',
-        zoomIn: 'Enlarge',
-        pctFull: 'Proportional scaling',
-        pct11: 'Show original size',
-        rotateLeft: 'Rotate left',
-        rotateRight: 'Rotate right',
-        print: 'Click to print',
-        download: 'Click to download'
+        zoomOut: 'Encoger',
+        zoomIn: 'agrandar',
+        pctFull: 'Escala igualmente',
+        pct11: 'Mostrar tamaño original',
+        rotateLeft: 'Girar a la izquierda',
+        rotateRight: 'Girar hacia la derecha',
+        print: 'Haga clic para imprimir la imagen',
+        download: 'Haga clic para descargar la imagen'
       }
     },
     upload: {
-      fileBtnText: 'Click or drag',
-      imgBtnText: 'Click or drag',
-      dragPlaceholder: 'Please drag and drop the file into this area to upload it.',
-      imgSizeHint: 'Single {0}',
-      imgCountHint: 'Up to {0}',
-      fileTypeHint: 'Support {0} file types',
-      fileSizeHint: 'Single file size does not exceed {0}',
-      fileCountHint: 'Up to {0} file can be uploaded',
-      uploadTypeErr: '文件类型不匹配！',
-      overCountErr: 'You can only choose {0} file!',
-      overCountExtraErr: 'It has exceeded the maximum number {0}, and more than {0} file will be ignored!超出最大数量 1 个，超出的 1 个文件将被忽略！',
-      overSizeErr: 'The size of the file is not more than {0}}!',
-      reUpload: 'Re upload',
-      uploadProgress: 'Uploading {0}%',
-      uploadErr: 'Fail to upload',
-      uploadSuccess: 'Successfully upload',
-      moreBtnText: 'More ({0})',
-      viewItemTitle: 'click to view',
+      fileBtnText: 'Haga clic o arrastre para cargar',
+      imgBtnText: 'Haga clic o arrastre para cargar',
+      dragPlaceholder: 'Arrastre y deje caer el archivo a esta área para cargar',
+      imgSizeHint: 'Folleto {0}',
+      imgCountHint: 'Máximo {0} imágenes',
+      fileTypeHint: 'Soporte {0} tipos de archivos',
+      fileSizeHint: 'Un solo tamaño de archivo no excede {0}',
+      fileCountHint: 'Se pueden cargar hasta {0} archivos',
+      uploadTypeErr: '¡Tipo de archivo MISMATCH!',
+      overCountErr: '¡Solo los archivos {0} se pueden seleccionar como máximo!',
+      overCountExtraErr: 'Se ha excedido el número máximo de {0}, ¡y los archivos de exceso {1} se ignorarán!',
+      overSizeErr: '¡El tamaño máximo del archivo no puede exceder {0}!',
+      reUpload: 'Volver a cargar',
+      uploadProgress: 'Cargando {0}%',
+      uploadErr: 'Carga falló',
+      uploadSuccess: 'Subir con éxito',
+      moreBtnText: 'Más ({0})',
+      viewItemTitle: 'Haga clic para ver',
       morePopup: {
-        readTitle: 'List',
-        imageTitle: 'Upload image',
-        fileTitle: 'Upload file'
+        readTitle: 'Ver la lista',
+        imageTitle: 'Subir fotos',
+        fileTitle: 'Archivo de carga'
       }
     },
     empty: {
-      defText: 'No Data'
+      defText: 'Aún no hay datos'
     },
     colorPicker: {
-      clear: '清除',
-      confirm: '确认',
-      copySuccess: '已复制到剪贴板：{0}'
+      clear: 'Claro',
+      confirm: 'confirmar',
+      copySuccess: 'Copiado al portapapeles: {0}'
     },
     formDesign: {
-      formName: 'Form name',
-      defFormTitle: 'Unnamed form',
-      widgetPropTab: 'Field property',
-      widgetFormTab: 'Form property',
+      formName: 'Nombre del formulario',
+      defFormTitle: 'Forma sin nombre',
+      widgetPropTab: 'Propiedades de control',
+      widgetFormTab: 'Propiedades de forma',
       error: {
-        wdFormUni: '该类型的控件在表单中只允许添加一个',
-        wdSubUni: '该类型的控件在子表中只允许添加一个'
+        wdFormUni: 'Este tipo de control puede agregar solo uno en el formulario',
+        wdSubUni: 'Este tipo de control puede agregar solo uno en la subtendia'
       },
       styleSetting: {
-        btn: 'Style setting',
-        title: 'Form style setting',
-        layoutTitle: 'Field layout',
-        verticalLayout: 'Vertical layout',
-        horizontalLayout: 'Horizontal layout',
-        styleTitle: 'Title style',
-        boldTitle: 'Bold title',
-        fontBold: 'Bold',
-        fontNormal: 'Normal',
-        colonTitle: 'Display colon',
-        colonVisible: 'Visible',
-        colonHidden: 'Hidden',
-        alignTitle: 'Title align',
-        widthTitle: 'Title width',
-        alignLeft: 'Left',
-        alignRight: 'Right',
-        unitPx: 'Px',
-        unitPct: 'Pct'
+        btn: 'Configuración de estilo',
+        title: 'Configuración de estilo de formulario',
+        layoutTitle: 'Diseño de control',
+        verticalLayout: 'Diseño superior e inferior',
+        horizontalLayout: 'Diseño horizontal',
+        styleTitle: 'Estilo de título',
+        boldTitle: 'Título Bold',
+        fontBold: 'Atrevido',
+        fontNormal: 'convencional',
+        colonTitle: 'Mostrar el colon',
+        colonVisible: 'espectáculo',
+        colonHidden: 'esconder',
+        alignTitle: 'Alineación',
+        widthTitle: 'Ancho del título',
+        alignLeft: 'A la izquierda',
+        alignRight: 'A la derecha',
+        unitPx: 'Píxeles',
+        unitPct: 'porcentaje'
       },
       widget: {
         group: {
-          base: 'Base control',
-          layout: 'Layout control',
-          system: 'System control',
-          module: 'Module control',
-          chart: 'Chart control',
-          advanced: 'Advanced control'
+          base: 'Controles básicos',
+          layout: 'Controles de diseño',
+          system: 'Controles del sistema',
+          module: 'Controles de módulos',
+          chart: 'Control de la tabla',
+          advanced: 'Controles avanzados'
         },
-        copyTitle: 'Copy_{0}',
+        copyTitle: 'Copy_ {0}',
         component: {
-          input: 'Input',
-          textarea: 'Textarea',
-          select: 'Select',
-          row: 'Row/column',
-          title: 'Title',
-          text: 'Text',
-          subtable: 'Subtable',
-          VxeSwitch: 'Yes/no',
-          VxeInput: 'Input',
-          VxeNumberInput: 'Number',
-          VxeDatePicker: 'Date',
-          VxeTextarea: 'Textarea',
-          VxeSelect: 'Select',
-          VxeTreeSelect: 'Tree select',
-          VxeRadioGroup: 'Radio',
-          VxeCheckboxGroup: 'Checkbox',
-          VxeUploadFile: 'File',
-          VxeUploadImage: 'Image',
-          VxeRate: 'Rate',
-          VxeSlider: 'Slider'
+          input: 'Caja de entrada',
+          textarea: 'Campo de texto',
+          select: 'Tire hacia abajo para seleccionar',
+          row: 'Una fila y múltiples columnas',
+          title: 'título',
+          text: 'texto',
+          subtable: 'Subtitable',
+          VxeSwitch: 'si',
+          VxeInput: 'Caja de entrada',
+          VxeNumberInput: 'número',
+          VxeDatePicker: 'fecha',
+          VxeTextarea: 'Campo de texto',
+          VxeSelect: 'Tire hacia abajo para seleccionar',
+          VxeTreeSelect: 'Selección de árboles',
+          VxeRadioGroup: 'Botón de radio',
+          VxeCheckboxGroup: 'Caja',
+          VxeUploadFile: 'documento',
+          VxeUploadImage: 'imagen',
+          VxeRate: 'puntaje',
+          VxeSlider: 'control deslizante'
         }
       },
       widgetProp: {
-        name: 'Field name',
-        placeholder: 'Field placeholder',
-        required: 'Required',
-        multiple: 'Allow to select multiple',
+        name: 'Nombre de control',
+        placeholder: 'Inmediato',
+        required: 'Verificación requerida',
+        multiple: 'Se permiten múltiples opciones',
         displaySetting: {
-          name: 'Display setting',
-          pc: 'PC',
-          mobile: 'Mobile',
-          visible: 'Visible',
-          hidden: 'Hidden'
+          name: 'Mostrar configuración',
+          pc: 'ordenador personal',
+          mobile: 'Móvil',
+          visible: 'espectáculo',
+          hidden: 'esconder'
         },
         dataSource: {
-          name: 'Data source',
-          defValue: 'Option {0}',
-          addOption: 'Add option',
-          batchEditOption: 'Batch edit',
-          batchEditTip: 'Each row corresponds to an option, supporting direct copying and pasting from tables, Excel, and WPS.',
-          batchEditSubTip: 'Each row corresponds to an option. If grouped, the sub items can start with spaces or tab keys, and can be directly copied and pasted from tables, Excel, or WPS.',
-          buildOption: 'Build option'
+          name: 'Fuente de datos',
+          defValue: 'Opción {0}',
+          addOption: 'Agregar opciones',
+          batchEditOption: 'Edición por lotes',
+          batchEditTip: 'Cada fila corresponde a una opción, que admite copiar y pegar directamente desde tablas, Excel y WPS.',
+          batchEditSubTip: 'Cada fila corresponde a una opción. Si se trata de un grupo, los elementos infantiles pueden comenzar con un espacio o una tecla Tab, y admite copiar y pegar directamente en Tablas, Excel y WPS.',
+          buildOption: 'Construir opciones'
         },
         rowProp: {
-          colSize: 'Number of columns',
-          col2: 'Two columns',
-          col3: 'Three columns',
-          col4: 'Four columns',
-          col6: 'Six columns',
-          layout: 'Layout'
+          colSize: 'Número de columnas',
+          col2: 'Dos columnas',
+          col3: 'Tres columnas',
+          col4: 'Cuatro columnas',
+          col6: 'Seis columnas',
+          layout: 'disposición'
         },
         textProp: {
-          name: 'Content',
-          alignTitle: 'Align',
-          alignLeft: 'Left',
-          alignCenter: 'Center',
-          alignRight: 'Right',
-          colorTitle: 'Color',
-          sizeTitle: 'Font size',
-          boldTitle: 'Font bold',
-          fontNormal: 'Normal',
-          fontBold: 'Bold'
+          name: 'contenido',
+          alignTitle: 'Alineación',
+          alignLeft: 'A la izquierda',
+          alignCenter: 'Centro',
+          alignRight: 'A la derecha',
+          colorTitle: 'Color de fuente',
+          sizeTitle: 'Tamaño de fuente',
+          boldTitle: 'Fuente en negrita',
+          fontNormal: 'convencional',
+          fontBold: 'Atrevido'
         },
         subtableProp: {
-          seqTitle: 'S/N',
-          showSeq: 'Display serial number',
-          showCheckbox: 'Allow multiple selections',
-          errSubDrag: 'The sub table does not support this control. Please use another control.',
-          colPlace: 'Drag the control in.'
+          seqTitle: 'Número de serie',
+          showSeq: 'Mostrar número de serie',
+          showCheckbox: 'Se permiten múltiples opciones',
+          errSubDrag: 'El subtendible no admite este control, utilice otros controles',
+          colPlace: 'Arrastre el control en'
         },
         uploadProp: {
-          limitFileCount: 'File quantity limitation',
-          limitFileSize: 'File size limitation',
-          multiFile: 'Allows multiple files',
-          limitImgCount: 'Image quantity limitation',
-          limitImgSize: 'Image size limitation',
-          multiImg: 'Allows multiple images'
+          limitFileCount: 'Límite de cantidad de archivo',
+          limitFileSize: 'Límite de tamaño de archivo',
+          multiFile: 'Permitir que se carguen varios archivos',
+          limitImgCount: 'Límite número de imágenes',
+          limitImgSize: 'Límite de tamaño de imagen',
+          multiImg: 'Permitir múltiples imágenes para cargar'
         }
       }
     },
     listDesign: {
-      fieldSettingTab: 'Field',
-      listSettingTab: 'Parameter',
-      searchTitle: 'Search',
-      listTitle: 'List',
-      searchField: 'Search field',
-      listField: 'List field',
+      fieldSettingTab: 'Configuración de campo',
+      listSettingTab: 'Configuración de parámetros',
+      searchTitle: 'Criterio de consulta',
+      listTitle: 'Campo de lista',
+      searchField: 'Campos de consulta',
+      listField: 'Campo de lista',
       activeBtn: {
-        ActionButtonUpdate: 'Edit',
-        ActionButtonDelete: 'Delete'
+        ActionButtonUpdate: 'editar',
+        ActionButtonDelete: 'borrar'
       },
       search: {
-        addBtn: 'Edit',
-        emptyText: 'No filter condition is configured.',
-        editPopupTitle: 'Edit search fields'
+        addBtn: 'editar',
+        emptyText: 'Condiciones de consulta no configuradas',
+        editPopupTitle: 'Editar campos de consulta'
       },
       searchPopup: {
-        colTitle: 'Title',
-        saveBtn: 'Save'
+        colTitle: 'título',
+        saveBtn: 'ahorrar'
       }
     },
     text: {
-      copySuccess: 'Successfully copied to clipboard.',
-      copyError: 'The current environment does not support this operation.'
+      copySuccess: 'Copiado al portapapeles',
+      copyError: 'El entorno actual no admite esta operación'
     },
     countdown: {
       formats: {
-        yyyy: 'Year',
-        MM: 'Moon',
-        dd: 'Day',
-        HH: 'Hour',
-        mm: 'Minute',
-        ss: 'Second'
+        yyyy: 'Año',
+        MM: 'luna',
+        dd: 'cielo',
+        HH: 'hora',
+        mm: 'punto',
+        ss: 'Segundo'
       }
     },
-
-    /**
-     * 扩展插件
-     */
     plugins: {
       extendCellArea: {
         area: {
-          mergeErr: '无法对合并单元格进行该操作',
-          multiErr: '无法对多重选择区域进行该操作',
-          selectErr: '无法操作指定区域的单元格',
-          extendErr: '如果延伸的区域包含被合并的单元格，所有合并的单元格需大小相同',
-          pasteMultiErr: '无法粘贴，需要相同大小的复制的区域和粘贴的区域才能执行此操作',
-          cpInvalidErr: '该操作无法进行，您选择的区域中存在被禁止的列（{0}）'
+          mergeErr: 'Esta operación no se puede realizar en células fusionadas',
+          multiErr: 'Esta operación no se puede realizar en múltiples áreas de selección',
+          selectErr: 'No se puede operar en las celdas en el rango especificado',
+          extendErr: 'Si el rango extendido contiene células fusionadas, todas las células fusionadas deben ser del mismo tamaño',
+          pasteMultiErr: 'Incapaz de pegar, las áreas copiadas y pegadas deben ser del mismo tamaño para realizar esta operación',
+          cpInvalidErr: 'La operación no se puede realizar. Hay columnas prohibidas ({0}) en el rango que seleccionó.'
         },
         fnr: {
-          title: '查找和替换',
-          findLabel: '查找',
-          replaceLabel: '替换',
-          findTitle: '查找内容：',
-          replaceTitle: '替换为：',
+          title: 'Buscar y reemplazar',
+          findLabel: 'Encontrar',
+          replaceLabel: 'reemplazar',
+          findTitle: 'Encuentra qué:',
+          replaceTitle: 'Reemplazar con:',
           tabs: {
-            find: '查找',
-            replace: '替换'
+            find: 'Encontrar',
+            replace: 'reemplazar'
           },
           filter: {
-            re: '正则表达式',
-            whole: '全词匹配',
-            sensitive: '区分大小写'
+            re: 'Expresiones regulares',
+            whole: 'Coincidencia de palabra completa',
+            sensitive: 'distingue mayúsculas y minúsculas'
           },
           btns: {
-            findNext: '查找下一个',
-            findAll: '查找全部',
-            replace: '替换',
-            replaceAll: '替换全部',
-            cancel: '取消'
+            findNext: 'Encontrar a continuación',
+            findAll: 'Encontrar todo',
+            replace: 'reemplazar',
+            replaceAll: 'Reemplazar todo',
+            cancel: 'Cancelar'
           },
           header: {
             seq: '#',
-            cell: '单元格',
-            value: '值'
+            cell: 'Celúla',
+            value: 'valor'
           },
           body: {
-            row: '行：{0}',
-            col: '列：{0}'
+            row: 'Fila: {0}',
+            col: 'Columna: {0}'
           },
-          empty: '(空值)',
-          reError: '无效的正则表达式',
-          recordCount: '已找到 {0} 个单元格',
-          notCell: '找不到匹配的单元格',
-          replaceSuccess: '成功替换 {0} 个单元格'
+          empty: '(Valor nulo)',
+          reError: 'Expresión regular no válida',
+          recordCount: '{0} celdas encontradas',
+          notCell: 'La celda correspondiente no se puede encontrar',
+          replaceSuccess: 'Reemplazó con éxito {0} celdas'
         }
       },
       filterComplexInput: {
         menus: {
-          fixedColumn: '锁定列',
-          fixedGroup: '锁定组',
-          cancelFixed: '取消锁定',
-          fixedLeft: '锁定左侧',
-          fixedRight: '锁定右侧'
+          fixedColumn: 'Columna de congelación',
+          fixedGroup: 'Grupo de congelación',
+          cancelFixed: 'Descongelar',
+          fixedLeft: 'Congelarse a la izquierda',
+          fixedRight: 'Congelarse a la derecha'
         },
         cases: {
-          equal: '等于',
-          gt: '大于',
-          lt: '小于',
-          begin: '开头是',
-          endin: '结尾是',
-          include: '包含',
-          isSensitive: '区分大小写'
+          equal: 'igual',
+          gt: 'Más que',
+          lt: 'Menos que',
+          begin: 'El comienzo es',
+          endin: 'El final es',
+          include: 'Incluir',
+          isSensitive: 'distingue mayúsculas y minúsculas'
         }
       },
       filterCombination: {
         menus: {
-          sort: '排序',
-          clearSort: '清除排序',
-          sortAsc: '升序',
-          sortDesc: '降序',
-          fixedColumn: '锁定列',
-          fixedGroup: '锁定组',
-          cancelFixed: '取消锁定',
-          fixedLeft: '锁定左侧',
-          fixedRight: '锁定右侧',
-          clearFilter: '清除筛选',
-          textOption: '文本筛选',
-          numberOption: '数值筛选'
+          sort: 'Clasificar',
+          clearSort: 'Clasificación clara',
+          sortAsc: 'Orden ascendente',
+          sortDesc: 'orden descendente',
+          fixedColumn: 'Columna de congelación',
+          fixedGroup: 'Grupo de congelación',
+          cancelFixed: 'Descongelar',
+          fixedLeft: 'Congelarse a la izquierda',
+          fixedRight: 'Congelarse a la derecha',
+          clearFilter: 'Filtro claro',
+          textOption: 'Filtro de texto',
+          numberOption: 'Filtro numérico'
         },
         popup: {
-          title: '自定义筛选的方式',
-          currColumnTitle: '当前列：',
-          and: '与',
-          or: '或',
-          describeHtml: '可用 ? 代表单个字符<br/>用 * 代表任意多个字符'
+          title: 'Métodos de filtrado personalizados',
+          currColumnTitle: 'Columna actual:',
+          and: 'y',
+          or: 'o',
+          describeHtml: '¿Disponible? Representa un solo personaje <br/> uso * representa cualquier caracteres múltiples'
         },
         cases: {
-          equal: '等于',
-          unequal: '不等于',
-          gt: '大于',
-          ge: '大于或等于',
-          lt: '小于',
-          le: '小于或等于',
-          begin: '开头是',
-          notbegin: '开头不是',
-          endin: '结尾是',
-          notendin: '结尾不是',
-          include: '包含',
-          exclude: '不包含',
-          between: '介于',
-          custom: '自定义筛选',
-          insensitive: '不区分大小写',
-          isSensitive: '区分大小写'
+          equal: 'igual',
+          unequal: 'No igual a',
+          gt: 'Más que',
+          ge: 'Mayor o igual a',
+          lt: 'Menos que',
+          le: 'Menos o igual a',
+          begin: 'El comienzo es',
+          notbegin: 'No es al principio',
+          endin: 'El final es',
+          notendin: 'El final no es',
+          include: 'Incluir',
+          exclude: 'No incluido',
+          between: 'Entre',
+          custom: 'Filtro personalizado',
+          insensitive: 'Caso insensible',
+          isSensitive: 'distingue mayúsculas y minúsculas'
         },
-        empty: '(空白)',
-        notData: '无匹配项'
-      }
-    },
-
-    /**
-     * 以下废弃
-     * @deprecated
-     */
-    renderer: {
-      search: 'Buscar',
-      cases: {
-        equal: 'Igual',
-        unequal: 'Distinto que',
-        gt: 'Mayor que',
-        ge: 'Mayor o igual que',
-        lt: 'Menor que',
-        le: 'Menor o igual que',
-        begin: 'Empieza por',
-        notbegin: 'No empieza por',
-        endin: 'Termina con',
-        notendin: 'No termina con',
-        include: 'Incluye',
-        exclude: 'Excluye',
-        between: 'Entre',
-        custom: 'Filtro personalizado',
-        insensitive: 'No sensible a mayúsculas/minúsculas',
-        isSensitive: 'Sensible a mayúsculas/minúsculas'
-      },
-      combination: {
-        menus: {
-          sort: '排序',
-          clearSort: 'Limpiar ordenamiento',
-          sortAsc: 'Orden ascendente',
-          sortDesc: 'Orden descendente',
-          fixedColumn: 'Columna fija',
-          fixedGroup: 'Grupo fijo',
-          cancelFixed: 'Borrar fijado',
-          fixedLeft: 'Fijar a la izquierda',
-          fixedRight: 'Fijar a la derecha',
-          clearFilter: 'Limpiar filtro',
-          textOption: 'Filtro de texto',
-          numberOption: 'Filtro de número'
-        },
-        popup: {
-          title: 'Filtro personalizado',
-          currColumnTitle: 'Columna actual:',
-          and: 'Y',
-          or: 'O',
-          describeHtml: 'Use ? para representar un solo carácter <br/> use * para representar cualquier número de caracteres'
-        },
-        empty: '(Vacío)',
-        notData: 'No hay datos'
+        empty: '(blanco)',
+        notData: 'Sin partido'
       }
     },
     pro: {
       area: {
-        mergeErr: 'La operación no se puede realizar en celdas combinadas',
-        multiErr: 'La operación no se puede realizar en áreas de selección múltiple',
-        extendErr: 'Si el área extendida contiene celdas combinadas, todas las celdas combinadas deben tener el mismo tamaño',
-        pasteMultiErr: 'No se puede pegar, se requieren áreas copiadas y pegadas del mismo tamaño para realizar esta operación'
+        mergeErr: 'Esta operación no se puede realizar en células fusionadas',
+        multiErr: 'Esta operación no se puede realizar en múltiples áreas de selección',
+        extendErr: 'Si el rango extendido contiene células fusionadas, todas las células fusionadas deben ser del mismo tamaño',
+        pasteMultiErr: 'Incapaz de pegar, las áreas copiadas y pegadas deben ser del mismo tamaño para realizar esta operación'
       },
       fnr: {
         title: 'Buscar y reemplazar',
-        findLabel: 'Buscar',
-        replaceLabel: 'Reemplazar',
-        findTitle: 'Qué buscar:',
+        findLabel: 'Encontrar',
+        replaceLabel: 'reemplazar',
+        findTitle: 'Encontrar contenido:',
         replaceTitle: 'Reemplazar con:',
         tabs: {
-          find: 'Buscar',
-          replace: 'Reemplazar'
+          find: 'Encontrar',
+          replace: 'reemplazar'
         },
         filter: {
-          re: 'Expresión regular',
-          whole: 'Palabra completa',
-          sensitive: 'Distinguir mayúsculas y minúsculas'
+          re: 'Expresiones regulares',
+          whole: 'Coincidencia de palabra completa',
+          sensitive: 'distingue mayúsculas y minúsculas'
         },
         btns: {
-          findNext: 'Buscar siguiente',
-          findAll: 'Buscar todo',
-          replace: 'Reemplazar',
+          findNext: 'Encontrar a continuación',
+          findAll: 'Encontrar todo',
+          replace: 'reemplazar',
           replaceAll: 'Reemplazar todo',
           cancel: 'Cancelar'
         },
         header: {
           seq: '#',
-          cell: 'Celda',
-          value: 'Valor'
+          cell: 'Celúla',
+          value: 'valor'
         },
-        empty: '(Vacío)',
-        reError: 'Expresión regular inválida',
-        recordCount: 'Se encontraron {0} celdas',
-        notCell: 'No se encontraron celdas coincidentes',
-        replaceSuccess: 'Se reemplazaron {0} celdas con éxito'
+        empty: '(Valor nulo)',
+        reError: 'Expresión regular no válida',
+        recordCount: '{0} celdas encontradas',
+        notCell: 'No se encontró celda a juego',
+        replaceSuccess: 'Reemplazó con éxito {0} celdas'
+      }
+    },
+    renderer: {
+      search: 'buscar',
+      cases: {
+        equal: 'igual',
+        unequal: 'No igual a',
+        gt: 'Más que',
+        ge: 'Mayor o igual a',
+        lt: 'Menos que',
+        le: 'Menos o igual a',
+        begin: 'El comienzo es',
+        notbegin: 'No es al principio',
+        endin: 'El final es',
+        notendin: 'El final no es',
+        include: 'Incluir',
+        exclude: 'No incluido',
+        between: 'Entre',
+        custom: 'Filtro personalizado',
+        insensitive: 'Caso insensible',
+        isSensitive: 'distingue mayúsculas y minúsculas'
+      },
+      combination: {
+        menus: {
+          sort: 'Clasificar',
+          clearSort: 'Clasificación clara',
+          sortAsc: 'Orden ascendente',
+          sortDesc: 'orden descendente',
+          fixedColumn: 'Columna de congelación',
+          fixedGroup: 'Grupo de congelación',
+          cancelFixed: 'Descongelar',
+          fixedLeft: 'Congelarse a la izquierda',
+          fixedRight: 'Congelarse a la derecha',
+          clearFilter: 'Filtro claro',
+          textOption: 'Filtrado de texto',
+          numberOption: 'Filtrado numérico'
+        },
+        popup: {
+          title: 'Métodos de filtrado personalizados',
+          currColumnTitle: 'Columna actual:',
+          and: 'y',
+          or: 'o',
+          describeHtml: '¿Disponible? Representa un solo personaje <br/> uso * representa cualquier caracteres múltiples'
+        },
+        empty: '(blanco)',
+        notData: 'Sin partido'
       }
     }
   }
