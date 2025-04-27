@@ -11,67 +11,67 @@ export default {
     },
     error: {
       downErr: 'Download failed',
-      errLargeData: 'When the amount of data bound is too large, you should use "{0}"; otherwise, a stall may occur',
-      groupFixed: 'If using group headers, frozen columns must be set by group',
-      groupMouseRange: 'The group header and "{0}" cannot be used at the same time, which may cause an error.',
+      errLargeData: 'When the amount of bound data is too large, please use {0}, otherwise it may cause lag',
+      groupFixed: 'If using grouped headers, the frozen column must be set by group',
+      groupMouseRange: 'The grouping header cannot be used at the same time as "{0}" and this may cause an error',
       groupTag: 'Grouping column headers should use "{0}" instead of "{1}", which may cause errors',
-      scrollErrProp: 'The parameter "{0}" is not supported when virtual scrolling is enabled',
-      errConflicts: '"{1}" is not supported when parameter "{0}", it should be "{2}", otherwise an error will occur',
-      notSupportProp: '"{1}" is not supported when parameter "{0}" is enabled, it should be "{2}", otherwise an error will occur',
-      notConflictProp: 'When using "{0}", you should set "{1}", otherwise there may be a functional conflict',
-      unableInsert: 'Unable to insert into the specified position, please check whether the parameters are correct',
-      useErr: 'An error occurred while installing the "{0}" module. The order may be incorrect. The dependent modules need to be installed before Table.',
-      barUnableLink: 'The toolbar cannot be associated with the table',
-      expandContent: 'The slot to expand the row should be "content", please check if it is correct',
+      scrollErrProp: 'This parameter "{0}" is not supported after virtual scrolling is enabled',
+      errConflicts: 'Parameter "{0}" conflicts with "{1}"',
+      notSupportProp: '"{1}" is not supported when the parameter "{0}" is enabled, it should be "{2}", otherwise an error will occur',
+      notConflictProp: 'When using "{0}", "{1}" should be set, otherwise there may be functional conflicts',
+      unableInsert: 'Cannot be inserted into the specified location, please check whether the parameters are correct',
+      useErr: 'An error occurred while installing the "{0}" module. The order may be incorrect. The dependent module needs to be installed before Table',
+      barUnableLink: 'The toolbar cannot associate tables',
+      expandContent: 'The slot for the expanded line should be "content", please check if it is correct',
       reqComp: 'The "{0}" component is missing, please check if it is installed correctly. https://vxeui.com/#/start/useGlobal',
-      reqModule: 'Missing module "{0}"',
-      reqProp: 'The required "{0}" parameter is missing, which may result in an error',
+      reqModule: 'Missing "{0}" module',
+      reqProp: 'The necessary "{0}" parameter is missing, which may cause an error',
       emptyProp: 'Parameter "{0}" is not allowed to be empty',
-      errProp: 'Unsupported parameter "{0}", possible "{1}"',
+      errProp: 'Unsupported parameter "{0}", possibly "{1}"',
       colRepet: 'column.{0}="{1}" is repeated, which may cause some functions to become unusable',
       notFunc: 'Method "{0}" does not exist',
       errFunc: 'Parameter "{0}" is not a method',
-      notValidators: 'Global check "{0}" does not exist',
-      notFormats: 'Global format "{0}" does not exist',
-      notCommands: 'Global directive "{0}" does not exist',
+      notValidators: 'Global verification "{0}" does not exist',
+      notFormats: 'Global formatting "{0}" does not exist',
+      notCommands: 'The global directive "{0}" does not exist',
       notSlot: 'Slot "{0}" does not exist',
-      noTree: 'The tree structure does not support "{0}"',
+      noTree: '"{0}" is not supported in the tree structure',
       notProp: 'Unsupported parameter "{0}"',
-      checkProp: 'When the amount of data is too large, it may cause the check box to freeze. It is recommended to set the parameter "{0}" to improve the rendering speed.',
-      coverProp: 'The parameter "{1}" of "{0}" is defined repeatedly, which may cause an error.',
-      uniField: 'Field name "{0}" is defined repeatedly, which may cause an error',
-      repeatKey: 'Duplicate primary key {0}="{1}", this may cause an error',
+      checkProp: 'When the data volume is too large, the check box may be stuttered. It is recommended to set the parameter "{0}" to improve rendering speed',
+      coverProp: 'The parameter "{1}" of "{0}" is repeatedly defined, which may cause an error',
+      uniField: 'The field name "{0}" is repeatedly defined, which may cause an error',
+      repeatKey: 'Repeat the primary key {0}="{1}", which may cause an error',
       delFunc: 'Method "{0}" is deprecated, please use "{1}"',
-      delProp: 'Parameter "{0}" is obsolete, please use "{1}"',
+      delProp: 'Parameter "{0}" is deprecated, please use "{1}"',
       delEvent: 'Event "{0}" is deprecated, please use "{1}"',
-      removeProp: 'Parameter "{0}" is deprecated and is not recommended and may result in errors',
-      errFormat: 'Global formatting content should be defined using "VXETable.formats". The method of mounting "formatter={0}" is no longer recommended.',
+      removeProp: 'Parameter "{0}" is deprecated and is not recommended, which may cause an error',
+      errFormat: 'Global formatted content should be defined using "VXETable.formats" and the method of mounting "formatter={0}" is no longer recommended.',
       notType: 'Unsupported file type "{0}"',
-      notExp: 'This browser does not support import/export functionality',
-      impFields: 'Import failed, please check whether the field name and data format are correct',
-      treeNotImp: 'Tree tables do not support importing',
-      treeCrossDrag: 'Only the first level can be dragged',
-      treeDragChild: 'A parent cannot be dragged into its own children',
-      reqPlugin: 'Extension plugin not installed "{1}" https://vxeui.com/other{0}/#/{1}/install',
-      errMaxRow: 'The maximum supported data volume {0} line is exceeded, which may cause an error.'
+      notExp: 'This browser does not support import/export function',
+      impFields: 'The import failed. Please check whether the field name and data format are correct.',
+      treeNotImp: 'Tree tables do not support import',
+      treeCrossDrag: 'Only drag the first level',
+      treeDragChild: 'Parents cannot drag to their own children',
+      reqPlugin: '"{1}" is not installed at https://vxeui.com/other{0}/#/{1}/install',
+      errMaxRow: 'Exceeding the maximum supported data volume {0} rows, this may cause an error'
     },
     table: {
       emptyText: 'No data yet',
-      allTitle: 'Select all/Cancel',
+      allTitle: 'Select all/cancel',
       seqTitle: 'Serial number',
       actionTitle: 'operate',
       confirmFilter: 'filter',
-      resetFilter: 'reset',
+      resetFilter: 'Reset',
       allFilter: 'all',
       sortAsc: 'Ascending order: lowest to highest',
       sortDesc: 'Descending order: highest to lowest',
-      filter: 'Enable filtering on selected columns',
+      filter: 'Enable filtering for selected columns',
       impSuccess: 'Successfully imported {0} records',
       expLoading: 'Exporting',
-      expSuccess: 'Export successful',
+      expSuccess: 'Export successfully',
       expError: 'Export failed',
       expFilename: 'Export_{0}',
-      expOriginFilename: 'export_source_{0}',
+      expOriginFilename: 'Export_source_{0}',
       customTitle: 'Column settings',
       customAll: 'all',
       customConfirm: 'confirm',
@@ -80,17 +80,17 @@ export default {
       customRestore: 'Restore default',
       maxFixedCol: 'The maximum number of frozen columns cannot exceed {0}',
       dragTip: 'Move: {0}',
-      resizeColTip: 'Width: {0} Pixels',
-      resizeRowTip: 'Height: {0} Pixels',
+      resizeColTip: 'Width: {0} pixels',
+      resizeRowTip: 'Height: {0} pixels',
       rowGroupContentTotal: '{0} ({1})'
     },
     grid: {
       selectOneRecord: 'Please select at least one record!',
-      deleteSelectRecord: 'Are you sure you want to delete the selected records?',
-      removeSelectRecord: 'Are you sure you want to remove the selected records?',
-      dataUnchanged: 'The data has not been changed!',
-      delSuccess: 'Selected records successfully deleted!',
-      saveSuccess: 'Saved successfully!',
+      deleteSelectRecord: 'Are you sure you want to delete the selected record?',
+      removeSelectRecord: 'Are you sure you want to remove the selected record?',
+      dataUnchanged: 'Data not changed!',
+      delSuccess: 'The selected record was successfully deleted!',
+      saveSuccess: 'Save successfully!',
       operError: 'An error occurred and the operation failed!'
     },
     select: {
@@ -99,7 +99,7 @@ export default {
       emptyText: 'No data yet'
     },
     pager: {
-      goto: 'Go to',
+      goto: 'Go',
       gotoTitle: 'Number of pages',
       pagesize: '{0} items/page',
       total: 'Total {0} records',
@@ -110,20 +110,20 @@ export default {
       prevPageTitle: 'Previous page',
       nextPage: 'Next page',
       nextPageTitle: 'Next page',
-      prevJump: 'Jump page up',
-      prevJumpTitle: 'Jump page up',
-      nextJump: 'Jump page down',
-      nextJumpTitle: 'Jump page down',
+      prevJump: 'Jump up page',
+      prevJumpTitle: 'Jump up page',
+      nextJump: 'Jump down page',
+      nextJumpTitle: 'Jump down page',
       endPage: 'Last page',
       endPageTitle: 'Last page'
     },
     alert: {
-      title: 'System prompt'
+      title: 'System prompts'
     },
     button: {
       confirm: 'confirm',
       cancel: 'Cancel',
-      clear: '清除'
+      clear: 'Clear'
     },
     filter: {
       search: 'search'
@@ -133,26 +133,26 @@ export default {
       cstmRestore: 'Restore default',
       cstmCancel: 'Cancel',
       cstmConfirm: 'Sure',
-      cstmConfirmRestore: 'Please confirm whether to restore to the default column configuration?',
+      cstmConfirmRestore: 'Please confirm whether it is restored to the default column configuration?',
       cstmDragTarget: 'Move: {0}',
       setting: {
-        colSort: 'sort',
-        sortHelpTip: 'Click and drag the icon to adjust column ordering',
-        colTitle: 'Column header',
+        colSort: 'Sort',
+        sortHelpTip: 'Click and drag the icon to adjust the sort of columns',
+        colTitle: 'Column title',
         colResizable: 'Column width (pixels)',
         colVisible: 'Whether to display',
-        colFixed: 'Freeze columns',
+        colFixed: 'Freeze column',
         colFixedMax: 'Freeze columns (up to {0} columns)',
-        fixedLeft: 'left side',
+        fixedLeft: 'Left side',
         fixedUnset: 'Not set',
-        fixedRight: 'right side'
+        fixedRight: 'Right side'
       }
     },
     import: {
       modes: {
-        covering: 'Overwriting method (directly overwrite table data)',
+        covering: 'Overwrite method (directly overwrite table data)',
         insert: 'Append at the bottom (append new data at the bottom of the table)',
-        insertTop: 'Top append (append new data at the top of the table)',
+        insertTop: 'Append at the top (append new data at the top of the table)',
         insertBottom: 'Append at the bottom (append new data at the bottom of the table)'
       },
       impTitle: 'Import data',
@@ -160,8 +160,8 @@ export default {
       impSelect: 'Select file',
       impType: 'File type',
       impOpts: 'Parameter settings',
-      impMode: 'import mode',
-      impConfirm: 'import',
+      impMode: 'Import mode',
+      impConfirm: 'Import',
       impCancel: 'Cancel'
     },
     export: {
@@ -169,16 +169,16 @@ export default {
         csv: 'CSV (comma separated)(*.csv)',
         html: 'Web page (*.html)',
         xml: 'XML data (*.xml)',
-        txt: 'Text file (tab delimited) (*.txt)',
-        xls: 'Excel 97-2003 workbook (*.xls)',
+        txt: 'Text file (tab separated)(*.txt)',
+        xls: 'Excel 97-2003 Workbook (*.xls)',
         xlsx: 'Excel workbook (*.xlsx)',
         pdf: 'PDF (*.pdf)'
       },
       modes: {
-        empty: 'Null data',
-        current: 'Current data (data of the current page)',
-        selected: 'Selected data (selected data on the current page)',
-        all: 'Full data (including all paginated data)'
+        empty: 'Empty data',
+        current: 'Current data (data on the current page)',
+        selected: 'Selected data (data selected on the current page)',
+        all: 'Full data (including all paged data)'
       },
       printTitle: 'Print data',
       expTitle: 'Export data',
@@ -186,49 +186,49 @@ export default {
       expNamePlaceholder: 'Please enter a file name',
       expSheetName: 'title',
       expSheetNamePlaceholder: 'Please enter a title',
-      expType: 'save type',
+      expType: 'Save type',
       expMode: 'Select data',
       expCurrentColumn: 'All fields',
       expColumn: 'Select field',
       expOpts: 'Parameter settings',
       expOptHeader: 'Header',
-      expHeaderTitle: 'Is a header required?',
-      expOptFooter: 'Footer',
-      expFooterTitle: 'Is a table footer required?',
-      expOptColgroup: 'Group header',
-      expOptTitle: 'Title',
-      expTitleTitle: 'Whether it is a column title, otherwise it is displayed as a column field name',
-      expColgroupTitle: 'If present, headers with grouping structures are supported',
-      expOptMerge: 'Merge',
-      expMergeTitle: 'Supports cells with merge structures if present',
-      expOptAllExpand: 'Expand tree',
-      expAllExpandTitle: 'If it exists, it supports expanding all data with hierarchical structure.',
-      expOptUseStyle: 'Style',
-      expUseStyleTitle: 'Styled cells are supported if present',
+      expHeaderTitle: 'Is the table header required',
+      expOptFooter: 'End of table',
+      expFooterTitle: 'Is the end of the table required?',
+      expOptColgroup: 'Grouping header',
+      expOptTitle: 'Column title',
+      expTitleTitle: "Whether it is the column title, otherwise it will be displayed as the column's field name",
+      expColgroupTitle: 'If present, a header with a grouping structure is supported',
+      expOptMerge: 'merge',
+      expMergeTitle: 'If present, cells with merged structures are supported',
+      expOptAllExpand: 'Expand the tree',
+      expAllExpandTitle: 'If it exists, it is supported to expand all data with hierarchical structures',
+      expOptUseStyle: 'style',
+      expUseStyleTitle: 'If present, cells with style are supported',
       expOptOriginal: 'Source data',
-      expOriginalTitle: 'If it is source data, it supports importing into the table',
+      expOriginalTitle: 'If it is source data, import into tables is supported',
       expPrint: 'Print',
       expConfirm: 'Export',
       expCancel: 'Cancel'
     },
     modal: {
       errTitle: 'Error message',
-      zoomMin: 'minimize',
+      zoomMin: 'Minimize',
       zoomIn: 'maximize',
       zoomOut: 'reduction',
       close: 'closure',
       miniMaxSize: 'The number of minimized windows cannot exceed {0}',
-      footPropErr: 'show-footer is only used to enable table footer and needs to be used with show-confirm-button | show-cancel-button | slot'
+      footPropErr: 'show-footer is only used to enable the table tail, and must be used with show-confirm-button | show-cancel-button | slots'
     },
     drawer: {
       close: 'closure'
     },
     form: {
-      folding: 'close',
+      folding: 'Close',
       unfolding: 'Expand'
     },
     toolbar: {
-      import: 'import',
+      import: 'Import',
       export: 'Export',
       print: 'Print',
       refresh: 'refresh',
@@ -237,10 +237,10 @@ export default {
       custom: 'Column settings',
       customAll: 'all',
       customConfirm: 'confirm',
-      customRestore: 'reset',
-      fixedLeft: 'frozen on left',
-      fixedRight: 'frozen on right',
-      cancelFixed: 'Unfreeze column'
+      customRestore: 'Reset',
+      fixedLeft: 'Freeze left',
+      fixedRight: 'Freeze right',
+      cancelFixed: 'Unfreeze'
     },
     datePicker: {
       yearTitle: '{0} years'
@@ -252,7 +252,7 @@ export default {
         m3: 'March',
         m4: 'April',
         m5: 'May',
-        m6: 'June 06',
+        m6: 'June',
         m7: 'July',
         m8: 'August',
         m9: 'September',
@@ -296,52 +296,52 @@ export default {
           m11: 'December'
         },
         quarters: {
-          q1: 'first quarter',
-          q2: 'second quarter',
-          q3: 'third quarter',
-          q4: 'fourth quarter'
+          q1: 'First quarter',
+          q2: 'Second quarter',
+          q3: 'Third quarter',
+          q4: 'Fourth quarter'
         }
       }
     },
     numberInput: {
-      currencySymbol: '￥'
+      currencySymbol: '$'
     },
     imagePreview: {
       popupTitle: 'Preview',
       operBtn: {
-        zoomOut: 'zoom out',
+        zoomOut: 'Shrink',
         zoomIn: 'enlarge',
-        pctFull: 'proportional scaling',
+        pctFull: 'Scaling equally',
         pct11: 'Show original size',
         rotateLeft: 'Rotate left',
-        rotateRight: 'Rotate right',
-        print: 'Click to print picture',
-        download: 'Click to download image'
+        rotateRight: 'Rotate to the right',
+        print: 'Click to print the picture',
+        download: 'Click to download the picture'
       }
     },
     upload: {
       fileBtnText: 'Click or drag to upload',
       imgBtnText: 'Click or drag to upload',
-      dragPlaceholder: 'Please drag and drop the file into this area to upload it',
+      dragPlaceholder: 'Please drag and drop the file to this area to upload',
       imgSizeHint: 'Leaflet {0}',
       imgCountHint: 'Maximum {0} pictures',
-      fileTypeHint: 'Supported {0} file types',
-      fileSizeHint: 'The size of a single file does not exceed {0}',
+      fileTypeHint: 'Support {0} file types',
+      fileSizeHint: 'A single file size does not exceed {0}',
       fileCountHint: 'Up to {0} files can be uploaded',
       uploadTypeErr: 'File type mismatch!',
-      overCountErr: 'Only {0} files can be selected!',
-      overCountExtraErr: 'The maximum number of {0} files has been exceeded. The excess {1} files will be ignored!',
+      overCountErr: 'Only {0} files can be selected at most!',
+      overCountExtraErr: 'The maximum number of {0} has been exceeded, and the excess {1} files will be ignored!',
       overSizeErr: 'The maximum file size cannot exceed {0}!',
-      reUpload: 'Reupload',
+      reUpload: 'Re-upload',
       uploadProgress: 'Uploading {0}%',
       uploadErr: 'Upload failed',
-      uploadSuccess: 'Upload successful',
+      uploadSuccess: 'Upload successfully',
       moreBtnText: 'More ({0})',
       viewItemTitle: 'Click to view',
       morePopup: {
         readTitle: 'View list',
         imageTitle: 'Upload pictures',
-        fileTitle: 'Upload files'
+        fileTitle: 'Upload file'
       }
     },
     empty: {
@@ -350,16 +350,16 @@ export default {
     colorPicker: {
       clear: 'Clear',
       confirm: 'confirm',
-      copySuccess: 'Copied to clipboard: {0}'
+      copySuccess: 'Copyed to clipboard: {0}'
     },
     formDesign: {
-      formName: 'form name',
-      defFormTitle: 'unnamed form',
-      widgetPropTab: 'Control properties',
-      widgetFormTab: 'form properties',
+      formName: 'Form name',
+      defFormTitle: 'Unnamed form',
+      widgetPropTab: 'Control Properties',
+      widgetFormTab: 'Form Properties',
       error: {
-        wdFormUni: 'Only one control of this type is allowed to be added to the form',
-        wdSubUni: 'Only one control of this type is allowed to be added to the subtable'
+        wdFormUni: 'This type of control is allowed to add only one in the form',
+        wdSubUni: 'This type of control is allowed to add only one in the subtable'
       },
       styleSetting: {
         btn: 'Style settings',
@@ -375,39 +375,39 @@ export default {
         colonVisible: 'show',
         colonHidden: 'hide',
         alignTitle: 'Alignment',
-        widthTitle: 'title width',
+        widthTitle: 'Title Width',
         alignLeft: 'On the left',
         alignRight: 'On the right',
-        unitPx: 'Pixel',
+        unitPx: 'Pixels',
         unitPct: 'percentage'
       },
       widget: {
         group: {
           base: 'Basic controls',
-          layout: 'Layout controls',
-          system: 'System controls',
-          module: 'module control',
-          chart: 'chart control',
-          advanced: 'Advanced controls'
+          layout: 'Layout Controls',
+          system: 'System Controls',
+          module: 'Module controls',
+          chart: 'Chart control',
+          advanced: 'Advanced Controls'
         },
         copyTitle: 'Copy_{0}',
         component: {
           input: 'Input box',
-          textarea: 'text field',
-          select: 'drop down selection',
+          textarea: 'Text field',
+          select: 'Pull down to select',
           row: 'One row and multiple columns',
           title: 'title',
           text: 'text',
-          subtable: 'Subtable',
+          subtable: 'Sub-table',
           VxeSwitch: 'whether',
           VxeInput: 'Input box',
           VxeNumberInput: 'number',
           VxeDatePicker: 'date',
-          VxeTextarea: 'text field',
-          VxeSelect: 'drop down selection',
-          VxeTreeSelect: 'tree selection',
-          VxeRadioGroup: 'radio button',
-          VxeCheckboxGroup: 'checkbox',
+          VxeTextarea: 'Text field',
+          VxeSelect: 'Pull down to select',
+          VxeTreeSelect: 'Tree selection',
+          VxeRadioGroup: 'Radio button',
+          VxeCheckboxGroup: 'Checkbox',
           VxeUploadFile: 'document',
           VxeUploadImage: 'picture',
           VxeRate: 'score',
@@ -416,76 +416,76 @@ export default {
       },
       widgetProp: {
         name: 'Control name',
-        placeholder: 'prompt',
+        placeholder: 'Prompt',
         required: 'Required verification',
-        multiple: 'Allow multiple selections',
+        multiple: 'Multiple choices are allowed',
         displaySetting: {
-          name: 'display settings',
+          name: 'Display settings',
           pc: 'PC',
-          mobile: 'Mobile version',
+          mobile: 'Mobile',
           visible: 'show',
           hidden: 'hide'
         },
         dataSource: {
-          name: 'data source',
+          name: 'Data Source',
           defValue: 'Option {0}',
           addOption: 'Add options',
           batchEditOption: 'Batch editing',
-          batchEditTip: 'Each row corresponds to an option, and supports copying and pasting directly from tables, Excel, and WPS.',
-          batchEditSubTip: 'Each row corresponds to an option. If it is a group, the sub-items can start with a space or a tab key. Direct copy and paste from tables, Excel, and WPS is supported.',
+          batchEditTip: 'Each row corresponds to an option, which supports direct copy and paste from tables, Excel, and WPS.',
+          batchEditSubTip: 'Each row corresponds to an option. If it is a group, the child items can start with a space or a tab key, and it supports direct copy and paste from tables, Excel, and WPS.',
           buildOption: 'Build options'
         },
         rowProp: {
           colSize: 'Number of columns',
-          col2: 'two columns',
-          col3: 'three columns',
-          col4: 'four columns',
-          col6: 'six columns',
+          col2: 'Two columns',
+          col3: 'Three columns',
+          col4: 'Four columns',
+          col6: 'Six columns',
           layout: 'layout'
         },
         textProp: {
           name: 'content',
           alignTitle: 'Alignment',
           alignLeft: 'On the left',
-          alignCenter: 'center',
+          alignCenter: 'Center',
           alignRight: 'On the right',
           colorTitle: 'Font color',
-          sizeTitle: 'font size',
+          sizeTitle: 'Font size',
           boldTitle: 'Bold font',
           fontNormal: 'conventional',
           fontBold: 'Bold'
         },
         subtableProp: {
           seqTitle: 'Serial number',
-          showSeq: 'Display serial number',
-          showCheckbox: 'Allow multiple selections',
+          showSeq: 'Show serial number',
+          showCheckbox: 'Multiple choices are allowed',
           errSubDrag: 'The subtable does not support this control, please use other controls',
           colPlace: 'Drag the control in'
         },
         uploadProp: {
           limitFileCount: 'File quantity limit',
           limitFileSize: 'File size limit',
-          multiFile: 'Allow multiple file uploads',
-          limitImgCount: 'Picture quantity limit',
+          multiFile: 'Allow multiple files to be uploaded',
+          limitImgCount: 'Limit number of pictures',
           limitImgSize: 'Image size limit',
-          multiImg: 'Allow multiple images to be uploaded'
+          multiImg: 'Allow multiple pictures to upload'
         }
       }
     },
     listDesign: {
       fieldSettingTab: 'Field settings',
       listSettingTab: 'Parameter settings',
-      searchTitle: 'Query conditions',
-      listTitle: 'list field',
-      searchField: 'Query field',
-      listField: 'list field',
+      searchTitle: 'Query criteria',
+      listTitle: 'List field',
+      searchField: 'Query fields',
+      listField: 'List field',
       activeBtn: {
         ActionButtonUpdate: 'edit',
         ActionButtonDelete: 'delete'
       },
       search: {
         addBtn: 'edit',
-        emptyText: 'No query conditions configured',
+        emptyText: 'Query conditions not configured',
         editPopupTitle: 'Edit query fields'
       },
       searchPopup: {
@@ -494,7 +494,7 @@ export default {
       }
     },
     text: {
-      copySuccess: 'Copied to clipboard',
+      copySuccess: 'Copyed to clipboard',
       copyError: 'The current environment does not support this operation'
     },
     countdown: {
@@ -528,8 +528,8 @@ export default {
             replace: 'replace'
           },
           filter: {
-            re: 'regular expression',
-            whole: 'whole word match',
+            re: 'Regular expressions',
+            whole: 'Full word matching',
             sensitive: 'case sensitive'
           },
           btns: {
@@ -541,32 +541,32 @@ export default {
           },
           header: {
             seq: '#',
-            cell: 'cell',
+            cell: 'Cell',
             value: 'value'
           },
           body: {
             row: 'Row: {0}',
             col: 'Column: {0}'
           },
-          empty: '(null value)',
+          empty: '(Null value)',
           reError: 'Invalid regular expression',
           recordCount: '{0} cells found',
-          notCell: 'No matching cell found',
+          notCell: 'The matching cell cannot be found',
           replaceSuccess: 'Successfully replaced {0} cells'
         }
       },
       filterComplexInput: {
         menus: {
-          fixedColumn: 'Freeze columns',
-          fixedGroup: 'freeze group',
+          fixedColumn: 'Freeze column',
+          fixedGroup: 'Freeze group',
           cancelFixed: 'Unfreeze',
-          fixedLeft: 'freeze left',
-          fixedRight: 'freeze right'
+          fixedLeft: 'Freeze left',
+          fixedRight: 'Freeze right'
         },
         cases: {
           equal: 'equal',
-          gt: 'greater than',
-          lt: 'less than',
+          gt: 'Greater than',
+          lt: 'Less than',
           begin: 'The beginning is',
           endin: 'The end is',
           include: 'Include',
@@ -579,38 +579,38 @@ export default {
           clearSort: 'Clear sort',
           sortAsc: 'Ascending order',
           sortDesc: 'descending order',
-          fixedColumn: 'Freeze columns',
-          fixedGroup: 'freeze group',
+          fixedColumn: 'Freeze column',
+          fixedGroup: 'Freeze group',
           cancelFixed: 'Unfreeze',
-          fixedLeft: 'freeze left',
-          fixedRight: 'freeze right',
-          clearFilter: 'Clear filters',
-          textOption: 'text filter',
-          numberOption: 'numerical filter'
+          fixedLeft: 'Freeze left',
+          fixedRight: 'Freeze right',
+          clearFilter: 'Clear Filter',
+          textOption: 'Text filter',
+          numberOption: 'Numerical filter'
         },
         popup: {
-          title: 'How to customize filtering',
+          title: 'Custom filtering methods',
           currColumnTitle: 'Current column:',
           and: 'and',
           or: 'or',
-          describeHtml: 'Available ? represents a single character<br/>Use * to represent any number of characters'
+          describeHtml: 'Available? Represents a single character<br/>Use * Represents any multiple characters'
         },
         cases: {
           equal: 'equal',
-          unequal: 'not equal to',
-          gt: 'greater than',
-          ge: 'greater than or equal to',
-          lt: 'less than',
-          le: 'less than or equal to',
+          unequal: 'Not equal to',
+          gt: 'Greater than',
+          ge: 'Greater than or equal to',
+          lt: 'Less than',
+          le: 'Less than or equal to',
           begin: 'The beginning is',
-          notbegin: 'Not at the beginning',
+          notbegin: "It's not at the beginning",
           endin: 'The end is',
           notendin: 'The ending is not',
           include: 'Include',
           exclude: 'Not included',
-          between: 'between',
+          between: 'Between',
           custom: 'Custom filter',
-          insensitive: 'Not case sensitive',
+          insensitive: 'Case insensitive',
           isSensitive: 'case sensitive'
         },
         empty: '(blank)',
@@ -628,15 +628,15 @@ export default {
         title: 'Find and replace',
         findLabel: 'Find',
         replaceLabel: 'replace',
-        findTitle: 'Find what:',
+        findTitle: 'Find content:',
         replaceTitle: 'Replace with:',
         tabs: {
           find: 'Find',
           replace: 'replace'
         },
         filter: {
-          re: 'regular expression',
-          whole: 'whole word match',
+          re: 'Regular expressions',
+          whole: 'Full word matching',
           sensitive: 'case sensitive'
         },
         btns: {
@@ -648,10 +648,10 @@ export default {
         },
         header: {
           seq: '#',
-          cell: 'cell',
+          cell: 'Cell',
           value: 'value'
         },
-        empty: '(null value)',
+        empty: '(Null value)',
         reError: 'Invalid regular expression',
         recordCount: '{0} cells found',
         notCell: 'No matching cell found',
@@ -662,20 +662,20 @@ export default {
       search: 'search',
       cases: {
         equal: 'equal',
-        unequal: 'not equal to',
-        gt: 'greater than',
-        ge: 'greater than or equal to',
-        lt: 'less than',
-        le: 'less than or equal to',
+        unequal: 'Not equal to',
+        gt: 'Greater than',
+        ge: 'Greater than or equal to',
+        lt: 'Less than',
+        le: 'Less than or equal to',
         begin: 'The beginning is',
-        notbegin: 'Not at the beginning',
+        notbegin: "It's not at the beginning",
         endin: 'The end is',
         notendin: 'The ending is not',
         include: 'Include',
         exclude: 'Not included',
-        between: 'between',
+        between: 'Between',
         custom: 'Custom filter',
-        insensitive: 'Not case sensitive',
+        insensitive: 'Case insensitive',
         isSensitive: 'case sensitive'
       },
       combination: {
@@ -684,21 +684,21 @@ export default {
           clearSort: 'Clear sort',
           sortAsc: 'Ascending order',
           sortDesc: 'descending order',
-          fixedColumn: 'Freeze columns',
-          fixedGroup: 'freeze group',
+          fixedColumn: 'Freeze column',
+          fixedGroup: 'Freeze group',
           cancelFixed: 'Unfreeze',
-          fixedLeft: 'freeze to left',
-          fixedRight: 'freeze to right',
-          clearFilter: 'Clear filters',
-          textOption: 'text filter',
-          numberOption: 'numerical filter'
+          fixedLeft: 'Freeze left',
+          fixedRight: 'Freeze right',
+          clearFilter: 'Clear Filter',
+          textOption: 'Text filtering',
+          numberOption: 'Numerical filtering'
         },
         popup: {
-          title: 'How to customize filtering',
+          title: 'Custom filtering methods',
           currColumnTitle: 'Current column:',
           and: 'and',
           or: 'or',
-          describeHtml: 'Available ? represents a single character<br/>Use * to represent any number of characters'
+          describeHtml: 'Available? Represents a single character<br/>Use * Represents any multiple characters'
         },
         empty: '(blank)',
         notData: 'No match'

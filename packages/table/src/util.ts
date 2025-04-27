@@ -1,4 +1,4 @@
-import { watch, reactive } from 'vue'
+import { watch, reactive, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { ColumnInfo } from './columnInfo'
 import { isPx, isScale } from '../../ui/src/dom'
@@ -72,23 +72,18 @@ export const convertHeaderColumnToRows = (originColumns: any): any[][] => {
 export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft: number, scrollTop: number) {
   const internalData = $xeTable.internalData
 
-  return $xeTable.clearScroll().then(() => {
-    if (scrollLeft || scrollTop) {
-      // 重置最后滚动状态
-      internalData.lastScrollLeft = 0
-      internalData.lastScrollTop = 0
-
-      internalData.intoRunScroll = false
-      internalData.inVirtualScroll = false
-      internalData.inWheelScroll = false
-      internalData.inHeaderScroll = false
-      internalData.inBodyScroll = false
-      internalData.inFooterScroll = false
-      internalData.scrollRenderType = ''
-      // 还原滚动状态
-      return $xeTable.scrollTo(scrollLeft, scrollTop)
-    }
-  })
+  if (scrollLeft || scrollTop) {
+    internalData.intoRunScroll = false
+    internalData.inVirtualScroll = false
+    internalData.inWheelScroll = false
+    internalData.inHeaderScroll = false
+    internalData.inBodyScroll = false
+    internalData.inFooterScroll = false
+    internalData.scrollRenderType = ''
+    // 还原滚动状态
+    return $xeTable.scrollTo(scrollLeft, scrollTop)
+  }
+  return nextTick()
 }
 
 /**

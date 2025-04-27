@@ -6227,12 +6227,14 @@ export default defineComponent({
           setScrollLeft(bodyScrollElem, scrollLeft)
           setScrollLeft(headerScrollElem, scrollLeft)
           setScrollLeft(footerScrollElem, scrollLeft)
+          loadScrollXData()
         }
         if (XEUtils.isNumber(scrollTop)) {
           setScrollTop(yHandleEl, scrollTop)
           setScrollTop(bodyScrollElem, scrollTop)
           setScrollTop(leftScrollElem, scrollTop)
           setScrollTop(rightScrollElem, scrollTop)
+          loadScrollYData()
         }
         if (reactData.scrollXLoad || reactData.scrollYLoad) {
           return new Promise<void>(resolve => {
@@ -6256,7 +6258,7 @@ export default defineComponent({
         const rest = []
         if (row) {
           if (props.treeConfig) {
-            rest.push(tablePrivateMethods.scrollToTreeRow(row))
+            rest.push($xeTable.scrollToTreeRow(row))
           } else {
             rest.push(rowToVisible($xeTable, row))
           }

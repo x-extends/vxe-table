@@ -3,244 +3,244 @@ export default {
     base: {
       pleaseInput: '入力してください',
       pleaseSelect: '選択してください',
-      comma: ',',
-      fullStop: '.'
+      comma: '，',
+      fullStop: '。'
     },
     loading: {
-      text: 'Loading...'
+      text: '読み込み...'
     },
     error: {
-      downErr: 'ダウンロードに失敗しました',
-      errLargeData: '当绑定的数据量过大时，应该请使用 {0}，否则可能会出现卡顿',
-      groupFixed: 'ヘッダー結合を使用する場合、固定列はグループで設定しなければなりません',
-      groupMouseRange: 'ヘッダー結合と「{0}」は同時に使用できません。これによりエラーが発生する可能性があります',
-      groupTag: 'ヘッダー結合は "{0}" を使ってください。 "{1}" はエラーが発生する可能性があります',
-      scrollErrProp: '仮想スクロールはこのパラメータを使えません： "{0}"',
-      errConflicts: 'パラメータ "{0}" と "{1}" は同時に使えません',
-      notSupportProp: '当启用参数 "{0}" 时不支持 "{1}"，应该为 "{2}"，否则将会出现错误',
-      notConflictProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会存在功能冲突',
-      unableInsert: '指定された位置に挿入できない',
-      useErr: '"{0}" モジュールをインストールする際にエラーが発生し、順序が正しくない可能性がある。依存するモジュールはTableの前にインストールする必要がある',
-      barUnableLink: 'ツールバーはフォームを関連付けることができない',
-      expandContent: '拡張行スロットは "content" である必要があります。確認してください',
-      reqComp: 'Require "{0}" component, check whether the install is correct. https://vxeui.com/#/start/useGlobal',
-      reqModule: '"{0}" モジュールが必要です',
-      reqProp: '必要な "{0}" パラメーターが欠落しているため、エラーが発生する可能性があります',
-      emptyProp: '"{0}" プロパティは空白が許可されていません',
-      errProp: 'サポートされていないパラメーター "{0}"、"{1}" の可能性があります',
-      colRepet: 'column.{0}="{0}" が重複しているため、機能が使えなくなる可能性があります。',
-      notFunc: 'メソッド "{0}" がありません',
-      errFunc: 'The argument "{0}" is not a method',
-      notValidators: 'Global validators "{0}" no existe.',
-      notFormats: 'Global formats "{0}" no existe.',
-      notCommands: 'Global commands "{0}" no existe.',
-      notSlot: 'slot "{0}" がありません',
-      noTree: 'Tree structureは "{0}" をサポートしていません',
-      notProp: 'サポートされていないパラメータ "{0}"',
-      checkProp: 'パフマンス低下になる可能性があります。パラメータ "{0}" の値を指定してください',
-      coverProp: 'The parameter "{1}" to "{0}" is repeatedly defined. This may cause an error',
-      uniField: '字段名 "{0}" 重复定义，这可能会出现错误',
-      repeatKey: '主键重复 {0}="{1}"，这可能会出现错误',
-      delFunc: '"{0}" functionが非推奨です。"{1}"を使用してください',
-      delProp: '"{0}" propertyが非推奨です。"{1}"を使用してください',
-      delEvent: 'イベント "{0}" が廃止されました。 "{1}" を使用してください',
-      removeProp: 'パラメーター "{0}" が非推奨です。エラーが発生する可能性があります',
-      errFormat: '全般フォーマットするには "VXETable.formats" で定義してください。 "formatter={0}" での方式が非推奨です',
-      notType: 'サポートされていないファイルの種類 "{0}"',
-      notExp: 'ご利用のブラウザはインポート/エクスポート機能を利用できません',
-      impFields: 'インポートに失敗しました。フィールド名とデータ形式を確認してください',
+      downErr: 'ダウンロードが失敗しました',
+      errLargeData: 'バインドされたデータの量が大きすぎる場合は、{0}を使用してください。',
+      groupFixed: 'グループ化されたヘッダーを使用する場合、凍結列はグループごとに設定する必要があります',
+      groupMouseRange: 'グループ化ヘッダーは「{0}」と同時に使用することはできません。これにより、エラーが発生する可能性があります。',
+      groupTag: 'グループ化列ヘッダーは、「{1}」の代わりに「{0}」を使用する必要があります。',
+      scrollErrProp: 'このパラメーター「{0}」は、仮想スクロールが有効になった後にサポートされていません',
+      errConflicts: 'パラメーター「{0}」は「{1}」と競合します',
+      notSupportProp: '「{1}」はパラメーター「{0}」が有効になっている場合、「{2}」である必要があります。そうしないと、エラーが発生します。',
+      notConflictProp: '「{0}」を使用する場合、「{1}」を設定する必要があります。',
+      unableInsert: '指定された場所に挿入できません。パラメーターが正しいかどうかを確認してください',
+      useErr: '「{0}」モジュールのインストール中にエラーが発生しました。注文が正しくない場合があります。従属モジュールは、テーブルの前にインストールする必要があります',
+      barUnableLink: 'ツールバーはテーブルを関連付けることができません',
+      expandContent: '拡張ラインのスロットは「コンテンツ」である必要があります。正しいかどうかを確認してください',
+      reqComp: '「{0}」コンポーネントがありません。正しくインストールされているかどうかを確認してください。 https://vxeui.com/#/start/useglobal',
+      reqModule: '「{0}」モジュールがありません',
+      reqProp: '必要な「{0}」パラメーターが欠落しているため、エラーが発生する場合があります',
+      emptyProp: 'パラメーター「{0}」は空にすることは許可されていません',
+      errProp: 'サポートされていないパラメーター「{0}」、おそらく「{1}」',
+      colRepet: '列。{0} = "{1}"が繰り返されるため、一部の機能が使用できなくなる可能性があります',
+      notFunc: 'メソッド「{0}」は存在しません',
+      errFunc: 'パラメーター「{0}」はメソッドではありません',
+      notValidators: 'グローバル検証「{0}」は存在しません',
+      notFormats: 'グローバルフォーマット「{0}」は存在しません',
+      notCommands: 'グローバル指令「{0}」は存在しません',
+      notSlot: 'スロット「{0}」は存在しません',
+      noTree: '「{0}」はツリー構造ではサポートされていません',
+      notProp: 'サポートされていないパラメーター "{0}"',
+      checkProp: 'データのボリュームが大きすぎると、チェックボックスがutter音を立てる可能性があります。レンダリング速度を改善するためにパラメーター「{0}」を設定することをお勧めします',
+      coverProp: '「{0}」のパラメーター「{1}」が繰り返し定義されているため、エラーが発生する可能性があります',
+      uniField: 'フィールド名「{0}」が繰り返し定義されているため、エラーが発生する可能性があります',
+      repeatKey: 'プライマリキー{0} = "{1}"を繰り返します。これはエラーを引き起こす可能性があります',
+      delFunc: 'メソッド「{0}」は非推奨です。「{1}」を使用してください',
+      delProp: 'パラメーター「{0}」は非推奨です。「{1}」を使用してください',
+      delEvent: 'イベント「{0}」は非推奨です。「{1}」を使用してください',
+      removeProp: 'パラメーター「{0}」は非推奨であり、推奨されていないため、エラーが発生する可能性があります',
+      errFormat: 'グローバルフォーマットコンテンツは、「Vxetable.Formats」を使用して定義する必要があり、「Formatter = {0}」を取り付ける方法は推奨されなくなります。',
+      notType: 'サポートされていないファイルタイプ "{0}"',
+      notExp: 'このブラウザは、インポート/エクスポート機能をサポートしません',
+      impFields: 'インポートが失敗しました。フィールド名とデータ形式が正しいかどうかを確認してください。',
       treeNotImp: 'ツリーテーブルはインポートをサポートしていません',
-      treeCrossDrag: '只能拖拽第一层级',
-      treeDragChild: '父级不能拖拽到自己的子级中',
-      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install',
-      errMaxRow: '超过支持的最大数据量 {0} 行，这可能会导致出现错误'
+      treeCrossDrag: '最初のレベルのみをドラッグします',
+      treeDragChild: '親は自分の子供にドラッグすることはできません',
+      reqPlugin: '「{1}」はhttps://vxeui.com/other {0 }/#/ {1 }/installにインストールされていません',
+      errMaxRow: 'サポートされている最大データボリューム{0}行を超えると、これによりエラーが発生する可能性があります'
     },
     table: {
-      emptyText: 'データがありません',
-      allTitle: '全て選択/取消',
-      seqTitle: 'N/S',
-      actionTitle: 'Action',
-      confirmFilter: 'OK',
+      emptyText: 'まだデータはありません',
+      allTitle: 'すべてを選択/キャンセルします',
+      seqTitle: 'シリアルナンバー',
+      actionTitle: '動作します',
+      confirmFilter: 'フィルター',
       resetFilter: 'リセット',
       allFilter: '全て',
-      sortAsc: '昇順',
-      sortDesc: '降順',
-      filter: '選択した列が絞り込む有効',
-      impSuccess: '{0} レコードがインポートされました',
-      expLoading: 'エクスポート中',
-      expSuccess: 'エクスポートが成功しました',
-      expError: 'Export failure',
-      expOriginFilename: 'エクスポート_{0}',
-      expSrcFilename: 'エクスポート_ソース_{0}',
+      sortAsc: '昇順：最低から最高',
+      sortDesc: '降順注文：最高から最低',
+      filter: '選択した列のフィルタリングを有効にします',
+      impSuccess: '{0}レコードを正常にインポートしました',
+      expLoading: 'エクスポート',
+      expSuccess: '正常にエクスポート',
+      expError: 'エクスポートは失敗しました',
+      expFilename: 'Export_ {0}',
+      expOriginFilename: 'export_source_ {0}',
       customTitle: '列設定',
-      customAll: '全部',
-      customConfirm: 'OK',
-      customClose: '关闭',
-      customCancel: 'Cancel',
-      customRestore: 'リセット',
-      maxFixedCol: '最大固定列数が {0} です。',
-      dragTip: '移动：{0}',
-      resizeColTip: '宽：{0} 像素',
-      resizeRowTip: '高：{0} 像素',
-      rowGroupContentTotal: '{0}（{1}）'
+      customAll: '全て',
+      customConfirm: '確認する',
+      customClose: '閉鎖',
+      customCancel: 'キャンセル',
+      customRestore: 'デフォルトを復元します',
+      maxFixedCol: '凍結柱の最大数は{0}を超えることはできません',
+      dragTip: '移動：{0}',
+      resizeColTip: '幅：{0}ピクセル',
+      resizeRowTip: '高さ：{0}ピクセル',
+      rowGroupContentTotal: '{0} ({1})'
     },
     grid: {
-      selectOneRecord: '1つ以上のレコードを選択してください',
-      deleteSelectRecord: 'レコードを削除してもよろしいですか？',
-      removeSelectRecord: 'レコードを削除してもよろしいですか？',
-      dataUnchanged: 'データが変更されませんでした',
-      delSuccess: '選択したレコードを削除しました',
-      saveSuccess: '保存しました',
-      operError: 'エラーが発生しました。操作が失敗しました'
+      selectOneRecord: '少なくとも1つのレコードを選択してください！',
+      deleteSelectRecord: '選択したレコードを削除したいですか？',
+      removeSelectRecord: '選択したレコードを削除したいですか？',
+      dataUnchanged: 'データは変更されていません！',
+      delSuccess: '選択したレコードは正常に削除されました！',
+      saveSuccess: '正常に保存してください！',
+      operError: 'エラーが発生し、操作が失敗しました！'
     },
     select: {
       search: '検索',
-      loadingText: 'Loading',
-      emptyText: 'データがありません'
+      loadingText: '読み込み',
+      emptyText: 'まだデータはありません'
     },
     pager: {
-      goto: '移動',
-      gotoTitle: '页数',
-      pagesize: '{0}件/ページ',
-      total: '全 {0} 件',
+      goto: '行く',
+      gotoTitle: 'ページ数',
+      pagesize: '{0}アイテム/ページ',
+      total: '合計{0}レコード',
       pageClassifier: 'ページ',
-      homePage: '1ページ目',
-      homePageTitle: '1ページ目',
+      homePage: 'フロントページ',
+      homePageTitle: 'フロントページ',
       prevPage: '前のページ',
       prevPageTitle: '前のページ',
       nextPage: '次のページ',
       nextPageTitle: '次のページ',
-      prevJump: '前のページに移動',
-      prevJumpTitle: '前のページに移動',
-      nextJump: '次のページに移動',
-      nextJumpTitle: '次のページに移動',
-      endPage: '最後ページ',
-      endPageTitle: '最後ページ'
+      prevJump: 'ジャンプアップページ',
+      prevJumpTitle: 'ジャンプアップページ',
+      nextJump: 'ジャンプダウンページ',
+      nextJumpTitle: 'ジャンプダウンページ',
+      endPage: '最後のページ',
+      endPageTitle: '最後のページ'
     },
     alert: {
-      title: '確認'
+      title: 'システムプロンプト'
     },
     button: {
-      confirm: 'OK',
+      confirm: '確認する',
       cancel: 'キャンセル',
-      clear: 'パージ'
+      clear: 'クリア'
     },
     filter: {
       search: '検索'
     },
     custom: {
       cstmTitle: '列設定',
-      cstmRestore: 'リセット',
+      cstmRestore: 'デフォルトを復元します',
       cstmCancel: 'キャンセル',
-      cstmConfirm: 'OK',
-      cstmConfirmRestore: '列をデフォルト状態に戻します。よろしいですか？',
-      cstmDragTarget: '移动：{0}',
+      cstmConfirm: 'もちろん',
+      cstmConfirmRestore: 'デフォルトの列構成に復元されているかどうかを確認してください。',
+      cstmDragTarget: '移動：{0}',
       setting: {
-        colSort: 'ソート',
-        sortHelpTip: 'ドラッグして列を並べ替えます',
-        colTitle: '列标题',
-        colResizable: '列の幅 (px)',
-        colVisible: '表示する',
-        colFixed: '列固定',
-        colFixedMax: '列固定（最大 {0} 列）',
+        colSort: '選別',
+        sortHelpTip: 'アイコンをクリックしてドラッグして、列の種類を調整します',
+        colTitle: '列のタイトル',
+        colResizable: '列幅（ピクセル）',
+        colVisible: '表示するかどうか',
+        colFixed: 'フリーズコラム',
+        colFixedMax: 'フリーズ列（{0}列まで）',
         fixedLeft: '左側',
-        fixedUnset: '指定しない',
+        fixedUnset: '設定されていません',
         fixedRight: '右側'
       }
     },
     import: {
       modes: {
-        covering: '上書きモード',
-        insert: '追加モード（最後行に追加）',
-        insertTop: '追加モード（先頭行に追加）',
-        insertBottom: '追加モード（最後行に追加）'
+        covering: 'メソッドを上書きする（テーブルデータを直接上書きする）',
+        insert: '下部に追加します（テーブルの下部に新しいデータを追加）',
+        insertTop: '上部に追加します（テーブルの上部に新しいデータを追加）',
+        insertBottom: '下部に追加します（テーブルの下部に新しいデータを追加）'
       },
-      impTitle: 'データインポート',
+      impTitle: 'データをインポートします',
       impFile: 'ファイル名',
-      impSelect: 'ファイル選択',
-      impType: 'ファイルの種類',
-      impOpts: 'パラメータ指定',
+      impSelect: '[ファイル]を選択します',
+      impType: 'ファイルタイプ',
+      impOpts: 'パラメーター設定',
       impMode: 'インポートモード',
-      impConfirm: 'インポート',
+      impConfirm: '輸入',
       impCancel: 'キャンセル'
     },
     export: {
       types: {
-        csv: 'CSV (カンマ区切り)(*.csv)',
-        html: 'webページ(*.html)',
-        xml: 'XML データ(*.xml)',
-        txt: 'テキストファイル（タブ区切り）(*.txt)',
-        xls: 'Excel 97-2003 ワークブック(*.xls)',
-        xlsx: 'Excel ワークブック(*.xlsx)',
-        pdf: 'PDF (*.pdf)'
+        csv: 'CSV（コンマ分離）（*。CSV）',
+        html: 'Webページ（*.html）',
+        xml: 'XMLデータ（*.xml）',
+        txt: 'テキストファイル（タブ分離）（*。txt）',
+        xls: 'Excel 97-2003ワークブック（*.xls）',
+        xlsx: 'Excelワークブック（*.xlsx）',
+        pdf: 'pdf（*.pdf）'
       },
       modes: {
-        empty: '空数据',
-        current: '表示中のデータ(表示中のページのデータ)',
-        selected: '選択したデータ(表示中のページに選択したデータ)',
-        all: '全てのデータ（全てのページのデータを含む）'
+        empty: '空のデータ',
+        current: '現在のデータ（現在のページのデータ）',
+        selected: '選択されたデータ（現在のページで選択されたデータ）',
+        all: '完全なデータ（すべてのページデータを含む）'
       },
-      printTitle: '印刷',
-      expTitle: 'データ',
+      printTitle: 'データを印刷します',
+      expTitle: 'データのエクスポート',
       expName: 'ファイル名',
       expNamePlaceholder: 'ファイル名を入力してください',
       expSheetName: 'タイトル',
       expSheetNamePlaceholder: 'タイトルを入力してください',
-      expType: '保存タイプ',
-      expMode: '保存データ',
-      expCurrentColumn: '全てのフィールド',
-      expColumn: '列',
-      expOpts: 'パラメータ',
-      expOptHeader: 'ヘッダー',
-      expHeaderTitle: 'ヘッダーをエクスポート',
-      expOptFooter: 'フッター',
-      expFooterTitle: 'フッターをエクスポート',
-      expOptColgroup: 'グループ分けタイトル',
-      expOptTitle: '列标题',
-      expTitleTitle: '是否为列标题，否则显示为列的字段名',
-      expColgroupTitle: 'グループ分けタイトルを有効にする',
-      expOptMerge: '結合',
-      expMergeTitle: '結合セルを有効にする',
-      expOptAllExpand: '展开树',
-      expAllExpandTitle: '階層構造を有効にする',
+      expType: 'タイプを保存します',
+      expMode: 'データを選択します',
+      expCurrentColumn: 'すべてのフィールド',
+      expColumn: 'フィールドを選択します',
+      expOpts: 'パラメーター設定',
+      expOptHeader: 'ヘッダ',
+      expHeaderTitle: 'テーブルヘッダーが必要です',
+      expOptFooter: 'テーブルの終わり',
+      expFooterTitle: 'テーブルの終わりは必要ですか？',
+      expOptColgroup: 'グループ化ヘッダー',
+      expOptTitle: '列のタイトル',
+      expTitleTitle: 'それが列のタイトルであるかどうか、それ以外の場合は列のフィールド名として表示されます',
+      expColgroupTitle: '存在する場合、グループ構造を持つヘッダーがサポートされています',
+      expOptMerge: 'マージ',
+      expMergeTitle: '存在する場合、マージされた構造を持つ細胞がサポートされます',
+      expOptAllExpand: 'ツリーを拡張します',
+      expAllExpandTitle: '存在する場合、階層構造を使用してすべてのデータを拡張することがサポートされています',
       expOptUseStyle: 'スタイル',
-      expUseStyleTitle: 'スタイルを有効にする',
+      expUseStyleTitle: '存在する場合、スタイルのあるセルがサポートされています',
       expOptOriginal: 'ソースデータ',
-      expOriginalTitle: 'ソースデータを有効にする',
+      expOriginalTitle: 'ソースデータの場合、テーブルへのインポートがサポートされています',
       expPrint: '印刷',
-      expConfirm: 'OK',
+      expConfirm: '輸出',
       expCancel: 'キャンセル'
     },
     modal: {
-      errTitle: 'エラー',
-      zoomMin: '最小化',
-      zoomIn: '最大化',
-      zoomOut: '縮小',
-      close: '閉じる',
-      miniMaxSize: 'The number of minimized Windows cannot exceed {0}.',
-      footPropErr: 'show-footer 仅用于启用表尾，需配合 show-confirm-button | show-cancel-button | 插槽使用'
+      errTitle: 'エラーメッセージ',
+      zoomMin: '最小化します',
+      zoomIn: '最大化します',
+      zoomOut: '削減',
+      close: '閉鎖',
+      miniMaxSize: '最小化されたウィンドウの数は{0}を超えることはできません',
+      footPropErr: 'ショーフッターは、テーブルテールを有効にするためにのみ使用され、Show-Confirm-Buttonで使用する必要があります|ショーキャンセルボタン|スロット'
     },
     drawer: {
-      close: '閉じる'
+      close: '閉鎖'
     },
     form: {
-      folding: '展開を戻す',
-      unfolding: '展開'
+      folding: '近い',
+      unfolding: '拡大する'
     },
     toolbar: {
-      import: 'ファイル読込',
-      export: 'エクスポート',
+      import: '輸入',
+      export: '輸出',
       print: '印刷',
-      refresh: '再読み込み',
-      zoomIn: 'フルスクリーン',
-      zoomOut: '縮小',
-      custom: 'カスタム設定',
-      customAll: '全部',
-      customConfirm: 'OK',
+      refresh: 'リフレッシュします',
+      zoomIn: '全画面表示',
+      zoomOut: '削減',
+      custom: '列設定',
+      customAll: '全て',
+      customConfirm: '確認する',
       customRestore: 'リセット',
-      fixedLeft: '左側に固定',
-      fixedRight: '右側に固定',
-      cancelFixed: '列固定を取消'
+      fixedLeft: '左フリーズ',
+      fixedRight: '右フリーズします',
+      cancelFixed: '凍結外'
     },
     datePicker: {
       yearTitle: '{0} 年'
@@ -272,7 +272,7 @@ export default {
           year: 'yyyy'
         },
         weeks: {
-          w: '曜日',
+          w: '週',
           w0: '日',
           w1: '月',
           w2: '火',
@@ -307,401 +307,401 @@ export default {
       currencySymbol: '$'
     },
     imagePreview: {
-      popupTitle: 'Preview',
+      popupTitle: 'プレビュー',
       operBtn: {
-        zoomOut: 'Reduce',
-        zoomIn: 'Enlarge',
-        pctFull: 'Proportional scaling',
-        pct11: 'Show original size',
-        rotateLeft: 'Rotate left',
-        rotateRight: 'Rotate right',
-        print: 'Click to print',
-        download: 'Click to download'
+        zoomOut: '縮む',
+        zoomIn: '拡大します',
+        pctFull: '均等にスケーリング',
+        pct11: '元のサイズを表示します',
+        rotateLeft: '左に回転します',
+        rotateRight: '右に回転します',
+        print: 'クリックして画像を印刷します',
+        download: 'クリックして写真をダウンロードします'
       }
     },
     upload: {
-      fileBtnText: 'Click or drag',
-      imgBtnText: 'Click or drag',
-      dragPlaceholder: 'Please drag and drop the file into this area to upload it.',
-      imgSizeHint: 'Single {0}',
-      imgCountHint: 'Up to {0}',
-      fileTypeHint: 'Support {0} file types',
-      fileSizeHint: 'Single file size does not exceed {0}',
-      fileCountHint: 'Up to {0} file can be uploaded',
-      uploadTypeErr: '文件类型不匹配！',
-      overCountErr: 'You can only choose {0} file!',
-      overCountExtraErr: 'It has exceeded the maximum number {0}, and more than {0} file will be ignored!超出最大数量 1 个，超出的 1 个文件将被忽略！',
-      overSizeErr: 'The size of the file is not more than {0}}!',
-      reUpload: 'Re upload',
-      uploadProgress: 'Uploading {0}%',
-      uploadErr: 'Fail to upload',
-      uploadSuccess: 'Successfully upload',
-      moreBtnText: 'More ({0})',
-      viewItemTitle: 'click to view',
+      fileBtnText: 'クリックまたはドラッグしてアップロードします',
+      imgBtnText: 'クリックまたはドラッグしてアップロードします',
+      dragPlaceholder: 'このエリアにファイルをドラッグアンドドロップしてアップロードしてください',
+      imgSizeHint: 'リーフレット{0}',
+      imgCountHint: '最大{0}写真',
+      fileTypeHint: 'サポート{0}ファイルタイプ',
+      fileSizeHint: '単一のファイルサイズが{0}を超えない',
+      fileCountHint: '最大{0}ファイルをアップロードできます',
+      uploadTypeErr: 'ファイルタイプの不一致！',
+      overCountErr: 'せいぜい{0}ファイルのみを選択できます！',
+      overCountExtraErr: '{0}の最大数は超えており、過剰な{1}ファイルは無視されます！',
+      overSizeErr: '最大ファイルサイズは{0}を超えることはできません！',
+      reUpload: '再アップロード',
+      uploadProgress: '{0}％のアップロード',
+      uploadErr: 'アップロードに失敗しました',
+      uploadSuccess: '正常にアップロードします',
+      moreBtnText: 'その他（{0}）',
+      viewItemTitle: 'クリックして表示します',
       morePopup: {
-        readTitle: '查看列表',
-        imageTitle: '上传图片',
-        fileTitle: '上传文件'
+        readTitle: 'リストを表示します',
+        imageTitle: '写真をアップロードします',
+        fileTitle: 'ファイルをアップロードします'
       }
     },
     empty: {
-      defText: '暂无数据'
+      defText: 'まだデータはありません'
     },
     colorPicker: {
-      clear: '清除',
-      confirm: '确认',
-      copySuccess: '已复制到剪贴板：{0}'
+      clear: 'クリア',
+      confirm: '確認する',
+      copySuccess: 'クリップボードにコピー：{0}'
     },
     formDesign: {
-      formName: 'Form name',
-      defFormTitle: 'Unnamed form',
-      widgetPropTab: 'Field property',
-      widgetFormTab: 'Form property',
+      formName: 'フォーム名',
+      defFormTitle: '名前のないフォーム',
+      widgetPropTab: '制御プロパティ',
+      widgetFormTab: 'フォームプロパティ',
       error: {
-        wdFormUni: '该类型的控件在表单中只允许添加一个',
-        wdSubUni: '该类型的控件在子表中只允许添加一个'
+        wdFormUni: 'このタイプのコントロールは、フォームに1つだけを追加することができます',
+        wdSubUni: 'このタイプのコントロールは、サブテーブルに1つだけを追加することができます'
       },
       styleSetting: {
-        btn: 'Style setting',
-        title: 'Form style setting',
-        layoutTitle: 'Field layout',
-        verticalLayout: 'Vertical layout',
-        horizontalLayout: 'Horizontal layout',
-        styleTitle: 'Title style',
-        boldTitle: 'Bold title',
-        fontBold: 'Bold',
-        fontNormal: 'Normal',
-        colonTitle: 'Display colon',
-        colonVisible: 'Visible',
-        colonHidden: 'Hidden',
-        alignTitle: 'Title align',
-        widthTitle: 'Title width',
-        alignLeft: 'Left',
-        alignRight: 'Right',
-        unitPx: 'Px',
-        unitPct: 'Pct'
+        btn: 'スタイル設定',
+        title: 'フォームスタイル設定',
+        layoutTitle: 'コントロールレイアウト',
+        verticalLayout: '上部および下部のレイアウト',
+        horizontalLayout: '水平レイアウト',
+        styleTitle: 'タイトルスタイル',
+        boldTitle: 'タイトル太字',
+        fontBold: '大胆な',
+        fontNormal: '従来の',
+        colonTitle: 'コロンを表示します',
+        colonVisible: '見せる',
+        colonHidden: '隠れる',
+        alignTitle: 'アライメント',
+        widthTitle: 'タイトル幅',
+        alignLeft: '左に',
+        alignRight: '右側に',
+        unitPx: 'ピクセル',
+        unitPct: 'パーセンテージ'
       },
       widget: {
         group: {
-          base: 'Base control',
-          layout: 'Layout control',
-          system: 'System control',
-          module: 'Module control',
-          chart: 'Chart control',
-          advanced: 'Advanced control'
+          base: '基本的なコントロール',
+          layout: 'レイアウトコントロール',
+          system: 'システムコントロール',
+          module: 'モジュールコントロール',
+          chart: 'チャート制御',
+          advanced: '高度なコントロール'
         },
-        copyTitle: 'Copy_{0}',
+        copyTitle: 'copy_ {0}',
         component: {
-          input: 'Input',
-          textarea: 'Textarea',
-          select: 'Select',
-          row: 'Row/column',
-          title: 'Title',
-          text: 'Text',
-          subtable: 'Subtable',
-          VxeSwitch: 'Yes/no',
-          VxeInput: 'Input',
-          VxeNumberInput: 'Number',
-          VxeDatePicker: 'Date',
-          VxeTextarea: 'Textarea',
-          VxeSelect: 'Select',
-          VxeTreeSelect: 'Tree select',
-          VxeRadioGroup: 'Radio',
-          VxeCheckboxGroup: 'Checkbox',
-          VxeUploadFile: 'File',
-          VxeUploadImage: 'Image',
-          VxeRate: 'Rate',
-          VxeSlider: 'Slider'
+          input: '入力ボックス',
+          textarea: 'テキストフィールド',
+          select: 'プルダウンして選択します',
+          row: '1つの行と複数の列',
+          title: 'タイトル',
+          text: '文章',
+          subtable: 'サブテーブル',
+          VxeSwitch: 'かどうか',
+          VxeInput: '入力ボックス',
+          VxeNumberInput: '番号',
+          VxeDatePicker: '日付',
+          VxeTextarea: 'テキストフィールド',
+          VxeSelect: 'プルダウンして選択します',
+          VxeTreeSelect: 'ツリー選択',
+          VxeRadioGroup: 'ラジオボタン',
+          VxeCheckboxGroup: 'チェックボックス',
+          VxeUploadFile: '書類',
+          VxeUploadImage: '写真',
+          VxeRate: 'スコア',
+          VxeSlider: 'スライダー'
         }
       },
       widgetProp: {
-        name: 'Field name',
-        placeholder: 'Field placeholder',
-        required: 'Required',
-        multiple: 'Allow to select multiple',
+        name: 'コントロール名',
+        placeholder: 'プロンプト',
+        required: '必要な検証',
+        multiple: '複数の選択肢が許可されています',
         displaySetting: {
-          name: 'Display setting',
+          name: '設定を表示します',
           pc: 'PC',
-          mobile: 'Mobile',
-          visible: 'Visible',
-          hidden: 'Hidden'
+          mobile: '携帯',
+          visible: '見せる',
+          hidden: '隠れる'
         },
         dataSource: {
-          name: 'Data source',
-          defValue: 'Option {0}',
-          addOption: 'Add option',
-          batchEditOption: 'Batch edit',
-          batchEditTip: 'Each row corresponds to an option, supporting direct copying and pasting from tables, Excel, and WPS.',
-          batchEditSubTip: 'Each row corresponds to an option. If grouped, the sub items can start with spaces or tab keys, and can be directly copied and pasted from tables, Excel, or WPS.',
-          buildOption: 'Build option'
+          name: 'データソース',
+          defValue: 'オプション{0}',
+          addOption: 'オプションを追加します',
+          batchEditOption: 'バッチ編集',
+          batchEditTip: '各行はオプションに対応し、テーブル、Excel、およびWPSからの直接コピーと貼り付けをサポートします。',
+          batchEditSubTip: '各行はオプションに対応します。それがグループの場合、子アイテムはスペースまたはタブキーから始めることができ、テーブル、Excel、およびWPSからの直接コピーと貼り付けをサポートします。',
+          buildOption: 'オプションを構築します'
         },
         rowProp: {
-          colSize: 'Number of columns',
-          col2: 'Two columns',
-          col3: 'Three columns',
-          col4: 'Four columns',
-          col6: 'Six columns',
-          layout: 'Layout'
+          colSize: '列数',
+          col2: '2つの列',
+          col3: '3つの列',
+          col4: '4つの列',
+          col6: '6列',
+          layout: 'レイアウト'
         },
         textProp: {
-          name: 'Content',
-          alignTitle: 'Align',
-          alignLeft: 'Left',
-          alignCenter: 'Center',
-          alignRight: 'Right',
-          colorTitle: 'Color',
-          sizeTitle: 'Font size',
-          boldTitle: 'Font bold',
-          fontNormal: 'Normal',
-          fontBold: 'Bold'
+          name: 'コンテンツ',
+          alignTitle: 'アライメント',
+          alignLeft: '左に',
+          alignCenter: '中心',
+          alignRight: '右側に',
+          colorTitle: 'フォントカラー',
+          sizeTitle: 'フォントサイズ',
+          boldTitle: '大胆なフォント',
+          fontNormal: '従来の',
+          fontBold: '大胆な'
         },
         subtableProp: {
-          seqTitle: 'S/N',
-          showSeq: 'Display serial number',
-          showCheckbox: 'Allow multiple selections',
-          errSubDrag: 'The sub table does not support this control. Please use another control.',
-          colPlace: '将控件拖拽进来'
+          seqTitle: 'シリアルナンバー',
+          showSeq: 'シリアル番号を表示します',
+          showCheckbox: '複数の選択肢が許可されています',
+          errSubDrag: 'サブテーブルはこのコントロールをサポートしていません。他のコントロールを使用してください',
+          colPlace: 'コントロールをドラッグします'
         },
         uploadProp: {
-          limitFileCount: 'File quantity limitation',
-          limitFileSize: 'File size limitation',
-          multiFile: 'Allows multiple files',
-          limitImgCount: 'Image quantity limitation',
-          limitImgSize: 'Image size limitation',
-          multiImg: 'Allows multiple images'
+          limitFileCount: 'ファイル数量制限',
+          limitFileSize: 'ファイルサイズ制限',
+          multiFile: '複数のファイルをアップロードします',
+          limitImgCount: '写真の数を制限します',
+          limitImgSize: '画像サイズの制限',
+          multiImg: '複数の写真をアップロードしてください'
         }
       }
     },
     listDesign: {
-      fieldSettingTab: 'Field',
-      listSettingTab: 'Parameter',
-      searchTitle: 'Search',
-      listTitle: 'List',
-      searchField: 'Search field',
-      listField: 'List field',
+      fieldSettingTab: 'フィールド設定',
+      listSettingTab: 'パラメーター設定',
+      searchTitle: 'クエリ基準',
+      listTitle: 'リストフィールド',
+      searchField: 'クエリフィールド',
+      listField: 'リストフィールド',
       activeBtn: {
-        ActionButtonUpdate: 'Edit',
-        ActionButtonDelete: 'Delete'
+        ActionButtonUpdate: '編集',
+        ActionButtonDelete: '消去'
       },
       search: {
-        addBtn: 'Edit',
-        emptyText: 'No filter condition is configured.',
-        editPopupTitle: '编辑查询字段'
+        addBtn: '編集',
+        emptyText: 'クエリ条件が構成されていません',
+        editPopupTitle: 'クエリフィールドを編集します'
       },
       searchPopup: {
-        colTitle: '标题',
+        colTitle: 'タイトル',
         saveBtn: '保存'
       }
     },
     text: {
-      copySuccess: 'Successfully copied to clipboard.',
-      copyError: 'The current environment does not support this operation.'
+      copySuccess: 'クリップボードにコピーします',
+      copyError: '現在の環境はこの操作をサポートしていません'
     },
     countdown: {
       formats: {
         yyyy: '年',
         MM: '月',
-        dd: '天',
-        HH: '时',
-        mm: '分',
-        ss: '秒'
+        dd: '空',
+        HH: '時間',
+        mm: 'ポイント',
+        ss: '2番'
       }
     },
     plugins: {
       extendCellArea: {
         area: {
-          mergeErr: '該当セルに操作できません',
-          multiErr: '複数の選択箇所に操作できません',
-          selectErr: '无法操作指定区域的单元格',
-          extendErr: '結合セルが含まれている場合、すべての結合セルのサイズが同じでなければなりません',
-          pasteMultiErr: 'ペーストできません。同じサーズの領域を選択してください',
-          cpInvalidErr: '操作できません。選択禁止の列（{0}）が選択されています'
+          mergeErr: 'この操作は、マージされたセルで実行することはできません',
+          multiErr: 'この操作は、複数の選択領域で実行することはできません',
+          selectErr: '指定された範囲のセルで動作することができません',
+          extendErr: '拡張範囲にマージされたセルが含まれている場合、すべてのマージされたセルは同じサイズでなければなりません',
+          pasteMultiErr: '貼り付けることができないため、この操作を実行するには、コピーされたエリアと貼り付けエリアが同じサイズである必要があります',
+          cpInvalidErr: '操作は実行できません。選択した範囲に禁止された列（{0}）があります。'
         },
         fnr: {
-          title: '検索と置換',
-          findLabel: '検索',
-          replaceLabel: '置換',
-          findTitle: '検索内容：',
-          replaceTitle: '置換する文字：',
+          title: '見つけて交換します',
+          findLabel: '探す',
+          replaceLabel: '交換する',
+          findTitle: '何を見つける：',
+          replaceTitle: '置き換えてください：',
           tabs: {
-            find: '検索',
-            replace: '置換'
+            find: '探す',
+            replace: '交換する'
           },
           filter: {
             re: '正規表現',
-            whole: 'フルワード',
-            sensitive: '大文字小文字区別する'
+            whole: '完全な一致',
+            sensitive: '大文字と小文字を区別'
           },
           btns: {
-            findNext: '次検索',
-            findAll: 'すべて検索',
-            replace: '置換',
-            replaceAll: 'すべて置換',
+            findNext: '次を見つけます',
+            findAll: 'すべてを見つけてください',
+            replace: '交換する',
+            replaceAll: 'すべてを交換します',
             cancel: 'キャンセル'
           },
           header: {
             seq: '#',
-            cell: 'セル',
-            value: '値'
+            cell: '細胞',
+            value: '価値'
           },
           body: {
             row: '行：{0}',
             col: '列：{0}'
           },
-          empty: '(空白)',
+          empty: '（null値）',
           reError: '無効な正規表現',
-          recordCount: '{0} 個のセルが見つかりました',
-          notCell: '見つかりませんでした',
-          replaceSuccess: '{0} 個のセルを置換しました'
+          recordCount: '{0}セルが見つかりました',
+          notCell: '一致するセルは見つかりません',
+          replaceSuccess: '{0}セルを正常に交換しました'
         }
       },
       filterComplexInput: {
         menus: {
-          fixedColumn: '列ロック',
-          fixedGroup: 'グループロック',
-          cancelFixed: 'ロック解除',
-          fixedLeft: '左側ロック',
-          fixedRight: '右側ロック'
+          fixedColumn: 'フリーズコラム',
+          fixedGroup: '凍結グループ',
+          cancelFixed: '凍結外',
+          fixedLeft: '左フリーズ',
+          fixedRight: '右フリーズします'
         },
         cases: {
-          equal: 'イコール',
-          gt: '大なり',
-          lt: '小なり',
-          begin: '先頭は',
-          endin: '末尾は',
+          equal: '等しい',
+          gt: 'より大きい',
+          lt: '未満',
+          begin: '始まりはです',
+          endin: '終わりです',
           include: '含む',
-          isSensitive: '大文字小文字区別する'
+          isSensitive: '大文字と小文字を区別'
         }
       },
       filterCombination: {
         menus: {
-          sort: '排序',
-          clearSort: 'ソートクリア',
+          sort: '選別',
+          clearSort: 'クリアソート',
           sortAsc: '昇順',
           sortDesc: '降順',
-          fixedColumn: '列ロック',
-          fixedGroup: 'グループロック',
-          cancelFixed: 'ロック解除',
-          fixedLeft: '左側ロック',
-          fixedRight: '右側ロック',
-          clearFilter: '絞り込みクリア',
-          textOption: '文字絞り込む',
-          numberOption: '数値絞り込み'
+          fixedColumn: 'フリーズコラム',
+          fixedGroup: '凍結グループ',
+          cancelFixed: '凍結外',
+          fixedLeft: '左フリーズ',
+          fixedRight: '右フリーズします',
+          clearFilter: 'クリアフィルター',
+          textOption: 'テキストフィルター',
+          numberOption: '数値フィルター'
         },
         popup: {
-          title: 'カスタムフィルター',
-          currColumnTitle: '現在列：',
-          and: 'と',
-          or: 'もしくは',
-          describeHtml: ' ? で一文字<br/> * で複数文字を代替する'
+          title: 'カスタムフィルタリング方法',
+          currColumnTitle: '現在の列：',
+          and: 'そして',
+          or: 'または',
+          describeHtml: '利用可能？単一の文字を表す<br/> use *は複数の文字を表します'
         },
         cases: {
-          equal: 'イコール',
-          unequal: 'ノットイコール',
-          gt: '大なり',
-          ge: '大なりイコール',
-          lt: '小なり',
-          le: '小なりイコール',
-          begin: '先頭は',
-          notbegin: 'not begin',
-          endin: '末尾は',
-          notendin: 'not endin',
+          equal: '等しい',
+          unequal: '等しくない',
+          gt: 'より大きい',
+          ge: '以上大きい',
+          lt: '未満',
+          le: '以下以上',
+          begin: '始まりはです',
+          notbegin: '最初はありません',
+          endin: '終わりです',
+          notendin: 'エンディングはそうではありません',
           include: '含む',
-          exclude: '含まない',
-          between: '属する',
+          exclude: '含まれていません',
+          between: '間',
           custom: 'カスタムフィルター',
-          insensitive: '大文字小文字区別しない',
-          isSensitive: '大文字小文字区別する'
+          insensitive: '症例は無感覚です',
+          isSensitive: '大文字と小文字を区別'
         },
-        empty: '(空白)',
-        notData: 'データなし'
-      }
-    },
-    renderer: {
-      search: '搜索',
-      cases: {
-        equal: '等于',
-        unequal: '不等于',
-        gt: '大于',
-        ge: '大于或等于',
-        lt: '小于',
-        le: '小于或等于',
-        begin: '开头是',
-        notbegin: '开头不是',
-        endin: '结尾是',
-        notendin: '结尾不是',
-        include: '包含',
-        exclude: '不包含',
-        between: '介于',
-        custom: '自定义筛选',
-        insensitive: '不区分大小写',
-        isSensitive: '区分大小写'
-      },
-      combination: {
-        menus: {
-          sort: '排序',
-          clearSort: '清除排序',
-          sortAsc: '升序',
-          sortDesc: '降序',
-          fixedColumn: '冻结列',
-          fixedGroup: '冻结分组',
-          cancelFixed: '取消冻结',
-          fixedLeft: '冻结到左侧',
-          fixedRight: '冻结到右侧',
-          clearFilter: '清除筛选',
-          textOption: '文本筛选',
-          numberOption: '数值筛选'
-        },
-        popup: {
-          title: '自定义筛选的方式',
-          currColumnTitle: '当前列：',
-          and: '与',
-          or: '或',
-          describeHtml: '可用 ? 代表单个字符<br/>用 * 代表任意多个字符'
-        },
-        empty: '(空白)',
-        notData: '无匹配项'
+        empty: '（空白）',
+        notData: '一致しません'
       }
     },
     pro: {
       area: {
-        mergeErr: '无法对合并单元格进行该操作',
-        multiErr: '无法对多重选择区域进行该操作',
-        extendErr: '如果延伸的区域包含被合并的单元格，所有合并的单元格需大小相同',
-        pasteMultiErr: '无法粘贴，需要相同大小的复制的区域和粘贴的区域才能执行此操作'
+        mergeErr: 'この操作は、マージされたセルで実行することはできません',
+        multiErr: 'この操作は、複数の選択領域で実行することはできません',
+        extendErr: '拡張範囲にマージされたセルが含まれている場合、すべてのマージされたセルは同じサイズでなければなりません',
+        pasteMultiErr: '貼り付けることができないため、この操作を実行するには、コピーされたエリアと貼り付けエリアが同じサイズである必要があります'
       },
       fnr: {
-        title: '查找和替换',
-        findLabel: '查找',
-        replaceLabel: '替换',
-        findTitle: '查找内容：',
-        replaceTitle: '替换为：',
+        title: '見つけて交換します',
+        findLabel: '探す',
+        replaceLabel: '交換する',
+        findTitle: 'コンテンツを見つける：',
+        replaceTitle: '置き換えてください：',
         tabs: {
-          find: '查找',
-          replace: '替换'
+          find: '探す',
+          replace: '交換する'
         },
         filter: {
-          re: '正则表达式',
-          whole: '全词匹配',
-          sensitive: '区分大小写'
+          re: '正規表現',
+          whole: '完全な一致',
+          sensitive: '大文字と小文字を区別'
         },
         btns: {
-          findNext: '查找下一个',
-          findAll: '查找全部',
-          replace: '替换',
-          replaceAll: '替换全部',
-          cancel: '取消'
+          findNext: '次を見つけます',
+          findAll: 'すべてを見つけてください',
+          replace: '交換する',
+          replaceAll: 'すべてを交換します',
+          cancel: 'キャンセル'
         },
         header: {
           seq: '#',
-          cell: '单元格',
-          value: '值'
+          cell: '細胞',
+          value: '価値'
         },
-        empty: '(空值)',
-        reError: '无效的正则表达式',
-        recordCount: '已找到 {0} 个单元格',
-        notCell: '找不到匹配的单元格',
-        replaceSuccess: '成功替换 {0} 个单元格'
+        empty: '（null値）',
+        reError: '無効な正規表現',
+        recordCount: '{0}セルが見つかりました',
+        notCell: '一致するセルは見つかりません',
+        replaceSuccess: '{0}セルを正常に交換しました'
+      }
+    },
+    renderer: {
+      search: '検索',
+      cases: {
+        equal: '等しい',
+        unequal: '等しくない',
+        gt: 'より大きい',
+        ge: '以上大きい',
+        lt: '未満',
+        le: '以下以上',
+        begin: '始まりはです',
+        notbegin: '最初はありません',
+        endin: '終わりです',
+        notendin: 'エンディングはそうではありません',
+        include: '含む',
+        exclude: '含まれていません',
+        between: '間',
+        custom: 'カスタムフィルター',
+        insensitive: '症例は無感覚です',
+        isSensitive: '大文字と小文字を区別'
+      },
+      combination: {
+        menus: {
+          sort: '選別',
+          clearSort: 'クリアソート',
+          sortAsc: '昇順',
+          sortDesc: '降順',
+          fixedColumn: 'フリーズコラム',
+          fixedGroup: '凍結グループ',
+          cancelFixed: '凍結外',
+          fixedLeft: '左フリーズ',
+          fixedRight: '右フリーズします',
+          clearFilter: 'クリアフィルター',
+          textOption: 'テキストフィルタリング',
+          numberOption: '数値フィルタリング'
+        },
+        popup: {
+          title: 'カスタムフィルタリング方法',
+          currColumnTitle: '現在の列：',
+          and: 'そして',
+          or: 'または',
+          describeHtml: '利用可能？単一の文字を表す<br/> use *は複数の文字を表します'
+        },
+        empty: '（空白）',
+        notData: '一致しません'
       }
     }
   }

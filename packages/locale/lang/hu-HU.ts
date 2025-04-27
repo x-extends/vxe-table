@@ -1,8 +1,8 @@
 export default {
   vxe: {
     base: {
-      pleaseInput: 'Kérjük, lépjen be',
-      pleaseSelect: 'Kérem válasszon',
+      pleaseInput: 'Kérjük, írja be',
+      pleaseSelect: 'Kérjük, válassza ki',
       comma: '，',
       fullStop: '。'
     },
@@ -10,240 +10,240 @@ export default {
       text: 'terhelés...'
     },
     error: {
-      downErr: 'Letöltés sikertelen',
-      errLargeData: '当绑定的数据量过大时，应该请使用 {0}，否则可能会出现卡顿',
-      groupFixed: 'Csoportfejlécek használata esetén a rögzített oszlopokat csoportonként kell beállítani',
-      groupMouseRange: 'A csoportfejléc és a „{0}” nem használhatók egyszerre, ami hibát okozhat.',
-      groupTag: 'A csoportosító oszlopfejlécben a „{0}” értéket kell használni a „{1}” helyett, ami hibákat okozhat',
-      scrollErrProp: 'A "{0}" paraméter nem támogatott, ha a virtuális görgetés engedélyezve van',
-      errConflicts: 'A "{0}" paraméter ütközik a következővel: "{1}"',
-      notSupportProp: '当启用参数 "{0}" 时不支持 "{1}"，应该为 "{2}"，否则将会出现错误',
-      notConflictProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会存在功能冲突',
-      unableInsert: 'Nem sikerült beilleszteni a megadott pozícióba, ellenőrizze, hogy a paraméterek helyesek-e',
-      useErr: 'Hiba történt a "{0}" modul telepítésekor. Lehet, hogy a sorrend helytelen. A függő modulokat a táblázat előtt kell telepíteni.',
-      barUnableLink: 'Az eszköztár nem társítható a táblázathoz',
-      expandContent: 'A sor bővítésére szolgáló helynek "tartalom"-nak kell lennie, ellenőrizze, hogy helyes-e',
-      reqComp: 'A "{0}" összetevő hiányzik. Kérjük, ellenőrizze, hogy megfelelően van-e telepítve. https://vxeui.com/#/start/useGlobal',
+      downErr: 'A letöltés sikertelen',
+      errLargeData: 'Ha a kötött adatok mennyisége túl nagy, kérjük, használja a {0} -et, különben késést okozhat',
+      groupFixed: 'Csoportos fejlécek használata esetén a fagyasztott oszlopot csoportonként kell beállítani',
+      groupMouseRange: 'A csoportosítási fejléc nem használható egyszerre, mint a "{0}", és ez hibát okozhat',
+      groupTag: 'Az oszlopfejlécek csoportosításának a "{0}" -et használni kell a "{1}" helyett, amely hibákat okozhat',
+      scrollErrProp: 'Ezt a "{0}" paramétert a virtuális görgetés engedélyezése után nem támogatják',
+      errConflicts: 'A "{0}" paraméter konfliktusok "{1}"',
+      notSupportProp: 'A "{1}" nem támogatott, ha a "{0}" paraméter engedélyezve van, "{2}" -nek kell lennie, különben hiba lép fel',
+      notConflictProp: 'A "{0}" használatakor a "{1}" -et be kell állítani, különben funkcionális konfliktusok merülhetnek fel',
+      unableInsert: 'Nem lehet beilleszteni a megadott helyre, kérjük, ellenőrizze, hogy a paraméterek helyesek -e',
+      useErr: 'Hiba történt a "{0}" modul telepítése során. A sorrend helytelen lehet. A függő modult a táblázat előtt kell telepíteni',
+      barUnableLink: 'Az eszköztár nem társíthatja a táblákat',
+      expandContent: 'A kibővített vonal résidőnek "tartalomnak" kell lennie, kérjük, ellenőrizze, hogy helyes -e',
+      reqComp: 'Hiányzik a "{0}" összetevő, kérjük, ellenőrizze, hogy helyesen van -e telepítve. https://vxeui.com/#/start/useglobal',
       reqModule: 'Hiányzik a "{0}" modul',
-      reqProp: 'A szükséges "{0}" paraméter hiányzik, ami hibát okozhat',
-      emptyProp: 'A(z) "{0}" paraméter nem lehet üres',
-      errProp: 'Nem támogatott "{0}" paraméter, lehetséges "{1}"',
-      colRepet: 'oszlopban.{0}="{1}" ismétlődik, ami miatt egyes funkciók használhatatlanná válhatnak',
-      notFunc: 'A(z) "{0}" módszer nem létezik',
-      errFunc: 'A "{0}" paraméter nem metódus',
-      notValidators: '"{0}" globális ellenőrzés nem létezik',
-      notFormats: '"{0}" globális formátum nem létezik',
-      notCommands: 'A(z) "{0}" globális irányelv nem létezik',
-      notSlot: '"{0}" hely nem létezik',
-      noTree: 'A fastruktúra nem támogatja a következőt: "{0}"',
-      notProp: 'Nem támogatott "{0}" paraméter',
-      checkProp: 'Ha az adatmennyiség túl nagy, a jelölőnégyzet lefagyhat. Javasoljuk, hogy a "{0}" paramétert állítsa be a megjelenítési sebesség javítása érdekében.',
-      coverProp: 'A(z) "{0}" "{1}" paramétere ismételten definiálva van, ami hibát okozhat.',
-      uniField: 'A(z) "{0}" mezőnév többször is meghatározásra kerül, ami hibát okozhat',
-      repeatKey: '主键重复 {0}="{1}"，这可能会出现错误',
-      delFunc: 'A(z) "{0}" módszer elavult, kérjük, használja a "{1}"',
+      reqProp: 'Hiányzik a szükséges "{0}" paraméter, amely hibát okozhat',
+      emptyProp: 'A "{0}" paraméter nem szabad üres lenni',
+      errProp: 'Nem támogatott "{0}" paraméter, esetleg "{1}" paraméter',
+      colRepet: 'oszlop. {0} = "{1}" megismétlődik, ami egyes funkciók felhasználhatatlanná válhat',
+      notFunc: 'A "{0}" módszer nem létezik',
+      errFunc: 'A "{0}" paraméter nem módszer',
+      notValidators: 'A "{0}" globális ellenőrzése nem létezik',
+      notFormats: 'A "{0}" globális formázása nem létezik',
+      notCommands: 'A "{0}" globális irányelv nem létezik',
+      notSlot: 'A "{0}" rés nem létezik',
+      noTree: 'A "{0}" nem támogatott a faszerkezetben',
+      notProp: 'Nem támogatott paraméter "{0}"',
+      checkProp: 'Ha az adatmennyiség túl nagy, akkor a jelölőnégyzet dadoghat. Javasoljuk, hogy állítsa be a "{0}" paramétert a megjelenítési sebesség javítása érdekében',
+      coverProp: 'A "{1}" paramétert a "{0}" paramétere többször meghatározza, ami hibát okozhat',
+      uniField: 'A "{0}" mező nevét többször definiálják, ami hibát okozhat',
+      repeatKey: 'Ismételje meg az elsődleges gombot {0} = "{1}", amely hibát okozhat',
+      delFunc: 'A "{0}" módszer elavult, kérjük, használja a "{1}" módszert',
       delProp: 'A "{0}" paraméter elavult, kérjük, használja a "{1}" paramétert',
-      delEvent: 'A(z) "{0}" esemény elavult, kérjük, használja a "{1}" eseményt',
-      removeProp: 'A "{0}" paraméter elavult, ezért nem ajánlott, és hibákat okozhat',
-      errFormat: 'A globális formázási tartalmat a "VXETable.formats" használatával kell meghatározni. A "formatter={0}" beillesztési módja már nem ajánlott.',
-      notType: 'Nem támogatott "{0}" fájltípus',
-      notExp: 'Ez a böngésző nem támogatja az importálási/exportálási funkciókat',
-      impFields: 'Az importálás nem sikerült, ellenőrizze, hogy a mezőnév és az adatformátum helyes-e',
-      treeNotImp: 'A fatáblák nem támogatják az importálást',
-      treeCrossDrag: '只能拖拽第一层级',
-      treeDragChild: '父级不能拖拽到自己的子级中',
-      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install',
-      errMaxRow: '超过支持的最大数据量 {0} 行，这可能会导致出现错误'
+      delEvent: 'A "{0}" esemény elavult, kérjük, használja a "{1}" eseményt',
+      removeProp: 'A "{0}" paraméter elavult és nem ajánlott, ami hibát okozhat',
+      errFormat: 'A globális formázott tartalmat a "vxetable.formats" használatával kell meghatározni, és a "formater = {0}" rögzítésének módszerét már nem ajánljuk.',
+      notType: 'Nem támogatott fájltípus "{0}"',
+      notExp: 'Ez a böngésző nem támogatja az import/export funkciót',
+      impFields: 'Az import sikertelen. Kérjük, ellenőrizze, hogy a mezőnév és az adatformátum helyes -e.',
+      treeNotImp: 'A faasztalok nem támogatják az importot',
+      treeCrossDrag: 'Csak húzza az első szintet',
+      treeDragChild: 'A szülők nem tudnak elhúzni a saját gyermekeiket',
+      reqPlugin: 'A "{1}" nincs telepítve a https://vxeui.com/other oldalon {0 }/#/ (1 }/install',
+      errMaxRow: 'A maximális támogatott adatmennyiség {0} sorok túllépése, ez hibát okozhat'
     },
     table: {
-      emptyText: 'Még nincsenek adatok',
-      allTitle: 'Összes kijelölése/Mégse',
-      seqTitle: 'sorozatszámát',
+      emptyText: 'Még nincs adat',
+      allTitle: 'Válassza ki az összes/Mégse lehetőséget',
+      seqTitle: 'Sorszám',
       actionTitle: 'működik',
       confirmFilter: 'szűrő',
-      resetFilter: 'reset',
+      resetFilter: 'Visszaállít',
       allFilter: 'minden',
-      sortAsc: 'Növekvő sorrend: a legalacsonyabbtól a legmagasabbig',
-      sortDesc: 'Csökkenő sorrend: a legmagasabbtól a legalacsonyabbig',
-      filter: 'Szűrés engedélyezése a kijelölt oszlopokon',
-      impSuccess: '{0} rekord sikeresen importálva',
+      sortAsc: 'Növekvő sorrend: a legalacsonyabb és legmagasabb',
+      sortDesc: 'Csökkentés: a legmagasabb vagy a legalacsonyabb',
+      filter: 'A kiválasztott oszlopok szűrése engedélyezése engedélyezése',
+      impSuccess: 'Sikeresen importált {0} rekordok',
       expLoading: 'Exportálás',
-      expSuccess: 'Az exportálás sikeres volt',
-      expError: 'Export failure',
-      expFilename: 'Exportálás_{0}',
-      expOriginFilename: 'export_source_{0}',
+      expSuccess: 'Sikeresen exportál',
+      expError: 'Az export sikertelen',
+      expFilename: 'Export_ {0}',
+      expOriginFilename: 'Export_source_ {0}',
       customTitle: 'Oszlopbeállítások',
       customAll: 'minden',
-      customConfirm: 'erősítse meg',
+      customConfirm: 'megerősít',
       customClose: 'bezárás',
-      customCancel: 'Mégsem',
-      customRestore: 'Alapértelmezés visszaállítása',
-      maxFixedCol: 'A rögzített oszlopok maximális száma nem haladhatja meg a következőt: {0}',
-      dragTip: '移动：{0}',
-      resizeColTip: '宽：{0} 像素',
-      resizeRowTip: '高：{0} 像素',
-      rowGroupContentTotal: '{0}（{1}）'
+      customCancel: 'Töröl',
+      customRestore: 'Visszaállítja az alapértelmezettet',
+      maxFixedCol: 'A fagyasztott oszlopok maximális száma nem haladhatja meg a {0}',
+      dragTip: 'Mozgás: {0}',
+      resizeColTip: 'Szélesség: {0} pixelek',
+      resizeRowTip: 'Magasság: {0} pixelek',
+      rowGroupContentTotal: '{0} ({1})'
     },
     grid: {
       selectOneRecord: 'Kérjük, válasszon legalább egy rekordot!',
-      deleteSelectRecord: 'Biztosan törli a kiválasztott rekordokat?',
-      removeSelectRecord: 'Biztosan eltávolítja a kiválasztott rekordokat?',
+      deleteSelectRecord: 'Biztos benne, hogy törölni akarja a kiválasztott rekordot?',
+      removeSelectRecord: 'Biztosan el akarja távolítani a kiválasztott rekordot?',
       dataUnchanged: 'Az adatok nem változtak!',
-      delSuccess: 'A kiválasztott rekordok sikeresen törölve!',
-      saveSuccess: 'Sikeres mentés!',
-      operError: 'Hiba történt, és a művelet meghiúsult!'
+      delSuccess: 'A kiválasztott rekordot sikeresen törölték!',
+      saveSuccess: 'Mentés sikeresen!',
+      operError: 'Hiba történt, és a művelet meghibásodott!'
     },
     select: {
       search: 'keresés',
       loadingText: 'terhelés',
-      emptyText: 'Még nincsenek adatok'
+      emptyText: 'Még nincs adat'
     },
     pager: {
-      goto: 'Menj ide',
+      goto: 'Megy',
       gotoTitle: 'Oldalak száma',
-      pagesize: '{0} elem/oldal',
-      total: 'Összesen {0} rekord',
-      pageClassifier: 'oldal',
-      homePage: 'címlapon',
-      homePageTitle: 'címlapon',
+      pagesize: '{0} Tételek/oldal',
+      total: 'Összesen {0} rekordok',
+      pageClassifier: 'Oldal',
+      homePage: 'címlap',
+      homePageTitle: 'címlap',
       prevPage: 'Előző oldal',
       prevPageTitle: 'Előző oldal',
       nextPage: 'Következő oldal',
       nextPageTitle: 'Következő oldal',
-      prevJump: 'Ugrás az oldalra',
-      prevJumpTitle: 'Ugrás az oldalra',
-      nextJump: 'Ugrás lefelé az oldallal',
-      nextJumpTitle: 'Ugrás lefelé az oldallal',
+      prevJump: 'Ugrás az oldalon',
+      prevJumpTitle: 'Ugrás az oldalon',
+      nextJump: 'Ugrás lefelé',
+      nextJumpTitle: 'Ugrás lefelé',
       endPage: 'Utolsó oldal',
       endPageTitle: 'Utolsó oldal'
     },
     alert: {
-      title: 'Rendszer prompt'
+      title: 'A rendszer felszólít'
     },
     button: {
-      confirm: 'erősítse meg',
-      cancel: 'Mégsem',
-      clear: '清除'
+      confirm: 'megerősít',
+      cancel: 'Töröl',
+      clear: 'Világos'
     },
     filter: {
       search: 'keresés'
     },
     custom: {
       cstmTitle: 'Oszlopbeállítások',
-      cstmRestore: 'Alapértelmezés visszaállítása',
-      cstmCancel: 'Mégsem',
+      cstmRestore: 'Visszaállítja az alapértelmezettet',
+      cstmCancel: 'Töröl',
       cstmConfirm: 'Persze',
-      cstmConfirmRestore: 'Kérjük, erősítse meg, hogy visszaállítja-e az alapértelmezett oszlopkonfigurációt?',
-      cstmDragTarget: '移动：{0}',
+      cstmConfirmRestore: 'Kérjük, erősítse meg, hogy visszaáll -e az alapértelmezett oszlopkonfigurációra?',
+      cstmDragTarget: 'Mozgás: {0}',
       setting: {
-        colSort: 'fajta',
-        sortHelpTip: 'Kattintson és húzza az ikont az oszlopok sorrendjének módosításához',
-        colTitle: '列标题',
-        colResizable: 'Oszlopszélesség (pixel)',
-        colVisible: 'Megjelenik-e',
-        colFixed: 'fagyasztóoszlop',
-        colFixedMax: 'Oszlopok rögzítése (legfeljebb {0} oszlop)',
-        fixedLeft: 'bal oldalt',
-        fixedUnset: 'Nincs beállítva',
-        fixedRight: 'jobb oldalon'
+        colSort: 'Fajta',
+        sortHelpTip: 'Kattintson és húzza az ikont az oszlopok beállításához',
+        colTitle: 'Oszlopcím',
+        colResizable: 'Oszlop szélessége (pixelek)',
+        colVisible: 'Függetlenül attól, hogy megjelenjen',
+        colFixed: 'Fagyasztási oszlop',
+        colFixedMax: 'Fagyasztva oszlopok ({0} oszlopokig)',
+        fixedLeft: 'Bal oldal',
+        fixedUnset: 'Nem állított be',
+        fixedRight: 'Jobb oldali'
       }
     },
     import: {
       modes: {
-        covering: 'Felülírási módszer (a táblázat adatainak közvetlen felülírása)',
-        insert: 'Hozzáfűzés a táblázat alján (új adatok hozzáfűzése a táblázat aljához)',
-        insertTop: 'Felső hozzáfűzés (új adatok hozzáfűzése a táblázat tetejéhez)',
-        insertBottom: 'Hozzáfűzés a táblázat alján (új adatok hozzáfűzése a táblázat aljához)'
+        covering: 'Felülírja a módszert (közvetlenül felülírja a táblázatok adatait)',
+        insert: 'Függeljen az alján (új adatokat csatoljon a táblázat alján)',
+        insertTop: 'Függeljen a tetejére (új adatokat csatoljon az asztal tetején)',
+        insertBottom: 'Függeljen az alján (új adatokat csatoljon a táblázat alján)'
       },
       impTitle: 'Adatok importálása',
       impFile: 'fájlnév',
       impSelect: 'Válassza ki a fájlt',
-      impType: 'Fájl típusa',
-      impOpts: 'Paraméter beállítások',
-      impMode: 'importálási mód',
-      impConfirm: 'import',
-      impCancel: 'Mégsem'
+      impType: 'Fájltípus',
+      impOpts: 'Paraméterbeállítások',
+      impMode: 'Importálási mód',
+      impConfirm: 'Behozatal',
+      impCancel: 'Töröl'
     },
     export: {
       types: {
-        csv: 'CSV (vesszővel elválasztva) (*.csv)',
+        csv: 'CSV (vessző elválasztva) (*. CSV)',
         html: 'Weboldal (*.html)',
         xml: 'XML adatok (*.xml)',
-        txt: 'Szövegfájl (tabulátorral tagolt) (*.txt)',
+        txt: 'Szövegfájl (fül elválasztva) (*. Txt)',
         xls: 'Excel 97-2003 munkafüzet (*.xls)',
-        xlsx: 'Excel-munkafüzet (*.xlsx)',
+        xlsx: 'Excel munkafüzet (*.xlsx)',
         pdf: 'PDF (*.pdf)'
       },
       modes: {
-        empty: '空数据',
-        current: 'Aktuális adatok (az aktuális oldal adatai)',
-        selected: 'Kijelölt adatok (kijelölt adatok az aktuális oldalon)',
-        all: 'Teljes adat (beleértve az összes oldalszámozott adatot)'
+        empty: 'Üres adatok',
+        current: 'Jelenlegi adatok (adatok az aktuális oldalon)',
+        selected: 'Kiválasztott adatok (az aktuális oldalon kiválasztott adatok)',
+        all: 'Teljes adatok (beleértve az összes lapos adatot)'
       },
-      printTitle: 'Adatok nyomtatása',
-      expTitle: 'Adatok exportálása',
+      printTitle: 'Nyomtatási adatok',
+      expTitle: 'Exportadatok',
       expName: 'fájlnév',
-      expNamePlaceholder: 'Kérjük, adjon meg egy fájlnevet',
+      expNamePlaceholder: 'Kérjük, írjon be egy fájlnevet',
       expSheetName: 'cím',
-      expSheetNamePlaceholder: 'Kérjük, adjon meg egy címet',
-      expType: 'mentés típusa',
+      expSheetNamePlaceholder: 'Kérjük, írjon be egy címet',
+      expType: 'Típus mentése',
       expMode: 'Válassza ki az adatokat',
       expCurrentColumn: 'Minden mező',
       expColumn: 'Válassza ki a mezőt',
-      expOpts: 'Paraméter beállítások',
+      expOpts: 'Paraméterbeállítások',
       expOptHeader: 'Fejléc',
-      expHeaderTitle: 'Szükséges a fejléc?',
-      expOptFooter: 'táblázat vége',
-      expFooterTitle: 'Szükséges a táblázat lábléce?',
-      expOptColgroup: 'Csoportfejléc',
-      expOptTitle: '列标题',
-      expTitleTitle: '是否为列标题，否则显示为列的字段名',
-      expColgroupTitle: 'Ha vannak, a csoportosító szerkezetű fejlécek támogatottak',
+      expHeaderTitle: 'Szükséges -e az asztali fejléc?',
+      expOptFooter: 'Asztal vége',
+      expFooterTitle: 'Szükség van az asztal végére?',
+      expOptColgroup: 'Csoportosítási fejléc',
+      expOptTitle: 'Oszlopcím',
+      expTitleTitle: 'Függetlenül attól, hogy ez az oszlop címe, különben az oszlop mező neve lesz jelenik meg',
+      expColgroupTitle: 'Ha van, akkor egy csoportosító struktúrával rendelkező fejléc támogatott',
       expOptMerge: 'összeolvad',
-      expMergeTitle: 'Támogatja a cellákat egyesítési struktúrákkal, ha vannak',
-      expOptAllExpand: '展开树',
-      expAllExpandTitle: 'Ha létezik, támogatja az összes adat kibontását hierarchikus szerkezettel.',
+      expMergeTitle: 'Ha van jelen, az egyesített struktúrákkal rendelkező sejtek támogatottak',
+      expOptAllExpand: 'Bővítse a fát',
+      expAllExpandTitle: 'Ha létezik, akkor támogatott, hogy az összes adatot hierarchikus struktúrákkal bővítse',
       expOptUseStyle: 'stílus',
-      expUseStyleTitle: 'A stílusos cellák támogatottak, ha vannak',
-      expOptOriginal: 'forrásadatok',
-      expOriginalTitle: 'Ha forrásadatokról van szó, akkor támogatja a táblába történő importálást',
+      expUseStyleTitle: 'Ha van jelen, akkor a stílusú sejtek támogatottak',
+      expOptOriginal: 'Forrásadatok',
+      expOriginalTitle: 'Ha ez forrásadatok, akkor az importálási táblákba támogatott',
       expPrint: 'Nyomtatás',
       expConfirm: 'Export',
-      expCancel: 'Mégsem'
+      expCancel: 'Töröl'
     },
     modal: {
       errTitle: 'Hibaüzenet',
-      zoomMin: 'minimalizálni',
-      zoomIn: 'maximalizálni',
+      zoomMin: 'Minimalizál',
+      zoomIn: 'maximalizál',
       zoomOut: 'csökkentés',
       close: 'bezárás',
-      miniMaxSize: 'A minimalizált ablakok száma nem haladhatja meg a következőt: {0}',
-      footPropErr: 'show-footer 仅用于启用表尾，需配合 show-confirm-button | show-cancel-button | 插槽使用'
+      miniMaxSize: 'A minimalizált ablakok száma nem haladhatja meg a {0}',
+      footPropErr: 'A show-láb csak az asztali farok engedélyezésére szolgál, és a show-confirm-button segítségével kell használni | Show-Cancel-button | rés'
     },
     drawer: {
       close: 'bezárás'
     },
     form: {
-      folding: 'közeli',
-      unfolding: 'Bontsa ki'
+      folding: 'Közeli',
+      unfolding: 'Kiszélesít'
     },
     toolbar: {
-      import: 'import',
+      import: 'Behozatal',
       export: 'Export',
       print: 'Nyomtatás',
-      refresh: 'frissíteni',
+      refresh: 'frissít',
       zoomIn: 'teljes képernyő',
       zoomOut: 'csökkentés',
       custom: 'Oszlopbeállítások',
       customAll: 'minden',
-      customConfirm: 'erősítse meg',
-      customRestore: 'reset',
-      fixedLeft: 'lefagyott a bal oldalon',
-      fixedRight: 'lefagyott a jobb oldalon',
-      cancelFixed: 'Oldja fel az oszlopot'
+      customConfirm: 'megerősít',
+      customRestore: 'Visszaállít',
+      fixedLeft: 'Fagyasztva balra',
+      fixedRight: 'Jobbra fagy',
+      cancelFixed: 'Kiolvaszt'
     },
     datePicker: {
-      yearTitle: '{0} év'
+      yearTitle: '{0} Évek'
     },
     input: {
       date: {
@@ -252,34 +252,34 @@ export default {
         m3: 'március',
         m4: 'április',
         m5: 'május',
-        m6: 'Június',
+        m6: 'június',
         m7: 'július',
         m8: 'augusztus',
         m9: 'szeptember',
         m10: 'október',
         m11: 'november',
         m12: 'december',
-        quarterLabel: '{0} év',
-        monthLabel: '{0} év',
+        quarterLabel: '{0} Évek',
+        monthLabel: '{0} Évek',
         dayLabel: '{0} év {1}',
         labelFormat: {
           date: 'yyyy-MM-dd',
           time: 'HH:mm:ss',
           datetime: 'yyyy-MM-dd HH:mm:ss',
-          week: 'yyyy év WW hete',
+          week: 'Week WW of year yyyy',
           month: 'yyyy-MM',
-          quarter: 'negyedév q év yyyy',
+          quarter: 'quarter q of year yyyy',
           year: 'yyyy'
         },
         weeks: {
-          w: 'hét',
-          w0: 'vasárnap',
-          w1: 'hétfőn',
-          w2: 'kedd',
-          w3: 'szerda',
-          w4: 'csütörtök',
-          w5: 'péntek',
-          w6: 'szombat'
+          w: 'Hét',
+          w0: 'Nap',
+          w1: 'Mon',
+          w2: 'Kedd',
+          w3: 'Házasodik',
+          w4: 'Csütörtökön',
+          w5: 'Péntek',
+          w6: 'Ült'
         },
         months: {
           m0: 'január',
@@ -296,10 +296,10 @@ export default {
           m11: 'december'
         },
         quarters: {
-          q1: 'első negyedévben',
-          q2: 'második negyedévben',
-          q3: 'harmadik negyedévben',
-          q4: 'negyedik negyedévben'
+          q1: 'Első negyedév',
+          q2: 'Második negyedév',
+          q3: 'Harmadik negyedév',
+          q4: 'Negyedik negyedév'
         }
       }
     },
@@ -309,184 +309,184 @@ export default {
     imagePreview: {
       popupTitle: 'Előnézet',
       operBtn: {
-        zoomOut: 'kicsinyítés',
+        zoomOut: 'Összezsugorodik',
         zoomIn: 'nagyít',
-        pctFull: 'arányos skálázás',
-        pct11: 'Eredeti méret megjelenítése',
-        rotateLeft: 'Forgatás balra',
-        rotateRight: 'Forgatás jobbra',
-        print: 'Kattintson a kép nyomtatásához',
+        pctFull: 'Egyformán méretezés',
+        pct11: 'Mutassa meg az eredeti méretet',
+        rotateLeft: 'Forgatd balra',
+        rotateRight: 'Jobbra forog',
+        print: 'Kattintson a kép kinyomtatásához',
         download: 'Kattintson a kép letöltéséhez'
       }
     },
     upload: {
       fileBtnText: 'Kattintson vagy húzza a feltöltéshez',
       imgBtnText: 'Kattintson vagy húzza a feltöltéshez',
-      dragPlaceholder: 'Kérjük, húzza át a fájlt erre a területre a feltöltéshez',
-      imgSizeHint: 'Szórólap{0}',
-      imgCountHint: 'Maximum {0} kép',
-      fileTypeHint: 'Támogatott {0} fájltípus',
-      fileSizeHint: 'Egyetlen fájl mérete nem haladja meg a következőt: {0}',
-      fileCountHint: 'Legfeljebb {0} fájl tölthető fel',
-      uploadTypeErr: '文件类型不匹配！',
-      overCountErr: 'Csak {0} fájl választható ki!',
-      overCountExtraErr: 'Túllépte a maximálisan megengedett {0} fájlt. A többlet {1} fájlt figyelmen kívül hagyja.',
-      overSizeErr: 'A maximális fájlméret nem haladhatja meg a következőt: {0}!',
-      reUpload: 'Újratöltés',
-      uploadProgress: 'Feltöltés: {0}%',
+      dragPlaceholder: 'Kérjük, húzza és dobja el a fájlt erre a területre a feltöltéshez',
+      imgSizeHint: 'Szórólap {0}',
+      imgCountHint: 'Maximum {0} képek',
+      fileTypeHint: 'Támogatás {0} fájltípusok',
+      fileSizeHint: 'Egyetlen fájlméret nem haladja meg a {0}',
+      fileCountHint: 'Legfeljebb {0} fájlok feltölthetők',
+      uploadTypeErr: 'Fájl típusú eltérés!',
+      overCountErr: 'Csak a {0} fájlok választhatók legfeljebb!',
+      overCountExtraErr: 'A {0} maximális számát túllépték, és a {1} felesleges fájlokat figyelmen kívül hagyják!',
+      overSizeErr: 'A maximális fájlméret nem haladhatja meg a {0}!',
+      reUpload: 'Újból feltölt',
+      uploadProgress: 'Feltöltés {0}%',
       uploadErr: 'A feltöltés sikertelen',
-      uploadSuccess: 'Feltöltés sikeres',
-      moreBtnText: 'Továbbiak ({0})',
-      viewItemTitle: 'Kattintson a megtekintéséhez',
+      uploadSuccess: 'Töltse fel sikeresen',
+      moreBtnText: 'Tovább ({0})',
+      viewItemTitle: 'Kattintson a megtekintéshez',
       morePopup: {
-        readTitle: 'lista megtekintése',
-        imageTitle: 'Tölts fel képeket',
-        fileTitle: 'Fájlok feltöltése'
+        readTitle: 'Lista megtekintése',
+        imageTitle: 'Töltsön fel képeket',
+        fileTitle: 'Feltöltési fájl'
       }
     },
     empty: {
-      defText: '暂无数据'
+      defText: 'Még nincs adat'
     },
     colorPicker: {
-      clear: '清除',
-      confirm: '确认',
-      copySuccess: '已复制到剪贴板：{0}'
+      clear: 'Világos',
+      confirm: 'megerősít',
+      copySuccess: 'Másolva a vágólapra: {0}'
     },
     formDesign: {
-      formName: 'forma neve',
-      defFormTitle: 'névtelen forma',
-      widgetPropTab: 'Vezérlési tulajdonságok',
-      widgetFormTab: 'forma tulajdonságait',
+      formName: 'Forma neve',
+      defFormTitle: 'Névtelen forma',
+      widgetPropTab: 'Vezérlő tulajdonságok',
+      widgetFormTab: 'Formatulajdonságok',
       error: {
-        wdFormUni: 'Csak egy ilyen típusú vezérlő adható az űrlaphoz',
-        wdSubUni: 'Csak egy ilyen típusú vezérlő adható hozzá az altáblázathoz'
+        wdFormUni: 'Az ilyen típusú vezérlés csak egyet ad hozzá az űrlaphoz',
+        wdSubUni: 'Az ilyen típusú vezérlés csak egyet ad hozzá a szubtable -be'
       },
       styleSetting: {
         btn: 'Stílusbeállítások',
-        title: 'Űrlapstílus-beállítások',
+        title: 'A stílus stílus beállításai',
         layoutTitle: 'Vezérlő elrendezés',
         verticalLayout: 'Felső és alsó elrendezés',
         horizontalLayout: 'Vízszintes elrendezés',
-        styleTitle: 'Cím stílusa',
-        boldTitle: 'A cím félkövér',
+        styleTitle: 'Címstílus',
+        boldTitle: 'Cím merész',
         fontBold: 'Bátor',
         fontNormal: 'hagyományos',
-        colonTitle: 'Mutasd a kettőspontot',
+        colonTitle: 'Show Colon',
         colonVisible: 'megmutat',
         colonHidden: 'elrejt',
         alignTitle: 'Igazítás',
-        widthTitle: 'cím szélessége',
-        alignLeft: 'a bal oldalon',
-        alignRight: 'a jobb oldalon',
-        unitPx: 'Pixel',
+        widthTitle: 'Címszélesség',
+        alignLeft: 'Bal oldalon',
+        alignRight: 'Jobb oldalon',
+        unitPx: 'Pixelek',
         unitPct: 'százalék'
       },
       widget: {
         group: {
-          base: 'Alapvető vezérlők',
-          layout: 'Elrendezésvezérlők',
+          base: 'Alapvezérlők',
+          layout: 'Elrendezés -vezérlők',
           system: 'Rendszervezérlők',
-          module: 'modulvezérlés',
-          chart: 'diagram vezérlés',
-          advanced: 'Speciális vezérlők'
+          module: 'Modulvezérlők',
+          chart: 'Térképvezérlés',
+          advanced: 'Fejlett vezérlők'
         },
-        copyTitle: 'Másolás_{0}',
+        copyTitle: 'Copy_ {0}',
         component: {
-          input: 'Beviteli doboz',
-          textarea: 'szöveges mezőben',
-          select: 'legördülő menü kiválasztása',
+          input: 'Bemeneti doboz',
+          textarea: 'Szöveges mező',
+          select: 'Húzza le a kiválasztáshoz',
           row: 'Egy sor és több oszlop',
           title: 'cím',
           text: 'szöveg',
           subtable: 'Altáblázat',
-          VxeSwitch: 'hogy vajon',
-          VxeInput: 'Beviteli doboz',
+          VxeSwitch: 'hogy',
+          VxeInput: 'Bemeneti doboz',
           VxeNumberInput: 'szám',
           VxeDatePicker: 'dátum',
-          VxeTextarea: 'szöveges mezőben',
-          VxeSelect: 'legördülő menü kiválasztása',
-          VxeTreeSelect: 'fa kiválasztása',
-          VxeRadioGroup: 'rádió gomb',
-          VxeCheckboxGroup: 'jelölőnégyzetet',
+          VxeTextarea: 'Szöveges mező',
+          VxeSelect: 'Húzza le a kiválasztáshoz',
+          VxeTreeSelect: 'Fa kiválasztás',
+          VxeRadioGroup: 'Rádiógomb',
+          VxeCheckboxGroup: 'Jelölőnégyzet',
           VxeUploadFile: 'dokumentum',
           VxeUploadImage: 'kép',
-          VxeRate: 'Rate',
-          VxeSlider: 'Slider'
+          VxeRate: 'pontszám',
+          VxeSlider: 'csúszó'
         }
       },
       widgetProp: {
-        name: 'Vezérlő neve',
-        placeholder: 'gyors',
+        name: 'Vezérlőnév',
+        placeholder: 'Gyors',
         required: 'Szükséges ellenőrzés',
-        multiple: 'Több kijelölés engedélyezése',
+        multiple: 'Több választás megengedett',
         displaySetting: {
-          name: 'megjelenítési beállítások',
+          name: 'Megjelenítési beállítások',
           pc: 'PC',
-          mobile: 'Mobil verzió',
+          mobile: 'Mozgó',
           visible: 'megmutat',
           hidden: 'elrejt'
         },
         dataSource: {
-          name: 'adatforrás',
-          defValue: '{0}. lehetőség',
-          addOption: 'Beállítások hozzáadása',
+          name: 'Adatforrás',
+          defValue: '{0} opció',
+          addOption: 'Adjon hozzá lehetőségeket',
           batchEditOption: 'Kötegelt szerkesztés',
-          batchEditTip: 'Minden sor egy opciónak felel meg, és támogatja a közvetlenül a táblázatokból, Excelből és WPS-ből történő másolást és beillesztést.',
-          batchEditSubTip: 'Minden sor egy beállításnak felel meg. Ha csoportról van szó, akkor az alelemek szóközzel vagy tabulátorral kezdődhetnek, az Excel és a WPS közvetlen másolása és beillesztése támogatott.',
-          buildOption: 'Építési lehetőségek'
+          batchEditTip: 'Mindegyik sor megfelel egy opciónak, amely támogatja a közvetlen másolatot és beillesztést a táblákból, az Excelből és a WPS -ből.',
+          batchEditSubTip: 'Minden sor egy opciónak felel meg. Ha ez egy csoport, akkor a gyermektermékek szóközökkel vagy fülkulcsmal kezdődhetnek, és támogatja a közvetlen másolatot és beillesztést a táblákból, az Excelből és a WP -kből.',
+          buildOption: 'Építsen lehetőségeket'
         },
         rowProp: {
           colSize: 'Oszlopok száma',
-          col2: 'két oszlop',
-          col3: 'három oszlop',
-          col4: 'négy oszlop',
-          col6: 'hat oszlop',
+          col2: 'Két oszlop',
+          col3: 'Három oszlop',
+          col4: 'Négy oszlop',
+          col6: 'Hat oszlop',
           layout: 'elrendezés'
         },
         textProp: {
           name: 'tartalom',
           alignTitle: 'Igazítás',
-          alignLeft: 'a bal oldalon',
-          alignCenter: 'központ',
-          alignRight: 'a jobb oldalon',
-          colorTitle: 'Betűszín',
-          sizeTitle: 'betűméret',
-          boldTitle: 'Félkövér betűtípus',
+          alignLeft: 'Bal oldalon',
+          alignCenter: 'Központ',
+          alignRight: 'Jobb oldalon',
+          colorTitle: 'Betűtípus színe',
+          sizeTitle: 'Betűkészlet',
+          boldTitle: 'Vastag betűkészlet',
           fontNormal: 'hagyományos',
           fontBold: 'Bátor'
         },
         subtableProp: {
-          seqTitle: 'sorozatszámát',
-          showSeq: 'Sorozatszám megjelenítése',
-          showCheckbox: 'Több kijelölés engedélyezése',
-          errSubDrag: 'Az altábla nem támogatja ezt a vezérlőt, kérjük, használjon más vezérlőket',
-          colPlace: 'Húzza be a vezérlőt'
+          seqTitle: 'Sorszám',
+          showSeq: 'Mutassa meg a sorozatszámot',
+          showCheckbox: 'Több választás megengedett',
+          errSubDrag: 'A Subtable nem támogatja ezt a vezérlést, kérjük, használjon más kezelőszerveket',
+          colPlace: 'Húzza be a vezérlést'
         },
         uploadProp: {
-          limitFileCount: 'Fájl mennyiségi korlát',
+          limitFileCount: 'Fájlmennyiség',
           limitFileSize: 'Fájlméret korlátozás',
-          multiFile: 'Több fájl feltöltésének engedélyezése',
-          limitImgCount: 'Kép mennyiségi korlát',
-          limitImgSize: 'Képméret korlát',
-          multiImg: 'Több kép feltöltésének engedélyezése'
+          multiFile: 'Hagyja több fájl feltöltését',
+          limitImgCount: 'Korlátok száma a képek számának',
+          limitImgSize: 'Képméret korlátozás',
+          multiImg: 'Hagyja több kép feltöltését'
         }
       }
     },
     listDesign: {
-      fieldSettingTab: 'Helyi beállítások',
-      listSettingTab: 'Paraméter beállítások',
-      searchTitle: 'Lekérdezési feltételek',
-      listTitle: 'lista mezőben',
-      searchField: 'Lekérdezési mező',
-      listField: 'lista mezőben',
+      fieldSettingTab: 'Mezőbeállítások',
+      listSettingTab: 'Paraméterbeállítások',
+      searchTitle: 'Lekérdezési kritériumok',
+      listTitle: 'Lista mező',
+      searchField: 'Lekérdezési mezők',
+      listField: 'Lista mező',
       activeBtn: {
-        ActionButtonUpdate: 'szerkeszteni',
+        ActionButtonUpdate: 'szerkeszt',
         ActionButtonDelete: 'töröl'
       },
       search: {
-        addBtn: 'szerkeszteni',
-        emptyText: 'Nincsenek konfigurálva lekérdezési feltételek',
-        editPopupTitle: 'Lekérdezési mezők szerkesztése'
+        addBtn: 'szerkeszt',
+        emptyText: 'A lekérdezési feltételek nem konfigurálva',
+        editPopupTitle: 'A lekérdezési mezők szerkesztése'
       },
       searchPopup: {
         colTitle: 'cím',
@@ -494,7 +494,7 @@ export default {
       }
     },
     text: {
-      copySuccess: 'Vágólapra másolva',
+      copySuccess: 'Másolva a vágólapra',
       copyError: 'A jelenlegi környezet nem támogatja ezt a műveletet'
     },
     countdown: {
@@ -510,198 +510,198 @@ export default {
     plugins: {
       extendCellArea: {
         area: {
-          mergeErr: 'Ez a művelet nem hajtható végre egyesített cellákon',
-          multiErr: 'Ez a művelet nem hajtható végre több kiválasztási területen',
-          selectErr: 'Unable to operate the cells in the designated area.',
-          extendErr: 'Ha a kiterjesztett tartomány egyesített cellákat tartalmaz, az összes egyesített cellának azonos méretűnek kell lennie',
-          pasteMultiErr: 'Nem lehet beilleszteni, a másolt és beillesztett területeknek azonos méretűnek kell lenniük a művelet végrehajtásához',
-          cpInvalidErr: 'A művelet nem hajtható végre. Tiltott oszlopok ({0}) vannak a kiválasztott tartományban.'
+          mergeErr: 'Ezt a műveletet nem lehet végrehajtani az egyesített cellákon',
+          multiErr: 'Ezt a műveletet nem lehet többszörös kiválasztási területeken végrehajtani',
+          selectErr: 'Nem tudott működni a megadott tartományban lévő sejteken',
+          extendErr: 'Ha a kiterjesztett tartomány egyesített cellákat tartalmaz, akkor az összes egyesített sejtnek azonos méretűnek kell lennie',
+          pasteMultiErr: 'Mivel nem képes beilleszteni, a lemásolt és beillesztett területeknek ugyanolyan méretűnek kell lenniük, hogy elvégezzék ezt a műveletet',
+          cpInvalidErr: 'A műveletet nem lehet végrehajtani. A kiválasztott tartományban vannak tiltott oszlopok ({0}).'
         },
         fnr: {
           title: 'Keresse meg és cserélje ki',
           findLabel: 'Lelet',
-          replaceLabel: 'cserélje ki',
-          findTitle: 'Mit találsz:',
-          replaceTitle: 'Csere erre:',
+          replaceLabel: 'cserél',
+          findTitle: 'Találd meg, mit:',
+          replaceTitle: 'Cserélje ki:',
           tabs: {
             find: 'Lelet',
-            replace: 'cserélje ki'
+            replace: 'cserél'
           },
           filter: {
-            re: 'reguláris kifejezés',
-            whole: 'egész szó egyezés',
-            sensitive: 'kis- és nagybetűérzékeny'
+            re: 'Rendszeres kifejezések',
+            whole: 'Teljes szó -illesztés',
+            sensitive: 'tokos érzékeny'
           },
           btns: {
-            findNext: 'Keresse meg a következőt',
-            findAll: 'Találd meg az összeset',
-            replace: 'cserélje ki',
+            findNext: 'Keresse meg a következőket',
+            findAll: 'Megtalálja az összeset',
+            replace: 'cserél',
             replaceAll: 'Cserélje ki az összeset',
-            cancel: 'Mégsem'
+            cancel: 'Töröl'
           },
           header: {
             seq: '#',
-            cell: 'sejt',
+            cell: 'Sejt',
             value: 'érték'
           },
           body: {
-            row: '行：{0}',
-            col: '列：{0}'
+            row: 'Sor: {0}',
+            col: 'Oszlop: {0}'
           },
-          empty: '(null érték)',
-          reError: 'Érvénytelen reguláris kifejezés',
-          recordCount: '{0} cella található',
-          notCell: 'Nem található egyező cella',
-          replaceSuccess: '{0} cella sikeresen lecserélve'
+          empty: '(Null érték)',
+          reError: 'Érvénytelen normál kifejezés',
+          recordCount: '{0} A talált sejtek',
+          notCell: 'A megfelelő cella nem található',
+          replaceSuccess: 'Sikeresen cserélte a {0} sejteket'
         }
       },
       filterComplexInput: {
         menus: {
-          fixedColumn: 'fagyasztóoszlop',
-          fixedGroup: 'fagyasztó csoport',
+          fixedColumn: 'Fagyasztási oszlop',
+          fixedGroup: 'Fagyasztócsoport',
           cancelFixed: 'Kiolvaszt',
-          fixedLeft: 'lefagy balra',
-          fixedRight: 'lefagy jobbra'
+          fixedLeft: 'Fagyasztva balra',
+          fixedRight: 'Jobbra fagy'
         },
         cases: {
           equal: 'egyenlő',
-          gt: 'nagyobb mint',
-          lt: 'kevesebb mint',
+          gt: 'Nagyobb, mint',
+          lt: 'Kevesebb, mint',
           begin: 'A kezdet az',
           endin: 'A vége az',
-          include: 'Tartalmazza',
-          isSensitive: 'kis- és nagybetűérzékeny'
+          include: 'Tartalmaz',
+          isSensitive: 'tokos érzékeny'
         }
       },
       filterCombination: {
         menus: {
-          sort: '排序',
+          sort: 'Fajta',
           clearSort: 'Tiszta rendezés',
           sortAsc: 'Növekvő sorrend',
-          sortDesc: 'csökkenő sorrendben',
-          fixedColumn: 'fagyasztóoszlop',
-          fixedGroup: 'fagyasztó csoport',
+          sortDesc: 'leszállító végzés',
+          fixedColumn: 'Fagyasztási oszlop',
+          fixedGroup: 'Fagyasztócsoport',
           cancelFixed: 'Kiolvaszt',
-          fixedLeft: 'lefagy balra',
-          fixedRight: 'lefagy jobbra',
-          clearFilter: 'Tiszta szűrők',
-          textOption: 'szövegszűrő',
-          numberOption: 'numerikus szűrő'
+          fixedLeft: 'Fagyasztva balra',
+          fixedRight: 'Jobbra fagy',
+          clearFilter: 'Átlátszó szűrő',
+          textOption: 'Szöveges szűrő',
+          numberOption: 'Numerikus szűrő'
         },
         popup: {
-          title: 'A szűrés testreszabása',
-          currColumnTitle: 'Jelenlegi oszlop:',
+          title: 'Egyedi szűrési módszerek',
+          currColumnTitle: 'Aktuális oszlop:',
           and: 'és',
           or: 'vagy',
-          describeHtml: 'Az Elérhető ? egyetlen karaktert jelöl.<br/>A * tetszőleges számú karaktert jelöl'
+          describeHtml: 'Elérhető? Egyetlen karaktert képvisel.'
         },
         cases: {
           equal: 'egyenlő',
-          unequal: 'nem egyenlő',
-          gt: 'nagyobb mint',
-          ge: 'nagyobb vagy egyenlő',
-          lt: 'kevesebb mint',
-          le: 'kisebb vagy egyenlő',
+          unequal: 'Nem egyenlő',
+          gt: 'Nagyobb, mint',
+          ge: 'Nagyobb vagy azzal egyenlő',
+          lt: 'Kevesebb, mint',
+          le: 'Kevesebb vagy azzal egyenlő',
           begin: 'A kezdet az',
-          notbegin: 'Az elején nem',
+          notbegin: 'Az elején nincs',
           endin: 'A vége az',
-          notendin: 'A vége nem',
-          include: 'Tartalmazza',
-          exclude: 'Nem tartalmazza',
-          between: 'között',
+          notendin: 'A vége nem az',
+          include: 'Tartalmaz',
+          exclude: 'Nem tartozik bele',
+          between: 'Között',
           custom: 'Egyedi szűrő',
-          insensitive: 'Nem érzékeny a kis- és nagybetűkre',
-          isSensitive: 'kis- és nagybetűérzékeny'
+          insensitive: 'Esettanulmány',
+          isSensitive: 'tokos érzékeny'
         },
         empty: '(üres)',
-        notData: 'Nincs egyezés'
+        notData: 'Nincs mérkőzés'
       }
     },
     pro: {
       area: {
-        mergeErr: 'Ez a művelet nem hajtható végre egyesített cellákon',
-        multiErr: 'Ez a művelet nem hajtható végre több kiválasztási területen',
-        extendErr: 'Ha a kiterjesztett tartomány egyesített cellákat tartalmaz, az összes egyesített cellának azonos méretűnek kell lennie',
-        pasteMultiErr: 'Nem lehet beilleszteni, a másolt és beillesztett területeknek azonos méretűnek kell lenniük a művelet végrehajtásához'
+        mergeErr: 'Ezt a műveletet nem lehet végrehajtani az egyesített cellákon',
+        multiErr: 'Ezt a műveletet nem lehet többszörös kiválasztási területeken végrehajtani',
+        extendErr: 'Ha a kiterjesztett tartomány egyesített cellákat tartalmaz, akkor az összes egyesített sejtnek azonos méretűnek kell lennie',
+        pasteMultiErr: 'Mivel nem képes beilleszteni, a lemásolt és beillesztett területeknek ugyanolyan méretűnek kell lenniük, hogy elvégezzék ezt a műveletet'
       },
       fnr: {
         title: 'Keresse meg és cserélje ki',
         findLabel: 'Lelet',
-        replaceLabel: 'cserélje ki',
-        findTitle: 'Mit találsz:',
-        replaceTitle: 'Csere erre:',
+        replaceLabel: 'cserél',
+        findTitle: 'Keressen tartalmat:',
+        replaceTitle: 'Cserélje ki:',
         tabs: {
           find: 'Lelet',
-          replace: 'cserélje ki'
+          replace: 'cserél'
         },
         filter: {
-          re: 'reguláris kifejezés',
-          whole: 'egész szó egyezés',
-          sensitive: 'kis- és nagybetűérzékeny'
+          re: 'Rendszeres kifejezések',
+          whole: 'Teljes szó -illesztés',
+          sensitive: 'tokos érzékeny'
         },
         btns: {
-          findNext: 'Keresse meg a következőt',
-          findAll: 'Találd meg az összeset',
-          replace: 'cserélje ki',
+          findNext: 'Keresse meg a következőket',
+          findAll: 'Megtalálja az összeset',
+          replace: 'cserél',
           replaceAll: 'Cserélje ki az összeset',
-          cancel: 'Mégsem'
+          cancel: 'Töröl'
         },
         header: {
           seq: '#',
-          cell: 'sejt',
+          cell: 'Sejt',
           value: 'érték'
         },
-        empty: '(null érték)',
-        reError: 'Érvénytelen reguláris kifejezés',
-        recordCount: '{0} cella található',
-        notCell: 'Nem található egyező cella',
-        replaceSuccess: '{0} cella sikeresen lecserélve'
+        empty: '(Null érték)',
+        reError: 'Érvénytelen normál kifejezés',
+        recordCount: '{0} A talált sejtek',
+        notCell: 'Nincs megfelelő cella',
+        replaceSuccess: 'Sikeresen cserélte a {0} sejteket'
       }
     },
     renderer: {
       search: 'keresés',
       cases: {
         equal: 'egyenlő',
-        unequal: 'nem egyenlő',
-        gt: 'nagyobb mint',
-        ge: 'nagyobb vagy egyenlő',
-        lt: 'kevesebb mint',
-        le: 'kisebb vagy egyenlő',
+        unequal: 'Nem egyenlő',
+        gt: 'Nagyobb, mint',
+        ge: 'Nagyobb vagy azzal egyenlő',
+        lt: 'Kevesebb, mint',
+        le: 'Kevesebb vagy azzal egyenlő',
         begin: 'A kezdet az',
-        notbegin: 'Az elején nem',
+        notbegin: 'Az elején nincs',
         endin: 'A vége az',
-        notendin: 'A vége nem',
-        include: 'Tartalmazza',
-        exclude: 'Nem tartalmazza',
-        between: 'között',
+        notendin: 'A vége nem az',
+        include: 'Tartalmaz',
+        exclude: 'Nem tartozik bele',
+        between: 'Között',
         custom: 'Egyedi szűrő',
-        insensitive: 'Nem érzékeny a kis- és nagybetűkre',
-        isSensitive: 'kis- és nagybetűérzékeny'
+        insensitive: 'Esettanulmány',
+        isSensitive: 'tokos érzékeny'
       },
       combination: {
         menus: {
-          sort: '排序',
+          sort: 'Fajta',
           clearSort: 'Tiszta rendezés',
           sortAsc: 'Növekvő sorrend',
-          sortDesc: 'csökkenő sorrendben',
-          fixedColumn: 'Lock oszlop',
-          fixedGroup: 'Zár csoport',
-          cancelFixed: 'Kinyit',
-          fixedLeft: 'Zár balra',
-          fixedRight: 'Zárja le jobbra',
-          clearFilter: 'Tiszta szűrők',
-          textOption: 'szövegszűrő',
-          numberOption: 'numerikus szűrő'
+          sortDesc: 'leszállító végzés',
+          fixedColumn: 'Fagyasztási oszlop',
+          fixedGroup: 'Fagyasztócsoport',
+          cancelFixed: 'Kiolvaszt',
+          fixedLeft: 'Fagyasztva balra',
+          fixedRight: 'Jobbra fagy',
+          clearFilter: 'Átlátszó szűrő',
+          textOption: 'Szöveges szűrés',
+          numberOption: 'Numerikus szűrés'
         },
         popup: {
-          title: 'A szűrés testreszabása',
-          currColumnTitle: 'Jelenlegi oszlop:',
+          title: 'Egyedi szűrési módszerek',
+          currColumnTitle: 'Aktuális oszlop:',
           and: 'és',
           or: 'vagy',
-          describeHtml: 'Az Elérhető ? egyetlen karaktert jelöl.<br/>A * tetszőleges számú karaktert jelöl'
+          describeHtml: 'Elérhető? Egyetlen karaktert képvisel.'
         },
         empty: '(üres)',
-        notData: 'Nincs egyezés'
+        notData: 'Nincs mérkőzés'
       }
     }
   }
