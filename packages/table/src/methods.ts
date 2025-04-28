@@ -2513,13 +2513,13 @@ function calcScrollbar ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
   if (bodyWrapperElem) {
     overflowY = scrollYHeight > bodyWrapperElem.clientHeight
     if (yHandleEl) {
-      reactData.scrollbarWidth = Math.max(scrollbarOpts.width || 0, yHandleEl.offsetWidth - yHandleEl.clientWidth)
+      reactData.scrollbarWidth = scrollbarOpts.width || (yHandleEl.offsetWidth - yHandleEl.clientWidth) || 14
     }
     reactData.overflowY = overflowY
 
     overflowX = scrollXWidth > bodyWrapperElem.clientWidth
     if (xHandleEl) {
-      reactData.scrollbarHeight = Math.max(scrollbarOpts.height || 0, xHandleEl.offsetHeight - xHandleEl.clientHeight)
+      reactData.scrollbarHeight = scrollbarOpts.height || (xHandleEl.offsetHeight - xHandleEl.clientHeight) || 14
     }
     reactData.overflowX = overflowX
 
@@ -2724,6 +2724,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   scrollYStore.endIndex = 1
   scrollXStore.startIndex = 0
   scrollXStore.endIndex = 1
+  internalData.cvCacheMaps = {}
   reactData.isRowLoading = true
   reactData.scrollVMLoading = false
   internalData.treeExpandedMaps = {}
@@ -3171,45 +3172,45 @@ const createGetColumnCacheProp = (prop: 'index' | '_index' | '$index') => {
   }
 }
 
-function lazyScrollXData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
-  const internalData = $xeTable as unknown as TableInternalData
+// function lazyScrollXData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+//   const internalData = $xeTable as unknown as TableInternalData
 
-  const { lxTimeout, lxRunTime, scrollXStore } = internalData
-  const { visibleSize } = scrollXStore
-  const fpsTime = Math.max(5, Math.min(10, Math.floor(visibleSize / 3)))
-  if (lxTimeout) {
-    clearTimeout(lxTimeout)
-  }
-  if (!lxRunTime || lxRunTime + fpsTime < Date.now()) {
-    internalData.lxRunTime = Date.now()
-    loadScrollXData($xeTable)
-  }
-  internalData.lxTimeout = setTimeout(() => {
-    internalData.lxTimeout = undefined
-    internalData.lxRunTime = undefined
-    loadScrollXData($xeTable)
-  }, fpsTime)
-}
+//   const { lxTimeout, lxRunTime, scrollXStore } = internalData
+//   const { visibleSize } = scrollXStore
+//   const fpsTime = Math.max(5, Math.min(10, Math.floor(visibleSize / 3)))
+//   if (lxTimeout) {
+//     clearTimeout(lxTimeout)
+//   }
+//   if (!lxRunTime || lxRunTime + fpsTime < Date.now()) {
+//     internalData.lxRunTime = Date.now()
+//     loadScrollXData($xeTable)
+//   }
+//   internalData.lxTimeout = setTimeout(() => {
+//     internalData.lxTimeout = undefined
+//     internalData.lxRunTime = undefined
+//     loadScrollXData($xeTable)
+//   }, fpsTime)
+// }
 
-function lazyScrollYData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
-  const internalData = $xeTable as unknown as TableInternalData
+// function lazyScrollYData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+//   const internalData = $xeTable as unknown as TableInternalData
 
-  const { lyTimeout, lyRunTime, scrollYStore } = internalData
-  const { visibleSize } = scrollYStore
-  const fpsTime = Math.floor(Math.max(4, Math.min(10, visibleSize / 3)))
-  if (lyTimeout) {
-    clearTimeout(lyTimeout)
-  }
-  if (!lyRunTime || lyRunTime + fpsTime < Date.now()) {
-    internalData.lyRunTime = Date.now()
-    loadScrollYData($xeTable)
-  }
-  internalData.lyTimeout = setTimeout(() => {
-    internalData.lyTimeout = undefined
-    internalData.lyRunTime = undefined
-    loadScrollYData($xeTable)
-  }, fpsTime)
-}
+//   const { lyTimeout, lyRunTime, scrollYStore } = internalData
+//   const { visibleSize } = scrollYStore
+//   const fpsTime = Math.floor(Math.max(4, Math.min(10, visibleSize / 3)))
+//   if (lyTimeout) {
+//     clearTimeout(lyTimeout)
+//   }
+//   if (!lyRunTime || lyRunTime + fpsTime < Date.now()) {
+//     internalData.lyRunTime = Date.now()
+//     loadScrollYData($xeTable)
+//   }
+//   internalData.lyTimeout = setTimeout(() => {
+//     internalData.lyTimeout = undefined
+//     internalData.lyRunTime = undefined
+//     loadScrollYData($xeTable)
+//   }, fpsTime)
+// }
 
 function checkLastSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, isRollX: boolean, isRollY: boolean) {
   const reactData = $xeTable as unknown as TableReactData
@@ -9302,12 +9303,12 @@ const Methods = {
   triggerScrollXEvent () {
     const $xeTable = this
 
-    const virtualXOpts = $xeTable.computeVirtualXOpts
-    if (virtualXOpts.immediate) {
-      loadScrollXData($xeTable)
-    } else {
-      lazyScrollXData($xeTable)
-    }
+    // const virtualXOpts = $xeTable.computeVirtualXOpts
+    // if (virtualXOpts.immediate) {
+    loadScrollXData($xeTable)
+    // } else {
+    //   lazyScrollXData($xeTable)
+    // }
   },
   /**
    * 纵向 Y 可视渲染事件处理
@@ -9315,12 +9316,12 @@ const Methods = {
   triggerScrollYEvent () {
     const $xeTable = this
 
-    const virtualYOpts = $xeTable.computeVirtualYOpts
-    if (virtualYOpts.immediate) {
-      loadScrollYData($xeTable)
-    } else {
-      lazyScrollYData($xeTable)
-    }
+    // const virtualYOpts = $xeTable.computeVirtualYOpts
+    // if (virtualYOpts.immediate) {
+    loadScrollYData($xeTable)
+    // } else {
+    //   lazyScrollYData($xeTable)
+    // }
   },
   triggerBodyScrollEvent (evnt: Event, fixedType: '' | 'left' | 'right') {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods

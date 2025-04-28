@@ -1,6 +1,35 @@
+@use "sass:map";
+@use "sass:list";
 @use '../helpers/baseMixin.scss';
 @use './icon.scss';
 @use './table-module/all.scss';
+
+$btnThemeList: (
+  (
+    name: "primary",
+    textColor: var(--vxe-ui-font-primary-color),
+  ),
+  (
+    name: "success",
+    textColor: var(--vxe-ui-status-success-color),
+  ),
+  (
+    name: "info",
+    textColor: var(--vxe-ui-status-info-color),
+  ),
+  (
+    name: "warning",
+    textColor: var(--vxe-ui-status-warning-color),
+  ),
+  (
+    name: "danger",
+    textColor: var(--vxe-ui-status-danger-color),
+  ),
+  (
+    name: "error",
+    textColor: var(--vxe-ui-status-error-color),
+  )
+);
 
 .vxe-table-slots,
 .vxe-table--file-form {
@@ -792,6 +821,12 @@
   .vxe-cell-title-prefix-icon,
   .vxe-cell-title-suffix-icon {
     cursor: help;
+    @for $index from 0 to list.length($btnThemeList) {
+      $item: list.nth($btnThemeList, $index + 1);
+      &.theme--#{map.get($item, name)} {
+        color: map.get($item, textColor);
+      }
+    }
   }
 }
 

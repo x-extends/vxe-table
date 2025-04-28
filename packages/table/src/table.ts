@@ -1509,6 +1509,8 @@ export default {
       // 已删除行
       removeRowMaps: {},
 
+      cvCacheMaps: {},
+
       swYSize: 0,
       swYInterval: 0,
       swYTotal: 0
@@ -1821,11 +1823,15 @@ export default {
   },
   beforeDestroy () {
     const $xeTable = this
+    const internalData = $xeTable as unknown as TableInternalData
 
     const tableViewportEl = $xeTable.$refs.refTableViewportElem as HTMLDivElement
     if (tableViewportEl) {
       tableViewportEl.removeEventListener('wheel', $xeTable.triggerBodyWheelEvent)
     }
+    internalData.cvCacheMaps = {}
+    internalData.prevDragRow = null
+    internalData.prevDragCol = null
     if (this.$resize) {
       this.$resize.disconnect()
     }

@@ -209,7 +209,7 @@ VxeUI.setConfig({
     },
     virtualXConfig: {
       enabled: true,
-      gt: 28,
+      gt: 24,
       preSize: 0,
       oSize: 1
     },
@@ -220,8 +220,8 @@ VxeUI.setConfig({
       oSize: 2
     },
     scrollbarConfig: {
-      width: 14,
-      height: 14
+      // width: 14,
+      // height: 14
     }
   },
   // export: {
