@@ -400,6 +400,8 @@ export default defineComponent({
       // 已删除行
       removeRowMaps: {},
 
+      cvCacheMaps: {},
+
       inited: false,
       tooltipTimeout: null,
       initStatus: false,
@@ -2931,13 +2933,13 @@ export default defineComponent({
       if (bodyWrapperElem) {
         overflowY = scrollYHeight > bodyWrapperElem.clientHeight
         if (yHandleEl) {
-          reactData.scrollbarWidth = Math.max(scrollbarOpts.width || 0, yHandleEl.offsetWidth - yHandleEl.clientWidth)
+          reactData.scrollbarWidth = scrollbarOpts.width || (yHandleEl.offsetWidth - yHandleEl.clientWidth) || 14
         }
         reactData.overflowY = overflowY
 
         overflowX = scrollXWidth > bodyWrapperElem.clientWidth
         if (xHandleEl) {
-          reactData.scrollbarHeight = Math.max(scrollbarOpts.height || 0, xHandleEl.offsetHeight - xHandleEl.clientHeight)
+          reactData.scrollbarHeight = scrollbarOpts.height || (xHandleEl.offsetHeight - xHandleEl.clientHeight) || 14
         }
 
         const headerHeight = headerTableElem ? headerTableElem.clientHeight : 0
@@ -3134,6 +3136,7 @@ export default defineComponent({
       scrollYStore.endIndex = 1
       scrollXStore.startIndex = 0
       scrollXStore.endIndex = 1
+      internalData.cvCacheMaps = {}
       reactData.isRowLoading = true
       reactData.scrollVMLoading = false
       internalData.treeExpandedMaps = {}
@@ -3741,41 +3744,41 @@ export default defineComponent({
       }
     }
 
-    const lazyScrollXData = () => {
-      const { lxTimeout, lxRunTime, scrollXStore } = internalData
-      const { visibleSize } = scrollXStore
-      const fpsTime = Math.max(5, Math.min(10, Math.floor(visibleSize / 3)))
-      if (lxTimeout) {
-        clearTimeout(lxTimeout)
-      }
-      if (!lxRunTime || lxRunTime + fpsTime < Date.now()) {
-        internalData.lxRunTime = Date.now()
-        loadScrollXData()
-      }
-      internalData.lxTimeout = setTimeout(() => {
-        internalData.lxTimeout = undefined
-        internalData.lxRunTime = undefined
-        loadScrollXData()
-      }, fpsTime)
-    }
+    // const lazyScrollXData = () => {
+    //   const { lxTimeout, lxRunTime, scrollXStore } = internalData
+    //   const { visibleSize } = scrollXStore
+    //   const fpsTime = Math.max(5, Math.min(10, Math.floor(visibleSize / 3)))
+    //   if (lxTimeout) {
+    //     clearTimeout(lxTimeout)
+    //   }
+    //   if (!lxRunTime || lxRunTime + fpsTime < Date.now()) {
+    //     internalData.lxRunTime = Date.now()
+    //     loadScrollXData()
+    //   }
+    //   internalData.lxTimeout = setTimeout(() => {
+    //     internalData.lxTimeout = undefined
+    //     internalData.lxRunTime = undefined
+    //     loadScrollXData()
+    //   }, fpsTime)
+    // }
 
-    const lazyScrollYData = () => {
-      const { lyTimeout, lyRunTime, scrollYStore } = internalData
-      const { visibleSize } = scrollYStore
-      const fpsTime = Math.floor(Math.max(4, Math.min(10, visibleSize / 3)))
-      if (lyTimeout) {
-        clearTimeout(lyTimeout)
-      }
-      if (!lyRunTime || lyRunTime + fpsTime < Date.now()) {
-        internalData.lyRunTime = Date.now()
-        loadScrollYData()
-      }
-      internalData.lyTimeout = setTimeout(() => {
-        internalData.lyTimeout = undefined
-        internalData.lyRunTime = undefined
-        loadScrollYData()
-      }, fpsTime)
-    }
+    // const lazyScrollYData = () => {
+    //   const { lyTimeout, lyRunTime, scrollYStore } = internalData
+    //   const { visibleSize } = scrollYStore
+    //   const fpsTime = Math.floor(Math.max(4, Math.min(10, visibleSize / 3)))
+    //   if (lyTimeout) {
+    //     clearTimeout(lyTimeout)
+    //   }
+    //   if (!lyRunTime || lyRunTime + fpsTime < Date.now()) {
+    //     internalData.lyRunTime = Date.now()
+    //     loadScrollYData()
+    //   }
+    //   internalData.lyTimeout = setTimeout(() => {
+    //     internalData.lyTimeout = undefined
+    //     internalData.lyRunTime = undefined
+    //     loadScrollYData()
+    //   }, fpsTime)
+    // }
 
     const checkLastSyncScroll = (isRollX: boolean, isRollY: boolean) => {
       const { scrollXLoad, scrollYLoad } = reactData
@@ -9645,23 +9648,23 @@ export default defineComponent({
        * 横向 X 可视渲染事件处理
        */
       triggerScrollXEvent () {
-        const virtualXOpts = computeVirtualXOpts.value
-        if (virtualXOpts.immediate) {
-          loadScrollXData()
-        } else {
-          lazyScrollXData()
-        }
+        // const virtualXOpts = computeVirtualXOpts.value
+        // if (virtualXOpts.immediate) {
+        loadScrollXData()
+        // } else {
+        //   lazyScrollXData()
+        // }
       },
       /**
        * 纵向 Y 可视渲染事件处理
        */
       triggerScrollYEvent () {
-        const virtualYOpts = computeVirtualYOpts.value
-        if (virtualYOpts.immediate) {
-          loadScrollYData()
-        } else {
-          lazyScrollYData()
-        }
+        // const virtualYOpts = computeVirtualYOpts.value
+        // if (virtualYOpts.immediate) {
+        loadScrollYData()
+        // } else {
+        //   lazyScrollYData()
+        // }
       },
       triggerBodyScrollEvent (evnt, fixedType) {
         const { scrollYLoad, scrollXLoad } = reactData
@@ -9850,12 +9853,14 @@ export default defineComponent({
         if (!bodyScrollElem) {
           return
         }
+
         const wheelSpeed = getWheelSpeed(reactData.lastScrollTime)
         const deltaTop = shiftKey ? 0 : Math.ceil(deltaY * wheelSpeed)
         const deltaLeft = shiftKey ? Math.ceil((shiftKey ? (deltaY || deltaX) : deltaX) * wheelSpeed) : 0
 
         const isTopWheel = deltaTop < 0
         const currScrollTop = bodyScrollElem.scrollTop
+
         // 如果滚动位置已经是顶部或底部，则不需要触发
         if (isTopWheel ? currScrollTop <= 0 : currScrollTop >= bodyScrollElem.scrollHeight - bodyScrollElem.clientHeight) {
           return
@@ -11358,6 +11363,9 @@ export default defineComponent({
       if (tableViewportEl) {
         tableViewportEl.removeEventListener('wheel', $xeTable.triggerBodyWheelEvent)
       }
+      internalData.cvCacheMaps = {}
+      internalData.prevDragRow = null
+      internalData.prevDragCol = null
       if (resizeObserver) {
         resizeObserver.disconnect()
       }

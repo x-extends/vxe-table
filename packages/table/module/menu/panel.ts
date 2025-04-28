@@ -54,6 +54,7 @@ export default defineComponent({
               const hasChildMenus = item.children && item.children.some((child: any) => child.visible !== false)
               const prefixOpts = Object.assign({}, item.prefixConfig)
               const suffixOpts = Object.assign({}, item.suffixConfig)
+              const menuContent = getFuncText(item.name)
               return item.visible === false
                 ? null
                 : h('li', {
@@ -84,8 +85,9 @@ export default defineComponent({
                       prefixOpts.content ? h('span', {}, `${prefixOpts.content}`) : createCommentVNode()
                     ]),
                     h('div', {
-                      class: 'vxe-context-menu--link-content'
-                    }, getFuncText(item.name)),
+                      class: 'vxe-context-menu--link-content',
+                      title: menuContent
+                    }, menuContent),
                     h('div', {
                       class: ['vxe-context-menu--link-suffix', suffixOpts.className || '']
                     }, [
@@ -103,6 +105,7 @@ export default defineComponent({
                     }, item.children.map((child: any, cIndex: any) => {
                       const childPrefixOpts = Object.assign({}, child.prefixConfig)
                       const childSuffixOpts = Object.assign({}, child.suffixConfig)
+                      const childMenuContent = getFuncText(child.name)
                       return child.visible === false
                         ? null
                         : h('li', {
@@ -133,8 +136,9 @@ export default defineComponent({
                               childPrefixOpts.content ? h('span', `${childPrefixOpts.content}`) : createCommentVNode()
                             ]),
                             h('div', {
-                              class: 'vxe-context-menu--link-content'
-                            }, getFuncText(child.name)),
+                              class: 'vxe-context-menu--link-content',
+                              title: childMenuContent
+                            }, childMenuContent),
                             h('div', {
                               class: ['vxe-context-menu--link-suffix', childSuffixOpts.className || '']
                             }, [

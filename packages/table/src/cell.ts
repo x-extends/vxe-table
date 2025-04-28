@@ -15,7 +15,7 @@ function renderTitlePrefixIcon (params: VxeTableDefines.CellRenderHeaderParams &
   const titlePrefix = column.titlePrefix || column.titleHelp
   if (titlePrefix) {
     return h('i', {
-      class: ['vxe-cell-title-prefix-icon', titlePrefix.icon || getIcon().TABLE_TITLE_PREFIX],
+      class: ['vxe-cell-title-prefix-icon', titlePrefix.iconStatus ? `theme--${titlePrefix.iconStatus}` : '', titlePrefix.icon || getIcon().TABLE_TITLE_PREFIX],
       onMouseenter (evnt: MouseEvent) {
         $table.triggerHeaderTitleEvent(evnt, titlePrefix, params)
       },
@@ -32,7 +32,7 @@ function renderTitleSuffixIcon (params: VxeTableDefines.CellRenderHeaderParams &
   const titleSuffix = column.titleSuffix
   if (titleSuffix) {
     return h('i', {
-      class: ['vxe-cell-title-suffix-icon', titleSuffix.icon || getIcon().TABLE_TITLE_SUFFIX],
+      class: ['vxe-cell-title-suffix-icon', titleSuffix.iconStatus ? `theme--${titleSuffix.iconStatus}` : '', titleSuffix.icon || getIcon().TABLE_TITLE_SUFFIX],
       onMouseenter (evnt: MouseEvent) {
         $table.triggerHeaderTitleEvent(evnt, titleSuffix, params)
       },
