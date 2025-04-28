@@ -3744,41 +3744,41 @@ export default defineComponent({
       }
     }
 
-    // const lazyScrollXData = () => {
-    //   const { lxTimeout, lxRunTime, scrollXStore } = internalData
-    //   const { visibleSize } = scrollXStore
-    //   const fpsTime = Math.max(5, Math.min(10, Math.floor(visibleSize / 3)))
-    //   if (lxTimeout) {
-    //     clearTimeout(lxTimeout)
-    //   }
-    //   if (!lxRunTime || lxRunTime + fpsTime < Date.now()) {
-    //     internalData.lxRunTime = Date.now()
-    //     loadScrollXData()
-    //   }
-    //   internalData.lxTimeout = setTimeout(() => {
-    //     internalData.lxTimeout = undefined
-    //     internalData.lxRunTime = undefined
-    //     loadScrollXData()
-    //   }, fpsTime)
-    // }
+    const lazyScrollXData = () => {
+      const { lxTimeout, lxRunTime, scrollXStore } = internalData
+      const { visibleSize } = scrollXStore
+      const fpsTime = visibleSize > 26 ? 26 : (visibleSize > 16 ? 14 : 6)
+      if (lxTimeout) {
+        clearTimeout(lxTimeout)
+      }
+      if (!lxRunTime || lxRunTime + fpsTime < Date.now()) {
+        internalData.lxRunTime = Date.now()
+        loadScrollXData()
+      }
+      internalData.lxTimeout = setTimeout(() => {
+        internalData.lxTimeout = undefined
+        internalData.lxRunTime = undefined
+        loadScrollXData()
+      }, fpsTime)
+    }
 
-    // const lazyScrollYData = () => {
-    //   const { lyTimeout, lyRunTime, scrollYStore } = internalData
-    //   const { visibleSize } = scrollYStore
-    //   const fpsTime = Math.floor(Math.max(4, Math.min(10, visibleSize / 3)))
-    //   if (lyTimeout) {
-    //     clearTimeout(lyTimeout)
-    //   }
-    //   if (!lyRunTime || lyRunTime + fpsTime < Date.now()) {
-    //     internalData.lyRunTime = Date.now()
-    //     loadScrollYData()
-    //   }
-    //   internalData.lyTimeout = setTimeout(() => {
-    //     internalData.lyTimeout = undefined
-    //     internalData.lyRunTime = undefined
-    //     loadScrollYData()
-    //   }, fpsTime)
-    // }
+    const lazyScrollYData = () => {
+      const { lyTimeout, lyRunTime, scrollYStore } = internalData
+      const { visibleSize } = scrollYStore
+      const fpsTime = visibleSize > 30 ? 32 : (visibleSize > 20 ? 18 : 8)
+      if (lyTimeout) {
+        clearTimeout(lyTimeout)
+      }
+      if (!lyRunTime || lyRunTime + fpsTime < Date.now()) {
+        internalData.lyRunTime = Date.now()
+        loadScrollYData()
+      }
+      internalData.lyTimeout = setTimeout(() => {
+        internalData.lyTimeout = undefined
+        internalData.lyRunTime = undefined
+        loadScrollYData()
+      }, fpsTime)
+    }
 
     const checkLastSyncScroll = (isRollX: boolean, isRollY: boolean) => {
       const { scrollXLoad, scrollYLoad } = reactData
@@ -9648,23 +9648,23 @@ export default defineComponent({
        * 横向 X 可视渲染事件处理
        */
       triggerScrollXEvent () {
-        // const virtualXOpts = computeVirtualXOpts.value
-        // if (virtualXOpts.immediate) {
-        loadScrollXData()
-        // } else {
-        //   lazyScrollXData()
-        // }
+        const virtualXOpts = computeVirtualXOpts.value
+        if (virtualXOpts.immediate) {
+          loadScrollXData()
+        } else {
+          lazyScrollXData()
+        }
       },
       /**
        * 纵向 Y 可视渲染事件处理
        */
       triggerScrollYEvent () {
-        // const virtualYOpts = computeVirtualYOpts.value
-        // if (virtualYOpts.immediate) {
-        loadScrollYData()
-        // } else {
-        //   lazyScrollYData()
-        // }
+        const virtualYOpts = computeVirtualYOpts.value
+        if (virtualYOpts.immediate) {
+          loadScrollYData()
+        } else {
+          lazyScrollYData()
+        }
       },
       triggerBodyScrollEvent (evnt, fixedType) {
         const { scrollYLoad, scrollXLoad } = reactData
@@ -9877,9 +9877,8 @@ export default defineComponent({
         if (isRollX) {
           evnt.preventDefault()
           internalData.inWheelScroll = true
-          wheelScrollLeftTo(scrollLeft, (offsetLeft: number) => {
-            internalData.inWheelScroll = true
-            const currLeftNum = offsetLeft
+          if (browseObj['-moz'] || browseObj.safari) {
+            const currLeftNum = scrollLeft
             setScrollLeft(xHandleEl, currLeftNum)
             setScrollLeft(bodyScrollElem, currLeftNum)
             setScrollLeft(headerScrollElem, currLeftNum)
@@ -9891,14 +9890,29 @@ export default defineComponent({
               type: 'table',
               fixed: ''
             })
-          })
+          } else {
+            wheelScrollLeftTo(scrollLeft, (offsetLeft: number) => {
+              internalData.inWheelScroll = true
+              const currLeftNum = offsetLeft
+              setScrollLeft(xHandleEl, currLeftNum)
+              setScrollLeft(bodyScrollElem, currLeftNum)
+              setScrollLeft(headerScrollElem, currLeftNum)
+              setScrollLeft(footerScrollElem, currLeftNum)
+              if (scrollXLoad) {
+                $xeTable.triggerScrollXEvent(evnt)
+              }
+              $xeTable.handleScrollEvent(evnt, isRollY, isRollX, bodyScrollElem.scrollTop, currLeftNum, {
+                type: 'table',
+                fixed: ''
+              })
+            })
+          }
         }
         if (isRollY) {
           evnt.preventDefault()
           internalData.inWheelScroll = true
-          wheelScrollTopTo(scrollTop - currScrollTop, (offsetTop: number) => {
-            internalData.inWheelScroll = true
-            const currTopNum = bodyScrollElem.scrollTop + offsetTop
+          if (browseObj['-moz'] || browseObj.safari) {
+            const currTopNum = scrollTop
             setScrollTop(yHandleEl, currTopNum)
             setScrollTop(bodyScrollElem, currTopNum)
             setScrollTop(leftScrollElem, currTopNum)
@@ -9911,7 +9925,24 @@ export default defineComponent({
               type: 'table',
               fixed: ''
             })
-          })
+          } else {
+            wheelScrollTopTo(scrollTop - currScrollTop, (offsetTop: number) => {
+              internalData.inWheelScroll = true
+              const currTopNum = bodyScrollElem.scrollTop + offsetTop
+              setScrollTop(yHandleEl, currTopNum)
+              setScrollTop(bodyScrollElem, currTopNum)
+              setScrollTop(leftScrollElem, currTopNum)
+              setScrollTop(rightScrollElem, currTopNum)
+              setScrollTop(rowExpandEl, currTopNum)
+              if (scrollYLoad) {
+                $xeTable.triggerScrollYEvent(evnt)
+              }
+              $xeTable.handleScrollEvent(evnt, isRollY, isRollX, currTopNum, bodyScrollElem.scrollLeft, {
+                type: 'table',
+                fixed: ''
+              })
+            })
+          }
         }
       },
       triggerVirtualScrollXEvent (evnt) {
@@ -10050,21 +10081,19 @@ export default defineComponent({
             isScrollXBig = true
           }
 
-          let marginLeft = ''
-          if (scrollXLoad && overflowX) {
-            marginLeft = `${xSpaceLeft}px`
-          }
-          if (headerTableElem) {
-            headerTableElem.style.marginLeft = headerTableElem.getAttribute('xvm') ? marginLeft : ''
-          }
-          if (bodyTableElem) {
-            bodyTableElem.style.marginLeft = marginLeft
-          }
-          if (footerTableElem) {
-            footerTableElem.style.marginLeft = footerTableElem.getAttribute('xvm') ? marginLeft : ''
+          if (!(scrollXLoad && overflowX)) {
+            xSpaceLeft = 0
           }
 
-          reactData.isScrollXBig = isScrollXBig
+          if (headerTableElem) {
+            headerTableElem.style.transform = headerTableElem.getAttribute('xvm') ? `translate(${xSpaceLeft}px, 0px)` : ''
+          }
+          if (bodyTableElem) {
+            bodyTableElem.style.transform = `translate(${xSpaceLeft}px, ${reactData.scrollYTop || 0}px)`
+          }
+          if (footerTableElem) {
+            footerTableElem.style.transform = footerTableElem.getAttribute('xvm') ? `translate(${xSpaceLeft}px, 0px)` : ''
+          }
 
           const containerList = ['main']
           containerList.forEach(name => {
@@ -10076,6 +10105,11 @@ export default defineComponent({
               }
             })
           })
+
+          reactData.scrollXLeft = xSpaceLeft
+          reactData.scrollXWidth = ySpaceWidth
+          reactData.isScrollXBig = isScrollXBig
+
           const scrollXSpaceEl = refScrollXSpaceElem.value
           if (scrollXSpaceEl) {
             scrollXSpaceEl.style.width = `${ySpaceWidth}px`
@@ -10092,7 +10126,7 @@ export default defineComponent({
       },
       // 更新纵向 Y 可视渲染上下剩余空间大小
       updateScrollYSpace () {
-        const { isAllOverflow, scrollYLoad, expandColumn } = reactData
+        const { isAllOverflow, overflowY, scrollYLoad, expandColumn } = reactData
         const { scrollYStore, elemStore, isResizeCellHeight, afterFullData, fullAllDataRowIdData, rowExpandedMaps } = internalData
         const { startIndex } = scrollYStore
         const mouseOpts = computeMouseOpts.value
@@ -10102,6 +10136,8 @@ export default defineComponent({
         const defaultRowHeight = computeDefaultRowHeight.value
         const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
         const bodyTableElem = getRefElem(elemStore['main-body-table'])
+        const leftBodyTableElem = getRefElem(elemStore['left-body-table'])
+        const rightbodyTableElem = getRefElem(elemStore['right-body-table'])
         const containerList = ['main', 'left', 'right']
         let ySpaceTop = 0
         let scrollYHeight = 0
@@ -10153,12 +10189,22 @@ export default defineComponent({
           }
           ySpaceHeight = maxYHeight
         }
+        if (!(scrollYLoad && overflowY)) {
+          scrollYTop = 0
+        }
+
+        if (leftBodyTableElem) {
+          leftBodyTableElem.style.transform = `translate(0px, ${scrollYTop}px)`
+        }
+        if (bodyTableElem) {
+          bodyTableElem.style.transform = `translate(${reactData.scrollXLeft || 0}px, ${scrollYTop}px)`
+        }
+        if (rightbodyTableElem) {
+          rightbodyTableElem.style.transform = `translate(0px, ${scrollYTop}px)`
+        }
+
         containerList.forEach(name => {
           const layoutList = ['header', 'body', 'footer']
-          const tableElem = getRefElem(elemStore[`${name}-body-table`])
-          if (tableElem) {
-            tableElem.style.marginTop = scrollYTop ? `${scrollYTop}px` : ''
-          }
           layoutList.forEach(layout => {
             const ySpaceElem = getRefElem(elemStore[`${name}-${layout}-ySpace`])
             if (ySpaceElem) {
@@ -10166,6 +10212,7 @@ export default defineComponent({
             }
           })
         })
+
         const scrollYSpaceEl = refScrollYSpaceElem.value
         if (scrollYSpaceEl) {
           scrollYSpaceEl.style.height = ySpaceHeight ? `${ySpaceHeight}px` : ''
