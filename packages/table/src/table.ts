@@ -3250,6 +3250,310 @@ export default defineComponent({
       })
     }
 
+     /**
+     * 向树结构添加数据(目前只支持transform=true&lazy=false)，不会清空状态
+     * @param {Array} datas 添加的数据
+     * @author zhiliang.yang
+     */
+     const insertTreeTableData = (datas: any[], isReset: boolean) => {
+      const { keepSource } = props
+      const { editStore, scrollYLoad: oldScrollYLoad } = reactData
+      const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop, tableFullTreeData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+      const treeOpts = computeTreeOpts.value
+      const expandOpts = computeExpandOpts.value
+
+      datas.forEach((row) => {
+        const rowid = XEUtils.get(row, `${treeOpts.rowField}`)
+        const parentRowid = XEUtils.get(row, `${treeOpts.parentField}`)
+
+        // 直接定位到父节点
+        const parentRowRest = parentRowid === null ? null : fullAllDataRowIdData[parentRowid]
+        if (!parentRowRest) {
+          // 根节点
+          tableFullTreeData.push(row)
+
+          // 更新map
+          const index = tableFullTreeData.length
+          const seq = '' + index
+          const level = 0
+          const items = tableFullTreeData
+          const rowRest = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index - 1, items, parent: null, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0, treeLoaded: false, expandLoaded: false }
+          fullDataRowIdData[rowid] = rowRest
+          fullAllDataRowIdData[rowid] = rowRest
+        } else {
+          const parentRow = parentRowRest.row
+          const parentChildren = XEUtils.get(parentRow, `${treeOpts.childrenField}`, [])
+          parentChildren.splice(row.insertIndex === undefined ? parentChildren.length : row.insertIndex, 0, row)
+          XEUtils.set(parentRow, `${treeOpts.childrenField}`, parentChildren)
+          XEUtils.set(parentRow, `${treeOpts.mapChildrenField}`, parentChildren.slice(0))
+
+          // 更新map
+          const index = row.insertIndex + 1
+          const seq = parentRowRest.seq + '.' + index
+          const level = parentRowRest.level + 1
+          const items = XEUtils.get(parentRow, `${treeOpts.childrenField}`, [])
+          const rowRest = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index - 1, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0, treeLoaded: false, expandLoaded: false }
+          fullDataRowIdData[rowid] = rowRest
+          fullAllDataRowIdData[rowid] = rowRest
+        }
+      })
+
+      const fullData = tableFullTreeData.slice(0)
+      scrollYStore.startIndex = 0
+      scrollYStore.endIndex = 1
+      scrollXStore.startIndex = 0
+      scrollXStore.endIndex = 1
+      reactData.isRowLoading = true
+      reactData.scrollVMLoading = false
+      editStore.insertMaps = {}
+      editStore.removeMaps = {}
+      const sYLoad = updateScrollYStatus(fullData)
+      reactData.isDragColMove = false
+      reactData.isDragRowMove = false
+
+      // 全量数据
+      internalData.tableFullData = fullData
+      if (isReset) {
+        internalData.isResizeCellHeight = false
+      }
+      // 克隆原数据，用于显示编辑状态，与编辑值做对比
+      if (keepSource) {
+        $xeTable.cacheSourceMap(fullData)
+      }
+      if ($xeTable.clearCellAreas && props.mouseConfig) {
+        $xeTable.clearCellAreas()
+        $xeTable.clearCopyCellArea()
+      }
+      $xeTable.clearMergeCells()
+      $xeTable.clearMergeFooterItems()
+      $xeTable.handleTableData(true)
+      $xeTable.updateFooter()
+      $xeTable.handleUpdateBodyMerge()
+      return nextTick().then(() => {
+        updateHeight()
+        updateStyle()
+      }).then(() => {
+        computeScrollLoad()
+      }).then(() => {
+        // 是否启用了虚拟滚动
+        if (sYLoad) {
+          scrollYStore.endIndex = scrollYStore.visibleSize
+        }
+
+        if (sYLoad) {
+          if (reactData.expandColumn && expandOpts.mode !== 'fixed') {
+            errLog('vxe.error.notConflictProp', ['column.type="expand', 'expand-config.mode="fixed"'])
+          }
+          // if (showOverflow) {
+          //   if (!rowOpts.height) {
+          //     const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
+          //     if (errColumn) {
+          //       errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+          //     }
+          //   }
+          // }
+
+          if (!(props.height || props.maxHeight)) {
+            errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+          }
+          // if (!props.showOverflow) {
+          //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
+          // }
+          if (props.spanMethod) {
+            errLog('vxe.error.scrollErrProp', ['table.span-method'])
+          }
+        }
+
+        handleReserveStatus()
+        $xeTable.checkSelectionStatus()
+        return new Promise<void>(resolve => {
+          nextTick()
+            .then(() => handleRecalculateLayout(false))
+            .then(() => {
+              calcCellHeight()
+              updateRowOffsetTop()
+              return handleRecalculateLayout(false)
+            })
+            .then(() => {
+              let targetScrollLeft = lastScrollLeft
+              let targetScrollTop = lastScrollTop
+              const virtualXOpts = computeVirtualXOpts.value
+              const virtualYOpts = computeVirtualYOpts.value
+              // 是否在更新数据之后自动滚动重置滚动条
+              if (virtualXOpts.scrollToLeftOnChange) {
+                targetScrollLeft = 0
+              }
+              if (virtualYOpts.scrollToTopOnChange) {
+                targetScrollTop = 0
+              }
+              reactData.isRowLoading = false
+              handleRecalculateLayout(false)
+              // 是否变更虚拟滚动
+              if (oldScrollYLoad === sYLoad) {
+                restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
+                  .then(() => {
+                    resolve()
+                  })
+              } else {
+                setTimeout(() => {
+                  restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
+                    .then(() => {
+                      resolve()
+                    })
+                })
+              }
+            })
+        })
+      })
+    }
+
+    /**
+     * 从树结构删除数据(目前只支持transform=true&lazy=false)，不会清空状态
+     * @param {Array} datas 删除的数据
+     * @author zhiliang.yang
+     */
+    const removeTreeTableData = (datas: any[], map:any, isReset: boolean) => {
+      const { keepSource } = props
+      const { editStore, scrollYLoad: oldScrollYLoad } = reactData
+      const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop, fullDataRowIdData, fullAllDataRowIdData } = internalData
+      const treeOpts = computeTreeOpts.value
+      const expandOpts = computeExpandOpts.value
+
+      datas.forEach((row) => {
+        const rowid = XEUtils.get(row, `${treeOpts.rowField}`)
+        if (!fullDataRowIdData[rowid] || !fullAllDataRowIdData[rowid]) return
+        const parentRowid = XEUtils.get(row, `${treeOpts.parentField}`)
+        // 直接定位到父节点
+        const parentRowRest = parentRowid === null ? null : fullAllDataRowIdData[parentRowid]
+        if (!parentRowRest) {
+          // 根节点
+          internalData.tableFullTreeData = internalData.tableFullTreeData.filter(item => XEUtils.get(item, `${treeOpts.rowField}`) !== rowid)
+        } else {
+          const parentRow = parentRowRest.row
+          let parentChildren = XEUtils.get(parentRow, `${treeOpts.childrenField}`, [])
+          parentChildren = parentChildren.filter((item: any) => XEUtils.get(item, `${treeOpts.rowField}`) !== rowid)
+          XEUtils.set(parentRow, `${treeOpts.childrenField}`, parentChildren)
+          XEUtils.set(parentRow, `${treeOpts.mapChildrenField}`, parentChildren.slice(0))
+        }
+
+        // delete fullDataRowIdData[rowid]
+        // delete fullAllDataRowIdData[rowid]
+        // 删除子树数据
+        const childrenRowId = map.get(rowid) || [rowid]
+        childrenRowId.forEach((id: string) => {
+          delete fullDataRowIdData[id]
+          delete fullAllDataRowIdData[id]
+        })
+      })
+
+      const fullData = internalData.tableFullTreeData.slice(0)
+      scrollYStore.startIndex = 0
+      scrollYStore.endIndex = 1
+      scrollXStore.startIndex = 0
+      scrollXStore.endIndex = 1
+      reactData.isRowLoading = true
+      reactData.scrollVMLoading = false
+      editStore.insertMaps = {}
+      editStore.removeMaps = {}
+      const sYLoad = updateScrollYStatus(fullData)
+      reactData.isDragColMove = false
+      reactData.isDragRowMove = false
+
+      // 全量数据
+      internalData.tableFullData = fullData
+      if (isReset) {
+        internalData.isResizeCellHeight = false
+      }
+      // 克隆原数据，用于显示编辑状态，与编辑值做对比
+      if (keepSource) {
+        $xeTable.cacheSourceMap(fullData)
+      }
+      if ($xeTable.clearCellAreas && props.mouseConfig) {
+        $xeTable.clearCellAreas()
+        $xeTable.clearCopyCellArea()
+      }
+      $xeTable.clearMergeCells()
+      $xeTable.clearMergeFooterItems()
+      $xeTable.handleTableData(true)
+      $xeTable.updateFooter()
+      $xeTable.handleUpdateBodyMerge()
+      return nextTick().then(() => {
+        updateHeight()
+        updateStyle()
+      }).then(() => {
+        computeScrollLoad()
+      }).then(() => {
+        // 是否启用了虚拟滚动
+        if (sYLoad) {
+          scrollYStore.endIndex = scrollYStore.visibleSize
+        }
+
+        if (sYLoad) {
+          if (reactData.expandColumn && expandOpts.mode !== 'fixed') {
+            errLog('vxe.error.notConflictProp', ['column.type="expand', 'expand-config.mode="fixed"'])
+          }
+          // if (showOverflow) {
+          //   if (!rowOpts.height) {
+          //     const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
+          //     if (errColumn) {
+          //       errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+          //     }
+          //   }
+          // }
+
+          if (!(props.height || props.maxHeight)) {
+            errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+          }
+          // if (!props.showOverflow) {
+          //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
+          // }
+          if (props.spanMethod) {
+            errLog('vxe.error.scrollErrProp', ['table.span-method'])
+          }
+        }
+
+        handleReserveStatus()
+        $xeTable.checkSelectionStatus()
+        return new Promise<void>(resolve => {
+          nextTick()
+            .then(() => handleRecalculateLayout(false))
+            .then(() => {
+              calcCellHeight()
+              updateRowOffsetTop()
+              return handleRecalculateLayout(false)
+            })
+            .then(() => {
+              let targetScrollLeft = lastScrollLeft
+              let targetScrollTop = lastScrollTop
+              const virtualXOpts = computeVirtualXOpts.value
+              const virtualYOpts = computeVirtualYOpts.value
+              // 是否在更新数据之后自动滚动重置滚动条
+              if (virtualXOpts.scrollToLeftOnChange) {
+                targetScrollLeft = 0
+              }
+              if (virtualYOpts.scrollToTopOnChange) {
+                targetScrollTop = 0
+              }
+              reactData.isRowLoading = false
+              handleRecalculateLayout(false)
+              // 是否变更虚拟滚动
+              if (oldScrollYLoad === sYLoad) {
+                restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
+                  .then(() => {
+                    resolve()
+                  })
+              } else {
+                setTimeout(() => {
+                  restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
+                    .then(() => {
+                      resolve()
+                    })
+                })
+              }
+            })
+        })
+      })
+    }
     /**
      * 处理数据加载默认行为
      * 默认执行一次，除非被重置
@@ -4057,7 +4361,7 @@ export default defineComponent({
           }
           return tableMethods.recalculate()
         })
-      },
+      },  
       /**
        * 重新加载数据，会清空表格状态
        * @param {Array} datas 数据
@@ -4072,6 +4376,39 @@ export default defineComponent({
             handleLoadDefaults()
             return tableMethods.recalculate()
           })
+      },
+      /**
+       * 向树结构添加数据(目前只支持transform=true&lazy=false)，不会清空状态
+       * @param {Array} datas 添加的数据
+       * @author zhiliang.yang
+       */
+      insertTreeData (datas) {
+        const { initStatus } = internalData
+        return insertTreeTableData(datas, false).then(() => {
+          internalData.inited = true
+          internalData.initStatus = true
+          if (!initStatus) {
+            handleLoadDefaults()
+          }
+          return tableMethods.recalculate()
+        })
+      },
+      /**
+       * 从树结构删除数据(目前只支持transform=true&lazy=false)，不会清空状态
+       * @param {Array} datas 删除子树的根节点
+       * @param {Array} map 根节点下所有子树的rowid
+       * @author zhiliang.yang
+       */
+      removeTreeData (datas, map) {
+        const { initStatus } = internalData
+        return removeTreeTableData(datas, map, false).then(() => {
+          internalData.inited = true
+          internalData.initStatus = true
+          if (!initStatus) {
+            handleLoadDefaults()
+          }
+          return tableMethods.recalculate()
+        })
       },
       /**
        * 修改行数据
