@@ -58,7 +58,7 @@ export default defineComponent({
       const defaultRowHeight = computeDefaultRowHeight.value
       const cellOpts = computeCellOpts.value
       const footerCellOpts = computeFooterCellOpts.value
-      const currCellHeight = getCellHeight(footerCellOpts.height || cellOpts.height) || defaultRowHeight
+      const currCellHeight = getCellHeight(footerCellOpts.height) || defaultRowHeight
 
       return tableColumn.map((column, $columnIndex) => {
         const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column

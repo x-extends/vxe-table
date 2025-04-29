@@ -55,7 +55,7 @@ export default defineComponent({
       const cellOpts = computeCellOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
       const headerCellOpts = computeHeaderCellOpts.value
-      const currCellHeight = getCellHeight(headerCellOpts.height || cellOpts.height) || defaultRowHeight
+      const currCellHeight = getCellHeight(headerCellOpts.height) || defaultRowHeight
       const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
 
       return cols.map((column, $columnIndex) => {

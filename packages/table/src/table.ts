@@ -9,7 +9,7 @@ import TableHeaderComponent from './header'
 import TableFooterComponent from './footer'
 import tableProps from './props'
 import tableEmits from './emits'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getCellHeight } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 import TableCustomPanelComponent from '../module/custom/panel'
@@ -559,17 +559,15 @@ export default defineComponent({
 
     const computeHeaderCellOpts = computed(() => {
       const headerCellOpts = Object.assign({}, getConfig().table.headerCellConfig, props.headerCellConfig)
-      if (headerCellOpts.height) {
-        headerCellOpts.height = XEUtils.toNumber(headerCellOpts.height)
-      }
+      const cellOpts = computeCellOpts.value
+      headerCellOpts.height = XEUtils.toNumber(getCellHeight(headerCellOpts.height || cellOpts.height))
       return headerCellOpts
     })
 
     const computeFooterCellOpts = computed(() => {
       const footerCellOpts = Object.assign({}, getConfig().table.footerCellConfig, props.footerCellConfig)
-      if (footerCellOpts.height) {
-        footerCellOpts.height = XEUtils.toNumber(footerCellOpts.height)
-      }
+      const cellOpts = computeCellOpts.value
+      footerCellOpts.height = XEUtils.toNumber(getCellHeight(footerCellOpts.height || cellOpts.height))
       return footerCellOpts
     })
 
@@ -2292,7 +2290,7 @@ export default defineComponent({
             if (tableElem) {
               tableElem.style.width = tWidth ? `${tWidth}px` : ''
               // 兼容性处理
-              tableElem.style.paddingRight = osbWidth && fixedType && (browseObj['-moz'] || browseObj.safari) ? `${osbWidth}px` : ''
+              tableElem.style.paddingRight = osbWidth && fixedType && (browseObj.firefox || browseObj.safari) ? `${osbWidth}px` : ''
             }
             const emptyBlockElem = getRefElem(elemStore[`${name}-${layout}-emptyBlock`])
             if (emptyBlockElem) {
@@ -9877,7 +9875,7 @@ export default defineComponent({
         if (isRollX) {
           evnt.preventDefault()
           internalData.inWheelScroll = true
-          if (browseObj['-moz'] || browseObj.safari) {
+          if (browseObj.firefox || browseObj.safari) {
             const currLeftNum = scrollLeft
             setScrollLeft(xHandleEl, currLeftNum)
             setScrollLeft(bodyScrollElem, currLeftNum)
@@ -9911,7 +9909,7 @@ export default defineComponent({
         if (isRollY) {
           evnt.preventDefault()
           internalData.inWheelScroll = true
-          if (browseObj['-moz'] || browseObj.safari) {
+          if (browseObj.firefox || browseObj.safari) {
             const currTopNum = scrollTop
             setScrollTop(yHandleEl, currTopNum)
             setScrollTop(bodyScrollElem, currTopNum)
