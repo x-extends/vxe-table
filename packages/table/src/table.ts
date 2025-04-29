@@ -2,7 +2,7 @@ import { CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { getFuncText, isEnableConf } from '../../ui/src/utils'
 import { initTpImg } from '../../ui/src/dom'
-import { createHandleGetRowId } from './util'
+import { createHandleGetRowId, getCellHeight } from './util'
 import { VxeUI } from '../../ui'
 import methods from './methods'
 import TableBodyComponent from './body'
@@ -844,9 +844,8 @@ export default {
       const props = $xeTable
 
       const headerCellOpts = Object.assign({}, getConfig().table.headerCellConfig, props.headerCellConfig)
-      if (headerCellOpts.height) {
-        headerCellOpts.height = XEUtils.toNumber(headerCellOpts.height)
-      }
+      const cellOpts = $xeTable.computeCellOpts
+      headerCellOpts.height = XEUtils.toNumber(getCellHeight(headerCellOpts.height || cellOpts.height))
       return headerCellOpts
     },
     computeFooterCellOpts () {
@@ -854,9 +853,8 @@ export default {
       const props = $xeTable
 
       const footerCellOpts = Object.assign({}, getConfig().table.footerCellConfig, props.footerCellConfig)
-      if (footerCellOpts.height) {
-        footerCellOpts.height = XEUtils.toNumber(footerCellOpts.height)
-      }
+      const cellOpts = $xeTable.computeCellOpts
+      footerCellOpts.height = XEUtils.toNumber(getCellHeight(footerCellOpts.height || cellOpts.height))
       return footerCellOpts
     },
     rowOpts () {

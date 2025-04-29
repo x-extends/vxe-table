@@ -1076,7 +1076,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
         if (tableElem) {
           tableElem.style.width = tWidth ? `${tWidth}px` : ''
           // 兼容性处理
-          tableElem.style.paddingRight = osbWidth && fixedType && (browseObj['-moz'] || browseObj.safari) ? `${osbWidth}px` : ''
+          tableElem.style.paddingRight = osbWidth && fixedType && (browseObj.firefox || browseObj.safari) ? `${osbWidth}px` : ''
         }
         const emptyBlockElem = getRefElem(elemStore[`${name}-${layout}-emptyBlock`])
         if (emptyBlockElem) {
@@ -9550,7 +9550,7 @@ const Methods = {
     if (isRollX) {
       evnt.preventDefault()
       internalData.inWheelScroll = true
-      if (browseObj['-moz'] || browseObj.safari) {
+      if (browseObj.firefox || browseObj.safari) {
         const currLeftNum = scrollLeft
         setScrollLeft(xHandleEl, currLeftNum)
         setScrollLeft(bodyScrollElem, currLeftNum)
@@ -9582,7 +9582,7 @@ const Methods = {
     }
     if (isRollY) {
       evnt.preventDefault()
-      if (browseObj['-moz'] || browseObj.safari) {
+      if (browseObj.firefox || browseObj.safari) {
         const currTopNum = scrollTop
         setScrollTop(yHandleEl, currTopNum)
         setScrollTop(bodyScrollElem, currTopNum)

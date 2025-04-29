@@ -31,7 +31,7 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const cellOpts = $xeTable.computeCellOpts
   const footerCellOpts = $xeTable.computeFooterCellOpts
-  const currCellHeight = getCellHeight(footerCellOpts.height || cellOpts.height) || defaultRowHeight
+  const currCellHeight = getCellHeight(footerCellOpts.height) || defaultRowHeight
 
   return tableColumn.map((column: any, $columnIndex: any) => {
     const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
