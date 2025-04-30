@@ -208,16 +208,16 @@ VxeUI.setConfig({
       isReplace: true
     },
     virtualXConfig: {
-      enabled: true,
+      enabled: false,
       gt: 24,
       preSize: 0,
-      oSize: 1
+      oSize: 0
     },
     virtualYConfig: {
-      enabled: true,
+      enabled: false,
       gt: 100,
       preSize: 1,
-      oSize: 2
+      oSize: 0
     },
     scrollbarConfig: {
       // width: 14,
