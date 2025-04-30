@@ -13,7 +13,7 @@ body:
   id: issue_confirm_read_agreement
   attributes:
     label: "是否已准备好复现链接与示例代码？"
-    description: "按要求准备好复现 Demo，复现 Demo 操作步骤：https://vxetable.cn/issues.html"
+    description: "按要求准备好复现 Demo，复现 Demo 操作步骤：<https://vxetable.cn/issues.html>"
     options:
     - label: "我确定已准备好以上复现链接"
       required: true
