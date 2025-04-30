@@ -1553,6 +1553,11 @@ export default defineComponent({
       internalData.customHeight = calcTableHeight('height')
       internalData.customMinHeight = calcTableHeight('minHeight')
       internalData.customMaxHeight = calcTableHeight('maxHeight')
+
+      // 如果启用虚拟滚动，默认高度
+      if (reactData.scrollYLoad && !(internalData.customHeight || internalData.customMinHeight)) {
+        internalData.customHeight = 300
+      }
     }
 
     const calcColumnAutoWidth = (column: VxeTableDefines.ColumnInfo, wrapperEl: HTMLDivElement) => {
@@ -3197,7 +3202,7 @@ export default defineComponent({
           // }
 
           if (!(props.height || props.maxHeight)) {
-            errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+            errLog('vxe.error.reqProp', ['height | max-height | virtual-y-config={enabled: false}'])
           }
           // if (!props.showOverflow) {
           //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
