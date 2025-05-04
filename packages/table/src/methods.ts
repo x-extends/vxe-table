@@ -4548,15 +4548,10 @@ const Methods = {
           rowList = currTableData.filter((row) => XEUtils.get(row, checkField))
         }
       } else {
+        const currMaps = isFull || (treeConfig && !transform) ? fullDataRowIdData : afterFullRowMaps
         XEUtils.each(selectCheckboxMaps, (row, rowid) => {
-          if (isFull) {
-            if (fullDataRowIdData[rowid]) {
-              rowList.push(fullDataRowIdData[rowid].row)
-            }
-          } else {
-            if (afterFullRowMaps[rowid]) {
-              rowList.push(afterFullRowMaps[rowid])
-            }
+          if (currMaps[rowid]) {
+            rowList.push(fullDataRowIdData[rowid].row)
           }
         })
       }
