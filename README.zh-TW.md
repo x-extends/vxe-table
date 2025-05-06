@@ -14,6 +14,10 @@
 
 一個基於 [vue](https://www.npmjs.com/package/vue) 的PC端表格組件，支持增刪改查、虛擬樹、拖拽排序、懶加載、快捷菜單、數據校驗、導入/匯出/列印、表單渲染、自定義模板、渲染器、JSON 配置式…
 
+## 在 Cloud IDE 中預覽
+
+[https://idegithub.com/x-extends/vxe-table](https://idegithub.com/x-extends/vxe-table)
+
 ## 瀏覽器支持
 
 ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
