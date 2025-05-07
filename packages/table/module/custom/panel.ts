@@ -1158,7 +1158,7 @@ export default defineComponent({
     nextTick(() => {
       const customOpts = computeCustomOpts.value
       const { mode } = customOpts
-      if (!VxeUIModalComponent) {
+      if (!VxeUIModalComponent && (mode === 'modal')) {
         errLog('vxe.error.reqComp', ['vxe-modal'])
       }
       if (!VxeUIDrawerComponent && (mode === 'drawer')) {

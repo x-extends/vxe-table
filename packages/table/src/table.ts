@@ -1,6 +1,6 @@
 import { defineComponent, h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
-import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, getOffsetPos, setScrollTop, setScrollLeft, toCssUnit, hasControlKey } from '../../ui/src/dom'
+import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
@@ -7609,8 +7609,9 @@ export default defineComponent({
         evnt.stopPropagation()
         evnt.preventDefault()
         const { column } = params
-        const { overflowX, scrollbarHeight } = reactData
+        const { columnStore, overflowX, scrollbarHeight } = reactData
         const { elemStore, visibleColumn } = internalData
+        const { leftList, rightList } = columnStore
         const resizableOpts = computeResizableOpts.value
         const osbHeight = overflowX ? scrollbarHeight : 0
         const tableEl = refElem.value
@@ -7620,10 +7621,11 @@ export default defineComponent({
         if (!resizeBarElem) {
           return
         }
+        const isLeftFixed = fixedType === 'left'
+        const isRightFixed = fixedType === 'right'
         const resizeTipElem = resizeBarElem.firstElementChild as HTMLDivElement
         const scrollbarXToTop = computeScrollbarXToTop.value
         const { clientX: dragClientX } = evnt
-        const wrapperElem = refElem.value
         const dragBtnElem = evnt.target as HTMLDivElement
         let resizeColumn = column
         if (column.children && column.children.length) {
@@ -7638,30 +7640,34 @@ export default defineComponent({
         if (!bodyScrollElem) {
           return
         }
-        const pos = getOffsetPos(dragBtnElem, wrapperElem)
+        const tableRect = tableEl.getBoundingClientRect()
+        const rightContainerRect = rightContainerElem ? rightContainerElem.getBoundingClientRect() : null
+        const cellRect = cell.getBoundingClientRect()
+        const dragBtnRect = dragBtnElem.getBoundingClientRect()
+
         const dragBtnWidth = dragBtnElem.clientWidth
         const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
-        const minInterval = getColReMinWidth(cellParams) - dragBtnOffsetWidth // 列之间的最小间距
-        let dragMinLeft = pos.left - cell.clientWidth + dragBtnWidth + minInterval
-        let dragPosLeft = pos.left + dragBtnOffsetWidth
-        const isLeftFixed = fixedType === 'left'
-        const isRightFixed = fixedType === 'right'
+        const dragPosLeft = dragBtnRect.x - tableRect.x + dragBtnOffsetWidth
 
-        // 计算左右侧固定列偏移量
-        let fixedOffsetWidth = 0
+        const minInterval = getColReMinWidth(cellParams) - dragBtnOffsetWidth // 列之间的最小间距
+        const dragMinLeft = isRightFixed ? 0 : (cellRect.x - tableRect.x + dragBtnWidth + minInterval)
+        const dragMaxLeft = cellRect.x - tableRect.x + cell.clientWidth - minInterval
+
+        let fixedLeftRemainWidth = 0
+        let fixedRightRemainWidth = 0
         if (isLeftFixed || isRightFixed) {
-          const siblingProp = isLeftFixed ? 'nextElementSibling' : 'previousElementSibling'
-          let tempCellElem = cell[siblingProp] as HTMLTableCellElement
-          while (tempCellElem) {
-            if (hasClass(tempCellElem, 'fixed--hidden')) {
-              break
-            } else if (!hasClass(tempCellElem, 'col--group')) {
-              fixedOffsetWidth += tempCellElem.offsetWidth
+          let isMach = false
+          const fixedColumn = isLeftFixed ? leftList : rightList
+          for (let i = 0; i < fixedColumn.length; i++) {
+            const item = fixedColumn[i]
+            if (isMach) {
+              fixedLeftRemainWidth += item.renderWidth
+            } else {
+              isMach = item.id === resizeColumn.id
+              if (!isMach) {
+                fixedRightRemainWidth += item.renderWidth
+              }
             }
-            tempCellElem = tempCellElem[siblingProp] as HTMLTableCellElement
-          }
-          if (isRightFixed && rightContainerElem) {
-            dragPosLeft = rightContainerElem.offsetLeft + fixedOffsetWidth
           }
         }
 
@@ -7672,27 +7678,27 @@ export default defineComponent({
           const tableHeight = tableEl.clientHeight
           const offsetX = evnt.clientX - dragClientX
           let left = dragPosLeft + offsetX
-          const scrollLeft = fixedType ? 0 : bodyScrollElem.scrollLeft
+
           if (isLeftFixed) {
-          // 左固定列（不允许超过右侧固定列、不允许超过右边距）
-            left = Math.min(left, (rightContainerElem ? rightContainerElem.offsetLeft : bodyScrollElem.clientWidth) - fixedOffsetWidth - minInterval)
+            if (rightContainerRect) {
+              left = Math.min(left, rightContainerRect.x - tableRect.x - fixedLeftRemainWidth - minInterval)
+            }
           } else if (isRightFixed) {
-          // 右侧固定列（不允许超过左侧固定列、不允许超过左边距）
-            dragMinLeft = (leftContainerElem ? leftContainerElem.clientWidth : 0) + fixedOffsetWidth + minInterval
-            left = Math.min(left, dragPosLeft + cell.clientWidth - minInterval)
-          } else {
-            dragMinLeft = Math.max(bodyScrollElem.scrollLeft, dragMinLeft)
-          // left = Math.min(left, bodyScrollElem.clientWidth + bodyScrollElem.scrollLeft - 40)
+            if (leftContainerElem) {
+              left = Math.max(left, leftContainerElem.clientWidth + fixedRightRemainWidth + minInterval)
+            }
+            left = Math.min(left, dragMaxLeft)
           }
+
           dragLeft = Math.max(left, dragMinLeft)
-          const resizeBarLeft = Math.max(1, dragLeft - scrollLeft)
+
+          const resizeBarLeft = Math.max(1, dragLeft)
           resizeBarElem.style.left = `${resizeBarLeft}px`
           resizeBarElem.style.top = `${scrollbarXToTop ? osbHeight : 0}px`
           resizeBarElem.style.height = `${scrollbarXToTop ? tableHeight - osbHeight : tableHeight}px`
           if (resizableOpts.showDragTip && resizeTipElem) {
-            resizeTipElem.textContent = getI18n('vxe.table.resizeColTip', [resizeColumn.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)])
+            resizeTipElem.textContent = getI18n('vxe.table.resizeColTip', [Math.floor(resizeColumn.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft))])
             const tableWrapperWidth = tableEl.clientWidth
-            const wrapperRect = wrapperElem.getBoundingClientRect()
             const resizeBarWidth = resizeBarElem.clientWidth
             const resizeTipWidth = resizeTipElem.clientWidth
             const resizeTipHeight = resizeTipElem.clientHeight
@@ -7703,7 +7709,7 @@ export default defineComponent({
               resizeTipLeft += tableWrapperWidth - resizeBarLeft
             }
             resizeTipElem.style.left = `${resizeTipLeft}px`
-            resizeTipElem.style.top = `${Math.min(tableHeight - resizeTipHeight, Math.max(0, evnt.clientY - wrapperRect.y - resizeTipHeight / 2))}px`
+            resizeTipElem.style.top = `${Math.min(tableHeight - resizeTipHeight, Math.max(0, evnt.clientY - tableRect.y - resizeTipHeight / 2))}px`
           }
           reactData.isDragResize = true
         }

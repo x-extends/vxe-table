@@ -315,8 +315,16 @@ hooks.add('tableFilterModule', {
         handleFilterConfirmFilter(null)
         return nextTick()
       },
+      saveFilterPanelByEvent (evnt) {
+        handleFilterConfirmFilter(evnt)
+        return nextTick()
+      },
       resetFilterPanel () {
         handleFilterResetFilter(null)
+        return nextTick()
+      },
+      resetFilterPanelByEvent (evnt) {
+        handleFilterResetFilter(evnt)
         return nextTick()
       },
       getCheckedFilters () {
