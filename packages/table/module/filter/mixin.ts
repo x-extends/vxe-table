@@ -167,10 +167,22 @@ export default {
       $xeTable.handleFilterConfirmFilter(null)
       return $xeTable.$nextTick()
     },
+    _saveFilterPanelByEvent (evnt: Event) {
+      const $xeTable = this
+
+      $xeTable.handleFilterConfirmFilter(evnt)
+      return $xeTable.$nextTick()
+    },
     _resetFilterPanel () {
       const $xeTable = this
 
       $xeTable.handleFilterResetFilter(null)
+      return $xeTable.$nextTick()
+    },
+    _resetFilterPanelByEvent (evnt: Event) {
+      const $xeTable = this
+
+      $xeTable.handleFilterResetFilter(evnt)
       return $xeTable.$nextTick()
     },
     _getCheckedFilters () {

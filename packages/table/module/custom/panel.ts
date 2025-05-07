@@ -854,7 +854,7 @@ export default {
 
       const { customOpts } = $xeTable
       const { mode } = customOpts
-      if (!VxeUIModalComponent) {
+      if (!VxeUIModalComponent && (mode === 'modal')) {
         errLog('vxe.error.reqComp', ['vxe-modal'])
       }
       if (!VxeUIDrawerComponent && (mode === 'drawer')) {
