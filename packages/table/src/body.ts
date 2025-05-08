@@ -818,7 +818,8 @@ export default defineComponent({
             xid: xID,
             cellspacing: 0,
             cellpadding: 0,
-            border: 0
+            border: 0,
+            xvm: isOptimizeMode ? '1' : null
           }, [
             /**
              * 列宽

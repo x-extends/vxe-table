@@ -272,7 +272,7 @@ export default {
           year: 'yyyy'
         },
         weeks: {
-          w: '주',
+          w: '',
           w0: '일요일',
           w1: '월요일',
           w2: '화요일',

@@ -272,7 +272,7 @@ export default {
           year: 'yyyy'
         },
         weeks: {
-          w: 'Tuần',
+          w: '',
           w0: 'Mặt trời',
           w1: 'Mon',
           w2: 'TUE',

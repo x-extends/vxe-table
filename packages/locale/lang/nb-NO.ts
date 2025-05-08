@@ -272,7 +272,7 @@ export default {
           year: 'yyyy'
         },
         weeks: {
-          w: 'Uke',
+          w: '',
           w0: 'Sol',
           w1: 'Man',
           w2: 'Tir',

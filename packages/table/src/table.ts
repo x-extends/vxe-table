@@ -8669,24 +8669,26 @@ export default defineComponent({
         const { selectRadioRow: oldValue } = reactData
         const { row } = params
         const radioOpts = computeRadioOpts.value
-        const { trigger } = radioOpts
+        const { trigger, checkMethod } = radioOpts
         if (trigger === 'manual') {
           return
         }
         evnt.stopPropagation()
-        let newValue = row
-        let isChange = oldValue !== newValue
-        if (isChange) {
-          handleCheckedRadioRow(newValue)
-        } else if (!radioOpts.strict) {
-          isChange = oldValue === newValue
+        if (!checkMethod || checkMethod({ $table: $xeTable, row })) {
+          let newValue = row
+          let isChange = oldValue !== newValue
           if (isChange) {
-            newValue = null
-            $xeTable.clearRadioRow()
+            handleCheckedRadioRow(newValue)
+          } else if (!radioOpts.strict) {
+            isChange = oldValue === newValue
+            if (isChange) {
+              newValue = null
+              $xeTable.clearRadioRow()
+            }
           }
-        }
-        if (isChange) {
-          dispatchEvent('radio-change', { oldValue, newValue, ...params }, evnt)
+          if (isChange) {
+            dispatchEvent('radio-change', { oldValue, newValue, ...params }, evnt)
+          }
         }
       },
       triggerCurrentColumnEvent (evnt, params) {
@@ -11217,8 +11219,8 @@ export default defineComponent({
         if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
           warnLog('vxe.error.reqProp', ['keep-source'])
         }
-        if (treeConfig && (treeOpts.showLine || treeOpts.line) && (!(props.rowKey || rowOpts.useKey) || !showOverflow)) {
-          warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
+        if (treeConfig && (treeOpts.showLine || treeOpts.line) && !showOverflow) {
+          warnLog('vxe.error.reqProp', ['show-overflow'])
         }
         if (treeConfig && !treeOpts.transform && props.stripe) {
           warnLog('vxe.error.noTree', ['stripe'])

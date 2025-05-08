@@ -272,7 +272,7 @@ export default {
           year: 'yyyy'
         },
         weeks: {
-          w: 'Тиждень',
+          w: '',
           w0: 'Сонце',
           w1: 'Мн',
           w2: 'Зміст',
