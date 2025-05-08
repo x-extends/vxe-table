@@ -1548,8 +1548,8 @@ export default {
     if (props.editConfig && editOpts.showStatus && !props.keepSource) {
       warnLog('vxe.error.reqProp', ['keep-source'])
     }
-    if (treeConfig && (treeOpts.showLine || treeOpts.line) && (!(props.rowKey || rowOpts.useKey) || !showOverflow)) {
-      warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
+    if (treeConfig && (treeOpts.showLine || treeOpts.line) && !showOverflow) {
+      warnLog('vxe.error.reqProp', ['show-overflow'])
     }
     if (treeConfig && !treeOpts.transform && props.stripe) {
       warnLog('vxe.error.noTree', ['stripe'])

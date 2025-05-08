@@ -272,7 +272,7 @@ export default {
           year: 'yyyy'
         },
         weeks: {
-          w: 'Pekan',
+          w: '',
           w0: 'Matahari',
           w1: 'Senin',
           w2: 'Sel',

@@ -7096,24 +7096,26 @@ const Methods = {
     const { selectRadioRow: oldValue } = reactData
     const { row } = params
     const radioOpts = $xeTable.computeRadioOpts
-    const { trigger } = radioOpts
+    const { trigger, checkMethod } = radioOpts
     if (trigger === 'manual') {
       return
     }
     evnt.stopPropagation()
-    let newValue = row
-    let isChange = oldValue !== newValue
-    if (isChange) {
-      handleCheckedRadioRow($xeTable, newValue)
-    } else if (!radioOpts.strict) {
-      isChange = oldValue === newValue
+    if (!checkMethod || checkMethod({ $table: $xeTable, row })) {
+      let newValue = row
+      let isChange = oldValue !== newValue
       if (isChange) {
-        newValue = null
-        $xeTable.clearRadioRow()
+        handleCheckedRadioRow($xeTable, newValue)
+      } else if (!radioOpts.strict) {
+        isChange = oldValue === newValue
+        if (isChange) {
+          newValue = null
+          $xeTable.clearRadioRow()
+        }
       }
-    }
-    if (isChange) {
-      $xeTable.dispatchEvent('radio-change', { oldValue, newValue, ...params }, evnt)
+      if (isChange) {
+        $xeTable.dispatchEvent('radio-change', { oldValue, newValue, ...params }, evnt)
+      }
     }
   },
   triggerCurrentColumnEvent (evnt: Event, params: {
@@ -8922,7 +8924,9 @@ const Methods = {
     return rest
   },
   /**
-   * 获取树表格状态
+   * 内部方法、获取树表格状态
+   * @deprecated
+   * @private
    */
   getTreeStatus () {
     if (this.treeConfig) {

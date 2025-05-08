@@ -272,7 +272,7 @@ export default {
           year: 'yyyy'
         },
         weeks: {
-          w: 'minggu',
+          w: '',
           w0: 'Ahad',
           w1: 'pada hari Isnin',
           w2: 'Selasa',

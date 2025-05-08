@@ -272,7 +272,7 @@ export default {
           year: 'yyyy'
         },
         weeks: {
-          w: 'hafta',
+          w: '',
           w0: 'Yakshanba',
           w1: 'dushanba kuni',
           w2: 'Seshanba',

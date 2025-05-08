@@ -272,7 +272,7 @@ export default {
           year: 'yyyy'
         },
         weeks: {
-          w: 'สัปดาห์',
+          w: '',
           w0: 'ดวงอาทิตย์',
           w1: 'จอน',
           w2: 'อ.',

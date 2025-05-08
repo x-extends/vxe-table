@@ -272,7 +272,7 @@ export default {
           year: 'yyyy'
         },
         weeks: {
-          w: 'Semaine',
+          w: '',
           w0: 'Soleil',
           w1: 'Lun',
           w2: 'Mar',

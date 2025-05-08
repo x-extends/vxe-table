@@ -426,14 +426,17 @@ function renderNativeOptgroups (h: CreateElement, renderOpts: any, params: any, 
   const { optionGroups, optionGroupProps = {} } = renderOpts
   const groupOptions = optionGroupProps.options || 'options'
   const groupLabel = optionGroupProps.label || 'label'
-  return optionGroups.map((group: any, gIndex: any) => {
-    return h('optgroup', {
-      key: gIndex,
-      attrs: {
-        label: group[groupLabel]
-      }
-    }, renderOptionsMethods(h, group[groupOptions], renderOpts, params))
-  })
+  if (optionGroups) {
+    return optionGroups.map((group: any, gIndex: any) => {
+      return h('optgroup', {
+        key: gIndex,
+        attrs: {
+          label: group[groupLabel]
+        }
+      }, renderOptionsMethods(h, group[groupOptions], renderOpts, params))
+    })
+  }
+  return []
 }
 
 /**
@@ -446,19 +449,22 @@ function renderNativeOptions (h: CreateElement, options: any, renderOpts: any, p
   const valueProp = optionProps.value || 'value'
   const disabledProp = optionProps.disabled || 'disabled'
   const cellValue = isImmediateCell(renderOpts, params) ? getCellValue(row, column) : column.model.value
-  return options.map((option: any, oIndex: any) => {
-    return h('option', {
-      key: oIndex,
-      attrs: {
-        value: option[valueProp],
-        disabled: option[disabledProp]
-      },
-      domProps: {
+  if (options) {
+    return options.map((option: any, oIndex: any) => {
+      return h('option', {
+        key: oIndex,
+        attrs: {
+          value: option[valueProp],
+          disabled: option[disabledProp]
+        },
+        domProps: {
         /* eslint-disable eqeqeq */
-        selected: option[valueProp] == cellValue
-      }
-    }, option[labelProp])
-  })
+          selected: option[valueProp] == cellValue
+        }
+      }, option[labelProp])
+    })
+  }
+  return []
 }
 
 function nativeFilterRender (h: CreateElement, renderOpts: any, params: any) {
