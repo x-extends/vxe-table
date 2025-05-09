@@ -1304,7 +1304,7 @@ export default defineComponent({
     }
 
     const removeBodyMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
-      const { mergeBodyList, fullColumnIdData, fullAllDataRowIdData } = internalData
+      const { mergeBodyList, fullColumnIdData, fullAllDataRowIdData, mergeBodyMaps } = internalData
       const rest: VxeTableDefines.MergeItem[] = []
       if (merges) {
         const { handleGetRowId } = createHandleGetRowId($xeTable)
@@ -1339,6 +1339,9 @@ export default defineComponent({
             const item = rItems[0]
             if (item) {
               rest.push(rItems[0])
+              if (mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`]) {
+                delete mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
+              }
             }
           }
         })
@@ -1347,7 +1350,7 @@ export default defineComponent({
     }
 
     const removeFooterMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
-      const { mergeFooterList, fullColumnIdData } = internalData
+      const { mergeFooterList, fullColumnIdData, mergeFooterMaps } = internalData
       const rest: VxeTableDefines.MergeItem[] = []
       if (merges) {
         if (!XEUtils.isArray(merges)) {
@@ -1372,6 +1375,9 @@ export default defineComponent({
             const item = rItems[0]
             if (item) {
               rest.push(item)
+              if (mergeFooterMaps[`${mergeRowIndex}:${mergeColumnIndex}`]) {
+                delete mergeFooterMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
+              }
             }
           }
         })
