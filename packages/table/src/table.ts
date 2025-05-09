@@ -1252,7 +1252,7 @@ export default defineComponent({
 
     const handleFooterMerge = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
       const { footerTableData } = reactData
-      const { mergeFooterList, mergeFooterMaps } = internalData
+      const { mergeFooterList, mergeFooterMaps, fullColumnIdData } = internalData
       if (merges) {
         const { visibleColumn } = internalData
         if (!XEUtils.isArray(merges)) {
@@ -1264,6 +1264,12 @@ export default defineComponent({
           let mergeColumnIndex = -1
           if (XEUtils.isNumber(margeCol)) {
             mergeColumnIndex = margeCol
+          } else {
+            const colid = margeCol ? margeCol.id : null
+            const colRest = colid ? fullColumnIdData[colid] : null
+            if (colRest) {
+              mergeColumnIndex = colRest._index
+            }
           }
           if (mergeRowIndex > -1 && mergeColumnIndex > -1 && (rowspan || colspan)) {
             rowspan = XEUtils.toNumber(rowspan) || 1
@@ -1297,29 +1303,76 @@ export default defineComponent({
       }
     }
 
-    const removeMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[], mList: VxeTableDefines.MergeItem[], rowList?: any) => {
+    const removeBodyMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
+      const { mergeBodyList, fullColumnIdData, fullAllDataRowIdData } = internalData
       const rest: VxeTableDefines.MergeItem[] = []
       if (merges) {
-        // const { treeConfig } = props
-        const { visibleColumn } = internalData
+        const { handleGetRowId } = createHandleGetRowId($xeTable)
         if (!XEUtils.isArray(merges)) {
           merges = [merges]
         }
-        // if (treeConfig && merges.length) {
-        //   errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
-        // }
         merges.forEach((item) => {
-          let { row, col } = item
-          if (rowList && XEUtils.isNumber(row)) {
-            row = rowList[row]
+          const { row: margeRow, col: margeCol } = item
+          let mergeRowIndex = -1
+          let mergeColumnIndex = -1
+          if (XEUtils.isNumber(margeRow)) {
+            mergeRowIndex = margeRow
+          } else {
+            const rowid = margeRow ? handleGetRowId(margeRow) : null
+            const rowRest = rowid ? fullAllDataRowIdData[rowid] : null
+            if (rowRest) {
+              mergeRowIndex = rowRest._index
+            }
           }
-          if (XEUtils.isNumber(col)) {
-            col = visibleColumn[col]
+          if (XEUtils.isNumber(margeCol)) {
+            mergeColumnIndex = margeCol
+          } else {
+            const colid = margeCol ? margeCol.id : null
+            const colRest = colid ? fullColumnIdData[colid] : null
+            if (colRest) {
+              mergeColumnIndex = colRest._index
+            }
           }
-          const mcIndex = XEUtils.findIndexOf(mList, item => (item._row === row || getRowid($xeTable, item._row) === getRowid($xeTable, row)) && ((item as any)._col.id === col || item._col.id === (col as VxeTableDefines.ColumnInfo).id))
+          const mcIndex = XEUtils.findIndexOf(mergeBodyList, item => item.row === mergeRowIndex && item.col === mergeColumnIndex)
           if (mcIndex > -1) {
-            const rItems = mList.splice(mcIndex, 1)
-            rest.push(rItems[0])
+            const rItems = mergeBodyList.splice(mcIndex, 1)
+            const item = rItems[0]
+            if (item) {
+              rest.push(rItems[0])
+            }
+          }
+        })
+      }
+      return rest
+    }
+
+    const removeFooterMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
+      const { mergeFooterList, fullColumnIdData } = internalData
+      const rest: VxeTableDefines.MergeItem[] = []
+      if (merges) {
+        if (!XEUtils.isArray(merges)) {
+          merges = [merges]
+        }
+        merges.forEach((item) => {
+          const { row: margeRow, col: margeCol } = item
+          const mergeRowIndex = XEUtils.isNumber(margeRow) ? margeRow : -1
+          let mergeColumnIndex = -1
+          if (XEUtils.isNumber(margeCol)) {
+            mergeColumnIndex = margeCol
+          } else {
+            const colid = margeCol ? margeCol.id : null
+            const colRest = colid ? fullColumnIdData[colid] : null
+            if (colRest) {
+              mergeColumnIndex = colRest._index
+            }
+          }
+          const mcIndex = XEUtils.findIndexOf(mergeFooterList, item => item.row === mergeRowIndex && item.col === mergeColumnIndex)
+          if (mcIndex > -1) {
+            const rItems = mergeFooterList.splice(mcIndex, 1)
+            const item = rItems[0]
+            if (item) {
+              rest.push(item)
+            }
           }
         })
       }
@@ -1793,7 +1846,7 @@ export default defineComponent({
      */
     const updateAfterDataIndex = () => {
       const { treeConfig } = props
-      const { fullDataRowIdData, fullAllDataRowIdData, afterTreeFullData } = internalData
+      const { fullDataRowIdData, fullAllDataRowIdData, afterFullData, afterTreeFullData } = internalData
       const treeOpts = computeTreeOpts.value
       const { transform } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
@@ -1814,8 +1867,20 @@ export default defineComponent({
           }
           fullMaps[rowid] = row
         }, { children: transform ? treeOpts.mapChildrenField : childrenField })
+        if (transform) {
+          afterFullData.forEach((row, index) => {
+            const rowid = handleGetRowId(row)
+            const rowRest = fullAllDataRowIdData[rowid]
+            const seq = index + 1
+            if (rowRest) {
+              if (!treeConfig) {
+                rowRest.seq = seq
+              }
+              rowRest._index = index
+            }
+          })
+        }
         internalData.afterFullRowMaps = fullMaps
-        updateAfterListIndex()
       } else {
         updateAfterListIndex()
       }
@@ -6377,7 +6442,8 @@ export default defineComponent({
         if (props.spanMethod) {
           errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
         }
-        const rest = removeMerges(merges, internalData.mergeBodyList, internalData.afterFullData)
+        const rest = removeBodyMerges(merges)
+        $xeTable.handleUpdateBodyMerge()
         return nextTick().then(() => {
           $xeTable.updateCellAreas()
           updateStyle()
@@ -6397,6 +6463,7 @@ export default defineComponent({
         internalData.mergeBodyList = []
         internalData.mergeBodyMaps = {}
         internalData.mergeBodyCellMaps = {}
+        reactData.mergeBodyFlag++
         return nextTick().then(() => {
           return updateStyle()
         })
@@ -6416,7 +6483,8 @@ export default defineComponent({
         if (props.footerSpanMethod) {
           errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
         }
-        const rest = removeMerges(merges, internalData.mergeFooterList)
+        const rest = removeFooterMerges(merges)
+        $xeTable.handleUpdateFooterMerge()
         return nextTick().then(() => {
           tableMethods.updateCellAreas()
           updateStyle()
@@ -6436,6 +6504,7 @@ export default defineComponent({
         internalData.mergeFooterList = []
         internalData.mergeFooterMaps = {}
         internalData.mergeFooterCellMaps = {}
+        reactData.mergeFootFlag++
         return nextTick().then(() => {
           return updateStyle()
         })
