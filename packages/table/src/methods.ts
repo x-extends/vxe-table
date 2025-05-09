@@ -1936,7 +1936,7 @@ const handleFooterMerge = ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
 function removeBodyMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { mergeBodyList, fullColumnIdData, fullAllDataRowIdData } = internalData
+  const { mergeBodyList, fullColumnIdData, fullAllDataRowIdData, mergeBodyMaps } = internalData
   const rest: VxeTableDefines.MergeItem[] = []
   if (merges) {
     const { handleGetRowId } = createHandleGetRowId($xeTable)
@@ -1971,6 +1971,9 @@ function removeBodyMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
         const item = rItems[0]
         if (item) {
           rest.push(rItems[0])
+          if (mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`]) {
+            delete mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
+          }
         }
       }
     })
@@ -1981,7 +1984,7 @@ function removeBodyMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
 function removeFooterMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { mergeFooterList, fullColumnIdData } = internalData
+  const { mergeFooterList, fullColumnIdData, mergeFooterMaps } = internalData
   const rest: VxeTableDefines.MergeItem[] = []
   if (merges) {
     if (!XEUtils.isArray(merges)) {
@@ -2006,6 +2009,9 @@ function removeFooterMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
         const item = rItems[0]
         if (item) {
           rest.push(item)
+          if (mergeFooterMaps[`${mergeRowIndex}:${mergeColumnIndex}`]) {
+            delete mergeFooterMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
+          }
         }
       }
     })
