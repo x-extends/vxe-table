@@ -176,7 +176,7 @@ function getComponentOns (renderOpts: any, params: any, eFns?: {
   model: (cellValue: any) => void
   change?: (...args: any[]) => void
   blur?: (...args: any[]) => void
-}) {
+}, eventOns?: Record<string, any>) {
   const { events } = renderOpts
   const modelEvent = getModelEvent(renderOpts)
   const changeEvent = getChangeEvent(renderOpts)
@@ -214,7 +214,7 @@ function getComponentOns (renderOpts: any, params: any, eFns?: {
       }
     }
   }
-  return ons
+  return eventOns ? Object.assign(ons, eventOns) : ons
 }
 
 function getEditOns (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderTableEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
@@ -833,6 +833,76 @@ renderer.mixin({
     renderTableDefault: defaultEditRender,
     renderTableFilter: defaultFilterRender,
     tableFilterDefaultMethod: handleFilterMethod
+  },
+  VxeDateRangePicker: {
+    tableAutoFocus: 'input',
+    renderTableEdit (h: CreateElement, renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+      const { startField, endField } = renderOpts
+      const { $table, row, column } = params
+      const { model } = column
+      const cellValue = getCellValue(row, column)
+      const seProps: Record<string, any> = {}
+      const seOs: Record<string, any> = {}
+      if (startField && endField) {
+        seProps.startValue = XEUtils.get(row, startField)
+        seProps.endValue = XEUtils.get(row, endField)
+        seOs['update:startValue'] = (value: any) => {
+          if (startField) {
+            XEUtils.set(row, startField, value)
+          }
+        }
+        seOs['update:endValue'] = (value: any) => {
+          if (endField) {
+            XEUtils.set(row, endField, value)
+          }
+        }
+      }
+      return [
+        h(getDefaultComponent(renderOpts), {
+          props: getCellEditProps(renderOpts, params, cellValue, seProps),
+          on: getComponentOns(renderOpts, params, {
+            model (cellValue) {
+              model.update = true
+              model.value = cellValue
+              setCellValue(row, column, cellValue)
+            },
+            change () {
+              $table.updateStatus(params)
+            },
+            blur () {
+              $table.handleCellRuleUpdateStatus('blur', params)
+            }
+          }, seOs)
+        })
+      ]
+    },
+    renderTableCell (h, renderOpts, params) {
+      const { startField, endField } = renderOpts
+      const { row, column } = params
+      let startValue = ''
+      let endValue = ''
+      if (startField && endField) {
+        startValue = XEUtils.get(row, startField)
+        endValue = XEUtils.get(row, endField)
+      } else {
+        const cellValue = XEUtils.get(row, column.field)
+        if (cellValue) {
+          if (XEUtils.isArray(cellValue)) {
+            startValue = cellValue[0]
+            endValue = cellValue[1]
+          } else {
+            const strs = `${cellValue}`.split(',')
+            startValue = strs[0]
+            endValue = strs[1]
+          }
+        }
+      }
+      let cellLabel = ''
+      if (startValue && endValue) {
+        cellLabel = `${startValue} ~ ${endValue}`
+      }
+      return getCellLabelVNs(h, renderOpts, params, cellLabel)
+    }
   },
   VxeTextarea: {
     tableAutoFocus: 'textarea',

@@ -245,6 +245,9 @@ export default {
     datePicker: {
       yearTitle: '{0} 年'
     },
+    dateRangePicker: {
+      pleaseRange: '请选择开始日期与结束日期'
+    },
     input: {
       date: {
         m1: '01 月',
