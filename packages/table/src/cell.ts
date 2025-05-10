@@ -14,15 +14,19 @@ function renderTitlePrefixIcon (params: VxeTableDefines.CellRenderHeaderParams &
   const { $table, column } = params
   const titlePrefix = column.titlePrefix || column.titleHelp
   if (titlePrefix) {
-    return h('i', {
-      class: ['vxe-cell-title-prefix-icon', titlePrefix.iconStatus ? `theme--${titlePrefix.iconStatus}` : '', titlePrefix.icon || getIcon().TABLE_TITLE_PREFIX],
+    return h('span', {
+      class: ['vxe-cell-title-prefix-icon', titlePrefix.iconStatus ? `theme--${titlePrefix.iconStatus}` : ''],
       onMouseenter (evnt: MouseEvent) {
         $table.triggerHeaderTitleEvent(evnt, titlePrefix, params)
       },
       onMouseleave (evnt: MouseEvent) {
         $table.handleTargetLeaveEvent(evnt)
       }
-    })
+    }, [
+      h('i', {
+        class: titlePrefix.icon || getIcon().TABLE_TITLE_PREFIX
+      })
+    ])
   }
   return renderEmptyElement($table)
 }
@@ -31,15 +35,19 @@ function renderTitleSuffixIcon (params: VxeTableDefines.CellRenderHeaderParams &
   const { $table, column } = params
   const titleSuffix = column.titleSuffix
   if (titleSuffix) {
-    return h('i', {
-      class: ['vxe-cell-title-suffix-icon', titleSuffix.iconStatus ? `theme--${titleSuffix.iconStatus}` : '', titleSuffix.icon || getIcon().TABLE_TITLE_SUFFIX],
+    return h('span', {
+      class: ['vxe-cell-title-suffix-icon', titleSuffix.iconStatus ? `theme--${titleSuffix.iconStatus}` : ''],
       onMouseenter (evnt: MouseEvent) {
         $table.triggerHeaderTitleEvent(evnt, titleSuffix, params)
       },
       onMouseleave (evnt: MouseEvent) {
         $table.handleTargetLeaveEvent(evnt)
       }
-    })
+    }, [
+      h('i', {
+        class: titleSuffix.icon || getIcon().TABLE_TITLE_SUFFIX
+      })
+    ])
   }
   return renderEmptyElement($table)
 }
@@ -1090,14 +1098,20 @@ export const Cell = {
     if (isEnableConf(editConfig)) {
       editIconVNs = [
         isRequired && editOpts.showAsterisk
-          ? h('i', {
+          ? h('span', {
             class: 'vxe-cell--required-icon'
-          })
+          }, [
+            h('i')
+          ])
           : renderEmptyElement($table),
         isEnableConf(editRender) && editOpts.showIcon
-          ? h('i', {
-            class: ['vxe-cell--edit-icon', editOpts.icon || getIcon().TABLE_EDIT]
-          })
+          ? h('span', {
+            class: 'vxe-cell--edit-icon'
+          }, [
+            h('i', {
+              class: editOpts.icon || getIcon().TABLE_EDIT
+            })
+          ])
           : renderEmptyElement($table)
       ]
     }

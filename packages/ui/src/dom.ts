@@ -82,6 +82,13 @@ export function toCssUnit (val?: number | string, unit = 'px') {
   return `${val || ''}`
 }
 
+export function queryElement (elem: HTMLTableCellElement, selector: string) {
+  if (elem) {
+    return elem.querySelector<HTMLElement>(selector)
+  }
+  return null
+}
+
 export function getDomNode () {
   const documentElement = document.documentElement
   const bodyElem = document.body
