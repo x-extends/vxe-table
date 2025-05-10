@@ -245,6 +245,9 @@ export default {
     datePicker: {
       yearTitle: '{0} years'
     },
+    dateRangePicker: {
+      pleaseRange: 'Please select the date time and the end date'
+    },
     input: {
       date: {
         m1: 'January',

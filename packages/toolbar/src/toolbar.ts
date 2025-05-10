@@ -227,7 +227,7 @@ export default defineComponent({
           $xeGrid.triggerToolbarTolEvent(item, evnt)
         } else {
           const gCommandOpts = commands.get(code)
-          const params = { code, tool: item, $table: $table!, $grid: $xeGrid, $event: evnt }
+          const params = { code, button: null, tool: item, $table: $table!, $grid: $xeGrid, $event: evnt }
           if (gCommandOpts) {
             const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
             if (tCommandMethod) {
