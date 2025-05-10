@@ -776,18 +776,24 @@ $btnThemeList: (
   // user-select: none;
   &.col--ellipsis {
     & > .vxe-cell {
-      display: flex;
-      align-items: center;
+      .vxe-cell--wrapper {
+        display: flex;
+        align-items: center;
+        .vxe-cell--drag-handle,
+        .vxe-cell--sort,
+        .vxe-cell--filter,
+        .vxe-cell-title-prefix-icon,
+        .vxe-cell-title-suffix-icon,
+        .vxe-cell--checkbox,
+        .vxe-cell-title-suffix-icon,
+        .vxe-cell--required-icon {
+          flex-shrink: 0;
+        }
+      }
       .vxe-cell--title {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-      }
-      & > i,
-      & > span {
-        &:not(.vxe-cell--title) {
-          flex-shrink: 0;
-        }
       }
     }
   }
@@ -797,14 +803,16 @@ $btnThemeList: (
     width: 0.8em;
     height: 1em;
     line-height: 1em;
-    font-family: Verdana,Arial,Tahoma;
-    font-weight: normal;
     position: relative;
-    &:before {
-      content: "*";
-      position: absolute;
-      left: 0;
-      top: 0.2em;
+    & > i {
+      font-family: Verdana,Arial,Tahoma;
+      font-weight: normal;
+      &:before {
+        content: "*";
+        position: absolute;
+        left: 0;
+        top: 0.2em;
+      }
     }
   }
   // .vxe-cell--required-icon,

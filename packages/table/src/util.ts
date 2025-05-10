@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 import { ColumnInfo } from './columnInfo'
-import { isScale, isPx } from '../../ui/src/dom'
+import { isScale, isPx, queryElement } from '../../ui/src/dom'
 import { warnLog, errLog } from '../../ui/src/log'
 import { eqEmptyValue } from '../../ui/src/utils'
 
@@ -175,7 +175,7 @@ function getPaddingLeftRightSize (elem: any) {
   return 0
 }
 
-function getElementMarginWidth (elem: any) {
+function getElementMarginAndWidth (elem: any) {
   if (elem) {
     const computedStyle = getComputedStyle(elem)
     const marginLeft = XEUtils.toNumber(computedStyle.marginLeft)
@@ -261,10 +261,6 @@ export function getRootColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   return column
 }
 
-function queryCellElement (cell: any, selector: any) {
-  return cell.querySelector('.vxe-cell' + selector)
-}
-
 export function toFilters (filters: any) {
   if (filters && XEUtils.isArray(filters)) {
     return filters.map(({ label, value, data, resetValue, checked }) => {
@@ -293,19 +289,19 @@ export function getColReMinWidth (params: any) {
   const showTitle = headOverflow === 'title'
   const showTooltip = headOverflow === true || headOverflow === 'tooltip'
   const hasEllipsis = showTitle || showTooltip || showEllipsis
-  const minTitleWidth = XEUtils.floor((XEUtils.toNumber(getComputedStyle(cell).fontSize) || 14) * 1.6)
-  const paddingLeftRight = getPaddingLeftRightSize(cell) + getPaddingLeftRightSize(queryCellElement(cell, ''))
+  const minTitleWidth = XEUtils.floor((XEUtils.toNumber(getComputedStyle(cell).fontSize) || 14) * 1.8)
+  const paddingLeftRight = getPaddingLeftRightSize(cell) + getPaddingLeftRightSize(queryElement(cell, ''))
   let mWidth = minTitleWidth + paddingLeftRight
   // 默认最小宽处理
   if (hasEllipsis) {
-    const dragIconWidth = getPaddingLeftRightSize(queryCellElement(cell, '>.vxe-cell--drag-handle'))
-    const checkboxIconWidth = getPaddingLeftRightSize(queryCellElement(cell, '>.vxe-cell--checkbox'))
-    const requiredIconWidth = getElementMarginWidth(queryCellElement(cell, '>.vxe-cell--required-icon'))
-    const editIconWidth = getElementMarginWidth(queryCellElement(cell, '>.vxe-cell--edit-icon'))
-    const prefixIconWidth = getElementMarginWidth(queryCellElement(cell, '>.vxe-cell-title-prefix-icon'))
-    const suffixIconWidth = getElementMarginWidth(queryCellElement(cell, '>.vxe-cell-title-suffix-icon'))
-    const sortIconWidth = getElementMarginWidth(queryCellElement(cell, '>.vxe-cell--sort'))
-    const filterIconWidth = getElementMarginWidth(queryCellElement(cell, '>.vxe-cell--filter'))
+    const dragIconWidth = getElementMarginAndWidth(queryElement(cell, '.vxe-cell--drag-handle'))
+    const checkboxIconWidth = getElementMarginAndWidth(queryElement(cell, '.vxe-cell--checkbox'))
+    const requiredIconWidth = getElementMarginAndWidth(queryElement(cell, '.vxe-cell--required-icon'))
+    const editIconWidth = getElementMarginAndWidth(queryElement(cell, '.vxe-cell--edit-icon'))
+    const prefixIconWidth = getElementMarginAndWidth(queryElement(cell, '.vxe-cell-title-prefix-icon'))
+    const suffixIconWidth = getElementMarginAndWidth(queryElement(cell, '.vxe-cell-title-suffix-icon'))
+    const sortIconWidth = getElementMarginAndWidth(queryElement(cell, '.vxe-cell--sort'))
+    const filterIconWidth = getElementMarginAndWidth(queryElement(cell, '.vxe-cell--filter'))
     mWidth += dragIconWidth + checkboxIconWidth + requiredIconWidth + editIconWidth + prefixIconWidth + suffixIconWidth + filterIconWidth + sortIconWidth
   }
   // 如果设置最小宽
