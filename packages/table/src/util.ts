@@ -290,7 +290,7 @@ export function getColReMinWidth (params: any) {
   const showTooltip = headOverflow === true || headOverflow === 'tooltip'
   const hasEllipsis = showTitle || showTooltip || showEllipsis
   const minTitleWidth = XEUtils.floor((XEUtils.toNumber(getComputedStyle(cell).fontSize) || 14) * 1.8)
-  const paddingLeftRight = getPaddingLeftRightSize(cell) + getPaddingLeftRightSize(queryElement(cell, ''))
+  const paddingLeftRight = getPaddingLeftRightSize(cell) + getPaddingLeftRightSize(queryElement(cell, '.vxe-cell'))
   let mWidth = minTitleWidth + paddingLeftRight
   // 默认最小宽处理
   if (hasEllipsis) {
