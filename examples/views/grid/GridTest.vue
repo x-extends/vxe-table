@@ -1,87 +1,52 @@
 <template>
   <div>
-    <!-- 加高该元素 bug会消失 -->
-    <div style="width: 100%; height: 200px"></div>
-    <vxe-table
-      max-height="448"
-      :data="tableData"
-      :cell-config="{ height: 88 }"
-      @scroll-boundary="handleScrollBoundary"
-      style="--vxe-ui-table-cell-padding-default: 16px 24px 16px 16px"
-    >
-      <vxe-column field="name" title="名称" min-width="150"> </vxe-column>
-      <vxe-column field="amount" title="价格" min-width="150" align="right">
-      </vxe-column>
-    </vxe-table>
-    <!-- 加高该元素 bug会消失 -->
-    <div style="width: 100%; height: 200px"></div>
+    <vxe-grid v-bind="gridOptions">
+      <template #rateAddress>
+        <span>标题显示原生 title ___________________________</span>
+      </template>
+    </vxe-grid>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-const loading = ref(false)
-const tableData = ref([])
-const findList = (field, order) => {
-  loading.value = true
-  // 模拟接口
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      loading.value = false
-      const mockList = [
-        {
-          id: 10001,
-          name: 'A',
-          price: 1201.58
-        },
-        {
-          id: 10002,
-          name: 'B',
-          price: 0.1257
-        },
-        {
-          id: 10003,
-          name: 'C',
-          price: 1201.58
-        },
-        {
-          id: 10004,
-          name: 'D',
-          price: 0.1257
-        },
-        {
-          id: 10005,
-          name: 'E',
-          price: 1201.58
-        },
-        {
-          id: 10006,
-          name: 'F',
-          price: 0.1257
-        },
-        {
-          id: 10007,
-          name: 'G',
-          price: 1201.58
-        },
-        {
-          id: 10008,
-          name: 'H',
-          price: 0.1257
+import { reactive } from 'vue'
+const gridOptions = reactive({
+  showFooter: true,
+  rowConfig: {
+    isHover: true
+  },
+  columns: [
+    { type: 'seq', width: 70 },
+    { field: 'name', title: '名称', showOverflow: 'ellipsis' },
+    { field: 'role', title: '角色', showOverflow: true },
+    { field: 'date', title: '标题溢出，显示为 tooltip xxxxxxxxxxxxxxx', showHeaderOverflow: true, showOverflow: 'title', showFooterOverflow: true },
+    { field: 'rate', title: 'Rate', showHeaderOverflow: 'title', slots: { header: 'rateAddress' } },
+    { field: 'address', title: '不换行不换行不换行不换行不换行不换行不换行不换行不换行', width: 160 }
+  ],
+  data: [
+    { name: 'Test1', role: '前端', date: '内容显示原生 title', rate: 5, address: 'address1' },
+    { name: '内容超出隐藏，不显示提示信息xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', role: '后端', date: '2020-02-22', rate: 2, address: 'address2\ntooltip文本换行\n换行xx' },
+    { name: 'Test3', role: '内容超出一行显示为 tooltip xxxxxxxxxxxxxxxxxxxx', date: '2020-01-01', rate: 0, address: 'address3\ntooltip文本换行\n换行xx' },
+    { name: 'Test4', role: '设计师', date: '2020-02-23', rate: 1, address: 'address4' },
+    { name: 'Test5', role: '前端', date: '2020-01-20', rate: 3, address: 'address5\ntooltip文本换行\n换行xx' }
+  ],
+  footerMethod ({ columns }) {
+    const footerData = [
+      columns.map((column, columnIndex) => {
+        if (columnIndex === 0) {
+          return '合计'
         }
-      ]
-      tableData.value = tableData.value.concat(mockList)
-    }, 1000)
-  })
-}
-
-onMounted(() => {
-  findList()
+        if (['date'].includes(column.field)) {
+          return '说明 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx长文本内容长文本内容xxxxxxxxxxxxx'
+        }
+        if (['rate'].includes(column.field)) {
+          return '不想换行不想换行不想换行不想换行不想换行不想换行不想换行不想换行'
+        }
+        return null
+      })
+    ]
+    return footerData
+  }
 })
 
-function handleScrollBoundary ({ isBottom }) {
-  if (isBottom && !loading.value) {
-    findList()
-  }
-}
 </script>
