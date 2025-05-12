@@ -443,7 +443,7 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const internalData = $xeTable as unknown as TableInternalData
 
   const { showOverflow } = tableProps
-  const { scrollYLoad } = reactData
+  const { scrollYLoad, scrollYTop } = reactData
   const { elemStore, afterFullData, fullAllDataRowIdData, isResizeCellHeight } = internalData
   const rowOpts = $xeTable.computeRowOpts
   const cellOpts = $xeTable.computeCellOpts
@@ -457,8 +457,7 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     const bodyScrollTop = bodyScrollElem.scrollTop
     const trElem: HTMLTableRowElement | null = bodyScrollElem.querySelector(`[rowid="${rowid}"]`)
     if (trElem) {
-      const trOffsetParent = trElem.offsetParent as HTMLElement
-      const trOffsetTop = trElem.offsetTop + (trOffsetParent ? trOffsetParent.offsetTop : 0)
+      const trOffsetTop = trElem.offsetTop + (scrollYLoad ? scrollYTop : 0)
       const trHeight = trElem.clientHeight
       // 检测行是否在可视区中
       if (trOffsetTop < bodyScrollTop || trOffsetTop > bodyScrollTop + bodyHeight) {
@@ -499,7 +498,7 @@ export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { scrollXLoad } = reactData
+  const { scrollXLoad, scrollXLeft } = reactData
   const { elemStore, visibleColumn } = internalData
   const leftFixedWidth = $xeTable.computeLeftFixedWidth
   const rightFixedWidth = $xeTable.computeRightFixedWidth
@@ -519,8 +518,7 @@ export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
       tdElem = bodyScrollElem.querySelector(`.${column.id}`)
     }
     if (tdElem) {
-      const tdOffsetParent = tdElem.offsetParent as HTMLElement
-      const tdOffsetLeft = tdElem.offsetLeft + (tdOffsetParent ? tdOffsetParent.offsetLeft : 0)
+      const tdOffsetLeft = tdElem.offsetLeft + (scrollXLoad ? scrollXLeft : 0)
       const cellWidth = tdElem.clientWidth
       // 检测是否在可视区中
       if (tdOffsetLeft < (bodyScrollLeft + leftFixedWidth)) {
