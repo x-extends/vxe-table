@@ -6384,7 +6384,11 @@ const Methods = {
     if (!titleElem) {
       return
     }
-    const cellEl = titleElem.parentElement as HTMLDivElement
+    const cWrapperEl = titleElem.parentElement as HTMLDivElement
+    if (!cWrapperEl) {
+      return
+    }
+    const cellEl = cWrapperEl.parentElement as HTMLDivElement
     if (!cellEl) {
       return
     }
@@ -6393,7 +6397,8 @@ const Methods = {
       return
     }
     if (tooltipStore.column !== column || !tooltipStore.visible) {
-      handleTooltip($xeTable, evnt, thEl, thEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), thEl.querySelector<HTMLElement>('.vxe-cell--title') || cellEl, params)
+      const ctEl = thEl.querySelector<HTMLElement>('.vxe-cell--title')
+      handleTooltip($xeTable, evnt, thEl, (hasClass(thEl, 'col--ellipsis') ? ctEl : cWrapperEl) || cWrapperEl, ctEl || cellEl, params)
     }
   },
   /**
