@@ -150,7 +150,8 @@ export function updateDeepRowKey (row: any, rowKey: string) {
 }
 
 function getFastRowIdByKey (row: any, rowKey: string) {
-  return row[rowKey]
+  // return row[rowKey]
+  return encodeRowid(row[rowKey])
 }
 
 export function updateFastRowKey (row: any, rowKey: string) {
