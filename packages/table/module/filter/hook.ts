@@ -52,6 +52,9 @@ hooks.add('tableFilterModule', {
       const { filterStore } = reactData
       $xeTable.handleClearFilter(filterStore.column)
       $xeTable.confirmFilterEvent(evnt)
+      if (evnt) {
+        $xeTable.dispatchEvent('clear-filter', { filterList: [] }, evnt)
+      }
     }
 
     const filterPrivateMethods: TableFilterPrivateMethods = {
@@ -290,10 +293,10 @@ hooks.add('tableFilterModule', {
         if (fieldOrColumn) {
           column = handleFieldOrColumn($xeTable, fieldOrColumn)
           if (column) {
-            filterPrivateMethods.handleClearFilter(column)
+            $xeTable.handleClearFilter(column)
           }
         } else {
-          tableFullColumn.forEach(filterPrivateMethods.handleClearFilter)
+          tableFullColumn.forEach($xeTable.handleClearFilter)
         }
         if (!fieldOrColumn || column !== filterStore.column) {
           Object.assign(filterStore, {

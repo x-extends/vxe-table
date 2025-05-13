@@ -39,9 +39,11 @@ export default [
   'clear-merge',
   'sort-change',
   'clear-sort',
+  'clear-all-sort',
   'filter-change',
   'filter-visible',
   'clear-filter',
+  'clear-all-filter',
 
   'resizable-change', // 废弃
 

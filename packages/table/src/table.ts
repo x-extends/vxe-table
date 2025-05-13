@@ -5790,6 +5790,40 @@ export default defineComponent({
           return updateStyle()
         })
       },
+      clearSortByEvent (evnt, fieldOrColumn) {
+        const { tableFullColumn } = internalData
+        const sortOpts = computeSortOpts.value
+        const sortCols: VxeTableDefines.ColumnInfo[] = []
+        let column: VxeTableDefines.ColumnInfo<any> | null = null
+        if (evnt) {
+          if (fieldOrColumn) {
+            column = handleFieldOrColumn($xeTable, fieldOrColumn)
+            if (column) {
+              column.order = null
+            }
+          } else {
+            tableFullColumn.forEach((column) => {
+              if (column.order) {
+                column.order = null
+                sortCols.push(column)
+              }
+            })
+          }
+          if (!sortOpts.remote) {
+            $xeTable.handleTableData(true)
+          }
+          if (sortCols.length) {
+            const params = { $table: $xeTable, $event: evnt, cols: sortCols, sortList: [] }
+            dispatchEvent('clear-all-sort', params, evnt)
+          } else if (column) {
+            $xeTable.handleColumnSortEvent(evnt, column)
+          }
+        }
+        return nextTick().then(() => {
+          updateRowOffsetTop()
+          return updateStyle()
+        })
+      },
       isSort (fieldOrColumn) {
         if (fieldOrColumn) {
           const column = handleFieldOrColumn($xeTable, fieldOrColumn)
@@ -5848,6 +5882,47 @@ export default defineComponent({
       },
       isFilter (fieldOrColumn) {
         return tableMethods.isActiveFilterByColumn(fieldOrColumn)
+      },
+      clearFilterByEvent (evnt, fieldOrColumn) {
+        const { filterStore } = reactData
+        const { tableFullColumn } = internalData
+        const filterOpts = computeFilterOpts.value
+        const filterCols: VxeTableDefines.ColumnInfo[] = []
+        let column: VxeTableDefines.ColumnInfo<any> | null = null
+        if (fieldOrColumn) {
+          column = handleFieldOrColumn($xeTable, fieldOrColumn)
+          if (column) {
+            $xeTable.handleClearFilter(column)
+          }
+        } else {
+          tableFullColumn.forEach(column => {
+            if (column.filters) {
+              filterCols.push(column)
+              $xeTable.handleClearFilter(column)
+            }
+          })
+        }
+        if (!fieldOrColumn || column !== filterStore.column) {
+          Object.assign(filterStore, {
+            isAllSelected: false,
+            isIndeterminate: false,
+            style: null,
+            options: [],
+            column: null,
+            multiple: false,
+            visible: false
+          })
+        }
+        if (!filterOpts.remote) {
+          $xeTable.updateData()
+        }
+        if (filterCols.length) {
+          const params = { $table: $xeTable, $event: evnt, cols: filterCols, filterList: [] }
+          dispatchEvent('clear-all-filter', params, evnt)
+        } else if (column) {
+          $xeTable.dispatchEvent('clear-filter', { filterList: () => $xeTable.getCheckedFilters() }, evnt)
+        }
+        return nextTick()
       },
       /**
        * 判断展开行是否懒加载完成
@@ -8481,7 +8556,12 @@ export default defineComponent({
           }
         }
         if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
-          handleTooltip(evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), params)
+          const ctEl = tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper')
+          let ovEl = null
+          if (column.treeNode) {
+            ovEl = tdEl.querySelector<HTMLElement>('.vxe-tree-cell')
+          }
+          handleTooltip(evnt, tdEl, ovEl || ctEl, tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), params)
         }
       },
       /**
@@ -8905,11 +8985,14 @@ export default defineComponent({
       handleColumnSortEvent (evnt, column) {
         const { mouseConfig } = props
         const mouseOpts = computeMouseOpts.value
-        const { field, sortable } = column
+        const { field, sortable, order } = column
         if (sortable) {
-          const params = { $table: $xeTable, $event: evnt, column, field, property: field, order: column.order, sortList: tableMethods.getSortColumns(), sortTime: column.sortTime }
+          const params = { $table: $xeTable, $event: evnt, column, field, property: field, order, sortList: tableMethods.getSortColumns(), sortTime: column.sortTime }
           if (mouseConfig && mouseOpts.area && $xeTable.handleSortEvent) {
             $xeTable.handleSortEvent(evnt, params)
+          }
+          if (!order) {
+            dispatchEvent('clear-sort', params, evnt)
           }
           dispatchEvent('sort-change', params, evnt)
         }
@@ -8924,10 +9007,10 @@ export default defineComponent({
         if (sortable) {
           if (!order || column.order === order) {
             if (allowClear) {
-              tableMethods.clearSort(multiple ? column : null)
+              $xeTable.clearSort(multiple ? column : null)
             }
           } else {
-            tableMethods.sort({ field, order })
+            $xeTable.sort({ field, order })
           }
           $xeTable.handleColumnSortEvent(evnt, column)
         }
@@ -11282,6 +11365,7 @@ export default defineComponent({
       const rowOpts = computeRowOpts.value
       const customOpts = computeCustomOpts.value
       const rowGroupOpts = computeRowGroupOpts.value
+      const virtualYOpts = computeVirtualYOpts.value
       const { groupFields } = rowGroupOpts
 
       if (columnOpts.drag || rowOpts.drag || customOpts.allowSort) {
@@ -11497,9 +11581,11 @@ export default defineComponent({
         }
       })
 
-      const tableViewportEl = refTableViewportElem.value
-      if (tableViewportEl) {
-        tableViewportEl.addEventListener('wheel', $xeTable.triggerBodyWheelEvent, { passive: false })
+      if (virtualYOpts.mode !== 'scroll') {
+        const tableViewportEl = refTableViewportElem.value
+        if (tableViewportEl) {
+          tableViewportEl.addEventListener('wheel', $xeTable.triggerBodyWheelEvent, { passive: false })
+        }
       }
 
       globalEvents.on($xeTable, 'paste', handleGlobalPasteEvent)
