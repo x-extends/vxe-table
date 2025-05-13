@@ -4347,7 +4347,6 @@ const Methods = {
   },
   /**
    * 检查是否为临时行数据
-   * @param {Row} row 行对象
    */
   isInsertByRow (row: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -4367,19 +4366,16 @@ const Methods = {
   },
   /**
    * 删除所有新增的临时数据
-   * @returns
    */
   removeInsertRow () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
 
-    internalData.insertRowMaps = {}
-    return $xeTable.remove($xeTable.getInsertRecords())
+    const { insertRowMaps } = internalData
+    return $xeTable.remove(XEUtils.values(insertRowMaps))
   },
   /**
    * 检查行或列数据是否发生改变
-   * @param {Row} rowOrId 行对象
-   * @param {String} field 字段名
    */
   isUpdateByRow (rowOrId: any, field?: string | null) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods

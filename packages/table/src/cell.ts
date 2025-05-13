@@ -1089,7 +1089,9 @@ export const Cell = {
           ? h('i', {
             class: 'vxe-cell--edit-icon'
           }, [
-            h('i')
+            h('i', {
+              class: editOpts.icon || getIcon().TABLE_EDIT
+            })
           ])
           : renderEmptyElement($table)
       ]

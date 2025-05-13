@@ -2,7 +2,7 @@ import { CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { getFuncText, isEnableConf } from '../../ui/src/utils'
 import { initTpImg } from '../../ui/src/dom'
-import { createHandleGetRowId, getCellHeight } from './util'
+import { createHandleGetRowId, getCellHeight, hasDeepKey } from './util'
 import { VxeUI } from '../../ui'
 import methods from './methods'
 import TableBodyComponent from './body'
@@ -29,6 +29,14 @@ import type { VxeLoadingComponent, VxeTooltipComponent, VxeTabsConstructor, VxeT
 import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, TableReactData, VxeTableDefines } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
+
+function handleKeyField ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const keyField = $xeTable.computeRowField
+  internalData.currKeyField = keyField
+  internalData.isCurrDeepKey = hasDeepKey(keyField)
+}
 
 /**
  * 渲染浮固定列
@@ -730,6 +738,13 @@ export default {
       }
       return ''
     },
+    computeRowField () {
+      const $xeTable = this
+      const props = $xeTable
+
+      const rowOpts = $xeTable.computeRowOpts
+      return `${props.rowId || rowOpts.keyField || '_X_ROW_KEY'}`
+    },
     validOpts () {
       return this.computeValidOpts
     },
@@ -1202,12 +1217,12 @@ export default {
       return fixedSize
     },
     fixedColumnSize () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       return $xeTable.computeFixedColumnSize
     },
     computeIsMaxFixedColumn () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const fixedColumnSize = $xeTable.computeFixedColumnSize
       const columnOpts = $xeTable.columnOpts
@@ -1252,8 +1267,8 @@ export default {
       return false
     },
     computeVirtualScrollBars () {
-      const $xeTable = this
-      const reactData = $xeTable
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const { overflowX, scrollXLoad, overflowY, scrollYLoad } = reactData
       return {
@@ -1333,7 +1348,7 @@ export default {
       this.reScrollFlag++
     },
     reScrollFlag () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       $xeTable.$nextTick(() => {
         $xeTable.recalculate(true).then(() => $xeTable.refreshScroll())
@@ -1365,7 +1380,7 @@ export default {
       this.footFlag++
     },
     footFlag () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       $xeTable.updateFooter()
     },
@@ -1395,6 +1410,21 @@ export default {
       const $xeTable = this
 
       $xeTable.handleUpdateRowGroup(val)
+    },
+    computeRowField () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
+      // 行主键被改变，重载表格
+      const { inited, tableFullData } = internalData
+      if (inited) {
+        handleKeyField($xeTable)
+        reactData.tableData = []
+        $xeTable.$nextTick(() => {
+          $xeTable.reloadData(tableFullData)
+        })
+      }
     }
   } as any,
   created () {
@@ -1404,6 +1434,8 @@ export default {
 
     Object.assign($xeTable, {
       tZindex: 0,
+      currKeyField: '',
+      isCurrDeepKey: false,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
       scrollXStore: {
@@ -1513,6 +1545,8 @@ export default {
       swYInterval: 0,
       swYTotal: 0
     })
+
+    handleKeyField($xeTable)
 
     const { data, exportConfig, importConfig, treeConfig, showOverflow, highlightCurrentRow, highlightCurrentColumn } = props
     const { scrollXStore, scrollYStore } = internalData

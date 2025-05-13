@@ -97,39 +97,44 @@ export function getRowUniqueId () {
   return XEUtils.uniqueId('row_')
 }
 
+export function hasDeepKey (rowKey: string) {
+  return rowKey.indexOf('.') > -1
+}
+
 // 行主键 key
 export function getRowkey ($xeTable: VxeTableConstructor) {
-  const props = $xeTable
-  const rowOpts = $xeTable.computeRowOpts
-  return `${props.rowId || rowOpts.keyField || '_X_ROW_KEY'}`
+  const internalData = $xeTable as unknown as TableInternalData
+  const { currKeyField } = internalData
+  return currKeyField
 }
 
 // 行主键 value
 export function getRowid ($xeTable: VxeTableConstructor, row: any) {
-  const rowid = XEUtils.get(row, getRowkey($xeTable))
-  return encodeRowid(rowid)
+  const internalData = $xeTable as unknown as TableInternalData
+  const { isCurrDeepKey, currKeyField } = internalData
+  return row ? encodeRowid((isCurrDeepKey ? getDeepRowIdByKey : getFastRowIdByKey)(row, currKeyField)) : ''
 }
 
 export function createHandleUpdateRowId ($xeTable: VxeTableConstructor) {
-  const rowKey = getRowkey($xeTable)
-  const isDeepKey = rowKey.indexOf('.') > -1
-  const updateRId = isDeepKey ? updateDeepRowKey : updateFastRowKey
+  const internalData = $xeTable as unknown as TableInternalData
+  const { isCurrDeepKey, currKeyField } = internalData
+  const updateRId = isCurrDeepKey ? updateDeepRowKey : updateFastRowKey
   return {
-    rowKey,
+    rowKey: currKeyField,
     handleUpdateRowId (row: any) {
-      return row ? updateRId(row, rowKey) : null
+      return row ? updateRId(row, currKeyField) : ''
     }
   }
 }
 
 export function createHandleGetRowId ($xeTable: VxeTableConstructor) {
-  const rowKey = getRowkey($xeTable)
-  const isDeepKey = rowKey.indexOf('.') > -1
-  const getRId = isDeepKey ? getDeepRowIdByKey : getFastRowIdByKey
+  const internalData = $xeTable as unknown as TableInternalData
+  const { isCurrDeepKey, currKeyField } = internalData
+  const getRId = isCurrDeepKey ? getDeepRowIdByKey : getFastRowIdByKey
   return {
-    rowKey,
+    rowKey: currKeyField,
     handleGetRowId (row: any) {
-      return row ? getRId(row, rowKey) : null
+      return row ? encodeRowid(getRId(row, currKeyField)) : ''
     }
   }
 }
@@ -144,7 +149,7 @@ function getDeepRowIdByKey (row: any, rowKey: string) {
 }
 
 export function updateDeepRowKey (row: any, rowKey: string) {
-  let rowid = getDeepRowIdByKey(row, rowKey)
+  let rowid = encodeRowid(getDeepRowIdByKey(row, rowKey))
   if (eqEmptyValue(rowid)) {
     rowid = getRowUniqueId()
     XEUtils.set(row, rowKey, rowid)
@@ -157,7 +162,7 @@ function getFastRowIdByKey (row: any, rowKey: string) {
 }
 
 export function updateFastRowKey (row: any, rowKey: string) {
-  let rowid = getFastRowIdByKey(row, rowKey)
+  let rowid = encodeRowid(getFastRowIdByKey(row, rowKey))
   if (eqEmptyValue(rowid)) {
     rowid = getRowUniqueId()
     row[rowKey] = rowid
@@ -165,7 +170,7 @@ export function updateFastRowKey (row: any, rowKey: string) {
   return rowid
 }
 
-function getPaddingLeftRightSize (elem: any) {
+function getPaddingLeftRightSize (elem: HTMLElement | null) {
   if (elem) {
     const computedStyle = getComputedStyle(elem)
     const paddingLeft = XEUtils.toNumber(computedStyle.paddingLeft)
@@ -175,7 +180,7 @@ function getPaddingLeftRightSize (elem: any) {
   return 0
 }
 
-function getElementMarginAndWidth (elem: any) {
+function getElementMarginAndWidth (elem: HTMLElement | null) {
   if (elem) {
     const computedStyle = getComputedStyle(elem)
     const marginLeft = XEUtils.toNumber(computedStyle.marginLeft)
