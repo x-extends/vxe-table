@@ -1794,6 +1794,7 @@ export default {
     const columnOpts = $xeTable.computeColumnOpts
     const rowOpts = $xeTable.computeRowOpts
     const customOpts = $xeTable.computeCustomOpts
+    const virtualYOpts = $xeTable.computeVirtualYOpts
 
     if (columnOpts.drag || rowOpts.drag || customOpts.allowSort) {
       initTpImg()
@@ -1839,9 +1840,11 @@ export default {
       this.$resize = resizeObserver
     }
 
-    const tableViewportEl = $xeTable.$refs.refTableViewportElem as HTMLDivElement
-    if (tableViewportEl) {
-      tableViewportEl.addEventListener('wheel', $xeTable.triggerBodyWheelEvent, { passive: false })
+    if (virtualYOpts.mode !== 'scroll') {
+      const tableViewportEl = $xeTable.$refs.refTableViewportElem as HTMLDivElement
+      if (tableViewportEl) {
+        tableViewportEl.addEventListener('wheel', $xeTable.triggerBodyWheelEvent, { passive: false })
+      }
     }
 
     this.preventEvent(null, 'mounted')

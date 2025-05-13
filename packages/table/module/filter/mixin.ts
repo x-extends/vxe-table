@@ -4,7 +4,7 @@ import { toFilters, handleFieldOrColumn, getRefElem } from '../../src/util'
 import { toCssUnit, triggerEvent, getDomNode } from '../../../ui/src/dom'
 import { isEnableConf } from '../../../ui/src/utils'
 
-import type { VxeTableConstructor, VxeTableDefines, TableReactData, TableInternalData } from '../../../../types'
+import type { VxeTableConstructor, VxeTableDefines, TableReactData, TableInternalData, VxeTablePrivateMethods } from '../../../../types'
 
 const { renderer } = VxeUI
 
@@ -294,25 +294,37 @@ export default {
      * 当筛选面板中的重置按钮被按下时触发
      * @param {Event} evnt 事件
      */
-    handleFilterResetFilter (evnt: any) {
-      this.handleClearFilter(this.filterStore.column)
-      this.confirmFilterEvent(evnt)
+    handleFilterResetFilter (evnt: Event) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { filterStore } = reactData
+      $xeTable.handleClearFilter(filterStore.column)
+      $xeTable.confirmFilterEvent(evnt)
+      if (evnt) {
+        $xeTable.dispatchEvent('clear-filter', { filterList: [] }, evnt)
+      }
     },
     /**
      * 清空指定列的筛选条件
      * 如果为空则清空所有列的筛选条件
      * @param {String} fieldOrColumn 列
      */
-    _clearFilter (fieldOrColumn: any) {
-      const { filterStore } = this
+    _clearFilter (fieldOrColumn: string | VxeTableDefines.ColumnInfo<any> | null | undefined) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { filterStore } = reactData
+      const { tableFullColumn } = internalData
       let column
       if (fieldOrColumn) {
-        column = handleFieldOrColumn(this, fieldOrColumn)
+        column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column) {
-          this.handleClearFilter(column)
+          $xeTable.handleClearFilter(column)
         }
       } else {
-        this.visibleColumn.forEach(this.handleClearFilter)
+        tableFullColumn.forEach($xeTable.handleClearFilter)
       }
       if (!fieldOrColumn || column !== filterStore.column) {
         Object.assign(filterStore, {
@@ -325,12 +337,14 @@ export default {
           visible: false
         })
       }
-      return this.updateData()
+      return $xeTable.updateData()
     },
-    _updateFilterOptionStatus (item: any, checked: any) {
+    _updateFilterOptionStatus (item: any, checked: boolean) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       item._checked = checked
       item.checked = checked
-      return this.$nextTick()
+      return $xeTable.$nextTick()
     }
   } as any
 }

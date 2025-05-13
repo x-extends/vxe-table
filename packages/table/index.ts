@@ -7,9 +7,16 @@ let isReg = false
 
 export const VxeTable = Object.assign({}, VxeTableComponent, {
   install (app: VueConstructor) {
-    if (typeof window !== 'undefined' && (window as any).VXETableMixin) {
-      VxeTableComponent.mixins.push((window as any).VXETableMixin)
-      delete (window as any).VXETableMixin
+    if (typeof window !== 'undefined') {
+      if ((window as any).VxeTableExtendCellArea && (window as any).VxeTableExtendCellArea.use) {
+        (window as any).VxeTableExtendCellArea.use(VxeUI)
+      } else if ((window as any).VXETableMixin) {
+        VxeTableComponent.mixins.push((window as any).VXETableMixin)
+        delete (window as any).VXETableMixin
+      }
+      if ((window as any).VxeTableExtendPivotTable && (window as any).VxeTableExtendPivotTable.use) {
+        (window as any).VxeTableExtendPivotTable.use(VxeUI)
+      }
     }
     // 兼容老版本
     if (typeof window !== 'undefined' && (window as any).VxeTableExtendCellArea && (window as any).VxeTableExtendCellArea.init) {

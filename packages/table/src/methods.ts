@@ -6425,7 +6425,12 @@ const Methods = {
       }
     }
     if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
-      handleTooltip($xeTable, evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), params)
+      const ctEl = tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper')
+      let ovEl = null
+      if (column.treeNode) {
+        ovEl = tdEl.querySelector<HTMLElement>('.vxe-tree-cell')
+      }
+      handleTooltip($xeTable, evnt, tdEl, ovEl || ctEl, tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), params)
     }
   },
   /**
@@ -7584,11 +7589,14 @@ const Methods = {
 
     const { mouseConfig } = props
     const mouseOpts = $xeTable.computeMouseOpts
-    const { field, sortable } = column
+    const { field, sortable, order } = column
     if (sortable) {
-      const params = { $table: $xeTable, $event: evnt, column, field, property: field, order: column.order, sortList: $xeTable.getSortColumns(), sortTime: column.sortTime }
+      const params = { $table: $xeTable, $event: evnt, column, field, property: field, order, sortList: $xeTable.getSortColumns(), sortTime: column.sortTime }
       if (mouseConfig && mouseOpts.area && $xeTable.handleSortEvent) {
         $xeTable.handleSortEvent(evnt, params)
+      }
+      if (!order) {
+        $xeTable.dispatchEvent('clear-sort', params, evnt)
       }
       $xeTable.dispatchEvent('sort-change', params, evnt)
     }
@@ -8585,6 +8593,43 @@ const Methods = {
       return updateStyle($xeTable)
     })
   },
+  clearSortByEvent (evnt: Event, fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any> | null) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { tableFullColumn } = internalData
+    const sortOpts = $xeTable.computeSortOpts
+    const sortCols: VxeTableDefines.ColumnInfo[] = []
+    let column: VxeTableDefines.ColumnInfo<any> | null = null
+    if (evnt) {
+      if (fieldOrColumn) {
+        column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        if (column) {
+          column.order = null
+        }
+      } else {
+        tableFullColumn.forEach((column) => {
+          if (column.order) {
+            column.order = null
+            sortCols.push(column)
+          }
+        })
+      }
+      if (!sortOpts.remote) {
+        $xeTable.handleTableData(true)
+      }
+      if (sortCols.length) {
+        const params = { $table: $xeTable, $event: evnt, cols: sortCols, sortList: [] }
+        $xeTable.dispatchEvent('clear-all-sort', params, evnt)
+      } else if (column) {
+        $xeTable.handleColumnSortEvent(evnt, column)
+      }
+    }
+    return $xeTable.$nextTick().then(() => {
+      updateRowOffsetTop($xeTable)
+      return updateStyle($xeTable)
+    })
+  },
   // 在 v3 中废弃
   getSortColumn () {
     if (process.env.VUE_APP_VXE_ENV === 'development') {
@@ -8653,6 +8698,51 @@ const Methods = {
   isFilter (fieldOrColumn: any) {
     return this.isActiveFilterByColumn(fieldOrColumn)
   },
+  clearFilterByEvent (evnt: Event, fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any> | null) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { filterStore } = reactData
+    const { tableFullColumn } = internalData
+    const filterOpts = $xeTable.computeFilterOpts
+    const filterCols: VxeTableDefines.ColumnInfo[] = []
+    let column: VxeTableDefines.ColumnInfo<any> | null = null
+    if (fieldOrColumn) {
+      column = handleFieldOrColumn($xeTable, fieldOrColumn)
+      if (column) {
+        $xeTable.handleClearFilter(column)
+      }
+    } else {
+      tableFullColumn.forEach(column => {
+        if (column.filters) {
+          filterCols.push(column)
+          $xeTable.handleClearFilter(column)
+        }
+      })
+    }
+    if (!fieldOrColumn || column !== filterStore.column) {
+      Object.assign(filterStore, {
+        isAllSelected: false,
+        isIndeterminate: false,
+        style: null,
+        options: [],
+        column: null,
+        multiple: false,
+        visible: false
+      })
+    }
+    if (!filterOpts.remote) {
+      $xeTable.updateData()
+    }
+    if (filterCols.length) {
+      const params = { $table: $xeTable, $event: evnt, cols: filterCols, filterList: [] }
+      $xeTable.dispatchEvent('clear-all-filter', params, evnt)
+    } else if (column) {
+      $xeTable.dispatchEvent('clear-filter', { filterList: () => $xeTable.getCheckedFilters() }, evnt)
+    }
+    return $xeTable.$nextTick()
+  },
   /**
    * 判断展开行是否懒加载完成
    * @param {Row} row 行对象
@@ -8665,7 +8755,7 @@ const Methods = {
     return rowRest && !!rowRest.expandLoaded
   },
   clearRowExpandLoaded (row: any) {
-    const $xeTable = this as VxeTableConstructor
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
