@@ -9,7 +9,7 @@ import TableHeaderComponent from './header'
 import TableFooterComponent from './footer'
 import tableProps from './props'
 import tableEmits from './emits'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getCellHeight } from './util'
+import { getRowUniqueId, clearTableAllStatus, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getCellHeight } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 import TableCustomPanelComponent from '../module/custom/panel'
@@ -294,6 +294,8 @@ export default defineComponent({
 
     const internalData: TableInternalData = {
       tZindex: 0,
+      currKeyField: '',
+      isCurrDeepKey: false,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
       scrollXStore: {
@@ -469,6 +471,11 @@ export default defineComponent({
         return `${id}`
       }
       return ''
+    })
+
+    const computeRowField = computed(() => {
+      const rowOpts = computeRowOpts.value
+      return `${props.rowId || rowOpts.keyField || '_X_ROW_KEY'}`
     })
 
     const computeValidOpts = computed(() => {
@@ -887,6 +894,7 @@ export default defineComponent({
       computeSize,
       computeTableId,
       computeValidOpts,
+      computeRowField,
       computeVirtualXOpts,
       computeVirtualYOpts,
       computeScrollbarOpts,
@@ -969,6 +977,12 @@ export default defineComponent({
         return ('' + val1) === ('' + val2)
       }
       return XEUtils.isEqual(val1, val2)
+    }
+
+    const handleKeyField = () => {
+      const keyField = computeRowField.value
+      internalData.currKeyField = keyField
+      internalData.isCurrDeepKey = hasDeepKey(keyField)
     }
 
     const getNextSortOrder = (column: VxeTableDefines.ColumnInfo) => {
@@ -3791,11 +3805,10 @@ export default defineComponent({
     }
 
     const createGetRowCacheProp = (prop: 'seq' | 'index' | '_index' | '$index') => {
-      const { handleGetRowId } = createHandleGetRowId($xeTable)
       return function (row: any) {
         const { fullAllDataRowIdData } = internalData
         if (row) {
-          const rowid = handleGetRowId(row)
+          const rowid = getRowid($xeTable, row)
           const rowRest = fullAllDataRowIdData[rowid]
           if (rowRest) {
             return rowRest[prop]
@@ -4548,7 +4561,6 @@ export default defineComponent({
       },
       /**
        * 检查是否为临时行数据
-       * @param {Row} row 行对象
        */
       isInsertByRow (row) {
         const rowid = getRowid($xeTable, row)
@@ -4560,16 +4572,13 @@ export default defineComponent({
       },
       /**
        * 删除所有新增的临时数据
-       * @returns
        */
       removeInsertRow () {
-        internalData.insertRowMaps = {}
-        return $xeTable.remove($xeTable.getInsertRecords())
+        const { insertRowMaps } = internalData
+        return $xeTable.remove(XEUtils.values(insertRowMaps))
       },
       /**
        * 检查行或列数据是否发生改变
-       * @param {Row} rowidOrRow 行对象、行主键
-       * @param {String} field 字段名
        */
       isUpdateByRow (rowidOrRow, field) {
         const { keepSource } = props
@@ -11224,11 +11233,25 @@ export default defineComponent({
       handleUpdateRowGroup(val)
     })
 
+    watch(computeRowField, () => {
+      const { inited, tableFullData } = internalData
+      // 行主键被改变，重载表格
+      if (inited) {
+        handleKeyField()
+        reactData.tableData = []
+        nextTick(() => {
+          $xeTable.reloadData(tableFullData)
+        })
+      }
+    })
+
     if ($xeTabs) {
       watch(() => $xeTabs ? $xeTabs.reactData.resizeFlag : null, () => {
         handleGlobalResizeEvent()
       })
     }
+
+    handleKeyField()
 
     hooks.forEach((options) => {
       const { setupTable } = options

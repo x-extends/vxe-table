@@ -1,17 +1,29 @@
 <template>
   <div>
-    <vxe-button status="success" @click="getSelectEvent">获取已选</vxe-button>
-    <vxe-grid ref="gridRef" v-bind="gridOptions" v-on="gridEvents"></vxe-grid>
+    <p>
+      <vxe-button @click="toggleSelectRow(gridOptions.data[1])">切换第二行选中</vxe-button>
+      <vxe-button @click="setSelectRow([gridOptions.data[2], gridOptions.data[3]], true)">设置第三、四行选中</vxe-button>
+      <vxe-button @click="selectAllEvent">设置所有行选中</vxe-button>
+      <vxe-button @click="clearSelectEvent">清除所有行选中</vxe-button>
+      <vxe-button @click="getSelectEvent">获取选中</vxe-button>
+    </p>
+
+    <vxe-grid
+      ref="gridRef"
+      v-bind="gridOptions"
+      @checkbox-all="selectAllChangeEvent"
+      @checkbox-change="selectChangeEvent">
+    </vxe-grid>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive } from 'vue'
 import { VxeUI } from '../../../packages'
-import { VxeGridInstance, VxeGridProps, VxeGridListeners } from '../../../types'
+import { VxeGridInstance, VxeGridProps, VxeGridEvents } from '../../../types'
 
 interface RowVO {
-  id: number
+  id: string
   name: string
   role: string
   sex: string
@@ -21,67 +33,77 @@ interface RowVO {
 
 const gridRef = ref<VxeGridInstance<RowVO>>()
 
-const allList = [
-  { id: '1#2', name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
-  { id: '2', name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-  { id: '3#2', name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-  { id: 'B1_WHC-XXX#前模镶件#B1_WHC-XXX', name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc' },
-  { id: 'B1_WHC-XXX#前模镶件#B1_WHC-XXX', name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
-]
-
-// 模拟前端分页
-const handlePageData = () => {
-  gridOptions.loading = true
-  setTimeout(() => {
-    const { pageSize, currentPage } = gridOptions.pagerConfig
-    gridOptions.pagerConfig.total = allList.length
-    gridOptions.data = allList.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-    gridOptions.loading = false
-  }, 100)
-}
-
 const gridOptions = reactive<VxeGridProps<RowVO> & {
-  pagerConfig: {
-    total: number
-    currentPage: number
-    pageSize: number
-  }
+  data: RowVO[]
 }>({
-  showOverflow: true,
   border: true,
-  loading: false,
-  height: 500,
+  height: 300,
   rowConfig: {
+    isCurrent: true,
+    isHover: true,
     keyField: 'id'
   },
-  checkboxConfig: {
-    reserve: true,
-    showReserveStatus: true
-  },
-  pagerConfig: {
-    total: 0,
-    currentPage: 1,
-    pageSize: 10
+  radioConfig: {
+    labelField: 'name',
+    trigger: 'row'
   },
   columns: [
     { type: 'checkbox', width: 60 },
-    { field: 'name', title: 'Name', minWidth: 160 },
-    { field: 'email', title: 'Email', minWidth: 160 },
-    { field: 'nickname', title: 'Nickname', minWidth: 160 },
-    { field: 'age', title: 'Age', width: 100 },
-    { field: 'role', title: 'Role', minWidth: 160 },
-    { field: 'amount', title: 'Amount', width: 140 },
-    { field: 'updateDate', title: 'Update Date', visible: false },
-    { field: 'createDate', title: 'Create Date', visible: false }
+    { field: 'name', title: 'Name' },
+    { field: 'sex', title: 'Sex' },
+    { field: 'age', title: 'Age' },
+    { field: 'address', title: 'Address', showOverflow: true }
   ],
-  data: []
+  data: [
+    { id: '10001', name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+    { id: '10002', name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+    { id: '10 0值03', name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+    { id: '10+00$-4', name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc' },
+    { id: '100-#0值5', name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
+  ]
 })
 
-const gridEvents: VxeGridListeners = {
-  pageChange ({ pageSize, currentPage }) {
-    gridOptions.pagerConfig.currentPage = currentPage
-    gridOptions.pagerConfig.pageSize = pageSize
-    handlePageData()
+const selectAllChangeEvent: VxeGridEvents.CheckboxAll<RowVO> = ({ checked }) => {
+  const $grid = gridRef.value
+  if ($grid) {
+    const records = $grid.getCheckboxRecords()
+    console.log(checked ? '所有勾选事件' : '所有取消事件', records)
+  }
+}
+
+const selectChangeEvent: VxeGridEvents.CheckboxChange<RowVO> = ({ checked }) => {
+  const $grid = gridRef.value
+  if ($grid) {
+    const records = $grid.getCheckboxRecords()
+    console.log(checked ? '勾选事件' : '取消事件', records)
+  }
+}
+
+const toggleSelectRow = (row: RowVO) => {
+  const $grid = gridRef.value
+  if ($grid) {
+    $grid.toggleCheckboxRow(row)
+  }
+}
+
+const setSelectRow = (rows: RowVO[], checked: boolean) => {
+  const $grid = gridRef.value
+  if ($grid) {
+    $grid.setCheckboxRow(rows, checked)
+  }
+}
+
+const selectAllEvent = () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    $grid.setAllCheckboxRow(true)
+  }
+}
+
+const clearSelectEvent = () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    $grid.clearCheckboxRow()
   }
 }
 
@@ -89,13 +111,7 @@ const getSelectEvent = () => {
   const $grid = gridRef.value
   if ($grid) {
     const selectRecords = $grid.getCheckboxRecords()
-    const selectReserveRecords = $grid.getCheckboxReserveRecords()
-    VxeUI.modal.message({
-      content: `总共勾选： ${selectRecords.length + selectReserveRecords.length} 条，当前页勾选：${selectRecords.length} 条，已保留勾选：${selectReserveRecords.length} 条`,
-      status: 'success'
-    })
+    VxeUI.modal.alert(`${selectRecords.length}条数据`)
   }
 }
-
-handlePageData()
 </script>
