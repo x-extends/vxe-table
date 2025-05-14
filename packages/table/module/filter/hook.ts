@@ -275,6 +275,7 @@ hooks.add('tableFilterModule', {
         if (column && column.filters) {
           column.filters = toFilters(options || [])
           if (isUpdate) {
+            // 已废弃，即将去掉事件触发 new Event('click') -> null
             return $xeTable.handleColumnConfirmFilter(column, new Event('click'))
           }
         }

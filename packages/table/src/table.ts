@@ -9,7 +9,7 @@ import TableHeaderComponent from './header'
 import TableFooterComponent from './footer'
 import tableProps from './props'
 import tableEmits from './emits'
-import { getRowUniqueId, clearTableAllStatus, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getCellHeight } from './util'
+import { getRowUniqueId, clearTableAllStatus, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getCellHeight } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 import TableCustomPanelComponent from '../module/custom/panel'
@@ -987,7 +987,7 @@ export default defineComponent({
 
     const getNextSortOrder = (column: VxeTableDefines.ColumnInfo) => {
       const sortOpts = computeSortOpts.value
-      const { orders } = sortOpts
+      const { orders = [] } = sortOpts
       const currOrder = column.order || null
       const oIndex = orders.indexOf(currOrder) + 1
       return orders[oIndex < orders.length ? oIndex : 0]
@@ -1397,6 +1397,54 @@ export default defineComponent({
         })
       }
       return rest
+    }
+
+    const handleSortEvent = (evnt: Event | null, sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) => {
+      const sortOpts = computeSortOpts.value
+      const { multiple, remote, orders } = sortOpts
+      if (!XEUtils.isArray(sortConfs)) {
+        sortConfs = [sortConfs]
+      }
+      if (sortConfs && sortConfs.length) {
+        if (!multiple) {
+          sortConfs = [sortConfs[0]]
+          clearAllSort()
+        }
+        let firstColumn: any = null
+        sortConfs.forEach((confs: any, index: number) => {
+          let { field, order } = confs
+          let column = field
+          if (XEUtils.isString(field)) {
+            column = $xeTable.getColumnByField(field)
+          }
+          if (!firstColumn) {
+            firstColumn = column
+          }
+          if (column && column.sortable) {
+            if (orders && orders.indexOf(order) === -1) {
+              order = getNextSortOrder(column)
+            }
+            if (column.order !== order) {
+              column.order = order
+            }
+            column.sortTime = Date.now() + index
+          }
+        })
+        if (isUpdate) {
+          if (!remote) {
+            $xeTable.handleTableData(true)
+          }
+        }
+        if (evnt) {
+          $xeTable.handleColumnSortEvent(evnt, firstColumn)
+        }
+        return nextTick().then(() => {
+          updateRowOffsetTop()
+          $xeTable.updateCellAreas()
+          return updateStyle()
+        })
+      }
+      return nextTick()
     }
 
     const clearAllSort = () => {
@@ -5723,49 +5771,11 @@ export default defineComponent({
         return nextTick()
       },
       setSort (sortConfs, isUpdate) {
-        const sortOpts = computeSortOpts.value
-        const { multiple, remote, orders } = sortOpts
-        if (!XEUtils.isArray(sortConfs)) {
-          sortConfs = [sortConfs]
-        }
-        if (sortConfs && sortConfs.length) {
-          if (!multiple) {
-            sortConfs = [sortConfs[0]]
-            clearAllSort()
-          }
-          let firstColumn: any = null
-          sortConfs.forEach((confs: any, index: number) => {
-            let { field, order } = confs
-            let column = field
-            if (XEUtils.isString(field)) {
-              column = tableMethods.getColumnByField(field)
-            }
-            if (!firstColumn) {
-              firstColumn = column
-            }
-            if (column && column.sortable) {
-              if (orders && orders.indexOf(order) === -1) {
-                order = getNextSortOrder(column)
-              }
-              if (column.order !== order) {
-                column.order = order
-              }
-              column.sortTime = Date.now() + index
-            }
-          })
-          if (isUpdate) {
-            if (!remote) {
-              $xeTable.handleTableData(true)
-            }
-            $xeTable.handleColumnSortEvent(new Event('click'), firstColumn)
-          }
-          return nextTick().then(() => {
-            updateRowOffsetTop()
-            tableMethods.updateCellAreas()
-            return updateStyle()
-          })
-        }
-        return nextTick()
+        // 已废弃，即将去掉事件触发 new Event('click') -> null
+        return handleSortEvent(new Event('click'), sortConfs, isUpdate)
+      },
+      setSortByEvent (evnt, sortConfs, isUpdate) {
+        return handleSortEvent(evnt, sortConfs, isUpdate)
       },
       /**
        * 清空指定列的排序条件
@@ -5846,6 +5856,16 @@ export default defineComponent({
           return XEUtils.orderBy(sortList, 'sortTime')
         }
         return sortList
+      },
+      setFilterByEvent (evnt, fieldOrColumn, options, isUpdate) {
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        if (column && column.filters) {
+          column.filters = toFilters(options || [])
+          if (isUpdate) {
+            return $xeTable.handleColumnConfirmFilter(column, evnt)
+          }
+        }
+        return nextTick()
       },
       /**
        * 关闭筛选
