@@ -3916,7 +3916,7 @@ export default defineComponent({
     }
 
     const checkLastSyncScroll = (isRollX: boolean, isRollY: boolean) => {
-      const { scrollXLoad, scrollYLoad } = reactData
+      const { scrollXLoad, scrollYLoad, isAllOverflow } = reactData
       const { lcsTimeout } = internalData
       if (lcsTimeout) {
         clearTimeout(lcsTimeout)
@@ -3932,13 +3932,19 @@ export default defineComponent({
         internalData.inFooterScroll = false
         internalData.scrollRenderType = ''
 
-        calcCellHeight()
+        if (!isAllOverflow) {
+          calcCellHeight()
+          updateRowOffsetTop()
+        }
         if (isRollX && scrollXLoad) {
           $xeTable.updateScrollXData()
         }
         if (isRollY && scrollYLoad) {
           $xeTable.updateScrollYData().then(() => {
-            calcCellHeight()
+            if (!isAllOverflow) {
+              calcCellHeight()
+              updateRowOffsetTop()
+            }
             $xeTable.updateScrollYSpace()
           })
         }
@@ -4969,6 +4975,7 @@ export default defineComponent({
             }
             XEUtils.eachTree([targetColumn], (column) => {
               column.fixed = fixed
+              column.renderFixed = fixed
             })
             tablePrivateMethods.saveCustomStore('update:fixed')
             if (!status) {
@@ -4993,6 +5000,7 @@ export default defineComponent({
           if (targetColumn && targetColumn.fixed) {
             XEUtils.eachTree([targetColumn], (column) => {
               column.fixed = null
+              column.renderFixed = null
             })
             tablePrivateMethods.saveCustomStore('update:fixed')
             if (!status) {
@@ -8578,10 +8586,14 @@ export default defineComponent({
         if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
           const ctEl = tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper')
           let ovEl = null
+          let tipEl = tdEl.querySelector<HTMLElement>(column.type === 'html' ? '.vxe-cell--html' : '.vxe-cell--label')
           if (column.treeNode) {
             ovEl = tdEl.querySelector<HTMLElement>('.vxe-tree-cell')
           }
-          handleTooltip(evnt, tdEl, ovEl || ctEl, tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), params)
+          if (!tipEl) {
+            tipEl = ctEl
+          }
+          handleTooltip(evnt, tdEl, ovEl || ctEl, tipEl, params)
         }
       },
       /**
@@ -8593,7 +8605,16 @@ export default defineComponent({
         const tdEl = evnt.currentTarget as HTMLTableCellElement
         handleTargetEnterEvent(tooltipStore.column !== column || !!tooltipStore.row)
         if (tooltipStore.column !== column || !tooltipStore.visible) {
-          handleTooltip(evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector('.vxe-cell--wrapper') as HTMLElement, params)
+          const ctEl = tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper')
+          let ovEl = null
+          let tipEl = tdEl.querySelector<HTMLElement>(column.type === 'html' ? '.vxe-cell--html' : '.vxe-cell--label')
+          if (column.type === 'html') {
+            ovEl = tdEl.querySelector<HTMLElement>('.vxe-cell--html')
+          }
+          if (!tipEl) {
+            tipEl = ctEl
+          }
+          handleTooltip(evnt, tdEl, ovEl || ctEl, tipEl, params)
         }
       },
       handleTargetLeaveEvent () {
