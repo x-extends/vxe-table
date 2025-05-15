@@ -1050,6 +1050,20 @@ $btnThemeList: (
       }
     }
   }
+  .vxe-header--column {
+    &.col--ellipsis {
+      &.col--center {
+        .vxe-cell--wrapper {
+          justify-content: center;
+        }
+      }
+      &.col--right {
+        .vxe-cell--wrapper {
+          justify-content: right;
+        }
+      }
+    }
+  }
   .vxe-header--column,
   .vxe-footer--column {
     &.col--ellipsis {

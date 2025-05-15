@@ -3,7 +3,7 @@ import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTarge
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem } from './util'
+import { getRowUniqueId, clearTableAllStatus, toFilters, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
@@ -30,8 +30,9 @@ function eqCellValue (row1: any, row2: any, field: any) {
   return XEUtils.isEqual(val1, val2)
 }
 
-function getNextSortOrder (_vm: any, column: any) {
-  const orders = _vm.sortOpts.orders
+function getNextSortOrder ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: any) {
+  const sortOpts = $xeTable.computeSortOpts
+  const { orders = [] } = sortOpts
   const currOrder = column.order || null
   const oIndex = orders.indexOf(currOrder) + 1
   return orders[oIndex < orders.length ? oIndex : 0]
@@ -2019,8 +2020,59 @@ function removeFooterMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
   return rest
 }
 
-function clearAllSort (_vm: any) {
-  _vm.tableFullColumn.forEach((column: any) => {
+function handleSortEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: Event | null, sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
+  const sortOpts = $xeTable.computeSortOpts
+  const { multiple, remote, orders } = sortOpts
+  if (!XEUtils.isArray(sortConfs)) {
+    sortConfs = [sortConfs]
+  }
+  if (sortConfs && sortConfs.length) {
+    if (!multiple) {
+      sortConfs = [sortConfs[0]]
+      clearAllSort($xeTable)
+    }
+    let firstColumn: any = null
+    sortConfs.forEach((confs: any, index: number) => {
+      let { field, order } = confs
+      let column = field
+      if (XEUtils.isString(field)) {
+        column = $xeTable.getColumnByField(field)
+      }
+      if (!firstColumn) {
+        firstColumn = column
+      }
+      if (column && column.sortable) {
+        if (orders && orders.indexOf(order) === -1) {
+          order = getNextSortOrder($xeTable, column)
+        }
+        if (column.order !== order) {
+          column.order = order
+        }
+        column.sortTime = Date.now() + index
+      }
+    })
+    if (isUpdate) {
+      if (!remote) {
+        $xeTable.handleTableData(true)
+      }
+    }
+    if (evnt) {
+      $xeTable.handleColumnSortEvent(evnt, firstColumn)
+    }
+    return $xeTable.$nextTick().then(() => {
+      updateRowOffsetTop($xeTable)
+      $xeTable.updateCellAreas()
+      return updateStyle($xeTable)
+    })
+  }
+  return $xeTable.$nextTick()
+}
+
+function clearAllSort ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { tableFullColumn } = internalData
+  tableFullColumn.forEach((column: any) => {
     column.order = null
   })
 }
@@ -3288,7 +3340,7 @@ function checkLastSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { scrollXLoad, scrollYLoad } = reactData
+  const { scrollXLoad, scrollYLoad, isAllOverflow } = reactData
   const { lcsTimeout } = internalData
   if (lcsTimeout) {
     clearTimeout(lcsTimeout)
@@ -3303,13 +3355,19 @@ function checkLastSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     internalData.inBodyScroll = false
     internalData.inFooterScroll = false
     internalData.scrollRenderType = ''
-    calcCellHeight($xeTable)
+    if (!isAllOverflow) {
+      calcCellHeight($xeTable)
+      updateRowOffsetTop($xeTable)
+    }
     if (isRollX && scrollXLoad) {
       $xeTable.updateScrollXData()
     }
     if (isRollY && scrollYLoad) {
       $xeTable.updateScrollYData().then(() => {
-        calcCellHeight($xeTable)
+        if (!isAllOverflow) {
+          calcCellHeight($xeTable)
+          updateRowOffsetTop($xeTable)
+        }
         $xeTable.updateScrollYSpace()
       })
     }
@@ -4812,6 +4870,7 @@ const Methods = {
         }
         XEUtils.eachTree([targetColumn], (column) => {
           column.fixed = fixed
+          column.renderFixed = fixed
         })
         $xeTable.saveCustomStore('update:fixed')
         if (!status) {
@@ -4838,6 +4897,7 @@ const Methods = {
       if (targetColumn && targetColumn.fixed) {
         XEUtils.eachTree([targetColumn], (column) => {
           column.fixed = null
+          column.renderFixed = null
         })
         $xeTable.saveCustomStore('update:fixed')
         if (!status) {
@@ -6427,10 +6487,14 @@ const Methods = {
     if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
       const ctEl = tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper')
       let ovEl = null
+      let tipEl = tdEl.querySelector<HTMLElement>(column.type === 'html' ? '.vxe-cell--html' : '.vxe-cell--label')
       if (column.treeNode) {
         ovEl = tdEl.querySelector<HTMLElement>('.vxe-tree-cell')
       }
-      handleTooltip($xeTable, evnt, tdEl, ovEl || ctEl, tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), params)
+      if (!tipEl) {
+        tipEl = ctEl
+      }
+      handleTooltip($xeTable, evnt, tdEl, ovEl || ctEl, tipEl, params)
     }
   },
   /**
@@ -6445,10 +6509,19 @@ const Methods = {
     const tdEl = evnt.currentTarget as HTMLTableCellElement
     handleTargetEnterEvent($xeTable, tooltipStore.column !== column || !!tooltipStore.row)
     if (tooltipStore.column !== column || !tooltipStore.visible) {
-      handleTooltip($xeTable, evnt, tdEl, tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper'), tdEl.querySelector<HTMLElement>('.vxe-cell--label') || tdEl.querySelector('.vxe-cell--wrapper') as HTMLElement, params)
+      const ctEl = tdEl.querySelector<HTMLElement>('.vxe-cell--wrapper')
+      let ovEl = null
+      let tipEl = tdEl.querySelector<HTMLElement>(column.type === 'html' ? '.vxe-cell--html' : '.vxe-cell--label')
+      if (column.type === 'html') {
+        ovEl = tdEl.querySelector<HTMLElement>('.vxe-cell--html')
+      }
+      if (!tipEl) {
+        tipEl = ctEl
+      }
+      handleTooltip($xeTable, evnt, tdEl, ovEl || ctEl, tipEl, params)
     }
   },
-  openTooltip (target: any, content: any) {
+  openTooltip (target: HTMLElement, content: string | number) {
     const { $refs } = this
     const commTip = $refs.refCommTooltip
     if (commTip) {
@@ -8524,49 +8597,13 @@ const Methods = {
   setSort (sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    const sortOpts = $xeTable.computeSortOpts
-    const { multiple, remote, orders } = sortOpts
-    if (!XEUtils.isArray(sortConfs)) {
-      sortConfs = [sortConfs]
-    }
-    if (sortConfs && sortConfs.length) {
-      if (!multiple) {
-        sortConfs = [sortConfs[0]]
-        clearAllSort($xeTable)
-      }
-      let firstColumn: any = null
-      sortConfs.forEach((confs: any, index: number) => {
-        let { field, order } = confs
-        let column = field
-        if (XEUtils.isString(field)) {
-          column = $xeTable.getColumnByField(field)
-        }
-        if (!firstColumn) {
-          firstColumn = column
-        }
-        if (column && column.sortable) {
-          if (orders && orders.indexOf(order) === -1) {
-            order = getNextSortOrder($xeTable, column)
-          }
-          if (column.order !== order) {
-            column.order = order
-          }
-          column.sortTime = Date.now() + index
-        }
-      })
-      if (isUpdate) {
-        if (!remote) {
-          $xeTable.handleTableData(true)
-        }
-        $xeTable.handleColumnSortEvent(new Event('click'), firstColumn)
-      }
-      return $xeTable.$nextTick().then(() => {
-        updateRowOffsetTop($xeTable)
-        $xeTable.updateCellAreas()
-        return updateStyle($xeTable)
-      })
-    }
-    return $xeTable.$nextTick()
+    // 已废弃，即将去掉事件触发 new Event('click') -> null
+    return handleSortEvent($xeTable, new Event('click'), sortConfs, isUpdate)
+  },
+  setSortByEvent (evnt: Event, sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    return handleSortEvent($xeTable, evnt, sortConfs, isUpdate)
   },
   /**
    * 清空指定列的排序条件
@@ -8657,6 +8694,18 @@ const Methods = {
       return XEUtils.orderBy(sortList, 'sortTime')
     }
     return sortList
+  },
+  setFilterByEvent (evnt: Event, fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>, options: VxeColumnPropTypes.FilterItem[], isUpdate?: boolean) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+    if (column && column.filters) {
+      column.filters = toFilters(options || [])
+      if (isUpdate) {
+        return $xeTable.handleColumnConfirmFilter(column, evnt)
+      }
+    }
+    return $xeTable.$nextTick()
   },
   /**
    * 关闭筛选
