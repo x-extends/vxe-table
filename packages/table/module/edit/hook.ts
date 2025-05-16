@@ -92,10 +92,8 @@ hooks.add('tableEditModule', {
           fullDataRowIdData[rowid] = rest
           fullAllDataRowIdData[rowid] = rest
         } else {
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (parentRowId) {
-              warnLog('vxe.error.unableInsert')
-            }
+          if (parentRowId) {
+            warnLog('vxe.error.unableInsert')
           }
           afterFullData[funcName](item)
           tableFullTreeData[funcName](item)
@@ -170,11 +168,9 @@ hooks.add('tableEditModule', {
               const parentLevel = parentRest ? parentRest.level : 0
               newRecords.forEach((item, i) => {
                 const rowid = getRowid($xeTable, item)
-                if (process.env.VUE_APP_VXE_ENV === 'development') {
-                  if (item[treeOpts.parentField]) {
-                    if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
-                      errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
-                    }
+                if (item[treeOpts.parentField]) {
+                  if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
+                    errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
                   }
                 }
                 if (parentRow) {
@@ -203,9 +199,7 @@ hooks.add('tableEditModule', {
                 }
               }
             } else {
-              if (process.env.VUE_APP_VXE_ENV === 'development') {
-                warnLog('vxe.error.unableInsert')
-              }
+              warnLog('vxe.error.unableInsert')
               insertTreeRow(newRecords, true)
             }
           } else {
@@ -698,9 +692,7 @@ hooks.add('tableEditModule', {
         return []
       },
       getActiveRecord () {
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
-        }
+        warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
         return $xeTable.getEditRecord()
       },
       getEditRecord () {
@@ -726,9 +718,7 @@ hooks.add('tableEditModule', {
       },
       clearActived (row) {
         // 即将废弃
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
-        }
+        warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
         return $xeTable.clearEdit(row)
       },
       /**
@@ -749,9 +739,7 @@ hooks.add('tableEditModule', {
         return nextTick()
       },
       isActiveByRow (row) {
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
-        }
+        warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
         // 即将废弃
         return $xeTable.isEditByRow(row)
       },
@@ -764,9 +752,7 @@ hooks.add('tableEditModule', {
         return editStore.actived.row === row
       },
       setActiveRow (row) {
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          warnLog('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
-        }
+        warnLog('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
         // 即将废弃
         return editMethods.setEditRow(row)
       },
@@ -786,9 +772,7 @@ hooks.add('tableEditModule', {
         return handleEditCell(row, column, isPos)
       },
       setActiveCell (row, fieldOrColumn) {
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
-        }
+        warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
         // 即将废弃
         return editMethods.setEditCell(row, fieldOrColumn)
       },

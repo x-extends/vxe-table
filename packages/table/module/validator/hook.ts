@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
-import { getFuncText, eqEmptyValue } from '../../../ui/src/utils'
+import { getFuncText } from '../../../ui/src/utils'
 import { scrollToView } from '../../../ui/src/dom'
 import { handleFieldOrColumn, getRowid } from '../../src/util'
 import { warnLog, errLog } from '../../../ui/src/log'
@@ -41,6 +41,106 @@ class Rule {
   }
 
   [key: string]: any
+}
+
+// 如果存在 pattern，判断正则
+function validREValue (pattern: string | RegExp | undefined, val: string) {
+  if (pattern && !(XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(val)) {
+    return false
+  }
+  return true
+}
+
+// 如果存在 max，判断最大值
+function validMaxValue (max: string | number | undefined, num: number) {
+  if (!XEUtils.eqNull(max) && num > XEUtils.toNumber(max)) {
+    return false
+  }
+  return true
+}
+
+// 如果存在 min，判断最小值
+function validMinValue (min: string | number | undefined, num: number) {
+  if (!XEUtils.eqNull(min) && num < XEUtils.toNumber(min)) {
+    return false
+  }
+  return true
+}
+
+function validRuleValue (rule: VxeTableDefines.ValidatorRule, val: any, required: boolean | undefined) {
+  const { type, min, max, pattern } = rule
+  const isArrType = type === 'array'
+  const isNumType = type === 'number'
+  const isStrType = type === 'string'
+  const strVal = `${val}`
+  if (!validREValue(pattern, strVal)) {
+    return false
+  }
+  if (isArrType) {
+    if (!XEUtils.isArray(val)) {
+      return false
+    }
+    if (required) {
+      if (!val.length) {
+        return false
+      }
+    }
+    if (!validMinValue(min, val.length)) {
+      return false
+    }
+    if (!validMaxValue(max, val.length)) {
+      return false
+    }
+  } else if (isNumType) {
+    const numVal = Number(val)
+    if (isNaN(numVal)) {
+      return false
+    }
+    if (!validMinValue(min, numVal)) {
+      return false
+    }
+    if (!validMaxValue(max, numVal)) {
+      return false
+    }
+  } else {
+    if (isStrType) {
+      if (!XEUtils.isString(val)) {
+        return false
+      }
+    }
+    if (required) {
+      if (!strVal) {
+        return false
+      }
+    }
+    if (!validMinValue(min, strVal.length)) {
+      return false
+    }
+    if (!validMaxValue(max, strVal.length)) {
+      return false
+    }
+  }
+  return true
+}
+
+function checkRuleStatus (rule: VxeTableDefines.ValidatorRule, val: any) {
+  const { required } = rule
+  const isEmptyVal = XEUtils.eqNull(val)
+  if (required) {
+    if (isEmptyVal) {
+      return false
+    }
+    if (!validRuleValue(rule, val, required)) {
+      return false
+    }
+  } else {
+    if (!isEmptyVal) {
+      if (!validRuleValue(rule, val, required)) {
+        return false
+      }
+    }
+  }
+  return true
 }
 
 const tableValidatorMethodKeys: (keyof TableValidatorMethods)[] = ['fullValidate', 'validate', 'fullValidateField', 'validateField', 'clearValidate']
@@ -258,10 +358,8 @@ hooks.add('tableValidatorModule', {
        * 完整校验行，和 validate 的区别就是会给有效数据中的每一行进行校验
        */
       fullValidate (rows, cb) {
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (XEUtils.isFunction(cb)) {
-            warnLog('vxe.error.notValidators', ['fullValidate(rows, callback)', 'fullValidate(rows)'])
-          }
+        if (XEUtils.isFunction(cb)) {
+          warnLog('vxe.error.notValidators', ['fullValidate(rows, callback)', 'fullValidate(rows)'])
         }
         return beginValidate(rows, null, cb, true)
       },
@@ -341,29 +439,6 @@ hooks.add('tableValidatorModule', {
       }
     }
 
-    const validErrorRuleValue = (rule: VxeTableDefines.ValidatorRule, val: any) => {
-      const { type, min, max, pattern } = rule
-      const isNumType = type === 'number'
-      const numVal = isNumType ? XEUtils.toNumber(val) : XEUtils.getSize(val)
-      // 判断数值
-      if (isNumType && isNaN(val)) {
-        return true
-      }
-      // 如果存在 min，判断最小值
-      if (!XEUtils.eqNull(min) && numVal < XEUtils.toNumber(min)) {
-        return true
-      }
-      // 如果存在 max，判断最大值
-      if (!XEUtils.eqNull(max) && numVal > XEUtils.toNumber(max)) {
-        return true
-      }
-      // 如果存在 pattern，正则校验
-      if (pattern && !(XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(val)) {
-        return true
-      }
-      return false
-    }
-
     validatorPrivateMethods = {
       /**
        * 校验数据
@@ -391,7 +466,7 @@ hooks.add('tableValidatorModule', {
           if (rules) {
             const cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, field) : val
             rules.forEach((rule) => {
-              const { type, trigger, required, validator } = rule
+              const { trigger, validator } = rule
               if (validType === 'all' || !trigger || validType === trigger) {
                 if (validator) {
                   const validParams = {
@@ -414,9 +489,7 @@ hooks.add('tableValidatorModule', {
                       if (tcvMethod) {
                         customValid = tcvMethod(validParams)
                       } else {
-                        if (process.env.VUE_APP_VXE_ENV === 'development') {
-                          warnLog('vxe.error.notValidators', [validator])
-                        }
+                        errLog('vxe.error.notValidators', [validator])
                       }
                     } else {
                       errLog('vxe.error.notValidators', [validator])
@@ -439,17 +512,7 @@ hooks.add('tableValidatorModule', {
                     }
                   }
                 } else {
-                  const isArrType = type === 'array'
-                  const isArrVal = XEUtils.isArray(cellValue)
-                  let hasEmpty = true
-                  if (isArrType || isArrVal) {
-                    hasEmpty = !isArrVal || !cellValue.length
-                  } else if (XEUtils.isString(cellValue)) {
-                    hasEmpty = eqEmptyValue(cellValue.trim())
-                  } else {
-                    hasEmpty = eqEmptyValue(cellValue)
-                  }
-                  if (required ? (hasEmpty || validErrorRuleValue(rule, cellValue)) : (!hasEmpty && validErrorRuleValue(rule, cellValue))) {
+                  if (!checkRuleStatus(rule, cellValue)) {
                     validRuleErr = true
                     errorRules.push(new Rule(rule))
                   }

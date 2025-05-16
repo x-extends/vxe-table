@@ -3539,7 +3539,6 @@ export default defineComponent({
         //     }
         //   }
         // }
-        // if (process.env.VUE_APP_VXE_ENV === 'development') {
         // if (props.showHeader && !props.showHeaderOverflow) {
         //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
         // }
@@ -3552,7 +3551,6 @@ export default defineComponent({
         if (props.footerSpanMethod) {
           warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
         }
-        // }
         if (isReset) {
           const { visibleSize } = handleVirtualXVisible()
           scrollXStore.startIndex = 0
@@ -4264,9 +4262,7 @@ export default defineComponent({
           }
           reactData.tableData = tableData.slice(0)
         } else {
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            warnLog('vxe.error.reqProp', ['keep-source'])
-          }
+          errLog('vxe.error.reqProp', ['keep-source'])
         }
         return nextTick()
       },
@@ -4447,9 +4443,7 @@ export default defineComponent({
         const { transform } = treeOpts
         const { handleGetRowId } = createHandleGetRowId($xeTable)
         if (!keepSource) {
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            errLog('vxe.error.reqProp', ['keep-source'])
-          }
+          errLog('vxe.error.reqProp', ['keep-source'])
           return nextTick()
         }
         let targetRows = rows
@@ -5990,9 +5984,7 @@ export default defineComponent({
         return nextTick()
       },
       reloadExpandContent (row) {
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          warnLog('vxe.error.delFunc', ['reloadExpandContent', 'reloadRowExpand'])
-        }
+        warnLog('vxe.error.delFunc', ['reloadExpandContent', 'reloadRowExpand'])
         // 即将废弃
         return $xeTable.reloadRowExpand(row)
       },
@@ -6095,9 +6087,7 @@ export default defineComponent({
       },
       isExpandByRow (row) {
         // 已废弃
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
-        }
+        warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
         return tableMethods.isRowExpandByRow(row)
       },
       /**
@@ -6276,9 +6266,7 @@ export default defineComponent({
         return nextTick()
       },
       reloadTreeChilds (row) {
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          warnLog('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
-        }
+        warnLog('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
         // 即将废弃
         return $xeTable.reloadTreeExpand(row)
       },
@@ -8191,10 +8179,8 @@ export default defineComponent({
         // 兼容老版本
         if (!evntList.length && type === 'event.clearEdit') {
           evntList = interceptor.get('event.clearActived')
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (evntList.length) {
-              warnLog('vxe.error.delEvent', ['event.clearActived', 'event.clearEdit'])
-            }
+          if (evntList.length) {
+            warnLog('vxe.error.delEvent', ['event.clearActived', 'event.clearEdit'])
           }
         }
         // 兼容老版本

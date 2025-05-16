@@ -1228,32 +1228,6 @@ export default defineComponent({
       // }
     }
 
-    // 检查插槽
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      (gridMethods as any).loadColumn = (columns: any[]): Promise<any> => {
-        const $xeTable = refTable.value
-        XEUtils.eachTree(columns, (column) => {
-          if (column.slots) {
-            XEUtils.each(column.slots, (func) => {
-              if (!XEUtils.isFunction(func)) {
-                if (!slots[func]) {
-                  errLog('vxe.error.notSlot', [func])
-                }
-              }
-            })
-          }
-        })
-        if ($xeTable) {
-          return $xeTable.loadColumn(columns)
-        }
-        return nextTick()
-      }
-      (gridMethods as any).reloadColumn = (columns: any[]): Promise<any> => {
-        gridExtendTableMethods.clearAll()
-        return (gridMethods as any).loadColumn(columns)
-      }
-    }
-
     const gridPrivateMethods: GridPrivateMethods = {
       extendTableMethods,
       callSlot (slotFunc, params) {
@@ -1315,7 +1289,31 @@ export default defineComponent({
       }
     }
 
-    Object.assign($xeGrid, gridExtendTableMethods, gridMethods, gridPrivateMethods)
+    Object.assign($xeGrid, gridExtendTableMethods, gridMethods, gridPrivateMethods, {
+      // 检查插槽
+      loadColumn (columns: any[]) {
+        const $xeTable = refTable.value
+        XEUtils.eachTree(columns, (column) => {
+          if (column.slots) {
+            XEUtils.each(column.slots, (func) => {
+              if (!XEUtils.isFunction(func)) {
+                if (!slots[func]) {
+                  errLog('vxe.error.notSlot', [func])
+                }
+              }
+            })
+          }
+        })
+        if ($xeTable) {
+          return $xeTable.loadColumn(columns)
+        }
+        return nextTick()
+      },
+      reloadColumn (columns: any[]) {
+        $xeGrid.clearAll()
+        return $xeGrid.loadColumn(columns)
+      }
+    })
 
     const columnFlag = ref(0)
     watch(() => props.columns ? props.columns.length : -1, () => {

@@ -16,8 +16,8 @@ let htmlCellElem: any
 const csvBOM = '\ufeff'
 const enterSymbol = '\r\n'
 
-function defaultFilterExportColumn (column: any) {
-  return column.field || ['seq', 'checkbox', 'radio'].indexOf(column.type) > -1
+function defaultFilterExportColumn (column: VxeTableDefines.ColumnInfo) {
+  return !!column.field || ['seq', 'checkbox', 'radio'].indexOf(column.type || '') > -1
 }
 
 const getConvertColumns = (columns: any) => {
@@ -78,7 +78,7 @@ const convertToRows = (originColumns: any): any[][] => {
   return rows
 }
 
-function toTableBorder (border: any) {
+function toTableBorder (border: VxeTablePropTypes.Border | undefined) {
   if (border === true) {
     return 'full'
   }
@@ -1012,7 +1012,7 @@ hooks.add('tableExportModule', {
         }
         return false
       }
-      return exportOpts.original ? column.field : defaultFilterExportColumn(column)
+      return exportOpts.original ? !!column.field : defaultFilterExportColumn(column)
     }
 
     const handleExportAndPrint = (options: VxeTablePropTypes.ExportOpts | VxeTablePropTypes.ExportConfig, isPrint?: boolean) => {
@@ -1063,7 +1063,7 @@ hooks.add('tableExportModule', {
       })
       // 默认选中
       XEUtils.eachTree(exportColumns, (column, index, items, path, parent) => {
-        const isColGroup = column.children && column.children.length
+        const isColGroup = column.children && column.children.length > 0
         let isChecked = false
         if (columns && columns.length) {
           isChecked = handleFilterColumns(defOpts, column, columns)
@@ -1181,7 +1181,7 @@ hooks.add('tableExportModule', {
         const customCols = columns && columns.length
           ? columns
           : XEUtils.searchTree(collectColumn, column => {
-            const isColGroup = column.children && column.children.length
+            const isColGroup = column.children && column.children.length > 0
             let isChecked = false
             if (columns && columns.length) {
               isChecked = handleFilterColumns(opts, column, columns)
@@ -1195,7 +1195,7 @@ hooks.add('tableExportModule', {
         const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({ } as { data: any[], colgroups: any[], columns: any[] }, opts, { filename: '', sheetName: '' })
         // 如果设置源数据，则默认导出设置了字段的列
         if (!customCols && !columnFilterMethod) {
-          handleOptions.columnFilterMethod = ({ column }) => {
+          columnFilterMethod = ({ column }) => {
             if (excludeFields) {
               if (XEUtils.includes(excludeFields, column.field)) {
                 return false
@@ -1207,8 +1207,9 @@ hooks.add('tableExportModule', {
               }
               return false
             }
-            return original ? column.field : defaultFilterExportColumn(column)
+            return original ? !!column.field : defaultFilterExportColumn(column)
           }
+          handleOptions.columnFilterMethod = columnFilterMethod
         }
         if (customCols) {
           handleOptions._isCustomColumn = true
@@ -1294,10 +1295,8 @@ hooks.add('tableExportModule', {
         // 检查类型，如果为自定义导出，则不需要校验类型
         if (!handleOptions.exportMethod && !XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)) {
           errLog('vxe.error.notType', [type])
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (['xlsx', 'pdf'].includes(type)) {
-              warnLog('vxe.error.reqPlugin', [4, 'plugin-export-xlsx'])
-            }
+          if (['xlsx', 'pdf'].includes(type)) {
+            warnLog('vxe.error.reqPlugin', [4, 'plugin-export-xlsx'])
           }
           const params = { status: false }
           return Promise.reject(params)
@@ -1317,10 +1316,8 @@ hooks.add('tableExportModule', {
               handleOptions.data = selectRecords
             }
           } else if (mode === 'all') {
-            if (process.env.VUE_APP_VXE_ENV === 'development') {
-              if (!$xeGrid) {
-                warnLog('vxe.error.errProp', ['all', 'mode=current,selected'])
-              }
+            if (!$xeGrid) {
+              errLog('vxe.error.errProp', ['all', 'mode=current,selected'])
             }
 
             if ($xeGrid && !handleOptions.remote) {
@@ -1334,10 +1331,8 @@ hooks.add('tableExportModule', {
               const queryAllSuccessMethods = ajax.queryAllSuccess
               const queryAllErrorMethods = ajax.queryAllError
 
-              if (process.env.VUE_APP_VXE_ENV === 'development') {
-                if (!ajaxMethods) {
-                  warnLog('vxe.error.notFunc', ['proxy-config.ajax.queryAll'])
-                }
+              if (!ajaxMethods) {
+                errLog('vxe.error.notFunc', ['proxy-config.ajax.queryAll'])
               }
 
               if (ajaxMethods) {
@@ -1578,7 +1573,7 @@ hooks.add('tableExportModule', {
         if (!props.exportConfig) {
           errLog('vxe.error.reqProp', ['export-config'])
         }
-        handleExportAndPrint(defOpts)
+        return handleExportAndPrint(defOpts)
       },
       closePrint: handleCloseExport,
       openPrint (options) {
@@ -1589,7 +1584,7 @@ hooks.add('tableExportModule', {
         if (!props.printConfig) {
           errLog('vxe.error.reqProp', ['print-config'])
         }
-        handleExportAndPrint(defOpts, true)
+        return handleExportAndPrint(defOpts, true)
       }
     }
 
