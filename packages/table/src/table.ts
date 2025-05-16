@@ -1800,14 +1800,12 @@ export default {
       initTpImg()
     }
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      const { $listeners } = this
-      if (!this.menuConfig && ($listeners['menu-click'] || $listeners['cell-menu'] || $listeners['header-cell-menu'] || $listeners['footer-cell-menu'])) {
-        warnLog('vxe.error.reqProp', ['menu-config'])
-      }
-      if (!this.tooltipConfig && ($listeners['cell-mouseenter'] || $listeners['cell-mouseleave'])) {
-        warnLog('vxe.error.reqProp', ['tooltip-config'])
-      }
+    const { $listeners } = this
+    if (!this.menuConfig && ($listeners['menu-click'] || $listeners['cell-menu'] || $listeners['header-cell-menu'] || $listeners['footer-cell-menu'])) {
+      warnLog('vxe.error.reqProp', ['menu-config'])
+    }
+    if (!this.tooltipConfig && ($listeners['cell-mouseenter'] || $listeners['cell-mouseleave'])) {
+      warnLog('vxe.error.reqProp', ['tooltip-config'])
     }
 
     // 使用已安装的组件，如果未安装则不渲染

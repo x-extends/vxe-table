@@ -84,10 +84,8 @@ function insertTreeRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
     } else {
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (parentRowId) {
-          warnLog('vxe.error.unableInsert')
-        }
+      if (parentRowId) {
+        warnLog('vxe.error.unableInsert')
       }
       afterFullData[funcName](item)
       tableFullTreeData[funcName](item)
@@ -166,11 +164,9 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
           const parentLevel = parentRest ? parentRest.level : 0
           newRecords.forEach((item: any, i: any) => {
             const rowid = getRowid($xeTable, item)
-            if (process.env.VUE_APP_VXE_ENV === 'development') {
-              if (item[treeOpts.parentField]) {
-                if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
-                  errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
-                }
+            if (item[treeOpts.parentField]) {
+              if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
+                errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
               }
             }
             if (parentRow) {
@@ -199,9 +195,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
             }
           }
         } else {
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            warnLog('vxe.error.unableInsert')
-          }
+          warnLog('vxe.error.unableInsert')
           insertTreeRow($xeTable, newRecords, true)
         }
       } else {
@@ -745,9 +739,7 @@ export default {
       syncActivedCell($xeTable)
     },
     _clearActived (row: any) {
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
-      }
+      warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
       // 即将废弃
       return this.clearEdit(row)
     },
@@ -770,9 +762,7 @@ export default {
     _getActiveRecord () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
-      }
+      warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
       // 即将废弃
       return $xeTable.getEditRecord()
     },
@@ -793,9 +783,7 @@ export default {
     _isActiveByRow (row: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
-      }
+      warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
       // 即将废弃
       return $xeTable.isEditByRow(row)
     },
@@ -872,9 +860,7 @@ export default {
     _setActiveRow (row: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        warnLog('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
-      }
+      warnLog('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
       // 即将废弃
       return $xeTable.setEditRow(row)
     },
@@ -895,9 +881,7 @@ export default {
       return handleEditCell($xeTable, row, column, isPos)
     },
     _setActiveCell (row: any, fieldOrColumn: any) {
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
-      }
+      warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
       // 即将废弃
       return this.setEditCell(row, fieldOrColumn)
     },

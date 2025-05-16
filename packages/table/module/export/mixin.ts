@@ -12,10 +12,6 @@ const { getI18n, renderer } = VxeUI
 
 let htmlCellElem: any
 
-// 导入
-let fileForm: any
-let fileInput: any
-
 const csvBOM = '\ufeff'
 const enterSymbol = '\r\n'
 
@@ -42,11 +38,11 @@ function getSeq ($xeTable: VxeTableConstructor, cellValue: any, row: any, $rowIn
   return cellValue
 }
 
-function defaultFilterExportColumn (column: any) {
-  return column.field || ['seq', 'checkbox', 'radio'].indexOf(column.type) > -1
+function defaultFilterExportColumn (column: VxeTableDefines.ColumnInfo) {
+  return !!column.field || ['seq', 'checkbox', 'radio'].indexOf(column.type || '') > -1
 }
 
-function toTableBorder (border: any) {
+function toTableBorder (border: VxeTablePropTypes.Border | undefined) {
   if (border === true) {
     return 'full'
   }
@@ -510,7 +506,7 @@ function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: V
   return isPrint ? tables.join('') : createHtmlPage(opts, tables.join(''))
 }
 
-function toXML ($xeTable: any, opts: any, columns: any[], datas: any[]) {
+function toXML ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: any, columns: any[], datas: any[]) {
   const reactData = $xeTable as unknown as TableReactData
 
   let xml = [
@@ -564,53 +560,21 @@ function getContent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opt
   return ''
 }
 
-/**
- * 保存文件到本地
- * @param {*} options 参数
- */
-export function saveLocalFile (options: any) {
-  const { filename, type, content } = options
-  const name = `${filename}.${type}`
-  if (window.Blob) {
-    const blob = content instanceof Blob ? content : getExportBlobByContent(XEUtils.toValueString(content), options)
-    if ((navigator as any).msSaveBlob) {
-      (navigator as any).msSaveBlob(blob, name)
-    } else {
-      const url = URL.createObjectURL(blob as any)
-      const linkElem = document.createElement('a')
-      linkElem.target = '_blank'
-      linkElem.download = name
-      linkElem.href = url
-      document.body.appendChild(linkElem)
-      linkElem.click()
-      document.body.removeChild(linkElem)
-      requestAnimationFrame(() => {
-        if (linkElem.parentNode) {
-          linkElem.parentNode.removeChild(linkElem)
-        }
-        URL.revokeObjectURL(url)
-      })
-    }
-    return Promise.resolve()
-  }
-  return Promise.reject(new Error(getI18n('vxe.error.notExp')))
-}
-
-function downloadFile ($xeTable: any, opts: any, content: any) {
+function downloadFile ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: any, content: any) {
   const { filename, type, download } = opts
   if (!download) {
     const blob = getExportBlobByContent(content, opts)
     return Promise.resolve({ type, content, blob })
   }
-  saveLocalFile({ filename, type, content }).then(() => {
-    if (opts.message !== false) {
-      // 检测弹窗模块
-      if (!VxeUI.modal) {
-        errLog('vxe.error.reqModule', ['Modal'])
+  if (VxeUI.saveFile) {
+    VxeUI.saveFile({ filename, type, content }).then(() => {
+      if (opts.message !== false) {
+        if (VxeUI.modal) {
+          VxeUI.modal.message({ content: getI18n('vxe.table.expSuccess'), status: 'success' })
+        }
       }
-      VxeUI.modal.message({ content: getI18n('vxe.table.expSuccess'), status: 'success' })
-    }
-  })
+    })
+  }
 }
 
 function clearColumnConvert (columns: any) {
@@ -623,7 +587,7 @@ function clearColumnConvert (columns: any) {
   }, { children: 'children' })
 }
 
-function handleExport ($xeTable: any, opts: VxeTablePropTypes.ExportHandleOptions) {
+function handleExport ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions) {
   const $xeGrid = $xeTable.$xeGrid
 
   const { remote, columns, colgroups, exportMethod, afterExportMethod } = opts
@@ -977,58 +941,6 @@ function handleCloseExport () {
   return Promise.resolve()
 }
 
-/**
- * 读取本地文件
- * @param {*} options 参数
- */
-export function readLocalFile (options: any = {}) {
-  if (!fileForm) {
-    fileForm = document.createElement('form')
-    fileInput = document.createElement('input')
-    fileForm.className = 'vxe-table--file-form'
-    fileInput.name = 'file'
-    fileInput.type = 'file'
-    fileForm.appendChild(fileInput)
-    document.body.appendChild(fileForm)
-  }
-  return new Promise((resolve, reject) => {
-    const types = options.types || []
-    const isAllType = !types.length || types.some((type: any) => type === '*')
-    fileInput.multiple = !!options.multiple
-    fileInput.accept = isAllType ? '' : `.${types.join(', .')}`
-    fileInput.onchange = (evnt: any) => {
-      const { files } = evnt.target
-      const file = files[0]
-      let errType
-      // 校验类型
-      if (!isAllType) {
-        for (let fIndex = 0; fIndex < files.length; fIndex++) {
-          const { type } = parseFile(files[fIndex])
-          if (!XEUtils.includes(types, type)) {
-            errType = type
-            break
-          }
-        }
-      }
-      if (!errType) {
-        resolve({ status: true, files, file })
-      } else {
-        if (options.message !== false) {
-          // 检测弹窗模块
-          if (!VxeUI.modal) {
-            errLog('vxe.error.reqModule', ['Modal'])
-          }
-          VxeUI.modal.message({ content: getI18n('vxe.error.notType', [errType]), status: 'error' })
-        }
-        const params = { status: false, files, file }
-        reject(params)
-      }
-    }
-    fileForm.reset()
-    fileInput.click()
-  })
-}
-
 function handleFilterColumns (exportOpts: VxeTablePropTypes.ExportConfig, column: VxeTableDefines.ColumnInfo, columns: VxeTableDefines.ColumnInfo[] | VxeTablePropTypes.ExportOrPrintColumnOption[]) {
   return columns.some((item: any) => {
     if (isColumnInfo(item)) {
@@ -1065,7 +977,7 @@ function handleFilterFields (exportOpts: VxeTablePropTypes.ExportConfig, column:
     }
     return false
   }
-  return exportOpts.original ? column.field : defaultFilterExportColumn(column)
+  return exportOpts.original ? !!column.field : defaultFilterExportColumn(column)
 }
 
 function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTablePropTypes.ExportOpts | VxeTablePropTypes.ExportConfig, isPrint?: any) {
@@ -1121,7 +1033,7 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
   })
   // 默认选中
   XEUtils.eachTree(exportColumns, (column, index, items, path, parent) => {
-    const isColGroup = column.children && column.children.length
+    const isColGroup = column.children && column.children.length > 0
     let isChecked = false
     if (columns && columns.length) {
       isChecked = handleFilterColumns(defOpts, column, columns)
@@ -1249,16 +1161,16 @@ export default {
      * 如果是启用了虚拟滚动，则只能导出数据源，可以配合 dataFilterMethod 函数转换数据
      * @param {Object} options 参数
      */
-    _exportData (options: any) {
-      const $xeTable = this
+    _exportData (options?: VxeTablePropTypes.ExportConfig) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
-      const reactData = $xeTable
-      const internalData = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
       const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor
 
       const { treeConfig, showHeader, showFooter } = props
-      const { mergeFooterList, isGroup } = reactData
-      const { tableFullColumn, afterFullData, mergeBodyList, collectColumn } = internalData
+      const { isGroup } = reactData
+      const { tableFullColumn, afterFullData, collectColumn, mergeBodyList, mergeFooterList } = internalData
       const exportOpts = $xeTable.computeExportOpts
       const treeOpts = $xeTable.computeTreeOpts
       const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : {}
@@ -1297,7 +1209,7 @@ export default {
       const customCols = columns && columns.length
         ? columns
         : XEUtils.searchTree(collectColumn, column => {
-          const isColGroup = column.children && column.children.length
+          const isColGroup = column.children && column.children.length > 0
           let isChecked = false
           if (columns && columns.length) {
             isChecked = handleFilterColumns(opts, column, columns)
@@ -1311,7 +1223,7 @@ export default {
       const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({ } as { data: any[], colgroups: any[], columns: any[] }, opts, { filename: '', sheetName: '' })
       // 如果设置源数据，则默认导出设置了字段的列
       if (!customCols && !columnFilterMethod) {
-        handleOptions.columnFilterMethod = ({ column }) => {
+        columnFilterMethod = ({ column }) => {
           if (excludeFields) {
             if (XEUtils.includes(excludeFields, column.field)) {
               return false
@@ -1323,8 +1235,9 @@ export default {
             }
             return false
           }
-          return original ? column.field : defaultFilterExportColumn(column)
+          return original ? !!column.field : defaultFilterExportColumn(column)
         }
+        handleOptions.columnFilterMethod = columnFilterMethod
       }
       if (customCols) {
         handleOptions._isCustomColumn = true
@@ -1356,7 +1269,7 @@ export default {
             children: 'childNodes',
             mapChildren: '_children'
           }),
-          (column, index) => isColumnInfo(column) && (!columnFilterMethod || columnFilterMethod({ column: column as any, $columnIndex: index })),
+          (column, index) => isColumnInfo(column) && (!columnFilterMethod || columnFilterMethod({ $table: $xeTable, column: column as any, $columnIndex: index })),
           {
             children: '_children',
             mapChildren: 'childNodes',
@@ -1364,7 +1277,7 @@ export default {
           }
         )
       } else {
-        groups = XEUtils.searchTree(isGroup ? collectColumn : tableFullColumn, (column, index) => column.visible && (!columnFilterMethod || columnFilterMethod({ column, $columnIndex: index })), { children: 'children', mapChildren: 'childNodes', original: true })
+        groups = XEUtils.searchTree(isGroup ? collectColumn : tableFullColumn, (column, index) => column.visible && (!columnFilterMethod || columnFilterMethod({ $table: $xeTable, column, $columnIndex: index })), { children: 'children', mapChildren: 'childNodes', original: true })
       }
       // 获取所有列
       const cols: VxeTableDefines.ColumnInfo[] = []
@@ -1410,10 +1323,8 @@ export default {
       // 检查类型，如果为自定义导出，则不需要校验类型
       if (!handleOptions.exportMethod && !XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)) {
         errLog('vxe.error.notType', [type])
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (['xlsx', 'pdf'].includes(type)) {
-            warnLog('vxe.error.reqPlugin', [4, 'plugin-export-xlsx'])
-          }
+        if (['xlsx', 'pdf'].includes(type)) {
+          warnLog('vxe.error.reqPlugin', [4, 'plugin-export-xlsx'])
         }
         const params = { status: false }
         return Promise.reject(params)
@@ -1434,10 +1345,8 @@ export default {
             handleOptions.data = selectRecords
           }
         } else if (mode === 'all') {
-          if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (!$xeGrid) {
-              warnLog('vxe.error.errProp', ['all', 'mode=current,selected'])
-            }
+          if (!$xeGrid) {
+            errLog('vxe.error.errProp', ['all', 'mode=current,selected'])
           }
 
           if ($xeGrid && !handleOptions.remote) {
@@ -1450,10 +1359,8 @@ export default {
             const queryAllSuccessMethods = ajax.queryAllSuccess
             const queryAllErrorMethods = ajax.queryAllError
 
-            if (process.env.VUE_APP_VXE_ENV === 'development') {
-              if (!ajaxMethods) {
-                warnLog('vxe.error.notFunc', ['proxy-config.ajax.queryAll'])
-              }
+            if (!ajaxMethods) {
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.queryAll'])
             }
 
             if (ajaxMethods) {
@@ -1491,15 +1398,19 @@ export default {
       }
       return handleExport($xeTable, handleOptions)
     },
-    _importByFile (file: any, options: any) {
+    _importByFile (file: File, options: VxeTablePropTypes.ImportConfig) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       const opts = Object.assign({}, options)
       const { beforeImportMethod } = opts
       if (beforeImportMethod) {
-        beforeImportMethod({ options: opts, $table: this })
+        beforeImportMethod({ options: opts, $table: $xeTable })
       }
-      return handleFileImport(this, file, opts)
+      return handleFileImport($xeTable, file, opts)
     },
-    _importData (options: any) {
+    _importData (options?: VxeTablePropTypes.ImportConfig) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       const { importOpts } = this
       const opts = Object.assign({
         types: XEUtils.keys(importOpts._typeMaps)
@@ -1510,24 +1421,32 @@ export default {
       if (beforeImportMethod) {
         beforeImportMethod({ options: opts, $table: this })
       }
-      return readLocalFile(opts).catch(e => {
+      return VxeUI.readFile(opts).catch(e => {
         if (afterImportMethod) {
-          afterImportMethod({ status: false, options: opts, $table: this })
+          afterImportMethod({ status: false, options: opts, $table: $xeTable })
         }
         return Promise.reject(e)
-      }).then((params: any) => {
+      }).then((params) => {
         const { file } = params
-        return handleFileImport(this, file, opts)
+        return handleFileImport($xeTable, file, opts)
       })
     },
-    _saveFile (options: any) {
-      return saveLocalFile(options)
+    _saveFile (options: {
+      filename: string
+      type: string
+      content: string | Blob
+    }) {
+      return VxeUI.saveFile(options)
     },
-    _readFile (options: any) {
-      return readLocalFile(options)
+    _readFile (options?: {
+      multiple?: boolean
+      types?: string[]
+      message?: boolean
+    }) {
+      return VxeUI.readFile(options)
     },
-    _print (options: any) {
-      const $xeTable = this
+    _print (options?: VxeTablePropTypes.PrintConfig) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const $xeGrid = $xeTable.$xeGrid
 
       const opts = Object.assign({
@@ -1607,7 +1526,7 @@ export default {
       })
     },
     _getPrintHtml (options: VxeTablePropTypes.PrintConfig) {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const printOpts = $xeTable.computePrintOpts
       const opts = Object.assign({
@@ -1631,24 +1550,30 @@ export default {
       }
       return Promise.resolve()
     },
-    _openImport (options: any) {
-      const { importOpts } = this
+    _openImport (options?: VxeTablePropTypes.ImportConfig) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { treeConfig, importConfig } = props
+      const { initStore, importStore, importParams } = reactData
+      const importOpts = $xeTable.computeImportOpts
       const defOpts = Object.assign({
         mode: 'insertTop',
         message: true,
         types: XEUtils.keys(importOpts._typeMaps),
         modes: ['insertTop', 'covering']
-      }, options, importOpts)
+      }, importOpts, options)
       const types = defOpts.types || []
       const modes = defOpts.modes || []
-      const isTree = !!this.getTreeStatus()
+      const isTree = !!treeConfig
       if (isTree) {
         if (defOpts.message) {
           VxeUI.modal.message({ content: getI18n('vxe.error.treeNotImp'), status: 'error' })
         }
         return
       }
-      if (!this.importConfig) {
+      if (!importConfig) {
         errLog('vxe.error.reqProp', ['import-config'])
       }
       // 处理类型
@@ -1670,7 +1595,7 @@ export default {
           label: getI18n(`vxe.import.modes.${item}`)
         }
       })
-      Object.assign(this.importStore, {
+      Object.assign(importStore, {
         file: null,
         type: '',
         filename: '',
@@ -1678,27 +1603,40 @@ export default {
         typeList,
         visible: true
       })
-      Object.assign(this.importParams, defOpts)
-      if (!modeList.some((item: any) => item.value === this.importParams.mode)) {
-        this.importParams.mode = modeList[0].value
+      Object.assign(importParams, defOpts)
+      if (!modeList.some(item => item.value === importParams.mode)) {
+        importParams.mode = modeList[0].value
       }
-      this.initStore.import = true
+      initStore.import = true
     },
     _closeExport: handleCloseExport,
     _openExport (options: any) {
-      const { exportOpts } = this
-      if (!this.exportConfig) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      const exportOpts = $xeTable.computeExportOpts
+      const defOpts = Object.assign({
+        message: true,
+        types: XEUtils.keys(exportOpts._typeMaps)
+      }, exportOpts, options)
+      if (!props.exportConfig) {
         errLog('vxe.error.reqProp', ['export-config'])
       }
-      return handleExportAndPrint(this, Object.assign({}, exportOpts, options))
+      return handleExportAndPrint($xeTable, defOpts)
     },
     _closePrint: handleCloseExport,
     _openPrint (options: any) {
-      const { printOpts } = this
-      if (!this.printConfig) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      const printOpts = $xeTable.computePrintOpts
+      const defOpts = Object.assign({
+        message: true
+      }, printOpts, options)
+      if (!props.printConfig) {
         errLog('vxe.error.reqProp', ['print-config'])
       }
-      return handleExportAndPrint(this, Object.assign({}, printOpts, options), true)
+      return handleExportAndPrint($xeTable, defOpts, true)
     }
   } as any
 } as any

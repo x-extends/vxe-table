@@ -3127,7 +3127,6 @@ function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, i
     //     }
     //   }
     // }
-    // if (process.env.VUE_APP_VXE_ENV === 'development') {
     // if (props.showHeader && !props.showHeaderOverflow) {
     //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
     // }
@@ -3140,7 +3139,6 @@ function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, i
     if (props.footerSpanMethod) {
       warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
     }
-    // }
     if (isReset) {
       const { visibleSize } = handleVirtualXVisible($xeTable)
       scrollXStore.startIndex = 0
@@ -3838,9 +3836,7 @@ const Methods = {
       }
       this.tableData = tableData.slice(0)
     } else {
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        warnLog('vxe.error.reqProp', ['keep-source'])
-      }
+      errLog('vxe.error.reqProp', ['keep-source'])
     }
     return this.$nextTick()
   },
@@ -4084,16 +4080,12 @@ const Methods = {
   getVMRowIndex: createGetRowCacheProp('$index') as ((row: any) => number),
   // 在 v3 中废弃
   _getRowIndex (row: any) {
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      warnLog('vxe.error.delFunc', ['_getRowIndex', 'getVTRowIndex'])
-    }
+    warnLog('vxe.error.delFunc', ['_getRowIndex', 'getVTRowIndex'])
     return this.getVTRowIndex(row)
   },
   // 在 v3 中废弃
   $getRowIndex (row: any) {
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      warnLog('vxe.error.delFunc', ['$getRowIndex', 'getVMRowIndex'])
-    }
+    warnLog('vxe.error.delFunc', ['$getRowIndex', 'getVMRowIndex'])
     return this.getVMRowIndex(row)
   },
   /**
@@ -4113,16 +4105,12 @@ const Methods = {
   getVMColumnIndex: createGetColumnCacheProp('$index'),
   // 在 v3 中废弃
   _getColumnIndex (column: any) {
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      warnLog('vxe.error.delFunc', ['_getColumnIndex', 'getVTColumnIndex'])
-    }
+    warnLog('vxe.error.delFunc', ['_getColumnIndex', 'getVTColumnIndex'])
     return this.getVTColumnIndex(column)
   },
   // 在 v3 中废弃
   $getColumnIndex (column: any) {
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      warnLog('vxe.error.delFunc', ['$getColumnIndex', 'getVMColumnIndex'])
-    }
+    warnLog('vxe.error.delFunc', ['$getColumnIndex', 'getVMColumnIndex'])
     return this.getVMColumnIndex(column)
   },
   /**
@@ -4228,9 +4216,7 @@ const Methods = {
     const { transform } = treeOpts
     const { handleGetRowId } = createHandleGetRowId($xeTable)
     if (!keepSource) {
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        errLog('vxe.error.reqProp', ['keep-source'])
-      }
+      errLog('vxe.error.reqProp', ['keep-source'])
       return $xeTable.$nextTick()
     }
     let targetRows = rows
@@ -5820,10 +5806,8 @@ const Methods = {
     // 兼容老版本
     if (!evntList.length && type === 'event.clearEdit') {
       evntList = interceptor.get('event.clearActived')
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (evntList.length) {
-          warnLog('vxe.error.delEvent', ['event.clearActived', 'event.clearEdit'])
-        }
+      if (evntList.length) {
+        warnLog('vxe.error.delEvent', ['event.clearActived', 'event.clearEdit'])
       }
     }
     // 兼容老版本
@@ -8669,9 +8653,7 @@ const Methods = {
   },
   // 在 v3 中废弃
   getSortColumn () {
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      warnLog('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
-    }
+    warnLog('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
     return XEUtils.find(this.tableFullColumn, column => (column.sortable || column.remoteSort) && column.order)
   },
   isSort (fieldOrColumn: any) {
@@ -8839,9 +8821,7 @@ const Methods = {
     return $xeTable.$nextTick()
   },
   reloadExpandContent (row: any) {
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      warnLog('vxe.error.delFunc', ['reloadExpandContent', 'reloadRowExpand'])
-    }
+    warnLog('vxe.error.delFunc', ['reloadExpandContent', 'reloadRowExpand'])
     // 即将废弃
     return this.reloadRowExpand(row)
   },
@@ -8984,9 +8964,7 @@ const Methods = {
     return !!rowExpandedFlag && !!rowExpandedMaps[rowid]
   },
   isExpandByRow (row: any) {
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
-    }
+    warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
     // 即将废弃
     return this.isRowExpandByRow(row)
   },
@@ -9227,9 +9205,7 @@ const Methods = {
   reloadTreeChilds (row: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      warnLog('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
-    }
+    warnLog('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
     // 即将废弃
     return $xeTable.reloadTreeExpand(row)
   },

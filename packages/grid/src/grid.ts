@@ -111,13 +111,11 @@ function getToolbarSlots (_vm: any) {
   let buttonsSlot
   let toolsSlot
   const slots: any = {}
-  if (process.env.VUE_APP_VXE_ENV === 'development') {
-    if ($scopedSlots.buttons && (!toolbarOptSlots || toolbarOptSlots.buttons !== 'buttons')) {
-      warnLog('vxe.error.reqProp', ['toolbar-config.slots.buttons'])
-    }
-    if ($scopedSlots.tools && (!toolbarOptSlots || toolbarOptSlots.tools !== 'tools')) {
-      warnLog('vxe.error.reqProp', ['toolbar-config.slots.tools'])
-    }
+  if ($scopedSlots.buttons && (!toolbarOptSlots || toolbarOptSlots.buttons !== 'buttons')) {
+    warnLog('vxe.error.reqProp', ['toolbar-config.slots.buttons'])
+  }
+  if ($scopedSlots.tools && (!toolbarOptSlots || toolbarOptSlots.tools !== 'tools')) {
+    warnLog('vxe.error.reqProp', ['toolbar-config.slots.tools'])
   }
   if (toolbarOptSlots) {
     buttonsSlot = getFuncSlot(_vm, toolbarOptSlots, 'buttons')
@@ -604,17 +602,15 @@ export default {
     //   errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
     // }
 
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      if (this.toolbar) {
-        warnLog('vxe.error.delProp', ['grid.toolbar', 'grid.toolbar-config'])
-      }
-      if (this.toolbarConfig && !XEUtils.isObject(this.toolbarConfig)) {
-        warnLog('vxe.error.errProp', [`grid.toolbar-config=${this.toolbarConfig}`, 'grid.toolbar-config={}'])
-      }
-      // if (proxyOpts.props) {
-      //   warnLog('vxe.error.delProp', ['proxy-config.props', 'proxy-config.response'])
-      // }
+    if (this.toolbar) {
+      warnLog('vxe.error.delProp', ['grid.toolbar', 'grid.toolbar-config'])
     }
+    if (this.toolbarConfig && !XEUtils.isObject(this.toolbarConfig)) {
+      warnLog('vxe.error.errProp', [`grid.toolbar-config=${this.toolbarConfig}`, 'grid.toolbar-config={}'])
+    }
+    // if (proxyOpts.props) {
+    //   warnLog('vxe.error.delProp', ['proxy-config.props', 'proxy-config.response'])
+    // }
 
     // 使用已安装的组件，如果未安装则不渲染
     const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
@@ -1279,8 +1275,10 @@ export default {
         })
     },
     getProxyInfo () {
-      const { $refs, sortData, proxyConfig } = this
-      const $xeTable = $refs.xTable
+      const $xeGrid = this
+      const $xeTable = $xeGrid.$refs.xTable as VxeTableConstructor & VxeTablePrivateMethods
+
+      const { sortData, proxyConfig } = this
       if (proxyConfig) {
         return {
           data: $xeTable ? $xeTable.getFullData() : [],
@@ -1294,29 +1292,29 @@ export default {
       }
       return null
     },
-    // 检查插槽
-    ...(process.env.VUE_APP_VXE_ENV === 'development'
-      ? {
-          loadColumn (columns: any[]) {
-            const { $scopedSlots } = this
-            XEUtils.eachTree(columns, column => {
-              if (column.slots) {
-                XEUtils.each(column.slots, (func) => {
-                  if (!XEUtils.isFunction(func)) {
-                    if (!$scopedSlots[func]) {
-                      errLog('vxe.error.notSlot', [func])
-                    }
-                  }
-                })
+    loadColumn (columns: any[]) {
+      const $xeGrid = this
+      const $xeTable = $xeGrid.$refs.xTable as VxeTableConstructor & VxeTablePrivateMethods
+
+      const { $scopedSlots } = this
+      XEUtils.eachTree(columns, column => {
+        if (column.slots) {
+          XEUtils.each(column.slots, (func) => {
+            if (!XEUtils.isFunction(func)) {
+              if (!$scopedSlots[func]) {
+                errLog('vxe.error.notSlot', [func])
               }
-            })
-            return this.$refs.xTable.loadColumn(columns)
-          },
-          reloadColumn (columns: any[]) {
-            this.clearAll()
-            return this.loadColumn(columns)
-          }
+            }
+          })
         }
-      : null)
+      })
+      return $xeTable.loadColumn(columns)
+    },
+    reloadColumn (columns: any[]) {
+      const $xeGrid = this
+
+      $xeGrid.clearAll()
+      return $xeGrid.loadColumn(columns)
+    }
   } as any
 }
