@@ -39,7 +39,7 @@ function getSeq ($xeTable: VxeTableConstructor, cellValue: any, row: any, $rowIn
 }
 
 function defaultFilterExportColumn (column: VxeTableDefines.ColumnInfo) {
-  return !!column.field || ['seq', 'checkbox', 'radio'].indexOf(column.type || '') > -1
+  return !!column.field || ['seq', 'checkbox', 'radio'].indexOf(column.type || '') === -1
 }
 
 function toTableBorder (border: VxeTablePropTypes.Border | undefined) {
@@ -1206,9 +1206,13 @@ export default {
       if (!mode) {
         mode = selectRecords.length ? 'selected' : 'current'
       }
-      const customCols = columns && columns.length
-        ? columns
-        : XEUtils.searchTree(collectColumn, column => {
+      let isCustomCol = false
+      let customCols = []
+      if (columns && columns.length) {
+        isCustomCol = true
+        customCols = columns
+      } else {
+        customCols = XEUtils.searchTree(collectColumn, column => {
           const isColGroup = column.children && column.children.length > 0
           let isChecked = false
           if (columns && columns.length) {
@@ -1220,9 +1224,10 @@ export default {
           }
           return isChecked
         }, { children: 'children', mapChildren: 'childNodes', original: true })
+      }
       const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({ } as { data: any[], colgroups: any[], columns: any[] }, opts, { filename: '', sheetName: '' })
       // 如果设置源数据，则默认导出设置了字段的列
-      if (!customCols && !columnFilterMethod) {
+      if (!isCustomCol && !columnFilterMethod) {
         columnFilterMethod = ({ column }) => {
           if (excludeFields) {
             if (XEUtils.includes(excludeFields, column.field)) {
