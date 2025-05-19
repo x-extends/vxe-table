@@ -525,7 +525,7 @@ export default defineComponent({
           'vxe-body--row',
           isDeepRow ? `row--level-${rowLevel}` : '',
           {
-            'row--stripe': stripe && (_rowIndex + 1) % 2 === 0,
+            'row--stripe': stripe && (_rowIndex + 1) % 2 === 0 && !isNewRow,
             'is--new': isNewRow,
             'is--expand-row': isExpandRow,
             'is--expand-tree': isExpandTree,
