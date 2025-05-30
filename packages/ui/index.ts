@@ -207,13 +207,13 @@ VxeUI.setConfig({
       isReplace: true
     },
     virtualXConfig: {
-      enabled: false,
+      // enabled: false,
       gt: 24,
       preSize: 1,
       oSize: 0
     },
     virtualYConfig: {
-      enabled: false,
+      // enabled: false,
       gt: 100,
       preSize: 1,
       oSize: 0

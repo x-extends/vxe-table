@@ -1,4 +1,4 @@
-import { watch, reactive, nextTick } from 'vue'
+import { watch, reactive } from 'vue'
 import XEUtils from 'xe-utils'
 import { ColumnInfo } from './columnInfo'
 import { isPx, isScale, queryElement } from '../../ui/src/dom'
@@ -83,7 +83,7 @@ export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft
     // 还原滚动状态
     return $xeTable.scrollTo(scrollLeft, scrollTop)
   }
-  return nextTick()
+  return $xeTable.clearScroll()
 }
 
 /**

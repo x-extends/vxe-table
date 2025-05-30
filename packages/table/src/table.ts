@@ -4044,7 +4044,9 @@ export default defineComponent({
         const column = visibleColumn[cIndex]
         const colid = column.id
         const colRest = fullColumnIdData[colid]
-        colRest.oLeft = offsetLeft
+        if (colRest) {
+          colRest.oLeft = offsetLeft
+        }
         offsetLeft += column.renderWidth
       }
     }

@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
-import { getFuncText } from '../../../ui/src/utils'
+import { eqEmptyValue, getFuncText } from '../../../ui/src/utils'
 import { scrollToView } from '../../../ui/src/dom'
 import { handleFieldOrColumn, getRowid } from '../../src/util'
 import { warnLog, errLog } from '../../../ui/src/log'
@@ -125,7 +125,7 @@ function validRuleValue (rule: VxeTableDefines.ValidatorRule, val: any, required
 
 function checkRuleStatus (rule: VxeTableDefines.ValidatorRule, val: any) {
   const { required } = rule
-  const isEmptyVal = XEUtils.eqNull(val)
+  const isEmptyVal = XEUtils.isArray(val) ? !val.length : eqEmptyValue(val)
   if (required) {
     if (isEmptyVal) {
       return false
