@@ -83,7 +83,7 @@ export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft
     // 还原滚动状态
     return $xeTable.scrollTo(scrollLeft, scrollTop)
   }
-  return $xeTable.$nextTick()
+  return $xeTable.clearScroll()
 }
 
 export function toTreePathSeq (path: any) {

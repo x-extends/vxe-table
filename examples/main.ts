@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import i18n from './i18n'
 
-import VxeUI from 'vxe-pc-ui'
+import VxeUIAll from 'vxe-pc-ui'
 import 'vxe-pc-ui/lib/style.css'
 
 import enUS from 'vxe-pc-ui/packages/language/en-US'
@@ -13,9 +13,9 @@ import '../styles/all.scss'
 
 import './style/index.scss'
 
-VxeUI.setI18n('en-US', enUS)
+VxeUIAll.setI18n('en-US', enUS)
 
-Vue.use(VxeUI)
+Vue.use(VxeUIAll)
 Vue.use(VxeUITable)
 
 new Vue({
