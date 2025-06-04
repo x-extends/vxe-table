@@ -1058,7 +1058,7 @@ export default defineComponent({
           }
         }
         let visibleSize = 0
-        const toVisibleIndex = Math.max(0, leftIndex < visibleColumn.length ? leftIndex - 2 : 0)
+        const toVisibleIndex = leftIndex === visibleColumn.length ? leftIndex : Math.max(0, leftIndex < visibleColumn.length ? leftIndex - 2 : 0)
         for (let cIndex = toVisibleIndex, cLen = visibleColumn.length; cIndex < cLen; cIndex++) {
           const column = visibleColumn[cIndex]
           const colid = column.id
@@ -1145,7 +1145,7 @@ export default defineComponent({
               rightIndex = rIndex
             }
           }
-          toVisibleIndex = Math.max(0, leftIndex < afterFullData.length ? leftIndex - 2 : 0)
+          toVisibleIndex = leftIndex === afterFullData.length ? leftIndex : Math.max(0, leftIndex < afterFullData.length ? leftIndex - 2 : 0)
           for (let rIndex = toVisibleIndex, rLen = afterFullData.length; rIndex < rLen; rIndex++) {
             const row = afterFullData[rIndex]
             const rowid = handleGetRowId(row)
@@ -3155,6 +3155,7 @@ export default defineComponent({
           const groupField = rgItem.field
           const groupColumn = $xeTable.getColumnByField(groupField)
           const groupMaps: Record<string, any[]> = {}
+          const groupList: any[] = []
           const rowkey = getRowkey($xeTable)
           list.forEach((row) => {
             const cellValue = groupColumn ? $xeTable.getCellLabel(row, groupColumn) : XEUtils.get(row, groupField)
@@ -3171,8 +3172,10 @@ export default defineComponent({
           })
           XEUtils.objectEach(groupMaps, (childList, groupValue) => {
             const { fullData: childFullData, treeData: childTreeData } = handleGroupData(childList, rowGroups.slice(1))
+            const childCount = 0
             const groupRow = {
               isAggregate: true,
+              childCount,
               groupContent: groupValue,
               groupField,
               [rowField]: getRowUniqueId(),
@@ -3187,11 +3190,23 @@ export default defineComponent({
             if (indeterminateField) {
               groupRow[indeterminateField] = false
             }
+            groupList.push(groupRow)
             treeData.push(groupRow)
             fullData.push(groupRow)
             if (childFullData.length) {
               fullData.push(...childFullData)
             }
+          })
+          XEUtils.lastEach(groupList, groupItem => {
+            let count = 0
+            XEUtils.each(groupItem[childrenField], row => {
+              if (row.isAggregate) {
+                count += row[childrenField] ? row[childrenField].length : 0
+              } else {
+                count++
+              }
+            })
+            groupItem.childCount = count
           })
         }
       }
