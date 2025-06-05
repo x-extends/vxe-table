@@ -31,6 +31,9 @@
   /*table*/
   --vxe-ui-table-header-background-color: #28282a;
   --vxe-ui-table-column-to-row-background-color: #28282a;
+  --vxe-ui-table-column-hover-background-color: #242f3b;
+  --vxe-ui-table-column-current-background-color: #18222c;
+  --vxe-ui-table-column-hover-current-background-color: #242f3b;
   --vxe-ui-table-border-color: #37373a;
   --vxe-ui-table-row-hover-background-color: #262727;
   --vxe-ui-table-row-striped-background-color: #1D1D1D;
@@ -40,7 +43,7 @@
   --vxe-ui-table-row-checkbox-checked-background-color: #604820;
   --vxe-ui-table-row-hover-checkbox-checked-background-color: #6e5326;
   --vxe-ui-table-row-current-background-color: #18222c;
-  --vxe-ui-table-row-hover-current-background-color: #262727;
+  --vxe-ui-table-row-hover-current-background-color: #242f3b;
   --vxe-ui-table-fixed-scrolling-box-shadow-color: rgba(0, 0, 0, 0.8);
   --vxe-ui-table-drag-over-background-color:rgba(48, 48, 0, 0.3);
 }

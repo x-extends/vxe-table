@@ -508,11 +508,11 @@ export default defineComponent({
     })
 
     const computeVirtualXOpts = computed(() => {
-      return Object.assign({}, getConfig().table.scrollX, getConfig().table.virtualXConfig, props.scrollX, props.virtualXConfig) as VxeTablePropTypes.VirtualXConfig & { gt: number }
+      return Object.assign({}, getConfig().table.virtualXConfig || getConfig().table.scrollX, props.virtualXConfig || props.scrollX) as VxeTablePropTypes.VirtualXConfig & { gt: number }
     })
 
     const computeVirtualYOpts = computed(() => {
-      return Object.assign({}, getConfig().table.scrollY, getConfig().table.virtualYConfig, props.scrollY, props.virtualYConfig) as VxeTablePropTypes.VirtualYConfig & { gt: number }
+      return Object.assign({}, getConfig().table.virtualYConfig || getConfig().table.scrollY, props.virtualYConfig || props.scrollY) as VxeTablePropTypes.VirtualYConfig & { gt: number }
     })
 
     const computeScrollbarOpts = computed(() => {
