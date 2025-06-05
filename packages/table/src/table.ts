@@ -777,13 +777,13 @@ export default {
       const $xeTable = this
       const props = $xeTable
 
-      return Object.assign({}, getConfig().table.scrollX, getConfig().table.virtualXConfig, props.scrollX, props.virtualXConfig)
+      return Object.assign({}, getConfig().table.virtualXConfig || getConfig().table.scrollX, props.virtualXConfig || props.scrollX)
     },
     computeVirtualYOpts () {
       const $xeTable = this
       const props = $xeTable
 
-      return Object.assign({}, getConfig().table.scrollY, getConfig().table.virtualYConfig, props.scrollY, props.virtualYConfig)
+      return Object.assign({}, getConfig().table.virtualYConfig || getConfig().table.scrollY, props.virtualYConfig || props.scrollY)
     },
     computeScrollbarOpts () {
       const $xeTable = this

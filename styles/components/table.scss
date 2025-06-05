@@ -1000,15 +1000,6 @@ $btnThemeList: (
       }
     }
   }
-  &.column--highlight {
-    .vxe-header--column {
-      &:not(.col--seq) {
-        &:hover {
-          background-color: var(--vxe-ui-table-column-hover-background-color);
-        }
-      }
-    }
-  }
   &.header-cell--area {
     .vxe-table--header-wrapper {
       user-select: none;
@@ -1090,6 +1081,16 @@ $btnThemeList: (
   }
 
   // 列高亮
+  &.column--highlight {
+    .vxe-header--column {
+      &:hover {
+        background-color: var(--vxe-ui-table-column-hover-background-color);
+        &.col--current {
+          background-color: var(--vxe-ui-table-column-hover-current-background-color);
+        }
+      }
+    }
+  }
   .vxe-header--column,
   .vxe-body--column,
   .vxe-footer--column {
@@ -1135,6 +1136,9 @@ $btnThemeList: (
     &.row--hover {
       & > .vxe-body--column {
         background-color: var(--vxe-ui-table-row-hover-background-color);
+        &.col--current {
+          background-color: var(--vxe-ui-table-column-current-background-color);
+        }
       }
       &.row--stripe {
         & > .vxe-body--column {
