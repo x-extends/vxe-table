@@ -124,6 +124,8 @@ export const columnProps = {
   editRender: Object as PropType<VxeColumnPropTypes.EditRender>,
   // 内容渲染配置项
   contentRender: Object as PropType<VxeColumnPropTypes.ContentRender>,
+  // 聚合函数
+  aggFunc: [String, Boolean] as PropType<VxeColumnPropTypes.AggFunc>,
   // 额外的参数
   params: Object as PropType<VxeColumnPropTypes.Params>
 }

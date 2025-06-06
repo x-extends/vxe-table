@@ -582,8 +582,12 @@ export default defineComponent({
       return Object.assign({}, getConfig().table.rowConfig, props.rowConfig)
     })
 
+    const computeAggregateOpts = computed(() => {
+      return Object.assign({}, getConfig().table.aggregateConfig || getConfig().table.rowGroupConfig, props.aggregateConfig || props.rowGroupConfig)
+    })
+
     const computeRowGroupOpts = computed(() => {
-      return Object.assign({}, getConfig().table.rowGroupConfig, props.rowGroupConfig)
+      return computeAggregateOpts.value
     })
 
     const computeCurrentRowOpts = computed(() => {
@@ -910,6 +914,7 @@ export default defineComponent({
       computeHeaderCellOpts,
       computeFooterCellOpts,
       computeRowOpts,
+      computeAggregateOpts,
       computeRowGroupOpts,
       computeCurrentRowOpts,
       computeRowDragOpts,
@@ -1962,7 +1967,7 @@ export default defineComponent({
       const { treeConfig } = props
       const { isRowGroupStatus } = reactData
       const { fullAllDataRowIdData, treeExpandedMaps, rowGroupExpandedMaps } = internalData
-      const rowGroupOpts = computeRowGroupOpts.value
+      const aggregateOpts = computeAggregateOpts.value
       const treeOpts = computeTreeOpts.value
       const { handleGetRowId } = createHandleGetRowId($xeTable)
       const fullData: any[] = []
@@ -1987,7 +1992,7 @@ export default defineComponent({
         updateScrollYStatus(fullData)
         return fullData
       } else if (isRowGroupStatus) {
-        const { childrenField } = rowGroupOpts
+        const { childrenField } = aggregateOpts
         XEUtils.eachTree(internalData.afterGroupFullData, (row, index, items, path, parentRow) => {
           const rowid = handleGetRowId(row)
           const parentRowid = handleGetRowId(parentRow)
@@ -2017,7 +2022,7 @@ export default defineComponent({
       const { tableFullColumn, tableFullData, tableFullTreeData, tableFullGroupData } = internalData
       const filterOpts = computeFilterOpts.value
       const sortOpts = computeSortOpts.value
-      const rowGroupOpts = computeRowGroupOpts.value
+      const aggregateOpts = computeAggregateOpts.value
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const { transform, rowField, parentField, mapChildrenField } = treeOpts
@@ -2083,8 +2088,8 @@ export default defineComponent({
             tableTree = XEUtils.searchTree(tableFullGroupData, handleFilter, {
               original: true,
               isEvery: true,
-              children: rowGroupOpts.mapChildrenField,
-              mapChildren: rowGroupOpts.childrenField
+              children: aggregateOpts.mapChildrenField,
+              mapChildren: aggregateOpts.childrenField
             })
             tableData = tableTree
           } else if (treeConfig && transform) {
@@ -2106,8 +2111,8 @@ export default defineComponent({
             tableTree = XEUtils.searchTree(tableFullGroupData, () => true, {
               original: true,
               isEvery: true,
-              children: rowGroupOpts.mapChildrenField,
-              mapChildren: rowGroupOpts.childrenField
+              children: aggregateOpts.mapChildrenField,
+              mapChildren: aggregateOpts.childrenField
             })
             tableData = tableTree
           } else if (treeConfig && transform) {
@@ -2135,17 +2140,17 @@ export default defineComponent({
               tableTree = XEUtils.isArray(sortRests) ? sortRests : tableTree
             } else {
               const treeList = XEUtils.toTreeArray(tableTree, {
-                key: rowGroupOpts.rowField,
-                parentKey: rowGroupOpts.parentField,
-                children: rowGroupOpts.mapChildrenField
+                key: aggregateOpts.rowField,
+                parentKey: aggregateOpts.parentField,
+                children: aggregateOpts.mapChildrenField
               })
               tableTree = XEUtils.toArrayTree(
                 XEUtils.orderBy(treeList, orderColumns.map(({ column, order }) => [getOrderField(column), order])),
                 {
-                  key: rowGroupOpts.rowField,
-                  parentKey: rowGroupOpts.parentField,
-                  children: rowGroupOpts.childrenField,
-                  mapChildren: rowGroupOpts.mapChildrenField
+                  key: aggregateOpts.rowField,
+                  parentKey: aggregateOpts.parentField,
+                  children: aggregateOpts.childrenField,
+                  mapChildren: aggregateOpts.mapChildrenField
                 }
               )
             }
@@ -2187,8 +2192,8 @@ export default defineComponent({
           tableTree = XEUtils.searchTree(tableFullGroupData, () => true, {
             original: true,
             isEvery: true,
-            children: rowGroupOpts.mapChildrenField,
-            mapChildren: rowGroupOpts.childrenField
+            children: aggregateOpts.mapChildrenField,
+            mapChildren: aggregateOpts.childrenField
           })
           tableData = tableTree
         } else if (treeConfig && transform) {
@@ -2654,7 +2659,7 @@ export default defineComponent({
       const { isRowGroupStatus } = reactData
       const { afterFullData, afterTreeFullData, afterGroupFullData, checkboxReserveRowMap, selectCheckboxMaps } = internalData
       const treeOpts = computeTreeOpts.value
-      const rowGroupOpts = computeRowGroupOpts.value
+      const aggregateOpts = computeAggregateOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const checkboxOpts = computeCheckboxOpts.value
       const { checkField, reserve, checkMethod } = checkboxOpts
@@ -2702,7 +2707,7 @@ export default defineComponent({
                 const rowid = handleGetRowId(row)
                 selectRowMaps[rowid] = row
               }
-            }, { children: rowGroupOpts.mapChildrenField })
+            }, { children: aggregateOpts.mapChildrenField })
           } else {
             /**
              * 如果是树取消
@@ -2714,7 +2719,7 @@ export default defineComponent({
                 if (checkMethod({ $table: $xeTable, row }) ? false : selectCheckboxMaps[rowid]) {
                   selectRowMaps[rowid] = row
                 }
-              }, { children: rowGroupOpts.mapChildrenField })
+              }, { children: aggregateOpts.mapChildrenField })
             }
           }
         } else if (treeConfig) {
@@ -3139,12 +3144,50 @@ export default defineComponent({
         : []
     }
 
+    const handleeGroupSummary = (aggList: VxeTableDefines.AggregateRowInfo[]) => {
+      const aggregateOpts = computeAggregateOpts.value
+      const { mapChildrenField } = aggregateOpts
+      if (mapChildrenField) {
+        XEUtils.lastEach(aggList, aggRow => {
+          let count = 0
+          XEUtils.each(aggRow[mapChildrenField], (row: VxeTableDefines.AggregateRowInfo) => {
+            if (row.isAggregate) {
+              count += row.childCount || 0
+            } else {
+              count++
+            }
+          })
+          aggRow.childCount = count
+        })
+        if ($xeTable.handlePivotTableAggregateData) {
+          $xeTable.handlePivotTableAggregateData(aggList)
+        }
+      }
+    }
+
+    const updateGroupData = () => {
+      const { aggregateConfig, rowGroupConfig } = props
+      const { isRowGroupStatus } = reactData
+      const { tableFullGroupData } = internalData
+      const aggregateOpts = computeAggregateOpts.value
+      const { mapChildrenField } = aggregateOpts
+      if ((aggregateConfig || rowGroupConfig) && isRowGroupStatus) {
+        const aggList: VxeTableDefines.AggregateRowInfo[] = []
+        XEUtils.eachTree(tableFullGroupData, row => {
+          if (row.isAggregate) {
+            aggList.push(row)
+          }
+        }, { children: mapChildrenField })
+        handleeGroupSummary(aggList)
+      }
+    }
+
     const handleGroupData = (list: any[], rowGroups: VxeTableDefines.RowGroupItem[]) => {
       let fullData = list
       let treeData = list
       if (rowGroups) {
-        const rowGroupOpts = computeRowGroupOpts.value
-        const { rowField, parentField, childrenField, mapChildrenField } = rowGroupOpts
+        const aggregateOpts = computeAggregateOpts.value
+        const { rowField, parentField, childrenField, mapChildrenField } = aggregateOpts
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField } = checkboxOpts
         const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
@@ -3155,7 +3198,7 @@ export default defineComponent({
           const groupField = rgItem.field
           const groupColumn = $xeTable.getColumnByField(groupField)
           const groupMaps: Record<string, any[]> = {}
-          const groupList: any[] = []
+          const aggList: VxeTableDefines.AggregateRowInfo[] = []
           const rowkey = getRowkey($xeTable)
           list.forEach((row) => {
             const cellValue = groupColumn ? $xeTable.getCellLabel(row, groupColumn) : XEUtils.get(row, groupField)
@@ -3172,12 +3215,12 @@ export default defineComponent({
           })
           XEUtils.objectEach(groupMaps, (childList, groupValue) => {
             const { fullData: childFullData, treeData: childTreeData } = handleGroupData(childList, rowGroups.slice(1))
-            const childCount = 0
-            const groupRow = {
+            const aggRow: VxeTableDefines.AggregateRowInfo = {
               isAggregate: true,
-              childCount,
+              aggData: {},
               groupContent: groupValue,
               groupField,
+              childCount: 0,
               [rowField]: getRowUniqueId(),
               [parentField]: null,
               [rowkey]: getRowUniqueId(),
@@ -3185,29 +3228,19 @@ export default defineComponent({
               [mapChildrenField]: childTreeData
             }
             if (checkField) {
-              groupRow[checkField] = false
+              aggRow[checkField] = false
             }
             if (indeterminateField) {
-              groupRow[indeterminateField] = false
+              aggRow[indeterminateField] = false
             }
-            groupList.push(groupRow)
-            treeData.push(groupRow)
-            fullData.push(groupRow)
+            aggList.push(aggRow)
+            treeData.push(aggRow)
+            fullData.push(aggRow)
             if (childFullData.length) {
               fullData.push(...childFullData)
             }
           })
-          XEUtils.lastEach(groupList, groupItem => {
-            let count = 0
-            XEUtils.each(groupItem[childrenField], row => {
-              if (row.isAggregate) {
-                count += row[childrenField] ? row[childrenField].length : 0
-              } else {
-                count++
-              }
-            })
-            groupItem.childCount = count
-          })
+          handleeGroupSummary(aggList)
         }
       }
       return {
@@ -3221,7 +3254,7 @@ export default defineComponent({
      * @param {Array} datas 数据
      */
     const loadTableData = (datas: any[], isReset: boolean) => {
-      const { keepSource, treeConfig, rowGroupConfig } = props
+      const { keepSource, treeConfig, rowGroupConfig, aggregateConfig } = props
       const { rowGroupList, scrollYLoad: oldScrollYLoad } = reactData
       const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
       const rowOpts = computeRowOpts.value
@@ -3235,11 +3268,11 @@ export default defineComponent({
         errLog('vxe.error.errMaxRow', [supportMaxRow])
       }
       if (treeConfig && rowGroupList.length) {
-        errLog('vxe.error.noTree', ['row-group-config'])
+        errLog('vxe.error.noTree', ['aggregate-config'])
         return nextTick()
       }
       if (rowOpts.drag && rowGroupList.length) {
-        errLog('vxe.error.errConflicts', ['row-config.drag', 'row-group-config'])
+        errLog('vxe.error.errConflicts', ['row-config.drag', 'aggregate-config'])
         return nextTick()
       }
       let isRGroup = false
@@ -3276,7 +3309,7 @@ export default defineComponent({
         } else {
           treeData = fullData.slice(0)
         }
-      } else if (rowGroupConfig && rowGroupList.length) {
+      } else if ((aggregateConfig || rowGroupConfig) && rowGroupList.length) {
         const groupRest = handleGroupData(fullData, rowGroupList)
         treeData = groupRest.treeData
         fullData = groupRest.fullData
@@ -3388,12 +3421,16 @@ export default defineComponent({
               if (oldScrollYLoad === sYLoad) {
                 restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
                   .then(() => {
+                    calcCellHeight()
+                    updateRowOffsetTop()
                     resolve()
                   })
               } else {
                 setTimeout(() => {
                   restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
                     .then(() => {
+                      calcCellHeight()
+                      updateRowOffsetTop()
                       resolve()
                     })
                 })
@@ -3633,6 +3670,7 @@ export default defineComponent({
         $xeTable.clearMergeCells()
         $xeTable.clearMergeFooterItems()
         $xeTable.handleTableData(true)
+        $xeTable.handleAggregateSummaryData()
 
         if ((scrollXLoad || scrollYLoad) && (expandColumn && expandOpts.mode !== 'fixed')) {
           warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
@@ -3762,8 +3800,8 @@ export default defineComponent({
      */
     const handleRowGroupBaseExpand = (rows: any[], expanded: boolean) => {
       const { fullAllDataRowIdData, tableFullGroupData, rowGroupExpandedMaps } = internalData
-      const rowGroupOpts = computeRowGroupOpts.value
-      const { mapChildrenField, accordion } = rowGroupOpts
+      const aggregateOpts = computeAggregateOpts.value
+      const { mapChildrenField, accordion } = aggregateOpts
       const { handleGetRowId } = createHandleGetRowId($xeTable)
       let validRows = rows
       if (mapChildrenField) {
@@ -6145,9 +6183,9 @@ export default defineComponent({
         return rest
       },
       setRowGroups (fieldOrColumns) {
-        const { rowGroupConfig } = props
-        if (!rowGroupConfig) {
-          errLog('vxe.error.reqProp', ['row-group-config'])
+        const { aggregateConfig, rowGroupConfig } = props
+        if (!(aggregateConfig || rowGroupConfig)) {
+          errLog('vxe.error.reqProp', ['aggregate-config'])
           return nextTick()
         }
         if (fieldOrColumns) {
@@ -6159,19 +6197,27 @@ export default defineComponent({
         return nextTick()
       },
       clearRowGroups () {
-        const { rowGroupConfig } = props
-        if (!rowGroupConfig) {
-          errLog('vxe.error.reqProp', ['row-group-config'])
+        const { aggregateConfig, rowGroupConfig } = props
+        if (!(aggregateConfig || rowGroupConfig)) {
+          errLog('vxe.error.reqProp', ['aggregate-config'])
           return nextTick()
         }
         handleUpdateRowGroup([])
         return loadTableData(internalData.tableSynchData, true)
       },
       isRowGroupRecord (row) {
+        warnLog('vxe.error.delFunc', ['isRowGroupRecord', 'isAggregateRecord'])
+        return $xeTable.isAggregateRecord(row)
+      },
+      isRowGroupExpandByRow (row) {
+        warnLog('vxe.error.delFunc', ['isRowGroupExpandByRow', 'isAggregateExpandByRow'])
+        return $xeTable.isAggregateExpandByRow(row)
+      },
+      isAggregateRecord (row) {
         const { isRowGroupStatus } = reactData
         return isRowGroupStatus && row.isAggregate
       },
-      isRowGroupExpandByRow (row) {
+      isAggregateExpandByRow (row) {
         const { rowGroupExpandedFlag } = reactData
         const { rowGroupExpandedMaps } = internalData
         return !!rowGroupExpandedFlag && !!rowGroupExpandedMaps[getRowid($xeTable, row)]
@@ -6187,8 +6233,8 @@ export default defineComponent({
       },
       setAllRowGroupExpand (expanded) {
         const { tableFullGroupData } = internalData
-        const rowGroupOpts = computeRowGroupOpts.value
-        const { mapChildrenField } = rowGroupOpts
+        const aggregateOpts = computeAggregateOpts.value
+        const { mapChildrenField } = aggregateOpts
         const rgExpandedMaps: Record<string, any> = {}
         if (expanded && mapChildrenField) {
           XEUtils.eachTree(tableFullGroupData, (row) => {
@@ -7717,8 +7763,8 @@ export default defineComponent({
             handleRowCache(row, index, items, parentRow ? -1 : index, parentRow, rowid, nodes.length - 1, toTreePathSeq(path))
           }, { children: childrenField })
         } else if (isRowGroupStatus) {
-          const rowGroupOpts = computeRowGroupOpts.value
-          const { mapChildrenField } = rowGroupOpts
+          const aggregateOpts = computeAggregateOpts.value
+          const { mapChildrenField } = aggregateOpts
           XEUtils.eachTree(tableFullGroupData, (row, index, items, path, parentRow, nodes) => {
             const rowid = handleUpdateRowId(row)
             handleRowCache(row, index, items, parentRow ? -1 : index, parentRow, rowid, nodes.length - 1, toTreePathSeq(path))
@@ -8230,7 +8276,7 @@ export default defineComponent({
         const { treeConfig } = props
         const { isRowGroupStatus } = reactData
         const { afterTreeFullData, afterGroupFullData, selectCheckboxMaps, treeIndeterminateRowMaps } = internalData
-        const rowGroupOpts = computeRowGroupOpts.value
+        const aggregateOpts = computeAggregateOpts.value
         const treeOpts = computeTreeOpts.value
         const childrenField = treeOpts.children || treeOpts.childrenField
         const checkboxOpts = computeCheckboxOpts.value
@@ -8245,7 +8291,7 @@ export default defineComponent({
 
           if (isRowGroupStatus) {
             // 行分组
-            const mapChildrenField = rowGroupOpts.mapChildrenField
+            const mapChildrenField = aggregateOpts.mapChildrenField
             if (mapChildrenField) {
               XEUtils.eachTree(afterGroupFullData, (row) => {
                 const rowid = handleGetRowId(row)
@@ -8403,7 +8449,7 @@ export default defineComponent({
         const { treeConfig } = props
         const { isRowGroupStatus } = reactData
         const { selectCheckboxMaps } = internalData
-        const rowGroupOpts = computeRowGroupOpts.value
+        const aggregateOpts = computeAggregateOpts.value
         const treeOpts = computeTreeOpts.value
         const { transform, mapChildrenField } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
@@ -8455,7 +8501,7 @@ export default defineComponent({
                 }
                 handleCheckboxReserveRow(row, checked)
               }
-            }, { children: rowGroupOpts.mapChildrenField })
+            }, { children: aggregateOpts.mapChildrenField })
             reactData.updateCheckboxFlag++
             return
           } else if (treeConfig) {
@@ -8515,6 +8561,9 @@ export default defineComponent({
         const { mergeFooterList } = internalData
         internalData.mergeFooterCellMaps = buildMergeData(mergeFooterList)
         reactData.mergeFootFlag++
+      },
+      handleAggregateSummaryData () {
+        return updateGroupData()
       },
       triggerHeaderTitleEvent (evnt, iconParams, params) {
         const tipContent = iconParams.content || (iconParams as any).message
@@ -8675,7 +8724,7 @@ export default defineComponent({
         const radioOpts = computeRadioOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const keyboardOpts = computeKeyboardOpts.value
-        const rowGroupOpts = computeRowGroupOpts.value
+        const aggregateOpts = computeAggregateOpts.value
         const rowOpts = computeRowOpts.value
         const columnOpts = computeColumnOpts.value
         const currentColumnOpts = computeCurrentColumnOpts.value
@@ -8702,7 +8751,7 @@ export default defineComponent({
             $xeTable.triggerTreeExpandEvent(evnt, params)
           }
           // 如果是行分组
-          if ((rowGroupOpts.trigger === 'row' || (rowGroupNode && rowGroupOpts.trigger === 'cell'))) {
+          if ((aggregateOpts.trigger === 'row' || (rowGroupNode && aggregateOpts.trigger === 'cell'))) {
             $xeTable.triggerRowGroupExpandEvent(evnt, params)
           }
         }
@@ -8981,9 +9030,9 @@ export default defineComponent({
        */
       triggerRowGroupExpandEvent (evnt, params) {
         const { rowGroupExpandedMaps } = internalData
-        const rowGroupOpts = computeRowGroupOpts.value
+        const aggregateOpts = computeAggregateOpts.value
         const { row, column } = params
-        const { trigger } = rowGroupOpts
+        const { trigger } = aggregateOpts
         if (trigger === 'manual') {
           return
         }
@@ -10249,10 +10298,10 @@ export default defineComponent({
         const { tableFullData } = internalData
         const rests: Promise<any>[] = []
         if (treeConfig || isRowGroupStatus) {
-          const rowGroupOpts = computeRowGroupOpts.value
+          const aggregateOpts = computeAggregateOpts.value
           const treeOpts = computeTreeOpts.value
           const childrenField = treeOpts.children || treeOpts.childrenField
-          const matchObj = XEUtils.findTree(tableFullData, item => $xeTable.eqRow(item, row), { children: isRowGroupStatus ? rowGroupOpts.mapChildrenField : childrenField })
+          const matchObj = XEUtils.findTree(tableFullData, item => $xeTable.eqRow(item, row), { children: isRowGroupStatus ? aggregateOpts.mapChildrenField : childrenField })
           if (matchObj) {
             const nodes = matchObj.nodes
             nodes.forEach((row, index) => {
@@ -11408,9 +11457,9 @@ export default defineComponent({
       const columnOpts = computeColumnOpts.value
       const rowOpts = computeRowOpts.value
       const customOpts = computeCustomOpts.value
-      const rowGroupOpts = computeRowGroupOpts.value
+      const aggregateOpts = computeAggregateOpts.value
       const virtualYOpts = computeVirtualYOpts.value
-      const { groupFields } = rowGroupOpts
+      const { groupFields } = aggregateOpts
 
       if (columnOpts.drag || rowOpts.drag || customOpts.allowSort) {
         initTpImg()
@@ -11434,6 +11483,7 @@ export default defineComponent({
         const currentRowOpts = computeCurrentRowOpts.value
         const currentColumnOpts = computeCurrentColumnOpts.value
         const keyboardOpts = computeKeyboardOpts.value
+        const aggregateOpts = computeAggregateOpts.value
 
         if (props.rowId) {
           warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
@@ -11522,6 +11572,15 @@ export default defineComponent({
         }
         if (props.dragConfig) {
           warnLog('vxe.error.delProp', ['drag-config', 'row-drag-config'])
+        }
+        if (props.rowGroupConfig) {
+          warnLog('vxe.error.delProp', ['row-group-config', 'aggregate-config'])
+        }
+        if (aggregateOpts.countFields) {
+          warnLog('vxe.error.delProp', ['row-group-config.countFields', 'column.agg-func'])
+        }
+        if (aggregateOpts.countMethod) {
+          warnLog('vxe.error.delProp', ['row-group-config.countMethod', 'aggregate-config.aggregateMethod'])
         }
         if (props.treeConfig && treeOpts.children) {
           warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])

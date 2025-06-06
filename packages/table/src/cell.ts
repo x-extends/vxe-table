@@ -288,12 +288,12 @@ function renderCellHandle (params: VxeTableDefines.CellRenderBodyParams & {
   const { isRowGroupStatus } = tableReactData
   const { editConfig } = tableProps
   const { type, treeNode, rowGroupNode, editRender } = column
-  const { computeEditOpts, computeCheckboxOpts, computeRowGroupOpts } = $table.getComputeMaps()
-  const rowGroupOpts = computeRowGroupOpts.value
-  const { mode } = rowGroupOpts
+  const { computeEditOpts, computeCheckboxOpts, computeAggregateOpts } = $table.getComputeMaps()
+  const aggregateOpts = computeAggregateOpts.value
+  const { mode } = aggregateOpts
   const checkboxOpts = computeCheckboxOpts.value
   const editOpts = computeEditOpts.value
-  const isDeepCell = treeNode || (isRowGroupStatus && row.isAggregate && (mode === 'column' ? column.field === row.groupField : rowGroupNode))
+  const isDeepCell = treeNode || (isRowGroupStatus && (mode === 'column' ? column.field === row.groupField : rowGroupNode))
   switch (type) {
     case 'seq':
       return isDeepCell ? Cell.renderDeepIndexCell(params) : Cell.renderSeqCell(params)
@@ -397,7 +397,7 @@ export const Cell = {
     const tableReactData = $table.reactData
     const tableInternalData = $table.internalData
     const { isRowGroupStatus } = tableReactData
-    const { field, slots, editRender, cellRender, rowGroupNode } = column
+    const { field, slots, editRender, cellRender, rowGroupNode, aggFunc } = column
     const renderOpts = editRender || cellRender
     const defaultSlot = slots ? slots.default : null
     if (defaultSlot) {
@@ -415,39 +415,51 @@ export const Cell = {
       }
     }
     let cellValue: string | number | null = ''
-    if (isRowGroupStatus && row.isAggregate) {
+    if (isRowGroupStatus && field && row.isAggregate) {
+      const aggRow: VxeTableDefines.AggregateRowInfo = row
       const { fullColumnFieldData } = tableInternalData
-      const { computeRowGroupOpts } = $table.getComputeMaps()
-      const rowGroupOpts = computeRowGroupOpts.value
-      const { mode, showTotal, totalMethod, countFields, countMethod, contentMethod, mapChildrenField } = rowGroupOpts
-      const groupField = row.groupField
-      const groupContent = row.groupContent
-      const childList = mapChildrenField ? (row[mapChildrenField] || []) : []
-      const totalValue = row.childCount
+      const { computeAggregateOpts } = $table.getComputeMaps()
+      const aggregateOpts = computeAggregateOpts.value
+      const { mode, showTotal, totalMethod, countFields, contentMethod, mapChildrenField } = aggregateOpts
+      const aggMethod = aggregateOpts.aggregateMethod || aggregateOpts.countMethod
+      const groupField = aggRow.groupField
+      const groupContent = aggRow.groupContent
+      const childList = mapChildrenField ? (aggRow[mapChildrenField] || []) : []
+      const childCount = aggRow.childCount
       const colRest = fullColumnFieldData[groupField] || {}
-      const params = {
+      const ctParams = {
         $table,
         groupField,
         groupColumn: (colRest ? colRest.column : null) as VxeTableDefines.ColumnInfo,
         column,
         groupValue: groupContent,
         children: childList,
-        totalValue: totalValue
+        childCount,
+        aggValue: null as any,
+
+        /**
+         * 已废弃
+         * @deprecated
+         */
+        totalValue: childCount
       }
-      if (mode === 'column' ? column.field === row.groupField : rowGroupNode) {
+      if (mode === 'column' ? field === aggRow.groupField : rowGroupNode) {
         cellValue = groupContent
         if (contentMethod) {
-          cellValue = `${contentMethod(params)}`
+          cellValue = `${contentMethod(ctParams)}`
         }
         if (showTotal) {
-          cellValue = getI18n('vxe.table.rowGroupContentTotal', [cellValue, totalMethod ? totalMethod(params) : totalValue, totalValue])
+          cellValue = getI18n('vxe.table.rowGroupContentTotal', [cellValue, totalMethod ? totalMethod(ctParams) : childCount, childCount])
         }
-      } else if (countFields && countFields.includes(field)) {
-        if (countMethod) {
-          cellValue = `${countMethod(params)}`
+      } else if ($table.getPivotTableAggregateCellAggValue) {
+        cellValue = $table.getPivotTableAggregateCellAggValue(params)
+      } else if (aggFunc === true || (countFields && countFields.includes(field))) {
+        if (aggMethod) {
+          ctParams.aggValue = childCount
+          cellValue = `${aggMethod(ctParams)}`
         }
       }
-    } else if (!(isRowGroupStatus && row.isAggregate)) {
+    } else {
       cellValue = $table.getCellLabel(row, column)
     }
     const cellPlaceholder = editRender ? editRender.placeholder : ''
@@ -480,11 +492,11 @@ export const Cell = {
     const tableReactData = $table.reactData
     const tableInternalData = $table.internalData
     const { row, level } = params
-    const { computeRowGroupOpts } = $table.getComputeMaps()
+    const { computeAggregateOpts } = $table.getComputeMaps()
     const { rowGroupExpandedFlag } = tableReactData
     const { rowGroupExpandedMaps } = tableInternalData
-    const rowGroupOpts = computeRowGroupOpts.value
-    const { padding, indent } = rowGroupOpts
+    const aggregateOpts = computeAggregateOpts.value
+    const { padding, indent } = aggregateOpts
     const rowid = getRowid($table, row)
     const isExpand = !!rowGroupExpandedFlag && !!rowGroupExpandedMaps[rowid]
     return h('div', {
@@ -497,16 +509,18 @@ export const Cell = {
           }
         : undefined
     }, [
-      h('span', {
-        class: 'vxe-row-group--node-btn',
-        onClick (evnt: MouseEvent) {
-          $table.triggerRowGroupExpandEvent(evnt, params)
-        }
-      }, [
-        h('i', {
-          class: isExpand ? getIcon().TABLE_ROW_GROUP_OPEN : getIcon().TABLE_ROW_GROUP_CLOSE
-        })
-      ]),
+      row.isAggregate
+        ? h('span', {
+          class: 'vxe-row-group--node-btn',
+          onClick (evnt: MouseEvent) {
+            $table.triggerRowGroupExpandEvent(evnt, params)
+          }
+        }, [
+          h('i', {
+            class: isExpand ? getIcon().TABLE_ROW_GROUP_OPEN : getIcon().TABLE_ROW_GROUP_CLOSE
+          })
+        ])
+        : renderEmptyElement($table),
       h('div', {
         class: 'vxe-row-group-cell'
       }, cellVNodes)
@@ -588,10 +602,12 @@ export const Cell = {
   renderDeepNodeBtn (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, cellVNodes: VxeComponentSlotType[]) {
     const { $table, row, column } = params
     const { rowGroupNode } = column
-    if (row.isAggregate) {
-      const { computeRowGroupOpts } = $table.getComputeMaps()
-      const rowGroupOpts = computeRowGroupOpts.value
-      const { mode } = rowGroupOpts
+    const tableReactData = $table.reactData
+    const { rowGroupList } = tableReactData
+    if (rowGroupList.length) {
+      const { computeAggregateOpts } = $table.getComputeMaps()
+      const aggregateOpts = computeAggregateOpts.value
+      const { mode } = aggregateOpts
       if (mode === 'column' ? column.field === row.groupField : rowGroupNode) {
         return [Cell.renderRowGroupBtn(params, cellVNodes)]
       }

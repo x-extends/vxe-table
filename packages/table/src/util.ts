@@ -4,7 +4,7 @@ import { ColumnInfo } from './columnInfo'
 import { isPx, isScale, queryElement } from '../../ui/src/dom'
 import { eqEmptyValue } from '../../ui/src/utils'
 
-import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines } from '../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeTablePropTypes } from '../../../types'
 
 const getAllConvertColumns = (columns: any, parentColumn?: any) => {
   const result: any[] = []
@@ -169,19 +169,23 @@ export interface XEColumnInstance {
   columnConfig: ColumnInfo;
 }
 
-export const handleFieldOrColumn = ($xeTable: VxeTableConstructor, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null) => {
+export function handleFieldOrColumn ($xeTable: VxeTableConstructor, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null) {
   if (fieldOrColumn) {
     return XEUtils.isString(fieldOrColumn) || XEUtils.isNumber(fieldOrColumn) ? $xeTable.getColumnByField(`${fieldOrColumn}`) : fieldOrColumn
   }
   return null
 }
 
-export const handleRowidOrRow = ($xeTable: VxeTableConstructor, rowidOrRow: any) => {
+export function handleRowidOrRow ($xeTable: VxeTableConstructor, rowidOrRow: any) {
   if (rowidOrRow) {
     const rowid = XEUtils.isString(rowidOrRow) || XEUtils.isNumber(rowidOrRow) ? rowidOrRow : getRowid($xeTable, rowidOrRow)
     return $xeTable.getRowById(rowid)
   }
   return null
+}
+
+export function getCellRestHeight (rowRest: VxeTableDefines.RowCacheItem, cellOpts: VxeTablePropTypes.CellConfig, rowOpts: VxeTablePropTypes.RowConfig, defaultRowHeight: number) {
+  return rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
 }
 
 function getPaddingLeftRightSize (elem: HTMLElement | null) {

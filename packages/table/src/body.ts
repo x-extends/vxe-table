@@ -1,7 +1,7 @@
 import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { getOffsetSize, calcTreeLine, getRowid, createHandleGetRowId } from './util'
+import { getOffsetSize, calcTreeLine, getRowid, createHandleGetRowId, getCellRestHeight } from './util'
 import { updateCellTitle, getPropClass } from '../../ui/src/dom'
 import { isEnableConf } from '../../ui/src/utils'
 import { getSlotVNs } from '../../ui/src/vn'
@@ -234,6 +234,7 @@ export default defineComponent({
         $xeTable.triggerCellDblclickEvent(evnt, cellParams)
       }
       let isMergeCell = false
+      let mergeRowspan = 1
       // 合并行或列
       if (mergeBodyFlag && mergeBodyList.length) {
         const spanRest = mergeBodyCellMaps[`${_rowIndex}:${_columnIndex}`]
@@ -244,6 +245,7 @@ export default defineComponent({
           }
           if (rowspan > 1) {
             isMergeCell = true
+            mergeRowspan = rowspan
             tdAttrs.rowspan = rowspan
           }
           if (colspan > 1) {
@@ -258,9 +260,12 @@ export default defineComponent({
           return null
         }
         if (rowspan > 1) {
+          isMergeCell = true
+          mergeRowspan = rowspan
           tdAttrs.rowspan = rowspan
         }
         if (colspan > 1) {
+          isMergeCell = true
           tdAttrs.colspan = colspan
         }
       }
@@ -276,7 +281,7 @@ export default defineComponent({
       }
 
       const isVNAutoHeight = scrollYLoad && !hasEllipsis
-      const cellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+      let cellHeight = getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
 
       const isLastColumn = $columnIndex === columns.length - 1
       const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
@@ -288,6 +293,16 @@ export default defineComponent({
             isVNPreEmptyStatus = true
           } else if (scrollXLoad && !virtualXOpts.immediate && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
             isVNPreEmptyStatus = true
+          }
+        }
+      }
+
+      if (mergeRowspan > 1) {
+        const mEndRow = afterFullData[_rowIndex + mergeRowspan - 1]
+        if (mEndRow) {
+          const meRowRest = fullAllDataRowIdData[getRowid($xeTable, mEndRow)]
+          if (meRowRest) {
+            cellHeight += meRowRest.oTop - rowRest.oTop + getCellRestHeight(meRowRest, cellOpts, rowOpts, defaultRowHeight)
           }
         }
       }
@@ -326,8 +341,10 @@ export default defineComponent({
         )
       } else {
         // 渲染单元格
+        if (treeConfig) {
+          tdVNs.push(...renderLine(rowid, cellParams, cellHeight))
+        }
         tdVNs.push(
-          ...renderLine(rowid, cellParams, cellHeight),
           h('div', {
             key: 'tc',
             class: ['vxe-cell', {
