@@ -177,7 +177,9 @@ export default {
   footerCellConfig: Object as PropType<VxeTablePropTypes.FooterCellConfig>,
   // 行配置项
   rowConfig: Object as PropType<VxeTablePropTypes.RowConfig>,
-  // 行分组配置项
+  // 数据聚合配置项
+  aggregateConfig: Object as PropType<VxeTablePropTypes.AggregateConfig>,
+  //  已废弃，被 aggregateConfig 替换
   rowGroupConfig: Object as PropType<VxeTablePropTypes.RowGroupConfig>,
   // 当前行配置项
   currentRowConfig: Object as PropType<VxeTablePropTypes.CurrentRowConfig>,

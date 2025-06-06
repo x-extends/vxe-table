@@ -881,11 +881,16 @@ export default {
 
       return Object.assign({}, getConfig().table.rowConfig, props.rowConfig)
     },
-    computeRowGroupOpts () {
+    computeAggregateOpts () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
-      return Object.assign({}, getConfig().table.rowGroupConfig, props.rowGroupConfig)
+      return Object.assign({}, getConfig().table.aggregateConfig || getConfig().table.rowGroupConfig, props.aggregateConfig || props.rowGroupConfig)
+    },
+    computeRowGroupOpts () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      return $xeTable.computeAggregateOpts
     },
     computeCurrentRowOpts () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -1279,8 +1284,8 @@ export default {
     computeRowGroupFields () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      const rowGroupOpts = $xeTable.computeRowGroupOpts
-      return rowGroupOpts.groupFields
+      const aggregateOpts = $xeTable.computeAggregateOpts
+      return aggregateOpts.groupFields
     },
     tabsResizeFlag () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -1564,8 +1569,8 @@ export default {
     const currentRowOpts = $xeTable.computeCurrentRowOpts
     const currentColumnOpts = $xeTable.computeCurrentColumnOpts
     const keyboardOpts = $xeTable.computeKeyboardOpts
-    const rowGroupOpts = $xeTable.computeRowGroupOpts
-    const { groupFields } = rowGroupOpts
+    const aggregateOpts = $xeTable.computeAggregateOpts
+    const { groupFields } = aggregateOpts
 
     if (props.rowId) {
       warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
@@ -1657,6 +1662,15 @@ export default {
     }
     if (props.dragConfig) {
       warnLog('vxe.error.delProp', ['drag-config', 'row-drag-config'])
+    }
+    if (props.rowGroupConfig) {
+      warnLog('vxe.error.delProp', ['row-group-config', 'aggregate-config'])
+    }
+    if (aggregateOpts.countFields) {
+      warnLog('vxe.error.delProp', ['row-group-config.countFields', 'column.agg-func'])
+    }
+    if (aggregateOpts.countMethod) {
+      warnLog('vxe.error.delProp', ['row-group-config.countMethod', 'aggregate-config.aggregateMethod'])
     }
     if (props.treeConfig && treeOpts.children) {
       warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])

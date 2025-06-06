@@ -4,7 +4,7 @@ import { isScale, isPx, queryElement } from '../../ui/src/dom'
 import { warnLog, errLog } from '../../ui/src/log'
 import { eqEmptyValue } from '../../ui/src/utils'
 
-import type { VxeTableDefines, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePrivateMethods } from '../../../types'
+import type { VxeTableDefines, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePrivateMethods, VxeTablePropTypes } from '../../../types'
 
 const getAllConvertColumns = (columns: any, parentColumn?: any) => {
   const result: any[] = []
@@ -204,12 +204,16 @@ export function handleFieldOrColumn ($xeTable: VxeTableConstructor, fieldOrColum
   return null
 }
 
-export const handleRowidOrRow = ($xeTable: VxeTableConstructor, rowidOrRow: any) => {
+export function handleRowidOrRow ($xeTable: VxeTableConstructor, rowidOrRow: any) {
   if (rowidOrRow) {
     const rowid = XEUtils.isString(rowidOrRow) || XEUtils.isNumber(rowidOrRow) ? rowidOrRow : getRowid($xeTable, rowidOrRow)
     return $xeTable.getRowById(rowid)
   }
   return null
+}
+
+export function getCellRestHeight (rowRest: VxeTableDefines.RowCacheItem, cellOpts: VxeTablePropTypes.CellConfig, rowOpts: VxeTablePropTypes.RowConfig, defaultRowHeight: number) {
+  return rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
 }
 
 // 组装列配置

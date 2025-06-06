@@ -447,8 +447,8 @@ function handleRowGroupBaseExpand ($xeTable: VxeTableConstructor & VxeTablePriva
   const internalData = $xeTable as unknown as TableInternalData
 
   const { fullAllDataRowIdData, tableFullGroupData, rowGroupExpandedMaps } = internalData
-  const rowGroupOpts = $xeTable.computeRowGroupOpts
-  const { mapChildrenField, accordion } = rowGroupOpts
+  const aggregateOpts = $xeTable.computeAggregateOpts
+  const { mapChildrenField, accordion } = aggregateOpts
   const { handleGetRowId } = createHandleGetRowId($xeTable)
   let validRows = rows
   if (mapChildrenField) {
@@ -602,7 +602,7 @@ function handleVirtualTreeToList ($xeTable: VxeTableConstructor & VxeTablePrivat
   const { treeConfig } = props
   const { isRowGroupStatus } = reactData
   const { fullAllDataRowIdData, treeExpandedMaps, rowGroupExpandedMaps } = internalData
-  const rowGroupOpts = $xeTable.computeRowGroupOpts
+  const aggregateOpts = $xeTable.computeAggregateOpts
   const treeOpts = $xeTable.computeTreeOpts
   const { handleGetRowId } = createHandleGetRowId($xeTable)
   const fullData: any[] = []
@@ -627,7 +627,7 @@ function handleVirtualTreeToList ($xeTable: VxeTableConstructor & VxeTablePrivat
     updateScrollYStatus($xeTable, fullData)
     return fullData
   } else if (isRowGroupStatus) {
-    const { childrenField } = rowGroupOpts
+    const { childrenField } = aggregateOpts
     XEUtils.eachTree(internalData.afterGroupFullData, (row, index, items, path, parentRow) => {
       const rowid = handleGetRowId(row)
       const parentRowid = handleGetRowId(parentRow)
@@ -661,7 +661,7 @@ function updateAfterFullData ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const { tableFullColumn, tableFullData, tableFullTreeData, tableFullGroupData } = internalData
   const filterOpts = $xeTable.computeFilterOpts
   const sortOpts = $xeTable.computeSortOpts
-  const rowGroupOpts = $xeTable.computeRowGroupOpts
+  const aggregateOpts = $xeTable.computeAggregateOpts
   const treeOpts = $xeTable.computeTreeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
   const { transform, rowField, parentField, mapChildrenField } = treeOpts
@@ -728,8 +728,8 @@ function updateAfterFullData ($xeTable: VxeTableConstructor & VxeTablePrivateMet
         tableTree = XEUtils.searchTree(tableFullGroupData, handleFilter, {
           original: true,
           isEvery: true,
-          children: rowGroupOpts.mapChildrenField,
-          mapChildren: rowGroupOpts.childrenField
+          children: aggregateOpts.mapChildrenField,
+          mapChildren: aggregateOpts.childrenField
         })
         tableData = tableTree
       } else if (treeConfig && transform) {
@@ -751,8 +751,8 @@ function updateAfterFullData ($xeTable: VxeTableConstructor & VxeTablePrivateMet
         tableTree = XEUtils.searchTree(tableFullGroupData, () => true, {
           original: true,
           isEvery: true,
-          children: rowGroupOpts.mapChildrenField,
-          mapChildren: rowGroupOpts.childrenField
+          children: aggregateOpts.mapChildrenField,
+          mapChildren: aggregateOpts.childrenField
         })
         tableData = tableTree
       } else if (treeConfig && transform) {
@@ -780,17 +780,17 @@ function updateAfterFullData ($xeTable: VxeTableConstructor & VxeTablePrivateMet
           tableTree = XEUtils.isArray(sortRests) ? sortRests : tableTree
         } else {
           const treeList = XEUtils.toTreeArray(tableTree, {
-            key: rowGroupOpts.rowField,
-            parentKey: rowGroupOpts.parentField,
-            children: rowGroupOpts.mapChildrenField
+            key: aggregateOpts.rowField,
+            parentKey: aggregateOpts.parentField,
+            children: aggregateOpts.mapChildrenField
           })
           tableTree = XEUtils.toArrayTree(
             XEUtils.orderBy(treeList, orderColumns.map(({ column, order }) => [getOrderField($xeTable, column), order])),
             {
-              key: rowGroupOpts.rowField,
-              parentKey: rowGroupOpts.parentField,
-              children: rowGroupOpts.childrenField,
-              mapChildren: rowGroupOpts.mapChildrenField
+              key: aggregateOpts.rowField,
+              parentKey: aggregateOpts.parentField,
+              children: aggregateOpts.childrenField,
+              mapChildren: aggregateOpts.mapChildrenField
             }
           )
         }
@@ -844,8 +844,8 @@ function updateAfterFullData ($xeTable: VxeTableConstructor & VxeTablePrivateMet
       tableTree = XEUtils.searchTree(tableFullGroupData, () => true, {
         original: true,
         isEvery: true,
-        children: rowGroupOpts.mapChildrenField,
-        mapChildren: rowGroupOpts.childrenField
+        children: aggregateOpts.mapChildrenField,
+        mapChildren: aggregateOpts.childrenField
       })
       tableData = tableTree
     } else if (treeConfig && transform) {
@@ -1336,7 +1336,7 @@ function handleCheckedAllCheckboxRow ($xeTable: VxeTableConstructor & VxeTablePr
   const { isRowGroupStatus } = reactData
   const { afterFullData, afterTreeFullData, afterGroupFullData, checkboxReserveRowMap, selectCheckboxMaps } = internalData
   const treeOpts = $xeTable.computeTreeOpts
-  const rowGroupOpts = $xeTable.computeRowGroupOpts
+  const aggregateOpts = $xeTable.computeAggregateOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
   const checkboxOpts = $xeTable.computeCheckboxOpts
   const { checkField, reserve, checkMethod } = checkboxOpts
@@ -1384,7 +1384,7 @@ function handleCheckedAllCheckboxRow ($xeTable: VxeTableConstructor & VxeTablePr
             const rowid = handleGetRowId(row)
             selectRowMaps[rowid] = row
           }
-        }, { children: rowGroupOpts.mapChildrenField })
+        }, { children: aggregateOpts.mapChildrenField })
       } else {
         /**
          * 如果是树取消
@@ -1396,7 +1396,7 @@ function handleCheckedAllCheckboxRow ($xeTable: VxeTableConstructor & VxeTablePr
             if (checkMethod({ $table: $xeTable, row }) ? false : selectCheckboxMaps[rowid]) {
               selectRowMaps[rowid] = row
             }
-          }, { children: rowGroupOpts.mapChildrenField })
+          }, { children: aggregateOpts.mapChildrenField })
         }
       }
     } else if (treeConfig) {
@@ -2711,12 +2711,54 @@ const handleUpdateRowGroup = ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     : []
 }
 
+function handleeGroupSummary ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, aggList: VxeTableDefines.AggregateRowInfo[]) {
+  const aggregateOpts = $xeTable.computeAggregateOpts
+  const { mapChildrenField } = aggregateOpts
+  if (mapChildrenField) {
+    XEUtils.lastEach(aggList, aggRow => {
+      let count = 0
+      XEUtils.each(aggRow[mapChildrenField], (row: VxeTableDefines.AggregateRowInfo) => {
+        if (row.isAggregate) {
+          count += row.childCount || 0
+        } else {
+          count++
+        }
+      })
+      aggRow.childCount = count
+    })
+    if ($xeTable.handlePivotTableAggregateData) {
+      $xeTable.handlePivotTableAggregateData(aggList)
+    }
+  }
+}
+
+function updateGroupData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { aggregateConfig, rowGroupConfig } = props
+  const { isRowGroupStatus } = reactData
+  const { tableFullGroupData } = internalData
+  const aggregateOpts = $xeTable.computeAggregateOpts
+  const { mapChildrenField } = aggregateOpts
+  if ((aggregateConfig || rowGroupConfig) && isRowGroupStatus) {
+    const aggList: VxeTableDefines.AggregateRowInfo[] = []
+    XEUtils.eachTree(tableFullGroupData, row => {
+      if (row.isAggregate) {
+        aggList.push(row)
+      }
+    }, { children: mapChildrenField })
+    handleeGroupSummary($xeTable, aggList)
+  }
+}
+
 function handleGroupData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, list: any[], rowGroups: VxeTableDefines.RowGroupItem[]) {
   let fullData = list
   let treeData = list
   if (rowGroups) {
-    const rowGroupOpts = $xeTable.computeRowGroupOpts
-    const { rowField, parentField, childrenField, mapChildrenField } = rowGroupOpts
+    const aggregateOpts = $xeTable.computeAggregateOpts
+    const { rowField, parentField, childrenField, mapChildrenField } = aggregateOpts
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const { checkField } = checkboxOpts
     const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
@@ -2727,7 +2769,7 @@ function handleGroupData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
       const groupField = rgItem.field
       const groupColumn = $xeTable.getColumnByField(groupField)
       const groupMaps: Record<string, any[]> = {}
-      const groupList: any[] = []
+      const aggList: VxeTableDefines.AggregateRowInfo[] = []
       const rowkey = getRowkey($xeTable)
       list.forEach((row) => {
         const cellValue = groupColumn ? $xeTable.getCellLabel(row, groupColumn) : XEUtils.get(row, groupField)
@@ -2744,12 +2786,12 @@ function handleGroupData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
       })
       XEUtils.objectEach(groupMaps, (childList, groupValue) => {
         const { fullData: childFullData, treeData: childTreeData } = handleGroupData($xeTable, childList, rowGroups.slice(1))
-        const childCount = 0
-        const groupRow = {
+        const aggRow: VxeTableDefines.AggregateRowInfo = {
           isAggregate: true,
-          childCount,
+          aggData: {},
           groupContent: groupValue,
           groupField,
+          childCount: 0,
           [rowField]: getRowUniqueId(),
           [parentField]: null,
           [rowkey]: getRowUniqueId(),
@@ -2757,29 +2799,19 @@ function handleGroupData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
           [mapChildrenField]: childTreeData
         }
         if (checkField) {
-          groupRow[checkField] = false
+          aggRow[checkField] = false
         }
         if (indeterminateField) {
-          groupRow[indeterminateField] = false
+          aggRow[indeterminateField] = false
         }
-        groupList.push(groupRow)
-        treeData.push(groupRow)
-        fullData.push(groupRow)
+        aggList.push(aggRow)
+        treeData.push(aggRow)
+        fullData.push(aggRow)
         if (childFullData.length) {
           fullData.push(...childFullData)
         }
       })
-      XEUtils.lastEach(groupList, groupItem => {
-        let count = 0
-        XEUtils.each(groupItem[childrenField], row => {
-          if (row.isAggregate) {
-            count += row[childrenField] ? row[childrenField].length : 0
-          } else {
-            count++
-          }
-        })
-        groupItem.childCount = count
-      })
+      handleeGroupSummary($xeTable, aggList)
     }
   }
   return {
@@ -2797,7 +2829,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { keepSource, treeConfig, rowGroupConfig } = props
+  const { keepSource, treeConfig, aggregateConfig, rowGroupConfig } = props
   const { rowGroupList, scrollYLoad: oldScrollYLoad } = reactData
   const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
   const rowOpts = $xeTable.computeRowOpts
@@ -2811,11 +2843,11 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
     errLog('vxe.error.errMaxRow', [supportMaxRow])
   }
   if (treeConfig && rowGroupList.length) {
-    errLog('vxe.error.noTree', ['row-group-config'])
+    errLog('vxe.error.noTree', ['aggregate-config'])
     return $xeTable.$nextTick()
   }
   if (rowOpts.drag && rowGroupList.length) {
-    errLog('vxe.error.errConflicts', ['row-config.drag', 'row-group-config'])
+    errLog('vxe.error.errConflicts', ['row-config.drag', 'aggregate-config'])
     return $xeTable.$nextTick()
   }
   let isRGroup = false
@@ -2852,7 +2884,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
     } else {
       treeData = fullData.slice(0)
     }
-  } else if (rowGroupConfig && rowGroupList.length) {
+  } else if ((aggregateConfig || rowGroupConfig) && rowGroupList.length) {
     const groupRest = handleGroupData($xeTable, fullData, rowGroupList)
     treeData = groupRest.treeData
     fullData = groupRest.fullData
@@ -2964,12 +2996,16 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
           if (oldScrollYLoad === sYLoad) {
             restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
               .then(() => {
+                calcCellHeight($xeTable)
+                updateRowOffsetTop($xeTable)
                 resolve()
               })
           } else {
             setTimeout(() => {
               restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
                 .then(() => {
+                  calcCellHeight($xeTable)
+                  updateRowOffsetTop($xeTable)
                   resolve()
                 })
             })
@@ -3226,6 +3262,7 @@ function handleColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
     $xeTable.clearMergeCells()
     $xeTable.clearMergeFooterItems()
     $xeTable.handleTableData(true)
+    $xeTable.handleAggregateSummaryData()
 
     if ((scrollXLoad || scrollYLoad) && (expandColumn && expandOpts.mode !== 'fixed')) {
       warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
@@ -3938,8 +3975,8 @@ const Methods = {
         handleRowCache(row, index, items, parentRow ? -1 : index, parentRow, rowid, nodes.length - 1, toTreePathSeq(path))
       }, { children: childrenField })
     } else if (isRowGroupStatus) {
-      const rowGroupOpts = $xeTable.computeRowGroupOpts
-      const { mapChildrenField } = rowGroupOpts
+      const aggregateOpts = $xeTable.computeAggregateOpts
+      const { mapChildrenField } = aggregateOpts
       XEUtils.eachTree(tableFullGroupData, (row, index, items, path, parentRow, nodes) => {
         const rowid = handleUpdateRowId(row)
         handleRowCache(row, index, items, parentRow ? -1 : index, parentRow, rowid, nodes.length - 1, toTreePathSeq(path))
@@ -6385,6 +6422,11 @@ const Methods = {
     internalData.mergeFooterCellMaps = buildMergeData(mergeFooterList)
     reactData.mergeFootFlag++
   },
+  handleAggregateSummaryData () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    return updateGroupData($xeTable)
+  },
   handleTargetLeaveEvent () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
@@ -6695,7 +6737,7 @@ const Methods = {
     const { treeConfig } = props
     const { isRowGroupStatus } = reactData
     const { selectCheckboxMaps } = internalData
-    const rowGroupOpts = $xeTable.computeRowGroupOpts
+    const aggregateOpts = $xeTable.computeAggregateOpts
     const treeOpts = $xeTable.computeTreeOpts
     const { transform, mapChildrenField } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
@@ -6747,7 +6789,7 @@ const Methods = {
             }
             handleCheckboxReserveRow($xeTable, row, checked)
           }
-        }, { children: rowGroupOpts.mapChildrenField })
+        }, { children: aggregateOpts.mapChildrenField })
         reactData.updateCheckboxFlag++
         return
       } else if (treeConfig) {
@@ -6898,7 +6940,7 @@ const Methods = {
     const { treeConfig } = props
     const { isRowGroupStatus } = reactData
     const { afterTreeFullData, afterGroupFullData, selectCheckboxMaps, treeIndeterminateRowMaps } = internalData
-    const rowGroupOpts = $xeTable.computeRowGroupOpts
+    const aggregateOpts = $xeTable.computeAggregateOpts
     const treeOpts = $xeTable.computeTreeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const checkboxOpts = $xeTable.computeCheckboxOpts
@@ -6913,7 +6955,7 @@ const Methods = {
 
       if (isRowGroupStatus) {
         // 行分组
-        const mapChildrenField = rowGroupOpts.mapChildrenField
+        const mapChildrenField = aggregateOpts.mapChildrenField
         if (mapChildrenField) {
           XEUtils.eachTree(afterGroupFullData, (row) => {
             const rowid = handleGetRowId(row)
@@ -7527,7 +7569,7 @@ const Methods = {
     const radioOpts = $xeTable.computeRadioOpts
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const keyboardOpts = $xeTable.computeKeyboardOpts
-    const rowGroupOpts = $xeTable.computeRowGroupOpts
+    const aggregateOpts = $xeTable.computeAggregateOpts
     const rowOpts = $xeTable.computeRowOpts
     const columnOpts = $xeTable.computeColumnOpts
     const currentColumnOpts = $xeTable.computeCurrentColumnOpts
@@ -7554,7 +7596,7 @@ const Methods = {
         $xeTable.triggerTreeExpandEvent(evnt, params)
       }
       // 如果是行分组
-      if ((rowGroupOpts.trigger === 'row' || (rowGroupNode && rowGroupOpts.trigger === 'cell'))) {
+      if ((aggregateOpts.trigger === 'row' || (rowGroupNode && aggregateOpts.trigger === 'cell'))) {
         $xeTable.triggerRowGroupExpandEvent(evnt, params)
       }
     }
@@ -9034,9 +9076,9 @@ const Methods = {
     const props = $xeTable
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { rowGroupConfig } = props
-    if (!rowGroupConfig) {
-      errLog('vxe.error.reqProp', ['row-group-config'])
+    const { aggregateConfig, rowGroupConfig } = props
+    if (!(aggregateConfig || rowGroupConfig)) {
+      errLog('vxe.error.reqProp', ['aggregate-config'])
       return $xeTable.$nextTick()
     }
     if (fieldOrColumns) {
@@ -9052,9 +9094,9 @@ const Methods = {
     const props = $xeTable
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { rowGroupConfig } = props
-    if (!rowGroupConfig) {
-      errLog('vxe.error.reqProp', ['row-group-config'])
+    const { aggregateConfig, rowGroupConfig } = props
+    if (!(aggregateConfig || rowGroupConfig)) {
+      errLog('vxe.error.reqProp', ['aggregate-config'])
       return $xeTable.$nextTick()
     }
     handleUpdateRowGroup($xeTable, [])
@@ -9062,12 +9104,24 @@ const Methods = {
   },
   isRowGroupRecord (row: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    warnLog('vxe.error.delFunc', ['isRowGroupRecord', 'isAggregateRecord'])
+    return $xeTable.isAggregateRecord(row)
+  },
+  isRowGroupExpandByRow (row: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    warnLog('vxe.error.delFunc', ['isRowGroupExpandByRow', 'isAggregateExpandByRow'])
+    return $xeTable.isAggregateExpandByRow(row)
+  },
+  isAggregateRecord (row: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
 
     const { isRowGroupStatus } = reactData
     return isRowGroupStatus && row.isAggregate
   },
-  isRowGroupExpandByRow (row: any) {
+  isAggregateExpandByRow (row: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
@@ -9093,8 +9147,8 @@ const Methods = {
     const internalData = $xeTable as unknown as TableInternalData
 
     const { tableFullGroupData } = internalData
-    const rowGroupOpts = $xeTable.computeRowGroupOpts
-    const { mapChildrenField } = rowGroupOpts
+    const aggregateOpts = $xeTable.computeAggregateOpts
+    const { mapChildrenField } = aggregateOpts
     const rgExpandedMaps: Record<string, any> = {}
     if (expanded && mapChildrenField) {
       XEUtils.eachTree(tableFullGroupData, (row) => {
@@ -9234,9 +9288,9 @@ const Methods = {
     const internalData = $xeTable as unknown as TableInternalData
 
     const { rowGroupExpandedMaps } = internalData
-    const rowGroupOpts = $xeTable.computeRowGroupOpts
+    const aggregateOpts = $xeTable.computeAggregateOpts
     const { row, column } = params
-    const { trigger } = rowGroupOpts
+    const { trigger } = aggregateOpts
     if (trigger === 'manual') {
       return
     }
@@ -10240,10 +10294,10 @@ const Methods = {
     const { tableFullData } = internalData
     const rests: Promise<any>[] = []
     if (treeConfig || isRowGroupStatus) {
-      const rowGroupOpts = $xeTable.computeRowGroupOpts
+      const aggregateOpts = $xeTable.computeAggregateOpts
       const treeOpts = $xeTable.computeTreeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
-      const matchObj = XEUtils.findTree(tableFullData, item => $xeTable.eqRow(item, row), { children: isRowGroupStatus ? rowGroupOpts.mapChildrenField : childrenField })
+      const matchObj = XEUtils.findTree(tableFullData, item => $xeTable.eqRow(item, row), { children: isRowGroupStatus ? aggregateOpts.mapChildrenField : childrenField })
       if (matchObj) {
         const nodes = matchObj.nodes
         nodes.forEach((row, index) => {

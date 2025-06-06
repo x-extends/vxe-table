@@ -103,6 +103,7 @@ export class ColumnInfo {
       titleHelp: _vm.titleHelp,
       titlePrefix: _vm.titlePrefix,
       titleSuffix: _vm.titleSuffix,
+      aggFunc: _vm.aggFunc,
       // 自定义参数
       params: _vm.params,
       // 渲染属性
@@ -127,6 +128,8 @@ export class ColumnInfo {
       // 列排序
       sortNumber: 0, // 用于记录自定义列顺序
       renderSortNumber: 0, // 用于记录自定义列顺序
+
+      renderAggFn: '',
 
       renderFixed: '',
       renderVisible: false,
