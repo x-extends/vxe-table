@@ -5,7 +5,7 @@ import { scrollToView } from '../../../ui/src/dom'
 import { handleFieldOrColumn, getRowid } from '../../src/util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
-import type { VxeTableDefines, TableInternalData } from '../../../../types'
+import type { VxeTableDefines, TableInternalData, TableReactData } from '../../../../types'
 
 const { getConfig, validators } = VxeUI
 
@@ -229,13 +229,15 @@ export default {
     beginValidate (rows: any, cols: VxeTableDefines.ColumnInfo[] | null, cb: any, isFull: any) {
       const $xeTable = this
       const props = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
 
       const validRest: any = {}
       const { editRules, treeConfig } = props
+      const { isRowGroupStatus } = reactData
       const { afterFullData, pendingRowMaps, removeRowMaps } = internalData
       const treeOpts = $xeTable.computeTreeOpts
-      const childrenField = treeOpts.children || treeOpts.childrenField
+      const aggregateOpts = $xeTable.computeAggregateOpts
       let validList
       if (rows === true) {
         validList = afterFullData
@@ -264,6 +266,9 @@ export default {
           }
           // 是否标记删除
           if (pendingRowMaps[rowid]) {
+            return
+          }
+          if ($xeTable.isAggregateRecord(row)) {
             return
           }
           if (isFull || !this.validRuleErr) {
@@ -305,7 +310,10 @@ export default {
             rowValidErrs.push(Promise.all(colVailds))
           }
         }
-        if (treeConfig) {
+        if (isRowGroupStatus) {
+          XEUtils.eachTree(validList, handleVaild, { children: aggregateOpts.mapChildrenField })
+        } else if (treeConfig) {
+          const childrenField = treeOpts.children || treeOpts.childrenField
           XEUtils.eachTree(validList, handleVaild, { children: childrenField })
         } else {
           validList.forEach(handleVaild)

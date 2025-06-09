@@ -19,6 +19,33 @@ const propKeys = Object.keys(tableComponentProps)
 
 const defaultLayouts: VxeGridPropTypes.Layouts = [['Form'], ['Toolbar', 'Top', 'Table', 'Bottom', 'Pager']]
 
+function initPages ($xeGrid: VxeGridConstructor & VxeGridPrivateMethods, propKey?: 'currentPage' | 'pageSize' | 'total') {
+  const props = $xeGrid
+  const reactData = $xeGrid as unknown as GridReactData
+
+  const { tablePage } = reactData
+  const { pagerConfig } = props
+  const pagerOpts = $xeGrid.computePagerOpts
+  if (pagerConfig && isEnableConf(pagerOpts)) {
+    if (propKey) {
+      if (pagerOpts[propKey]) {
+        tablePage[propKey] = XEUtils.toNumber(pagerOpts[propKey])
+      }
+    } else {
+      const { currentPage, pageSize, total } = pagerOpts
+      if (currentPage) {
+        tablePage.currentPage = currentPage
+      }
+      if (pageSize) {
+        tablePage.pageSize = pageSize
+      }
+      if (total) {
+        tablePage.pageSize = total
+      }
+    }
+  }
+}
+
 function renderDefaultForm (h: CreateElement, $xeGrid: any) {
   const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
   const props = $xeGrid
@@ -565,11 +592,23 @@ export default {
         footKeys
       }
     },
-    computePageConfFlag () {
+    computeCustomCurrentPageFlag () {
       const $xeGrid = this
 
       const pagerOpts = $xeGrid.computePagerOpts
-      return `${pagerOpts.currentPage}${pagerOpts.pageSize}`
+      return pagerOpts.currentPage
+    },
+    computeCustomPageSizeFlag () {
+      const $xeGrid = this
+
+      const pagerOpts = $xeGrid.computePagerOpts
+      return pagerOpts.pageSize
+    },
+    computeCustomTotalFlag () {
+      const $xeGrid = this
+
+      const pagerOpts = $xeGrid.computePagerOpts
+      return pagerOpts.total
     }
   } as any,
   watch: {
@@ -589,8 +628,20 @@ export default {
     proxyConfig () {
       this.initProxy()
     },
-    computePageConfFlag () {
-      this.initPages()
+    computeCustomCurrentPageFlag () {
+      const $xeGrid = this as VxeGridConstructor & VxeGridPrivateMethods
+
+      initPages($xeGrid, 'currentPage')
+    },
+    computeCustomPageSizeFlag () {
+      const $xeGrid = this as VxeGridConstructor & VxeGridPrivateMethods
+
+      initPages($xeGrid, 'pageSize')
+    },
+    computeCustomTotalFlag () {
+      const $xeGrid = this as VxeGridConstructor & VxeGridPrivateMethods
+
+      initPages($xeGrid, 'total')
     }
   } as any,
   created (this: any) {
@@ -629,7 +680,7 @@ export default {
       }
     })
 
-    this.initPages()
+    initPages($xeGrid)
     globalEvents.on(this, 'keydown', this.handleGlobalKeydownEvent)
   },
   mounted (this: any) {
@@ -721,18 +772,6 @@ export default {
           xTable.connect(xToolbar)
         }
       })
-    },
-    initPages () {
-      const { tablePage, pagerConfig, pagerOpts } = this
-      const { currentPage, pageSize } = pagerOpts
-      if (pagerConfig) {
-        if (currentPage) {
-          tablePage.currentPage = currentPage
-        }
-        if (pageSize) {
-          tablePage.pageSize = pageSize
-        }
-      }
     },
     initProxy () {
       const { proxyInited, proxyConfig, proxyOpts, formConfig, formOpts } = this

@@ -3874,25 +3874,37 @@ const Methods = {
    * @param {String} field 字段名
    */
   reloadRow (row: any, record: any, field: any) {
-    const { keepSource, tableSourceData, tableData } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { keepSource } = props
+    const { tableData } = reactData
+    const { sourceDataRowIdData } = internalData
     if (keepSource) {
-      const rowIndex = this.getRowIndex(row)
-      const oRow = tableSourceData[rowIndex]
+      if ($xeTable.isAggregateRecord(row)) {
+        return $xeTable.$nextTick()
+      }
+      const oRow = sourceDataRowIdData[getRowid($xeTable, row)]
       if (oRow && row) {
         if (field) {
-          const newValue = XEUtils.get(record || row, field)
+          const newValue = XEUtils.clone(XEUtils.get(record || row, field), true)
           XEUtils.set(row, field, newValue)
           XEUtils.set(oRow, field, newValue)
         } else {
-          const newRecord = XEUtils.clone({ ...record }, true)
+          const rowkey = getRowkey($xeTable)
+          const rowid = getRowid($xeTable, row)
+          const newRecord = XEUtils.clone(Object.assign({}, record), true)
+          XEUtils.set(newRecord, rowkey, rowid)
           XEUtils.destructuring(oRow, Object.assign(row, newRecord))
         }
       }
-      this.tableData = tableData.slice(0)
+      reactData.tableData = tableData.slice(0)
     } else {
       errLog('vxe.error.reqProp', ['keep-source'])
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   /**
    * 加载列配置
@@ -3900,9 +3912,9 @@ const Methods = {
    * @param {ColumnInfo} columns 列配置
    */
   loadColumn (columns: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    const collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), { children: 'children' })
+    const collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn($xeTable, column), { children: 'children' })
     return handleColumn($xeTable, collectColumn)
   },
   /**
