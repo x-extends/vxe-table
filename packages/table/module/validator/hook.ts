@@ -149,7 +149,7 @@ hooks.add('tableValidatorModule', {
   setupTable ($xeTable) {
     const { props, reactData, internalData } = $xeTable
     const { refValidTooltip } = $xeTable.getRefMaps()
-    const { computeValidOpts, computeTreeOpts, computeEditOpts } = $xeTable.getComputeMaps()
+    const { computeValidOpts, computeTreeOpts, computeEditOpts, computeAggregateOpts } = $xeTable.getComputeMaps()
 
     let validatorMethods = {} as TableValidatorMethods
     let validatorPrivateMethods = {} as TableValidatorPrivateMethods
@@ -209,9 +209,10 @@ hooks.add('tableValidatorModule', {
     const beginValidate = (rows: any, cols: VxeTableDefines.ColumnInfo[] | null, cb: any, isFull?: boolean): Promise<any> => {
       const validRest: any = {}
       const { editRules, treeConfig } = props
+      const { isRowGroupStatus } = reactData
       const { afterFullData, pendingRowMaps, removeRowMaps } = internalData
       const treeOpts = computeTreeOpts.value
-      const childrenField = treeOpts.children || treeOpts.childrenField
+      const aggregateOpts = computeAggregateOpts.value
       const validOpts = computeValidOpts.value
       let validList
       if (rows === true) {
@@ -250,6 +251,9 @@ hooks.add('tableValidatorModule', {
           }
           // 是否标记删除
           if (pendingRowMaps[rowid]) {
+            return
+          }
+          if ($xeTable.isAggregateRecord(row)) {
             return
           }
           if (isFull || !validRuleErr) {
@@ -291,7 +295,10 @@ hooks.add('tableValidatorModule', {
             rowValidErrs.push(Promise.all(colVailds))
           }
         }
-        if (treeConfig) {
+        if (isRowGroupStatus) {
+          XEUtils.eachTree(validList, handleVaild, { children: aggregateOpts.mapChildrenField })
+        } else if (treeConfig) {
+          const childrenField = treeOpts.children || treeOpts.childrenField
           XEUtils.eachTree(validList, handleVaild, { children: childrenField })
         } else {
           validList.forEach(handleVaild)

@@ -334,7 +334,7 @@ hooks.add('tableEditModule', {
       params.cell = cell
       if (cell && isEnableConf(editConfig) && isEnableConf(editRender)) {
         // 激活编辑
-        if (!$xeTable.isPendingByRow(row)) {
+        if (!$xeTable.isPendingByRow(row) && !$xeTable.isAggregateRecord(row)) {
           if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
             // 判断是否禁用编辑
             let type: 'edit-disabled' | 'edit-activated' = 'edit-disabled'
@@ -428,7 +428,7 @@ hooks.add('tableEditModule', {
     const handleEditCell = (row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo, isPos: boolean) => {
       const { editConfig } = props
       const column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
-      if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender)) {
+      if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender) && !$xeTable.isAggregateRecord(row)) {
         return Promise.resolve(isPos ? $xeTable.scrollToRow(row, column) : null).then(() => {
           const cell = $xeTable.getCellElement(row, column)
           if (cell) {

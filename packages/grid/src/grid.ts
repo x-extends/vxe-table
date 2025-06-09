@@ -226,9 +226,19 @@ export default defineComponent({
       }
     })
 
-    const computePageConfFlag = computed(() => {
+    const computeCustomCurrentPageFlag = computed(() => {
       const pagerOpts = computePagerOpts.value
-      return `${pagerOpts.currentPage}${pagerOpts.pageSize}`
+      return pagerOpts.currentPage
+    })
+
+    const computeCustomPageSizeFlag = computed(() => {
+      const pagerOpts = computePagerOpts.value
+      return pagerOpts.pageSize
+    })
+
+    const computeCustomTotalFlag = computed(() => {
+      const pagerOpts = computePagerOpts.value
+      return pagerOpts.total
     })
 
     const refMaps: GridPrivateRef = {
@@ -277,17 +287,26 @@ export default defineComponent({
       return proxyConfig && isEnableConf(proxyOpts) && proxyOpts.form ? formData : formOpts.data
     }
 
-    const initPages = () => {
+    const initPages = (propKey?: 'currentPage' | 'pageSize' | 'total') => {
       const { tablePage } = reactData
       const { pagerConfig } = props
       const pagerOpts = computePagerOpts.value
-      const { currentPage, pageSize } = pagerOpts
       if (pagerConfig && isEnableConf(pagerOpts)) {
-        if (currentPage) {
-          tablePage.currentPage = currentPage
-        }
-        if (pageSize) {
-          tablePage.pageSize = pageSize
+        if (propKey) {
+          if (pagerOpts[propKey]) {
+            tablePage[propKey] = XEUtils.toNumber(pagerOpts[propKey])
+          }
+        } else {
+          const { currentPage, pageSize, total } = pagerOpts
+          if (currentPage) {
+            tablePage.currentPage = currentPage
+          }
+          if (pageSize) {
+            tablePage.pageSize = pageSize
+          }
+          if (total) {
+            tablePage.pageSize = total
+          }
         }
       }
     }
@@ -1330,8 +1349,16 @@ export default defineComponent({
       initToolbar()
     })
 
-    watch(computePageConfFlag, () => {
-      initPages()
+    watch(computeCustomCurrentPageFlag, () => {
+      initPages('currentPage')
+    })
+
+    watch(computeCustomPageSizeFlag, () => {
+      initPages('pageSize')
+    })
+
+    watch(computeCustomTotalFlag, () => {
+      initPages('total')
     })
 
     watch(() => props.proxyConfig, () => {

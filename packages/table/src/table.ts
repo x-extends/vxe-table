@@ -4298,10 +4298,12 @@ export default defineComponent({
       reloadRow (row, record, field?: string) {
         const { keepSource } = props
         const { tableData } = reactData
-        const { tableSourceData } = internalData
+        const { sourceDataRowIdData } = internalData
         if (keepSource) {
-          const rowIndex = tableMethods.getRowIndex(row)
-          const oRow = tableSourceData[rowIndex]
+          if ($xeTable.isAggregateRecord(row)) {
+            return nextTick()
+          }
+          const oRow = sourceDataRowIdData[getRowid($xeTable, row)]
           if (oRow && row) {
             if (field) {
               const newValue = XEUtils.clone(XEUtils.get(record || row, field), true)
