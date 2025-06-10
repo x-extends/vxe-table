@@ -136,8 +136,6 @@ export default defineComponent({
       if ($table) {
         if ($table.triggerCustomEvent) {
           $table.triggerCustomEvent($event)
-        } else {
-          errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
         }
       }
     }
@@ -147,8 +145,6 @@ export default defineComponent({
       const $table = connectTable
       if ($table) {
         $table.customOpenEvent($event)
-      } else {
-        errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
       }
     }
 

@@ -3523,7 +3523,6 @@ export default defineComponent({
       const centerList: VxeTableDefines.ColumnInfo[] = []
       const rightList: VxeTableDefines.ColumnInfo[] = []
       const { isGroup, columnStore } = reactData
-      const virtualXOpts = computeVirtualXOpts.value
       const { collectColumn, tableFullColumn, scrollXStore, fullColumnIdData } = internalData
       // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
       if (isGroup) {
@@ -3578,11 +3577,12 @@ export default defineComponent({
         })
       }
       const visibleColumn = leftList.concat(centerList).concat(rightList)
-      // 如果gt为0，则总是启用
-      const scrollXLoad = !!virtualXOpts.enabled && virtualXOpts.gt > -1 && (virtualXOpts.gt === 0 || virtualXOpts.gt < tableFullColumn.length)
+      internalData.visibleColumn = visibleColumn
+      updateColumnOffsetLeft()
+      const sXLoad = updateScrollXStatus()
       reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
       Object.assign(columnStore, { leftList, centerList, rightList })
-      if (scrollXLoad) {
+      if (sXLoad) {
         // if (showOverflow) {
         //   if (!rowOpts.height) {
         //     const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
@@ -3618,7 +3618,6 @@ export default defineComponent({
         $xeTable.clearMergeCells()
         $xeTable.clearMergeFooterItems()
       }
-      reactData.scrollXLoad = scrollXLoad
       visibleColumn.forEach((column, index) => {
         const colid = column.id
         const colRest = fullColumnIdData[colid]
@@ -3626,7 +3625,6 @@ export default defineComponent({
           colRest._index = index
         }
       })
-      internalData.visibleColumn = visibleColumn
       handleTableColumn()
       if (isReset) {
         updateColumnOffsetLeft()
@@ -3690,6 +3688,15 @@ export default defineComponent({
           return $xeTable.recalculate()
         })
       })
+    }
+
+    const updateScrollXStatus = (fullColumn?: any[]) => {
+      const virtualXOpts = computeVirtualXOpts.value
+      const allCols = fullColumn || internalData.tableFullColumn
+      // 如果gt为0，则总是启用
+      const scrollXLoad = !!virtualXOpts.enabled && virtualXOpts.gt > -1 && (virtualXOpts.gt === 0 || virtualXOpts.gt < allCols.length)
+      reactData.scrollXLoad = scrollXLoad
+      return scrollXLoad
     }
 
     const updateScrollYStatus = (fullData?: any[]) => {
@@ -4370,8 +4377,22 @@ export default defineComponent({
        * @param {ColumnInfo} columns 列配置
        */
       loadColumn (columns) {
+        const { lastScrollLeft, lastScrollTop } = internalData
         const collectColumn = XEUtils.mapTree(columns, column => reactive(Cell.createColumn($xeTable, column)))
-        return handleColumn(collectColumn)
+        return handleColumn(collectColumn).then(() => {
+          let targetScrollLeft = lastScrollLeft
+          let targetScrollTop = lastScrollTop
+          const virtualXOpts = computeVirtualXOpts.value
+          const virtualYOpts = computeVirtualYOpts.value
+          // 是否在更新数据之后自动滚动重置滚动条
+          if (virtualXOpts.scrollToLeftOnChange) {
+            targetScrollLeft = 0
+          }
+          if (virtualYOpts.scrollToTopOnChange) {
+            targetScrollTop = 0
+          }
+          restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
+        })
       },
       /**
        * 加载列配置并恢复到初始状态
@@ -5270,7 +5291,7 @@ export default defineComponent({
         return new Promise<void>(resolve => {
           // 还原滚动条位置
           if (lastScrollLeft || lastScrollTop) {
-            return restoreScrollLocation($xeTable, lastScrollLeft, lastScrollTop).then().then(() => {
+            return restoreScrollLocation($xeTable, lastScrollLeft, lastScrollTop).then(() => {
               // 存在滚动行为未结束情况
               setTimeout(resolve, 10)
             })
@@ -10607,12 +10628,12 @@ export default defineComponent({
     // 检测对应模块是否安装
     'openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').forEach(name => {
       ($xeTable as any)[name] = function () {
-        errLog('vxe.error.reqModule', ['VxeTableExportModule'])
+        errLog('vxe.error.reqModule', ['Export'])
       }
     })
     'clearValidate,fullValidate,validate'.split(',').forEach(name => {
       ($xeTable as any)[name] = function () {
-        errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
+        errLog('vxe.error.reqModule', ['Validator'])
       }
     })
 

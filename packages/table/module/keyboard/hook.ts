@@ -138,7 +138,10 @@ hooks.add('tableKeyboardModule', {
         let isMouseScrollDown: any = false
         let mouseScrollSpaceSize = 1
         const triggerEvent = (type: 'change' | 'start' | 'end', evnt: MouseEvent) => {
-          $xeTable.dispatchEvent(`checkbox-range-${type}` as 'checkbox-range-change' | 'checkbox-range-start' | 'checkbox-range-end', { records: $xeTable.getCheckboxRecords(), reserves: $xeTable.getCheckboxReserveRecords() }, evnt)
+          $xeTable.dispatchEvent(`checkbox-range-${type}` as 'checkbox-range-change' | 'checkbox-range-start' | 'checkbox-range-end', {
+            records: () => $xeTable.getCheckboxRecords(),
+            reserves: () => $xeTable.getCheckboxReserveRecords()
+          }, evnt)
         }
         const handleChecked = (evnt: MouseEvent) => {
           const { clientX, clientY } = evnt
