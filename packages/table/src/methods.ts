@@ -327,7 +327,19 @@ function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
   reactData.isAllOverflow = isAllOverflow
 }
 
-const updateScrollYStatus = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, fullData?: any[]) => {
+function updateScrollXStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, fullColumn?: any[]) {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const virtualXOpts = $xeTable.computeVirtualXOpts
+  const allCols = fullColumn || internalData.tableFullColumn
+  // 如果gt为0，则总是启用
+  const scrollXLoad = !!virtualXOpts.enabled && virtualXOpts.gt > -1 && (virtualXOpts.gt === 0 || virtualXOpts.gt < allCols.length)
+  reactData.scrollXLoad = scrollXLoad
+  return scrollXLoad
+}
+
+function updateScrollYStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, fullData?: any[]) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -3110,7 +3122,6 @@ function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, i
   const centerList: VxeTableDefines.ColumnInfo[] = []
   const rightList: VxeTableDefines.ColumnInfo[] = []
   const { isGroup, columnStore } = reactData
-  const virtualXOpts = $xeTable.computeVirtualXOpts
   const { collectColumn, tableFullColumn, scrollXStore, fullColumnIdData } = internalData
   // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
   if (isGroup) {
@@ -3165,11 +3176,12 @@ function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, i
     })
   }
   const visibleColumn = leftList.concat(centerList).concat(rightList)
-  // 如果gt为0，则总是启用
-  const scrollXLoad = !!virtualXOpts.enabled && virtualXOpts.gt > -1 && (virtualXOpts.gt === 0 || virtualXOpts.gt < tableFullColumn.length)
+  internalData.visibleColumn = visibleColumn
+  updateColumnOffsetLeft($xeTable)
+  const sXLoad = updateScrollXStatus($xeTable)
   reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
   Object.assign(columnStore, { leftList, centerList, rightList })
-  if (scrollXLoad) {
+  if (sXLoad) {
     // if (showOverflow) {
     //   if (!rowOpts.height) {
     //     const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
@@ -3205,7 +3217,6 @@ function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, i
     $xeTable.clearMergeCells()
     $xeTable.clearMergeFooterItems()
   }
-  reactData.scrollXLoad = scrollXLoad
   visibleColumn.forEach((column, index) => {
     const colid = column.id
     const colRest = fullColumnIdData[colid]
@@ -3213,7 +3224,6 @@ function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, i
       colRest._index = index
     }
   })
-  internalData.visibleColumn = visibleColumn
   handleTableColumn($xeTable)
   if (isReset) {
     return $xeTable.updateFooter().then(() => {
@@ -3913,9 +3923,24 @@ const Methods = {
    */
   loadColumn (columns: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
 
+    const { lastScrollLeft, lastScrollTop } = internalData
     const collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn($xeTable, column), { children: 'children' })
-    return handleColumn($xeTable, collectColumn)
+    return handleColumn($xeTable, collectColumn).then(() => {
+      let targetScrollLeft = lastScrollLeft
+      let targetScrollTop = lastScrollTop
+      const virtualXOpts = $xeTable.computeVirtualXOpts
+      const virtualYOpts = $xeTable.computeVirtualYOpts
+      // 是否在更新数据之后自动滚动重置滚动条
+      if (virtualXOpts.scrollToLeftOnChange) {
+        targetScrollLeft = 0
+      }
+      if (virtualYOpts.scrollToTopOnChange) {
+        targetScrollTop = 0
+      }
+      restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
+    })
   },
   /**
    * 加载列配置并恢复到初始状态
@@ -5766,7 +5791,7 @@ const Methods = {
     return new Promise<void>(resolve => {
       // 还原滚动条位置
       if (lastScrollLeft || lastScrollTop) {
-        return restoreScrollLocation($xeTable, lastScrollLeft, lastScrollTop).then().then(() => {
+        return restoreScrollLocation($xeTable, lastScrollLeft, lastScrollTop).then(() => {
           // 存在滚动行为未结束情况
           setTimeout(resolve, 10)
         })
@@ -10603,15 +10628,15 @@ funcs.forEach(name => {
   Methods[name] = function (...args: any[]) {
     if (!this[`_${name}`]) {
       if ('openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').includes(name)) {
-        errLog('vxe.error.reqModule', ['VxeTableExportModule'])
+        errLog('vxe.error.reqModule', ['Export'])
       } else if ('fullValidate,validate'.split(',').includes(name)) {
-        errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
+        errLog('vxe.error.reqModule', ['Validator'])
       } else if ('setFilter,openFilter,clearFilter,getCheckedFilters'.split(',').includes(name)) {
-        errLog('vxe.error.reqModule', ['VxeTableFilterModule'])
+        errLog('vxe.error.reqModule', ['Filter'])
       } else if ('insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell'.split(',').includes(name)) {
-        errLog('vxe.error.reqModule', ['VxeTableEditModule'])
+        errLog('vxe.error.reqModule', ['Edit'])
       } else if ('openCustom'.split(',').includes(name)) {
-        errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
+        errLog('vxe.error.reqModule', ['Custom'])
       }
     }
     return this[`_${name}`] ? this[`_${name}`](...args) : null

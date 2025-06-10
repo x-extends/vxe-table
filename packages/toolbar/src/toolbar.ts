@@ -169,8 +169,6 @@ export default /* define-vxe-component start */ defineVxeComponent({
       if ($table) {
         if ($table.triggerCustomEvent) {
           $table.triggerCustomEvent($event)
-        } else {
-          errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
         }
       }
     },
@@ -182,8 +180,6 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const $table: any = connectTable
       if ($table) {
         $table.customOpenEvent($event)
-      } else {
-        errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
       }
     },
     handleMouseleaveSettingEvent  ({ $event }: any) {
