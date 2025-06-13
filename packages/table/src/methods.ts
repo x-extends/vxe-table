@@ -10272,7 +10272,9 @@ const Methods = {
         }, 30)
       })
     }
-    return $xeTable.$nextTick()
+    return $xeTable.$nextTick().then(() => {
+      internalData.intoRunScroll = false
+    })
   },
   /**
    * 如果有滚动条，则滚动到对应的行

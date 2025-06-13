@@ -185,6 +185,7 @@ VxeUI.setConfig({
       extension: true
     },
     keyboardConfig: {
+      isAll: true,
       isEsc: true
     },
     areaConfig: {

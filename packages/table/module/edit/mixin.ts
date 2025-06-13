@@ -256,7 +256,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
   }
   return $xeTable.$nextTick().then(() => {
     $xeTable.updateCellAreas()
-    return $xeTable.recalculate()
+    return $xeTable.recalculate(true)
   }).then(() => {
     return {
       row: newRecords.length ? newRecords[newRecords.length - 1] : null,
@@ -609,7 +609,7 @@ export default {
       }
       return this.$nextTick().then(() => {
         this.updateCellAreas()
-        return this.recalculate()
+        return this.recalculate(true)
       }).then(() => {
         return { row: delList.length ? delList[delList.length - 1] : null, rows: delList }
       })
