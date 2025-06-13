@@ -6504,7 +6504,9 @@ export default defineComponent({
             }, 30)
           })
         }
-        return nextTick()
+        return nextTick().then(() => {
+          internalData.intoRunScroll = false
+        })
       },
       /**
        * 如果有滚动条，则滚动到对应的行

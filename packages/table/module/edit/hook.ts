@@ -260,7 +260,7 @@ hooks.add('tableEditModule', {
       }
       return nextTick().then(() => {
         $xeTable.updateCellAreas()
-        return $xeTable.recalculate()
+        return $xeTable.recalculate(true)
       }).then(() => {
         return {
           row: newRecords.length ? newRecords[newRecords.length - 1] : null,
@@ -597,7 +597,7 @@ hooks.add('tableEditModule', {
         }
         return nextTick().then(() => {
           $xeTable.updateCellAreas()
-          return $xeTable.recalculate()
+          return $xeTable.recalculate(true)
         }).then(() => {
           return { row: delList.length ? delList[delList.length - 1] : null, rows: delList }
         })
