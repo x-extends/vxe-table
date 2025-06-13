@@ -286,7 +286,7 @@ function renderTdColumn (
     if (mEndRow) {
       const meRowRest = fullAllDataRowIdData[getRowid($xeTable, mEndRow)]
       if (meRowRest) {
-        cellHeight += meRowRest.oTop - rowRest.oTop + getCellRestHeight(meRowRest, cellOpts, rowOpts, defaultRowHeight)
+        cellHeight += meRowRest.oTop + getCellRestHeight(meRowRest, cellOpts, rowOpts, defaultRowHeight) - rowRest.oTop - getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
       }
     }
   }
