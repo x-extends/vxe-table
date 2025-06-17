@@ -5,7 +5,7 @@ import { VxeUI } from '../../ui'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { ValueOf, VxeButtonComponent, VxeButtonEvents, VxeComponentSlotType } from 'vxe-pc-ui'
+import type { ValueOf, VxeButtonComponent, VxeButtonEvents, VxeComponentSlotType, VxeButtonDefines } from 'vxe-pc-ui'
 import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, ToolbarInternalData, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, ToolbarPrivateRef, ToolbarReactData, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, useFns } = VxeUI
@@ -15,11 +15,17 @@ export default defineVxeComponent({
   props: {
     loading: Boolean,
     refresh: [Boolean, Object] as PropType<VxeToolbarPropTypes.Refresh>,
+    refreshOptions: Object as PropType<VxeToolbarPropTypes.RefreshOptions>,
     import: [Boolean, Object] as PropType<VxeToolbarPropTypes.Import>,
+    importOptions: Object as PropType<VxeToolbarPropTypes.ImportOptions>,
     export: [Boolean, Object] as PropType<VxeToolbarPropTypes.Export>,
+    exportOptions: Object as PropType<VxeToolbarPropTypes.ExportOptions>,
     print: [Boolean, Object] as PropType<VxeToolbarPropTypes.Print>,
+    printOptions: Object as PropType<VxeToolbarPropTypes.PrintOptions>,
     zoom: [Boolean, Object] as PropType< VxeToolbarPropTypes.Zoom>,
+    zoomOptions: Object as PropType< VxeToolbarPropTypes.ZoomOptions>,
     custom: [Boolean, Object] as PropType<VxeToolbarPropTypes.Custom>,
+    customOptions: Object as PropType<VxeToolbarPropTypes.CustomOptions>,
     buttons: {
       type: Array as PropType<VxeToolbarPropTypes.Buttons>,
       default: () => getConfig().toolbar.buttons
@@ -82,27 +88,27 @@ export default defineVxeComponent({
     const $xeGrid = inject<(VxeGridConstructor & GridPrivateMethods) | null>('$xeGrid', null)
 
     const computeRefreshOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().toolbar.refresh, true), props.refresh) as VxeToolbarPropTypes.RefreshOpts
+      return Object.assign({}, XEUtils.clone(getConfig().toolbar.refresh, true), props.refreshOptions, props.refresh) as VxeToolbarPropTypes.RefreshOptions
     })
 
     const computeImportOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().toolbar.import, true), props.import) as VxeToolbarPropTypes.ImportOpts
+      return Object.assign({}, XEUtils.clone(getConfig().toolbar.import, true), props.importOptions, props.import) as VxeToolbarPropTypes.ImportOptions
     })
 
     const computeExportOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().toolbar.export, true), props.export) as VxeToolbarPropTypes.ExportOpts
+      return Object.assign({}, XEUtils.clone(getConfig().toolbar.export, true), props.exportOptions, props.export) as VxeToolbarPropTypes.ExportOptions
     })
 
     const computePrintOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().toolbar.print, true), props.print) as VxeToolbarPropTypes.PrintOpts
+      return Object.assign({}, XEUtils.clone(getConfig().toolbar.print, true), props.printOptions, props.print) as VxeToolbarPropTypes.PrintOptions
     })
 
     const computeZoomOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().toolbar.zoom, true), props.zoom) as VxeToolbarPropTypes.ZoomOpts
+      return Object.assign({}, XEUtils.clone(getConfig().toolbar.zoom, true), props.zoomOptions, props.zoom) as VxeToolbarPropTypes.ZoomOptions
     })
 
     const computeCustomOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().toolbar.custom, true), props.custom) as VxeToolbarPropTypes.CustomOpts
+      return Object.assign({}, XEUtils.clone(getConfig().toolbar.custom, true), props.customOptions, props.custom) as VxeToolbarPropTypes.CustomOptions
     })
 
     const computeTableCustomOpts = computed(() => {
@@ -189,56 +195,22 @@ export default defineVxeComponent({
     const zoomEvent: VxeButtonEvents.Click = ({ $event }) => {
       if ($xeGrid) {
         $xeGrid.triggerZoomEvent($event)
-      }
-    }
-
-    const btnEvent = (evnt: Event, item: VxeToolbarPropTypes.ButtonConfig) => {
-      const { connectTable } = internalData
-      const $table = connectTable
-      const { code } = item
-      if (code) {
-        if ($xeGrid) {
-          $xeGrid.triggerToolbarBtnEvent(item, evnt)
-        } else {
-          const gCommandOpts = commands.get(code)
-          const params = { code, button: item, $table: $table!, $grid: $xeGrid, $event: evnt }
-          if (gCommandOpts) {
-            const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
-            if (tCommandMethod) {
-              tCommandMethod(params)
-            } else {
-              errLog('vxe.error.notCommands', [code])
-            }
-          }
-          $xeToolbar.dispatchEvent('button-click', params, evnt)
-        }
-      }
-    }
-
-    const tolEvent = (evnt: Event, item: VxeToolbarPropTypes.ButtonConfig) => {
-      const { connectTable } = internalData
-      const $table = connectTable
-      const { code } = item
-      if (code) {
-        if ($xeGrid) {
-          $xeGrid.triggerToolbarTolEvent(item, evnt)
-        } else {
-          const gCommandOpts = commands.get(code)
-          const params = { code, button: null, tool: item, $table: $table!, $grid: $xeGrid, $event: evnt }
-          if (gCommandOpts) {
-            const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
-            if (tCommandMethod) {
-              tCommandMethod(params)
-            } else {
-              errLog('vxe.error.notCommands', [code])
-            }
-          }
-          $xeToolbar.dispatchEvent('tool-click', params, evnt)
-        }
+      } else {
+        warnLog('vxe.error.notProp', ['zoom'])
       }
     }
 
     const importEvent = () => {
+      if (checkTable()) {
+        const { connectTable } = internalData
+        const $table = connectTable
+        if ($table) {
+          $table.importData()
+        }
+      }
+    }
+
+    const openImportEvent = () => {
       if (checkTable()) {
         const { connectTable } = internalData
         const $table = connectTable
@@ -253,6 +225,16 @@ export default defineVxeComponent({
         const { connectTable } = internalData
         const $table = connectTable
         if ($table) {
+          $table.exportData()
+        }
+      }
+    }
+
+    const openExportEvent = () => {
+      if (checkTable()) {
+        const { connectTable } = internalData
+        const $table = connectTable
+        if ($table) {
           $table.openExport()
         }
       }
@@ -263,8 +245,105 @@ export default defineVxeComponent({
         const { connectTable } = internalData
         const $table = connectTable
         if ($table) {
+          $table.print()
+        }
+      }
+    }
+
+    const openPrintEvent = () => {
+      if (checkTable()) {
+        const { connectTable } = internalData
+        const $table = connectTable
+        if ($table) {
           $table.openPrint()
         }
+      }
+    }
+
+    const handleDefaultCodeEvent = (eventParams: VxeButtonDefines.ClickEventParams, item: VxeToolbarPropTypes.ButtonConfig | VxeToolbarPropTypes.ToolConfig, cb: () => void) => {
+      switch (item.code) {
+        case 'print':
+          printEvent()
+          break
+        case 'open_print':
+          openPrintEvent()
+          break
+        case 'custom':
+          handleClickSettingEvent(eventParams)
+          break
+        case 'export':
+          exportEvent()
+          break
+        case 'open_export':
+          openExportEvent()
+          break
+        case 'import':
+          importEvent()
+          break
+        case 'open_import':
+          openImportEvent()
+          break
+        case 'zoom':
+          zoomEvent(eventParams)
+          break
+        case 'refresh':
+          refreshEvent(eventParams)
+          break
+        default:
+          cb()
+          break
+      }
+    }
+
+    const btnEvent = (eventParams: VxeButtonDefines.ClickEventParams, item: VxeToolbarPropTypes.ButtonConfig) => {
+      const { $event } = eventParams
+      const { connectTable } = internalData
+      const $table = connectTable
+      const { code } = item
+      if (code) {
+        handleDefaultCodeEvent(eventParams, item, () => {
+          if ($xeGrid) {
+            $xeGrid.triggerToolbarBtnEvent(item, $event)
+          } else {
+            const gCommandOpts = commands.get(code)
+            const params = { code, button: item, $table: $table!, $grid: $xeGrid, $event }
+            if (gCommandOpts) {
+              const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
+              if (tCommandMethod) {
+                tCommandMethod(params)
+              } else {
+                errLog('vxe.error.notCommands', [code])
+              }
+            }
+            $xeToolbar.dispatchEvent('button-click', params, $event)
+          }
+        })
+      }
+    }
+
+    const tolEvent = (eventParams: VxeButtonDefines.ClickEventParams, item: VxeToolbarPropTypes.ToolConfig) => {
+      const { $event } = eventParams
+      const { connectTable } = internalData
+      const $table = connectTable
+      const { code } = item
+      if (code) {
+        handleDefaultCodeEvent(eventParams, item, () => {
+          if ($xeGrid) {
+            $xeGrid.triggerToolbarTolEvent(item, $event)
+          } else {
+            const gCommandOpts = commands.get(code)
+            const params = { code, button: null, tool: item, $table: $table!, $grid: $xeGrid, $event }
+            if (gCommandOpts) {
+              const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
+              if (tCommandMethod) {
+                tCommandMethod(params)
+              } else {
+                errLog('vxe.error.notCommands', [code])
+              }
+            }
+            $xeToolbar.dispatchEvent('tool-click', params, $event)
+          }
+        })
       }
     }
 
@@ -308,7 +387,7 @@ export default defineVxeComponent({
               permissionCode: child.permissionCode,
               prefixTooltip: child.prefixTooltip,
               suffixTooltip: child.suffixTooltip,
-              onClick: ({ $event }) => isBtn ? btnEvent($event, child) : tolEvent($event, child)
+              onClick: (eventParams) => isBtn ? btnEvent(eventParams, child) : tolEvent(eventParams, child)
             })
             : createCommentVNode()
         })
@@ -365,7 +444,7 @@ export default defineVxeComponent({
                     destroyOnClose: item.destroyOnClose,
                     placement: item.placement,
                     transfer: item.transfer,
-                    onClick: ({ $event }) => btnEvent($event, item)
+                    onClick: (eventParams) => btnEvent(eventParams, item)
                   }, dropdowns && dropdowns.length
                     ? {
                         dropdowns: () => renderDropdowns(item, true)
@@ -433,7 +512,7 @@ export default defineVxeComponent({
                     destroyOnClose: item.destroyOnClose,
                     placement: item.placement,
                     transfer: item.transfer,
-                    onClick: ({ $event }) => tolEvent($event, item)
+                    onClick: (eventParams) => tolEvent(eventParams, item)
                   }, dropdowns && dropdowns.length
                     ? {
                         dropdowns: () => renderDropdowns(item, false)
@@ -459,7 +538,7 @@ export default defineVxeComponent({
           circle: true,
           icon: importOpts.icon || getIcon().TOOLBAR_TOOLS_IMPORT,
           title: getI18n('vxe.toolbar.import'),
-          onClick: importEvent
+          onClick: openImportEvent
         })
         : createCommentVNode()
     }
@@ -472,7 +551,7 @@ export default defineVxeComponent({
           circle: true,
           icon: exportOpts.icon || getIcon().TOOLBAR_TOOLS_EXPORT,
           title: getI18n('vxe.toolbar.export'),
-          onClick: exportEvent
+          onClick: openExportEvent
         })
         : createCommentVNode()
     }
@@ -485,7 +564,7 @@ export default defineVxeComponent({
           circle: true,
           icon: printOpts.icon || getIcon().TOOLBAR_TOOLS_PRINT,
           title: getI18n('vxe.toolbar.print'),
-          onClick: printEvent
+          onClick: openPrintEvent
         })
         : createCommentVNode()
     }
@@ -584,12 +663,31 @@ export default defineVxeComponent({
     $xeToolbar.renderVN = renderVN
 
     nextTick(() => {
-      const { refresh } = props
       const refreshOpts = computeRefreshOpts.value
       const queryMethod = refreshOpts.queryMethod || refreshOpts.query
-      if (refresh && !$xeGrid && !queryMethod) {
+      if (props.refresh && !$xeGrid && !queryMethod) {
         warnLog('vxe.error.notFunc', ['queryMethod'])
       }
+
+      if (XEUtils.isPlainObject(props.custom)) {
+        warnLog('vxe.error.delProp', ['custom={...}', 'custom=boolean & custom-options={...}'])
+      }
+      if (XEUtils.isPlainObject(props.print)) {
+        warnLog('vxe.error.delProp', ['print={...}', 'print=boolean & print-options={...}'])
+      }
+      if (XEUtils.isPlainObject(props.export)) {
+        warnLog('vxe.error.delProp', ['export={...}', 'export=boolean & export-options={...}'])
+      }
+      if (XEUtils.isPlainObject(props.import)) {
+        warnLog('vxe.error.delProp', ['import={...}', 'import=boolean & import-options={...}'])
+      }
+      if (XEUtils.isPlainObject(props.refresh)) {
+        warnLog('vxe.error.delProp', ['refresh={...}', 'refresh=boolean & refresh-options={...}'])
+      }
+      if (XEUtils.isPlainObject(props.refresh)) {
+        warnLog('vxe.error.delProp', ['zoom={...}', 'zoom=boolean & zoom-options={...}'])
+      }
+
       const customOpts = computeCustomOpts.value
       if (customOpts.isFooter) {
         warnLog('vxe.error.delProp', ['toolbar.custom.isFooter', 'table.custom-config.showFooter'])
