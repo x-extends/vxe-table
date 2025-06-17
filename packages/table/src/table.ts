@@ -90,27 +90,31 @@ function renderFixed (h: CreateElement, $xeTable: VxeTableConstructor & VxeTable
   ])
 }
 
-function renderEmptyBody (h: CreateElement, _vm: any) {
-  const { $scopedSlots, emptyOpts } = _vm
+function renderEmptyBody (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const slots = $xeTable.$scopedSlots
+  const $xeGrid = $xeTable.$xeGrid
+
+  const emptyOpts = $xeTable.computeEmptyOpts
+  const emptySlot = slots.empty
   let emptyContent: any = ''
-  const params = { $table: _vm }
-  if ($scopedSlots.empty) {
-    emptyContent = $scopedSlots.empty.call(_vm, params, h)
+  const emptyParams = { $table: $xeTable, $grid: $xeGrid }
+  if (emptySlot) {
+    emptyContent = emptySlot.call($xeTable, emptyParams)
   } else {
     const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
     const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
     if (rtEmptyView) {
-      emptyContent = getSlotVNs(rtEmptyView.call(_vm, h, emptyOpts, params))
+      emptyContent = getSlotVNs(rtEmptyView.call($xeTable, h, emptyOpts, emptyParams))
     } else {
-      emptyContent = getFuncText(_vm.emptyText) || getI18n('vxe.table.emptyText')
+      emptyContent = getFuncText($xeTable.emptyText) || getI18n('vxe.table.emptyText')
     }
   }
   return emptyContent
 }
 
-const renderDragTipContents = (h: CreateElement, $xeTable: any) => {
+const renderDragTipContents = (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) => {
   const props = $xeTable
-  const reactData = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
 
   const { dragConfig } = props
   const { dragRow, dragCol, dragTipText } = reactData
@@ -130,8 +134,8 @@ const renderDragTipContents = (h: CreateElement, $xeTable: any) => {
   return [h('span', dragTipText)]
 }
 
-const renderDragTip = (h: CreateElement, $xeTable: any) => {
-  const reactData = $xeTable
+const renderDragTip = (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) => {
+  const reactData = $xeTable as unknown as TableReactData
 
   const { dragRow, dragCol } = reactData
   const rowOpts = $xeTable.computeRowOpts
@@ -187,10 +191,10 @@ const renderDragTip = (h: CreateElement, $xeTable: any) => {
   return renderEmptyElement($xeTable)
 }
 
-function handleUpdateResize (_vm: any) {
-  const { $el } = _vm
-  if ($el && $el.clientWidth && $el.clientHeight) {
-    _vm.recalculate()
+function handleUpdateResize ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const el = $xeTable.$refs.refElem as HTMLDivElement
+  if (el && el.clientWidth && el.clientHeight) {
+    $xeTable.recalculate()
   }
 }
 
@@ -672,6 +676,8 @@ export default {
       visiblwRowsFlag: 1,
 
       isRowGroupStatus: false,
+      rowGroupList: [],
+      aggHandleFields: [],
 
       rowGroupExpandedFlag: 1,
       rowExpandedFlag: 1,
@@ -729,17 +735,21 @@ export default {
       return this.computeTableId
     },
     computeTableId () {
-      const { id } = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+      const $xeGrid = $xeTable.$xeGrid
+
+      const { id } = props
       if (id) {
         if (XEUtils.isFunction(id)) {
-          return `${id({ $table: this }) || ''}`
+          return `${id({ $table: $xeTable, $grid: $xeGrid }) || ''}`
         }
         return `${id}`
       }
       return ''
     },
     computeRowField () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       const rowOpts = $xeTable.computeRowOpts
@@ -749,7 +759,10 @@ export default {
       return this.computeValidOpts
     },
     computeValidOpts () {
-      return Object.assign({ message: 'default' }, getConfig().table.validConfig, this.validConfig)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.validConfig, props.validConfig)
     },
     sXOpts () {
       return this.computeVirtualXOpts
@@ -758,7 +771,7 @@ export default {
       return this.computeVirtualXOpts
     },
     computeScrollXThreshold () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const virtualXOpts = $xeTable.computeVirtualXOpts
       const { threshold } = virtualXOpts
@@ -774,37 +787,37 @@ export default {
       return this.computeVirtualYOpts
     },
     computeVirtualXOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.virtualXConfig || getConfig().table.scrollX, props.virtualXConfig || props.scrollX)
     },
     computeVirtualYOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.virtualYConfig || getConfig().table.scrollY, props.virtualYConfig || props.scrollY)
     },
     computeScrollbarOpts () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.scrollbarConfig, props.scrollbarConfig)
     },
     computeScrollbarXToTop () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const scrollbarOpts = $xeTable.computeScrollbarOpts
       return !!(scrollbarOpts.x && scrollbarOpts.x.position === 'top')
     },
     computeScrollbarYToLeft () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const scrollbarOpts = $xeTable.computeScrollbarOpts
       return !!(scrollbarOpts.y && scrollbarOpts.y.position === 'left')
     },
     computeScrollYThreshold () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const virtualYOpts = $xeTable.computeVirtualYOpts
       const { threshold } = virtualYOpts
@@ -1176,26 +1189,18 @@ export default {
     },
     computeTableRowExpandedList () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-      const props = $xeTable
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
 
-      const { treeConfig } = props
-      const { rowExpandedFlag, expandColumn, rowGroupExpandedFlag, treeExpandedFlag, isRowGroupStatus } = reactData
+      const { rowExpandedFlag, expandColumn, rowGroupExpandedFlag, treeExpandedFlag } = reactData
       const { visibleDataRowIdData, rowExpandedMaps } = internalData
-      const treeOpts = $xeTable.computeTreeOpts
-      const { transform } = treeOpts
       const expandList: any[] = []
       if (expandColumn && rowExpandedFlag && rowGroupExpandedFlag && treeExpandedFlag) {
-        if (isRowGroupStatus || (treeConfig && transform)) {
-          XEUtils.each(rowExpandedMaps, (row, rowid) => {
-            if (visibleDataRowIdData[rowid]) {
-              expandList.push(row)
-            }
-          })
-        } else {
-          return XEUtils.values(rowExpandedMaps)
-        }
+        XEUtils.each(rowExpandedMaps, (row, rowid) => {
+          if (visibleDataRowIdData[rowid]) {
+            expandList.push(row)
+          }
+        })
       }
       return expandList
     },
@@ -1286,6 +1291,22 @@ export default {
 
       const aggregateOpts = $xeTable.computeAggregateOpts
       return aggregateOpts.groupFields
+    },
+    computeRowGroupColumns () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { rowGroupList } = reactData
+      const { fullColumnFieldData } = internalData
+      const rgColumns: VxeTableDefines.ColumnInfo[] = []
+      rowGroupList.forEach(aggConf => {
+        const colRest = fullColumnFieldData[aggConf.field]
+        if (colRest) {
+          rgColumns.push(colRest.column)
+        }
+      })
+      return rgColumns
     },
     tabsResizeFlag () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -1391,11 +1412,13 @@ export default {
     },
 
     syncResize (value: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       if (value) {
-        handleUpdateResize(this)
-        this.$nextTick(() => {
-          handleUpdateResize(this)
-          setTimeout(() => handleUpdateResize(this))
+        handleUpdateResize($xeTable)
+        $xeTable.$nextTick(() => {
+          handleUpdateResize($xeTable)
+          setTimeout(() => handleUpdateResize($xeTable))
         })
       }
     },
@@ -1403,12 +1426,16 @@ export default {
       this.handleGlobalResizeEvent()
     },
     mergeCells (value: any) {
-      this.clearMergeCells()
-      this.$nextTick(() => this.setMergeCells(value))
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      $xeTable.clearMergeCells()
+      $xeTable.$nextTick(() => $xeTable.setMergeCells(value))
     },
     mergeFooterItems (value: any) {
-      this.clearMergeFooterItems()
-      this.$nextTick(() => this.setMergeFooterItems(value))
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      $xeTable.clearMergeFooterItems()
+      $xeTable.$nextTick(() => $xeTable.setMergeFooterItems(value))
     },
 
     computeRowGroupFields (val: any) {
@@ -2022,7 +2049,7 @@ export default {
       }, [
         h('div', {
           class: 'vxe-table--empty-content'
-        }, renderEmptyBody(h, this))
+        }, renderEmptyBody(h, $xeTable))
       ]),
       /**
        * 边框线

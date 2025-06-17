@@ -150,11 +150,20 @@ export default {
   showFooterOverflow: { type: [Boolean, String], default: () => getConfig().table.showFooterOverflow },
 
   /** 高级属性 */
-  // （即将废弃）columnKey 已废弃，被 column-config.useKey 替换
+  /**
+   * （即将废弃）columnKey 已废弃，被 column-config.useKey 替换
+   * @deprecated
+   */
   columnKey: Boolean,
-  // （即将废弃）rowKey 已废弃，被 row-config.useKey 替换
+  /**
+   * （即将废弃）rowKey 已废弃，被 row-config.useKey 替换
+   * @deprecated
+   */
   rowKey: Boolean,
-  // （即将废弃）rowId 已废弃，被 row-config.keyField 替换
+  /**
+   * （即将废弃）rowId 已废弃，被 row-config.keyField 替换
+   * @deprecated
+   */
   rowId: { type: String, default: () => getConfig().table.rowId },
   zIndex: Number,
   emptyText: { type: String, default: () => getConfig().table.emptyText },
@@ -179,11 +188,17 @@ export default {
   rowConfig: Object as PropType<VxeTablePropTypes.RowConfig>,
   // 数据聚合配置项
   aggregateConfig: Object as PropType<VxeTablePropTypes.AggregateConfig>,
-  //  已废弃，被 aggregateConfig 替换
+  /**
+   * 已废弃，被 aggregateConfig 替换
+   * @deprecated
+   */
   rowGroupConfig: Object as PropType<VxeTablePropTypes.RowGroupConfig>,
   // 当前行配置项
   currentRowConfig: Object as PropType<VxeTablePropTypes.CurrentRowConfig>,
-  // 已废弃，被 rowDragConfig 替换
+  /**
+   * 已废弃，被 rowDragConfig 替换
+   * @deprecated
+   */
   dragConfig: Object as PropType<VxeTablePropTypes.DragConfig>,
   // 行拖拽排序配置项
   rowDragConfig: Object as PropType<VxeTablePropTypes.RowDragConfig>,
@@ -215,7 +230,10 @@ export default {
   treeConfig: [Boolean, Object],
   // 快捷菜单配置项
   menuConfig: [Boolean, Object],
-  // 在 v4 中废弃 contextMenu
+  /**
+   * 在 v4 中废弃 contextMenu
+   * @deprecated
+   */
   contextMenu: [Boolean, Object],
   // 鼠标配置项
   mouseConfig: Object,
@@ -239,9 +257,15 @@ export default {
   emptyRender: [Boolean, Object],
   // 自定义列配置项
   customConfig: Object as PropType<VxeTablePropTypes.CustomConfig>,
-  // （即将废弃）横向虚拟滚动配置项
+  /**
+   * （即将废弃）横向虚拟滚动配置项
+   * @deprecated
+   */
   scrollX: Object as PropType<VxeTablePropTypes.ScrollX>,
-  // （即将废弃）纵向虚拟滚动配置项
+  /**
+   * （即将废弃）纵向虚拟滚动配置项
+   * @deprecated
+   */
   scrollY: Object as PropType<VxeTablePropTypes.ScrollY>,
   // 横向虚拟滚动配置项
   virtualXConfig: Object as PropType<VxeTablePropTypes.VirtualXConfig>,

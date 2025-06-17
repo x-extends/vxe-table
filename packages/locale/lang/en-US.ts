@@ -558,6 +558,12 @@ export default {
           replaceSuccess: 'Successfully replaced {0} cells'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: 'Group',
+          values: 'Values'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Freeze column',

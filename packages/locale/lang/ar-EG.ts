@@ -558,6 +558,12 @@ export default {
           replaceSuccess: 'تم استبدال خلايا {0} بنجاح'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'عمود تجميد',

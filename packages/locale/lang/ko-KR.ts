@@ -558,6 +558,12 @@ export default {
           replaceSuccess: '{0} 세포를 성공적으로 대체했습니다'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: '동결 열',

@@ -54,7 +54,8 @@ export default {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
-      const { customOpts, customColumnList } = this
+      const { customColumnList, aggHandleFields, rowGroupList } = reactData
+      const customOpts = $xeTable.computeCustomOpts
       const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
       XEUtils.eachTree(customColumnList, (column, index, items, path, parentColumn) => {
         if (parentColumn) {
@@ -86,7 +87,18 @@ export default {
       setTimeout(() => {
         reactData.isDragColMove = false
       }, 1000)
-      return $xeTable.saveCustomStore('confirm')
+      return $xeTable.saveCustomStore('confirm').then(() => {
+        if (($xeTable as any).handlePivotTableAggregateData) {
+          if (rowGroupList.length !== aggHandleFields.length || rowGroupList.some((conf, i) => conf.field !== aggHandleFields[i])) {
+          // 改动聚合分组
+            if (aggHandleFields.length) {
+              $xeTable.setRowGroups(aggHandleFields)
+            } else {
+              $xeTable.clearRowGroups()
+            }
+          }
+        }
+      })
     },
     _cancelCustom () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -122,6 +134,7 @@ export default {
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
 
+      const { rowGroupList } = reactData
       const { collectColumn } = internalData
       const customOpts = $xeTable.computeCustomOpts
       const { checkMethod } = customOpts
@@ -148,7 +161,18 @@ export default {
       })
       reactData.isCustomStatus = false
       $xeTable.saveCustomStore('reset')
-      return $xeTable.handleCustom()
+      return $xeTable.handleCustom().then(() => {
+        if (($xeTable as any).handlePivotTableAggregateData) {
+          const rowGroupFields = $xeTable.computeRowGroupFields
+          if (rowGroupFields ? rowGroupFields.length : rowGroupList.length) {
+            if (rowGroupFields && rowGroupFields.length) {
+              $xeTable.setRowGroups(rowGroupFields)
+            } else {
+              $xeTable.clearRowGroups()
+            }
+          }
+        }
+      })
     },
     _toggleCustomAllCheckbox () {
       const { customStore } = this

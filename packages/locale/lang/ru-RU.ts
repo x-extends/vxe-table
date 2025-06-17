@@ -558,6 +558,12 @@ export default {
           replaceSuccess: 'Успешно заменен {0} ячейки'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Замораживание колонки',

@@ -6,7 +6,7 @@ import { getOffsetSize, calcTreeLine, getRowid, createHandleGetRowId, getCellRes
 import { updateCellTitle } from '../../ui/src/dom'
 import { getSlotVNs } from '../../ui/src/vn'
 
-import type { VxeTableConstructor, VxeTableDefines, TableInternalData, VxeTablePrivateMethods, TableReactData, VxeComponentStyleType } from '../../../types'
+import type { VxeTableConstructor, VxeTableDefines, TableInternalData, VxeTablePrivateMethods, TableReactData, VxeComponentStyleType, VxeComponentSlotType } from '../../../types'
 
 const { getI18n, renderer, renderEmptyElement } = VxeUI
 
@@ -22,7 +22,7 @@ const isVMScrollProcess = ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   return !!(isDragResize || (lastScrollTime && Date.now() < lastScrollTime + (delayHover as number)))
 }
 
-function renderLine (h: CreateElement, $xeTable : VxeTableConstructor & VxeTablePrivateMethods, rowid: string, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number) {
+function renderLine (h: CreateElement, $xeTable : VxeTableConstructor & VxeTablePrivateMethods, rowid: string, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number): VxeComponentSlotType[] {
   const tableProps = $xeTable
   const tableInternalData = $xeTable as unknown as TableInternalData
 
@@ -310,7 +310,7 @@ function renderTdColumn (
     tcStyle.minHeight = `${cellHeight}px`
   }
 
-  const tdVNs = []
+  const tdVNs: VxeComponentSlotType[] = []
   if (fixedHiddenColumn && isAllOverflow) {
     tdVNs.push(
       h('div', {
@@ -614,7 +614,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
         const { showOverflow } = expandColumn || {}
         const colid = expandColumn.id
         const colRest = fullColumnIdData[colid] || {}
-        const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? isAllOverflow : showOverflow
+        const hasEllipsis = XEUtils.eqNull(showOverflow) ? isAllOverflow : showOverflow
         let columnIndex = -1
         let $columnIndex = -1
         let _columnIndex = -1
@@ -735,8 +735,9 @@ export default {
     const tableReactData = $xeTable as unknown as TableReactData
     const tableInternalData = $xeTable as unknown as TableInternalData
     const $xeGrid = $xeTable.$xeGrid
+    const slots = $xeTable.$scopedSlots
 
-    const { xID, $scopedSlots } = $xeTable
+    const { xID } = $xeTable
     const { fixedColumn, fixedType, tableColumn } = props
 
     const { spanMethod, footerSpanMethod, mouseConfig } = tableProps
@@ -819,13 +820,15 @@ export default {
     }
 
     let emptyContent
-    if ($scopedSlots.empty) {
-      emptyContent = $scopedSlots.empty.call(this, { $table: $xeTable, $grid: $xeGrid })
+    const emptySlot = slots ? slots.empty : null
+    const emptyParams = { $table: $xeTable, $grid: $xeGrid }
+    if (emptySlot) {
+      emptyContent = emptySlot.call($xeTable, emptyParams)
     } else {
       const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
       const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
       if (rtEmptyView) {
-        emptyContent = getSlotVNs(rtEmptyView.call(this, h, emptyOpts, { $table: $xeTable }))
+        emptyContent = getSlotVNs(rtEmptyView.call($xeTable, h, emptyOpts, emptyParams))
       } else {
         emptyContent = tableProps.emptyText || getI18n('vxe.table.emptyText')
       }
@@ -875,7 +878,7 @@ export default {
          */
           h('colgroup', {
             ref: 'refBodyColgroup'
-          }, renderColumnList.map((column: any, $columnIndex: any) => {
+          }, renderColumnList.map((column, $columnIndex) => {
             return h('col', {
               attrs: {
                 name: column.id
@@ -915,7 +918,7 @@ export default {
                   h('span', {
                     class: 'vxe-table--cell-main-area-btn',
                     on: {
-                      mousedown (evnt: any) {
+                      mousedown (evnt: MouseEvent) {
                         if ($xeTable.triggerCellAreaExtendMousedownEvent) {
                           $xeTable.triggerCellAreaExtendMousedownEvent(evnt, { $table: $xeTable, fixed: fixedType, type: renderType })
                         }

@@ -46,13 +46,16 @@ function initPages ($xeGrid: VxeGridConstructor & VxeGridPrivateMethods, propKey
   }
 }
 
-function renderDefaultForm (h: CreateElement, $xeGrid: any) {
+function renderDefaultForm (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
   const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
   const props = $xeGrid
   const slots = $xeGrid.$scopedSlots
+  const reactData = $xeGrid as unknown as GridReactData
 
   const { proxyConfig, formConfig } = props
-  const { proxyOpts, formData, formOpts } = $xeGrid
+  const { formData } = reactData
+  const proxyOpts = $xeGrid.computeProxyOpts
+  const formOpts = $xeGrid.computeFormOpts
   if (isEnableConf(formConfig) && formOpts.items && formOpts.items.length) {
     const formSlots: any = {}
     if (!formOpts.inited) {
@@ -81,10 +84,10 @@ function renderDefaultForm (h: CreateElement, $xeGrid: any) {
             data: proxyConfig && proxyOpts.form ? formData : formOpts.data
           }),
           on: {
-            submit: $xeGrid.submitEvent,
-            reset: $xeGrid.resetEvent,
-            collapse: $xeGrid.collapseEvent,
-            'submit-invalid': $xeGrid.submitInvalidEvent
+            submit: ($xeGrid as any).submitEvent,
+            reset: ($xeGrid as any).resetEvent,
+            collapse: ($xeGrid as any).collapseEvent,
+            'submit-invalid': ($xeGrid as any).submitInvalidEvent
           },
           scopedSlots: formSlots
         })
@@ -132,29 +135,52 @@ const getConfigSlot = ($xeGrid: VxeGridConstructor & VxeGridPrivateMethods, slot
   return slotConf
 }
 
-function getToolbarSlots (_vm: any) {
-  const { $scopedSlots, toolbarOpts } = _vm
+function getToolbarSlots ($xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
+  const slots = $xeGrid.$scopedSlots
+
+  const toolbarOpts = $xeGrid.computeToolbarOpts
   const toolbarOptSlots = toolbarOpts.slots
-  let buttonsSlot
-  let toolsSlot
-  const slots: any = {}
-  if ($scopedSlots.buttons && (!toolbarOptSlots || toolbarOptSlots.buttons !== 'buttons')) {
+  const toolbarSlots: {
+    buttons?(params: any): any
+    buttonPrefix?(params: any): any
+    buttonSuffix?(params: any): any
+    tools?(params: any): any
+    toolPrefix?(params: any): any
+    toolSuffix?(params: any): any
+  } = {}
+  if (slots.buttons && (!toolbarOptSlots || toolbarOptSlots.buttons !== 'buttons')) {
     warnLog('vxe.error.reqProp', ['toolbar-config.slots.buttons'])
   }
-  if ($scopedSlots.tools && (!toolbarOptSlots || toolbarOptSlots.tools !== 'tools')) {
+  if (slots.tools && (!toolbarOptSlots || toolbarOptSlots.tools !== 'tools')) {
     warnLog('vxe.error.reqProp', ['toolbar-config.slots.tools'])
   }
   if (toolbarOptSlots) {
-    buttonsSlot = getFuncSlot(_vm, toolbarOptSlots, 'buttons')
-    toolsSlot = getFuncSlot(_vm, toolbarOptSlots, 'tools')
+    const buttonsSlot = getFuncSlot($xeGrid, toolbarOptSlots, 'buttons')
+    const buttonPrefixSlot = getFuncSlot($xeGrid, toolbarOptSlots, 'buttonPrefix')
+    const buttonSuffixSlot = getFuncSlot($xeGrid, toolbarOptSlots, 'buttonSuffix')
+    const toolsSlot = getFuncSlot($xeGrid, toolbarOptSlots, 'tools')
+    const toolPrefixSlot = getFuncSlot($xeGrid, toolbarOptSlots, 'toolPrefix')
+    const toolSuffixSlot = getFuncSlot($xeGrid, toolbarOptSlots, 'toolSuffix')
     if (buttonsSlot) {
-      slots.buttons = buttonsSlot
+      toolbarSlots.buttons = buttonsSlot
+    }
+    if (buttonPrefixSlot) {
+      toolbarSlots.buttonPrefix = buttonPrefixSlot
+    }
+    if (buttonSuffixSlot) {
+      toolbarSlots.buttonSuffix = buttonSuffixSlot
     }
     if (toolsSlot) {
-      slots.tools = toolsSlot
+      toolbarSlots.tools = toolsSlot
+    }
+    if (toolPrefixSlot) {
+      toolbarSlots.toolPrefix = toolPrefixSlot
+    }
+    if (toolSuffixSlot) {
+      toolbarSlots.toolSuffix = toolSuffixSlot
     }
   }
-  return slots
+  return toolbarSlots
 }
 
 function getTableOns (_vm: any) {
@@ -197,9 +223,12 @@ function pageChangeEvent ($xeGrid: VxeGridConstructor & VxeGridPrivateMethods, p
 /**
  * 渲染表单
  */
-function renderForm (h: CreateElement, _vm: any) {
-  const { _e, $scopedSlots, formConfig } = _vm
-  const formSlot = $scopedSlots.form
+function renderForm (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
+  const slots = $xeGrid.$scopedSlots
+  const props = $xeGrid
+
+  const { formConfig } = props
+  const formSlot = slots.form
   const hasForm = !!(formSlot || isEnableConf(formConfig))
 
   if (hasForm) {
@@ -207,18 +236,22 @@ function renderForm (h: CreateElement, _vm: any) {
       key: 'form',
       ref: 'refFormWrapper',
       class: 'vxe-grid--form-wrapper'
-    }, formSlot ? formSlot.call(_vm, { $grid: _vm }, h) : renderDefaultForm(h, _vm))
+    }, formSlot ? formSlot.call($xeGrid, { $grid: $xeGrid }) : renderDefaultForm(h, $xeGrid))
   }
-  return _e()
+  return renderEmptyElement($xeGrid)
 }
 
 /**
  * 渲染工具栏
  */
-function renderToolbar (h: CreateElement, _vm: any) {
-  const { _e, $scopedSlots, toolbarConfig, toolbar } = _vm
-  const toolbarSlot = $scopedSlots.toolbar
+function renderToolbar (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
+  const slots = $xeGrid.$scopedSlots
+  const props = $xeGrid
+
+  const { toolbarConfig } = props
+  const toolbarSlot = slots.toolbar
   const hasToolbar = !!(toolbarSlot || isEnableConf(toolbarConfig) || toolbar)
+  const toolbarOpts = $xeGrid.computeToolbarOpts
 
   if (hasToolbar) {
     return h('div', {
@@ -226,62 +259,67 @@ function renderToolbar (h: CreateElement, _vm: any) {
       ref: 'refToolbarWrapper',
       class: 'vxe-grid--toolbar-wrapper'
     }, toolbarSlot
-      ? toolbarSlot.call(_vm, { $grid: _vm }, h)
+      ? toolbarSlot.call($xeGrid, { $grid: $xeGrid })
       : [
           h(VxeToolbarComponent, {
-            props: Object.assign({}, _vm.toolbarOpts, { slots: undefined }),
+            props: Object.assign({}, toolbarOpts, { slots: undefined }),
             ref: 'xToolbar',
-            scopedSlots: getToolbarSlots(_vm)
+            scopedSlots: getToolbarSlots($xeGrid)
           })
         ]
     )
   }
-  return _e()
+  return renderEmptyElement($xeGrid)
 }
 
 /**
  * 渲染表格顶部区域
  */
-function renderTop (h: CreateElement, _vm: any) {
-  const { _e, $scopedSlots } = _vm
-  const topSlot = $scopedSlots.top
+function renderTop (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
+  const slots = $xeGrid.$scopedSlots
+
+  const topSlot = slots.top
 
   return topSlot
     ? h('div', {
       key: 'top',
       ref: 'refTopWrapper',
       class: 'vxe-grid--top-wrapper'
-    }, topSlot.call(_vm, { $grid: _vm }, h))
-    : _e()
+    }, topSlot.call($xeGrid, { $grid: $xeGrid }))
+    : renderEmptyElement($xeGrid)
 }
 
-function renderTableLeft (h: CreateElement, _vm: any) {
-  const { _e, $scopedSlots } = _vm
-  const leftSlot = $scopedSlots.left
+function renderTableLeft (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
+  const slots = $xeGrid.$scopedSlots
+
+  const leftSlot = slots.left
   if (leftSlot) {
     return h('div', {
       class: 'vxe-grid--left-wrapper'
-    }, leftSlot({ $grid: _vm }))
+    }, leftSlot({ $grid: $xeGrid }))
   }
-  return _e()
+  return renderEmptyElement($xeGrid)
 }
 
-function renderTableRight (h: CreateElement, _vm: any) {
-  const { _e, $scopedSlots } = _vm
-  const rightSlot = $scopedSlots.right
+function renderTableRight (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
+  const slots = $xeGrid.$scopedSlots
+
+  const rightSlot = slots.right
   if (rightSlot) {
     return h('div', {
       class: 'vxe-grid--right-wrapper'
-    }, rightSlot({ $grid: _vm }))
+    }, rightSlot({ $grid: $xeGrid }))
   }
-  return _e()
+  return renderEmptyElement($xeGrid)
 }
 
 /**
  * 渲染表格
  */
-function renderTable (h: CreateElement, _vm: any) {
-  const { $scopedSlots, tableProps } = _vm
+function renderTable (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
+  const slots = $xeGrid.$scopedSlots
+
+  const tableProps = $xeGrid.computeTableProps
 
   return h('div', {
     class: 'vxe-grid--table-wrapper'
@@ -289,8 +327,8 @@ function renderTable (h: CreateElement, _vm: any) {
     h('vxe-table', {
       key: 'table',
       props: tableProps,
-      on: getTableOns(_vm),
-      scopedSlots: $scopedSlots,
+      on: getTableOns($xeGrid),
+      scopedSlots: slots,
       ref: 'xTable'
     })
   ])
@@ -299,17 +337,18 @@ function renderTable (h: CreateElement, _vm: any) {
 /**
  * 渲染表格底部区域
  */
-function renderBottom (h: CreateElement, _vm: any) {
-  const { _e, $scopedSlots } = _vm
-  const bottomSlot = $scopedSlots.bottom
+function renderBottom (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
+  const slots = $xeGrid.$scopedSlots
+
+  const bottomSlot = slots.bottom
 
   return bottomSlot
     ? h('div', {
       key: 'bottom',
       ref: 'refBottomWrapper',
       class: 'vxe-grid--bottom-wrapper'
-    }, bottomSlot.call(_vm, { $grid: _vm }, h))
-    : _e()
+    }, bottomSlot.call($xeGrid, { $grid: $xeGrid }))
+    : renderEmptyElement($xeGrid)
 }
 
 /**

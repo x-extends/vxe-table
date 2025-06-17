@@ -377,18 +377,6 @@ export const Cell = {
     const { isRowGroupStatus } = tableReactData
     const { field, slots, editRender, cellRender, rowGroupNode, aggFunc } = column
     const renderOpts = editRender || cellRender
-    if (slots && slots.default) {
-      return renderCellBaseVNs(h, params, $table.callSlot(slots.default, params, h))
-    }
-    if (renderOpts) {
-      const compConf = renderer.get(renderOpts.name)
-      const rtDefault = compConf ? (compConf.renderTableDefault || compConf.renderDefault) : null
-      const rtCell = compConf ? (compConf.renderTableCell || compConf.renderCell) : null
-      const renderFn = editRender ? rtCell : rtDefault
-      if (renderFn) {
-        return renderCellBaseVNs(h, params, getSlotVNs(renderFn.call($table, h, renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params))))
-      }
-    }
     let cellValue: string | number | null = ''
     if (isRowGroupStatus && field && row.isAggregate) {
       const aggRow: VxeTableDefines.AggregateRowInfo = row
@@ -434,6 +422,18 @@ export const Cell = {
         }
       }
     } else {
+      if (slots && slots.default) {
+        return renderCellBaseVNs(h, params, $table.callSlot(slots.default, params, h))
+      }
+      if (renderOpts) {
+        const compConf = renderer.get(renderOpts.name)
+        const rtDefault = compConf ? (compConf.renderTableDefault || compConf.renderDefault) : null
+        const rtCell = compConf ? (compConf.renderTableCell || compConf.renderCell) : null
+        const renderFn = editRender ? rtCell : rtDefault
+        if (renderFn) {
+          return renderCellBaseVNs(h, params, getSlotVNs(renderFn.call($table, h, renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params))))
+        }
+      }
       cellValue = $table.getCellLabel(row, column)
     }
     const cellPlaceholder = editRender ? editRender.placeholder : ''

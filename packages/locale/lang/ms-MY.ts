@@ -558,6 +558,12 @@ export default {
           replaceSuccess: '{0} sel berjaya diganti'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Lajur membekukan',

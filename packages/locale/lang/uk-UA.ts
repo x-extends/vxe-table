@@ -558,6 +558,12 @@ export default {
           replaceSuccess: 'Успішно замінив {0} комірок'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Заморожування стовпчика',
