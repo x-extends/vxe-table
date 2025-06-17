@@ -44,6 +44,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 篩選
 * [x] 儲存格合併
 * [x] 合併錶尾
+* [x] 行分组
 * [x] 導入/匯出/列印
 * [x] 顯示/隱藏列
 * [x] 拖拽/自定義列排序
@@ -61,11 +62,12 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 虛擬滾動
 * [x] 虛擬合併
 * [x] CSS 變量主題
+* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 数据分组与聚合函数
 * [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格區域選取
 * [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格複製/粘貼
 * [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格查找和替換
 * [x] ([企業版](https://vxetable.cn/pluginDocs/)) 全鍵盤操作
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 集成图表
+* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 集成图表
 
 ## 安裝
 

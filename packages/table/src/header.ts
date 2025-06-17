@@ -1,4 +1,5 @@
-import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted } from 'vue'
+import { TransitionGroup, h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted } from 'vue'
+import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getCellHeight, convertHeaderColumnToRows } from './util'
@@ -9,7 +10,7 @@ const { renderer, renderEmptyElement } = VxeUI
 
 const renderType = 'header'
 
-export default defineComponent({
+export default defineVxeComponent({
   name: 'VxeTableHeader',
   props: {
     tableData: Array as PropType<any[]>,

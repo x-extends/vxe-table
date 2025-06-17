@@ -1,4 +1,5 @@
-import { defineComponent, h, createCommentVNode, ref, Ref, computed, reactive, inject, nextTick } from 'vue'
+import { h, createCommentVNode, ref, Ref, computed, reactive, inject, nextTick } from 'vue'
+import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { formatText } from '../../../ui/src/utils'
@@ -9,7 +10,7 @@ import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } fro
 
 const { getI18n, getIcon } = VxeUI
 
-export default defineComponent({
+export default defineVxeComponent({
   name: 'VxeTableExportPanel',
   props: {
     defaultOptions: Object as any,

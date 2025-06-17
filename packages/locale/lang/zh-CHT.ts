@@ -558,6 +558,12 @@ export default {
           replaceSuccess: '成功替換 {0} 個單元格'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: '凍結列',

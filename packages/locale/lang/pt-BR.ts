@@ -558,6 +558,12 @@ export default {
           replaceSuccess: 'Células substituídas com sucesso {0}'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Coluna de congelamento',

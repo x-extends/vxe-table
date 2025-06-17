@@ -558,6 +558,12 @@ export default {
           replaceSuccess: 'Vellykket erstattet {0} celler'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Frysekolonne',

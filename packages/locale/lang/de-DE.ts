@@ -558,6 +558,12 @@ export default {
           replaceSuccess: 'Erfolgreich ersetzt {0} Zellen'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Einfrierensäule',

@@ -1,4 +1,5 @@
-import { defineComponent, h, ref, Ref, computed, inject, createCommentVNode, VNode, reactive, nextTick, PropType } from 'vue'
+import { h, ref, Ref, computed, inject, createCommentVNode, VNode, reactive, nextTick, PropType } from 'vue'
+import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getSlotVNs } from '../../ui/src/vn'
@@ -9,7 +10,7 @@ import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, ToolbarInt
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, useFns } = VxeUI
 
-export default defineComponent({
+export default defineVxeComponent({
   name: 'VxeToolbar',
   props: {
     loading: Boolean,

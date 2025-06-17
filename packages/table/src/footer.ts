@@ -1,4 +1,5 @@
-import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
+import { TransitionGroup, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
+import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { updateCellTitle, getPropClass } from '../../ui/src/dom'
@@ -10,7 +11,7 @@ const { renderer, renderEmptyElement } = VxeUI
 
 const renderType = 'footer'
 
-export default defineComponent({
+export default defineVxeComponent({
   name: 'VxeTableFooter',
   props: {
     footerTableData: {

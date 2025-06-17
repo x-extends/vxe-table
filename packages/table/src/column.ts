@@ -1,4 +1,5 @@
-import { defineComponent, h, onUnmounted, inject, ref, PropType, provide, onMounted, createCommentVNode } from 'vue'
+import { h, onUnmounted, inject, ref, PropType, provide, onMounted, createCommentVNode } from 'vue'
+import { defineVxeComponent } from '../../ui/src/comp'
 import { XEColumnInstance, watchColumn, assembleColumn, destroyColumn } from './util'
 import Cell from './cell'
 
@@ -130,7 +131,7 @@ export const columnProps = {
   params: Object as PropType<VxeColumnPropTypes.Params>
 }
 
-export default defineComponent({
+export default defineVxeComponent({
   name: 'VxeColumn',
   props: columnProps,
   setup (props, { slots }) {

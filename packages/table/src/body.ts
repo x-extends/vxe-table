@@ -1,4 +1,5 @@
-import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
+import { TransitionGroup, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
+import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getOffsetSize, calcTreeLine, getRowid, createHandleGetRowId, getCellRestHeight } from './util'
@@ -12,7 +13,7 @@ const { getI18n, renderer, renderEmptyElement } = VxeUI
 
 const renderType = 'body'
 
-export default defineComponent({
+export default defineVxeComponent({
   name: 'VxeTableBody',
   props: {
     tableData: Array as PropType<any[]>,
@@ -45,7 +46,7 @@ export default defineComponent({
       return !!(isDragResize || (lastScrollTime && Date.now() < lastScrollTime + (delayHover as number)))
     }
 
-    const renderLine = (rowid: string, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number) => {
+    const renderLine = (rowid: string, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number): VxeComponentSlotType[] => {
       const { row, column } = params
       const { afterFullData } = tableInternalData
       const { treeConfig } = tableProps
@@ -326,7 +327,7 @@ export default defineComponent({
         tcStyle.minHeight = `${cellHeight}px`
       }
 
-      const tdVNs: any[] = []
+      const tdVNs: VxeComponentSlotType[] = []
       if (fixedHiddenColumn && isAllOverflow) {
         tdVNs.push(
           h('div', {
@@ -609,7 +610,7 @@ export default defineComponent({
             const { showOverflow } = expandColumn || {}
             const colid = expandColumn.id
             const colRest = fullColumnIdData[colid] || {}
-            const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? isAllOverflow : showOverflow
+            const hasEllipsis = XEUtils.eqNull(showOverflow) ? isAllOverflow : showOverflow
             let columnIndex = -1
             let $columnIndex = -1
             let _columnIndex = -1
@@ -791,13 +792,14 @@ export default defineComponent({
 
       let emptyContent: string | VxeComponentSlotType | VxeComponentSlotType[]
       const emptySlot = slots ? slots.empty : null
+      const emptyParams = { $table: $xeTable, $grid: $xeGrid }
       if (emptySlot) {
-        emptyContent = $xeTable.callSlot(emptySlot, { $table: $xeTable, $grid: $xeGrid })
+        emptyContent = $xeTable.callSlot(emptySlot, emptyParams)
       } else {
         const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
         const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
         if (rtEmptyView) {
-          emptyContent = getSlotVNs(rtEmptyView(emptyOpts, { $table: $xeTable }))
+          emptyContent = getSlotVNs(rtEmptyView(emptyOpts, emptyParams))
         } else {
           emptyContent = tableProps.emptyText || getI18n('vxe.table.emptyText')
         }
@@ -880,7 +882,7 @@ export default defineComponent({
                 ? [
                     h('span', {
                       class: 'vxe-table--cell-main-area-btn',
-                      onMousedown (evnt: any) {
+                      onMousedown (evnt: MouseEvent) {
                         if ($xeTable.triggerCellAreaExtendMousedownEvent) {
                           $xeTable.triggerCellAreaExtendMousedownEvent(evnt, { $table: $xeTable, fixed: fixedType, type: renderType })
                         }

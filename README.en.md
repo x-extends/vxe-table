@@ -44,6 +44,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Filter
 * [x] Merged cells
 * [x] Merged footer items
+* [x] 行分组
 * [x] Import/Export/Print
 * [x] Show/Hide column
 * [x] Drag and drop/Customize column sorting
@@ -62,6 +63,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Virtual scroll
 * [x] Virtual merger
 * [x] CSS Variable Theme
+* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Data grouping and aggregation
 * [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell area selection
 * [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell copy & paste
 * [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell find and replace

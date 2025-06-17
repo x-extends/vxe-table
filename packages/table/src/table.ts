@@ -1,4 +1,5 @@
-import { defineComponent, h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, onMounted } from 'vue'
+import { h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, onMounted } from 'vue'
+import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
@@ -28,7 +29,7 @@ const customStorageKey = 'VXE_CUSTOM_STORE'
 const maxYHeight = 5e6
 const maxXWidth = 5e6
 
-export default defineComponent({
+export default defineVxeComponent({
   name: 'VxeTable',
   props: tableProps,
   emits: tableEmits,
@@ -247,6 +248,7 @@ export default defineComponent({
 
       isRowGroupStatus: false,
       rowGroupList: [],
+      aggHandleFields: [],
 
       rowGroupExpandedFlag: 1,
       rowExpandedFlag: 1,
@@ -769,22 +771,15 @@ export default defineComponent({
     })
 
     const computeTableRowExpandedList = computed(() => {
-      const { treeConfig } = props
-      const { rowExpandedFlag, expandColumn, rowGroupExpandedFlag, treeExpandedFlag, isRowGroupStatus } = reactData
+      const { rowExpandedFlag, expandColumn, rowGroupExpandedFlag, treeExpandedFlag } = reactData
       const { visibleDataRowIdData, rowExpandedMaps } = internalData
-      const treeOpts = computeTreeOpts.value
-      const { transform } = treeOpts
       const expandList: any[] = []
       if (expandColumn && rowExpandedFlag && rowGroupExpandedFlag && treeExpandedFlag) {
-        if (isRowGroupStatus || (treeConfig && transform)) {
-          XEUtils.each(rowExpandedMaps, (row, rowid) => {
-            if (visibleDataRowIdData[rowid]) {
-              expandList.push(row)
-            }
-          })
-        } else {
-          return XEUtils.values(rowExpandedMaps)
-        }
+        XEUtils.each(rowExpandedMaps, (row, rowid) => {
+          if (visibleDataRowIdData[rowid]) {
+            expandList.push(row)
+          }
+        })
       }
       return expandList
     })
@@ -864,6 +859,19 @@ export default defineComponent({
     const computeRowGroupFields = computed(() => {
       const rowGroupOpts = computeRowGroupOpts.value
       return rowGroupOpts.groupFields
+    })
+
+    const computeRowGroupColumns = computed(() => {
+      const { rowGroupList } = reactData
+      const { fullColumnFieldData } = internalData
+      const rgColumns: VxeTableDefines.ColumnInfo[] = []
+      rowGroupList.forEach(aggConf => {
+        const colRest = fullColumnFieldData[aggConf.field]
+        if (colRest) {
+          rgColumns.push(colRest.column)
+        }
+      })
+      return rgColumns
     })
 
     const refMaps: VxeTablePrivateRef = {
@@ -954,6 +962,8 @@ export default defineComponent({
       computeIsMaxFixedColumn,
       computeIsAllCheckboxDisabled,
       computeVirtualScrollBars,
+      computeRowGroupFields,
+      computeRowGroupColumns,
 
       computeSXOpts,
       computeSYOpts
@@ -988,6 +998,10 @@ export default defineComponent({
       const keyField = computeRowField.value
       internalData.currKeyField = keyField
       internalData.isCurrDeepKey = hasDeepKey(keyField)
+    }
+
+    const hangleStorageDefaultValue = (value: boolean | null | undefined, isAll: boolean) => {
+      return XEUtils.isBoolean(value) ? value : isAll
     }
 
     const getNextSortOrder = (column: VxeTableDefines.ColumnInfo) => {
@@ -1523,13 +1537,13 @@ export default defineComponent({
       const { customConfig } = props
       const tableId = computeTableId.value
       const customOpts = computeCustomOpts.value
-      const { storage, restoreStore } = customOpts
+      const { storage, restoreStore, storeOptions } = customOpts
       const isAllCustom = storage === true
-      const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {})
-      const isCustomResizable = isAllCustom || storageOpts.resizable
-      const isCustomVisible = isAllCustom || storageOpts.visible
-      const isCustomFixed = isAllCustom || storageOpts.fixed
-      const isCustomSort = isAllCustom || storageOpts.sort
+      const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {}, storeOptions)
+      const isCustomResizable = hangleStorageDefaultValue(storageOpts.resizable, isAllCustom)
+      const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
+      const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
+      const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
       if ((customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
         if (!tableId) {
           errLog('vxe.error.reqProp', ['id'])
@@ -3135,13 +3149,18 @@ export default defineComponent({
     }
 
     const handleUpdateRowGroup = (groupFields?: string[]) => {
-      reactData.rowGroupList = groupFields
-        ? (XEUtils.isArray(groupFields) ? groupFields : [groupFields]).map(field => {
-            return {
-              field
-            }
+      const aggFields: string[] = []
+      const aggConfs: { field: string }[] = []
+      if (groupFields) {
+        (XEUtils.isArray(groupFields) ? groupFields : [groupFields]).forEach(field => {
+          aggFields.push(field)
+          aggConfs.push({
+            field
           })
-        : []
+        })
+      }
+      reactData.rowGroupList = aggConfs
+      reactData.aggHandleFields = aggFields
     }
 
     const handleeGroupSummary = (aggList: VxeTableDefines.AggregateRowInfo[]) => {
@@ -3323,9 +3342,9 @@ export default defineComponent({
       internalData.cvCacheMaps = {}
       reactData.isRowLoading = true
       reactData.scrollVMLoading = false
-      internalData.treeExpandedMaps = {}
+      // internalData.treeExpandedMaps = {}
       reactData.treeExpandedFlag++
-      internalData.rowExpandedMaps = {}
+      // internalData.rowExpandedMaps = {}
       reactData.rowExpandedFlag++
       internalData.insertRowMaps = {}
       reactData.insertRowFlag++
@@ -4072,7 +4091,7 @@ export default defineComponent({
     const handleUpdateResize = () => {
       const el = refElem.value
       if (el && el.clientWidth && el.clientHeight) {
-        tableMethods.recalculate()
+        $xeTable.recalculate()
       }
     }
 
@@ -6715,13 +6734,13 @@ export default defineComponent({
         const { id } = props
         const customOpts = computeCustomOpts.value
         const { collectColumn } = internalData
-        const { storage, checkMethod } = customOpts
+        const { storage, checkMethod, storeOptions } = customOpts
         const isAllCustom = storage === true
-        const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {})
-        const isCustomResizable = isAllCustom || storageOpts.resizable
-        const isCustomVisible = isAllCustom || storageOpts.visible
-        const isCustomFixed = isAllCustom || storageOpts.fixed
-        const isCustomSort = isAllCustom || storageOpts.sort
+        const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {}, storeOptions)
+        const isCustomResizable = hangleStorageDefaultValue(storageOpts.resizable, isAllCustom)
+        const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
+        const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
+        const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
         const resizableData: Record<string, number> = {}
         const sortData: Record<string, number> = {}
         const visibleData: Record<string, boolean> = {}
@@ -8204,13 +8223,13 @@ export default defineComponent({
         const { customConfig } = props
         const tableId = computeTableId.value
         const customOpts = computeCustomOpts.value
-        const { updateStore, storage } = customOpts
+        const { updateStore, storage, storeOptions } = customOpts
         const isAllCustom = storage === true
-        const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {})
-        const isCustomResizable = isAllCustom || storageOpts.resizable
-        const isCustomVisible = isAllCustom || storageOpts.visible
-        const isCustomFixed = isAllCustom || storageOpts.fixed
-        const isCustomSort = isAllCustom || storageOpts.sort
+        const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {}, storeOptions)
+        const isCustomResizable = hangleStorageDefaultValue(storageOpts.resizable, isAllCustom)
+        const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
+        const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
+        const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
         if (type !== 'reset') {
           // fix：修复拖动列宽，重置按钮无法点击的问题
           reactData.isCustomStatus = true
@@ -10687,14 +10706,15 @@ export default defineComponent({
 
     const renderEmptyBody = () => {
       const emptyOpts = computeEmptyOpts.value
-      const params = { $table: $xeTable }
-      if (slots.empty) {
-        return slots.empty(params)
+      const emptySlot = slots.empty
+      const emptyParams = { $table: $xeTable, $grid: $xeGrid }
+      if (emptySlot) {
+        return emptySlot(emptyParams)
       } else {
         const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
         const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
         if (rtEmptyView) {
-          return getSlotVNs(rtEmptyView(emptyOpts, params))
+          return getSlotVNs(rtEmptyView(emptyOpts, emptyParams))
         }
       }
       return getFuncText(props.emptyText) || getI18n('vxe.table.emptyText')

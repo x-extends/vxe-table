@@ -1,4 +1,5 @@
-import { defineComponent, h, ref, computed, inject, Teleport } from 'vue'
+import { h, ref, computed, inject, Teleport } from 'vue'
+import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import { formatText, isEnableConf } from '../../../ui/src/utils'
 import { getPropClass } from '../../../ui/src/dom'
@@ -9,7 +10,7 @@ import type { VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } fro
 
 const { getI18n, getIcon, renderer } = VxeUI
 
-export default defineComponent({
+export default defineVxeComponent({
   name: 'VxeTableFilterPanel',
   props: {
     filterStore: Object as any

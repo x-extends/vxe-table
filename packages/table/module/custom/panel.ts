@@ -1,4 +1,5 @@
-import { defineComponent, h, inject, ref, Ref, VNode, PropType, nextTick, TransitionGroup, createCommentVNode } from 'vue'
+import { h, inject, ref, Ref, VNode, PropType, nextTick, TransitionGroup, createCommentVNode } from 'vue'
+import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
 import { getTpImg, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
@@ -10,7 +11,7 @@ import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeT
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
 
-export default defineComponent({
+export default defineVxeComponent({
   name: 'TableCustomPanel',
   props: {
     customStore: {
@@ -509,8 +510,10 @@ export default defineComponent({
 
     const renderSimplePanel = () => {
       const $xeGrid = $xeTable.xeGrid
+      const tableProps = $xeTable.props
 
       const { customStore } = props
+      const { treeConfig, rowGroupConfig, aggregateConfig } = tableProps
       const { isCustomStatus, customColumnList } = reactData
       const customOpts = computeCustomOpts.value
       const { immediate } = customOpts
@@ -665,112 +668,121 @@ export default defineComponent({
           : {}
       }, customStore.visible
         ? [
+            !treeConfig && (aggregateConfig || rowGroupConfig) && $xeTable.getPivotTableAggregateSimplePanel
+              ? h($xeTable.getPivotTableAggregateSimplePanel(), {
+                customStore
+              })
+              : renderEmptyElement($xeTable),
             h('div', {
-              class: 'vxe-table-custom--header'
-            }, headerSlot
-              ? $xeTable.callSlot(headerSlot, params)
-              : [
-                  h('ul', {
-                    class: 'vxe-table-custom--panel-list'
-                  }, [
-                    h('li', {
-                      class: 'vxe-table-custom--option'
-                    }, [
-                      allowVisible
-                        ? h('div', {
-                          class: ['vxe-table-custom--checkbox-option', {
-                            'is--checked': isAllChecked,
-                            'is--indeterminate': isAllIndeterminate
-                          }],
-                          title: getI18n('vxe.table.allTitle'),
-                          onClick: allOptionEvent
-                        }, [
-                          h('span', {
-                            class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
-                          }),
-                          h('span', {
-                            class: 'vxe-checkbox--label'
-                          }, getI18n('vxe.toolbar.customAll'))
-                        ])
-                        : h('span', {
-                          class: 'vxe-checkbox--label'
-                        }, getI18n('vxe.table.customTitle'))
-                    ])
-                  ])
-                ]),
-            h('div', {
-              ref: bodyElemRef,
-              class: 'vxe-table-custom--body'
+              class: 'vxe-table-custom--handle-wrapper'
             }, [
-              topSlot
-                ? h('div', {
-                  class: 'vxe-table-custom--panel-top'
-                }, $xeTable.callSlot(topSlot, params))
-                : renderEmptyElement($xeTable),
-              defaultSlot
-                ? h('div', {
-                  class: 'vxe-table-custom--panel-body'
-                }, $xeTable.callSlot(defaultSlot, params))
-                : h(TransitionGroup, {
-                  class: 'vxe-table-custom--panel-list',
-                  name: 'vxe-table-custom--list',
-                  tag: 'ul',
-                  ...customWrapperOns
-                }, {
-                  default: () => colVNs
-                }),
-              bottomSlot
-                ? h('div', {
-                  class: 'vxe-table-custom--panel-bottom'
-                }, $xeTable.callSlot(bottomSlot, params))
-                : renderEmptyElement($xeTable),
-              renderDragTip()
-            ]),
-            customOpts.showFooter
-              ? h('div', {
-                class: 'vxe-table-custom--footer'
-              }, footerSlot
-                ? $xeTable.callSlot(footerSlot, params)
+              h('div', {
+                class: 'vxe-table-custom--header'
+              }, headerSlot
+                ? $xeTable.callSlot(headerSlot, params)
                 : [
-                    h('div', {
-                      class: 'vxe-table-custom--footer-buttons'
+                    h('ul', {
+                      class: 'vxe-table-custom--panel-list'
                     }, [
-                      VxeUIButtonComponent
-                        ? h(VxeUIButtonComponent, {
-                          mode: 'text',
-                          content: customOpts.resetButtonText || getI18n('vxe.table.customRestore'),
-                          disabled: !isCustomStatus,
-                          onClick: resetCustomEvent
-                        })
-                        : createCommentVNode(),
-                      immediate
-                        ? (VxeUIButtonComponent
-                            ? h(VxeUIButtonComponent, {
-                              mode: 'text',
-                              content: customOpts.closeButtonText || getI18n('vxe.table.customClose'),
-                              onClick: cancelCloseEvent
-                            })
-                            : createCommentVNode())
-                        : (VxeUIButtonComponent
-                            ? h(VxeUIButtonComponent, {
-                              mode: 'text',
-                              content: customOpts.cancelButtonText || getI18n('vxe.table.customCancel'),
-                              onClick: cancelCustomEvent
-                            })
-                            : createCommentVNode()),
-                      immediate
-                        ? createCommentVNode()
-                        : (VxeUIButtonComponent
-                            ? h(VxeUIButtonComponent, {
-                              mode: 'text',
-                              status: 'primary',
-                              content: customOpts.confirmButtonText || getI18n('vxe.table.customConfirm'),
-                              onClick: confirmCustomEvent
-                            })
-                            : createCommentVNode())
+                      h('li', {
+                        class: 'vxe-table-custom--option'
+                      }, [
+                        allowVisible
+                          ? h('div', {
+                            class: ['vxe-table-custom--checkbox-option', {
+                              'is--checked': isAllChecked,
+                              'is--indeterminate': isAllIndeterminate
+                            }],
+                            title: getI18n('vxe.table.allTitle'),
+                            onClick: allOptionEvent
+                          }, [
+                            h('span', {
+                              class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
+                            }),
+                            h('span', {
+                              class: 'vxe-checkbox--label'
+                            }, getI18n('vxe.toolbar.customAll'))
+                          ])
+                          : h('span', {
+                            class: 'vxe-checkbox--label'
+                          }, getI18n('vxe.table.customTitle'))
+                      ])
                     ])
-                  ])
-              : null
+                  ]),
+              h('div', {
+                ref: bodyElemRef,
+                class: 'vxe-table-custom--body'
+              }, [
+                topSlot
+                  ? h('div', {
+                    class: 'vxe-table-custom--panel-top'
+                  }, $xeTable.callSlot(topSlot, params))
+                  : renderEmptyElement($xeTable),
+                defaultSlot
+                  ? h('div', {
+                    class: 'vxe-table-custom--panel-body'
+                  }, $xeTable.callSlot(defaultSlot, params))
+                  : h(TransitionGroup, {
+                    class: 'vxe-table-custom--panel-list',
+                    name: 'vxe-table-custom--list',
+                    tag: 'ul',
+                    ...customWrapperOns
+                  }, {
+                    default: () => colVNs
+                  }),
+                bottomSlot
+                  ? h('div', {
+                    class: 'vxe-table-custom--panel-bottom'
+                  }, $xeTable.callSlot(bottomSlot, params))
+                  : renderEmptyElement($xeTable),
+                renderDragTip()
+              ]),
+              customOpts.showFooter
+                ? h('div', {
+                  class: 'vxe-table-custom--footer'
+                }, footerSlot
+                  ? $xeTable.callSlot(footerSlot, params)
+                  : [
+                      h('div', {
+                        class: 'vxe-table-custom--footer-buttons'
+                      }, [
+                        VxeUIButtonComponent
+                          ? h(VxeUIButtonComponent, {
+                            mode: 'text',
+                            content: customOpts.resetButtonText || getI18n('vxe.table.customRestore'),
+                            disabled: !isCustomStatus,
+                            onClick: resetCustomEvent
+                          })
+                          : createCommentVNode(),
+                        immediate
+                          ? (VxeUIButtonComponent
+                              ? h(VxeUIButtonComponent, {
+                                mode: 'text',
+                                content: customOpts.closeButtonText || getI18n('vxe.table.customClose'),
+                                onClick: cancelCloseEvent
+                              })
+                              : createCommentVNode())
+                          : (VxeUIButtonComponent
+                              ? h(VxeUIButtonComponent, {
+                                mode: 'text',
+                                content: customOpts.cancelButtonText || getI18n('vxe.table.customCancel'),
+                                onClick: cancelCustomEvent
+                              })
+                              : createCommentVNode()),
+                        immediate
+                          ? createCommentVNode()
+                          : (VxeUIButtonComponent
+                              ? h(VxeUIButtonComponent, {
+                                mode: 'text',
+                                status: 'primary',
+                                content: customOpts.confirmButtonText || getI18n('vxe.table.customConfirm'),
+                                onClick: confirmCustomEvent
+                              })
+                              : createCommentVNode())
+                      ])
+                    ])
+                : null
+            ])
           ]
         : [])
     }

@@ -558,6 +558,12 @@ export default {
           replaceSuccess: '{0}セルを正常に交換しました'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'フリーズコラム',

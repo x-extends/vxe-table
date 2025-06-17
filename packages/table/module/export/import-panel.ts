@@ -1,4 +1,5 @@
-import { defineComponent, h, ref, Ref, computed, inject, reactive, nextTick, createCommentVNode } from 'vue'
+import { h, ref, Ref, computed, inject, reactive, nextTick, createCommentVNode } from 'vue'
+import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { parseFile } from '../../../ui/src/utils'
@@ -9,7 +10,7 @@ import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } fro
 
 const { getI18n, getIcon } = VxeUI
 
-export default defineComponent({
+export default defineVxeComponent({
   name: 'VxeTableImportPanel',
   props: {
     defaultOptions: Object as any,

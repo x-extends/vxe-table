@@ -558,6 +558,12 @@ export default {
           replaceSuccess: 'جەمئىي {0} دانە ئۇچۇر ئالماشتۇرۇلدى'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'قۇر توڭلىتىش',

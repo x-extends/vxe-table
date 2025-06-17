@@ -558,6 +558,12 @@ export default {
           replaceSuccess: 'Berhasil menggantikan {0} sel'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Kolom beku',

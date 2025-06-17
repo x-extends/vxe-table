@@ -558,6 +558,12 @@ export default {
           replaceSuccess: '{0} hujayralar muvaffaqiyatli almashtirildi'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Muzlatish ustuni',

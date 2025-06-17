@@ -558,6 +558,12 @@ export default {
           replaceSuccess: 'Đã thay thế thành công {0} ô'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Đóng băng cột',

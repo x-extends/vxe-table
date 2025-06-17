@@ -9,7 +9,7 @@ const tableCustomMethodKeys: (keyof TableCustomMethods)[] = ['openCustom', 'clos
 VxeUI.hooks.add('tableCustomModule', {
   setupTable ($xeTable) {
     const { reactData, internalData } = $xeTable
-    const { computeCustomOpts } = $xeTable.getComputeMaps()
+    const { computeCustomOpts, computeRowGroupFields } = $xeTable.getComputeMaps()
     const { refElem } = $xeTable.getRefMaps()
 
     const $xeGrid = $xeTable.xeGrid
@@ -71,7 +71,7 @@ VxeUI.hooks.add('tableCustomModule', {
     }
 
     const saveCustom = () => {
-      const { customColumnList } = reactData
+      const { customColumnList, aggHandleFields, rowGroupList } = reactData
       const customOpts = computeCustomOpts.value
       const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
       XEUtils.eachTree(customColumnList, (column, index, items, path, parentColumn) => {
@@ -104,7 +104,18 @@ VxeUI.hooks.add('tableCustomModule', {
       setTimeout(() => {
         reactData.isDragColMove = false
       }, 1000)
-      return $xeTable.saveCustomStore('confirm')
+      return $xeTable.saveCustomStore('confirm').then(() => {
+        if (($xeTable as any).handlePivotTableAggregateData) {
+          if (rowGroupList.length !== aggHandleFields.length || rowGroupList.some((conf, i) => conf.field !== aggHandleFields[i])) {
+          // 改动聚合分组
+            if (aggHandleFields.length) {
+              $xeTable.setRowGroups(aggHandleFields)
+            } else {
+              $xeTable.clearRowGroups()
+            }
+          }
+        }
+      })
     }
 
     const cancelCustom = () => {
@@ -179,6 +190,7 @@ VxeUI.hooks.add('tableCustomModule', {
       saveCustom,
       cancelCustom,
       resetCustom (options) {
+        const { rowGroupList } = reactData
         const { collectColumn } = internalData
         const customOpts = computeCustomOpts.value
         const { checkMethod } = customOpts
@@ -205,7 +217,18 @@ VxeUI.hooks.add('tableCustomModule', {
         })
         reactData.isCustomStatus = false
         $xeTable.saveCustomStore('reset')
-        return $xeTable.handleCustom()
+        return $xeTable.handleCustom().then(() => {
+          if (($xeTable as any).handlePivotTableAggregateData) {
+            const rowGroupFields = computeRowGroupFields.value
+            if (rowGroupFields ? rowGroupFields.length : rowGroupList.length) {
+              if (rowGroupFields && rowGroupFields.length) {
+                $xeTable.setRowGroups(rowGroupFields)
+              } else {
+                $xeTable.clearRowGroups()
+              }
+            }
+          }
+        })
       },
       toggleCustomAllCheckbox () {
         const { customStore } = reactData

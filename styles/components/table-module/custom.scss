@@ -52,9 +52,14 @@
   }
 }
 
+.vxe-table-custom--handle-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .vxe-table-custom-wrapper {
   display: none;
-  flex-direction: column;
+  flex-direction: row;
   position: absolute;
   text-align: left;
   background-color: var(--vxe-ui-layout-background-color);
@@ -120,8 +125,10 @@
 }
 
 .vxe-table-custom--header {
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
-  padding: 0.28em 0;
+  height: 2.4em;
   font-weight: 700;
   border-bottom: 1px solid var(--vxe-ui-base-popup-border-color);
   user-select: none;

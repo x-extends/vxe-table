@@ -558,6 +558,12 @@ export default {
           replaceSuccess: 'แทนที่เซลล์ {0} สำเร็จ'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'คอลัมน์แช่แข็ง',

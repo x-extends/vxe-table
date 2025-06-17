@@ -558,6 +558,12 @@ export default {
           replaceSuccess: 'Sikeresen cserélte a {0} sejteket'
         }
       },
+      extendPivotTable: {
+        aggregation: {
+          grouping: '分组',
+          values: '值'
+        }
+      },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Fagyasztási oszlop',

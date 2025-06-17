@@ -1,11 +1,12 @@
-import { defineComponent, h, onUnmounted, provide, inject, ref, onMounted, Slot, createCommentVNode } from 'vue'
+import { h, onUnmounted, provide, inject, ref, onMounted, Slot, createCommentVNode } from 'vue'
+import { defineVxeComponent } from '../../ui/src/comp'
 import { columnProps } from './column'
 import { XEColumnInstance, watchColumn, assembleColumn, destroyColumn } from './util'
 import Cell from './cell'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
-export default defineComponent({
+export default defineVxeComponent({
   name: 'VxeColgroup',
   props: columnProps,
   setup (props, { slots }) {

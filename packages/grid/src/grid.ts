@@ -1,4 +1,5 @@
-import { defineComponent, h, PropType, ref, Ref, computed, provide, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted } from 'vue'
+import { h, PropType, ref, Ref, computed, provide, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted } from 'vue'
+import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
 import { getOffsetHeight, getPaddingTopBottomSize, getDomNode, toCssUnit } from '../../ui/src/dom'
@@ -35,7 +36,7 @@ const gridComponentEmits: VxeGridEmits = [
   'zoom'
 ]
 
-export default defineComponent({
+export default defineVxeComponent({
   name: 'VxeGrid',
   props: {
     ...tableComponentProps,
@@ -575,17 +576,38 @@ export default defineComponent({
           slotVNs = slots.toolbar({ $grid: $xeGrid })
         } else {
           const toolbarOptSlots = toolbarOpts.slots
-          let buttonsSlot: any
-          let toolsSlot: any
-          const toolbarSlots: { [key: string]: () => VNode[] } = {}
+          const toolbarSlots: {
+            buttons?(params: any): any
+            buttonPrefix?(params: any): any
+            buttonSuffix?(params: any): any
+            tools?(params: any): any
+            toolPrefix?(params: any): any
+            toolSuffix?(params: any): any
+           } = {}
           if (toolbarOptSlots) {
-            buttonsSlot = getFuncSlot(toolbarOptSlots, 'buttons')
-            toolsSlot = getFuncSlot(toolbarOptSlots, 'tools')
+            const buttonsSlot = getFuncSlot(toolbarOptSlots, 'buttons')
+            const buttonPrefixSlot = getFuncSlot(toolbarOptSlots, 'buttonPrefix')
+            const buttonSuffixSlot = getFuncSlot(toolbarOptSlots, 'buttonSuffix')
+            const toolsSlot = getFuncSlot(toolbarOptSlots, 'tools')
+            const toolPrefixSlot = getFuncSlot(toolbarOptSlots, 'toolPrefix')
+            const toolSuffixSlot = getFuncSlot(toolbarOptSlots, 'toolSuffix')
             if (buttonsSlot) {
               toolbarSlots.buttons = buttonsSlot
             }
+            if (buttonPrefixSlot) {
+              toolbarSlots.buttonPrefix = buttonPrefixSlot
+            }
+            if (buttonSuffixSlot) {
+              toolbarSlots.buttonSuffix = buttonSuffixSlot
+            }
             if (toolsSlot) {
               toolbarSlots.tools = toolsSlot
+            }
+            if (toolPrefixSlot) {
+              toolbarSlots.toolPrefix = toolPrefixSlot
+            }
+            if (toolSuffixSlot) {
+              toolbarSlots.toolSuffix = toolSuffixSlot
             }
           }
           slotVNs.push(

@@ -83,6 +83,7 @@
 * [x] 筛选
 * [x] 合并单元格
 * [x] 合并表尾
+* [x] 行分组
 * [x] 导入/导出/打印
 * [x] 显示/隐藏列
 * [x] 拖拽/自定义列排序
@@ -101,6 +102,8 @@
 * [x] 虚拟滚动
 * [x] 虚拟合并
 * [x] CSS 变量主题
+* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 数据分组与聚合函数
+* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 数据分组与聚合函数
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格区域选取
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格复制/粘贴
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格查找和替换

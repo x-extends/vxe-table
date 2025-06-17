@@ -1,4 +1,5 @@
-import { defineComponent, h, Teleport, inject, ref, Ref, createCommentVNode } from 'vue'
+import { h, Teleport, inject, ref, Ref, createCommentVNode } from 'vue'
+import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import { getFuncText } from '../../../ui/src/utils'
 import XEUtils from 'xe-utils'
@@ -7,7 +8,7 @@ import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } fro
 
 const { getIcon } = VxeUI
 
-export default defineComponent({
+export default defineVxeComponent({
   name: 'VxeTableMenuPanel',
   setup (props, context) {
     const xID = XEUtils.uniqueId()
