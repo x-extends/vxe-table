@@ -9205,8 +9205,10 @@ const Methods = {
     }
     internalData.rowGroupExpandedMaps = rgExpandedMaps
     handleVirtualTreeToList($xeTable)
+    $xeTable.handleTableData()
+    updateAfterDataIndex($xeTable)
     reactData.rowGroupExpandedFlag++
-    return $xeTable.handleTableData()
+    return $xeTable.recalculate(true)
   },
   clearRowGroupExpand () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -9215,8 +9217,10 @@ const Methods = {
 
     internalData.rowGroupExpandedMaps = {}
     handleVirtualTreeToList($xeTable)
+    $xeTable.handleTableData()
+    updateAfterDataIndex($xeTable)
     reactData.rowGroupExpandedFlag++
-    return $xeTable.handleTableData()
+    return $xeTable.recalculate(true)
   },
   getTreeExpandRecords () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
