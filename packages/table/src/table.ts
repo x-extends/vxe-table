@@ -6287,14 +6287,18 @@ export default defineVxeComponent({
         }
         internalData.rowGroupExpandedMaps = rgExpandedMaps
         handleVirtualTreeToList()
+        $xeTable.handleTableData()
+        updateAfterDataIndex()
         reactData.rowGroupExpandedFlag++
-        return $xeTable.handleTableData()
+        return $xeTable.recalculate(true)
       },
       clearRowGroupExpand () {
         internalData.rowGroupExpandedMaps = {}
         handleVirtualTreeToList()
+        $xeTable.handleTableData()
+        updateAfterDataIndex()
         reactData.rowGroupExpandedFlag++
-        return $xeTable.handleTableData()
+        return $xeTable.recalculate(true)
       },
       getTreeExpandRecords () {
         const rest: any[] = []
