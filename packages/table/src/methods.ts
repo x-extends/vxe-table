@@ -185,7 +185,7 @@ function restoreCustomStorage ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
   const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
   const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
-  if ((customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
+  if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
     if (!tableId) {
       errLog('vxe.error.reqProp', ['id'])
       return
@@ -5128,7 +5128,7 @@ const Methods = {
     const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
     const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
     const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
-    if ((customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
+    if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
       if (!tableId) {
         errLog('vxe.error.reqProp', ['id'])
         return
@@ -5174,7 +5174,9 @@ const Methods = {
       fixedData: undefined
     }
     if (!id) {
-      errLog('vxe.error.reqProp', ['id'])
+      if (storage) {
+        errLog('vxe.error.reqProp', ['id'])
+      }
       return storeData
     }
     let hasResizable = 0
@@ -5244,7 +5246,7 @@ const Methods = {
     if (type !== 'reset') {
       reactData.isCustomStatus = true
     }
-    if ((customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
+    if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
       if (!tableId) {
         errLog('vxe.error.reqProp', ['id'])
         return this.$nextTick()
@@ -9166,6 +9168,23 @@ const Methods = {
 
     const { isRowGroupStatus } = reactData
     return isRowGroupStatus && row.isAggregate
+  },
+  getAggregateContentByRow (row: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+
+    const { isRowGroupStatus } = reactData
+    return isRowGroupStatus && row && row.isAggregate ? row.groupContent : ''
+  },
+  getAggregateRowChildren (row: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+
+    const aggregateOpts = $xeTable.computeAggregateOpts
+    const { childrenField, mapChildrenField } = aggregateOpts
+
+    const { isRowGroupStatus } = reactData
+    return isRowGroupStatus && row && row.isAggregate && childrenField && mapChildrenField ? (row[mapChildrenField] || []) : []
   },
   isAggregateExpandByRow (row: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
