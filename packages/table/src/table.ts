@@ -1544,7 +1544,7 @@ export default defineVxeComponent({
       const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
       const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
       const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
-      if ((customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
+      if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
         if (!tableId) {
           errLog('vxe.error.reqProp', ['id'])
           return
@@ -6259,6 +6259,17 @@ export default defineVxeComponent({
         const { isRowGroupStatus } = reactData
         return isRowGroupStatus && row.isAggregate
       },
+      getAggregateContentByRow (row) {
+        const { isRowGroupStatus } = reactData
+        return isRowGroupStatus && row && row.isAggregate ? row.groupContent : ''
+      },
+      getAggregateRowChildren (row) {
+        const aggregateOpts = computeAggregateOpts.value
+        const { childrenField, mapChildrenField } = aggregateOpts
+
+        const { isRowGroupStatus } = reactData
+        return isRowGroupStatus && row && row.isAggregate && childrenField && mapChildrenField ? (row[mapChildrenField] || []) : []
+      },
       isAggregateExpandByRow (row) {
         const { rowGroupExpandedFlag } = reactData
         const { rowGroupExpandedMaps } = internalData
@@ -6756,7 +6767,9 @@ export default defineVxeComponent({
           fixedData: undefined
         }
         if (!id) {
-          errLog('vxe.error.reqProp', ['id'])
+          if (storage) {
+            errLog('vxe.error.reqProp', ['id'])
+          }
           return storeData
         }
         let hasResizable = 0
@@ -8238,7 +8251,7 @@ export default defineVxeComponent({
           // fix：修复拖动列宽，重置按钮无法点击的问题
           reactData.isCustomStatus = true
         }
-        if ((customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
+        if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
           if (!tableId) {
             errLog('vxe.error.reqProp', ['id'])
             return nextTick()
