@@ -761,22 +761,40 @@ export default {
     },
     _getActiveRecord () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
 
-      warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
-      // 即将废弃
-      return $xeTable.getEditRecord()
+      warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditCell'])
+      const { editStore } = reactData
+      const { fullAllDataRowIdData } = internalData
+      const { args, row } = editStore.actived
+      if (args && row && fullAllDataRowIdData[getRowid($xeTable, row)]) {
+        return Object.assign({}, args, { row })
+      }
+      return null
     },
     _getEditRecord () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
 
+      warnLog('vxe.error.delFunc', ['getEditRecord', 'getEditCell'])
       const { editStore } = reactData
-      const { afterFullData } = internalData
-      const el = $xeTable.$refs.refElem as HTMLDivElement
+      const { fullAllDataRowIdData } = internalData
       const { args, row } = editStore.actived
-      if (args && $xeTable.findRowIndexOf(afterFullData, row) > -1 && el.querySelectorAll('.vxe-body--column.col--active').length) {
-        return Object.assign({}, args)
+      if (args && row && fullAllDataRowIdData[getRowid($xeTable, row)]) {
+        return Object.assign({}, args, { row })
+      }
+      return null
+    },
+    _getEditCell () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { editStore } = reactData
+      const { row, column } = editStore.actived
+      if (column && row) {
+        return { row, column }
       }
       return null
     },
@@ -967,9 +985,9 @@ export default {
       const reactData = $xeTable as unknown as TableReactData
 
       const { editStore } = reactData
-      const { args, column } = editStore.selected
-      if (args && column) {
-        return Object.assign({}, args)
+      const { row, column } = editStore.selected
+      if (row && column) {
+        return { row, column }
       }
       return null
     },

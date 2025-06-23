@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
-import { isColumnInfo, getCellValue } from '../../src/util'
+import { isColumnInfo, getCellValue, createHandleGetRowId } from '../../src/util'
 import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
 import { hasClass } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
@@ -76,11 +76,18 @@ function getBodyLabelData ($xeTable: VxeTableConstructor, opts: VxeTablePropType
     const childrenField = treeOpts.children || treeOpts.childrenField
     // 如果是树表格只允许导出数据源
     const rest: any[] = []
-    const expandMaps: Map<any, number> = new Map()
+    const expandMaps: Record<string, boolean> = {}
+    const useMaps: Record<string, boolean> = {}
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
     XEUtils.eachTree(datas, (item, $rowIndex, items, path, parent, nodes) => {
       const row = item._row || item
+      const rowid = handleGetRowId(row)
+      if (useMaps[rowid]) {
+        return
+      }
       const parentRow = parent && parent._row ? parent._row : parent
-      if ((isAllExpand || !parentRow || (expandMaps.has(parentRow) && $xeTable.isTreeExpandByRow(parentRow)))) {
+      const pRowid = parentRow ? handleGetRowId(parentRow) : ''
+      if ((isAllExpand || !parentRow || (expandMaps[pRowid] && $xeTable.isTreeExpandByRow(parentRow)))) {
         const hasRowChild = hasTreeChildren($xeTable, row)
         const item: any = {
           _row: row,
@@ -139,7 +146,10 @@ function getBodyLabelData ($xeTable: VxeTableConstructor, opts: VxeTablePropType
           }
           item[column.id] = toStringValue(cellValue)
         })
-        expandMaps.set(row, 1)
+        useMaps[rowid] = true
+        if (pRowid) {
+          expandMaps[pRowid] = true
+        }
         rest.push(Object.assign(item, row))
       }
     }, { children: childrenField })
@@ -1170,7 +1180,7 @@ export default {
 
       const { treeConfig, showHeader, showFooter } = props
       const { isGroup } = reactData
-      const { tableFullColumn, afterFullData, collectColumn, mergeBodyList, mergeFooterList } = internalData
+      const { tableFullColumn, afterFullData, afterTreeFullData, collectColumn, mergeBodyList, mergeFooterList } = internalData
       const exportOpts = $xeTable.computeExportOpts
       const treeOpts = $xeTable.computeTreeOpts
       const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : {}
@@ -1398,8 +1408,10 @@ export default {
             }
           }
         } else if (mode === 'current') {
-          handleOptions.data = afterFullData
+          handleOptions.data = treeConfig ? afterTreeFullData : afterFullData
         }
+      } else {
+        handleOptions._isCustomData = true
       }
       return handleExport($xeTable, handleOptions)
     },

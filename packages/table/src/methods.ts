@@ -7065,7 +7065,7 @@ const Methods = {
               vLen++
             }
         )
-        const isSelected = sLen >= vLen
+        const isSelected = selectCheckboxMaps[rowid] || (sLen >= vLen && (vLen >= 1 || hLen >= 1))
         const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
         if (checkField) {
           XEUtils.set(row, checkField, isSelected)
@@ -10656,7 +10656,7 @@ const Methods = {
 } as any
 
 // Module methods
-const funcs = 'setFilter,openFilter,clearFilter,saveFilterPanel,saveFilterPanelByEvent,resetFilterPanel,resetFilterPanelByEvent,getCheckedFilters,updateFilterOptionStatus,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFNR,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,insertNextAt,insertChild,insertChildAt,insertChildNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,fullValidateField,validateField,openExport,closeExport,openPrint,closePrint,getPrintHtml,exportData,openImport,closeImport,importData,saveFile,readFile,importByFile,print,openCustom,closeCustom,saveCustom,cancelCustom,resetCustom,toggleCustomAllCheckbox,setCustomAllCheckbox'.split(',')
+const funcs = 'setFilter,openFilter,clearFilter,saveFilterPanel,saveFilterPanelByEvent,resetFilterPanel,resetFilterPanelByEvent,getCheckedFilters,updateFilterOptionStatus,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFNR,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,insertNextAt,insertChild,insertChildAt,insertChildNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getEditCell,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,fullValidateField,validateField,openExport,closeExport,openPrint,closePrint,getPrintHtml,exportData,openImport,closeImport,importData,saveFile,readFile,importByFile,print,openCustom,closeCustom,toggleCustom,saveCustom,cancelCustom,resetCustom,toggleCustomAllCheckbox,setCustomAllCheckbox'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args: any[]) {
@@ -10667,7 +10667,7 @@ funcs.forEach(name => {
         errLog('vxe.error.reqModule', ['Validator'])
       } else if ('setFilter,openFilter,clearFilter,getCheckedFilters'.split(',').includes(name)) {
         errLog('vxe.error.reqModule', ['Filter'])
-      } else if ('insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell'.split(',').includes(name)) {
+      } else if ('insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,getEditRecord,getEditCell,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell'.split(',').includes(name)) {
         errLog('vxe.error.reqModule', ['Edit'])
       } else if ('openCustom'.split(',').includes(name)) {
         errLog('vxe.error.reqModule', ['Custom'])

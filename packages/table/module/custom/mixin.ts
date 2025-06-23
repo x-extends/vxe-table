@@ -50,6 +50,16 @@ export default {
       }
       return $xeTable.$nextTick()
     },
+    _toggleCustom () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { customStore } = reactData
+      if (customStore.visible) {
+        return $xeTable.closeCustom()
+      }
+      return $xeTable.openCustom()
+    },
     _saveCustom () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
