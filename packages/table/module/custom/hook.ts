@@ -4,7 +4,7 @@ import XEUtils from 'xe-utils'
 
 import type { TableCustomMethods, TableCustomPrivateMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../../types'
 
-const tableCustomMethodKeys: (keyof TableCustomMethods)[] = ['openCustom', 'closeCustom', 'saveCustom', 'cancelCustom', 'resetCustom', 'toggleCustomAllCheckbox', 'setCustomAllCheckbox']
+const tableCustomMethodKeys: (keyof TableCustomMethods)[] = ['openCustom', 'closeCustom', 'toggleCustom', 'saveCustom', 'cancelCustom', 'resetCustom', 'toggleCustomAllCheckbox', 'setCustomAllCheckbox']
 
 VxeUI.hooks.add('tableCustomModule', {
   setupTable ($xeTable) {
@@ -68,6 +68,14 @@ VxeUI.hooks.add('tableCustomModule', {
         }
       }
       return nextTick()
+    }
+
+    const toggleCustom = () => {
+      const { customStore } = reactData
+      if (customStore.visible) {
+        return closeCustom()
+      }
+      return openCustom()
     }
 
     const saveCustom = () => {
@@ -187,6 +195,7 @@ VxeUI.hooks.add('tableCustomModule', {
     const customMethods: TableCustomMethods = {
       openCustom,
       closeCustom,
+      toggleCustom,
       saveCustom,
       cancelCustom,
       resetCustom (options) {

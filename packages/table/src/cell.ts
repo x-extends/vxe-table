@@ -698,7 +698,7 @@ export const Cell = {
     if (isVisible) {
       radioVNs.push(
         h('span', {
-          class: ['vxe-radio--icon', isChecked ? getIcon().TABLE_RADIO_CHECKED : getIcon().TABLE_RADIO_UNCHECKED]
+          class: ['vxe-radio--icon', isChecked ? getIcon().TABLE_RADIO_CHECKED : (isDisabled ? getIcon().TABLE_RADIO_DISABLED_UNCHECKED : getIcon().TABLE_RADIO_UNCHECKED)]
         })
       )
     }
@@ -769,7 +769,7 @@ export const Cell = {
           ...ons
         }, [
           h('span', {
-            class: ['vxe-checkbox--icon', isAllCheckboxIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllCheckboxSelected ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
+            class: ['vxe-checkbox--icon', isAllCheckboxIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllCheckboxSelected ? getIcon().TABLE_CHECKBOX_CHECKED : (isAllCheckboxDisabled ? getIcon().TABLE_CHECKBOX_DISABLED_UNCHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED))]
           })
         ].concat(titleSlot || colTitle
           ? [
@@ -823,7 +823,7 @@ export const Cell = {
     if (isVisible) {
       checkVNs.push(
         h('span', {
-          class: ['vxe-checkbox--icon', indeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
+          class: ['vxe-checkbox--icon', indeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : (isDisabled ? getIcon().TABLE_CHECKBOX_DISABLED_UNCHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED))]
         })
       )
     }
@@ -892,7 +892,7 @@ export const Cell = {
     if (isVisible) {
       checkVNs.push(
         h('span', {
-          class: ['vxe-checkbox--icon', isIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
+          class: ['vxe-checkbox--icon', isIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : (isDisabled ? getIcon().TABLE_CHECKBOX_DISABLED_UNCHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED))]
         })
       )
       if (defaultSlot || labelField) {

@@ -10,7 +10,7 @@ import type { TableEditMethods, TableEditPrivateMethods, VxeTableDefines } from 
 
 const { getConfig, renderer, hooks, getI18n } = VxeUI
 
-const tableEditMethodKeys: (keyof TableEditMethods)[] = ['insert', 'insertAt', 'insertNextAt', 'insertChild', 'insertChildAt', 'insertChildNextAt', 'remove', 'removeCheckboxRow', 'removeRadioRow', 'removeCurrentRow', 'getRecordset', 'getInsertRecords', 'getRemoveRecords', 'getUpdateRecords', 'getEditRecord', 'getActiveRecord', 'getSelectedCell', 'clearEdit', 'clearActived', 'clearSelected', 'isEditByRow', 'isActiveByRow', 'setEditRow', 'setActiveRow', 'setEditCell', 'setActiveCell', 'setSelectCell']
+const tableEditMethodKeys: (keyof TableEditMethods)[] = ['insert', 'insertAt', 'insertNextAt', 'insertChild', 'insertChildAt', 'insertChildNextAt', 'remove', 'removeCheckboxRow', 'removeRadioRow', 'removeCurrentRow', 'getRecordset', 'getInsertRecords', 'getRemoveRecords', 'getUpdateRecords', 'getEditRecord', 'getActiveRecord', 'getEditCell', 'getSelectedCell', 'clearEdit', 'clearActived', 'clearSelected', 'isEditByRow', 'isActiveByRow', 'setEditRow', 'setActiveRow', 'setEditCell', 'setActiveCell', 'setSelectCell']
 
 hooks.add('tableEditModule', {
   setupTable ($xeTable) {
@@ -692,16 +692,30 @@ hooks.add('tableEditModule', {
         return []
       },
       getActiveRecord () {
-        warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
-        return $xeTable.getEditRecord()
+        warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditCell'])
+        const { editStore } = reactData
+        const { fullAllDataRowIdData } = internalData
+        const { args, row } = editStore.actived
+        if (args && row && fullAllDataRowIdData[getRowid($xeTable, row)]) {
+          return Object.assign({}, args, { row })
+        }
+        return null
       },
       getEditRecord () {
+        warnLog('vxe.error.delFunc', ['getEditRecord', 'getEditCell'])
         const { editStore } = reactData
-        const { afterFullData } = internalData
-        const el = refElem.value
+        const { fullAllDataRowIdData } = internalData
         const { args, row } = editStore.actived
-        if (args && $xeTable.findRowIndexOf(afterFullData, row) > -1 && el.querySelectorAll('.vxe-body--column.col--active').length) {
-          return Object.assign({}, args)
+        if (args && row && fullAllDataRowIdData[getRowid($xeTable, row)]) {
+          return Object.assign({}, args, { row })
+        }
+        return null
+      },
+      getEditCell () {
+        const { editStore } = reactData
+        const { row, column } = editStore.actived
+        if (column && row) {
+          return { row, column }
         }
         return null
       },
@@ -710,9 +724,9 @@ hooks.add('tableEditModule', {
        */
       getSelectedCell () {
         const { editStore } = reactData
-        const { args, column } = editStore.selected
-        if (args && column) {
-          return Object.assign({}, args)
+        const { row, column } = editStore.selected
+        if (row && column) {
+          return { row, column }
         }
         return null
       },

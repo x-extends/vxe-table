@@ -8414,7 +8414,7 @@ export default defineVxeComponent({
                   vLen++
                 }
             )
-            const isSelected = sLen >= vLen
+            const isSelected = selectCheckboxMaps[rowid] || (sLen >= vLen && (vLen >= 1 || hLen >= 1))
             const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
             if (checkField) {
               XEUtils.set(row, checkField, isSelected)

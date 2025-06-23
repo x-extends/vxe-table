@@ -72,6 +72,9 @@ export default [
   'scroll',
   'scroll-boundary',
   'custom',
+  'custom-visible-change',
+  'custom-visible-all',
+  'custom-fixed-change',
 
   'change-fnr', // 废弃
 

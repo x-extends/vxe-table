@@ -1,7 +1,7 @@
 import { inject, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
-import { isColumnInfo, getCellValue } from '../../src/util'
+import { isColumnInfo, getCellValue, createHandleGetRowId } from '../../src/util'
 import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
 import { hasClass } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
@@ -354,11 +354,18 @@ hooks.add('tableExportModule', {
         const childrenField = treeOpts.children || treeOpts.childrenField
         // 如果是树表格只允许导出数据源
         const rest: any[] = []
-        const expandMaps: Map<any, number> = new Map()
+        const expandMaps: Record<string, boolean> = {}
+        const useMaps: Record<string, boolean> = {}
+        const { handleGetRowId } = createHandleGetRowId($xeTable)
         XEUtils.eachTree(datas, (item, $rowIndex, items, path, parent, nodes) => {
           const row = item._row || item
+          const rowid = handleGetRowId(row)
+          if (useMaps[rowid]) {
+            return
+          }
           const parentRow = parent && parent._row ? parent._row : parent
-          if ((isAllExpand || !parentRow || (expandMaps.has(parentRow) && $xeTable.isTreeExpandByRow(parentRow)))) {
+          const pRowid = parentRow ? handleGetRowId(parentRow) : ''
+          if ((isAllExpand || !parentRow || (expandMaps[pRowid] && $xeTable.isTreeExpandByRow(parentRow)))) {
             const hasRowChild = hasTreeChildren(row)
             const item: any = {
               _row: row,
@@ -417,7 +424,10 @@ hooks.add('tableExportModule', {
               }
               item[column.id] = toStringValue(cellValue)
             })
-            expandMaps.set(row, 1)
+            useMaps[rowid] = true
+            if (pRowid) {
+              expandMaps[pRowid] = true
+            }
             rest.push(Object.assign(item, row))
           }
         }, { children: childrenField })
@@ -1142,7 +1152,7 @@ hooks.add('tableExportModule', {
       exportData (options) {
         const { treeConfig, showHeader, showFooter } = props
         const { isGroup } = reactData
-        const { tableFullColumn, afterFullData, collectColumn, mergeBodyList, mergeFooterList } = internalData
+        const { tableFullColumn, afterFullData, afterTreeFullData, collectColumn, mergeBodyList, mergeFooterList } = internalData
         const exportOpts = computeExportOpts.value
         const treeOpts = computeTreeOpts.value
         const proxyOpts = $xeGrid ? $xeGrid.getComputeMaps().computeProxyOpts.value : {} as VxeGridPropTypes.ProxyOpts
@@ -1370,8 +1380,10 @@ hooks.add('tableExportModule', {
               }
             }
           } if (mode === 'current') {
-            handleOptions.data = afterFullData
+            handleOptions.data = treeConfig ? afterTreeFullData : afterFullData
           }
+        } else {
+          handleOptions._isCustomData = true
         }
         return handleExport(handleOptions)
       },
@@ -1423,7 +1435,6 @@ hooks.add('tableExportModule', {
         })
         const { sheetName } = opts
         let printTitle = ''
-
         if (sheetName) {
           if (XEUtils.isFunction(sheetName)) {
             printTitle = sheetName({

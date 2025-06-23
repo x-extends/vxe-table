@@ -34,7 +34,7 @@
       <vxe-column field="checkbox" type="checkbox" title="ID" width="140" drag-sort></vxe-column>
       <vxe-colgroup field="group1" title="分组1">
         <vxe-colgroup field="group2" title="分组2">
-          <vxe-column type="expand" field="role" title="Role"  drag-sort>
+          <vxe-column type="expand" field="role" title="Role" width="140" drag-sort>
             <template #content="{ row }">
               <div>{{ row.name }}</div>
             </template>
@@ -42,13 +42,18 @@
           <vxe-column field="name" title="Name" width="100" drag-sort sortable></vxe-column>
         </vxe-colgroup>
       </vxe-colgroup>
-      <vxe-column field="sex11" title="<span style='color:red;'>Sex222</span>" type="html" drag-sort></vxe-column>
-      <vxe-column field="sex22" title="<span style='color:red;'>Sex1111</span>" type="html" drag-sort :visible="false"></vxe-column>
-      <vxe-column field="name1" title="Name1" sortable ></vxe-column>
-      <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
+      <vxe-column field="sex11" title="<span style='color:red;'>Sex222</span>" type="html" width="140" drag-sort></vxe-column>
+      <vxe-column field="sex22" title="<span style='color:red;'>Sex1111</span>" type="html" width="140" drag-sort :visible="false"></vxe-column>
+      <vxe-column field="name1" title="Name1" width="140" sortable ></vxe-column>
+      <vxe-column field="attr1" title="attr1" width="140"></vxe-column>
+      <vxe-column field="attr2" title="attr2" width="140"></vxe-column>
+      <vxe-column field="attr3" title="attr3" width="140"></vxe-column>
+      <vxe-column field="attr4" title="attr4" width="140"></vxe-column>
+      <vxe-column field="sex" title="Sex" width="140" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
       <vxe-column
         field="age"
         title="Age"
+        width="140"
         sortable
         :filters="demo1.ageOptions"
         :filter-method="filterAgeMethod" drag-sort></vxe-column>
