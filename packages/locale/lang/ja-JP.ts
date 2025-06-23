@@ -79,6 +79,7 @@ export default {
       customCancel: 'キャンセル',
       customRestore: 'デフォルトを復元します',
       maxFixedCol: '凍結柱の最大数は{0}を超えることはできません',
+      maxGroupCol: '最大分组字段的数量不能超过 {0} 个',
       dragTip: '移動：{0}',
       resizeColTip: '幅：{0}ピクセル',
       resizeRowTip: '高さ：{0}ピクセル',
@@ -561,7 +562,10 @@ export default {
       extendPivotTable: {
         aggregation: {
           grouping: '分组',
-          values: '值'
+          values: '值',
+          groupPlaceholder: '拖至此处进行分组',
+          valuesPlaceholder: '拖至此处进行聚合',
+          dragExistCol: '该列已存在'
         }
       },
       filterComplexInput: {

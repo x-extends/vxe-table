@@ -79,6 +79,7 @@ export default {
       customCancel: 'Cancelar',
       customRestore: 'Restaure o padrão',
       maxFixedCol: 'O número máximo de colunas congeladas não pode exceder {0}',
+      maxGroupCol: '最大分组字段的数量不能超过 {0} 个',
       dragTip: 'Move: {0}',
       resizeColTip: 'Largura: {0} pixels',
       resizeRowTip: 'Altura: {0} pixels',
@@ -561,7 +562,10 @@ export default {
       extendPivotTable: {
         aggregation: {
           grouping: '分组',
-          values: '值'
+          values: '值',
+          groupPlaceholder: '拖至此处进行分组',
+          valuesPlaceholder: '拖至此处进行聚合',
+          dragExistCol: '该列已存在'
         }
       },
       filterComplexInput: {

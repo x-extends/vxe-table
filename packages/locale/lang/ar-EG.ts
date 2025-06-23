@@ -79,6 +79,7 @@ export default {
       customCancel: 'يلغي',
       customRestore: 'استعادة الافتراضي',
       maxFixedCol: 'لا يمكن أن يتجاوز الحد الأقصى لعدد الأعمدة المجمدة {0}',
+      maxGroupCol: '最大分组字段的数量不能超过 {0} 个',
       dragTip: 'نقل: {0}',
       resizeColTip: 'العرض: {0} بكسل',
       resizeRowTip: 'الارتفاع: {0} بكسل',
@@ -561,7 +562,10 @@ export default {
       extendPivotTable: {
         aggregation: {
           grouping: '分组',
-          values: '值'
+          values: '值',
+          groupPlaceholder: '拖至此处进行分组',
+          valuesPlaceholder: '拖至此处进行聚合',
+          dragExistCol: '该列已存在'
         }
       },
       filterComplexInput: {

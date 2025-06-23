@@ -79,6 +79,7 @@ export default {
       customCancel: 'Hủy bỏ',
       customRestore: 'Khôi phục mặc định',
       maxFixedCol: 'Số lượng cột đóng băng tối đa không thể vượt quá {0}',
+      maxGroupCol: '最大分组字段的数量不能超过 {0} 个',
       dragTip: 'Di chuyển: {0}',
       resizeColTip: 'Chiều rộng: {0} pixel',
       resizeRowTip: 'Chiều cao: {0} pixel',
@@ -561,7 +562,10 @@ export default {
       extendPivotTable: {
         aggregation: {
           grouping: '分组',
-          values: '值'
+          values: '值',
+          groupPlaceholder: '拖至此处进行分组',
+          valuesPlaceholder: '拖至此处进行聚合',
+          dragExistCol: '该列已存在'
         }
       },
       filterComplexInput: {

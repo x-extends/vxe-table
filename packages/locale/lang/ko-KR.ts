@@ -79,6 +79,7 @@ export default {
       customCancel: '취소',
       customRestore: '기본값을 복원하십시오',
       maxFixedCol: '냉동 열의 최대 수는 {0}을 초과 할 수 없습니다.',
+      maxGroupCol: '最大分组字段的数量不能超过 {0} 个',
       dragTip: '움직임 : {0}',
       resizeColTip: '너비 : {0} 픽셀',
       resizeRowTip: '높이 : {0} 픽셀',
@@ -561,7 +562,10 @@ export default {
       extendPivotTable: {
         aggregation: {
           grouping: '分组',
-          values: '值'
+          values: '值',
+          groupPlaceholder: '拖至此处进行分组',
+          valuesPlaceholder: '拖至此处进行聚合',
+          dragExistCol: '该列已存在'
         }
       },
       filterComplexInput: {

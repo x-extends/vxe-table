@@ -20,7 +20,7 @@ import TableExportPanelComponent from '../module/export/export-panel'
 import TableMenuPanelComponent from '../module/menu/panel'
 
 import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType } from 'vxe-pc-ui'
-import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableEmits, VxeTableProps, VxeColumnPropTypes } from '../../../types'
+import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableEmits, VxeTableProps, VxeColumnPropTypes, VxeTableCustomPanelConstructor } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
 
@@ -422,7 +422,7 @@ export default defineVxeComponent({
     const refValidTooltip = ref() as Ref<VxeTooltipInstance>
     const refTableMenu = ref() as Ref<any>
     const refTableFilter = ref() as Ref<any>
-    const refTableCustom = ref() as Ref<ComponentPublicInstance>
+    const refTableCustom = ref() as Ref<VxeTableCustomPanelConstructor>
 
     const refTableViewportElem = ref<HTMLDivElement>()
     const refTableHeader = ref() as Ref<ComponentPublicInstance>
@@ -6226,12 +6226,25 @@ export default defineVxeComponent({
       },
       setRowGroups (fieldOrColumns) {
         const { aggregateConfig, rowGroupConfig } = props
+        const { rowGroupList } = reactData
+        const aggregateOpts = computeAggregateOpts.value
+        const { maxGroupSize } = aggregateOpts
         if (!(aggregateConfig || rowGroupConfig)) {
           errLog('vxe.error.reqProp', ['aggregate-config'])
           return nextTick()
         }
-        if (fieldOrColumns) {
-          handleUpdateRowGroup((XEUtils.isArray(fieldOrColumns) ? fieldOrColumns : [fieldOrColumns]).map(fieldOrColumn => {
+        const confList = fieldOrColumns ? (XEUtils.isArray(fieldOrColumns) ? fieldOrColumns : [fieldOrColumns]) : []
+        if (maxGroupSize && (rowGroupList.length + confList.length > maxGroupSize)) {
+          if (VxeUI.modal) {
+            VxeUI.modal.message({
+              status: 'error',
+              content: getI18n('vxe.table.maxGroupCol', [maxGroupSize])
+            })
+          }
+          return nextTick()
+        }
+        if (confList.length) {
+          handleUpdateRowGroup(confList.map(fieldOrColumn => {
             return XEUtils.isString(fieldOrColumn) ? fieldOrColumn : fieldOrColumn.field
           }))
           return loadTableData(internalData.tableSynchData, true)
@@ -6863,7 +6876,7 @@ export default defineVxeComponent({
       if (tableFilter) {
         if (getEventTargetNode(evnt, el, 'vxe-cell--filter').flag) {
           // 如果点击了筛选按钮
-        } else if (getEventTargetNode(evnt, tableFilter.getRefMaps().refElem.value as HTMLDivElement).flag) {
+        } else if (getEventTargetNode(evnt, tableFilter.getRefMaps().refElem.value).flag) {
           // 如果点击筛选容器
         } else {
           if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
@@ -6875,7 +6888,7 @@ export default defineVxeComponent({
       if (tableCustom) {
         if (customStore.btnEl === evnt.target || getEventTargetNode(evnt, document.body, 'vxe-toolbar-custom-target').flag) {
           // 如果点击了自定义列按钮
-        } else if (getEventTargetNode(evnt, tableCustom.$el as HTMLDivElement).flag) {
+        } else if (getEventTargetNode(evnt, tableCustom.getRefMaps().refElem.value).flag) {
           // 如果点击自定义列容器
         } else {
           if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
@@ -8377,7 +8390,7 @@ export default defineVxeComponent({
           }
 
           childRowList.forEach(vals => {
-            const row: string = vals[0]
+            const row = vals[0]
             const rowid: string = vals[1]
             const childList: any[] = vals[2]
             let sLen = 0 // 已选
@@ -8414,8 +8427,17 @@ export default defineVxeComponent({
                   vLen++
                 }
             )
-            const isSelected = selectCheckboxMaps[rowid] || (sLen >= vLen && (vLen >= 1 || hLen >= 1))
+
+            let isSelected = (sLen >= vLen && (vLen >= 1 || hLen >= 1))
+            if (checkMethod) {
+              if (checkMethod({ $table: $xeTable, row })) {
+                isSelected = sLen >= vLen
+              } else {
+                isSelected = selectCheckboxMaps[rowid]
+              }
+            }
             const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
+
             if (checkField) {
               XEUtils.set(row, checkField, isSelected)
             }

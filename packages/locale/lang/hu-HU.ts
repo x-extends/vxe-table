@@ -79,6 +79,7 @@ export default {
       customCancel: 'Töröl',
       customRestore: 'Visszaállítja az alapértelmezettet',
       maxFixedCol: 'A fagyasztott oszlopok maximális száma nem haladhatja meg a {0}',
+      maxGroupCol: '最大分组字段的数量不能超过 {0} 个',
       dragTip: 'Mozgás: {0}',
       resizeColTip: 'Szélesség: {0} pixelek',
       resizeRowTip: 'Magasság: {0} pixelek',
@@ -561,7 +562,10 @@ export default {
       extendPivotTable: {
         aggregation: {
           grouping: '分组',
-          values: '值'
+          values: '值',
+          groupPlaceholder: '拖至此处进行分组',
+          valuesPlaceholder: '拖至此处进行聚合',
+          dragExistCol: '该列已存在'
         }
       },
       filterComplexInput: {

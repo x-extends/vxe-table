@@ -147,7 +147,8 @@ VxeUI.setConfig({
       childrenField: '_X_ROW_CHILDREN',
       mapChildrenField: '_X_ROW_CHILD_LIST',
       indent: 20,
-      showIcon: true
+      showIcon: true,
+      maxGroupSize: 4
     },
     treeConfig: {
       padding: true,
@@ -322,6 +323,7 @@ VxeUI.setIcon({
   TABLE_ROW_GROUP_CLOSE: iconPrefix + 'arrow-right',
   TABLE_AGGREGATION_GROUPING: iconPrefix + 'grouping',
   TABLE_AGGREGATION_VALUES: iconPrefix + 'values',
+  TABLE_AGGREGATION_SORT: iconPrefix + 'drag-handle',
   TABLE_AGGREGATION_DELETE: iconPrefix + 'close',
 
   // toolbar

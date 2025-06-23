@@ -79,6 +79,7 @@ export default {
       customCancel: 'Cancel',
       customRestore: 'Restore default',
       maxFixedCol: 'The maximum number of frozen columns cannot exceed {0}',
+      maxGroupCol: 'The maximum number of grouping fields cannot exceed {0}',
       dragTip: 'Move: {0}',
       resizeColTip: 'Width: {0} pixels',
       resizeRowTip: 'Height: {0} pixels',
@@ -561,7 +562,10 @@ export default {
       extendPivotTable: {
         aggregation: {
           grouping: 'Group',
-          values: 'Values'
+          values: 'Values',
+          groupPlaceholder: 'Drag here to set row groups',
+          valuesPlaceholder: 'Drag here to aggregate',
+          dragExistCol: 'The column already exists'
         }
       },
       filterComplexInput: {

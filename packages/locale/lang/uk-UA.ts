@@ -79,6 +79,7 @@ export default {
       customCancel: 'Скасувати',
       customRestore: 'Відновити за замовчуванням',
       maxFixedCol: 'Максимальна кількість заморожених стовпців не може перевищувати {0}',
+      maxGroupCol: '最大分组字段的数量不能超过 {0} 个',
       dragTip: 'Перемістити: {0}',
       resizeColTip: 'Ширина: {0} пікселів',
       resizeRowTip: 'Висота: {0} пікселів',
@@ -561,7 +562,10 @@ export default {
       extendPivotTable: {
         aggregation: {
           grouping: '分组',
-          values: '值'
+          values: '值',
+          groupPlaceholder: '拖至此处进行分组',
+          valuesPlaceholder: '拖至此处进行聚合',
+          dragExistCol: '该列已存在'
         }
       },
       filterComplexInput: {
