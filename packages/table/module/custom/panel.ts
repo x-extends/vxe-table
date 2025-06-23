@@ -879,13 +879,13 @@ export default {
   data () {
     const reactData: TableCustomPanelReactData = {
       dragCol: null,
-      dragGroup: null,
-      dragValues: null,
       dragTipText: ''
     }
 
     const internalData: TableCustomPanelInternalData = {
       // prevDragCol: undefined,
+      // prevDragGroup: undefined,
+      // prevDragValues: undefined,
       // prevDragToChild: false,
       // prevDragPos: null
     }
@@ -1176,13 +1176,13 @@ export default {
     },
     sortDragstartEvent (evnt: any) {
       const $xeTableCustomPanel = this as unknown as VxeTableCustomPanelConstructor
-      const customPanelReactData = $xeTableCustomPanel.reactData
+      const customPanelInternalData = $xeTableCustomPanel.internalData
 
       if (evnt.dataTransfer) {
         evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
       }
-      customPanelReactData.dragGroup = null
-      customPanelReactData.dragValues = null
+      customPanelInternalData.prevDragGroup = null
+      customPanelInternalData.prevDragValues = null
     },
     sortDragendEvent (evnt: any) {
       const $xeTableCustomPanel = this as unknown as VxeTableCustomPanelConstructor
@@ -1201,11 +1201,11 @@ export default {
       const trEl = evnt.currentTarget as HTMLElement
       const columnDragOpts = $xeTable.computeColumnDragOpts
       const { isCrossDrag, isSelfToChildDrag, isToChildDrag, dragEndMethod } = columnDragOpts
-      const { dragCol, dragGroup, dragValues } = customPanelReactData
-      const { prevDragCol, prevDragPos, prevDragToChild } = customPanelInternalData
+      const { dragCol } = customPanelReactData
+      const { prevDragCol, prevDragGroup, prevDragValues, prevDragPos, prevDragToChild } = customPanelInternalData
       const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
 
-      if (dragGroup || dragValues) {
+      if (prevDragGroup || prevDragValues) {
         if ($xeTable.handlePivotTableAggregatePanelDragendEvent) {
           $xeTable.handlePivotTableAggregatePanelDragendEvent(evnt)
         }
@@ -1375,8 +1375,8 @@ export default {
 
       hideDropTip($xeTableCustomPanel)
       customPanelReactData.dragCol = null
-      customPanelReactData.dragGroup = null
-      customPanelReactData.dragValues = null
+      customPanelInternalData.prevDragGroup = null
+      customPanelInternalData.prevDragValues = null
       trEl.draggable = false
       trEl.removeAttribute('drag-pos')
       removeClass(trEl, 'active--drag-target')
@@ -1397,8 +1397,8 @@ export default {
       const isControlKey = hasControlKey(evnt)
       const colid = optEl.getAttribute('colid')
       const column = $xeTable.getColumnById(colid)
-      customPanelReactData.dragGroup = null
-      customPanelReactData.dragValues = null
+      customPanelInternalData.prevDragGroup = null
+      customPanelInternalData.prevDragValues = null
       // 是否移入有效列
       if (column && (isCrossDrag || column.level === 1)) {
         evnt.preventDefault()

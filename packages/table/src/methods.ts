@@ -7028,7 +7028,7 @@ const Methods = {
       }
 
       childRowList.forEach(vals => {
-        const row: string = vals[0]
+        const row = vals[0]
         const rowid: string = vals[1]
         const childList: any[] = vals[2]
         let sLen = 0 // 已选
@@ -7065,8 +7065,17 @@ const Methods = {
               vLen++
             }
         )
-        const isSelected = selectCheckboxMaps[rowid] || (sLen >= vLen && (vLen >= 1 || hLen >= 1))
+
+        let isSelected = (sLen >= vLen && (vLen >= 1 || hLen >= 1))
+        if (checkMethod) {
+          if (checkMethod({ $table: $xeTable, row })) {
+            isSelected = sLen >= vLen
+          } else {
+            isSelected = selectCheckboxMaps[rowid]
+          }
+        }
         const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
+
         if (checkField) {
           XEUtils.set(row, checkField, isSelected)
         }
