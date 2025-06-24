@@ -566,6 +566,15 @@ export default {
           groupPlaceholder: 'Drag here to set row groups',
           valuesPlaceholder: 'Drag here to aggregate',
           dragExistCol: 'The column already exists'
+        },
+        aggFuncs: {
+          sum: 'Sum',
+          count: 'Count',
+          avg: 'Avg',
+          min: 'Min',
+          max: 'Max',
+          first: 'First',
+          last: 'Last'
         }
       },
       filterComplexInput: {

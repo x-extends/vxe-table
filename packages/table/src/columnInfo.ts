@@ -106,6 +106,7 @@ export class ColumnInfo {
       halfVisible: false,
       defaultVisible: visible,
       defaultFixed: _vm.fixed,
+      defaultAggFunc: _vm.aggFunc,
 
       checked: false,
       halfChecked: false,

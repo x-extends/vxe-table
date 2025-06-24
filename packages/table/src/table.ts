@@ -249,6 +249,7 @@ export default defineVxeComponent({
       isRowGroupStatus: false,
       rowGroupList: [],
       aggHandleFields: [],
+      aggHandleAggColumns: [],
 
       rowGroupExpandedFlag: 1,
       rowExpandedFlag: 1,
@@ -1544,7 +1545,8 @@ export default defineVxeComponent({
       const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
       const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
       const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
-      if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
+      const isCustomAggFunc = hangleStorageDefaultValue(storageOpts.aggFunc, isAllCustom)
+      if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort || isCustomAggFunc)) {
         if (!tableId) {
           errLog('vxe.error.reqProp', ['id'])
           return
@@ -3148,6 +3150,17 @@ export default defineVxeComponent({
       })
     }
 
+    const handleUpdateAggValues = () => {
+      const { visibleColumn } = internalData
+      const aggCols: VxeTableDefines.ColumnInfo[] = []
+      visibleColumn.forEach(column => {
+        if (column.aggFunc) {
+          aggCols.push(column)
+        }
+      })
+      reactData.aggHandleAggColumns = aggCols
+    }
+
     const handleUpdateRowGroup = (groupFields?: string[]) => {
       const aggFields: string[] = []
       const aggConfs: { field: string }[] = []
@@ -3161,6 +3174,7 @@ export default defineVxeComponent({
       }
       reactData.rowGroupList = aggConfs
       reactData.aggHandleFields = aggFields
+      handleUpdateAggValues()
     }
 
     const handleeGroupSummary = (aggList: VxeTableDefines.AggregateRowInfo[]) => {
@@ -3645,6 +3659,7 @@ export default defineVxeComponent({
         }
       })
       handleTableColumn()
+      handleUpdateAggValues()
       if (isReset) {
         updateColumnOffsetLeft()
         return $xeTable.updateFooter().then(() => {
@@ -6769,15 +6784,18 @@ export default defineVxeComponent({
         const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
         const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
         const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
+        const isCustomAggFunc = hangleStorageDefaultValue(storageOpts.aggFunc, isAllCustom)
         const resizableData: Record<string, number> = {}
         const sortData: Record<string, number> = {}
         const visibleData: Record<string, boolean> = {}
         const fixedData: Record<string, VxeColumnPropTypes.Fixed> = {}
+        const aggFuncData: Record<string, VxeColumnPropTypes.AggFunc> = {}
         const storeData: VxeTableDefines.CustomStoreData = {
           resizableData: undefined,
           sortData: undefined,
           visibleData: undefined,
-          fixedData: undefined
+          fixedData: undefined,
+          aggFuncData: undefined
         }
         if (!id) {
           if (storage) {
@@ -6789,6 +6807,7 @@ export default defineVxeComponent({
         let hasSort = 0
         let hasFixed = 0
         let hasVisible = 0
+        let hasAggFunc = 0
         XEUtils.eachTree(collectColumn, (column, index, items, path, parentColumn) => {
           const colKey = column.getKey()
           if (!colKey) {
@@ -6819,6 +6838,10 @@ export default defineVxeComponent({
               visibleData[colKey] = true
             }
           }
+          if (isCustomAggFunc && column.aggFunc !== column.defaultAggFunc) {
+            hasAggFunc = 1
+            aggFuncData[colKey] = column.aggFunc
+          }
         })
         if (hasResizable) {
           storeData.resizableData = resizableData
@@ -6831,6 +6854,9 @@ export default defineVxeComponent({
         }
         if (hasVisible) {
           storeData.visibleData = visibleData
+        }
+        if (hasAggFunc) {
+          storeData.aggFuncData = aggFuncData
         }
         return storeData
       },
@@ -8260,11 +8286,12 @@ export default defineVxeComponent({
         const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
         const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
         const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
+        const isCustomAggFunc = hangleStorageDefaultValue(storageOpts.aggFunc, isAllCustom)
         if (type !== 'reset') {
           // fix：修复拖动列宽，重置按钮无法点击的问题
           reactData.isCustomStatus = true
         }
-        if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
+        if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort || isCustomAggFunc)) {
           if (!tableId) {
             errLog('vxe.error.reqProp', ['id'])
             return nextTick()
@@ -10634,6 +10661,9 @@ export default defineVxeComponent({
           }
         }
       },
+      handleUpdateAggData () {
+        return loadTableData(internalData.tableSynchData, true)
+      },
       updateZindex () {
         if (props.zIndex) {
           internalData.tZindex = props.zIndex
@@ -11651,6 +11681,16 @@ export default defineVxeComponent({
             return
           }
         }
+        if (!$xeTable.handlePivotTableAggregateData) {
+          if (customOpts.allowGroup) {
+            errLog('vxe.error.notProp', ['custom-config.allowGroup'])
+            return
+          }
+          if (customOpts.allowValues) {
+            errLog('vxe.error.notProp', ['custom-config.allowValues'])
+            return
+          }
+        }
         if (treeConfig && rowOpts.drag && !treeOpts.transform) {
           errLog('vxe.error.notSupportProp', ['column-config.drag', 'tree-config.transform=false', 'tree-config.transform=true'])
         }
@@ -11663,8 +11703,8 @@ export default defineVxeComponent({
         if (aggregateOpts.countFields) {
           warnLog('vxe.error.delProp', ['row-group-config.countFields', 'column.agg-func'])
         }
-        if (aggregateOpts.countMethod) {
-          warnLog('vxe.error.delProp', ['row-group-config.countMethod', 'aggregate-config.aggregateMethod'])
+        if (aggregateOpts.aggregateMethod) {
+          warnLog('vxe.error.delProp', ['row-group-config.aggregateMethod', 'aggregate-config.countMethod'])
         }
         if (props.treeConfig && treeOpts.children) {
           warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])

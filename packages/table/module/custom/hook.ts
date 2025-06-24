@@ -81,7 +81,7 @@ VxeUI.hooks.add('tableCustomModule', {
     const saveCustom = () => {
       const { customColumnList, aggHandleFields, rowGroupList } = reactData
       const customOpts = computeCustomOpts.value
-      const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
+      const { allowVisible, allowSort, allowFixed, allowResizable, allowGroup, allowValues } = customOpts
       XEUtils.eachTree(customColumnList, (column, index, items, path, parentColumn) => {
         if (parentColumn) {
           // 更新子列信息
@@ -106,6 +106,9 @@ VxeUI.hooks.add('tableCustomModule', {
         if (allowVisible) {
           column.visible = column.renderVisible
         }
+        if (allowGroup && allowValues) {
+          column.aggFunc = column.renderAggFn
+        }
       })
       reactData.isCustomStatus = true
       reactData.isDragColMove = true
@@ -113,14 +116,17 @@ VxeUI.hooks.add('tableCustomModule', {
         reactData.isDragColMove = false
       }, 1000)
       return $xeTable.saveCustomStore('confirm').then(() => {
-        if (($xeTable as any).handlePivotTableAggregateData) {
+        if (allowGroup && allowValues && ($xeTable as any).handlePivotTableAggregateData) {
           if (rowGroupList.length !== aggHandleFields.length || rowGroupList.some((conf, i) => conf.field !== aggHandleFields[i])) {
-          // 改动聚合分组
+            // 更新数据分组
             if (aggHandleFields.length) {
               $xeTable.setRowGroups(aggHandleFields)
             } else {
               $xeTable.clearRowGroups()
             }
+          } else {
+            // 更新聚合函数
+            $xeTable.handleUpdateAggData()
           }
         }
       })
@@ -207,7 +213,8 @@ VxeUI.hooks.add('tableCustomModule', {
           visible: true,
           resizable: options === true,
           fixed: options === true,
-          sort: options === true
+          sort: options === true,
+          aggFunc: options === true
         }, options)
         XEUtils.eachTree(collectColumn, (column) => {
           if (opts.resizable) {
@@ -222,12 +229,16 @@ VxeUI.hooks.add('tableCustomModule', {
           if (!checkMethod || checkMethod({ $table: $xeTable, column })) {
             column.visible = column.defaultVisible
           }
+          if (opts.aggFunc) {
+            column.aggFunc = column.defaultAggFunc
+            column.renderAggFn = column.defaultAggFunc
+          }
           column.renderResizeWidth = column.renderWidth
         })
         reactData.isCustomStatus = false
         $xeTable.saveCustomStore('reset')
         return $xeTable.handleCustom().then(() => {
-          if (($xeTable as any).handlePivotTableAggregateData) {
+          if (opts.aggFunc && ($xeTable as any).handlePivotTableAggregateData) {
             const rowGroupFields = computeRowGroupFields.value
             if (rowGroupFields ? rowGroupFields.length : rowGroupList.length) {
               if (rowGroupFields && rowGroupFields.length) {
@@ -235,6 +246,8 @@ VxeUI.hooks.add('tableCustomModule', {
               } else {
                 $xeTable.clearRowGroups()
               }
+            } else {
+              $xeTable.handleUpdateAggData()
             }
           }
         })

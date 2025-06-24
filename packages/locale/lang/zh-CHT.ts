@@ -566,6 +566,15 @@ export default {
           groupPlaceholder: '拖曳至此處進行分組',
           valuesPlaceholder: '拖曳至此處進行聚合',
           dragExistCol: '該列已存在'
+        },
+        aggFuncs: {
+          sum: '求和',
+          count: '计数',
+          avg: '平均值',
+          min: '最小值',
+          max: '最大值',
+          first: '首个值',
+          last: '末尾值'
         }
       },
       filterComplexInput: {

@@ -39,15 +39,17 @@ export default defineVxeComponent({
     const refDragLineElem = ref() as Ref<HTMLDivElement>
     const refDragTipElem = ref() as Ref<HTMLDivElement>
 
-    const customPanelReactData: TableCustomPanelReactData = reactive({
+    const customPanelReactData = reactive<TableCustomPanelReactData>({
       dragCol: null,
-      prevDragGroup: null,
-      prevDragValues: null,
+      dragGroupField: null,
+      dragAggFnCol: null,
       dragTipText: ''
     })
 
     const customPanelInternalData: TableCustomPanelInternalData = {
       // prevDragCol: undefined,
+      // prevDragGroupField: undefined,
+      // prevDragAggFnColid: undefined,
       // prevDragToChild: false,
       // prevDragPos: null
     }
@@ -230,8 +232,8 @@ export default defineVxeComponent({
       const { prevDragToChild } = customPanelInternalData
       const bodyWrapperRect = bodyWrapperElem.getBoundingClientRect()
       const customBodyRect = customBodyElem.getBoundingClientRect()
+      const dragLineEl = refDragLineElem.value
       if (optEl) {
-        const dragLineEl = refDragLineElem.value
         if (dragLineEl) {
           if (showLine) {
             const optRect = optEl.getBoundingClientRect()
@@ -245,6 +247,10 @@ export default defineVxeComponent({
           } else {
             dragLineEl.style.display = ''
           }
+        }
+      } else {
+        if (dragLineEl) {
+          dragLineEl.style.display = 'node'
         }
       }
       const dragTipEl = refDragTipElem.value
@@ -293,6 +299,8 @@ export default defineVxeComponent({
       const column = $xeTable.getColumnById(colid)
       trEl.draggable = true
       customPanelReactData.dragCol = column
+      customPanelReactData.dragGroupField = null
+      customPanelReactData.dragAggFnCol = null
       updateColDropTipContent()
       addClass(trEl, 'active--drag-origin')
     }
@@ -305,6 +313,8 @@ export default defineVxeComponent({
       hideDropTip()
       trEl.draggable = false
       customPanelReactData.dragCol = null
+      customPanelReactData.dragGroupField = null
+      customPanelReactData.dragAggFnCol = null
       removeClass(trEl, 'active--drag-origin')
     }
 
@@ -312,8 +322,8 @@ export default defineVxeComponent({
       if (evnt.dataTransfer) {
         evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
       }
-      customPanelInternalData.prevDragGroup = null
-      customPanelInternalData.prevDragValues = null
+      customPanelInternalData.prevDragGroupField = null
+      customPanelInternalData.prevDragAggFnColid = null
     }
 
     const sortDragendEvent = (evnt: DragEvent) => {
@@ -326,10 +336,10 @@ export default defineVxeComponent({
       const columnDragOpts = computeColumnDragOpts.value
       const { isCrossDrag, isSelfToChildDrag, isToChildDrag, dragEndMethod } = columnDragOpts
       const { dragCol } = customPanelReactData
-      const { prevDragCol, prevDragGroup, prevDragValues, prevDragPos, prevDragToChild } = customPanelInternalData
+      const { prevDragCol, prevDragGroupField, prevDragAggFnColid, prevDragPos, prevDragToChild } = customPanelInternalData
       const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
 
-      if (prevDragGroup || prevDragValues) {
+      if (prevDragGroupField || prevDragAggFnColid) {
         if ($xeTable.handlePivotTableAggregatePanelDragendEvent) {
           $xeTable.handlePivotTableAggregatePanelDragendEvent(evnt)
         }
@@ -499,8 +509,10 @@ export default defineVxeComponent({
 
       hideDropTip()
       customPanelReactData.dragCol = null
-      customPanelInternalData.prevDragGroup = null
-      customPanelInternalData.prevDragValues = null
+      customPanelReactData.dragGroupField = null
+      customPanelReactData.dragAggFnCol = null
+      customPanelInternalData.prevDragGroupField = null
+      customPanelInternalData.prevDragAggFnColid = null
       trEl.draggable = false
       trEl.removeAttribute('drag-pos')
       removeClass(trEl, 'active--drag-target')
@@ -517,14 +529,15 @@ export default defineVxeComponent({
       const colid = optEl.getAttribute('colid')
       const column = $xeTable.getColumnById(colid)
       const { dragCol } = customPanelReactData
-      customPanelInternalData.prevDragGroup = null
-      customPanelInternalData.prevDragValues = null
+      customPanelInternalData.prevDragGroupField = null
+      customPanelInternalData.prevDragAggFnColid = null
       // 是否移入有效列
       if (column && (isCrossDrag || column.level === 1)) {
         evnt.preventDefault()
         const offsetY = evnt.clientY - optEl.getBoundingClientRect().y
         const dragPos = offsetY < optEl.clientHeight / 2 ? 'top' : 'bottom'
         if (
+          !dragCol ||
           (dragCol && dragCol.id === column.id) ||
           (!isCrossDrag && column.level > 1) ||
           (!immediate && column.level > 1) ||
