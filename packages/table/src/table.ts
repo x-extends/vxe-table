@@ -678,6 +678,7 @@ export default {
       isRowGroupStatus: false,
       rowGroupList: [],
       aggHandleFields: [],
+      aggHandleAggColumns: [],
 
       rowGroupExpandedFlag: 1,
       rowExpandedFlag: 1,
@@ -1684,6 +1685,16 @@ export default {
         return
       }
     }
+    if (!$xeTable.handlePivotTableAggregateData) {
+      if (customOpts.allowGroup) {
+        errLog('vxe.error.notProp', ['custom-config.allowGroup'])
+        return
+      }
+      if (customOpts.allowValues) {
+        errLog('vxe.error.notProp', ['custom-config.allowValues'])
+        return
+      }
+    }
     if (treeConfig && rowOpts.drag && !treeOpts.transform) {
       warnLog('vxe.error.notSupportProp', ['column-config.drag', 'tree-config.transform=false', 'tree-config.transform=true'])
     }
@@ -1696,8 +1707,8 @@ export default {
     if (aggregateOpts.countFields) {
       warnLog('vxe.error.delProp', ['row-group-config.countFields', 'column.agg-func'])
     }
-    if (aggregateOpts.countMethod) {
-      warnLog('vxe.error.delProp', ['row-group-config.countMethod', 'aggregate-config.aggregateMethod'])
+    if (aggregateOpts.aggregateMethod) {
+      warnLog('vxe.error.delProp', ['row-group-config.aggregateMethod', 'aggregate-config.countMethod'])
     }
     if (props.treeConfig && treeOpts.children) {
       warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
@@ -2118,7 +2129,7 @@ export default {
       initStore.custom
         ? h(TableCustomPanelComponent, {
           key: 'cs',
-          ref: 'customWrapper',
+          ref: 'refTableCustom',
           props: {
             customStore
           }

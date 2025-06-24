@@ -66,7 +66,7 @@ export default {
 
       const { customColumnList, aggHandleFields, rowGroupList } = reactData
       const customOpts = $xeTable.computeCustomOpts
-      const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
+      const { allowVisible, allowSort, allowFixed, allowResizable, allowGroup, allowValues } = customOpts
       XEUtils.eachTree(customColumnList, (column, index, items, path, parentColumn) => {
         if (parentColumn) {
           // 更新子列信息
@@ -91,6 +91,9 @@ export default {
         if (allowVisible) {
           column.visible = column.renderVisible
         }
+        if (allowGroup && allowValues) {
+          column.aggFunc = column.renderAggFn
+        }
       })
       reactData.isCustomStatus = true
       reactData.isDragColMove = true
@@ -98,14 +101,17 @@ export default {
         reactData.isDragColMove = false
       }, 1000)
       return $xeTable.saveCustomStore('confirm').then(() => {
-        if (($xeTable as any).handlePivotTableAggregateData) {
+        if (allowGroup && allowValues && ($xeTable as any).handlePivotTableAggregateData) {
           if (rowGroupList.length !== aggHandleFields.length || rowGroupList.some((conf, i) => conf.field !== aggHandleFields[i])) {
-          // 改动聚合分组
+            // 更新数据分组
             if (aggHandleFields.length) {
               $xeTable.setRowGroups(aggHandleFields)
             } else {
               $xeTable.clearRowGroups()
             }
+          } else {
+            // 更新聚合函数
+            $xeTable.handleUpdateAggData()
           }
         }
       })
@@ -152,7 +158,8 @@ export default {
         visible: true,
         resizable: options === true,
         fixed: options === true,
-        sort: options === true
+        sort: options === true,
+        aggFunc: options === true
       }, options)
       XEUtils.eachTree(collectColumn, (column) => {
         if (opts.resizable) {
@@ -167,12 +174,16 @@ export default {
         if (!checkMethod || checkMethod({ $table: $xeTable, column })) {
           column.visible = column.defaultVisible
         }
+        if (opts.aggFunc) {
+          column.aggFunc = column.defaultAggFunc
+          column.renderAggFn = column.defaultAggFunc
+        }
         column.renderResizeWidth = column.renderWidth
       })
       reactData.isCustomStatus = false
       $xeTable.saveCustomStore('reset')
       return $xeTable.handleCustom().then(() => {
-        if (($xeTable as any).handlePivotTableAggregateData) {
+        if (opts.aggFunc && ($xeTable as any).handlePivotTableAggregateData) {
           const rowGroupFields = $xeTable.computeRowGroupFields
           if (rowGroupFields ? rowGroupFields.length : rowGroupList.length) {
             if (rowGroupFields && rowGroupFields.length) {
@@ -180,6 +191,8 @@ export default {
             } else {
               $xeTable.clearRowGroups()
             }
+          } else {
+            $xeTable.handleUpdateAggData()
           }
         }
       })

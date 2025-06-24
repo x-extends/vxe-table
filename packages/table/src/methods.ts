@@ -185,7 +185,8 @@ function restoreCustomStorage ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
   const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
   const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
-  if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
+  const isCustomAggFunc = hangleStorageDefaultValue(storageOpts.aggFunc, isAllCustom)
+  if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort || isCustomAggFunc)) {
     if (!tableId) {
       errLog('vxe.error.reqProp', ['id'])
       return
@@ -2715,7 +2716,21 @@ function handleRecalculateLayout ($xeTable: VxeTableConstructor & VxeTablePrivat
   })
 }
 
-const handleUpdateRowGroup = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, groupFields?: string[]) => {
+function handleUpdateAggValues ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { visibleColumn } = internalData
+  const aggCols: VxeTableDefines.ColumnInfo[] = []
+  visibleColumn.forEach(column => {
+    if (column.aggFunc) {
+      aggCols.push(column)
+    }
+  })
+  reactData.aggHandleAggColumns = aggCols
+}
+
+function handleUpdateRowGroup ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, groupFields?: string[]) {
   const reactData = $xeTable as unknown as TableReactData
 
   const aggFields: string[] = []
@@ -2730,6 +2745,7 @@ const handleUpdateRowGroup = ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   }
   reactData.rowGroupList = aggConfs
   reactData.aggHandleFields = aggFields
+  handleUpdateAggValues($xeTable)
 }
 
 function handleeGroupSummary ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, aggList: VxeTableDefines.AggregateRowInfo[]) {
@@ -3234,6 +3250,7 @@ function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, i
     }
   })
   handleTableColumn($xeTable)
+  handleUpdateAggValues($xeTable)
   if (isReset) {
     return $xeTable.updateFooter().then(() => {
       return $xeTable.recalculate()
@@ -5163,15 +5180,18 @@ const Methods = {
     const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
     const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
     const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
+    const isCustomAggFunc = hangleStorageDefaultValue(storageOpts.aggFunc, isAllCustom)
     const resizableData: Record<string, number> = {}
     const sortData: Record<string, number> = {}
     const visibleData: Record<string, boolean> = {}
     const fixedData: Record<string, VxeColumnPropTypes.Fixed> = {}
+    const aggFuncData: Record<string, VxeColumnPropTypes.AggFunc> = {}
     const storeData: VxeTableDefines.CustomStoreData = {
       resizableData: undefined,
       sortData: undefined,
       visibleData: undefined,
-      fixedData: undefined
+      fixedData: undefined,
+      aggFuncData: undefined
     }
     if (!id) {
       if (storage) {
@@ -5183,6 +5203,7 @@ const Methods = {
     let hasSort = 0
     let hasFixed = 0
     let hasVisible = 0
+    let hasAggFunc = 0
     XEUtils.eachTree(collectColumn, (column, index, items, path, parentColumn) => {
       const colKey = column.getKey()
       if (!colKey) {
@@ -5213,6 +5234,10 @@ const Methods = {
           visibleData[colKey] = true
         }
       }
+      if (isCustomAggFunc && column.aggFunc !== column.defaultAggFunc) {
+        hasAggFunc = 1
+        aggFuncData[colKey] = column.aggFunc
+      }
     })
     if (hasResizable) {
       storeData.resizableData = resizableData
@@ -5226,6 +5251,9 @@ const Methods = {
     if (hasVisible) {
       storeData.visibleData = visibleData
     }
+    if (hasAggFunc) {
+      storeData.aggFuncData = aggFuncData
+    }
     return storeData
   },
   saveCustomStore (type: any) {
@@ -5236,17 +5264,18 @@ const Methods = {
     const { customConfig } = props
     const tableId = $xeTable.computeTableId
     const customOpts = $xeTable.computeCustomOpts
-    const { updateStore, storage } = customOpts
+    const { updateStore, storage, storeOptions } = customOpts
     const isAllCustom = storage === true
-    const storageOpts = isAllCustom ? {} : Object.assign({}, storage || {})
-    const isCustomResizable = isAllCustom || storageOpts.resizable
-    const isCustomVisible = isAllCustom || storageOpts.visible
-    const isCustomFixed = isAllCustom || storageOpts.fixed
-    const isCustomSort = isAllCustom || storageOpts.sort
+    const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {}, storeOptions)
+    const isCustomResizable = hangleStorageDefaultValue(storageOpts.resizable, isAllCustom)
+    const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
+    const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
+    const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
+    const isCustomAggFunc = hangleStorageDefaultValue(storageOpts.aggFunc, isAllCustom)
     if (type !== 'reset') {
       reactData.isCustomStatus = true
     }
-    if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
+    if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort || isCustomAggFunc)) {
       if (!tableId) {
         errLog('vxe.error.reqProp', ['id'])
         return this.$nextTick()
@@ -5947,9 +5976,10 @@ const Methods = {
 
     const { $el, $refs, $toolbar, mouseConfig, editStore, ctxMenuStore, editRules, editOpts, validOpts, areaOpts, filterStore, customStore, getRowNode } = this
     const { actived } = editStore
-    const { customWrapper, refValidTooltip } = $refs
     const tableFilter = $refs.refTableFilter
     const tableMenu = $refs.refTableMenu
+    const tableCustom = $refs.refTableCustom
+    const validTooltip = $refs.refValidTooltip
     // 筛选
     if (tableFilter) {
       if (getEventTargetNode(evnt, $el, 'vxe-cell--filter').flag) {
@@ -5963,10 +5993,10 @@ const Methods = {
       }
     }
     // 自定义列
-    if (customWrapper) {
+    if (tableCustom) {
       if (customStore.btnEl === evnt.target || getEventTargetNode(evnt, document.body, 'vxe-toolbar-custom-target').flag) {
         // 如果点击了自定义列按钮
-      } else if (getEventTargetNode(evnt, customWrapper.$el).flag) {
+      } else if (getEventTargetNode(evnt, tableCustom.$el).flag) {
         // 如果点击自定义列容器
       } else {
         if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
@@ -5981,7 +6011,7 @@ const Methods = {
         // 如果是激活状态，点击了单元格之外
         const cell = actived.args.cell
         if ((!cell || !getEventTargetNode(evnt, cell).flag)) {
-          if (refValidTooltip && getEventTargetNode(evnt, refValidTooltip.$el).flag) {
+          if (validTooltip && getEventTargetNode(evnt, validTooltip.$el).flag) {
             // 如果是激活状态，且点击了校验提示框
           } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
             if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
@@ -10582,6 +10612,12 @@ const Methods = {
     return $xeTable.$nextTick().then(() => {
       return updateStyle($xeTable)
     })
+  },
+  handleUpdateAggData () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    return loadTableData($xeTable, internalData.tableSynchData, true)
   },
   updateZindex () {
     if (this.zIndex) {

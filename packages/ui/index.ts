@@ -109,6 +109,7 @@ VxeUI.setConfig({
         // rowGroup: false,
         // aggFunc: false
       },
+      // autoAggGroupValues: false,
       //  checkMethod () {},
       modalOptions: {
         showMaximize: true,
@@ -148,7 +149,8 @@ VxeUI.setConfig({
       childrenField: '_X_ROW_CHILDREN',
       mapChildrenField: '_X_ROW_CHILD_LIST',
       indent: 20,
-      showIcon: true
+      showIcon: true,
+      maxGroupSize: 4
     },
     treeConfig: {
       padding: true,
@@ -321,9 +323,10 @@ VxeUI.setIcon({
   TABLE_DRAG_DISABLED: iconPrefix + 'no-drop',
   TABLE_ROW_GROUP_OPEN: iconPrefix + 'arrow-right rotate90',
   TABLE_ROW_GROUP_CLOSE: iconPrefix + 'arrow-right',
-  TABLE_AGGREGATION_GROUPING: iconPrefix + 'grouping',
-  TABLE_AGGREGATION_VALUES: iconPrefix + 'values',
-  TABLE_AGGREGATION_DELETE: iconPrefix + 'close',
+  TABLE_AGGREGATE_GROUPING: iconPrefix + 'grouping',
+  TABLE_AGGREGATE_VALUES: iconPrefix + 'values',
+  TABLE_AGGREGATE_SORT: iconPrefix + 'drag-handle',
+  TABLE_AGGREGATE_DELETE: iconPrefix + 'close',
 
   // toolbar
   TOOLBAR_TOOLS_REFRESH: iconPrefix + 'repeat',
