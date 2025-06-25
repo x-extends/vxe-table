@@ -235,6 +235,7 @@ export default defineVxeComponent({
         $xeTable.triggerCellDblclickEvent(evnt, cellParams)
       }
       let isMergeCell = false
+      let mergeColspan = 1
       let mergeRowspan = 1
       // 合并行或列
       if (mergeBodyFlag && mergeBodyList.length) {
@@ -251,6 +252,7 @@ export default defineVxeComponent({
           }
           if (colspan > 1) {
             isMergeCell = true
+            mergeColspan = colspan
             tdAttrs.colspan = colspan
           }
         }
@@ -267,6 +269,7 @@ export default defineVxeComponent({
         }
         if (colspan > 1) {
           isMergeCell = true
+          mergeColspan = colspan
           tdAttrs.colspan = colspan
         }
       }
@@ -310,16 +313,16 @@ export default defineVxeComponent({
 
       const tcStyle: Record<string, string> = {}
       if (hasEllipsis && resizeWidthFlag) {
-        let tsColspan = tdAttrs.colspan || 0
-        if (tsColspan > 1) {
-          for (let index = 1; index < tsColspan; index++) {
+        let mergeColWidth = 0
+        if (mergeColspan > 1) {
+          for (let index = 1; index < mergeColspan; index++) {
             const nextColumn = visibleColumn[columnIndex + index]
             if (nextColumn) {
-              tsColspan += nextColumn.renderWidth
+              mergeColWidth += nextColumn.renderWidth
             }
           }
         }
-        tcStyle.width = `${column.renderWidth - (cellOffsetWidth * tsColspan)}px`
+        tcStyle.width = `${column.renderWidth + mergeColWidth - cellOffsetWidth}px`
       }
       if (scrollYLoad || hasEllipsis || isCsHeight || isRsHeight) {
         tcStyle.height = `${cellHeight}px`

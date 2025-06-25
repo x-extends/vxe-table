@@ -149,7 +149,8 @@ VxeUI.setConfig({
       mapChildrenField: '_X_ROW_CHILD_LIST',
       indent: 20,
       showIcon: true,
-      maxGroupSize: 4
+      maxGroupSize: 4,
+      showAggFuncTitle: true
     },
     treeConfig: {
       padding: true,

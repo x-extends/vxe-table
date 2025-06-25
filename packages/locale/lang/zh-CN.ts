@@ -138,7 +138,7 @@ export default {
       cstmDragTarget: '移动：{0}',
       setting: {
         colSort: '排序',
-        sortHelpTip: '点击并拖动图标可以调整列的排序',
+        sortHelpTip: '点击并拖动图标可以调整顺序',
         colTitle: '列标题',
         colResizable: '列宽（像素）',
         colVisible: '是否显示',
@@ -565,7 +565,8 @@ export default {
           values: '值',
           groupPlaceholder: '拖至此处进行分组',
           valuesPlaceholder: '拖至此处进行聚合',
-          dragExistCol: '该列已存在'
+          dragExistCol: '该列已存在',
+          sortHelpTip: '点击并拖动图标可以调整顺序'
         },
         aggFuncs: {
           sum: '求和',

@@ -218,12 +218,16 @@
 
 .vxe-table-custom-popup--body-wrapper {
   position: relative;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   height: 100%;
   outline: 0;
 }
 .vxe-table-custom-popup--handle-wrapper {
+  flex-grow: 1;
   outline: 0;
+  overflow: auto;
 }
 
 .vxe-table-custom-popup--table-wrapper {

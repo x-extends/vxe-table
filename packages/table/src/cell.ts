@@ -167,13 +167,26 @@ function renderHeaderCellBaseVNs (params: VxeTableDefines.CellRenderHeaderParams
   return vns
 }
 
+function getRenderDefaultColumnTitle (column: VxeTableDefines.ColumnInfo, content: VxeComponentSlotType | VxeComponentSlotType[]) {
+  if (column.type === 'html' && XEUtils.isString(content)) {
+    return h('span', {
+      key: 'ch',
+      innerHTML: content
+    })
+  }
+  return h('span', {
+    key: 'ct'
+  }, getSlotVNs(content))
+}
+
 function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, content: VxeComponentSlotType | VxeComponentSlotType[]) {
   const { $table, column } = params
   const tableProps = $table.props
   const tableReactData = $table.reactData
   const { computeTooltipOpts } = $table.getComputeMaps()
   const { showHeaderOverflow: allColumnHeaderOverflow } = tableProps
-  const { type, showHeaderOverflow } = column
+  const { isRowGroupStatus } = tableReactData
+  const { showHeaderOverflow } = column
   const tooltipOpts = computeTooltipOpts.value
   const showAllTip = tooltipOpts.showAll
   const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -202,17 +215,16 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams & { 
       }
     }
   }
+  const titleVN = getRenderDefaultColumnTitle(column, content)
   return [
-    type === 'html' && XEUtils.isString(content)
-      ? h('span', {
-        class: 'vxe-cell--title',
-        innerHTML: content,
-        ...ons
-      })
-      : h('span', {
-        class: 'vxe-cell--title',
-        ...ons
-      }, getSlotVNs(content))
+    h('span', {
+      class: 'vxe-cell--title',
+      ...ons
+    }, isRowGroupStatus && column.aggFunc && $table.getPivotTableAggregateRenderColTitles
+      ? $table.getPivotTableAggregateRenderColTitles(column, titleVN)
+      : [
+          titleVN
+        ])
   ]
 }
 

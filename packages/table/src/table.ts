@@ -6241,7 +6241,6 @@ export default defineVxeComponent({
       },
       setRowGroups (fieldOrColumns) {
         const { aggregateConfig, rowGroupConfig } = props
-        const { rowGroupList } = reactData
         const aggregateOpts = computeAggregateOpts.value
         const { maxGroupSize } = aggregateOpts
         if (!(aggregateConfig || rowGroupConfig)) {
@@ -6249,7 +6248,7 @@ export default defineVxeComponent({
           return nextTick()
         }
         const confList = fieldOrColumns ? (XEUtils.isArray(fieldOrColumns) ? fieldOrColumns : [fieldOrColumns]) : []
-        if (maxGroupSize && (rowGroupList.length + confList.length > maxGroupSize)) {
+        if (maxGroupSize && confList.length > maxGroupSize) {
           if (VxeUI.modal) {
             VxeUI.modal.message({
               status: 'error',

@@ -138,7 +138,7 @@ export default {
       cstmDragTarget: "Ko'chiring: {0}",
       setting: {
         colSort: 'Tartib',
-        sortHelpTip: 'Ustunlar turini sozlash uchun ikonkani bosing va torting',
+        sortHelpTip: '点击并拖动图标可以调整顺序',
         colTitle: 'Ustun unvon',
         colResizable: 'Ustun kengligi (piksellar)',
         colVisible: "Ko'rsatish kerakmi",
@@ -565,7 +565,8 @@ export default {
           values: '值',
           groupPlaceholder: '拖至此处进行分组',
           valuesPlaceholder: '拖至此处进行聚合',
-          dragExistCol: '该列已存在'
+          dragExistCol: '该列已存在',
+          sortHelpTip: '点击并拖动图标可以调整顺序'
         },
         aggFuncs: {
           sum: '求和',

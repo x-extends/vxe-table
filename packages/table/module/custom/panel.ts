@@ -750,7 +750,7 @@ export default defineVxeComponent({
         class: ['vxe-table-custom-wrapper', `placement--${placement}`, {
           'is--active': customStore.visible
         }],
-        style: maxHeight && !['left', 'right'].includes(placement as string)
+        style: maxHeight && !['left', 'right'].includes(placement || '')
           ? {
               maxHeight: `${maxHeight}px`
             }
@@ -885,7 +885,7 @@ export default defineVxeComponent({
       const $xeGrid = $xeTable.xeGrid
 
       const { customStore } = props
-      const { resizable: allResizable } = tableProps
+      const { treeConfig, rowGroupConfig, aggregateConfig, resizable: allResizable } = tableProps
       const { isCustomStatus, customColumnList } = tableReactData
       const customOpts = computeCustomOpts.value
       const { immediate } = customOpts
@@ -1165,7 +1165,12 @@ export default defineVxeComponent({
                     }, $xeTable.callSlot(bottomSlot, params))
                     : renderEmptyElement($xeTable),
                   renderDragTip()
-                ])
+                ]),
+                !treeConfig && (aggregateConfig || rowGroupConfig) && $xeTable.getPivotTableAggregatePopupPanel
+                  ? h($xeTable.getPivotTableAggregatePopupPanel(), {
+                    customStore
+                  })
+                  : renderEmptyElement($xeTable)
               ])
         },
         footer: () => {

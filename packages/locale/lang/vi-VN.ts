@@ -138,7 +138,7 @@ export default {
       cstmDragTarget: 'Di chuyển: {0}',
       setting: {
         colSort: 'Loại',
-        sortHelpTip: 'Nhấp và kéo biểu tượng để điều chỉnh các loại cột',
+        sortHelpTip: '点击并拖动图标可以调整顺序',
         colTitle: 'Tiêu đề cột',
         colResizable: 'Chiều rộng cột (pixel)',
         colVisible: 'Có hiển thị không',
@@ -565,7 +565,8 @@ export default {
           values: '值',
           groupPlaceholder: '拖至此处进行分组',
           valuesPlaceholder: '拖至此处进行聚合',
-          dragExistCol: '该列已存在'
+          dragExistCol: '该列已存在',
+          sortHelpTip: '点击并拖动图标可以调整顺序'
         },
         aggFuncs: {
           sum: '求和',
