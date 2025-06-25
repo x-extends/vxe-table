@@ -165,12 +165,27 @@ function renderHeaderCellBaseVNs (h: CreateElement, params: VxeTableDefines.Cell
   return vns
 }
 
+function getRenderDefaultColumnTitle (h: CreateElement, column: VxeTableDefines.ColumnInfo, content: VxeComponentSlotType | VxeComponentSlotType[]) {
+  if (column.type === 'html' && XEUtils.isString(content)) {
+    return h('span', {
+      key: 'ch',
+      domProps: {
+        innerHTML: content
+      }
+    })
+  }
+  return h('span', {
+    key: 'ct'
+  }, getSlotVNs(content))
+}
+
 function renderTitleContent (h: CreateElement, params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, content: VxeComponentSlotType | VxeComponentSlotType[]) {
   const { $table, column } = params
-  const { type, showHeaderOverflow } = column
+  const { showHeaderOverflow } = column
   const tableProps = $table
   const tableReactData = $table as unknown as TableReactData
   const { showHeaderOverflow: allColumnHeaderOverflow } = tableProps
+  const { isRowGroupStatus } = tableReactData
   const tooltipOpts = $table.computeTooltipOpts
   const showAllTip = tooltipOpts.showAll
   const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -199,19 +214,16 @@ function renderTitleContent (h: CreateElement, params: VxeTableDefines.CellRende
       }
     }
   }
+  const titleVN = getRenderDefaultColumnTitle(h, column, content)
   return [
-    type === 'html' && XEUtils.isString(content)
-      ? h('span', {
-        class: 'vxe-cell--title',
-        domProps: {
-          innerHTML: content
-        },
-        on: ons
-      })
-      : h('span', {
-        class: 'vxe-cell--title',
-        on: ons
-      }, getSlotVNs(content))
+    h('span', {
+      class: 'vxe-cell--title',
+      ...ons
+    }, isRowGroupStatus && column.aggFunc && $table.getPivotTableAggregateRenderColTitles
+      ? $table.getPivotTableAggregateRenderColTitles(h, column, titleVN)
+      : [
+          titleVN
+        ])
   ]
 }
 

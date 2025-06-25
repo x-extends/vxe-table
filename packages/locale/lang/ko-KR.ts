@@ -138,7 +138,7 @@ export default {
       cstmDragTarget: '움직임 : {0}',
       setting: {
         colSort: '종류',
-        sortHelpTip: '아이콘을 클릭하고 드래그하여 열을 조정합니다.',
+        sortHelpTip: '点击并拖动图标可以调整顺序',
         colTitle: '열 제목',
         colResizable: '열 폭 (픽셀)',
         colVisible: '표시 여부',
@@ -565,7 +565,8 @@ export default {
           values: '值',
           groupPlaceholder: '拖至此处进行分组',
           valuesPlaceholder: '拖至此处进行聚合',
-          dragExistCol: '该列已存在'
+          dragExistCol: '该列已存在',
+          sortHelpTip: '点击并拖动图标可以调整顺序'
         },
         aggFuncs: {
           sum: '求和',

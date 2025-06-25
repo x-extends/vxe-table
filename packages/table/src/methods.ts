@@ -9164,12 +9164,24 @@ const Methods = {
     const internalData = $xeTable as unknown as TableInternalData
 
     const { aggregateConfig, rowGroupConfig } = props
+    const aggregateOpts = $xeTable.computeAggregateOpts
+    const { maxGroupSize } = aggregateOpts
     if (!(aggregateConfig || rowGroupConfig)) {
       errLog('vxe.error.reqProp', ['aggregate-config'])
       return $xeTable.$nextTick()
     }
-    if (fieldOrColumns) {
-      handleUpdateRowGroup($xeTable, (XEUtils.isArray(fieldOrColumns) ? fieldOrColumns : [fieldOrColumns]).map(fieldOrColumn => {
+    const confList = fieldOrColumns ? (XEUtils.isArray(fieldOrColumns) ? fieldOrColumns : [fieldOrColumns]) : []
+    if (maxGroupSize && confList.length > maxGroupSize) {
+      if (VxeUI.modal) {
+        VxeUI.modal.message({
+          status: 'error',
+          content: getI18n('vxe.table.maxGroupCol', [maxGroupSize])
+        })
+      }
+      return $xeTable.$nextTick()
+    }
+    if (confList.length) {
+      handleUpdateRowGroup($xeTable, confList.map(fieldOrColumn => {
         return XEUtils.isString(fieldOrColumn) ? fieldOrColumn : fieldOrColumn.field
       }))
       return loadTableData($xeTable, internalData.tableSynchData, true)

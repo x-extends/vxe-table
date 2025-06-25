@@ -138,7 +138,7 @@ export default {
       cstmDragTarget: 'Move: {0}',
       setting: {
         colSort: 'Sort',
-        sortHelpTip: 'Click and drag the icon to adjust the sort of columns',
+        sortHelpTip: 'Click and drag the icons to adjust the order.',
         colTitle: 'Column title',
         colResizable: 'Column width (pixels)',
         colVisible: 'Whether to display',
@@ -565,7 +565,8 @@ export default {
           values: 'Values',
           groupPlaceholder: 'Drag here to set row groups',
           valuesPlaceholder: 'Drag here to aggregate',
-          dragExistCol: 'The column already exists'
+          dragExistCol: 'The column already exists',
+          sortHelpTip: 'Click and drag the icons to adjust the order.'
         },
         aggFuncs: {
           sum: 'Sum',

@@ -449,7 +449,7 @@ const renderPopupPanel = (h: CreateElement, $xeTableCustomPanel: VxeTableCustomP
   const $xeGrid = $xeTable.$xeGrid
 
   const { customStore } = props
-  const { resizable: allResizable } = tableProps
+  const { treeConfig, rowGroupConfig, aggregateConfig, resizable: allResizable } = tableProps
   const { isCustomStatus, customColumnList } = tableReactData
   const customOpts = $xeTable.computeCustomOpts
   const { immediate } = customOpts
@@ -750,7 +750,14 @@ const renderPopupPanel = (h: CreateElement, $xeTableCustomPanel: VxeTableCustomP
                 }, $xeTable.callSlot(bottomSlot, params, h))
                 : renderEmptyElement($xeTable),
               renderDragTip(h, _vm)
-            ])
+            ]),
+            !treeConfig && (aggregateConfig || rowGroupConfig) && $xeTable.getPivotTableAggregatePopupPanel
+              ? h($xeTable.getPivotTableAggregatePopupPanel(), {
+                props: {
+                  customStore
+                }
+              })
+              : renderEmptyElement($xeTable)
           ])
     },
     footer: () => {
