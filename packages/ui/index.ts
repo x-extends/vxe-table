@@ -259,7 +259,7 @@ VxeUI.setConfig({
       autoLoad: true,
       showResponseMsg: true,
       showActiveMsg: true,
-      props: {
+      response: {
         list: null,
         result: 'result',
         total: 'page.total',

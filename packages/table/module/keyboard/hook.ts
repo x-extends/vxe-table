@@ -268,8 +268,8 @@ hooks.add('tableKeyboardModule', {
       const checkboxOpts = computeCheckboxOpts.value
       const mouseOpts = computeMouseOpts.value
       const editOpts = computeEditOpts.value
-      if (mouseConfig && mouseOpts.area && $xeTable.triggerCellAreaMousedownEvent) {
-        return $xeTable.triggerCellAreaMousedownEvent(evnt, params)
+      if (mouseConfig && mouseOpts.area && $xeTable.triggerCellAreaMousednEvent) {
+        return $xeTable.triggerCellAreaMousednEvent(evnt, params)
       } else {
         if (checkboxConfig && checkboxOpts.range) {
           handleCheckboxRangeEvent(evnt, params)

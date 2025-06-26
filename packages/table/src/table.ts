@@ -11665,7 +11665,7 @@ export default defineVxeComponent({
         if (rowOpts.height && !props.showOverflow) {
           warnLog('vxe.error.notProp', ['table.show-overflow'])
         }
-        if (!$xeTable.triggerCellAreaMousedownEvent) {
+        if (!$xeTable.triggerCellAreaMousednEvent) {
           if (props.areaConfig) {
             warnLog('vxe.error.notProp', ['area-config'])
           }
