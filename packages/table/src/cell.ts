@@ -1191,6 +1191,15 @@ export const Cell = {
   },
   runRenderer (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, isEdit: boolean) {
     const { $table, column } = params
+    // 获取当前渲染区域和列所属区域
+    const currentFixedType = params.fixed || ''
+    const columnFixedType = column.fixed || ''
+    // 判断是否在正确的区域渲染
+    const isCorrectFixedArea = currentFixedType === columnFixedType
+    // 如果不在正确的区域，不渲染
+    if (!isCorrectFixedArea) {
+      return []
+    }
     const { slots, editRender, formatter } = column
     const defaultSlot = slots ? slots.default : null
     const editSlot = slots ? slots.edit : null
