@@ -14,7 +14,7 @@ export class ColumnInfo {
     const tableProps = $xeTable
     const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
 
-    const proxyOpts = $xeGrid ? $xeGrid.proxyOpts : null
+    const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : null
     const formatter = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
 

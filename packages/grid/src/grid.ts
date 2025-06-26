@@ -1,4 +1,5 @@
-import { CreateElement, VNode } from 'vue'
+import { CreateElement, VNode, PropType } from 'vue'
+import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
 import { getOffsetHeight, getPaddingTopBottomSize, getDomNode, toCssUnit } from '../../ui/src/dom'
@@ -9,179 +10,15 @@ import tableComponentProps from '../../table/src/props'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeFormComponent, VxePagerComponent, VxeComponentStyleType } from 'vxe-pc-ui'
-import type{ GridReactData, VxeGridConstructor, VxeGridPropTypes, VxeGridPrivateMethods, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types'
+import type { VxeFormComponent, VxePagerComponent, VxeFormItemProps, VxeFormDefines, VxeComponentStyleType, VxeComponentSizeType, ValueOf } from 'vxe-pc-ui'
+import type { GridReactData, VxeTablePropTypes, VxeGridConstructor, VxeToolbarPropTypes, VxeToolbarInstance, VxeGridPropTypes, VxeTableMethods, VxeGridEmits, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types'
 
-const { getConfig, getI18n, commands, globalEvents, globalMixins, renderEmptyElement } = VxeUI
+const { getConfig, getI18n, commands, globalEvents, globalMixins, createEvent, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
 
-const methods: any = {}
+const tableMethods: VxeTableMethods = {} as VxeTableMethods
 const propKeys = Object.keys(tableComponentProps)
 
 const defaultLayouts: VxeGridPropTypes.Layouts = [['Form'], ['Toolbar', 'Top', 'Table', 'Bottom', 'Pager']]
-
-function initPages ($xeGrid: VxeGridConstructor & VxeGridPrivateMethods, propKey?: 'currentPage' | 'pageSize' | 'total') {
-  const props = $xeGrid
-  const reactData = $xeGrid as unknown as GridReactData
-
-  const { tablePage } = reactData
-  const { pagerConfig } = props
-  const pagerOpts = $xeGrid.computePagerOpts
-  if (pagerConfig && isEnableConf(pagerOpts)) {
-    if (propKey) {
-      if (pagerOpts[propKey]) {
-        tablePage[propKey] = XEUtils.toNumber(pagerOpts[propKey])
-      }
-    } else {
-      const { currentPage, pageSize, total } = pagerOpts
-      if (currentPage) {
-        tablePage.currentPage = currentPage
-      }
-      if (pageSize) {
-        tablePage.pageSize = pageSize
-      }
-      if (total) {
-        tablePage.pageSize = total
-      }
-    }
-  }
-}
-
-function renderDefaultForm (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
-  const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
-  const props = $xeGrid
-  const slots = $xeGrid.$scopedSlots
-  const reactData = $xeGrid as unknown as GridReactData
-
-  const { proxyConfig, formConfig } = props
-  const { formData } = reactData
-  const proxyOpts = $xeGrid.computeProxyOpts
-  const formOpts = $xeGrid.computeFormOpts
-  if (isEnableConf(formConfig) && formOpts.items && formOpts.items.length) {
-    const formSlots: any = {}
-    if (!formOpts.inited) {
-      formOpts.inited = true
-      const beforeItem = proxyOpts.beforeItem
-      if (proxyOpts && beforeItem) {
-        formOpts.items.forEach((item: any) => {
-          beforeItem.call($xeGrid, { $grid: $xeGrid, item })
-        })
-      }
-    }
-    // 处理插槽
-    formOpts.items.forEach((item: any) => {
-      XEUtils.each(item.slots, (func) => {
-        if (!XEUtils.isFunction(func)) {
-          if (slots[func]) {
-            formSlots[func] = slots[func]
-          }
-        }
-      })
-    })
-    return [
-      VxeUIFormComponent
-        ? h(VxeUIFormComponent, {
-          props: Object.assign({}, formOpts, {
-            data: proxyConfig && proxyOpts.form ? formData : formOpts.data
-          }),
-          on: {
-            submit: ($xeGrid as any).submitEvent,
-            reset: ($xeGrid as any).resetEvent,
-            collapse: ($xeGrid as any).collapseEvent,
-            'submit-invalid': ($xeGrid as any).submitInvalidEvent
-          },
-          scopedSlots: formSlots
-        })
-        : renderEmptyElement($xeGrid)
-    ]
-  }
-  return []
-}
-
-function getFuncSlot ($xeGrid: VxeGridConstructor & VxeGridPrivateMethods, optSlots: any, slotKey: any) {
-  const slots = $xeGrid.$scopedSlots
-
-  const funcSlot = optSlots[slotKey]
-  if (funcSlot) {
-    if (XEUtils.isString(funcSlot)) {
-      if (slots[funcSlot]) {
-        return slots[funcSlot]
-      } else {
-        errLog('vxe.error.notSlot', [funcSlot])
-      }
-    } else {
-      return funcSlot
-    }
-  }
-  return null
-}
-
-const getConfigSlot = ($xeGrid: VxeGridConstructor & VxeGridPrivateMethods, slotConfigs?: Record<string, any>) => {
-  const slots = $xeGrid.$scopedSlots
-
-  const slotConf: Record<string, any> = {}
-  XEUtils.objectMap(slotConfigs, (slotFunc, slotKey) => {
-    if (slotFunc) {
-      if (XEUtils.isString(slotFunc)) {
-        if (slots[slotFunc]) {
-          slotConf[slotKey] = slots[slotFunc]
-        } else {
-          errLog('vxe.error.notSlot', [slotFunc])
-        }
-      } else {
-        slotConf[slotKey] = slotFunc
-      }
-    }
-  })
-  return slotConf
-}
-
-function getToolbarSlots ($xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
-  const slots = $xeGrid.$scopedSlots
-
-  const toolbarOpts = $xeGrid.computeToolbarOpts
-  const toolbarOptSlots = toolbarOpts.slots
-  const toolbarSlots: {
-    buttons?(params: any): any
-    buttonPrefix?(params: any): any
-    buttonSuffix?(params: any): any
-    tools?(params: any): any
-    toolPrefix?(params: any): any
-    toolSuffix?(params: any): any
-  } = {}
-  if (slots.buttons && (!toolbarOptSlots || toolbarOptSlots.buttons !== 'buttons')) {
-    warnLog('vxe.error.reqProp', ['toolbar-config.slots.buttons'])
-  }
-  if (slots.tools && (!toolbarOptSlots || toolbarOptSlots.tools !== 'tools')) {
-    warnLog('vxe.error.reqProp', ['toolbar-config.slots.tools'])
-  }
-  if (toolbarOptSlots) {
-    const buttonsSlot = getFuncSlot($xeGrid, toolbarOptSlots, 'buttons')
-    const buttonPrefixSlot = getFuncSlot($xeGrid, toolbarOptSlots, 'buttonPrefix')
-    const buttonSuffixSlot = getFuncSlot($xeGrid, toolbarOptSlots, 'buttonSuffix')
-    const toolsSlot = getFuncSlot($xeGrid, toolbarOptSlots, 'tools')
-    const toolPrefixSlot = getFuncSlot($xeGrid, toolbarOptSlots, 'toolPrefix')
-    const toolSuffixSlot = getFuncSlot($xeGrid, toolbarOptSlots, 'toolSuffix')
-    if (buttonsSlot) {
-      toolbarSlots.buttons = buttonsSlot
-    }
-    if (buttonPrefixSlot) {
-      toolbarSlots.buttonPrefix = buttonPrefixSlot
-    }
-    if (buttonSuffixSlot) {
-      toolbarSlots.buttonSuffix = buttonSuffixSlot
-    }
-    if (toolsSlot) {
-      toolbarSlots.tools = toolsSlot
-    }
-    if (toolPrefixSlot) {
-      toolbarSlots.toolPrefix = toolPrefixSlot
-    }
-    if (toolSuffixSlot) {
-      toolbarSlots.toolSuffix = toolSuffixSlot
-    }
-  }
-  return toolbarSlots
-}
 
 function getTableOns (_vm: any) {
   const { $listeners, proxyConfig, proxyOpts } = _vm
@@ -202,304 +39,64 @@ function getTableOns (_vm: any) {
   return ons
 }
 
-function pageChangeEvent ($xeGrid: VxeGridConstructor & VxeGridPrivateMethods, params: VxePagerDefines.PageChangeEventParams) {
-  const props = $xeGrid
-  const reactData = $xeGrid as unknown as GridReactData
+XEUtils.each(VxeTableComponent.methods, (fn, name) => {
+  (tableMethods as any)[name] = function (...args: any[]) {
+    const $xeGrid = this
+    const $xeTable = $xeGrid.$refs.refTable
 
-  const { proxyConfig } = props
-  const { tablePage } = reactData
-  const { $event, currentPage, pageSize } = params
-  const proxyOpts = $xeGrid.computeProxyOpts
-  tablePage.currentPage = currentPage
-  tablePage.pageSize = pageSize
-  $xeGrid.dispatchEvent('page-change', params, $event)
-  if (proxyConfig && isEnableConf(proxyOpts)) {
-    $xeGrid.commitProxy('query').then((rest) => {
-      $xeGrid.dispatchEvent('proxy-query', rest, $event)
-    })
-  }
-}
-
-/**
- * 渲染表单
- */
-function renderForm (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
-  const slots = $xeGrid.$scopedSlots
-  const props = $xeGrid
-
-  const { formConfig } = props
-  const formSlot = slots.form
-  const hasForm = !!(formSlot || isEnableConf(formConfig))
-
-  if (hasForm) {
-    return h('div', {
-      key: 'form',
-      ref: 'refFormWrapper',
-      class: 'vxe-grid--form-wrapper'
-    }, formSlot ? formSlot.call($xeGrid, { $grid: $xeGrid }) : renderDefaultForm(h, $xeGrid))
-  }
-  return renderEmptyElement($xeGrid)
-}
-
-/**
- * 渲染工具栏
- */
-function renderToolbar (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
-  const slots = $xeGrid.$scopedSlots
-  const props = $xeGrid
-
-  const { toolbarConfig } = props
-  const toolbarSlot = slots.toolbar
-  const hasToolbar = !!(toolbarSlot || isEnableConf(toolbarConfig) || toolbar)
-  const toolbarOpts = $xeGrid.computeToolbarOpts
-
-  if (hasToolbar) {
-    return h('div', {
-      key: 'toolbar',
-      ref: 'refToolbarWrapper',
-      class: 'vxe-grid--toolbar-wrapper'
-    }, toolbarSlot
-      ? toolbarSlot.call($xeGrid, { $grid: $xeGrid })
-      : [
-          h(VxeToolbarComponent, {
-            props: Object.assign({}, toolbarOpts, { slots: undefined }),
-            ref: 'xToolbar',
-            scopedSlots: getToolbarSlots($xeGrid)
-          })
-        ]
-    )
-  }
-  return renderEmptyElement($xeGrid)
-}
-
-/**
- * 渲染表格顶部区域
- */
-function renderTop (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
-  const slots = $xeGrid.$scopedSlots
-
-  const topSlot = slots.top
-
-  return topSlot
-    ? h('div', {
-      key: 'top',
-      ref: 'refTopWrapper',
-      class: 'vxe-grid--top-wrapper'
-    }, topSlot.call($xeGrid, { $grid: $xeGrid }))
-    : renderEmptyElement($xeGrid)
-}
-
-function renderTableLeft (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
-  const slots = $xeGrid.$scopedSlots
-
-  const leftSlot = slots.left
-  if (leftSlot) {
-    return h('div', {
-      class: 'vxe-grid--left-wrapper'
-    }, leftSlot({ $grid: $xeGrid }))
-  }
-  return renderEmptyElement($xeGrid)
-}
-
-function renderTableRight (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
-  const slots = $xeGrid.$scopedSlots
-
-  const rightSlot = slots.right
-  if (rightSlot) {
-    return h('div', {
-      class: 'vxe-grid--right-wrapper'
-    }, rightSlot({ $grid: $xeGrid }))
-  }
-  return renderEmptyElement($xeGrid)
-}
-
-/**
- * 渲染表格
- */
-function renderTable (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
-  const slots = $xeGrid.$scopedSlots
-
-  const tableProps = $xeGrid.computeTableProps
-
-  return h('div', {
-    class: 'vxe-grid--table-wrapper'
-  }, [
-    h('vxe-table', {
-      key: 'table',
-      props: tableProps,
-      on: getTableOns($xeGrid),
-      scopedSlots: slots,
-      ref: 'xTable'
-    })
-  ])
-}
-
-/**
- * 渲染表格底部区域
- */
-function renderBottom (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
-  const slots = $xeGrid.$scopedSlots
-
-  const bottomSlot = slots.bottom
-
-  return bottomSlot
-    ? h('div', {
-      key: 'bottom',
-      ref: 'refBottomWrapper',
-      class: 'vxe-grid--bottom-wrapper'
-    }, bottomSlot.call($xeGrid, { $grid: $xeGrid }))
-    : renderEmptyElement($xeGrid)
-}
-
-/**
- * 渲染分页
- */
-function renderPager (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
-  const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
-  const props = $xeGrid
-  const slots = $xeGrid.$scopedSlots
-  const reactData = $xeGrid as unknown as GridReactData
-
-  const { proxyConfig, pagerConfig } = props
-  const proxyOpts = $xeGrid.computeProxyOpts
-  const pagerOpts = $xeGrid.computePagerOpts
-  const pagerSlot = slots.pager
-  if ((pagerConfig && isEnableConf(pagerOpts)) || slots.pager) {
-    return h('div', {
-      ref: 'refPagerWrapper',
-      key: 'pager',
-      class: 'vxe-grid--pager-wrapper'
-    }, pagerSlot
-      ? pagerSlot.call($xeGrid, { $grid: $xeGrid })
-      : [
-          VxeUIPagerComponent
-            ? h(VxeUIPagerComponent, {
-              ref: 'refPager',
-              props: {
-                ...pagerOpts,
-                ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {})
-              },
-              on: {
-                'page-change' (params: any) {
-                  pageChangeEvent($xeGrid, params)
-                }
-              },
-              scopedSlots: getConfigSlot($xeGrid, pagerOpts.slots)
-            })
-            : renderEmptyElement($xeGrid)
-        ])
-  }
-  return renderEmptyElement($xeGrid)
-}
-
-function renderChildLayout (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods, layoutKeys: VxeGridPropTypes.LayoutKey[]) {
-  const childVNs: VNode[] = []
-  layoutKeys.forEach(key => {
-    switch (key) {
-      case 'Form':
-        childVNs.push(renderForm(h, $xeGrid))
-        break
-      case 'Toolbar':
-        childVNs.push(renderToolbar(h, $xeGrid))
-        break
-      case 'Top':
-        childVNs.push(renderTop(h, $xeGrid))
-        break
-      case 'Table':
-        childVNs.push(
-          h('div', {
-            key: 'table',
-            class: 'vxe-grid--table-container'
-          }, [
-            renderTableLeft(h, $xeGrid),
-            renderTable(h, $xeGrid),
-            renderTableRight(h, $xeGrid)
-          ])
-        )
-        break
-      case 'Bottom':
-        childVNs.push(renderBottom(h, $xeGrid))
-        break
-      case 'Pager':
-        childVNs.push(renderPager(h, $xeGrid))
-        break
-      default:
-        errLog('vxe.error.notProp', [`layouts -> ${key}`])
-        break
-    }
-  })
-  return childVNs
-}
-
-function renderLayout (h: CreateElement, $xeGrid: VxeGridConstructor & VxeGridPrivateMethods) {
-  const slots = $xeGrid.$scopedSlots
-
-  const currLayoutConf = ($xeGrid as any).computeCurrLayoutConf as {
-    headKeys: VxeGridPropTypes.LayoutKey[]
-    bodyKeys: VxeGridPropTypes.LayoutKey[]
-    footKeys: VxeGridPropTypes.LayoutKey[]
-  }
-  const { headKeys, bodyKeys, footKeys } = currLayoutConf
-  const asideLeftSlot = slots.asideLeft || slots['aside-left']
-  const asideRightSlot = slots.asideRight || slots['aside-right']
-  return [
-    h('div', {
-      class: 'vxe-grid--layout-header-wrapper'
-    }, renderChildLayout(h, $xeGrid, headKeys)),
-    h('div', {
-      class: 'vxe-grid--layout-body-wrapper'
-    }, [
-      asideLeftSlot
-        ? h('div', {
-          class: 'vxe-grid--layout-aside-left-wrapper'
-        }, asideLeftSlot({}))
-        : renderEmptyElement($xeGrid),
-      h('div', {
-        class: 'vxe-grid--layout-body-content-wrapper'
-      }, renderChildLayout(h, $xeGrid, bodyKeys)),
-      asideRightSlot
-        ? h('div', {
-          class: 'vxe-grid--layout-aside-right-wrapper'
-        }, asideRightSlot({}))
-        : renderEmptyElement($xeGrid)
-    ]),
-    h('div', {
-      class: 'vxe-grid--layout-footer-wrapper'
-    }, renderChildLayout(h, $xeGrid, footKeys))
-  ]
-}
-
-Object.keys(VxeTableComponent.methods).forEach((name: any) => {
-  methods[name] = function (this: any, ...args: any[]) {
-    return this.$refs.xTable && this.$refs.xTable[name](...args)
+    return $xeTable && $xeTable[name](...args)
   }
 })
 
-export default {
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeGrid',
   mixins: [
     globalMixins.sizeMixin
   ],
   props: {
-    ...tableComponentProps,
-    layouts: Array,
-    columns: Array,
-    pagerConfig: [Boolean, Object],
-    proxyConfig: Object,
-    toolbar: [Boolean, Object],
-    toolbarConfig: [Boolean, Object],
-    formConfig: [Boolean, Object],
-    zoomConfig: Object,
-    size: { type: String, default: () => getConfig().grid.size || getConfig().size }
+    // 以下仅用于类型
+    round: { type: Boolean, default: () => getConfig().table.round },
+    height: [Number, String] as PropType<VxeTablePropTypes.Height>,
+    minHeight: { type: [Number, String] as PropType<VxeTablePropTypes.MinHeight>, default: () => getConfig().table.minHeight },
+    maxHeight: [Number, String] as PropType<VxeTablePropTypes.MaxHeight>,
+    seqConfig: Object as PropType<VxeTablePropTypes.SeqConfig>,
+    sortConfig: Object as PropType<VxeTablePropTypes.SortConfig>,
+    filterConfig: Object as PropType<VxeTablePropTypes.FilterConfig>,
+    editConfig: [Boolean, Object] as PropType<VxeTablePropTypes.EditConfig>,
+    loading: Boolean as PropType<VxeTablePropTypes.Loading>,
+    validConfig: Object as PropType<VxeTablePropTypes.ValidConfig>,
+    editRules: Object as PropType<VxeTablePropTypes.EditRules>,
+    animat: { type: Boolean, default: () => getConfig().table.animat },
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    ...(tableComponentProps as {}),
+    // 以上仅用于类型
+
+    layouts: Array as PropType<VxeGridPropTypes.Layouts>,
+    columns: Array as PropType<VxeGridPropTypes.Columns<any>>,
+    pagerConfig: Object as PropType<VxeGridPropTypes.PagerConfig>,
+    proxyConfig: Object as PropType<VxeGridPropTypes.ProxyConfig<any>>,
+    toolbarConfig: Object as PropType<VxeGridPropTypes.ToolbarConfig>,
+    formConfig: Object as PropType<VxeGridPropTypes.FormConfig>,
+    zoomConfig: Object as PropType<VxeGridPropTypes.ZoomConfig>,
+    size: {
+      type: String as PropType<VxeGridPropTypes.Size>,
+      default: () => getConfig().grid.size || getConfig().size
+    }
   },
   provide () {
+    const $xeGrid = this
+
     return {
-      $xeGrid: this
+      $xeGrid
     }
   },
   data () {
-    return {
+    const xID = XEUtils.uniqueId()
+
+    const reactData: GridReactData = {
       tableLoading: false,
+      proxyInited: false,
       isZMax: false,
       tableData: [],
       filterData: [],
@@ -512,49 +109,97 @@ export default {
         currentPage: 1
       }
     }
+
+    return {
+      xID,
+      reactData
+    }
   },
   computed: {
+    ...({} as {
+      computeSize(): VxeComponentSizeType
+    }),
     isRespMsg () {
-      const { proxyOpts } = this
-      return XEUtils.isBoolean(proxyOpts.message) ? proxyOpts.message : proxyOpts.showResponseMsg
+      const $xeGrid = this
+
+      return $xeGrid.computeIsRespMsg
+    },
+    computeIsRespMsg () {
+      const $xeGrid = this
+
+      const proxyOpts = $xeGrid.computeProxyOpts as VxeGridPropTypes.ProxyConfig
+      return !!(XEUtils.isBoolean(proxyOpts.message) ? proxyOpts.message : proxyOpts.showResponseMsg)
     },
     isActiveMsg () {
-      return this.proxyOpts.showActiveMsg
+      const $xeGrid = this
+
+      return $xeGrid.computeIsActiveMsg
+    },
+    computeIsActiveMsg () {
+      const $xeGrid = this
+
+      const proxyOpts = $xeGrid.computeProxyOpts as VxeGridPropTypes.ProxyConfig
+      return !!proxyOpts.showActiveMsg
     },
     proxyOpts () {
-      return this.computeProxyOpts
+      const $xeGrid = this
+
+      return $xeGrid.computeProxyOpts
     },
     computeProxyOpts () {
-      return XEUtils.merge({}, XEUtils.clone(getConfig().grid.proxyConfig, true), this.proxyConfig)
+      const $xeGrid = this
+      const props = $xeGrid
+
+      return XEUtils.merge({}, XEUtils.clone(getConfig().grid.proxyConfig, true), props.proxyConfig) as VxeGridPropTypes.ProxyConfig
     },
     pagerOpts () {
-      return this.computePagerOpts
+      const $xeGrid = this
+
+      return $xeGrid.computePagerOpts
     },
     computePagerOpts () {
-      return Object.assign({}, getConfig().grid.pagerConfig, this.pagerConfig)
+      const $xeGrid = this
+      const props = $xeGrid
+
+      return Object.assign({}, getConfig().grid.pagerConfig, props.pagerConfig)
     },
     formOpts () {
-      return this.computeFormOpts
+      const $xeGrid = this
+
+      return $xeGrid.computeFormOpts
     },
     computeFormOpts () {
-      return Object.assign({}, getConfig().grid.formConfig, this.formConfig)
+      const $xeGrid = this
+      const props = $xeGrid
+
+      return Object.assign({}, getConfig().grid.formConfig, props.formConfig)
     },
     toolbarOpts () {
-      return this.computeToolbarOpts
+      const $xeGrid = this
+
+      return $xeGrid.computeToolbarOpts
     },
     computeToolbarOpts () {
-      return Object.assign({}, getConfig().grid.toolbarConfig, this.toolbarConfig || this.toolbar)
+      const $xeGrid = this
+      const props = $xeGrid
+
+      return Object.assign({}, getConfig().grid.toolbarConfig, props.toolbarConfig)
     },
     zoomOpts () {
-      return this.computeZoomOpts
+      const $xeGrid = this
+
+      return $xeGrid.computeZoomOpts
     },
     computeZoomOpts () {
-      return Object.assign({}, getConfig().grid.zoomConfig, this.zoomConfig)
+      const $xeGrid = this
+      const props = $xeGrid
+
+      return Object.assign({}, getConfig().grid.zoomConfig, props.zoomConfig)
     },
     computeStyles () {
       const $xeGrid = this
       const props = $xeGrid
-      const reactData = $xeGrid as GridReactData
+      const reactData = $xeGrid.reactData
 
       const { height, maxHeight } = props
       const { isZMax, tZindex } = reactData
@@ -571,15 +216,27 @@ export default {
       }
       return stys
     },
-    tableExtendProps () {
+    computeTableExtendProps () {
+      const $xeGrid = this
+      const props = $xeGrid
+
       const rest: any = {}
+      const gridProps: any = props
       propKeys.forEach(key => {
-        rest[key] = this[key]
+        rest[key] = gridProps[key]
       })
       return rest
     },
     computeTableProps () {
-      const { isZMax, seqConfig, pagerConfig, loading, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage } = this
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
+
+      const { seqConfig, pagerConfig, loading, editConfig, proxyConfig } = props
+      const { isZMax, tableLoading, tablePage } = reactData
+      const tableExtendProps = $xeGrid.computeTableExtendProps as any
+      const proxyOpts = $xeGrid.computeProxyOpts
+      const pagerOpts = $xeGrid.computePagerOpts
       const tProps = Object.assign({}, tableExtendProps)
       if (isZMax) {
         if (tableExtendProps.maxHeight) {
@@ -588,9 +245,9 @@ export default {
           tProps.height = '100%'
         }
       }
-      if (proxyConfig) {
+      if (proxyConfig && isEnableConf(proxyOpts)) {
         tProps.loading = loading || tableLoading
-        if (proxyOpts.seq && isEnableConf(pagerConfig)) {
+        if (pagerConfig && proxyOpts.seq && isEnableConf(pagerOpts)) {
           tProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
@@ -600,7 +257,9 @@ export default {
       return tProps
     },
     tableProps () {
-      return this.computeTableProps
+      const $xeGrid = this
+
+      return $xeGrid.computeTableProps
     },
     computeCurrLayoutConf () {
       const $xeGrid = this
@@ -634,126 +293,98 @@ export default {
     computeCustomCurrentPageFlag () {
       const $xeGrid = this
 
-      const pagerOpts = $xeGrid.computePagerOpts
+      const pagerOpts = $xeGrid.computePagerOpts as VxeGridPropTypes.PagerConfig
       return pagerOpts.currentPage
     },
     computeCustomPageSizeFlag () {
       const $xeGrid = this
 
-      const pagerOpts = $xeGrid.computePagerOpts
+      const pagerOpts = $xeGrid.computePagerOpts as VxeGridPropTypes.PagerConfig
       return pagerOpts.pageSize
     },
     computeCustomTotalFlag () {
       const $xeGrid = this
 
-      const pagerOpts = $xeGrid.computePagerOpts
+      const pagerOpts = $xeGrid.computePagerOpts as VxeGridPropTypes.PagerConfig
       return pagerOpts.total
     }
-  } as any,
+  },
   watch: {
     columns (value: any) {
-      this.$nextTick(() => this.loadColumn(value))
+      const $xeGrid = this
+
+      $xeGrid.$nextTick(() => $xeGrid.loadColumn(value))
     },
     toolbar (value: any) {
+      const $xeGrid = this
+
       if (value) {
-        this.initToolbar()
+        $xeGrid.initToolbar()
       }
     },
     toolbarConfig (value: any) {
+      const $xeGrid = this
+
       if (value) {
-        this.initToolbar()
+        $xeGrid.initToolbar()
       }
     },
     proxyConfig () {
-      this.initProxy()
+      const $xeGrid = this
+
+      $xeGrid.initProxy()
     },
     computeCustomCurrentPageFlag () {
-      const $xeGrid = this as VxeGridConstructor & VxeGridPrivateMethods
+      const $xeGrid = this
 
-      initPages($xeGrid, 'currentPage')
+      $xeGrid.initPages('currentPage')
     },
     computeCustomPageSizeFlag () {
-      const $xeGrid = this as VxeGridConstructor & VxeGridPrivateMethods
+      const $xeGrid = this
 
-      initPages($xeGrid, 'pageSize')
+      $xeGrid.initPages('pageSize')
     },
     computeCustomTotalFlag () {
-      const $xeGrid = this as VxeGridConstructor & VxeGridPrivateMethods
+      const $xeGrid = this
 
-      initPages($xeGrid, 'total')
+      $xeGrid.initPages('total')
     }
-  } as any,
-  created (this: any) {
-    const $xeGrid = this
-    const props = $xeGrid
-
-    // const { data, formOpts, proxyOpts, proxyConfig } = this
-    // if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
-    //   errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
-    // }
-
-    if (this.toolbar) {
-      warnLog('vxe.error.delProp', ['grid.toolbar', 'grid.toolbar-config'])
-    }
-    if (this.toolbarConfig && !XEUtils.isObject(this.toolbarConfig)) {
-      warnLog('vxe.error.errProp', [`grid.toolbar-config=${this.toolbarConfig}`, 'grid.toolbar-config={}'])
-    }
-    // if (proxyOpts.props) {
-    //   warnLog('vxe.error.delProp', ['proxy-config.props', 'proxy-config.response'])
-    // }
-
-    // 使用已安装的组件，如果未安装则不渲染
-    const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
-    const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
-
-    $xeGrid.$nextTick(() => {
-      if (props.formConfig) {
-        if (!VxeUIFormComponent) {
-          errLog('vxe.error.reqComp', ['vxe-form'])
-        }
-      }
-      if (props.pagerConfig) {
-        if (!VxeUIPagerComponent) {
-          errLog('vxe.error.reqComp', ['vxe-pager'])
-        }
-      }
-    })
-
-    initPages($xeGrid)
-    globalEvents.on(this, 'keydown', this.handleGlobalKeydownEvent)
   },
-  mounted (this: any) {
-    if (this.columns && this.columns.length) {
-      this.loadColumn(this.columns)
-    }
-    this.initToolbar()
-    this.initProxy()
-  },
-  destroyed (this: any) {
-    globalEvents.off(this, 'keydown')
-  },
-  render (this: any, h: CreateElement) {
-    const $xeGrid = this
-    const props = $xeGrid
-    const reactData = $xeGrid as GridReactData
 
-    const vSize = $xeGrid.computeSize
-    const styles = $xeGrid.computeStyles
-    return h('div', {
-      ref: 'refElem',
-      class: ['vxe-grid', {
-        [`size--${vSize}`]: vSize,
-        'is--animat': !!this.animat,
-        'is--round': this.round,
-        'is--maximize': reactData.isZMax,
-        'is--loading': props.loading || reactData.tableLoading
-      }],
-      style: styles
-    }, renderLayout(h, $xeGrid))
-  },
   methods: {
-    ...methods,
-    callSlot (slotFunc: any, params: any, h: any, vNodes: any) {
+    ...tableMethods,
+    dispatchEvent (type: ValueOf<VxeGridEmits>, params: Record<string, any>, evnt: Event | null) {
+      const $xeGrid = this
+      $xeGrid.$emit(type, createEvent(evnt, { $grid: $xeGrid }, params))
+    },
+    initPages (propKey?: 'currentPage' | 'pageSize' | 'total') {
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
+
+      const { tablePage } = reactData
+      const { pagerConfig } = props
+      const pagerOpts = $xeGrid.computePagerOpts
+      if (pagerConfig && isEnableConf(pagerOpts)) {
+        if (propKey) {
+          if (pagerOpts[propKey]) {
+            tablePage[propKey] = XEUtils.toNumber(pagerOpts[propKey])
+          }
+        } else {
+          const { currentPage, pageSize, total } = pagerOpts
+          if (currentPage) {
+            tablePage.currentPage = currentPage
+          }
+          if (pageSize) {
+            tablePage.pageSize = pageSize
+          }
+          if (total) {
+            tablePage.pageSize = total
+          }
+        }
+      }
+    },
+    callSlot (slotFunc: any, params: any, h: CreateElement, vNodes: any) {
       const $xeGrid = this
       const slots = $xeGrid.$scopedSlots
 
@@ -777,7 +408,7 @@ export default {
      */
     getExcludeHeight () {
       const $xeGrid = this
-      const reactData = $xeGrid as GridReactData
+      const reactData = $xeGrid.reactData
 
       const { isZMax } = reactData
       const el = $xeGrid.$refs.refElem as HTMLDivElement
@@ -794,8 +425,8 @@ export default {
       return 0
     },
     getParentHeight () {
-      const $xeGrid = this as VxeGridConstructor & VxeGridPrivateMethods
-      const reactData = $xeGrid as unknown as GridReactData
+      const $xeGrid = this
+      const reactData = $xeGrid.reactData
 
       const el = $xeGrid.$refs.refElem as HTMLDivElement
       if (el) {
@@ -805,71 +436,163 @@ export default {
       return 0
     },
     initToolbar () {
-      this.$nextTick(() => {
-        const { xTable, xToolbar } = this.$refs
-        if (xTable && xToolbar) {
-          xTable.connect(xToolbar)
+      const $xeGrid = this
+
+      $xeGrid.$nextTick(() => {
+        const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
+        const $xeToolbar = $xeGrid.$refs.refToolbar as VxeToolbarInstance
+        if ($xeTable && $xeToolbar) {
+          $xeTable.connect($xeToolbar)
         }
       })
     },
+    getDefaultFormData () {
+      const $xeGrid = this
+
+      const formOpts = $xeGrid.computeFormOpts
+      if (formOpts.items) {
+        const fData: any = {}
+        formOpts.items.forEach(item => {
+          const { field, itemRender } = item
+          if (field) {
+            let itemValue: any = null
+            if (itemRender) {
+              const { defaultValue } = itemRender
+              if (XEUtils.isFunction(defaultValue)) {
+                itemValue = defaultValue({ item })
+              } else if (!XEUtils.isUndefined(defaultValue)) {
+                itemValue = defaultValue
+              }
+            }
+            fData[field] = itemValue
+          }
+        })
+        return fData
+      }
+      return {}
+    },
     initProxy () {
-      const { proxyInited, proxyConfig, proxyOpts, formConfig, formOpts } = this
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
+
+      const { proxyConfig, formConfig } = props
+      const { proxyInited } = reactData
+      const proxyOpts = $xeGrid.computeProxyOpts
+      const formOpts = $xeGrid.computeFormOpts
       if (proxyConfig) {
         if (isEnableConf(formConfig) && proxyOpts.form && formOpts.items) {
-          const fData: any = {}
-          formOpts.items.forEach((item: any) => {
-            const { field, itemRender } = item
-            if (field) {
-              let itemValue = null
-              if (itemRender) {
-                const { defaultValue } = itemRender
-                if (XEUtils.isFunction(defaultValue)) {
-                  itemValue = defaultValue({ item })
-                } else if (!XEUtils.isUndefined(defaultValue)) {
-                  itemValue = defaultValue
-                }
-              }
-              fData[field] = itemValue
-            }
-          })
-          this.formData = fData
+          reactData.formData = $xeGrid.getDefaultFormData()
         }
         if (!proxyInited && proxyOpts.autoLoad !== false) {
-          this.proxyInited = true
-          this.$nextTick().then(() => this.commitProxy('_init')).then((rest: any) => {
-            this.$emit('proxy-query', { ...rest, isInited: true, $grid: this, $event: new Event('init') })
+          reactData.proxyInited = true
+          $xeGrid.$nextTick().then(() => $xeGrid.commitProxy('initial')).then((rest) => {
+            $xeGrid.dispatchEvent('proxy-query', { ...rest, isInited: true }, new Event('initial'))
           })
         }
       }
     },
-    handleGlobalKeydownEvent (evnt: any) {
-      const isEsc = evnt.keyCode === 27
-      if (isEsc && this.isZMax && this.zoomOpts.escRestore !== false) {
-        this.triggerZoomEvent(evnt)
+    handleGlobalKeydownEvent (evnt: KeyboardEvent) {
+      const $xeGrid = this
+      const reactData = $xeGrid.reactData
+
+      const zoomOpts = $xeGrid.computeZoomOpts
+      const isEsc = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ESCAPE)
+      if (isEsc && reactData.isZMax && zoomOpts.escRestore !== false) {
+        $xeGrid.triggerZoomEvent(evnt)
+      }
+    },
+    getRespMsg (rest: any, defaultMsg: string) {
+      const $xeGrid = this
+
+      const proxyOpts = $xeGrid.computeProxyOpts
+      const resConfigs = proxyOpts.response || proxyOpts.props || {}
+      const messageProp = resConfigs.message
+      let msg
+      if (rest && messageProp) {
+        msg = XEUtils.isFunction(messageProp) ? messageProp({ data: rest, $grid: $xeGrid as unknown as VxeGridConstructor }) : XEUtils.get(rest, messageProp)
+      }
+      return msg || getI18n(defaultMsg)
+    },
+    handleDeleteRow (code: string, alertKey: string, callback: () => void): Promise<void> {
+      const $xeGrid = this
+
+      const isActiveMsg = $xeGrid.computeIsActiveMsg
+      const selectRecords = $xeGrid.getCheckboxRecords()
+      if (isActiveMsg) {
+        if (selectRecords.length) {
+          if (VxeUI.modal) {
+            return VxeUI.modal.confirm({ id: `cfm_${code}`, content: getI18n(alertKey), escClosable: true }).then((type) => {
+              if (type === 'confirm') {
+                return callback()
+              }
+            })
+          }
+        } else {
+          if (VxeUI.modal) {
+            VxeUI.modal.message({ id: `msg_${code}`, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
+          }
+        }
+      } else {
+        if (selectRecords.length) {
+          callback()
+        }
+      }
+      return Promise.resolve()
+    },
+    triggerPendingEvent (code: string) {
+      const $xeGrid = this
+
+      const isActiveMsg = $xeGrid.computeIsActiveMsg
+      const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
+      const selectRecords = $xeTable.getCheckboxRecords()
+      if (selectRecords.length) {
+        $xeTable.togglePendingRow(selectRecords)
+        $xeGrid.clearCheckboxRow()
+      } else {
+        if (isActiveMsg) {
+          if (VxeUI.modal) {
+            VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
+          }
+        }
       }
     },
     /**
      * 提交指令，支持 code 或 button
      * @param {String/Object} code 字符串或对象
      */
-    commitProxy (proxyTarget: any, ...args: any[]) {
-      const $xeGrid = this as VxeGridConstructor & VxeGridPrivateMethods
-      const reactData = $xeGrid as unknown as GridReactData
+    commitProxy (proxyTarget: string | VxeToolbarPropTypes.ButtonConfig, ...args: any[]): Promise<any> {
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
 
-      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, isRespMsg, isActiveMsg, validConfig, pagerOpts } = this
+      /**
+       * 已废弃
+       * @deprecated
+       */
+      const toolbar = (props as any).toolbar
+
+      const { proxyConfig, toolbarConfig, pagerConfig, editRules, validConfig } = props
+      const { tablePage } = reactData
+      const isActiveMsg = $xeGrid.computeIsActiveMsg
+      const isRespMsg = $xeGrid.computeIsRespMsg
+      const proxyOpts = $xeGrid.computeProxyOpts
+      const pagerOpts = $xeGrid.computePagerOpts
+      const toolbarOpts = $xeGrid.computeToolbarOpts
       const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {} } = proxyOpts
       const resConfigs = proxyOpts.response || proxyOpts.props || {}
-      const $xeTable = $refs.xTable as VxeTableConstructor & VxeTablePrivateMethods
-      const formData = this.getFormData()
-      let button: any
-      let code: string
+      const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
+      let formData = $xeGrid.getFormData()
+      let button: VxeToolbarPropTypes.ButtonConfig | null = null
+      let code: string | null = null
       if (XEUtils.isString(proxyTarget)) {
-        const matchObj = toolbarConfig || toolbar ? XEUtils.findTree(toolbarOpts.buttons, (item: any) => item.code === proxyTarget, { children: 'dropdowns' }) : null
+        const { buttons } = toolbarOpts
+        const matchObj = (toolbarConfig || toolbar) && isEnableConf(toolbarOpts) && buttons ? XEUtils.findTree(buttons, (item) => item.code === proxyTarget, { children: 'dropdowns' }) : null
+        button = matchObj ? matchObj.item as any : null
         code = proxyTarget
-        button = matchObj ? matchObj.item : null
       } else {
         button = proxyTarget
-        code = button.code
+        code = button.code as string
       }
       const btnParams = button ? button.params : null
       switch (code) {
@@ -884,10 +607,10 @@ export default {
           // 已废弃
 
         case 'mark_cancel':
-          this.triggerPendingEvent(code)
+          $xeGrid.triggerPendingEvent(code)
           break
         case 'remove':
-          return this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeCheckboxRow())
+          return $xeGrid.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => $xeTable.removeCheckboxRow())
         case 'import':
           $xeTable.importData(btnParams)
           break
@@ -903,14 +626,14 @@ export default {
         case 'reset_custom':
           $xeTable.resetCustom(true)
           break
-        case '_init':
+        case 'initial':
         case 'reload':
         case 'query': {
           const ajaxMethods = ajax.query
           const querySuccessMethods = ajax.querySuccess
           const queryErrorMethods = ajax.queryError
           if (ajaxMethods) {
-            const isInited = code === '_init'
+            const isInited = code === 'initial'
             const isReload = code === 'reload'
             if (!isInited && reactData.tableLoading) {
               return $xeGrid.$nextTick()
@@ -927,25 +650,40 @@ export default {
               }
             }
             if (isInited) {
-              let defaultSort = null
-              if ($xeTable) {
-                const { sortOpts } = $xeTable
-                defaultSort = sortOpts.defaultSort
+              // 重置代理表单数据
+              if (proxyConfig && isEnableConf(proxyOpts) && proxyOpts.form) {
+                formData = $xeGrid.getDefaultFormData()
+                reactData.formData = formData
               }
-              // 如果使用默认排序
-              if (defaultSort) {
-                if (!XEUtils.isArray(defaultSort)) {
-                  defaultSort = [defaultSort]
-                }
-                sortList = defaultSort.map((item) => {
-                  return {
-                    field: item.field,
-                    property: item.field,
-                    order: item.order
-                  }
+              if ($xeTable) {
+                const { internalData: tableInternalData } = $xeTable
+                const { tableFullColumn, fullColumnFieldData } = tableInternalData
+                const sortOpts = $xeTable.computeSortOpts
+                let defaultSort = sortOpts.defaultSort
+                tableFullColumn.forEach((column) => {
+                  column.order = null
                 })
-              }
-              if ($xeTable) {
+                // 如果使用默认排序
+                if (defaultSort) {
+                  if (!XEUtils.isArray(defaultSort)) {
+                    defaultSort = [defaultSort]
+                  }
+                  sortList = defaultSort.map((item) => {
+                    const { field, order } = item
+                    const colRest = fullColumnFieldData[field]
+                    if (colRest) {
+                      const column = colRest.column
+                      if (column) {
+                        column.order = order
+                      }
+                    }
+                    return {
+                      field,
+                      property: field,
+                      order
+                    }
+                  })
+                }
                 filterList = $xeTable.getCheckedFilters()
               }
             } else {
@@ -963,7 +701,7 @@ export default {
               button,
               isInited,
               isReload,
-              $grid: this,
+              $grid: $xeGrid as unknown as VxeGridConstructor,
               page: pageParams,
               sort: sortList.length ? sortList[0] : {},
               sorts: sortList,
@@ -971,21 +709,21 @@ export default {
               form: formData,
               options: ajaxMethods
             }
-            this.sortData = sortList
-            this.filterData = filterList
-            this.tableLoading = true
+            reactData.sortData = sortList
+            reactData.filterData = filterList
+            reactData.tableLoading = true
             const applyArgs = [commitParams].concat(args)
             return Promise.resolve((beforeQuery || ajaxMethods)(...applyArgs))
               .then(rest => {
                 let tableData: any[] = []
-                this.tableLoading = false
+                reactData.tableLoading = false
                 if (rest) {
                   if (pagerConfig && isEnableConf(pagerOpts)) {
                     const totalProp = resConfigs.total
-                    const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $grid: this }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
+                    const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $grid: $xeGrid as unknown as VxeGridConstructor }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
                     tablePage.total = XEUtils.toNumber(total)
                     const resultProp = resConfigs.result
-                    tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $grid: this }) : XEUtils.get(rest, resultProp || 'result')) || []
+                    tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $grid: $xeGrid as unknown as VxeGridConstructor }) : XEUtils.get(rest, resultProp || 'result')) || []
                     // 检验当前页码，不能超出当前最大页数
                     const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
                     if (tablePage.currentPage > pageCount) {
@@ -993,7 +731,7 @@ export default {
                     }
                   } else {
                     const listProp = resConfigs.list
-                    tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: this }) : XEUtils.get(rest, listProp)) : rest) || []
+                    tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: $xeGrid as unknown as VxeGridConstructor }) : XEUtils.get(rest, listProp)) : rest) || []
                   }
                 }
                 if ($xeTable as any) {
@@ -1013,7 +751,7 @@ export default {
                 }
                 return { status: true }
               }).catch((rest) => {
-                this.tableLoading = false
+                reactData.tableLoading = false
                 if (queryErrorMethods) {
                   queryErrorMethods({ ...commitParams, response: rest })
                 }
@@ -1032,29 +770,29 @@ export default {
             const selectRecords = $xeTable.getCheckboxRecords()
             const removeRecords = selectRecords.filter((row) => !$xeTable.isInsertByRow(row))
             const body = { removeRecords }
-            const commitParams = { $grid: this, code, button, body, form: formData, options: ajaxMethods }
+            const commitParams = { $grid: $xeGrid, code, button, body, form: formData, options: ajaxMethods }
             const applyArgs = [commitParams].concat(args)
             if (selectRecords.length) {
-              return this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
+              return $xeGrid.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
                 if (!removeRecords.length) {
                   return $xeTable.remove(selectRecords)
                 }
-                this.tableLoading = true
+                reactData.tableLoading = true
                 return Promise.resolve((beforeDelete || ajaxMethods)(...applyArgs))
                   .then(rest => {
-                    this.tableLoading = false
+                    reactData.tableLoading = false
                     $xeTable.setPendingRow(removeRecords, false)
                     if (isRespMsg) {
                       // 检测弹窗模块
                       if (!VxeUI.modal) {
                         errLog('vxe.error.reqModule', ['Modal'])
                       }
-                      VxeUI.modal.message({ content: this.getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
+                      VxeUI.modal.message({ content: $xeGrid.getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
                     }
                     if (afterDelete) {
                       afterDelete(...applyArgs)
                     } else {
-                      this.commitProxy('query')
+                      $xeGrid.commitProxy('query')
                     }
                     if (deleteSuccessMethods) {
                       deleteSuccessMethods({ ...commitParams, response: rest })
@@ -1062,13 +800,13 @@ export default {
                     return { status: true }
                   })
                   .catch(rest => {
-                    this.tableLoading = false
+                    reactData.tableLoading = false
                     if (isRespMsg) {
                       // 检测弹窗模块
                       if (!VxeUI.modal) {
                         errLog('vxe.error.reqModule', ['Modal'])
                       }
-                      VxeUI.modal.message({ id: code, content: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
+                      VxeUI.modal.message({ id: code, content: $xeGrid.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
                     if (deleteErrorMethods) {
                       deleteErrorMethods({ ...commitParams, response: rest })
@@ -1095,22 +833,22 @@ export default {
           const saveSuccessMethods = ajax.saveSuccess
           const saveErrorMethods = ajax.saveError
           if (ajaxMethods) {
-            const body = this.getRecordset()
+            const body = $xeGrid.getRecordset()
             const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
-            const commitParams = { $grid: this, code, button, body, form: formData, options: ajaxMethods }
+            const commitParams = { $grid: $xeGrid, code, button, body, form: formData, options: ajaxMethods }
             const applyArgs = [commitParams].concat(args)
             // 排除掉新增且标记为删除的数据
             if (insertRecords.length) {
-              body.pendingRecords = pendingRecords.filter((row: any) => insertRecords.indexOf(row) === -1)
+              body.pendingRecords = pendingRecords.filter((row) => insertRecords.indexOf(row) === -1)
             }
             // 排除已标记为删除的数据
             if (pendingRecords.length) {
-              body.insertRecords = insertRecords.filter((row: any) => pendingRecords.indexOf(row) === -1)
+              body.insertRecords = insertRecords.filter((row) => pendingRecords.indexOf(row) === -1)
             }
-            let restPromise = Promise.resolve()
+            let restPromise: Promise<any> = Promise.resolve()
             if (editRules) {
               // 只校验新增和修改的数据
-              restPromise = this[validConfig && validConfig.msgMode === 'full' ? 'fullValidate' : 'validate'](body.insertRecords.concat(updateRecords))
+              restPromise = $xeGrid[validConfig && validConfig.msgMode === 'full' ? 'fullValidate' : 'validate'](body.insertRecords.concat(updateRecords))
             }
             return restPromise.then((errMap: any) => {
               if (errMap) {
@@ -1118,22 +856,22 @@ export default {
                 return
               }
               if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
-                this.tableLoading = true
+                reactData.tableLoading = true
                 return Promise.resolve((beforeSave || ajaxMethods)(...applyArgs))
                   .then(rest => {
-                    this.tableLoading = false
+                    reactData.tableLoading = false
                     $xeTable.clearPendingRow()
                     if (isRespMsg) {
                       // 检测弹窗模块
                       if (!VxeUI.modal) {
                         errLog('vxe.error.reqModule', ['Modal'])
                       }
-                      VxeUI.modal.message({ content: this.getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
+                      VxeUI.modal.message({ content: $xeGrid.getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
                     }
                     if (afterSave) {
                       afterSave(...applyArgs)
                     } else {
-                      this.commitProxy('query')
+                      $xeGrid.commitProxy('query')
                     }
                     if (saveSuccessMethods) {
                       saveSuccessMethods({ ...commitParams, response: rest })
@@ -1141,13 +879,13 @@ export default {
                     return { status: true }
                   })
                   .catch(rest => {
-                    this.tableLoading = false
+                    reactData.tableLoading = false
                     if (isRespMsg) {
                       // 检测弹窗模块
                       if (!VxeUI.modal) {
                         errLog('vxe.error.reqModule', ['Modal'])
                       }
-                      VxeUI.modal.message({ id: code, content: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
+                      VxeUI.modal.message({ id: code, content: $xeGrid.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
                     if (saveErrorMethods) {
                       saveErrorMethods({ ...commitParams, response: rest })
@@ -1173,198 +911,228 @@ export default {
           const gCommandOpts = commands.get(code)
           if (gCommandOpts) {
             if (gCommandOpts.commandMethod) {
-              gCommandOpts.commandMethod({ code, button, $grid: this, $table: $xeTable }, ...args)
+              gCommandOpts.commandMethod({ code, button, $grid: $xeGrid as unknown as VxeGridConstructor, $table: $xeTable }, ...args)
             } else {
               errLog('vxe.error.notCommands', [code])
             }
           }
         }
       }
-      return this.$nextTick()
-    },
-    getRespMsg (rest: any, defaultMsg: any) {
-      const { proxyOpts } = this
-      const resConfigs = proxyOpts.response || proxyOpts.props || {}
-      let msg: any
-      if (rest && resConfigs.message) {
-        msg = XEUtils.get(rest, resConfigs.message)
-      }
-      return msg || getI18n(defaultMsg)
-    },
-    handleDeleteRow (code: any, alertKey: any, callback: any) {
-      const selectRecords = this.getCheckboxRecords()
-      if (this.isActiveMsg) {
-        if (selectRecords.length) {
-          return VxeUI.modal.confirm({ id: `cfm_${code}`, content: getI18n(alertKey), escClosable: true }).then(type => {
-            if (type === 'confirm') {
-              return callback()
-            }
-          })
-        } else {
-          // 检测弹窗模块
-          if (!VxeUI.modal) {
-            errLog('vxe.error.reqModule', ['Modal'])
-          }
-          VxeUI.modal.message({ id: `msg_${code}`, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
-        }
-      } else {
-        if (selectRecords.length) {
-          callback()
-        }
-      }
-      return Promise.resolve()
+      return $xeGrid.$nextTick()
     },
     getFormData () {
-      const { proxyConfig, proxyOpts, formOpts, formData } = this
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
+
+      const { proxyConfig } = props
+      const { formData } = reactData
+      const proxyOpts = $xeGrid.computeProxyOpts
+      const formOpts = $xeGrid.computeFormOpts
       return proxyConfig && isEnableConf(proxyOpts) && proxyOpts.form ? formData : formOpts.data
     },
-    getFormItems (itemIndex: any) {
-      const { formConfig, formOpts } = this
-      const itemList: any[] = []
-      XEUtils.eachTree(isEnableConf(formConfig) && formOpts.items ? formOpts.items : [], item => {
+    getFormItems (itemIndex?: number): any {
+      const $xeGrid = this
+      const props = $xeGrid
+
+      const formOpts = $xeGrid.computeFormOpts
+      const { formConfig } = props
+      const { items } = formOpts
+      const itemList: VxeFormItemProps[] = []
+      XEUtils.eachTree(formConfig && isEnableConf(formOpts) && items ? items : [], item => {
         itemList.push(item)
       }, { children: 'children' })
       return XEUtils.isUndefined(itemIndex) ? itemList : itemList[itemIndex]
     },
     triggerToolbarCommitEvent (params: any, evnt: any) {
+      const $xeGrid = this
+
       const { code } = params
-      return this.commitProxy(params, evnt).then((rest: any) => {
+      return $xeGrid.commitProxy(params, evnt).then((rest) => {
         if (code && rest && rest.status && ['query', 'reload', 'delete', 'save'].includes(code)) {
-          this.$emit(code === 'delete' || code === 'save' ? `proxy-${code}` : 'proxy-query', { ...rest, isReload: code === 'reload', $grid: this, $event: evnt })
+          $xeGrid.dispatchEvent(code === 'delete' || code === 'save' ? `proxy-${code as 'delete' | 'save'}` : 'proxy-query', { ...rest, isReload: code === 'reload' }, evnt)
         }
       })
     },
     triggerToolbarBtnEvent (button: any, evnt: any) {
-      this.triggerToolbarCommitEvent(button, evnt)
-      this.$emit('toolbar-button-click', { code: button.code, button, $grid: this, $event: evnt })
+      const $xeGrid = this
+
+      $xeGrid.triggerToolbarCommitEvent(button, evnt)
+      $xeGrid.dispatchEvent('toolbar-button-click', { code: button.code, button }, evnt)
     },
     triggerToolbarTolEvent (tool: any, evnt: any) {
-      this.triggerToolbarCommitEvent(tool, evnt)
-      this.$emit('toolbar-tool-click', { code: tool.code, tool, $grid: this, $event: evnt })
-    },
-    triggerPendingEvent (code: any) {
-      const { isActiveMsg } = this
-      const selectRecords = this.getCheckboxRecords()
-      if (selectRecords.length) {
-        this.togglePendingRow(selectRecords)
-        this.clearCheckboxRow()
-      } else {
-        if (isActiveMsg) {
-          // 检测弹窗模块
-          if (!VxeUI.modal) {
-            errLog('vxe.error.reqModule', ['Modal'])
-          }
-          VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
-        }
-      }
-    },
-    sortChangeEvent (params: any) {
-      const { $table, column, sortList } = params
-      const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : $table.sortOpts.remote
-      // 如果是服务端排序
-      if (isRemote) {
-        this.sortData = sortList
-        if (this.proxyConfig) {
-          this.tablePage.currentPage = 1
-          this.commitProxy('query').then((rest: any) => {
-            this.$emit('proxy-query', { ...rest, $grid: this, $event: params.$event })
-          })
-        }
-      }
-      this.$emit('sort-change', Object.assign({ $grid: this }, params))
-    },
-    filterChangeEvent (params: any) {
-      const { $table, filterList } = params
-      // 如果是服务端过滤
-      if ($table.filterOpts.remote) {
-        this.filterData = filterList
-        if (this.proxyConfig) {
-          this.tablePage.currentPage = 1
-          this.commitProxy('query').then((rest: any) => {
-            this.$emit('proxy-query', { ...rest, $grid: this, $event: params.$event })
-          })
-        }
-      }
-      this.$emit('filter-change', Object.assign({ $grid: this }, params))
-    },
-    submitEvent (params: any) {
       const $xeGrid = this
-      const reactData = $xeGrid
 
-      const { proxyConfig } = this
+      $xeGrid.triggerToolbarCommitEvent(tool, evnt)
+      $xeGrid.dispatchEvent('toolbar-tool-click', { code: tool.code, tool }, evnt)
+    },
+    sortChangeEvent (params: VxeTableDefines.SortChangeEventParams) {
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
+      const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
+
+      const { proxyConfig } = props
+      const proxyOpts = $xeGrid.computeProxyOpts
+      const sortOpts = $xeTable.computeSortOpts
+      // 如果是服务端排序
+      if (sortOpts.remote) {
+        reactData.sortData = params.sortList
+        if (proxyConfig && isEnableConf(proxyOpts)) {
+          reactData.tablePage.currentPage = 1
+          $xeGrid.commitProxy('query').then((rest) => {
+            $xeGrid.dispatchEvent('proxy-query', rest, params.$event)
+          })
+        }
+      }
+      $xeGrid.dispatchEvent('sort-change', params, params.$event)
+    },
+    pageChangeEvent (params: VxePagerDefines.PageChangeEventParams) {
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
+
+      const { proxyConfig } = props
+      const { tablePage } = reactData
+      const { $event, currentPage, pageSize } = params
+      const proxyOpts = $xeGrid.computeProxyOpts
+      tablePage.currentPage = currentPage
+      tablePage.pageSize = pageSize
+      $xeGrid.dispatchEvent('page-change', params, $event)
+      if (proxyConfig && isEnableConf(proxyOpts)) {
+        $xeGrid.commitProxy('query').then((rest) => {
+          $xeGrid.dispatchEvent('proxy-query', rest, $event)
+        })
+      }
+    },
+    filterChangeEvent (params: VxeTableDefines.FilterChangeEventParams) {
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
+      const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
+
+      const { proxyConfig } = props
+      const proxyOpts = $xeGrid.computeProxyOpts
+      const filterOpts = $xeTable.computeFilterOpts
+      // 如果是服务端过滤
+      if (filterOpts.remote) {
+        reactData.filterData = params.filterList
+        if (proxyConfig && isEnableConf(proxyOpts)) {
+          reactData.tablePage.currentPage = 1
+          $xeGrid.commitProxy('query').then((rest) => {
+            $xeGrid.dispatchEvent('proxy-query', rest, params.$event)
+          })
+        }
+      }
+      $xeGrid.dispatchEvent('filter-change', params, params.$event)
+    },
+    submitFormEvent (params: VxeFormDefines.SubmitEventParams) {
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
+
+      const { proxyConfig } = props
+      const proxyOpts = $xeGrid.computeProxyOpts
       if (reactData.tableLoading) {
         return
       }
-      if (proxyConfig) {
-        this.commitProxy('reload').then((rest: any) => {
-          this.$emit('proxy-query', { ...rest, isReload: true, $grid: this, $event: params.$event })
+      if (proxyConfig && isEnableConf(proxyOpts)) {
+        $xeGrid.commitProxy('reload').then((rest) => {
+          $xeGrid.dispatchEvent('proxy-query', { ...rest, isReload: true }, params.$event)
         })
       }
-      this.$emit('form-submit', Object.assign({ $grid: this }, params))
+      $xeGrid.dispatchEvent('form-submit', params, params.$event)
     },
-    resetEvent (params: any) {
-      const { proxyConfig } = this
-      const $xeTable = this.$refs.xTable
-      if (proxyConfig) {
+    resetFormEvent (params: any) {
+      const $xeGrid = this
+      const props = $xeGrid
+
+      const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
+      const { proxyConfig } = props
+      const { $event } = params
+      const proxyOpts = $xeGrid.computeProxyOpts
+      if (proxyConfig && isEnableConf(proxyOpts)) {
         $xeTable.clearScroll()
-        this.commitProxy('reload').then((rest: any) => {
-          this.$emit('proxy-query', { ...rest, isReload: true, $grid: this, $event: params.$event })
+        $xeGrid.commitProxy('reload').then((rest) => {
+          $xeGrid.dispatchEvent('proxy-query', { ...rest, isReload: true }, $event)
         })
       }
-      this.$emit('form-reset', Object.assign({ $grid: this }, params))
+      $xeGrid.dispatchEvent('form-reset', params, $event)
     },
-    submitInvalidEvent (params: any) {
-      this.$emit('form-submit-invalid', Object.assign({ $grid: this }, params))
+    submitInvalidEvent (params: VxeFormDefines.SubmitInvalidEventParams) {
+      const $xeGrid = this
+
+      $xeGrid.dispatchEvent('form-submit-invalid', params, params.$event)
     },
-    collapseEvent (params: any) {
-      this.$nextTick(() => this.recalculate(true))
-      this.$emit('form-toggle-collapse', Object.assign({ $grid: this }, params))
-      this.$emit('form-collapse', Object.assign({ $grid: this }, params))
+    collapseEvent (params: VxeFormDefines.CollapseEventParams) {
+      const $xeGrid = this
+
+      const { $event } = params
+      $xeGrid.dispatchEvent('form-toggle-collapse', params, $event)
+      $xeGrid.dispatchEvent('form-collapse', params, $event)
     },
-    triggerZoomEvent (evnt: any) {
-      this.zoom()
-      this.$emit('zoom', { $grid: this, type: this.isZMax ? 'max' : 'revert', $event: evnt })
+    triggerZoomEvent (evnt: Event) {
+      const $xeGrid = this
+      const reactData = $xeGrid.reactData
+
+      $xeGrid.zoom()
+      $xeGrid.dispatchEvent('zoom', { type: reactData.isZMax ? 'max' : 'revert' }, evnt)
     },
     zoom () {
-      return this[this.isZMax ? 'revert' : 'maximize']()
+      const $xeGrid = this
+      const reactData = $xeGrid.reactData
+
+      return $xeGrid[reactData.isZMax ? 'revert' : 'maximize']()
     },
     isMaximized () {
-      return this.isZMax
+      const $xeGrid = this
+      const reactData = $xeGrid.reactData
+
+      return reactData.isZMax
     },
     maximize () {
-      return this.handleZoom(true)
+      const $xeGrid = this
+
+      return $xeGrid.handleZoom(true)
     },
     revert () {
-      return this.handleZoom()
+      const $xeGrid = this
+
+      return $xeGrid.handleZoom()
     },
-    handleZoom (isMax: any) {
-      const { isZMax } = this
+    handleZoom (isMax?: boolean) {
+      const $xeGrid = this
+      const reactData = $xeGrid.reactData
+
+      const { isZMax } = reactData
       if (isMax ? !isZMax : isZMax) {
-        this.isZMax = !isZMax
-        if (this.tZindex < getLastZIndex()) {
-          this.tZindex = nextZIndex()
+        reactData.isZMax = !isZMax
+        if (reactData.tZindex < getLastZIndex()) {
+          reactData.tZindex = nextZIndex()
         }
       }
-      return this.$nextTick()
-        .then(() => this.recalculate(true))
+      return $xeGrid.$nextTick()
+        .then(() => $xeGrid.recalculate(true))
         .then(() => {
-          setTimeout(() => this.recalculate(true), 15)
-          return this.isZMax
+          setTimeout(() => $xeGrid.recalculate(true), 15)
+          return reactData.isZMax
         })
     },
     getProxyInfo () {
       const $xeGrid = this
-      const $xeTable = $xeGrid.$refs.xTable as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeGrid
+      const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeGrid.reactData
 
-      const { sortData, proxyConfig } = this
-      if (proxyConfig) {
+      if (props.proxyConfig) {
+        const { sortData } = reactData
         return {
           data: $xeTable ? $xeTable.getFullData() : [],
-          filter: this.filterData,
-          form: this.getFormData(),
+          filter: reactData.filterData,
+          form: $xeGrid.getFormData(),
           sort: sortData.length ? sortData[0] : {},
           sorts: sortData,
-          pager: this.tablePage,
+          pager: reactData.tablePage,
           pendingRecords: $xeTable ? $xeTable.getPendingRecords() : []
         }
       }
@@ -1372,14 +1140,14 @@ export default {
     },
     loadColumn (columns: any[]) {
       const $xeGrid = this
-      const $xeTable = $xeGrid.$refs.xTable as VxeTableConstructor & VxeTablePrivateMethods
+      const slots = $xeGrid.$scopedSlots
+      const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
 
-      const { $scopedSlots } = this
       XEUtils.eachTree(columns, column => {
         if (column.slots) {
           XEUtils.each(column.slots, (func) => {
             if (!XEUtils.isFunction(func)) {
-              if (!$scopedSlots[func]) {
+              if (!slots[func]) {
                 errLog('vxe.error.notSlot', [func])
               }
             }
@@ -1393,6 +1161,453 @@ export default {
 
       $xeGrid.clearAll()
       return $xeGrid.loadColumn(columns)
+    },
+    getConfigSlot (slotConfigs?: Record<string, any>) {
+      const $xeGrid = this
+      const slots = $xeGrid.$scopedSlots
+
+      const slotConf: Record<string, any> = {}
+      XEUtils.objectMap(slotConfigs, (slotFunc, slotKey) => {
+        if (slotFunc) {
+          if (XEUtils.isString(slotFunc)) {
+            if (slots[slotFunc]) {
+              slotConf[slotKey] = slots[slotFunc]
+            } else {
+              errLog('vxe.error.notSlot', [slotFunc])
+            }
+          } else {
+            slotConf[slotKey] = slotFunc
+          }
+        }
+      })
+      return slotConf
+    },
+    getToolbarSlots () {
+      const $xeGrid = this
+      const slots = $xeGrid.$scopedSlots
+
+      const toolbarOpts = $xeGrid.computeToolbarOpts
+      const toolbarOptSlots = toolbarOpts.slots
+      const toolbarSlots: {
+        buttons?(params: any): any
+        buttonPrefix?(params: any): any
+        buttonSuffix?(params: any): any
+        tools?(params: any): any
+        toolPrefix?(params: any): any
+        toolSuffix?(params: any): any
+      } = {}
+      if (slots.buttons && (!toolbarOptSlots || toolbarOptSlots.buttons !== 'buttons')) {
+        warnLog('vxe.error.reqProp', ['toolbar-config.slots.buttons'])
+      }
+      if (slots.tools && (!toolbarOptSlots || toolbarOptSlots.tools !== 'tools')) {
+        warnLog('vxe.error.reqProp', ['toolbar-config.slots.tools'])
+      }
+      if (toolbarOptSlots) {
+        const buttonsSlot = $xeGrid.getFuncSlot(toolbarOptSlots, 'buttons')
+        const buttonPrefixSlot = $xeGrid.getFuncSlot(toolbarOptSlots, 'buttonPrefix')
+        const buttonSuffixSlot = $xeGrid.getFuncSlot(toolbarOptSlots, 'buttonSuffix')
+        const toolsSlot = $xeGrid.getFuncSlot(toolbarOptSlots, 'tools')
+        const toolPrefixSlot = $xeGrid.getFuncSlot(toolbarOptSlots, 'toolPrefix')
+        const toolSuffixSlot = $xeGrid.getFuncSlot(toolbarOptSlots, 'toolSuffix')
+        if (buttonsSlot) {
+          toolbarSlots.buttons = buttonsSlot
+        }
+        if (buttonPrefixSlot) {
+          toolbarSlots.buttonPrefix = buttonPrefixSlot
+        }
+        if (buttonSuffixSlot) {
+          toolbarSlots.buttonSuffix = buttonSuffixSlot
+        }
+        if (toolsSlot) {
+          toolbarSlots.tools = toolsSlot
+        }
+        if (toolPrefixSlot) {
+          toolbarSlots.toolPrefix = toolPrefixSlot
+        }
+        if (toolSuffixSlot) {
+          toolbarSlots.toolSuffix = toolSuffixSlot
+        }
+      }
+      return toolbarSlots
+    },
+    getFuncSlot (optSlots: any, slotKey: any) {
+      const $xeGrid = this
+      const slots = $xeGrid.$scopedSlots
+
+      const funcSlot = optSlots[slotKey]
+      if (funcSlot) {
+        if (XEUtils.isString(funcSlot)) {
+          if (slots[funcSlot]) {
+            return slots[funcSlot]
+          } else {
+            errLog('vxe.error.notSlot', [funcSlot])
+          }
+        } else {
+          return funcSlot
+        }
+      }
+      return null
+    },
+
+    //
+    // Render
+    //
+    renderDefaultForm (h: CreateElement) {
+      const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
+
+      const $xeGrid = this
+      const props = $xeGrid
+      const slots = $xeGrid.$scopedSlots
+      const reactData = $xeGrid.reactData
+
+      const { proxyConfig, formConfig } = props
+      const { formData } = reactData
+      const proxyOpts = $xeGrid.computeProxyOpts
+      const formOpts = $xeGrid.computeFormOpts
+      if (isEnableConf(formConfig) && formOpts.items && formOpts.items.length) {
+        const formSlots: any = {}
+        if (!(formOpts as any).inited) {
+          (formOpts as any).inited = true
+          const beforeItem = proxyOpts.beforeItem
+          if (proxyOpts && beforeItem) {
+            formOpts.items.forEach((item: any) => {
+              beforeItem.call($xeGrid, { $grid: $xeGrid, item })
+            })
+          }
+        }
+        // 处理插槽
+        formOpts.items.forEach((item: any) => {
+          XEUtils.each(item.slots, (func) => {
+            if (!XEUtils.isFunction(func)) {
+              if (slots[func]) {
+                formSlots[func] = slots[func]
+              }
+            }
+          })
+        })
+        return [
+          VxeUIFormComponent
+            ? h(VxeUIFormComponent, {
+              props: Object.assign({}, formOpts, {
+                data: proxyConfig && proxyOpts.form ? formData : formOpts.data
+              }),
+              on: {
+                submit: $xeGrid.submitFormEvent,
+                reset: $xeGrid.resetFormEvent,
+                collapse: $xeGrid.collapseEvent,
+                'submit-invalid': $xeGrid.submitInvalidEvent
+              },
+              scopedSlots: formSlots
+            })
+            : renderEmptyElement($xeGrid)
+        ]
+      }
+      return []
+    },
+    renderForm (h: CreateElement) {
+      const $xeGrid = this
+      const props = $xeGrid
+      const slots = $xeGrid.$scopedSlots
+
+      const { formConfig } = props
+      const formSlot = slots.form
+      const hasForm = !!(formSlot || isEnableConf(formConfig))
+
+      if (hasForm) {
+        return h('div', {
+          key: 'form',
+          ref: 'refFormWrapper',
+          class: 'vxe-grid--form-wrapper'
+        }, formSlot ? formSlot.call($xeGrid, { $grid: $xeGrid }) : $xeGrid.renderDefaultForm(h))
+      }
+      return renderEmptyElement($xeGrid)
+    },
+    renderToolbar (h: CreateElement) {
+      const $xeGrid = this
+      const props = $xeGrid
+      const slots = $xeGrid.$scopedSlots
+
+      const { toolbarConfig } = props
+      const toolbarSlot = slots.toolbar
+      const hasToolbar = !!(toolbarSlot || isEnableConf(toolbarConfig) || toolbar)
+      const toolbarOpts = $xeGrid.computeToolbarOpts
+
+      if (hasToolbar) {
+        return h('div', {
+          key: 'toolbar',
+          ref: 'refToolbarWrapper',
+          class: 'vxe-grid--toolbar-wrapper'
+        }, toolbarSlot
+          ? toolbarSlot.call($xeGrid, { $grid: $xeGrid })
+          : [
+              h(VxeToolbarComponent, {
+                props: Object.assign({}, toolbarOpts, { slots: undefined }),
+                ref: 'xToolbar',
+                scopedSlots: $xeGrid.getToolbarSlots()
+              })
+            ]
+        )
+      }
+      return renderEmptyElement($xeGrid)
+    },
+    renderTop (h: CreateElement) {
+      const $xeGrid = this
+      const slots = $xeGrid.$scopedSlots
+
+      const topSlot = slots.top
+      return topSlot
+        ? h('div', {
+          key: 'top',
+          ref: 'refTopWrapper',
+          class: 'vxe-grid--top-wrapper'
+        }, topSlot.call($xeGrid, { $grid: $xeGrid }))
+        : renderEmptyElement($xeGrid)
+    },
+    renderTableLeft (h: CreateElement) {
+      const $xeGrid = this
+      const slots = $xeGrid.$scopedSlots
+
+      const leftSlot = slots.left
+      if (leftSlot) {
+        return h('div', {
+          class: 'vxe-grid--left-wrapper'
+        }, leftSlot({ $grid: $xeGrid }))
+      }
+      return renderEmptyElement($xeGrid)
+    },
+    renderTableRight (h: CreateElement) {
+      const $xeGrid = this
+      const slots = $xeGrid.$scopedSlots
+
+      const rightSlot = slots.right
+      if (rightSlot) {
+        return h('div', {
+          class: 'vxe-grid--right-wrapper'
+        }, rightSlot({ $grid: $xeGrid }))
+      }
+      return renderEmptyElement($xeGrid)
+    },
+    renderTable (h: CreateElement) {
+      const $xeGrid = this
+      const slots = $xeGrid.$scopedSlots
+
+      const tableProps = $xeGrid.computeTableProps
+
+      return h('div', {
+        class: 'vxe-grid--table-wrapper'
+      }, [
+        h(VxeTableComponent, {
+          key: 'table',
+          props: tableProps,
+          on: getTableOns($xeGrid),
+          scopedSlots: slots,
+          ref: 'refTable'
+        })
+      ])
+    },
+    renderBottom (h: CreateElement) {
+      const $xeGrid = this
+      const slots = $xeGrid.$scopedSlots
+
+      const bottomSlot = slots.bottom
+
+      return bottomSlot
+        ? h('div', {
+          key: 'bottom',
+          ref: 'refBottomWrapper',
+          class: 'vxe-grid--bottom-wrapper'
+        }, bottomSlot.call($xeGrid, { $grid: $xeGrid }))
+        : renderEmptyElement($xeGrid)
+    },
+    renderPager (h: CreateElement) {
+      const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
+
+      const $xeGrid = this
+      const props = $xeGrid
+      const slots = $xeGrid.$scopedSlots
+      const reactData = $xeGrid.reactData
+
+      const { proxyConfig, pagerConfig } = props
+      const proxyOpts = $xeGrid.computeProxyOpts
+      const pagerOpts = $xeGrid.computePagerOpts
+      const pagerSlot = slots.pager
+      if ((pagerConfig && isEnableConf(pagerOpts)) || slots.pager) {
+        return h('div', {
+          ref: 'refPagerWrapper',
+          key: 'pager',
+          class: 'vxe-grid--pager-wrapper'
+        }, pagerSlot
+          ? pagerSlot.call($xeGrid, { $grid: $xeGrid })
+          : [
+              VxeUIPagerComponent
+                ? h(VxeUIPagerComponent, {
+                  ref: 'refPager',
+                  props: {
+                    ...pagerOpts,
+                    ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {})
+                  },
+                  on: {
+                    'page-change': $xeGrid.pageChangeEvent
+                  },
+                  scopedSlots: $xeGrid.getConfigSlot(pagerOpts.slots)
+                })
+                : renderEmptyElement($xeGrid)
+            ])
+      }
+      return renderEmptyElement($xeGrid)
+    },
+    renderChildLayout (h: CreateElement, layoutKeys: VxeGridPropTypes.LayoutKey[]) {
+      const $xeGrid = this
+
+      const childVNs: VNode[] = []
+      layoutKeys.forEach(key => {
+        switch (key) {
+          case 'Form':
+            childVNs.push($xeGrid.renderForm(h))
+            break
+          case 'Toolbar':
+            childVNs.push($xeGrid.renderToolbar(h))
+            break
+          case 'Top':
+            childVNs.push($xeGrid.renderTop(h))
+            break
+          case 'Table':
+            childVNs.push(
+              h('div', {
+                key: 'table',
+                class: 'vxe-grid--table-container'
+              }, [
+                $xeGrid.renderTableLeft(h),
+                $xeGrid.renderTable(h),
+                $xeGrid.renderTableRight(h)
+              ])
+            )
+            break
+          case 'Bottom':
+            childVNs.push($xeGrid.renderBottom(h))
+            break
+          case 'Pager':
+            childVNs.push($xeGrid.renderPager(h))
+            break
+          default:
+            errLog('vxe.error.notProp', [`layouts -> ${key}`])
+            break
+        }
+      })
+      return childVNs
+    },
+    renderLayout (h: CreateElement) {
+      const $xeGrid = this
+      const slots = $xeGrid.$scopedSlots
+
+      const currLayoutConf = $xeGrid.computeCurrLayoutConf
+      const { headKeys, bodyKeys, footKeys } = currLayoutConf
+      const asideLeftSlot = slots.asideLeft || slots['aside-left']
+      const asideRightSlot = slots.asideRight || slots['aside-right']
+      return [
+        h('div', {
+          class: 'vxe-grid--layout-header-wrapper'
+        }, $xeGrid.renderChildLayout(h, headKeys)),
+        h('div', {
+          class: 'vxe-grid--layout-body-wrapper'
+        }, [
+          asideLeftSlot
+            ? h('div', {
+              class: 'vxe-grid--layout-aside-left-wrapper'
+            }, asideLeftSlot({}))
+            : renderEmptyElement($xeGrid),
+          h('div', {
+            class: 'vxe-grid--layout-body-content-wrapper'
+          }, $xeGrid.renderChildLayout(h, bodyKeys)),
+          asideRightSlot
+            ? h('div', {
+              class: 'vxe-grid--layout-aside-right-wrapper'
+            }, asideRightSlot({}))
+            : renderEmptyElement($xeGrid)
+        ]),
+        h('div', {
+          class: 'vxe-grid--layout-footer-wrapper'
+        }, $xeGrid.renderChildLayout(h, footKeys))
+      ]
+    },
+    renderVN (h: CreateElement): VNode {
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
+
+      const vSize = $xeGrid.computeSize
+      const styles = $xeGrid.computeStyles
+      return h('div', {
+        ref: 'refElem',
+        class: ['vxe-grid', {
+          [`size--${vSize}`]: vSize,
+          'is--animat': !!props.animat,
+          'is--round': props.round,
+          'is--maximize': reactData.isZMax,
+          'is--loading': props.loading || reactData.tableLoading
+        }],
+        style: styles
+      }, $xeGrid.renderLayout(h))
     }
-  } as any
-}
+  },
+  created () {
+    // 使用已安装的组件，如果未安装则不渲染
+    const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
+    const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
+
+    const $xeGrid = this
+    const props = $xeGrid
+
+    const proxyOpts = $xeGrid.computeProxyOpts
+
+    // const { data, formOpts, proxyOpts, proxyConfig } = this
+    // if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
+    //   errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
+    // }
+
+    if ((props as any).toolbar) {
+      errLog('vxe.error.delProp', ['grid.toolbar', 'grid.toolbar-config'])
+    }
+    if (props.toolbarConfig && !XEUtils.isObject(props.toolbarConfig)) {
+      errLog('vxe.error.errProp', [`grid.toolbar-config=${props.toolbarConfig}`, 'grid.toolbar-config={}'])
+    }
+    if (proxyOpts.props) {
+      warnLog('vxe.error.delProp', ['proxy-config.props', 'proxy-config.response'])
+    }
+
+    $xeGrid.$nextTick(() => {
+      if (props.formConfig) {
+        if (!VxeUIFormComponent) {
+          errLog('vxe.error.reqComp', ['vxe-form'])
+        }
+      }
+      if (props.pagerConfig) {
+        if (!VxeUIPagerComponent) {
+          errLog('vxe.error.reqComp', ['vxe-pager'])
+        }
+      }
+    })
+
+    $xeGrid.initPages()
+    globalEvents.on($xeGrid, 'keydown', $xeGrid.handleGlobalKeydownEvent)
+  },
+  mounted () {
+    const $xeGrid = this
+    const props = $xeGrid
+
+    const { columns } = props
+    if (columns && columns.length) {
+      $xeGrid.loadColumn(columns)
+    }
+    $xeGrid.initToolbar()
+    $xeGrid.initProxy()
+  },
+  destroyed () {
+    const $xeGrid = this
+
+    globalEvents.off($xeGrid, 'keydown')
+  },
+  render (this: any, h) {
+    return this.renderVN(h)
+  }
+}) /* define-vxe-component end */

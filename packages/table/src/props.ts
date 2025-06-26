@@ -55,7 +55,7 @@ export default {
     default: () => getConfig().table.fit
   },
   // 表格是否加载中
-  loading: Boolean,
+  loading: Boolean as PropType<VxeTablePropTypes.Loading>,
   // 所有的列对其方式
   align: {
     type: String,
@@ -246,11 +246,11 @@ export default {
   // 查找/替换配置项
   fnrConfig: Object,
   // 编辑配置项
-  editConfig: [Boolean, Object],
+  editConfig: [Boolean, Object] as PropType<VxeTablePropTypes.EditConfig>,
   // 校验配置项
-  validConfig: Object,
+  validConfig: Object as PropType<VxeTablePropTypes.ValidConfig>,
   // 校验规则配置项
-  editRules: Object,
+  editRules: Object as PropType<VxeTablePropTypes.EditRules>,
   // 加载中配置项
   loadingConfig: Object,
   // 空内容渲染配置项
