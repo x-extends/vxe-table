@@ -7063,7 +7063,8 @@ const Methods = {
         const childList: any[] = vals[2]
         let sLen = 0 // 已选
         let hLen = 0 // 半选
-        let vLen = 0 // 有效行
+        let vLen = 0 // 有效子行
+        const cLen = childList.length // 有效子行
         childList.forEach(
           checkMethod
             ? (item) => {
@@ -7096,15 +7097,25 @@ const Methods = {
             }
         )
 
-        let isSelected = (sLen >= vLen && (vLen >= 1 || hLen >= 1))
-        if (checkMethod) {
-          if (checkMethod({ $table: $xeTable, row })) {
-            isSelected = sLen >= vLen
+        let isSelected = false
+        if (cLen > 0) {
+          if (vLen > 0) {
+            isSelected = (sLen > 0 || hLen > 0) && sLen >= vLen
           } else {
-            isSelected = selectCheckboxMaps[rowid]
+            // 如果存在子项禁用
+            if ((sLen > 0 && sLen >= vLen)) {
+              isSelected = true
+            } else if (selectCheckboxMaps[rowid]) {
+              isSelected = true
+            } else {
+              isSelected = false
+            }
           }
+        } else {
+          // 如果无子项
+          isSelected = selectCheckboxMaps[rowid]
         }
-        const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
+        const halfSelect = !isSelected && (sLen > 0 || hLen > 0)
 
         if (checkField) {
           XEUtils.set(row, checkField, isSelected)
@@ -7148,7 +7159,9 @@ const Methods = {
     const { handleGetRowId } = createHandleGetRowId($xeTable)
 
     let sLen = 0 // 已选
+    let dsLen = 0 // 禁用的已选
     let hLen = 0 // 半选
+    let dhLen = 0 // 禁用的半选
     let vLen = 0 // 有效行
 
     const rootList = (treeConfig ? afterTreeFullData : (isRowGroupStatus ? afterGroupFullData : afterFullData))
@@ -7165,9 +7178,9 @@ const Methods = {
           vLen++
         } else {
           if (selected) {
-            sLen++
+            dsLen++
           } else if (treeIndeterminateRowMaps[childRowid]) {
-            hLen++
+            dhLen++
           }
         }
       }
@@ -7183,7 +7196,7 @@ const Methods = {
       })
 
     const isSelected = rootList.length > 0 ? (vLen > 0 ? (sLen >= vLen) : (sLen >= rootList.length)) : false
-    let halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
+    let halfSelect = !isSelected && (sLen > 0 || hLen > 0 || dsLen > 0 || dhLen > 0)
 
     // 如果复选框启用保留记录，当保留数据存在时显示半选
     if (!isSelected && !halfSelect && showReserveStatus) {

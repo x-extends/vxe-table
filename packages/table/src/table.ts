@@ -1193,10 +1193,10 @@ export default {
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
 
-      const { rowExpandedFlag, expandColumn, rowGroupExpandedFlag, treeExpandedFlag } = reactData
+      const { tableData, rowExpandedFlag, expandColumn, rowGroupExpandedFlag, treeExpandedFlag } = reactData
       const { visibleDataRowIdData, rowExpandedMaps } = internalData
       const expandList: any[] = []
-      if (expandColumn && rowExpandedFlag && rowGroupExpandedFlag && treeExpandedFlag) {
+      if (tableData.length && expandColumn && rowExpandedFlag && rowGroupExpandedFlag && treeExpandedFlag) {
         XEUtils.each(rowExpandedMaps, (row, rowid) => {
           if (visibleDataRowIdData[rowid]) {
             expandList.push(row)
