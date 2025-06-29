@@ -258,6 +258,7 @@ VxeUI.setConfig({
     proxyConfig: {
       enabled: true,
       autoLoad: true,
+      showLoading: true,
       showResponseMsg: true,
       showActiveMsg: true,
       response: {

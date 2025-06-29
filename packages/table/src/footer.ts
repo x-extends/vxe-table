@@ -145,7 +145,7 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
     }
 
     return h('td', {
-      class: ['vxe-footer--column', column.id, {
+      class: ['vxe-table--column vxe-footer--column', column.id, {
         [`col--${footAlign}`]: footAlign,
         [`col--${type}`]: type,
         'col--last': isLastColumn,
@@ -199,33 +199,15 @@ function renderHeads (h: CreateElement, _vm: any, isOptimizeMode: boolean, rende
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
-  const tableReactData = $xeTable as unknown as TableReactData
 
   const { fixedType, footerTableData } = props
 
   const { footerRowClassName, footerRowStyle } = tableProps
-  const { isColLoading, isDragColMove } = tableReactData
-  const columnOpts = $xeTable.computeColumnOpts
-  const columnDragOpts = $xeTable.computeColumnDragOpts
 
   return (footerTableData as any[][]).map((row, $rowIndex) => {
     const _rowIndex = $rowIndex
     const rowParams = { $table: $xeTable, row, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
 
-    if (!isColLoading && columnOpts.drag && columnDragOpts.animation) {
-      return h('transition-group', {
-        key: $rowIndex,
-        props: {
-          tag: 'tr',
-          name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
-          class: [
-            'vxe-footer--row',
-            footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''
-          ],
-          style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) as VxeComponentStyleType : undefined
-        }
-      }, renderRows(h, _vm, isOptimizeMode, renderColumnList, footerTableData, row, $rowIndex, _rowIndex))
-    }
     return h('tr', {
       key: $rowIndex,
       class: [

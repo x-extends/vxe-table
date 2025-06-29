@@ -1193,10 +1193,10 @@ export default {
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
 
-      const { rowExpandedFlag, expandColumn, rowGroupExpandedFlag, treeExpandedFlag } = reactData
+      const { tableData, rowExpandedFlag, expandColumn, rowGroupExpandedFlag, treeExpandedFlag } = reactData
       const { visibleDataRowIdData, rowExpandedMaps } = internalData
       const expandList: any[] = []
-      if (expandColumn && rowExpandedFlag && rowGroupExpandedFlag && treeExpandedFlag) {
+      if (tableData.length && expandColumn && rowExpandedFlag && rowGroupExpandedFlag && treeExpandedFlag) {
         XEUtils.each(rowExpandedMaps, (row, rowid) => {
           if (visibleDataRowIdData[rowid]) {
             expandList.push(row)
@@ -1867,6 +1867,7 @@ export default {
     $xeTable.$nextTick(() => {
       if (props.loading) {
         if (!VxeUILoadingComponent && !this.$scopedSlots.loading) {
+          errLog('vxe.error.errProp', ['loading=true', 'loading=false | <template #loading>...</template>'])
           errLog('vxe.error.reqComp', ['vxe-loading'])
         }
       }
@@ -1875,6 +1876,24 @@ export default {
           (props.showFooterOverflow === true || props.showFooterOverflow === 'tooltip') ||
           props.tooltipConfig || props.editRules) {
         if (!VxeUITooltipComponent) {
+          if (props.showOverflow === true) {
+            errLog('vxe.error.errProp', ['show-overflow=true', 'show-overflow=title'])
+          }
+          if (props.showOverflow === 'tooltip') {
+            errLog('vxe.error.errProp', ['show-overflow=tooltip', 'show-overflow=title'])
+          }
+          if (props.showHeaderOverflow === true) {
+            errLog('vxe.error.errProp', ['show-header-overflow=true', 'show-header-overflow=title'])
+          }
+          if (props.showHeaderOverflow === 'tooltip') {
+            errLog('vxe.error.errProp', ['show-header-overflow=tooltip', 'show-header-overflow=title'])
+          }
+          if (props.showFooterOverflow === true) {
+            errLog('vxe.error.errProp', ['show-footer-overflow=true', 'show-footer-overflow=title'])
+          }
+          if (props.showFooterOverflow === 'tooltip') {
+            errLog('vxe.error.errProp', ['show-footer-overflow=tooltip', 'show-footer-overflow=title'])
+          }
           errLog('vxe.error.reqComp', ['vxe-tooltip'])
         }
       }

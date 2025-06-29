@@ -116,7 +116,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     }
 
     return h('th', {
-      class: ['vxe-header--column', colid, {
+      class: ['vxe-table--column vxe-header--column', colid, {
         [`col--${headAlign}`]: headAlign,
         [`col--${type}`]: type,
         'col--last': isLastColumn,
@@ -175,33 +175,14 @@ function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMo
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
-  const tableReactData = $xeTable as unknown as TableReactData
 
   const { fixedType } = props
 
-  const columnOpts = $xeTable.computeColumnOpts
-  const columnDragOpts = $xeTable.computeColumnDragOpts
-
   const { headerRowClassName, headerRowStyle } = tableProps
-  const { isColLoading, isDragColMove } = tableReactData
 
   return headerGroups.map((cols: any, $rowIndex: any) => {
     const params = { $table: $xeTable, $rowIndex, fixed: fixedType, type: cellType }
 
-    if (!isColLoading && columnOpts.drag && columnDragOpts.animation) {
-      return h('transition-group', {
-        key: $rowIndex,
-        props: {
-          tag: 'tr',
-          name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
-          class: [
-            'vxe-header--row',
-            headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName : ''
-          ],
-          style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) : null
-        }
-      }, renderRows(h, _vm, isGroup, isOptimizeMode, cols, $rowIndex))
-    }
     return h('tr', {
       key: $rowIndex,
       class: [

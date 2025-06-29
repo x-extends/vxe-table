@@ -60,6 +60,8 @@
 * [x] 虚拟滚动
 * [x] 虚拟合并
 * [x] CSS 变量主题
+* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 数据汇总
+* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 聚合函数
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格区域选取
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格复制/粘贴
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格查找和替换

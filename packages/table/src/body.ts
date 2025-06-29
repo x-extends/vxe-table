@@ -425,7 +425,7 @@ function renderTdColumn (
 
   return h('td', {
     class: [
-      'vxe-body--column',
+      'vxe-table--column vxe-body--column',
       colid,
       cellVerticalAlign ? `col--vertical-${cellVerticalAlign}` : '',
       cellAlign ? `col--${cellAlign}` : '',
@@ -469,7 +469,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
   const $xeGrid = $xeTable.$xeGrid
 
   const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
-  const { hasFixedColumn, treeExpandedFlag, isColLoading, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, isDragColMove, rowExpandHeightFlag, isRowGroupStatus } = tableReactData
+  const { hasFixedColumn, treeExpandedFlag, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, rowExpandHeightFlag, isRowGroupStatus } = tableReactData
   const { fullAllDataRowIdData, fullColumnIdData, treeExpandedMaps, pendingRowMaps, rowExpandedMaps } = tableInternalData
   const checkboxOpts = $xeTable.computeCheckboxOpts
   const radioOpts = $xeTable.computeRadioOpts
@@ -477,7 +477,6 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
   const editOpts = $xeTable.computeEditOpts
   const rowOpts = $xeTable.computeRowOpts
   const columnOpts = $xeTable.computeColumnOpts
-  const columnDragOpts = $xeTable.computeColumnDragOpts
   const { transform, seqMode } = treeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
   const rows: any[] = []
@@ -558,29 +557,15 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
       return renderTdColumn(h, $xeTable, seq, rowid, fixedType, isOptimizeMode, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
     })
     rows.push(
-      !isColLoading && (columnOpts.drag && columnDragOpts.animation)
-        ? h('transition-group', {
-          props: {
-            tag: 'tr',
-            name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`
-          },
-          class: trClass,
-          attrs: {
-            rowid
-          },
-          style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) as VxeComponentStyleType : undefined,
-          key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || isRowGroupStatus || treeConfig ? rowid : $rowIndex,
-          nativeOn: trOn
-        }, tdVNs)
-        : h('tr', {
-          class: trClass,
-          attrs: {
-            rowid
-          },
-          style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) as VxeComponentStyleType : undefined,
-          key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || isRowGroupStatus || treeConfig ? rowid : $rowIndex,
-          on: trOn
-        }, tdVNs)
+      h('tr', {
+        class: trClass,
+        attrs: {
+          rowid
+        },
+        style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) as VxeComponentStyleType : undefined,
+        key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || isRowGroupStatus || treeConfig ? rowid : $rowIndex,
+        on: trOn
+      }, tdVNs)
     )
     // 如果行被展开了
     if (isExpandRow) {
@@ -744,12 +729,10 @@ export default {
     const { fixedColumn, fixedType, tableColumn } = props
 
     const { spanMethod, footerSpanMethod, mouseConfig } = tableProps
-    const { isGroup, tableData, isRowLoading, isColLoading, overflowX, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn, dragRow, dragCol } = tableReactData
+    const { isGroup, tableData, isColLoading, overflowX, scrollXLoad, scrollYLoad, isAllOverflow, expandColumn, dragRow, dragCol } = tableReactData
     const { visibleColumn, fullAllDataRowIdData, fullColumnIdData } = tableInternalData
-    const rowOpts = $xeTable.computeRowOpts
     const emptyOpts = $xeTable.computeEmptyOpts
     const mouseOpts = $xeTable.computeMouseOpts
-    const rowDragOpts = $xeTable.computeRowDragOpts
     const expandOpts = $xeTable.computeExpandOpts
 
     let renderDataList = tableData
@@ -895,17 +878,9 @@ export default {
           /**
            * 内容
            */
-          !(isRowLoading || isColLoading) && (rowOpts.drag && rowDragOpts.animation)
-            ? h('transition-group', {
-              ref: 'refBodyTBody',
-              props: {
-                tag: 'tbody',
-                name: `vxe-body--row-list${isDragRowMove ? '' : '-disabled'}`
-              }
-            }, renderRows(h, this, fixedType, isOptimizeMode, renderDataList, renderColumnList))
-            : h('tbody', {
-              ref: 'refBodyTBody'
-            }, renderRows(h, this, fixedType, isOptimizeMode, renderDataList, renderColumnList))
+          h('tbody', {
+            ref: 'refBodyTBody'
+          }, renderRows(h, this, fixedType, isOptimizeMode, renderDataList, renderColumnList))
         ]),
         h('div', {
           class: 'vxe-table--checkbox-range'

@@ -11,7 +11,7 @@ import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
 import type { VxeFormComponent, VxePagerComponent, VxeFormItemProps, VxeFormDefines, VxeComponentStyleType, VxeComponentSizeType, ValueOf } from 'vxe-pc-ui'
-import type { GridReactData, VxeTablePropTypes, VxeGridConstructor, VxeToolbarPropTypes, VxeToolbarInstance, VxeGridPropTypes, VxeTableMethods, VxeGridEmits, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types'
+import type { GridReactData, VxeTablePropTypes, VxeGridConstructor, VxeToolbarPropTypes, VxeToolbarInstance, VxeGridPropTypes, VxeTableMethods, VxeGridEmits, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, TableInternalData } from '../../../types'
 
 const { getConfig, getI18n, commands, globalEvents, globalMixins, createEvent, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
 
@@ -232,11 +232,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const props = $xeGrid
       const reactData = $xeGrid.reactData
 
-      const { seqConfig, pagerConfig, loading, editConfig, proxyConfig } = props
-      const { isZMax, tableLoading, tablePage } = reactData
+      const { seqConfig, pagerConfig, editConfig, proxyConfig } = props
+      const { isZMax, tablePage } = reactData
       const tableExtendProps = $xeGrid.computeTableExtendProps as any
       const proxyOpts = $xeGrid.computeProxyOpts
       const pagerOpts = $xeGrid.computePagerOpts
+      const isLoading = $xeGrid.computeIsLoading
       const tProps = Object.assign({}, tableExtendProps)
       if (isZMax) {
         if (tableExtendProps.maxHeight) {
@@ -246,7 +247,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         }
       }
       if (proxyConfig && isEnableConf(proxyOpts)) {
-        tProps.loading = loading || tableLoading
+        tProps.loading = isLoading
         if (pagerConfig && proxyOpts.seq && isEnableConf(pagerOpts)) {
           tProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
@@ -307,6 +308,17 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       const pagerOpts = $xeGrid.computePagerOpts as VxeGridPropTypes.PagerConfig
       return pagerOpts.total
+    },
+    computeIsLoading () {
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = ($xeGrid as any).reactData as GridReactData
+
+      const { loading, proxyConfig } = props
+      const { tableLoading } = reactData
+      const proxyOpts = $xeGrid.computeProxyOpts as VxeGridPropTypes.ProxyConfig
+      const { showLoading } = proxyOpts
+      return loading || (tableLoading && showLoading && proxyConfig && isEnableConf(proxyOpts))
     }
   },
   watch: {
@@ -656,7 +668,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 reactData.formData = formData
               }
               if ($xeTable) {
-                const { internalData: tableInternalData } = $xeTable
+                const tableInternalData = $xeTable as unknown as TableInternalData
                 const { tableFullColumn, fullColumnFieldData } = tableInternalData
                 const sortOpts = $xeTable.computeSortOpts
                 let defaultSort = sortOpts.defaultSort
@@ -1537,6 +1549,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       const vSize = $xeGrid.computeSize
       const styles = $xeGrid.computeStyles
+      const isLoading = $xeGrid.computeIsLoading
       return h('div', {
         ref: 'refElem',
         class: ['vxe-grid', {
@@ -1544,7 +1557,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           'is--animat': !!props.animat,
           'is--round': props.round,
           'is--maximize': reactData.isZMax,
-          'is--loading': props.loading || reactData.tableLoading
+          'is--loading': isLoading
         }],
         style: styles
       }, $xeGrid.renderLayout(h))

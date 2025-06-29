@@ -96,10 +96,6 @@ export default {
         }
       })
       reactData.isCustomStatus = true
-      reactData.isDragColMove = true
-      setTimeout(() => {
-        reactData.isDragColMove = false
-      }, 1000)
       return $xeTable.saveCustomStore('confirm').then(() => {
         if (allowGroup && allowValues && ($xeTable as any).handlePivotTableAggregateData) {
           if (rowGroupList.length !== aggHandleFields.length || rowGroupList.some((conf, i) => conf.field !== aggHandleFields[i])) {
