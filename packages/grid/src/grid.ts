@@ -175,11 +175,12 @@ export default defineVxeComponent({
     })
 
     const computeTableProps = computed(() => {
-      const { seqConfig, pagerConfig, loading, editConfig, proxyConfig } = props
-      const { isZMax, tableLoading, tablePage } = reactData
+      const { seqConfig, pagerConfig, editConfig, proxyConfig } = props
+      const { isZMax, tablePage } = reactData
       const tableExtendProps = computeTableExtendProps.value
       const proxyOpts = computeProxyOpts.value
       const pagerOpts = computePagerOpts.value
+      const isLoading = computeIsLoading.value
       const tProps = Object.assign({}, tableExtendProps)
       if (isZMax) {
         if (tableExtendProps.maxHeight) {
@@ -189,7 +190,7 @@ export default defineVxeComponent({
         }
       }
       if (proxyConfig && isEnableConf(proxyOpts)) {
-        tProps.loading = loading || tableLoading
+        tProps.loading = isLoading
         if (pagerConfig && proxyOpts.seq && isEnableConf(pagerOpts)) {
           tProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
@@ -240,6 +241,14 @@ export default defineVxeComponent({
     const computeCustomTotalFlag = computed(() => {
       const pagerOpts = computePagerOpts.value
       return pagerOpts.total
+    })
+
+    const computeIsLoading = computed(() => {
+      const { loading, proxyConfig } = props
+      const { tableLoading } = reactData
+      const proxyOpts = computeProxyOpts.value
+      const { showLoading } = proxyOpts
+      return loading || (tableLoading && showLoading && proxyConfig && isEnableConf(proxyOpts))
     })
 
     const refMaps: GridPrivateRef = {
@@ -981,7 +990,7 @@ export default defineVxeComponent({
                   reactData.formData = formData
                 }
                 if ($xeTable) {
-                  const { internalData: tableInternalData } = $xeTable
+                  const tableInternalData = $xeTable.internalData
                   const { tableFullColumn, fullColumnFieldData } = tableInternalData
                   const { computeSortOpts } = $xeTable.getComputeMaps()
                   const sortOpts = computeSortOpts.value
@@ -1381,6 +1390,23 @@ export default defineVxeComponent({
       }
     })
 
+    const renderVN = () => {
+      const vSize = computeSize.value
+      const styles = computeStyles.value
+      const isLoading = computeIsLoading.value
+      return h('div', {
+        ref: refElem,
+        class: ['vxe-grid', {
+          [`size--${vSize}`]: vSize,
+          'is--animat': !!props.animat,
+          'is--round': props.round,
+          'is--maximize': reactData.isZMax,
+          'is--loading': isLoading
+        }],
+        style: styles
+      }, renderLayout())
+    }
+
     const columnFlag = ref(0)
     watch(() => props.columns ? props.columns.length : -1, () => {
       columnFlag.value++
@@ -1462,22 +1488,6 @@ export default defineVxeComponent({
     onUnmounted(() => {
       globalEvents.off($xeGrid, 'keydown')
     })
-
-    const renderVN = () => {
-      const vSize = computeSize.value
-      const styles = computeStyles.value
-      return h('div', {
-        ref: refElem,
-        class: ['vxe-grid', {
-          [`size--${vSize}`]: vSize,
-          'is--animat': !!props.animat,
-          'is--round': props.round,
-          'is--maximize': reactData.isZMax,
-          'is--loading': props.loading || reactData.tableLoading
-        }],
-        style: styles
-      }, renderLayout())
-    }
 
     $xeGrid.renderVN = renderVN
 

@@ -1,8 +1,8 @@
-import { TransitionGroup, h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted } from 'vue'
+import { h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { getCellHeight, convertHeaderColumnToRows } from './util'
+import { getCalcHeight, convertHeaderColumnToRows } from './util'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types'
 
@@ -56,7 +56,7 @@ export default defineVxeComponent({
       const cellOpts = computeCellOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
       const headerCellOpts = computeHeaderCellOpts.value
-      const currCellHeight = getCellHeight(headerCellOpts.height) || defaultRowHeight
+      const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
       const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
 
       return cols.map((column, $columnIndex) => {
@@ -146,7 +146,7 @@ export default defineVxeComponent({
         }
 
         return h('th', {
-          class: ['vxe-header--column', colid, {
+          class: ['vxe-table--column vxe-header--column', colid, {
             [`col--${headAlign}`]: headAlign,
             [`col--${type}`]: type,
             'col--last': isLastColumn,
@@ -203,27 +203,10 @@ export default defineVxeComponent({
     const renderHeads = (isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][]) => {
       const { fixedType } = props
       const { headerRowClassName, headerRowStyle } = tableProps
-      const { isColLoading, isDragColMove } = tableReactData
-      const columnOpts = computeColumnOpts.value
-      const columnDragOpts = computeColumnDragOpts.value
 
       return headerGroups.map((cols, $rowIndex) => {
         const params = { $table: $xeTable, $rowIndex, fixed: fixedType, type: renderType }
 
-        if (!isColLoading && columnOpts.drag && columnDragOpts.animation) {
-          return h(TransitionGroup, {
-            key: $rowIndex,
-            name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
-            tag: 'tr',
-            class: [
-              'vxe-header--row',
-              headerRowClassName ? (XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName) : ''
-            ],
-            style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) : null
-          }, {
-            default: () => renderRows(isGroup, isOptimizeMode, cols, $rowIndex)
-          })
-        }
         return h('tr', {
           key: $rowIndex,
           class: [

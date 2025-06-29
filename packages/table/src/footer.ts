@@ -1,9 +1,9 @@
-import { TransitionGroup, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
+import { h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { updateCellTitle, getPropClass } from '../../ui/src/dom'
-import { getCellHeight } from './util'
+import { getCalcHeight } from './util'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines } from '../../../types'
 
@@ -35,7 +35,7 @@ export default defineVxeComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeTooltipOpts, computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeFooterCellOpts, computeDefaultRowHeight, computeResizableOpts, computeVirtualXOpts } = $xeTable.getComputeMaps()
+    const { computeTooltipOpts, computeColumnOpts, computeCellOpts, computeFooterCellOpts, computeDefaultRowHeight, computeResizableOpts, computeVirtualXOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refFooterScroll = ref() as Ref<HTMLDivElement>
@@ -59,7 +59,7 @@ export default defineVxeComponent({
       const defaultRowHeight = computeDefaultRowHeight.value
       const cellOpts = computeCellOpts.value
       const footerCellOpts = computeFooterCellOpts.value
-      const currCellHeight = getCellHeight(footerCellOpts.height) || defaultRowHeight
+      const currCellHeight = getCalcHeight(footerCellOpts.height) || defaultRowHeight
 
       return tableColumn.map((column, $columnIndex) => {
         const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
@@ -173,7 +173,7 @@ export default defineVxeComponent({
         }
 
         return h('td', {
-          class: ['vxe-footer--column', column.id, {
+          class: ['vxe-table--column vxe-footer--column', column.id, {
             [`col--${footAlign}`]: footAlign,
             [`col--${type}`]: type,
             'col--last': isLastColumn,
@@ -222,28 +222,11 @@ export default defineVxeComponent({
     const renderHeads = (isOptimizeMode: boolean, renderColumnList: VxeTableDefines.ColumnInfo[]) => {
       const { fixedType, footerTableData } = props
       const { footerRowClassName, footerRowStyle } = tableProps
-      const { isColLoading, isDragColMove } = tableReactData
-      const columnOpts = computeColumnOpts.value
-      const columnDragOpts = computeColumnDragOpts.value
 
       return footerTableData.map((row, $rowIndex) => {
         const _rowIndex = $rowIndex
         const rowParams = { $table: $xeTable, row, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
 
-        if (!isColLoading && columnOpts.drag && columnDragOpts.animation) {
-          return h(TransitionGroup, {
-            key: $rowIndex,
-            name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
-            tag: 'tr',
-            class: [
-              'vxe-footer--row',
-              footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''
-            ],
-            style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
-          }, {
-            default: () => renderRows(isOptimizeMode, renderColumnList, footerTableData, row, $rowIndex, _rowIndex)
-          })
-        }
         return h('tr', {
           key: $rowIndex,
           class: [

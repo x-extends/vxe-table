@@ -63,7 +63,8 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Virtual scroll
 * [x] Virtual merger
 * [x] CSS Variable Theme
-* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Data grouping and aggregation
+* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Grouping summary
+* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Aggregation
 * [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell area selection
 * [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell copy & paste
 * [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell find and replace

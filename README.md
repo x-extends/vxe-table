@@ -30,12 +30,14 @@
     * [x] v3.13 重构展开行功能，同时支持展开行与虚拟渲染和冻结列
     * [x] v3.14 重构虚拟渲染，支持百万级数据渲染、渲染性能及流畅度大幅提升
     * [x] v3.15 优化虚拟渲染，提升 Chrome、Safari、Firefox 流畅度极兼容性
+    * [x] v3.16 重构虚拟渲染，提高渲染与拖拽效果流畅度
   * **V4**
     * [x] ~~v4.0 基于 vue3.2+，只支持现代浏览器，不支持 IE（2020-03-01 ~ 2024-12-01 已停止维护）~~
     * [x] v4.7 基于 vue3.2+，内部重构，拆分 Table 库和 UI 库，只支持现代浏览器，不支持 IE
     * [x] v4.11 重构展开行功能，同时支持展开行与虚拟渲染和冻结列
     * [x] v4.12 重构虚拟渲染，支持百万级数据渲染、渲染性能及流畅度大幅提升
     * [x] v4.13 优化虚拟渲染，提升 Chrome、Safari、Firefox 流畅度极兼容性
+    * [x] v4.14 重构虚拟渲染，提高渲染与拖拽效果流畅度
 * 版本计划
     * [ ] 优化展开行与冻结列
     * [ ] 优化虚拟渲染，支持千万级数据渲染
@@ -102,8 +104,8 @@
 * [x] 虚拟滚动
 * [x] 虚拟合并
 * [x] CSS 变量主题
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 数据分组与聚合函数
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 数据分组与聚合函数
+* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 数据汇总
+* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 聚合函数
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格区域选取
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格复制/粘贴
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格查找和替换

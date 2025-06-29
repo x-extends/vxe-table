@@ -62,7 +62,8 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 虛擬滾動
 * [x] 虛擬合併
 * [x] CSS 變量主題
-* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 数据分组与聚合函数
+* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 数据汇总
+* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 聚合函数
 * [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格區域選取
 * [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格複製/粘貼
 * [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格查找和替換

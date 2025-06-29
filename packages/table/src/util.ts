@@ -239,7 +239,7 @@ export function getRefElem (refEl: any) {
   return null
 }
 
-export function getCellHeight (height: number | 'unset' | undefined | null) {
+export function getCalcHeight (height: number | 'unset' | undefined | null) {
   if (height === 'unset') {
     return 0
   }

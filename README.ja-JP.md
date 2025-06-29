@@ -63,7 +63,8 @@
 * [x] 仮想スクロール
 * [x] 仮想マージ
 * [x] CSS変数テーマ
-* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) 数据分组与聚合函数
+* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) 数据汇总
+* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) 聚合函数
 * [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) セル領域選択
 * [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) セルのコピー＆ペースト
 * [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) セルの検索と置換

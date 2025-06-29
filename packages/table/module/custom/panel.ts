@@ -475,7 +475,6 @@ export default defineVxeComponent({
               customColumnList.splice(nafIndex + dragOffsetIndex, 0, dragColumn)
             }
 
-            tableReactData.isDragColMove = true
             if (mouseConfig) {
               if ($xeTable.clearSelected) {
                 $xeTable.clearSelected()
