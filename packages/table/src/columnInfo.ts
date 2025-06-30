@@ -53,6 +53,11 @@ export class ColumnInfo {
         }
       }
     }
+    if (_vm.aggFunc) {
+      if (!$xeTable.handlePivotTableAggregateData && _vm.aggFunc !== true) {
+        errLog('vxe.error.errProp', [`column.agg-func=${_vm.aggFunc}`, 'column.agg-func=true'])
+      }
+    }
 
     Object.assign(this, {
       // 基本属性
