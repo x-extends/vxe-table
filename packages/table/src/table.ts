@@ -9594,6 +9594,8 @@ export default defineVxeComponent({
                 }
               }
 
+              updateRowOffsetTop()
+              updateRowExpandStyle()
               $xeTable.updateCellAreas()
               $xeTable.recalculate()
             }).then(() => {
@@ -9998,7 +10000,9 @@ export default defineVxeComponent({
                 }
               }
 
+              updateColumnOffsetLeft()
               loadScrollXData()
+              $xeTable.updateCellAreas()
 
               return {
                 status: true
