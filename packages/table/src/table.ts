@@ -11873,6 +11873,7 @@ export default defineVxeComponent({
     nextTick(() => {
       if (props.loading) {
         if (!VxeUILoadingComponent && !slots.loading) {
+          errLog('vxe.error.errProp', ['loading=true', 'loading=false | <template #loading>...</template>'])
           errLog('vxe.error.reqComp', ['vxe-loading'])
         }
       }
@@ -11881,6 +11882,24 @@ export default defineVxeComponent({
           (props.showFooterOverflow === true || props.showFooterOverflow === 'tooltip') ||
           props.tooltipConfig || props.editRules) {
         if (!VxeUITooltipComponent) {
+          if (props.showOverflow === true) {
+            errLog('vxe.error.errProp', ['show-overflow=true', 'show-overflow=title'])
+          }
+          if (props.showOverflow === 'tooltip') {
+            errLog('vxe.error.errProp', ['show-overflow=tooltip', 'show-overflow=title'])
+          }
+          if (props.showHeaderOverflow === true) {
+            errLog('vxe.error.errProp', ['show-header-overflow=true', 'show-header-overflow=title'])
+          }
+          if (props.showHeaderOverflow === 'tooltip') {
+            errLog('vxe.error.errProp', ['show-header-overflow=tooltip', 'show-header-overflow=title'])
+          }
+          if (props.showFooterOverflow === true) {
+            errLog('vxe.error.errProp', ['show-footer-overflow=true', 'show-footer-overflow=title'])
+          }
+          if (props.showFooterOverflow === 'tooltip') {
+            errLog('vxe.error.errProp', ['show-footer-overflow=tooltip', 'show-footer-overflow=title'])
+          }
           errLog('vxe.error.reqComp', ['vxe-tooltip'])
         }
       }
