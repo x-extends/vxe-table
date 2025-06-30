@@ -8223,6 +8223,8 @@ const Methods = {
             }
           }
 
+          updateRowOffsetTop($xeTable)
+          updateRowExpandStyle($xeTable)
           $xeTable.updateCellAreas()
           $xeTable.recalculate()
         }).then(() => {
@@ -8652,7 +8654,9 @@ const Methods = {
             }
           }
 
+          updateColumnOffsetLeft($xeTable)
           loadScrollXData($xeTable)
+          $xeTable.updateCellAreas()
 
           return {
             status: true
