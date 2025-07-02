@@ -2740,7 +2740,7 @@ function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateM
       clearTimeout(rceTimeout)
       if (rceRunTime && rceRunTime + (refreshDelay - 5) < Date.now()) {
         resolve(
-          handleRecalculateStyle($xeTable, !!reFull, reWidth, reHeight)
+          handleRecalculateStyle($xeTable, reFull, reWidth, reHeight)
         )
       } else {
         $xeTable.$nextTick(() => {
@@ -2749,12 +2749,12 @@ function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateM
       }
     } else {
       resolve(
-        handleRecalculateStyle($xeTable, !!reFull, reWidth, reHeight)
+        handleRecalculateStyle($xeTable, reFull, reWidth, reHeight)
       )
     }
     internalData.rceTimeout = setTimeout(() => {
       internalData.rceTimeout = undefined
-      handleRecalculateStyle($xeTable, !!reFull, reWidth, reHeight)
+      handleRecalculateStyle($xeTable, reFull, reWidth, reHeight)
     }, refreshDelay)
   })
 }
@@ -3052,9 +3052,8 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
       $xeTable.$nextTick()
         .then(() => handleRecalculateStyle($xeTable, false, false, false))
         .then(() => {
-          calcCellHeight($xeTable)
+          handleRecalculateStyle($xeTable, false, true, true)
           updateRowOffsetTop($xeTable)
-          return handleRecalculateStyle($xeTable, false, false, false)
         })
         .then(() => {
           let targetScrollLeft = lastScrollLeft
@@ -3074,7 +3073,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
           if (oldScrollYLoad === sYLoad) {
             restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
               .then(() => {
-                calcCellHeight($xeTable)
+                handleRecalculateStyle($xeTable, false, true, true)
                 updateRowOffsetTop($xeTable)
                 resolve()
               })
@@ -3082,7 +3081,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
             setTimeout(() => {
               restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
                 .then(() => {
-                  calcCellHeight($xeTable)
+                  handleRecalculateStyle($xeTable, false, true, true)
                   updateRowOffsetTop($xeTable)
                   resolve()
                 })
@@ -3355,7 +3354,7 @@ function handleColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
         $xeTable.handleUpdateCustomColumn()
       }
       reactData.isColLoading = false
-      return $xeTable.recalculate()
+      return handleLazyRecalculate($xeTable, false, true, true)
     })
   })
 }
@@ -3560,8 +3559,21 @@ function updateHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   }
 }
 
-function calcColumnAutoWidth (column: VxeTableDefines.ColumnInfo, wrapperEl: HTMLDivElement) {
-  const cellElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[colid="${column.id}"]`)
+function calcColumnAutoWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: VxeTableDefines.ColumnInfo, wrapperEl: HTMLDivElement) {
+  const columnOpts = $xeTable.computeColumnOpts
+  const { autoOptions } = columnOpts
+  const { isCalcHeader, isCalcBody, isCalcFooter } = autoOptions || {}
+  const querySelections: string[] = []
+  if (isCalcHeader) {
+    querySelections.push(`.vxe-header-cell--wrapper[colid="${column.id}"]`)
+  }
+  if (isCalcBody) {
+    querySelections.push(`.vxe-body-cell--wrapper[colid="${column.id}"]`)
+  }
+  if (isCalcFooter) {
+    querySelections.push(`.vxe-footer-cell--wrapper[colid="${column.id}"]`)
+  }
+  const cellElemList = querySelections.length ? wrapperEl.querySelectorAll(querySelections.join(',')) : []
   let leftRightPadding = 0
   const firstCellEl = cellElemList[0]
   if (firstCellEl && firstCellEl.parentElement) {
@@ -3587,7 +3599,7 @@ function calcCellWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
     autoWidthColumnList.forEach(column => {
       const colid = column.id
       const colRest = fullColumnIdData[colid]
-      const colWidth = calcColumnAutoWidth(column, el)
+      const colWidth = calcColumnAutoWidth($xeTable, column, el)
       if (colRest) {
         colRest.width = Math.max(colWidth, colRest.width)
       }
@@ -5584,7 +5596,7 @@ const Methods = {
       const colMinWidth = getColReMinWidth(cellParams)
 
       el.setAttribute('data-calc-col', 'Y')
-      let resizeWidth = calcColumnAutoWidth(resizeColumn, el)
+      let resizeWidth = calcColumnAutoWidth($xeTable, resizeColumn, el)
       el.removeAttribute('data-calc-col')
       if (colRest) {
         resizeWidth = Math.max(resizeWidth, colRest.width)

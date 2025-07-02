@@ -96,12 +96,17 @@ function insertTreeRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   })
 }
 
+// function insertGroupRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, newRecords: any[], isAppend: boolean) {
+
+// }
+
 function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, records: any[], targetRow: any, isInsertNextRow?: any) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
   const { treeConfig } = props
+  const { isRowGroupStatus } = reactData
   const { tableFullTreeData, afterFullData, mergeBodyList, tableFullData, fullDataRowIdData, fullAllDataRowIdData, insertRowMaps } = internalData
   const treeOpts = $xeTable.computeTreeOpts
   const { transform, rowField, mapChildrenField } = treeOpts
@@ -111,9 +116,16 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
   }
   const newRecords: any[] = $xeTable.defineField(records.map(record => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record)))
   if (XEUtils.eqNull(targetRow)) {
-  // 如果为虚拟树
+    // 如果为虚拟树
     if (treeConfig && transform) {
       insertTreeRow($xeTable, newRecords, false)
+    } else if (isRowGroupStatus) {
+      // 如果分组
+      if (treeConfig) {
+        throw new Error(getI18n('vxe.error.noTree', ['insert']))
+      }
+      warnLog(getI18n('vxe.error.noGroup', ['remove']))
+      // insertGroupRow($xeTable, newRecords, false)
     } else {
       newRecords.forEach(item => {
         const rowid = getRowid($xeTable, item)
@@ -136,6 +148,13 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
       // 如果为虚拟树
       if (treeConfig && transform) {
         insertTreeRow($xeTable, newRecords, true)
+      } else if (isRowGroupStatus) {
+        // 如果分组
+        if (treeConfig) {
+          throw new Error(getI18n('vxe.error.noTree', ['insert']))
+        }
+        warnLog(getI18n('vxe.error.noGroup', ['remove']))
+        // insertGroupRow($xeTable, newRecords, true)
       } else {
         newRecords.forEach(item => {
           const rowid = getRowid($xeTable, item)
@@ -198,6 +217,12 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
           warnLog('vxe.error.unableInsert')
           insertTreeRow($xeTable, newRecords, true)
         }
+      } else if (isRowGroupStatus) {
+        // 如果分组
+        if (treeConfig) {
+          throw new Error(getI18n('vxe.error.noTree', ['insert']))
+        }
+        warnLog(getI18n('vxe.error.noGroup', ['remove']))
       } else {
         if (treeConfig) {
           throw new Error(getI18n('vxe.error.noTree', ['insert']))
@@ -500,7 +525,7 @@ export default {
       const internalData = $xeTable as unknown as TableInternalData
 
       const { treeConfig } = props
-      const { editStore } = reactData
+      const { editStore, isRowGroupStatus } = reactData
       const { tableFullTreeData, selectCheckboxMaps, afterFullData, mergeBodyList, tableFullData, pendingRowMaps, insertRowMaps, removeRowMaps } = internalData
       const checkboxOpts = $xeTable.computeCheckboxOpts
       const treeOpts = $xeTable.computeTreeOpts
@@ -556,6 +581,9 @@ export default {
               afterFullData.splice(afIndex, 1)
             }
           })
+        } else if (isRowGroupStatus) {
+          // 如果分组
+          warnLog(getI18n('vxe.error.noGroup', ['remove']))
         } else {
           rows.forEach((row: any) => {
             const tfIndex = this.findRowIndexOf(tableFullData, row)

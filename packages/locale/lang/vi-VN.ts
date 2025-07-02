@@ -36,6 +36,7 @@ export default {
       notCommands: 'Chỉ thị toàn cầu "{0}" không tồn tại',
       notSlot: 'Khe "{0}" không tồn tại',
       noTree: '"{0}" không được hỗ trợ trong cấu trúc cây',
+      noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Tham số không được hỗ trợ "{0}"',
       checkProp: 'Khi khối lượng dữ liệu quá lớn, hộp kiểm có thể được lắp. Bạn nên đặt tham số "{0}" để cải thiện tốc độ kết xuất',
       coverProp: 'Tham số "{1}" của "{0}" được xác định nhiều lần, có thể gây ra lỗi',
@@ -354,7 +355,8 @@ export default {
     colorPicker: {
       clear: 'Thông thoáng',
       confirm: 'xác nhận',
-      copySuccess: 'Được sao chép vào bảng tạm: {0}'
+      copySuccess: 'Được sao chép vào bảng tạm: {0}',
+      hex: 'HEX'
     },
     formDesign: {
       formName: 'Tên hình thức',

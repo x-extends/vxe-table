@@ -87,8 +87,24 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/component/grid',
-    name: 'GridTest',
-    component: () => import('../views/grid/GridTest.vue')
+    component: RouteLayout,
+    children: [
+      {
+        path: 'test1',
+        name: 'GridTest1',
+        component: () => import('../views/grid/GridTest1.vue')
+      },
+      {
+        path: 'test2',
+        name: 'GridTest2',
+        component: () => import('../views/grid/GridTest2.vue')
+      },
+      {
+        path: 'test3',
+        name: 'GridTest3',
+        component: () => import('../views/grid/GridTest3.vue')
+      }
+    ]
   },
   {
     path: '/keepAlives',

@@ -342,11 +342,15 @@ function countTreeExpand (prevRow: any, params: VxeTableDefines.CellRenderBodyPa
     return count
   }
   const { $table } = params
+  const reactData = $table as unknown as TableReactData
+  const { treeExpandedFlag } = reactData
+  const internalData = $table as unknown as TableInternalData
+  const { treeExpandedMaps } = internalData
   const treeOpts = $table.computeTreeOpts
   const { transform, mapChildrenField } = treeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
   const rowChildren = prevRow[transform ? mapChildrenField : childrenField]
-  if (rowChildren && $table.isTreeExpandByRow(prevRow)) {
+  if (rowChildren && treeExpandedFlag && treeExpandedMaps[getRowid($table, prevRow)]) {
     for (let index = 0; index < rowChildren.length; index++) {
       count += countTreeExpand(rowChildren[index], params)
     }

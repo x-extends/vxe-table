@@ -1828,6 +1828,7 @@ export default {
       this.handleInitDefaults()
       this.updateStyle()
     })
+
     globalEvents.on($xeTable, 'paste', this.handleGlobalPasteEvent)
     globalEvents.on($xeTable, 'copy', this.handleGlobalCopyEvent)
     globalEvents.on($xeTable, 'cut', this.handleGlobalCutEvent)
@@ -1897,17 +1898,18 @@ export default {
           errLog('vxe.error.reqComp', ['vxe-tooltip'])
         }
       }
+
+      if (this.autoResize) {
+        const resizeObserver = globalResize.create(() => {
+          if (this.autoResize) {
+            this.recalculate(true)
+          }
+        })
+        resizeObserver.observe(this.$el)
+        resizeObserver.observe(this.getParentElem())
+        this.$resize = resizeObserver
+      }
     })
-    if (this.autoResize) {
-      const resizeObserver = globalResize.create(() => {
-        if (this.autoResize) {
-          this.recalculate(true)
-        }
-      })
-      resizeObserver.observe(this.$el)
-      resizeObserver.observe(this.getParentElem())
-      this.$resize = resizeObserver
-    }
 
     if (virtualYOpts.mode !== 'scroll') {
       const tableViewportEl = $xeTable.$refs.refTableViewportElem as HTMLDivElement
@@ -1916,7 +1918,7 @@ export default {
       }
     }
 
-    this.preventEvent(null, 'mounted')
+    $xeTable.preventEvent(null, 'mounted')
   },
   activated () {
     this.recalculate().then(() => this.refreshScroll())

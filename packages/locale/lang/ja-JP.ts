@@ -36,6 +36,7 @@ export default {
       notCommands: 'グローバル指令「{0}」は存在しません',
       notSlot: 'スロット「{0}」は存在しません',
       noTree: '「{0}」はツリー構造ではサポートされていません',
+      noGroup: '数据分组后不支持 "{0}"',
       notProp: 'サポートされていないパラメーター "{0}"',
       checkProp: 'データのボリュームが大きすぎると、チェックボックスがutter音を立てる可能性があります。レンダリング速度を改善するためにパラメーター「{0}」を設定することをお勧めします',
       coverProp: '「{0}」のパラメーター「{1}」が繰り返し定義されているため、エラーが発生する可能性があります',
@@ -354,7 +355,8 @@ export default {
     colorPicker: {
       clear: 'クリア',
       confirm: '確認する',
-      copySuccess: 'クリップボードにコピー：{0}'
+      copySuccess: 'クリップボードにコピー：{0}',
+      hex: 'HEX'
     },
     formDesign: {
       formName: 'フォーム名',

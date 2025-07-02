@@ -9,6 +9,7 @@
       :row-config="{isHover: true}"
       :loading="demo1.loading"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
+      :column-config="columnConfig"
       :menu-config="menuConfig"
       :data="demo1.tableData"
       :footer-data="demo1.footerData">
@@ -41,6 +42,14 @@ import { VxeTablePropTypes } from '../../../types'
 
 export default Vue.extend({
   data () {
+    const columnConfig: VxeTablePropTypes.ColumnConfig = {
+      autoOptions: {
+        isCalcHeader: true,
+        isCalcBody: true,
+        isCalcFooter: true
+      }
+    }
+
     return {
       demo1: {
         loading: false,
@@ -90,7 +99,8 @@ export default Vue.extend({
             ]
           ]
         }
-      } as VxeTablePropTypes.MenuConfig
+      } as VxeTablePropTypes.MenuConfig,
+      columnConfig
     }
   },
   mounted () {

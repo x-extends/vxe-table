@@ -36,6 +36,7 @@ export default {
       notCommands: '글로벌 지시문 "{0}"은 존재하지 않습니다',
       notSlot: '슬롯 "{0}"은 존재하지 않습니다',
       noTree: '"{0}"은 트리 구조에서 지원되지 않습니다',
+      noGroup: '数据分组后不支持 "{0}"',
       notProp: '지원되지 않는 매개 변수 "{0}"',
       checkProp: '데이터 볼륨이 너무 커지면 확인란이 말더듬 될 수 있습니다. 렌더링 속도를 향상시키기 위해 매개 변수 "{0}"를 설정하는 것이 좋습니다.',
       coverProp: '"{0}"의 매개 변수 "{1}"이 반복적으로 정의되어 오류가 발생할 수 있습니다.',
@@ -354,7 +355,8 @@ export default {
     colorPicker: {
       clear: '분명한',
       confirm: '확인하다',
-      copySuccess: '클립 보드로 복사 : {0}'
+      copySuccess: '클립 보드로 복사 : {0}',
+      hex: 'HEX'
     },
     formDesign: {
       formName: '양식 이름',

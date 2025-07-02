@@ -36,6 +36,7 @@ export default {
       notCommands: 'Arahan global "{0}" tidak wujud',
       notSlot: 'Slot "{0}" tidak wujud',
       noTree: '"{0}" tidak disokong dalam struktur pokok',
+      noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Parameter yang tidak disokong "{0}"',
       checkProp: 'Apabila jumlah data terlalu besar, kotak semak boleh digagalkan. Adalah disyorkan untuk menetapkan parameter "{0}" untuk meningkatkan kelajuan rendering',
       coverProp: 'Parameter "{1}" dari "{0}" ditakrifkan berulang kali, yang boleh menyebabkan ralat',
@@ -354,7 +355,8 @@ export default {
     colorPicker: {
       clear: 'Jelas',
       confirm: 'mengesahkan',
-      copySuccess: 'Disalin ke papan klip: {0}'
+      copySuccess: 'Disalin ke papan klip: {0}',
+      hex: 'HEX'
     },
     formDesign: {
       formName: 'Nama Bentuk',

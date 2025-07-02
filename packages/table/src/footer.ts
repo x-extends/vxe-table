@@ -174,7 +174,7 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
               attrs: {
                 colid
               },
-              class: 'vxe-cell--wrapper'
+              class: 'vxe-cell--wrapper vxe-footer-cell--wrapper'
             }, column.renderFooter(h, cellParams))
           ]),
       /**

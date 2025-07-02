@@ -26,7 +26,7 @@ function renderLine (h: CreateElement, $xeTable : VxeTableConstructor & VxeTable
   const tableProps = $xeTable
   const tableInternalData = $xeTable as unknown as TableInternalData
 
-  const { row, column } = params
+  const { column } = params
   const { afterFullData } = tableInternalData
   const { treeConfig } = tableProps
   const treeOpts = $xeTable.computeTreeOpts
@@ -51,7 +51,7 @@ function renderLine (h: CreateElement, $xeTable : VxeTableConstructor & VxeTable
         h('div', {
           class: 'vxe-tree--line',
           style: {
-            height: `${$xeTable.eqRow(afterFullData[0], row) ? 1 : calcTreeLine(params, prevRow)}px`,
+            height: `${getRowid($xeTable, afterFullData[0]) === rowid ? 1 : calcTreeLine(params, prevRow)}px`,
             bottom: `-${Math.floor(cellHeight / 2)}px`,
             left: `${(rLevel * treeOpts.indent) + (rLevel ? 2 - getOffsetSize($xeTable) : 0) + 16}px`
           }
@@ -351,7 +351,7 @@ function renderTdColumn (
                 colid,
                 rowid
               },
-              class: 'vxe-cell--wrapper'
+              class: 'vxe-cell--wrapper vxe-body-cell--wrapper'
             }, column.renderCell(h, cellParams))
           ])
     )

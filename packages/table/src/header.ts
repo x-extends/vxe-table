@@ -152,7 +152,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
               attrs: {
                 colid
               },
-              class: 'vxe-cell--wrapper'
+              class: 'vxe-cell--wrapper vxe-header-cell--wrapper'
             }, column.renderHeader(h, cellParams))
           ]),
       /**
