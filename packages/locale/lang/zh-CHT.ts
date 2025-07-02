@@ -36,6 +36,7 @@ export default {
       notCommands: '全局指令 "{0}" 不存在',
       notSlot: '插槽 "{0}" 不存在',
       noTree: '樹結構不支持 "{0}"',
+      noGroup: '数据分组后不支持 "{0}"',
       notProp: '不支持的參數 "{0}"',
       checkProp: '當數據量過大時可能會導致複選框卡頓，建議設置參數 "{0}" 提升渲染速度',
       coverProp: '"{0}" 的參數 "{1}" 重複定義，這可能會出現錯誤',
@@ -354,7 +355,8 @@ export default {
     colorPicker: {
       clear: '清除',
       confirm: '確認',
-      copySuccess: '已復製到剪貼板：{0}'
+      copySuccess: '已復製到剪貼板：{0}',
+      hex: '十六进制'
     },
     formDesign: {
       formName: '表單名稱',

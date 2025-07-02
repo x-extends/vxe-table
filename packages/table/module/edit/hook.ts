@@ -104,8 +104,13 @@ hooks.add('tableEditModule', {
       })
     }
 
+    // const insertGroupRow = (newRecords: any[], isAppend: boolean) => {
+
+    // }
+
     const handleInsertRowAt = (records: any, targetRow: any, isInsertNextRow?: boolean) => {
       const { treeConfig } = props
+      const { isRowGroupStatus } = reactData
       const { tableFullTreeData, afterFullData, mergeBodyList, tableFullData, fullDataRowIdData, fullAllDataRowIdData, insertRowMaps } = internalData
       const treeOpts = computeTreeOpts.value
       const { transform, rowField, mapChildrenField } = treeOpts
@@ -118,6 +123,13 @@ hooks.add('tableEditModule', {
         // 如果为虚拟树
         if (treeConfig && transform) {
           insertTreeRow(newRecords, false)
+        } else if (isRowGroupStatus) {
+          // 如果分组
+          if (treeConfig) {
+            throw new Error(getI18n('vxe.error.noTree', ['insert']))
+          }
+          warnLog(getI18n('vxe.error.noGroup', ['remove']))
+          // insertGroupRow(newRecords, false)
         } else {
           newRecords.forEach(item => {
             const rowid = getRowid($xeTable, item)
@@ -140,6 +152,13 @@ hooks.add('tableEditModule', {
           // 如果为虚拟树
           if (treeConfig && transform) {
             insertTreeRow(newRecords, true)
+          } else if (isRowGroupStatus) {
+            // 如果分组
+            if (treeConfig) {
+              throw new Error(getI18n('vxe.error.noTree', ['insert']))
+            }
+            warnLog(getI18n('vxe.error.noGroup', ['remove']))
+            // insertGroupRow(newRecords, true)
           } else {
             newRecords.forEach(item => {
               const rowid = getRowid($xeTable, item)
@@ -202,6 +221,12 @@ hooks.add('tableEditModule', {
               warnLog('vxe.error.unableInsert')
               insertTreeRow(newRecords, true)
             }
+          } else if (isRowGroupStatus) {
+            // 如果分组
+            if (treeConfig) {
+              throw new Error(getI18n('vxe.error.noTree', ['insert']))
+            }
+            warnLog(getI18n('vxe.error.noGroup', ['remove']))
           } else {
             if (treeConfig) {
               throw new Error(getI18n('vxe.error.noTree', ['insert']))
@@ -488,7 +513,7 @@ hooks.add('tableEditModule', {
        */
       remove (rows: any) {
         const { treeConfig } = props
-        const { editStore } = reactData
+        const { editStore, isRowGroupStatus } = reactData
         const { tableFullTreeData, selectCheckboxMaps, afterFullData, mergeBodyList, tableFullData, pendingRowMaps, insertRowMaps, removeRowMaps } = internalData
         const checkboxOpts = computeCheckboxOpts.value
         const treeOpts = computeTreeOpts.value
@@ -544,6 +569,9 @@ hooks.add('tableEditModule', {
                 afterFullData.splice(afIndex, 1)
               }
             })
+          } else if (isRowGroupStatus) {
+            // 如果分组
+            warnLog(getI18n('vxe.error.noGroup', ['remove']))
           } else {
             rows.forEach((row: any) => {
               const tfIndex = $xeTable.findRowIndexOf(tableFullData, row)

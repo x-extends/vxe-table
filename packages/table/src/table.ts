@@ -278,6 +278,8 @@ export default defineVxeComponent({
       scrollXWidth: 0,
       isScrollXBig: false,
 
+      lazScrollLoading: false,
+
       rowExpandHeightFlag: 1,
       calcCellHeightFlag: 1,
       resizeHeightFlag: 1,
@@ -1704,7 +1706,20 @@ export default defineVxeComponent({
     }
 
     const calcColumnAutoWidth = (column: VxeTableDefines.ColumnInfo, wrapperEl: HTMLDivElement) => {
-      const cellElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[colid="${column.id}"]`)
+      const columnOpts = computeColumnOpts.value
+      const { autoOptions } = columnOpts
+      const { isCalcHeader, isCalcBody, isCalcFooter } = autoOptions || {}
+      const querySelections: string[] = []
+      if (isCalcHeader) {
+        querySelections.push(`.vxe-header-cell--wrapper[colid="${column.id}"]`)
+      }
+      if (isCalcBody) {
+        querySelections.push(`.vxe-body-cell--wrapper[colid="${column.id}"]`)
+      }
+      if (isCalcFooter) {
+        querySelections.push(`.vxe-footer-cell--wrapper[colid="${column.id}"]`)
+      }
+      const cellElemList = querySelections.length ? wrapperEl.querySelectorAll(querySelections.join(',')) : []
       let leftRightPadding = 0
       const firstCellEl = cellElemList[0]
       if (firstCellEl && firstCellEl.parentElement) {
@@ -3174,7 +3189,7 @@ export default defineVxeComponent({
           clearTimeout(rceTimeout)
           if (rceRunTime && rceRunTime + (refreshDelay - 5) < Date.now()) {
             resolve(
-              handleRecalculateStyle(!!reFull, reWidth, reHeight)
+              handleRecalculateStyle(reFull, reWidth, reHeight)
             )
           } else {
             nextTick(() => {
@@ -3183,12 +3198,12 @@ export default defineVxeComponent({
           }
         } else {
           resolve(
-            handleRecalculateStyle(!!reFull, reWidth, reHeight)
+            handleRecalculateStyle(reFull, reWidth, reHeight)
           )
         }
         internalData.rceTimeout = setTimeout(() => {
           internalData.rceTimeout = undefined
-          handleRecalculateStyle(!!reFull, reWidth, reHeight)
+          handleRecalculateStyle(reFull, reWidth, reHeight)
         }, refreshDelay)
       })
     }
@@ -3473,9 +3488,8 @@ export default defineVxeComponent({
           nextTick()
             .then(() => handleRecalculateStyle(false, false, false))
             .then(() => {
-              calcCellHeight()
+              handleRecalculateStyle(false, true, true)
               updateRowOffsetTop()
-              return handleRecalculateStyle(false, false, false)
             })
             .then(() => {
               let targetScrollLeft = lastScrollLeft
@@ -3495,7 +3509,7 @@ export default defineVxeComponent({
               if (oldScrollYLoad === sYLoad) {
                 restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
                   .then(() => {
-                    calcCellHeight()
+                    handleRecalculateStyle(false, true, true)
                     updateRowOffsetTop()
                     resolve()
                   })
@@ -3503,7 +3517,7 @@ export default defineVxeComponent({
                 setTimeout(() => {
                   restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
                     .then(() => {
-                      calcCellHeight()
+                      handleRecalculateStyle(false, true, true)
                       updateRowOffsetTop()
                       resolve()
                     })
@@ -3759,7 +3773,7 @@ export default defineVxeComponent({
             $xeTable.handleUpdateCustomColumn()
           }
           reactData.isColLoading = false
-          return $xeTable.recalculate()
+          return handleLazyRecalculate(false, true, true)
         })
       })
     }
@@ -4050,6 +4064,7 @@ export default defineVxeComponent({
     const checkLastSyncScroll = (isRollX: boolean, isRollY: boolean) => {
       const { scrollXLoad, scrollYLoad, isAllOverflow } = reactData
       const { lcsTimeout } = internalData
+      reactData.lazScrollLoading = true
       if (lcsTimeout) {
         clearTimeout(lcsTimeout)
       }
@@ -4062,6 +4077,7 @@ export default defineVxeComponent({
         internalData.inHeaderScroll = false
         internalData.inBodyScroll = false
         internalData.inFooterScroll = false
+        reactData.lazScrollLoading = false
         internalData.scrollRenderType = ''
 
         if (!isAllOverflow) {
@@ -12017,7 +12033,7 @@ export default defineVxeComponent({
       globalEvents.on($xeTable, 'keydown', handleGlobalKeydownEvent)
       globalEvents.on($xeTable, 'resize', handleGlobalResizeEvent)
       globalEvents.on($xeTable, 'contextmenu', $xeTable.handleGlobalContextmenuEvent)
-      tablePrivateMethods.preventEvent(null, 'mounted', { $table: $xeTable })
+      $xeTable.preventEvent(null, 'mounted', { $table: $xeTable })
     })
 
     onBeforeUnmount(() => {

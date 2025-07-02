@@ -48,21 +48,21 @@ body:
   id: issue_vue_version
   attributes:
     label: "vue 版本："
-    placeholder: "例如：3.5.13"
+    placeholder: "例如：3.5.17"
   validations:
     required: true
 - type: input
   id: issue_vxe_ui_version
   attributes:
     label: "vxe-pc-ui 版本："
-    placeholder: "例如：4.6.4"
+    placeholder: "例如：4.6.41"
   validations:
     required: true
 - type: input
   id: issue_vxe_table_version
   attributes:
     label: "vxe-table 版本："
-    placeholder: "例如：4.13.25"
+    placeholder: "例如：4.13.51"
   validations:
     required: true
 - type: checkboxes

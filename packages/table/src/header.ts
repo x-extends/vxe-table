@@ -183,7 +183,7 @@ export default defineVxeComponent({
             : [
                 h('div', {
                   colid,
-                  class: 'vxe-cell--wrapper'
+                  class: 'vxe-cell--wrapper vxe-header-cell--wrapper'
                 }, column.renderHeader(cellParams))
               ]),
           /**

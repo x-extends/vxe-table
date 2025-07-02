@@ -933,11 +933,11 @@ export default defineVxeComponent({
           case 'insert':
             return $xeTable.insert({})
           case 'insert_edit':
-            return $xeTable.insert({}).then(({ row }) => $xeTable.setEditRow(row))
+            return $xeTable.insert({}).then(({ row }) => $xeTable.setEditRow(row, true))
 
             // 已废弃
           case 'insert_actived':
-            return $xeTable.insert({}).then(({ row }) => $xeTable.setEditRow(row))
+            return $xeTable.insert({}).then(({ row }) => $xeTable.setEditRow(row, true))
             // 已废弃
 
           case 'mark_cancel':

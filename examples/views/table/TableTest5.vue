@@ -10,6 +10,7 @@
       :row-config="{isHover: true}"
       :loading="demo1.loading"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
+      :column-config="columnConfig"
       :menu-config="menuConfig"
       :data="demo1.tableData"
       :footer-data="demo1.footerData">
@@ -46,6 +47,14 @@ const demo1 = reactive({
   footerData: [
     { name: 'xxx xxx x xxx xxx xxxx xxx xxxx xxx xxxx xxx xxxx xxx xxxx xxx x', address: 'xxx xxxxx xxxxx xxxxx xxxxx xxxxx xxxxx xxxxx xx' }
   ]
+})
+
+const columnConfig = reactive<VxeTablePropTypes.ColumnConfig>({
+  autoOptions: {
+    isCalcHeader: true,
+    isCalcBody: true,
+    isCalcFooter: true
+  }
 })
 
 const menuConfig = reactive<VxeTablePropTypes.MenuConfig>({

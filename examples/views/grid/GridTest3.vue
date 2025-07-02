@@ -26,7 +26,7 @@ interface RowVO {
   [key: string]: string | number | boolean | any[]
 }
 
-const rowSize = ref(500)
+const rowSize = ref(100)
 const dataOptions = ref([
   { label: '加载 3 行', value: 3 },
   { label: '加载 20 行', value: 20 },

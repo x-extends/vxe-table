@@ -200,7 +200,7 @@ export default defineVxeComponent({
             : [
                 h('div', {
                   colid,
-                  class: 'vxe-cell--wrapper'
+                  class: 'vxe-cell--wrapper vxe-footer-cell--wrapper'
                 }, column.renderFooter(cellParams))
               ]),
           /**

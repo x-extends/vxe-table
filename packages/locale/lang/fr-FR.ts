@@ -36,6 +36,7 @@ export default {
       notCommands: "La directive globale \"{0}\" n'existe pas",
       notSlot: "Slot \"{0}\" n'existe pas",
       noTree: "\"{0}\" n'est pas pris en charge dans la structure de l'arbre",
+      noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Paramètre non pris en charge "{0}"',
       checkProp: 'Lorsque le volume de données est trop grand, la case peut être bégayée. Il est recommandé de définir le paramètre "{0}" pour améliorer la vitesse de rendu',
       coverProp: 'Le paramètre "{1}" de "{0}" est défini à plusieurs reprises, ce qui peut provoquer une erreur',
@@ -354,7 +355,8 @@ export default {
     colorPicker: {
       clear: 'Clair',
       confirm: 'confirmer',
-      copySuccess: 'Copie dans le presse-papiers: {0}'
+      copySuccess: 'Copie dans le presse-papiers: {0}',
+      hex: 'HEX'
     },
     formDesign: {
       formName: 'Nom de formulaire',

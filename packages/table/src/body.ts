@@ -47,7 +47,7 @@ export default defineVxeComponent({
     }
 
     const renderLine = (rowid: string, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number): VxeComponentSlotType[] => {
-      const { row, column } = params
+      const { column } = params
       const { afterFullData } = tableInternalData
       const { treeConfig } = tableProps
       const treeOpts = computeTreeOpts.value
@@ -72,7 +72,7 @@ export default defineVxeComponent({
             h('div', {
               class: 'vxe-tree--line',
               style: {
-                height: `${$xeTable.eqRow(afterFullData[0], row) ? 1 : calcTreeLine(params, prevRow)}px`,
+                height: `${getRowid($xeTable, afterFullData[0]) === rowid ? 1 : calcTreeLine(params, prevRow)}px`,
                 bottom: `-${Math.floor(cellHeight / 2)}px`,
                 left: `${(rLevel * treeOpts.indent) + (rLevel ? 2 - getOffsetSize($xeTable) : 0) + 16}px`
               }
@@ -330,6 +330,8 @@ export default defineVxeComponent({
         tcStyle.minHeight = `${cellHeight}px`
       }
 
+      // console.log(lastScrollTime)
+
       const tdVNs: VxeComponentSlotType[] = []
       if (fixedHiddenColumn && isAllOverflow) {
         tdVNs.push(
@@ -364,7 +366,7 @@ export default defineVxeComponent({
                 h('div', {
                   colid,
                   rowid,
-                  class: 'vxe-cell--wrapper'
+                  class: 'vxe-cell--wrapper vxe-body-cell--wrapper'
                 }, column.renderCell(cellParams))
               ])
         )
