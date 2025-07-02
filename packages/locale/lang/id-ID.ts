@@ -36,6 +36,7 @@ export default {
       notCommands: 'Petunjuk global "{0}" tidak ada',
       notSlot: 'Slot "{0}" tidak ada',
       noTree: '"{0}" tidak didukung dalam struktur pohon',
+      noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Parameter yang tidak didukung "{0}"',
       checkProp: 'Ketika volume data terlalu besar, kotak centang mungkin tergagap. Disarankan untuk mengatur parameter "{0}" untuk meningkatkan kecepatan rendering',
       coverProp: 'Parameter "{1}" dari "{0}" berulang kali didefinisikan, yang dapat menyebabkan kesalahan',
@@ -354,7 +355,8 @@ export default {
     colorPicker: {
       clear: 'Jernih',
       confirm: 'mengonfirmasi',
-      copySuccess: 'Disalin ke clipboard: {0}'
+      copySuccess: 'Disalin ke clipboard: {0}',
+      hex: 'HEX'
     },
     formDesign: {
       formName: 'Nama bentuk',

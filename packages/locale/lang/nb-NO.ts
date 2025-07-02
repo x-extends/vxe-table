@@ -36,6 +36,7 @@ export default {
       notCommands: 'Det globale direktivet "{0}" eksisterer ikke',
       notSlot: 'Slot "{0}" eksisterer ikke',
       noTree: '"{0}" støttes ikke i trestrukturen',
+      noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Ikke støttet parameter "{0}"',
       checkProp: 'Når datavolumet er for stort, kan avmerkingsboksen være stammet. Det anbefales å angi parameteren "{0}" for å forbedre gjengivelseshastigheten',
       coverProp: 'Parameteren "{1}" av "{0}" er gjentatte ganger definert, noe som kan forårsake en feil',
@@ -354,7 +355,8 @@ export default {
     colorPicker: {
       clear: 'Klar',
       confirm: 'bekrefte',
-      copySuccess: 'Kopiert til utklippstavlen: {0}'
+      copySuccess: 'Kopiert til utklippstavlen: {0}',
+      hex: 'HEX'
     },
     formDesign: {
       formName: 'Formnavn',

@@ -124,6 +124,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
       if (treeConfig) {
         throw new Error(getI18n('vxe.error.noTree', ['insert']))
       }
+      warnLog(getI18n('vxe.error.noGroup', ['remove']))
       // insertGroupRow($xeTable, newRecords, false)
     } else {
       newRecords.forEach(item => {
@@ -152,6 +153,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
         if (treeConfig) {
           throw new Error(getI18n('vxe.error.noTree', ['insert']))
         }
+        warnLog(getI18n('vxe.error.noGroup', ['remove']))
       // insertGroupRow($xeTable, newRecords, false)
       } else {
         newRecords.forEach(item => {
@@ -220,6 +222,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
         if (treeConfig) {
           throw new Error(getI18n('vxe.error.noTree', ['insert']))
         }
+        warnLog(getI18n('vxe.error.noGroup', ['remove']))
       } else {
         if (treeConfig) {
           throw new Error(getI18n('vxe.error.noTree', ['insert']))
@@ -580,6 +583,7 @@ export default {
           })
         } else if (isRowGroupStatus) {
           // 如果分组
+          warnLog(getI18n('vxe.error.noGroup', ['remove']))
         } else {
           rows.forEach((row: any) => {
             const tfIndex = this.findRowIndexOf(tableFullData, row)

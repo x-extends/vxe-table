@@ -36,6 +36,7 @@ export default {
       notCommands: 'A "{0}" globális irányelv nem létezik',
       notSlot: 'A "{0}" rés nem létezik',
       noTree: 'A "{0}" nem támogatott a faszerkezetben',
+      noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Nem támogatott paraméter "{0}"',
       checkProp: 'Ha az adatmennyiség túl nagy, akkor a jelölőnégyzet dadoghat. Javasoljuk, hogy állítsa be a "{0}" paramétert a megjelenítési sebesség javítása érdekében',
       coverProp: 'A "{1}" paramétert a "{0}" paramétere többször meghatározza, ami hibát okozhat',
@@ -354,7 +355,8 @@ export default {
     colorPicker: {
       clear: 'Világos',
       confirm: 'megerősít',
-      copySuccess: 'Másolva a vágólapra: {0}'
+      copySuccess: 'Másolva a vágólapra: {0}',
+      hex: 'HEX'
     },
     formDesign: {
       formName: 'Forma neve',
