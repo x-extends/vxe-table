@@ -36,6 +36,7 @@ export default {
       notCommands: 'The global directive "{0}" does not exist',
       notSlot: 'Slot "{0}" does not exist',
       noTree: '"{0}" is not supported in the tree structure',
+      noGroup: '"{0}" is not supported in the aggregation grouping',
       notProp: 'Unsupported parameter "{0}"',
       checkProp: 'When the data volume is too large, the check box may be stuttered. It is recommended to set the parameter "{0}" to improve rendering speed',
       coverProp: 'The parameter "{1}" of "{0}" is repeatedly defined, which may cause an error',
@@ -354,7 +355,8 @@ export default {
     colorPicker: {
       clear: 'Clear',
       confirm: 'confirm',
-      copySuccess: 'Copyed to clipboard: {0}'
+      copySuccess: 'Copyed to clipboard: {0}',
+      hex: 'HEX'
     },
     formDesign: {
       formName: 'Form name',

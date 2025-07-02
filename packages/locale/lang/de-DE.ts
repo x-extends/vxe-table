@@ -36,6 +36,7 @@ export default {
       notCommands: 'Die globale Richtlinie "{0}" existiert nicht',
       notSlot: 'Slot "{0}" existiert nicht',
       noTree: '"{0}" wird in der Baumstruktur nicht unterstützt',
+      noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Nicht unterstützter Parameter "{0}"',
       checkProp: 'Wenn das Datenvolumen zu groß ist, kann das Kontrollkästchen stottern. Es wird empfohlen, den Parameter "{0}" festzulegen, um die Rendering -Geschwindigkeit zu verbessern',
       coverProp: 'Der Parameter "{1}" von "{0}" wird wiederholt definiert, was einen Fehler verursachen kann',
@@ -354,7 +355,8 @@ export default {
     colorPicker: {
       clear: 'Klar',
       confirm: 'bestätigen',
-      copySuccess: 'Kopieren Sie in Zwischenablage: {0}'
+      copySuccess: 'Kopieren Sie in Zwischenablage: {0}',
+      hex: 'HEX'
     },
     formDesign: {
       formName: 'Formname',

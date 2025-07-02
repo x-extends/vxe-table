@@ -128,6 +128,7 @@ hooks.add('tableEditModule', {
           if (treeConfig) {
             throw new Error(getI18n('vxe.error.noTree', ['insert']))
           }
+          warnLog(getI18n('vxe.error.noGroup', ['remove']))
           // insertGroupRow(newRecords, false)
         } else {
           newRecords.forEach(item => {
@@ -156,6 +157,7 @@ hooks.add('tableEditModule', {
             if (treeConfig) {
               throw new Error(getI18n('vxe.error.noTree', ['insert']))
             }
+            warnLog(getI18n('vxe.error.noGroup', ['remove']))
             // insertGroupRow(newRecords, true)
           } else {
             newRecords.forEach(item => {
@@ -224,6 +226,7 @@ hooks.add('tableEditModule', {
             if (treeConfig) {
               throw new Error(getI18n('vxe.error.noTree', ['insert']))
             }
+            warnLog(getI18n('vxe.error.noGroup', ['remove']))
           } else {
             if (treeConfig) {
               throw new Error(getI18n('vxe.error.noTree', ['insert']))
@@ -568,6 +571,7 @@ hooks.add('tableEditModule', {
             })
           } else if (isRowGroupStatus) {
             // 如果分组
+            warnLog(getI18n('vxe.error.noGroup', ['remove']))
           } else {
             rows.forEach((row: any) => {
               const tfIndex = $xeTable.findRowIndexOf(tableFullData, row)

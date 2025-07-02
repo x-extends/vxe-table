@@ -36,6 +36,7 @@ export default {
       notCommands: 'La direttiva globale "{0}" non esiste',
       notSlot: 'Lo slot "{0}" non esiste',
       noTree: "\"{0}\" non è supportato nella struttura dell'albero",
+      noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Parametro non supportato "{0}"',
       checkProp: 'Quando il volume dei dati è troppo grande, la casella di controllo può essere balbettata. Si consiglia di impostare il parametro "{0}" per migliorare la velocità di rendering',
       coverProp: 'Il parametro "{1}" di "{0}" è ripetutamente definito, che può causare un errore',
@@ -354,7 +355,8 @@ export default {
     colorPicker: {
       clear: 'Chiaro',
       confirm: 'confermare',
-      copySuccess: 'Copiato sugli appunti: {0}'
+      copySuccess: 'Copiato sugli appunti: {0}',
+      hex: 'HEX'
     },
     formDesign: {
       formName: 'Nome del modulo',
