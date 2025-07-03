@@ -8141,6 +8141,8 @@ const Methods = {
           }
 
           return $xeTable.$nextTick().then(() => {
+            updateRowOffsetTop($xeTable)
+            updateRowExpandStyle($xeTable)
             $xeTable.updateCellAreas()
             $xeTable.recalculate()
           }).then(() => {
