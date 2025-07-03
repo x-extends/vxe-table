@@ -9516,6 +9516,8 @@ export default defineVxeComponent({
               }
 
               return nextTick().then(() => {
+                updateRowOffsetTop()
+                updateRowExpandStyle()
                 $xeTable.updateCellAreas()
                 $xeTable.recalculate()
               }).then(() => {

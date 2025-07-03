@@ -9,7 +9,7 @@ import type { TableFilterMethods, TableFilterPrivateMethods } from '../../../../
 
 const { renderer, hooks } = VxeUI
 
-const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['openFilter', 'setFilter', 'clearFilter', 'saveFilterPanel', 'resetFilterPanel', 'getCheckedFilters', 'updateFilterOptionStatus']
+const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['openFilter', 'setFilter', 'clearFilter', 'saveFilterPanel', 'saveFilterPanelByEvent', 'resetFilterPanel', 'resetFilterPanelByEvent', 'getCheckedFilters', 'updateFilterOptionStatus']
 
 hooks.add('tableFilterModule', {
   setupTable ($xeTable) {
