@@ -337,6 +337,7 @@ export default {
       overCountErr: 'يمكن تحديد ملفات {0} فقط على الأكثر!',
       overCountExtraErr: 'تم تجاوز الحد الأقصى لعدد {0} ، وسيتم تجاهل الملفات الزائدة {1}!',
       overSizeErr: 'لا يمكن أن يتجاوز حجم الملف الأقصى {0}!',
+      manualUpload: '点击上传',
       reUpload: 'إعادة التحميل',
       uploadProgress: 'تحميل {0} ٪',
       uploadErr: 'فشل التحميل',

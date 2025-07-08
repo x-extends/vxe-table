@@ -6685,6 +6685,11 @@ export default defineVxeComponent({
         handleBodyMerge(merges)
         $xeTable.handleUpdateBodyMerge()
         return nextTick().then(() => {
+          const { expandColumn } = reactData
+          const { mergeBodyList } = internalData
+          if (expandColumn && mergeBodyList.length) {
+            warnLog('vxe.error.errConflicts', ['type=expand', 'merge-cells | span-method'])
+          }
           $xeTable.updateCellAreas()
           return updateStyle()
         })

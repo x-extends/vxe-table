@@ -1,7 +1,5 @@
 # vxe-table
 
-简体中文 | [繁體中文](README.zh-TW.md) | [English](README.en.md) | [日本語](README.ja-JP.md)  
-
 [![star](https://gitee.com/x-extends/vxe-table/badge/star.svg?theme=gvp)](https://gitee.com/x-extends/vxe-table/stargazers)
 [![npm version](https://img.shields.io/npm/v/vxe-table.svg?style=flat-square)](https://www.npmjs.com/package/vxe-table)
 [![NodeJS with Webpack](https://github.com/x-extends/vxe-table/actions/workflows/webpack.yml/badge.svg)](https://github.com/x-extends/vxe-table/actions/workflows/webpack.yml)
@@ -12,7 +10,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表单/表格组件，支持增删改查、虚拟树、拖拽排序、懒加载、快捷菜单、数据校验、导入/导出/打印、表单渲染、自定义模板、渲染器、JSON 配置式...  
+一个基于 [Vxe UI](https://github.com/x-extends/vxe-pc-ui) 的 PC 端表格组件，支持复制粘贴、数据透视表、虚拟列表高性能的表格解决方案
 
 * 设计理念
   * 面向现代浏览器，不支持 IE

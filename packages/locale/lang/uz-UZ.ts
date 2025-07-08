@@ -337,6 +337,7 @@ export default {
       overCountErr: "Faqat {0} fayllari ko'pini tanlab olish mumkin!",
       overCountExtraErr: "{0} maksimal soni oshib ketdi va ortiqcha {1} fayllari e'tiborga olinmaydi!",
       overSizeErr: 'Fayl hajmi {0} dan oshmasligi kerak!',
+      manualUpload: '点击上传',
       reUpload: 'Qayta yuklamoq',
       uploadProgress: 'Yuklash {0}%',
       uploadErr: 'Yuklash muvaffaqiyatsiz tugadi',

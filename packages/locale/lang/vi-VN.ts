@@ -337,6 +337,7 @@ export default {
       overCountErr: 'Chỉ các tệp {0} có thể được chọn nhiều nhất!',
       overCountExtraErr: 'Số lượng tối đa của {0} đã bị vượt quá và các tệp dư thừa {1} sẽ bị bỏ qua!',
       overSizeErr: 'Kích thước tệp tối đa không thể vượt quá {0}!',
+      manualUpload: '点击上传',
       reUpload: 'Tải lại lại',
       uploadProgress: 'Tải lên {0}%',
       uploadErr: 'Tải lên không thành công',

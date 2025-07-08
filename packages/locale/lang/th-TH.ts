@@ -337,6 +337,7 @@ export default {
       overCountErr: 'สามารถเลือกไฟล์ {0} ได้อย่างมากเท่านั้น!',
       overCountExtraErr: 'เกินจำนวนสูงสุดของ {0} และไฟล์ {1} ส่วนเกินจะถูกละเว้น!',
       overSizeErr: 'ขนาดไฟล์สูงสุดไม่เกิน {0}!',
+      manualUpload: '点击上传',
       reUpload: 'อัปเดตใหม่',
       uploadProgress: 'การอัปโหลด {0}%',
       uploadErr: 'การอัปโหลดล้มเหลว',
