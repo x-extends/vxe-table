@@ -189,7 +189,7 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams & { 
   const { showHeaderOverflow } = column
   const tooltipOpts = computeTooltipOpts.value
   const showAllTip = tooltipOpts.showAll
-  const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+  const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
   const showTitle = headOverflow === 'title'
   const showTooltip = headOverflow === true || headOverflow === 'tooltip'
   const ons: Record<string, any> = {}

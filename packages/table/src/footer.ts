@@ -49,7 +49,7 @@ export default defineVxeComponent({
 
       const { fixedType } = props
       const { resizable: allResizable, border, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
-      const { scrollXLoad, scrollYLoad, overflowX, currentColumn } = tableReactData
+      const { scrollXLoad, scrollYLoad, overflowX, currentColumn, mergeFootFlag } = tableReactData
       const { fullColumnIdData, mergeFooterList, mergeFooterCellMaps, scrollXStore } = tableInternalData
       const virtualXOpts = computeVirtualXOpts.value
       const tooltipOpts = computeTooltipOpts.value
@@ -126,7 +126,7 @@ export default defineVxeComponent({
         }
         let isMergeCell = false
         // 合并行或列
-        if (mergeFooterList.length) {
+        if (mergeFootFlag && mergeFooterList.length) {
           const spanRest = mergeFooterCellMaps[`${_rowIndex}:${_columnIndex}`]
           if (spanRest) {
             const { rowspan, colspan } = spanRest

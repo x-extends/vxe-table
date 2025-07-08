@@ -12,64 +12,13 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-A [vue](https://www.npmjs.com/package/vue) based PC form component, support add delete change check, virtual tree, drag and drop, lazy loading, shortcut menu, data verification, import/export/print, form rendering, custom template, renderer, JSON configuration...
+A PC-end table component based on [Vxe UI](https://github.com/x-extends/vxe-pc-ui), supporting copy-paste, data pivot table, and high-performance virtual list table solution.
 
 ## Browser Support
 
 ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
 --- | --- | --- | --- | --- |
 Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
-
-## Features
-
-* [x] Basic table
-* [x] Configuration grid
-* [x] Striped
-* [x] Table with border
-* [x] Cell style
-* [x] Column resizing
-* [x] Column drag and drop
-* [x] Row drag and drop
-* [x] Minimum/maximum height
-* [x] Resize height & width
-* [x] Fixed column
-* [x] Grouping table header
-* [x] Table footer
-* [x] Highlight row & column
-* [x] Table sequence
-* [x] Radio
-* [x] Checkbox
-* [x] Sorting
-* [x] Multi field sorting
-* [x] Filter
-* [x] Merged cells
-* [x] Merged footer items
-* [x] 行分组
-* [x] Import/Export/Print
-* [x] Show/Hide column
-* [x] Drag and drop/Customize column sorting
-* [x] Loading
-* [x] Formatted cell
-* [x] Slot - template
-* [x] Context menu
-* [x] Detail - Expandable row
-* [x] Toolbar
-* [x] Virtual tree
-* [x] Editable CRUD
-* [x] Validate
-* [x] Data Proxy
-* [x] Keyboard navigation
-* [x] VxeGlobalRenderer
-* [x] Virtual scroll
-* [x] Virtual merger
-* [x] CSS Variable Theme
-* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Grouping summary
-* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Aggregation
-* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell area selection
-* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell copy & paste
-* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell find and replace
-* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Full keyboard operation
-* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Integrated chart
 
 ## Installing
 
@@ -82,19 +31,6 @@ npm install vxe-table@next
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
 
 ### NPM
-
-### Use Table
-
-```javascript
-// ...
-import VxeTable from 'vxe-table'
-import 'vxe-table/lib/style.css'
-// ...
-
-createApp(App).use(VxeTable).mount('#app')
-```
-
-### Use Table and UI
 
 ```javascript
 // ...
@@ -178,12 +114,6 @@ Compile packaging, generated compiled directory: es,lib
 ```shell
 npm run lib
 ```
-
-## Contributors
-
-Thank you to everyone who contributed to this project.
-
-[![vxe-table](https://contrib.rocks/image?repo=x-extends/vxe-table)](https://github.com/x-extends/vxe-table/graphs/contributors)
 
 ## License
 

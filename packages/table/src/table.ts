@@ -1226,6 +1226,13 @@ export default defineVxeComponent({
       return mergeMaps
     }
 
+    const handleUpdateMergeBodyCells = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
+      internalData.mergeBodyList = []
+      internalData.mergeBodyMaps = {}
+      internalData.mergeBodyCellMaps = {}
+      $xeTable.setMergeCells(merges)
+    }
+
     const handleBodyMerge = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
       const { fullAllDataRowIdData, fullColumnIdData, visibleColumn, afterFullData, mergeBodyList, mergeBodyMaps } = internalData
       if (merges) {
@@ -1285,6 +1292,13 @@ export default defineVxeComponent({
           }
         })
       }
+    }
+
+    const handleUpdateMergeFooterCells = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
+      internalData.mergeFooterList = []
+      internalData.mergeFooterMaps = {}
+      internalData.mergeFooterCellMaps = {}
+      $xeTable.setMergeFooterItems(merges)
     }
 
     const handleFooterMerge = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
@@ -6703,8 +6717,7 @@ export default defineVxeComponent({
         })
       },
       /**
-       * 设置合并单元格
-       * @param {TableMergeConfig[]} merges { row: Row|number, column: ColumnInfo|number, rowspan: number, colspan: number }
+       * 设置合并单元格 [{ row: Row|number, column: ColumnInfo|number, rowspan: number, colspan: number }]
        */
       setMergeCells (merges) {
         if (props.spanMethod) {
@@ -6713,13 +6726,17 @@ export default defineVxeComponent({
         handleBodyMerge(merges)
         $xeTable.handleUpdateBodyMerge()
         return nextTick().then(() => {
+          const { expandColumn } = reactData
+          const { mergeBodyList } = internalData
+          if (expandColumn && mergeBodyList.length) {
+            warnLog('vxe.error.errConflicts', ['type=expand', 'merge-cells | span-method'])
+          }
           $xeTable.updateCellAreas()
           return updateStyle()
         })
       },
       /**
-       * 移除单元格合并
-       * @param {TableMergeConfig[]} merges 多个或数组 [{row:Row|number, col:ColumnInfo|number}]
+       * 移除单元格合并 [{row:Row|number, col:ColumnInfo|number}]
        */
       removeMergeCells (merges) {
         if (props.spanMethod) {
@@ -6758,7 +6775,7 @@ export default defineVxeComponent({
         handleFooterMerge(merges)
         $xeTable.handleUpdateFooterMerge()
         return nextTick().then(() => {
-          tableMethods.updateCellAreas()
+          $xeTable.updateCellAreas()
           return updateStyle()
         })
       },
@@ -6769,7 +6786,7 @@ export default defineVxeComponent({
         const rest = removeFooterMerges(merges)
         $xeTable.handleUpdateFooterMerge()
         return nextTick().then(() => {
-          tableMethods.updateCellAreas()
+          $xeTable.updateCellAreas()
           updateStyle()
           return rest
         })
@@ -11704,12 +11721,7 @@ export default defineVxeComponent({
       mergeCellFlag.value++
     })
     watch(mergeCellFlag, () => {
-      tableMethods.clearMergeCells()
-      nextTick(() => {
-        if (props.mergeCells) {
-          tableMethods.setMergeCells(props.mergeCells)
-        }
-      })
+      handleUpdateMergeBodyCells(props.mergeCells || [])
     })
 
     const mergeFooterItemFlag = ref(0)
@@ -11720,12 +11732,7 @@ export default defineVxeComponent({
       mergeFooterItemFlag.value++
     })
     watch(mergeFooterItemFlag, () => {
-      tableMethods.clearMergeFooterItems()
-      nextTick(() => {
-        if (props.mergeFooterItems) {
-          tableMethods.setMergeFooterItems(props.mergeFooterItems)
-        }
-      })
+      handleUpdateMergeFooterCells(props.mergeFooterItems || [])
     })
 
     watch(computeRowGroupFields, (val) => {

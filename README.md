@@ -12,7 +12,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表单/表格组件，支持增删改查、虚拟树、拖拽排序、懒加载、快捷菜单、数据校验、导入/导出/打印、表单渲染、自定义模板、渲染器、JSON 配置式...  
+一个基于 [Vxe UI](https://github.com/x-extends/vxe-pc-ui) 的 PC 端表格组件，支持复制粘贴、数据透视表、虚拟列表高性能的表格解决方案
 
 * 设计理念
   * 面向现代浏览器，不支持 IE
@@ -53,6 +53,7 @@
 
 👉 [组件文档](https://vxeui.com)  
 👉 [表格文档](https://vxetable.cn)  
+👉 [可视化文档](https://design.vxeui.com)  
 
 ## QQ 交流群
 
@@ -117,25 +118,13 @@
 版本：[vue](https://www.npmjs.com/package/vue) 3.x
 
 ```shell
-npm install vxe-table@next
+npm install vxe-table
 ```
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
 
+
 ### NPM
-
-### 只使用表格
-
-```javascript
-// ...
-import VxeTable from 'vxe-table'
-import 'vxe-table/lib/style.css'
-// ...
-
-createApp(App).use(VxeTable).mount('#app')
-```
-
-### 使用表格与 UI 库
 
 ```javascript
 // ...

@@ -337,6 +337,7 @@ export default {
       overCountErr: 'Bare {0} filer kan velges på det meste!',
       overCountExtraErr: 'Det maksimale antallet {0} er overskredet, og overskuddet {1} filer vil bli ignorert!',
       overSizeErr: 'Maksimal filstørrelse kan ikke overstige {0}!',
+      manualUpload: '点击上传',
       reUpload: 'Last opp på nytt',
       uploadProgress: 'Last opp {0}%',
       uploadErr: 'Opplasting mislyktes',

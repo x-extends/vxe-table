@@ -12,64 +12,13 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-[vue](https://www.npmjs.com/package/vue) ベースのPCフォームコンポーネントで、追加、削除、変更、チェック、仮想ツリー、列のドラッグアンドドロップ、遅延読み込み、ショートカットメニュー、データ検証、インポート/エクスポート/印刷、フォームレンダリング、カスタムテンプレート、レンダラー、JSON構成をサポートします...
+[Vxe UI](https://github.com/x-extends/vxe-pc-ui) に基づく PC サイド テーブル コンポーネント。コピー アンド ペースト、ピボット テーブル、仮想リスト、高性能テーブル ソリューションをサポートします。
 
 ## ブラウザサポート
 
 ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
 --- | --- | --- | --- | --- |
 最新 ✔ | 最新 ✔ | 最新 ✔ | 最新 ✔ | 最新 ✔ |
-
-## 機能
-
-* [x] 基本テーブル
-* [x] 構成グリッド
-* [x] ストライプ
-* [x] 境界線付きテーブル
-* [x] セルスタイル
-* [x] 列のサイズ変更
-* [x] 列拖拽排序
-* [x] 行拖拽排序
-* [x] 最小/最大高さ
-* [x] 高さと幅のリサイズ
-* [x] 固定列
-* [x] グループ化テーブルヘッダー
-* [x] テーブルフッター
-* [x] 行と列のハイライト
-* [x] テーブルシーケンス
-* [x] ラジオ
-* [x] チェックボックス
-* [x] ソート
-* [x] 複数フィールドのソート
-* [x] フィルター
-* [x] セルの結合
-* [x] フッター項目の結合
-* [x] 行分组
-* [x] インポート/エクスポート/印刷
-* [x] 列の表示/非表示
-* [x] ドラッグアンドドロップ/カスタマイズ列の並べ替え
-* [x] ローディング
-* [x] フォーマットされたセル
-* [x] スロット - テンプレート
-* [x] コンテキストメニュー
-* [x] 詳細 - 展開可能な行
-* [x] ツールバー
-* [x] 仮想ツリー
-* [x] 編集可能なCRUD
-* [x] 検証
-* [x] データプロキシ
-* [x] キーボードナビゲーション
-* [x] VxeGlobalRenderer
-* [x] 仮想スクロール
-* [x] 仮想マージ
-* [x] CSS変数テーマ
-* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) 数据汇总
-* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) 聚合函数
-* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) セル領域選択
-* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) セルのコピー＆ペースト
-* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) セルの検索と置換
-* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) フルキーボード操作
-* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) 集成图表
 
 ## インストール
 
@@ -82,19 +31,6 @@ npm install vxe-table@next
 [unpkg](https://unpkg.com/vxe-table/) および [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/) で入手可能
 
 ### NPM
-
-### テーブルの使用
-
-```javascript
-// ...
-import VxeTable from 'vxe-table'
-import 'vxe-table/lib/style.css'
-// ...
-
-createApp(App).use(VxeTable).mount('#app')
-```
-
-### テーブルとUIの使用
 
 ```javascript
 // ...
@@ -178,12 +114,6 @@ npm run serve
 ```shell
 npm run lib
 ```
-
-## 貢献者
-
-このプロジェクトに貢献してくれたすべての人に感謝します。
-
-[![vxe-table](https://contrib.rocks/image?repo=x-extends/vxe-table)](https://github.com/x-extends/vxe-table/graphs/contributors)
 
 ## ライセンス
 

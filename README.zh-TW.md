@@ -12,63 +12,13 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-一個基於 [vue](https://www.npmjs.com/package/vue) 的PC端表格組件，支持增刪改查、虛擬樹、拖拽排序、懶加載、快捷菜單、數據校驗、導入/匯出/列印、表單渲染、自定義模板、渲染器、JSON 配置式…
+一個基於 [Vxe UI](https://github.com/x-extends/vxe-pc-ui) 的 PC 端表格元件，支援複製貼上、資料透視表、虛擬清單高效能的表格解決方案
 
 ## 瀏覽器支持
 
 ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
 --- | --- | --- | --- | --- |
 Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
-
-## 功能點
-
-* [x] 基礎表格
-* [x] 配置式表單
-* [x] 斑馬線條紋
-* [x] 多種邊框
-* [x] 儲存格樣式
-* [x] 列寬拖動
-* [x] 列拖拽排序
-* [x] 行拖拽排序
-* [x] 最小/最大高度
-* [x] 自我調整寬高
-* [x] 固定列
-* [x] 多級表頭
-* [x] 錶尾數據
-* [x] 高亮行或列
-* [x] 序號
-* [x] 單選框
-* [x] 核取方塊
-* [x] 排序
-* [x] 多欄位組合排序
-* [x] 篩選
-* [x] 儲存格合併
-* [x] 合併錶尾
-* [x] 行分组
-* [x] 導入/匯出/列印
-* [x] 顯示/隱藏列
-* [x] 拖拽/自定義列排序
-* [x] 加載中
-* [x] 格式化內容
-* [x] 自定義插槽 - 範本
-* [x] 快捷選單
-* [x] 展開行
-* [x] 工具列
-* [x] 增删改查
-* [x] 數據校驗
-* [x] 數據代理
-* [x] 鍵盤導航
-* [x] 渲染器
-* [x] 虛擬滾動
-* [x] 虛擬合併
-* [x] CSS 變量主題
-* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 数据汇总
-* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 聚合函数
-* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格區域選取
-* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格複製/粘貼
-* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格查找和替換
-* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 全鍵盤操作
-* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 集成图表
 
 ## 安裝
 
@@ -81,19 +31,6 @@ npm install vxe-table@next
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
 
 ### NPM
-
-### 使用表格
-
-```javascript
-// ...
-import VxeTable from 'vxe-table'
-import 'vxe-table/lib/style.css'
-// ...
-
-createApp(App).use(VxeTable).mount('#app')
-```
-
-### 使用表格与 UI 库
 
 ```javascript
 // ...
@@ -177,12 +114,6 @@ npm run serve
 ```shell
 npm run lib
 ```
-
-## Contributors
-
-Thank you to everyone who contributed to this project.
-
-[![vxe-table](https://contrib.rocks/image?repo=x-extends/vxe-table)](https://github.com/x-extends/vxe-table/graphs/contributors)
 
 ## License
 

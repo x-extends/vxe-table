@@ -337,6 +337,7 @@ export default {
       overCountErr: 'Csak a {0} fájlok választhatók legfeljebb!',
       overCountExtraErr: 'A {0} maximális számát túllépték, és a {1} felesleges fájlokat figyelmen kívül hagyják!',
       overSizeErr: 'A maximális fájlméret nem haladhatja meg a {0}!',
+      manualUpload: '点击上传',
       reUpload: 'Újból feltölt',
       uploadProgress: 'Feltöltés {0}%',
       uploadErr: 'A feltöltés sikertelen',

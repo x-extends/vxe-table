@@ -337,6 +337,7 @@ export default {
       overCountErr: 'せいぜい{0}ファイルのみを選択できます！',
       overCountExtraErr: '{0}の最大数は超えており、過剰な{1}ファイルは無視されます！',
       overSizeErr: '最大ファイルサイズは{0}を超えることはできません！',
+      manualUpload: '点击上传',
       reUpload: '再アップロード',
       uploadProgress: '{0}％のアップロード',
       uploadErr: 'アップロードに失敗しました',
