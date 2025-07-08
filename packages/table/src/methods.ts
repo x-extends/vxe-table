@@ -1833,7 +1833,7 @@ function buildMergeData (mergeConfigs: VxeTableDefines.MergeItem[]) {
   return mergeMaps
 }
 
-const handleBodyMerge = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
+function handleBodyMerge ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { fullAllDataRowIdData, fullColumnIdData, visibleColumn, afterFullData, mergeBodyList, mergeBodyMaps } = internalData
@@ -1896,7 +1896,7 @@ const handleBodyMerge = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods,
   }
 }
 
-const handleFooterMerge = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
+function handleFooterMerge ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -10720,12 +10720,13 @@ const Methods = {
     })
   },
   /**
-   * 设置合并单元格
-   * @param {TableMergeConfig[]} merges { row: Row|number, column: ColumnInfo|number, rowspan: number, colspan: number }
+   * 设置合并单元格 [{ row: Row|number, column: ColumnInfo|number, rowspan: number, colspan: number }]
    */
   setMergeCells (merges: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
     if (props.spanMethod) {
       errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
@@ -10733,13 +10734,17 @@ const Methods = {
     handleBodyMerge($xeTable, merges)
     $xeTable.handleUpdateBodyMerge()
     return $xeTable.$nextTick().then(() => {
+      const { expandColumn } = reactData
+      const { mergeBodyList } = internalData
+      if (expandColumn && mergeBodyList.length) {
+        warnLog('vxe.error.errConflicts', ['type=expand', 'merge-cells | span-method'])
+      }
       $xeTable.updateCellAreas()
       return updateStyle($xeTable)
     })
   },
   /**
-   * 移除单元格合并
-   * @param {TableMergeConfig[]} merges 多个或数组 [{row:Row|number, col:ColumnInfo|number}]
+   * 移除单元格合并 [{row:Row|number, col:ColumnInfo|number}]
    */
   removeMergeCells (merges: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods

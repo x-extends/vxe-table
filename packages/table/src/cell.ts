@@ -181,14 +181,14 @@ function getRenderDefaultColumnTitle (h: CreateElement, column: VxeTableDefines.
 
 function renderTitleContent (h: CreateElement, params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, content: VxeComponentSlotType | VxeComponentSlotType[]) {
   const { $table, column } = params
-  const { showHeaderOverflow } = column
   const tableProps = $table
   const tableReactData = $table as unknown as TableReactData
   const { showHeaderOverflow: allColumnHeaderOverflow } = tableProps
   const { isRowGroupStatus } = tableReactData
+  const { showHeaderOverflow } = column
   const tooltipOpts = $table.computeTooltipOpts
   const showAllTip = tooltipOpts.showAll
-  const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+  const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
   const showTitle = headOverflow === 'title'
   const showTooltip = headOverflow === true || headOverflow === 'tooltip'
   const ons: Record<string, any> = {}
@@ -218,7 +218,7 @@ function renderTitleContent (h: CreateElement, params: VxeTableDefines.CellRende
   return [
     h('span', {
       class: 'vxe-cell--title',
-      ...ons
+      on: ons
     }, isRowGroupStatus && column.aggFunc && $table.getPivotTableAggregateRenderColTitles
       ? $table.getPivotTableAggregateRenderColTitles(h, column, titleVN)
       : [

@@ -337,6 +337,7 @@ export default {
       overCountErr: '{0} 파일 만 최대 선택할 수 있습니다!',
       overCountExtraErr: '{0}의 최대 수가 초과되었고 초과 {1} 파일은 무시됩니다!',
       overSizeErr: '최대 파일 크기는 {0}을 초과 할 수 없습니다!',
+      manualUpload: '点击上传',
       reUpload: '재 포장',
       uploadProgress: '업로드 {0}%',
       uploadErr: '업로드 실패',

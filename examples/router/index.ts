@@ -20,7 +20,7 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
-    path: '/table/start/install',
+    path: '/start/install',
     name: 'StartInstall',
     component: StartInstall
   },

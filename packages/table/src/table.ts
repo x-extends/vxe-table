@@ -30,6 +30,24 @@ import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, Ta
 
 const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 
+function handleUpdateMergeBodyCells ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  internalData.mergeBodyList = []
+  internalData.mergeBodyMaps = {}
+  internalData.mergeBodyCellMaps = {}
+  $xeTable.setMergeCells(merges)
+}
+
+function handleUpdateMergeFooterCells ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  internalData.mergeFooterList = []
+  internalData.mergeFooterMaps = {}
+  internalData.mergeFooterCellMaps = {}
+  $xeTable.setMergeFooterItems(merges)
+}
+
 function handleKeyField ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -1429,14 +1447,12 @@ export default {
     mergeCells (value: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      $xeTable.clearMergeCells()
-      $xeTable.$nextTick(() => $xeTable.setMergeCells(value))
+      handleUpdateMergeBodyCells($xeTable, value)
     },
     mergeFooterItems (value: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      $xeTable.clearMergeFooterItems()
-      $xeTable.$nextTick(() => $xeTable.setMergeFooterItems(value))
+      handleUpdateMergeFooterCells($xeTable, value)
     },
 
     computeRowGroupFields (val: any) {

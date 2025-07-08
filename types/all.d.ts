@@ -3,11 +3,12 @@ import { VxeUIExport, VxeGlobalConfig } from 'vxe-pc-ui'
 
 declare global {
   interface Window {
+    VxeUITable: VxeUIExport
+
     /**
      * @deprecated
      */
-    VXETable: VxeUIExport;
-    VxeUITable: VxeUIExport;
+    VXETable: VxeUIExport
   }
 }
 

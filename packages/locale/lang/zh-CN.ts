@@ -337,6 +337,7 @@ export default {
       overCountErr: '最多只能选择{0}个文件！',
       overCountExtraErr: '已超出最大数量{0}个，超出的{1}个文件将被忽略！',
       overSizeErr: '文件大小最大不能超过{0}！',
+      manualUpload: '点击上传',
       reUpload: '重新上传',
       uploadProgress: '上传中 {0}%',
       uploadErr: '上传失败',
