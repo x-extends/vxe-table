@@ -337,6 +337,7 @@ export default {
       overCountErr: '¡Solo los archivos {0} se pueden seleccionar como máximo!',
       overCountExtraErr: 'Se ha excedido el número máximo de {0}, ¡y los archivos de exceso {1} se ignorarán!',
       overSizeErr: '¡El tamaño máximo del archivo no puede exceder {0}!',
+      manualUpload: '点击上传',
       reUpload: 'Volver a cargar',
       uploadProgress: 'Cargando {0}%',
       uploadErr: 'Carga falló',

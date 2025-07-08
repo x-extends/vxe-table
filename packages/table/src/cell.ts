@@ -218,7 +218,7 @@ function renderTitleContent (h: CreateElement, params: VxeTableDefines.CellRende
   return [
     h('span', {
       class: 'vxe-cell--title',
-      ...ons
+      on: ons
     }, isRowGroupStatus && column.aggFunc && $table.getPivotTableAggregateRenderColTitles
       ? $table.getPivotTableAggregateRenderColTitles(h, column, titleVN)
       : [

@@ -337,6 +337,7 @@ export default {
       overCountErr: 'ئەڭ كۆپ تاللاشقا بولىدىغان ھۆججەت سانى{0} پارچە',
       overCountExtraErr: 'ئەڭ كۆپ چەك {0}دانە ，ئارتىپ كەتكەن {1} دانە ھۆججەت قالدۇرۇلدى ',
       overSizeErr: 'ھۆججەت چوڭ-كىچىكلىكى {0}！',
+      manualUpload: '点击上传',
       reUpload: 'قايتا چىقىرىڭ',
       uploadProgress: 'يوللىنىۋاتىدۇ {0}%',
       uploadErr: 'چىقىرىش مەغلۇپ بولدى',

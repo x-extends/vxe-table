@@ -10531,6 +10531,8 @@ const Methods = {
   setMergeCells (merges: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
     if (props.spanMethod) {
       errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
@@ -10538,6 +10540,11 @@ const Methods = {
     handleBodyMerge($xeTable, merges)
     $xeTable.handleUpdateBodyMerge()
     return $xeTable.$nextTick().then(() => {
+      const { expandColumn } = reactData
+      const { mergeBodyList } = internalData
+      if (expandColumn && mergeBodyList.length) {
+        warnLog('vxe.error.errConflicts', ['type=expand', 'merge-cells | span-method'])
+      }
       $xeTable.updateCellAreas()
       return updateStyle($xeTable)
     })

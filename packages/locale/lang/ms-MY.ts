@@ -337,6 +337,7 @@ export default {
       overCountErr: 'Hanya {0} fail boleh dipilih paling banyak!',
       overCountExtraErr: 'Jumlah maksimum {0} telah melebihi, dan lebihan fail {1} ​​akan diabaikan!',
       overSizeErr: 'Saiz fail maksimum tidak boleh melebihi {0}!',
+      manualUpload: '点击上传',
       reUpload: 'Muat naik semula',
       uploadProgress: 'Memuat naik {0}%',
       uploadErr: 'Muat naik gagal',

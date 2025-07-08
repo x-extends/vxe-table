@@ -337,6 +337,7 @@ export default {
       overCountErr: 'Hanya {0} file yang paling banyak dapat dipilih!',
       overCountExtraErr: 'Jumlah maksimum {0} telah terlampaui, dan file kelebihan {1} akan diabaikan!',
       overSizeErr: 'Ukuran file maksimum tidak dapat melebihi {0}!',
+      manualUpload: '点击上传',
       reUpload: 'Mengunggah ulang',
       uploadProgress: 'Mengunggah {0}%',
       uploadErr: 'Unggah gagal',
