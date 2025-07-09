@@ -18,56 +18,6 @@
 --- | --- | --- | --- | --- |
 80+ ✔ | 80+ ✔ | 90+ ✔ | 75+ ✔ | 10+ ✔ |
 
-## 功能点
-
-* [x] 基础表格
-* [x] 配置式表格
-* [x] 斑马线条纹
-* [x] 多种边框
-* [x] 单元格样式
-* [x] 列宽拖动
-* [x] 列拖拽排序
-* [x] 行拖拽排序
-* [x] 最小/最大高度
-* [x] 自适应宽高
-* [x] 固定列
-* [x] 多级表头
-* [x] 表尾数据
-* [x] 高亮行或列
-* [x] 序号
-* [x] 单选框
-* [x] 复选框
-* [x] 排序
-* [x] 多字段排序
-* [x] 筛选
-* [x] 合并单元格
-* [x] 合并表尾
-* [x] 导入/导出/打印
-* [x] 显示/隐藏列
-* [x] 拖拽/自定义列排序
-* [x] 加载中
-* [x] 格式化内容
-* [x] 自定义插槽 - 模板
-* [x] 快捷菜单
-* [x] 展开行
-* [x] 工具栏
-* [x] 虚拟树
-* [x] 增删改查
-* [x] 数据校验
-* [x] 数据代理
-* [x] 键盘导航
-* [x] 渲染器
-* [x] 虚拟滚动
-* [x] 虚拟合并
-* [x] CSS 变量主题
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 数据汇总
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 聚合函数
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格区域选取
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格复制/粘贴
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格查找和替换
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 全键盘操作
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 集成图表
-
 ## 安装
 
 版本：[vue](https://www.npmjs.com/package/vue) 2.x
@@ -103,7 +53,6 @@ import Vue from 'vue'
 // ...
 import VxeTable from 'vxe-table'
 import 'vxe-table/lib/style.css'
-// ...
 
 import VxeUI from 'vxe-pc-ui'
 import 'vxe-pc-ui/lib/style.css'
@@ -168,43 +117,6 @@ Vue.use(VxeTable)
 </body>
 </html>
 ```
-
-## 示例
-
-```html
-<template>
-  <div>
-    <vxe-table :data="tableData">
-      <vxe-column type="seq" title="Seq" width="60"></vxe-column>
-      <vxe-column field="name" title="Name"></vxe-column>
-      <vxe-column field="role" title="Role"></vxe-column>
-      <vxe-colgroup title="Group1">
-        <vxe-column field="sex" title="Sex"></vxe-column>
-        <vxe-column field="address" title="Address"></vxe-column>
-      </vxe-colgroup>
-    </vxe-table>
-  </div>
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
-      ]
-    }
-  }
-}
-</script>
-```
-
-## 在线文档
-
-👉 [组件文档](https://vxeui.com)  
-👉 [表格文档](https://vxetable.cn)  
 
 ## Contributors
 
