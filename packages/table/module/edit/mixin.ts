@@ -138,7 +138,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
       // 刷新单元格合并
       mergeBodyList.forEach((mergeItem: any) => {
         const { row: mergeRowIndex } = mergeItem
-        if (mergeRowIndex > 0) {
+        if (mergeRowIndex >= 0) {
           mergeItem.row = mergeRowIndex + newRecords.length
         }
       })
@@ -163,13 +163,6 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
           fullAllDataRowIdData[rowid] = rest
           afterFullData.push(item)
           tableFullData.push(item)
-        })
-        // 刷新单元格合并
-        mergeBodyList.forEach((mergeItem: any) => {
-          const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
-          if (mergeRowIndex + mergeRowspan > afterFullData.length) {
-            mergeItem.rowspan = mergeRowspan + newRecords.length
-          }
         })
       }
     } else {
@@ -253,9 +246,9 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
         // 刷新单元格合并
         mergeBodyList.forEach((mergeItem: any) => {
           const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
-          if (mergeRowIndex > afIndex) {
+          if (mergeRowIndex >= afIndex) {
             mergeItem.row = mergeRowIndex + newRecords.length
-          } else if (mergeRowIndex + mergeRowspan > afIndex) {
+          } else if (isInsertNextRow ? (mergeRowIndex + mergeRowspan >= afIndex) : (mergeRowIndex + mergeRowspan > afIndex)) {
             mergeItem.rowspan = mergeRowspan + newRecords.length
           }
         })
