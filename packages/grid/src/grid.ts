@@ -1354,7 +1354,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           : [
               h(VxeToolbarComponent, {
                 props: Object.assign({}, toolbarOpts, { slots: undefined }),
-                ref: 'xToolbar',
+                ref: 'refToolbar',
                 scopedSlots: $xeGrid.getToolbarSlots()
               })
             ]

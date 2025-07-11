@@ -1,6 +1,7 @@
 import { VxeUI } from '../../../ui'
 import { formatText, isEnableConf, getClass } from '../../../ui/src/utils'
 import { getSlotVNs } from '../../../ui/src/vn'
+import { warnLog } from '../../../ui/src/log'
 import { CreateElement } from 'vue'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData } from '../../../../types'
@@ -269,7 +270,10 @@ export default {
     confirmFilter (evnt: any) {
       const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
 
-      $xeTable.handleFilterConfirmFilter(evnt)
+      if (!evnt) {
+        warnLog('vxe.error.delFunc', ['confirmFilter', 'saveFilterPanelByEvent'])
+      }
+      $xeTable.handleFilterConfirmFilter(evnt || new Event('click'))
     },
     // 重置筛选
     resetFilter (evnt: any) {
