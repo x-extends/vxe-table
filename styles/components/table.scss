@@ -401,7 +401,13 @@ $btnThemeList: (
   }
   .vxe-table--cell-col-status-area,
   .vxe-table--cell-row-status-area {
-    background-color: var(--vxe-ui-table-checkbox-range-background-color);
+    background-color: var(--vxe-ui-table-cell-area-status-background-color);
+  }
+  .vxe-table--cell-col-status-area {
+    border-bottom: var(--vxe-ui-table-cell-area-border-width) solid var(--vxe-ui-table-cell-area-border-color);
+  }
+  .vxe-table--cell-row-status-area {
+    border-right: var(--vxe-ui-table-cell-area-border-width) solid var(--vxe-ui-table-cell-area-border-color);
   }
 }
 

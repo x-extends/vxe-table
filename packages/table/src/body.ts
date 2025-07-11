@@ -243,7 +243,7 @@ export default defineVxeComponent({
         if (spanRest) {
           const { rowspan, colspan } = spanRest
           if (!rowspan || !colspan) {
-            return null
+            return renderEmptyElement($xeTable)
           }
           if (rowspan > 1) {
             isMergeCell = true
@@ -260,7 +260,7 @@ export default defineVxeComponent({
         // 自定义合并行或列的方法
         const { rowspan = 1, colspan = 1 } = spanMethod(cellParams) || {}
         if (!rowspan || !colspan) {
-          return null
+          return renderEmptyElement($xeTable)
         }
         if (rowspan > 1) {
           isMergeCell = true
@@ -401,13 +401,8 @@ export default defineVxeComponent({
       }
 
       let showAreaRowStatus = false
-      if (mouseConfig && mouseOpts.area && selectCellToRow) {
-        if (
-          (!_columnIndex && selectCellToRow === true) ||
-          (selectCellToRow === column.field)
-        ) {
-          showAreaRowStatus = true
-        }
+      if (mouseConfig && mouseOpts.area && !_columnIndex && selectCellToRow) {
+        showAreaRowStatus = true
       }
 
       if (!fixedHiddenColumn && showResizable && isAllColumnDrag) {
