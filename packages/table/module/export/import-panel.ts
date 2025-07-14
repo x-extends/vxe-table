@@ -5,7 +5,6 @@ import XEUtils from 'xe-utils'
 import { parseFile } from '../../../ui/src/utils'
 import { errLog } from '../../../ui/src/log'
 
-import type { VxeButtonComponent, VxeModalComponent, VxeSelectComponent } from 'vxe-pc-ui'
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
 
 const { getI18n, getIcon } = VxeUI
@@ -17,9 +16,9 @@ export default defineVxeComponent({
     storeData: Object as any
   },
   setup (props) {
-    const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
-    const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
-    const VxeUISelectComponent = VxeUI.getComponent<VxeSelectComponent>('VxeSelect')
+    const VxeUIModalComponent = VxeUI.getComponent('VxeModal')
+    const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
+    const VxeUISelectComponent = VxeUI.getComponent('VxeSelect')
 
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
     const { computeImportOpts } = $xeTable.getComputeMaps()

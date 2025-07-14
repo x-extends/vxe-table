@@ -11,7 +11,7 @@ import tableComponentEmits from '../../table/src/emits'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { ValueOf, VxePagerComponent, VxeFormComponent, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance, VxeComponentStyleType } from 'vxe-pc-ui'
+import type { ValueOf, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance, VxeComponentStyleType } from 'vxe-pc-ui'
 import type { VxeTableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxeToolbarInstance, GridPrivateRef, VxeTableProps, VxeTableConstructor, VxeTablePrivateMethods, VxeTableEvents, VxeTableDefines, VxeTableEventProps, VxeGridProps } from '../../../types'
 
 const { getConfig, getI18n, commands, hooks, useFns, createEvent, globalEvents, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
@@ -59,8 +59,8 @@ export default defineVxeComponent({
     const xID = XEUtils.uniqueId()
 
     // 使用已安装的组件，如果未安装则不渲染
-    const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
-    const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
+    const VxeUIFormComponent = VxeUI.getComponent('VxeForm')
+    const VxeUIPagerComponent = VxeUI.getComponent('VxePager')
 
     const defaultLayouts: VxeGridPropTypes.Layouts = [['Form'], ['Toolbar', 'Top', 'Table', 'Bottom', 'Pager']]
 
@@ -129,7 +129,7 @@ export default defineVxeComponent({
 
     const computeIsActiveMsg = computed(() => {
       const proxyOpts = computeProxyOpts.value
-      return !!proxyOpts.showActiveMsg
+      return XEUtils.isBoolean(proxyOpts.showActionMsg) ? proxyOpts.showActionMsg : !!proxyOpts.showActiveMsg
     })
 
     const computePagerOpts = computed(() => {

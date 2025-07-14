@@ -96,8 +96,26 @@ export default {
       operError: 'An error occurred and the operation failed!'
     },
     select: {
-      search: 'search',
-      loadingText: 'loading',
+      clear: 'Clear',
+      allChecked: 'All',
+      total: '{0} / {1}',
+      search: 'Search',
+      loadingText: 'Loading',
+      emptyText: 'No data yet',
+      maxOpt: 'The maximum number that can be selected cannot exceed {0}.',
+      overSizeErr: 'The maximum selectable quantity of {0} has been exceeded. The excess part will be ignored!',
+      searchEmpty: 'No matching data found!'
+    },
+    tree: {
+      searchEmpty: '未匹配到数据！'
+    },
+    treeSelect: {
+      clearChecked: 'Clear',
+      allChecked: 'Check all',
+      allExpand: 'Expand all',
+      clearExpand: 'Collapse all',
+      total: 'Selected {0}',
+      search: 'Search',
       emptyText: 'No data yet'
     },
     pager: {

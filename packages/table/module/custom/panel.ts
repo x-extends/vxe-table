@@ -6,7 +6,7 @@ import { getTpImg, addClass, removeClass, hasControlKey } from '../../../ui/src/
 import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
-import type { VxeModalComponent, VxeDrawerComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeInputComponent, VxeButtonEvents } from 'vxe-pc-ui'
+import type { VxeButtonEvents } from 'vxe-pc-ui'
 import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableCustomPanelConstructor, TableCustomPanelReactData, TableCustomPanelInternalData, TableCustomPanelPrivateRef, TableCustomPanelPrivateComputed } from '../../../../types'
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
@@ -22,11 +22,11 @@ export default defineVxeComponent({
   setup (props, context) {
     const xID = XEUtils.uniqueId()
 
-    const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
-    const VxeUIDrawerComponent = VxeUI.getComponent<VxeDrawerComponent>('VxeDrawer')
-    const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
-    const VxeUINumberInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeNumberInput')
-    const VxeUIRadioGroupComponent = VxeUI.getComponent<VxeRadioGroupComponent>('VxeRadioGroup')
+    const VxeUIModalComponent = VxeUI.getComponent('VxeModal')
+    const VxeUIDrawerComponent = VxeUI.getComponent('VxeDrawer')
+    const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
+    const VxeUINumberInputComponent = VxeUI.getComponent('VxeNumberInput')
+    const VxeUIRadioGroupComponent = VxeUI.getComponent('VxeRadioGroup')
 
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 

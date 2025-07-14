@@ -20,7 +20,7 @@ import TableImportPanelComponent from '../module/export/import-panel'
 import TableExportPanelComponent from '../module/export/export-panel'
 import TableMenuPanelComponent from '../module/menu/panel'
 
-import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType } from 'vxe-pc-ui'
+import type { VxeTooltipInstance, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType } from 'vxe-pc-ui'
 import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableEmits, VxeTableProps, VxeColumnPropTypes, VxeTableCustomPanelConstructor } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
@@ -42,8 +42,8 @@ export default defineVxeComponent({
     const browseObj = XEUtils.browse()
 
     // 使用已安装的组件，如果未安装则不渲染
-    const VxeUILoadingComponent = VxeUI.getComponent<VxeLoadingComponent>('VxeLoading')
-    const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
+    const VxeUILoadingComponent = VxeUI.getComponent('VxeLoading')
+    const VxeUITooltipComponent = VxeUI.getComponent('VxeTooltip')
 
     const $xeTabs = inject<(VxeTabsConstructor & VxeTabsPrivateMethods) | null>('$xeTabs', null)
 
@@ -6248,15 +6248,17 @@ export default defineVxeComponent({
        * 手动清空展开行状态，数据会恢复成未展开的状态
        */
       clearRowExpand () {
-        const { tableFullData } = internalData
+        const { tableFullData, scrollYStore } = internalData
         const expandOpts = computeExpandOpts.value
         const { reserve } = expandOpts
         const expList = $xeTable.getRowExpandRecords()
         internalData.rowExpandedMaps = {}
-        reactData.rowExpandedFlag++
         if (reserve) {
           tableFullData.forEach((row) => handleRowExpandReserve(row, false))
         }
+        reactData.rowExpandedFlag++
+        scrollYStore.startIndex = 0
+        scrollYStore.endIndex = 1
         return nextTick().then(() => {
           if (expList.length) {
             return handleLazyRecalculate(true, true, true)
@@ -8423,7 +8425,7 @@ export default defineVxeComponent({
         const treeOpts = computeTreeOpts.value
         const childrenField = treeOpts.children || treeOpts.childrenField
         const checkboxOpts = computeCheckboxOpts.value
-        const { checkField, checkStrictly, checkMethod } = checkboxOpts
+        const { checkField, indeterminateField, checkStrictly, checkMethod } = checkboxOpts
         if (checkStrictly) {
           return
         }
@@ -8454,6 +8456,10 @@ export default defineVxeComponent({
               if (childList && childList.length && !childRowMaps[rowid]) {
                 childRowMaps[rowid] = 1
                 childRowList.unshift([row, rowid, childList])
+              } else {
+                if (indeterminateField) {
+                  XEUtils.set(row, indeterminateField, false)
+                }
               }
             }, { children: transform ? mapChildrenField : childrenField })
           }
@@ -8465,7 +8471,7 @@ export default defineVxeComponent({
             let sLen = 0 // 已选
             let hLen = 0 // 半选
             let vLen = 0 // 有效子行
-            const cLen = childList.length // 有效子行
+            const cLen = childList.length // 子行
             childList.forEach(
               checkMethod
                 ? (item) => {
@@ -8520,6 +8526,9 @@ export default defineVxeComponent({
 
             if (checkField) {
               XEUtils.set(row, checkField, isSelected)
+            }
+            if (indeterminateField) {
+              XEUtils.set(row, indeterminateField, halfSelect)
             }
             if (isSelected) {
               if (!checkField) {

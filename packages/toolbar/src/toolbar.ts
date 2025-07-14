@@ -1,11 +1,11 @@
-import { h, ref, Ref, computed, inject, createCommentVNode, VNode, reactive, nextTick, PropType } from 'vue'
+import { h, ref, computed, inject, createCommentVNode, VNode, reactive, nextTick, PropType } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { ValueOf, VxeButtonComponent, VxeButtonEvents, VxeComponentSlotType, VxeButtonDefines } from 'vxe-pc-ui'
+import type { ValueOf, VxeButtonEvents, VxeComponentSlotType, VxeButtonDefines } from 'vxe-pc-ui'
 import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, ToolbarInternalData, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, ToolbarPrivateRef, ToolbarReactData, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, useFns } = VxeUI
@@ -54,7 +54,7 @@ export default defineVxeComponent({
     const xID = XEUtils.uniqueId()
 
     // 使用已安装的组件，如果未安装则不渲染
-    const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+    const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
 
     const { computeSize } = useFns.useSize(props)
 
@@ -68,7 +68,7 @@ export default defineVxeComponent({
       connectTable: null
     }
 
-    const refElem = ref() as Ref<HTMLDivElement>
+    const refElem = ref<HTMLDivElement>()
 
     const refMaps: ToolbarPrivateRef = {
       refElem

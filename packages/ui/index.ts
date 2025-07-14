@@ -264,7 +264,7 @@ VxeUI.setConfig({
       autoLoad: true,
       showLoading: true,
       showResponseMsg: true,
-      showActiveMsg: true,
+      showActionMsg: true,
       response: {
         list: null,
         result: 'result',

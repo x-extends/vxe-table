@@ -4,6 +4,7 @@ import { VxeUI } from '../../../ui'
 import { formatText, isEnableConf } from '../../../ui/src/utils'
 import { getPropClass } from '../../../ui/src/dom'
 import { getSlotVNs } from '../../../ui/src/vn'
+import { warnLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
 import type { VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from '../../../../types'
@@ -56,7 +57,10 @@ export default defineVxeComponent({
      *************************/
     // 确认筛选
     const confirmFilter = (evnt: Event) => {
-      $xeTable.handleFilterConfirmFilter(evnt)
+      if (!evnt) {
+        warnLog('vxe.error.delFunc', ['confirmFilter', 'saveFilterPanelByEvent'])
+      }
+      $xeTable.handleFilterConfirmFilter(evnt || new Event('click'))
     }
 
     // （单选）筛选发生改变
