@@ -3868,7 +3868,7 @@ const Methods = {
       setTimeout(() => handleLazyRecalculate($xeTable, false, true, true), 50)
     })
   },
-  handleTableData (force: any) {
+  handleTableData (force?: boolean) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
@@ -7048,7 +7048,7 @@ const Methods = {
     const treeOpts = $xeTable.computeTreeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const checkboxOpts = $xeTable.computeCheckboxOpts
-    const { checkField, checkStrictly, checkMethod } = checkboxOpts
+    const { checkField, indeterminateField, checkStrictly, checkMethod } = checkboxOpts
     if (checkStrictly) {
       return
     }
@@ -7079,6 +7079,10 @@ const Methods = {
           if (childList && childList.length && !childRowMaps[rowid]) {
             childRowMaps[rowid] = 1
             childRowList.unshift([row, rowid, childList])
+          } else {
+            if (indeterminateField) {
+              XEUtils.set(row, indeterminateField, false)
+            }
           }
         }, { children: transform ? mapChildrenField : childrenField })
       }
@@ -7090,7 +7094,7 @@ const Methods = {
         let sLen = 0 // 已选
         let hLen = 0 // 半选
         let vLen = 0 // 有效子行
-        const cLen = childList.length // 有效子行
+        const cLen = childList.length // 子行
         childList.forEach(
           checkMethod
             ? (item) => {
@@ -7145,6 +7149,9 @@ const Methods = {
 
         if (checkField) {
           XEUtils.set(row, checkField, isSelected)
+        }
+        if (indeterminateField) {
+          XEUtils.set(row, indeterminateField, halfSelect)
         }
         if (isSelected) {
           if (!checkField) {
@@ -9334,15 +9341,17 @@ const Methods = {
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { tableFullData } = internalData
+    const { tableFullData, scrollYStore } = internalData
     const expandOpts = $xeTable.computeExpandOpts
     const { reserve } = expandOpts
     const expList = $xeTable.getRowExpandRecords()
     internalData.rowExpandedMaps = {}
-    reactData.rowExpandedFlag++
     if (reserve) {
       tableFullData.forEach((row) => handleRowExpandReserve($xeTable, row, false))
     }
+    reactData.rowExpandedFlag++
+    scrollYStore.startIndex = 0
+    scrollYStore.endIndex = 1
     return $xeTable.$nextTick().then(() => {
       if (expList.length) {
         return handleLazyRecalculate($xeTable, true, true, true)

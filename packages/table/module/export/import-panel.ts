@@ -4,7 +4,6 @@ import XEUtils from 'xe-utils'
 import { parseFile } from '../../../ui/src/utils'
 import { errLog } from '../../../ui/src/log'
 
-import type { VxeModalComponent, VxeSelectComponent, VxeButtonComponent } from 'vxe-pc-ui'
 import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../../types'
 
 const { getI18n, getIcon, globalMixins, renderEmptyElement } = VxeUI
@@ -52,9 +51,9 @@ export default {
   created (this: any) {
     const $xeTableImportPanel = this
 
-    const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
-    const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
-    const VxeUISelectComponent = VxeUI.getComponent<VxeSelectComponent>('VxeSelect')
+    const VxeUIModalComponent = VxeUI.getComponent('VxeModal')
+    const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
+    const VxeUISelectComponent = VxeUI.getComponent('VxeSelect')
 
     $xeTableImportPanel.$nextTick(() => {
       if (!VxeUIModalComponent) {

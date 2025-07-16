@@ -10,7 +10,7 @@ import tableComponentProps from '../../table/src/props'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeFormComponent, VxePagerComponent, VxeFormItemProps, VxeFormDefines, VxeComponentStyleType, VxeComponentSizeType, ValueOf } from 'vxe-pc-ui'
+import type { VxeFormItemProps, VxeFormDefines, VxeComponentStyleType, VxeComponentSizeType, ValueOf } from 'vxe-pc-ui'
 import type { GridReactData, VxeTablePropTypes, VxeGridConstructor, VxeToolbarPropTypes, VxeToolbarInstance, VxeGridPropTypes, VxeTableMethods, VxeGridEmits, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, TableInternalData } from '../../../types'
 
 const { getConfig, getI18n, commands, globalEvents, globalMixins, createEvent, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
@@ -139,7 +139,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const $xeGrid = this
 
       const proxyOpts = $xeGrid.computeProxyOpts as VxeGridPropTypes.ProxyConfig
-      return !!proxyOpts.showActiveMsg
+      return XEUtils.isBoolean(proxyOpts.showActionMsg) ? proxyOpts.showActionMsg : !!proxyOpts.showActiveMsg
     },
     proxyOpts () {
       const $xeGrid = this
@@ -1265,7 +1265,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     // Render
     //
     renderDefaultForm (h: CreateElement) {
-      const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
+      const VxeUIFormComponent = VxeUI.getComponent('VxeForm')
 
       const $xeGrid = this
       const props = $xeGrid
@@ -1432,7 +1432,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         : renderEmptyElement($xeGrid)
     },
     renderPager (h: CreateElement) {
-      const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
+      const VxeUIPagerComponent = VxeUI.getComponent('VxePager')
 
       const $xeGrid = this
       const props = $xeGrid
@@ -1565,8 +1565,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
   },
   created () {
     // 使用已安装的组件，如果未安装则不渲染
-    const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
-    const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
+    const VxeUIFormComponent = VxeUI.getComponent('VxeForm')
+    const VxeUIPagerComponent = VxeUI.getComponent('VxePager')
 
     const $xeGrid = this
     const props = $xeGrid

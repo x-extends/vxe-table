@@ -25,7 +25,7 @@ import keyboardMixin from '../module/keyboard/mixin'
 import validatorMixin from '../module/validator/mixin'
 import customMixin from '../module/custom/mixin'
 
-import type { VxeLoadingComponent, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods } from 'vxe-pc-ui'
+import type { VxeTabsConstructor, VxeTabsPrivateMethods } from 'vxe-pc-ui'
 import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, TableReactData, VxeTableDefines } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
@@ -1878,8 +1878,8 @@ export default {
     }
 
     // 使用已安装的组件，如果未安装则不渲染
-    const VxeUILoadingComponent = VxeUI.getComponent<VxeLoadingComponent>('VxeLoading')
-    const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
+    const VxeUILoadingComponent = VxeUI.getComponent('VxeLoading')
+    const VxeUITooltipComponent = VxeUI.getComponent('VxeTooltip')
 
     $xeTable.$nextTick(() => {
       if (props.loading) {
@@ -1977,8 +1977,8 @@ export default {
   },
   render (h: CreateElement) {
     // 使用已安装的组件，如果未安装则不渲染
-    const VxeUILoadingComponent = VxeUI.getComponent<VxeLoadingComponent>('VxeLoading')
-    const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
+    const VxeUILoadingComponent = VxeUI.getComponent('VxeLoading')
+    const VxeUITooltipComponent = VxeUI.getComponent('VxeTooltip')
 
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const $xeGrid = $xeTable.$xeGrid

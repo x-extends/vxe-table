@@ -5,7 +5,7 @@ import { VxeUI } from '../../ui'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { ValueOf, VxeButtonComponent, VxeComponentSizeType, VxeComponentSlotType, VxeButtonDefines } from 'vxe-pc-ui'
+import type { ValueOf, VxeComponentSizeType, VxeComponentSlotType, VxeButtonDefines } from 'vxe-pc-ui'
 import type { VxeGridConstructor, GridPrivateMethods, ToolbarInternalData, VxeTableDefines, VxeToolbarEmits, VxeToolbarPropTypes, VxeTablePropTypes, ToolbarReactData, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, globalMixins, renderEmptyElement } = VxeUI
@@ -412,7 +412,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     //
     renderDropdowns (h: CreateElement, item: VxeToolbarPropTypes.ButtonConfig, isBtn: boolean) {
       // 使用已安装的组件，如果未安装则不渲染
-      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+      const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
 
       const $xeToolbar = this
 
@@ -456,7 +456,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
      */
     renderLeftBtns  (h: CreateElement): VxeComponentSlotType[] {
       // 使用已安装的组件，如果未安装则不渲染
-      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+      const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
 
       const $xeToolbar = this
       const props = $xeToolbar
@@ -534,7 +534,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
      */
     renderRightTools (h: CreateElement) {
       // 使用已安装的组件，如果未安装则不渲染
-      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+      const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
 
       const $xeToolbar = this
       const props = $xeToolbar
@@ -612,7 +612,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     },
     renderToolImport  (h: CreateElement) {
       // 使用已安装的组件，如果未安装则不渲染
-      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+      const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
 
       const $xeToolbar = this
 
@@ -633,7 +633,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     },
     renderToolExport  (h: CreateElement) {
       // 使用已安装的组件，如果未安装则不渲染
-      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+      const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
 
       const $xeToolbar = this
 
@@ -654,7 +654,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     },
     renderToolPrint (h: CreateElement) {
       // 使用已安装的组件，如果未安装则不渲染
-      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+      const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
 
       const $xeToolbar = this
 
@@ -675,7 +675,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     },
     renderToolRefresh  (h: CreateElement) {
       // 使用已安装的组件，如果未安装则不渲染
-      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+      const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
 
       const $xeToolbar = this
       const reactData = $xeToolbar.reactData
@@ -697,7 +697,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     },
     renderToolZoom  (h: CreateElement) {
       // 使用已安装的组件，如果未安装则不渲染
-      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+      const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
 
       const $xeToolbar = this
       const $xeGrid = $xeToolbar.$xeGrid
@@ -719,7 +719,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     },
     renderToolCustom (h: CreateElement) {
       // 使用已安装的组件，如果未安装则不渲染
-      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+      const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
 
       const $xeToolbar = this
 
@@ -844,7 +844,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     })
 
     // 使用已安装的组件，如果未安装则不渲染
-    const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+    const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
 
     if (props.refresh || props.import || props.export || props.print || props.zoom) {
       if (!VxeUIButtonComponent) {

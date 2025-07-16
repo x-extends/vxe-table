@@ -6,7 +6,7 @@ import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, TableReactData, TableInternalData, VxeColumnPropTypes, VxeTableCustomPanelConstructor, TableCustomPanelReactData, TableCustomPanelInternalData } from '../../../../types'
-import type { VxeModalComponent, VxeDrawerComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeInputComponent, VxeButtonDefines, VxeRadioGroupDefines } from 'vxe-pc-ui'
+import type { VxeButtonDefines, VxeRadioGroupDefines } from 'vxe-pc-ui'
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
 
@@ -113,7 +113,7 @@ const renderDragTip = (h: CreateElement, $xeTableCustomPanel: VxeTableCustomPane
 }
 
 const renderSimplePanel = (h: CreateElement, _vm: any) => {
-  const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+  const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
 
   const props = _vm
 
@@ -435,10 +435,10 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
 }
 
 const renderPopupPanel = (h: CreateElement, $xeTableCustomPanel: VxeTableCustomPanelConstructor) => {
-  const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
-  const VxeUIDrawerComponent = VxeUI.getComponent<VxeDrawerComponent>('VxeDrawer')
-  const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
-  const VxeUINumberInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeInput')
+  const VxeUIModalComponent = VxeUI.getComponent('VxeModal')
+  const VxeUIDrawerComponent = VxeUI.getComponent('VxeDrawer')
+  const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
+  const VxeUINumberInputComponent = VxeUI.getComponent('VxeInput')
 
   const _vm = $xeTableCustomPanel as any
   const props = $xeTableCustomPanel
@@ -913,11 +913,11 @@ export default {
   created () {
     const $xeTableCustomPanel = this as any
 
-    const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
-    const VxeUIDrawerComponent = VxeUI.getComponent<VxeDrawerComponent>('VxeDrawer')
-    const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
-    const VxeUINumberInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeNumberInput')
-    const VxeUIRadioGroupComponent = VxeUI.getComponent<VxeRadioGroupComponent>('VxeRadioGroup')
+    const VxeUIModalComponent = VxeUI.getComponent('VxeModal')
+    const VxeUIDrawerComponent = VxeUI.getComponent('VxeDrawer')
+    const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
+    const VxeUINumberInputComponent = VxeUI.getComponent('VxeNumberInput')
+    const VxeUIRadioGroupComponent = VxeUI.getComponent('VxeRadioGroup')
 
     $xeTableCustomPanel.$nextTick(() => {
       const $xeTable = $xeTableCustomPanel.$xeTable as VxeTableConstructor & VxeTablePrivateMethods

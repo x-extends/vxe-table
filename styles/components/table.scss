@@ -2155,6 +2155,7 @@ $btnThemeList: (
       text-align: left;
       z-index: 4;
       padding: 0 var(--vxe-ui-table-cell-padding-default);
+      pointer-events: none;
     }
     .vxe-cell--valid-error-wrapper {
       display: inline-block;

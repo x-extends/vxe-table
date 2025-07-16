@@ -96,9 +96,27 @@ export default {
       operError: '發生錯誤，操作失敗！'
     },
     select: {
+      clear: '清除',
+      allChecked: '全选',
+      total: '{0} / {1}',
       search: '搜尋',
       loadingText: '載入中',
-      emptyText: '暫無數據'
+      emptyText: '暫無數據',
+      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
+      searchEmpty: '未匹配到数据！'
+    },
+    tree: {
+      searchEmpty: '未匹配到数据！'
+    },
+    treeSelect: {
+      clearChecked: '清除',
+      allChecked: '全选',
+      allExpand: '全部展开',
+      clearExpand: '全部收起',
+      total: '已选 {0}',
+      search: '搜索',
+      emptyText: '暂无数据'
     },
     pager: {
       goto: '前往',

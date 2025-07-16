@@ -4,7 +4,6 @@ import XEUtils from 'xe-utils'
 import { formatText } from '../../../ui/src/utils'
 import { errLog } from '../../../ui/src/log'
 
-import type { VxeModalComponent, VxeInputComponent, VxeCheckboxComponent, VxeSelectComponent, VxeButtonComponent } from 'vxe-pc-ui'
 import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../../types'
 
 const { getI18n, getIcon, globalMixins, renderEmptyElement } = VxeUI
@@ -60,11 +59,11 @@ export default {
   created (this: any) {
     const $xeTableExportPanel = this
 
-    const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
-    const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
-    const VxeUISelectComponent = VxeUI.getComponent<VxeSelectComponent>('VxeSelect')
-    const VxeUIInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeInput')
-    const VxeUICheckboxComponent = VxeUI.getComponent<VxeCheckboxComponent>('VxeCheckbox')
+    const VxeUIModalComponent = VxeUI.getComponent('VxeModal')
+    const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
+    const VxeUISelectComponent = VxeUI.getComponent('VxeSelect')
+    const VxeUIInputComponent = VxeUI.getComponent('VxeInput')
+    const VxeUICheckboxComponent = VxeUI.getComponent('VxeCheckbox')
 
     $xeTableExportPanel.$nextTick(() => {
       if (!VxeUIModalComponent) {
