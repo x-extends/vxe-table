@@ -17,6 +17,7 @@ export default {
       groupTag: "\"Lim li}\" o'rniga guruh sarlavhalarida \"{1}\" o'rniga \"{0}\" o'rniga \"{0}\" dan foydalanish kerak",
       scrollErrProp: "Virtual aylantirish yoqilgandan so'ng \"{0}\" ushbu parametr qo'llab-quvvatlanmaydi",
       errConflicts: '"{0}" parametr "{1}" bilan ziddiyatlar',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '"{1}" parametri yoqilganda, u "{2}" parametrlari yoqilgan, aks holda xatolik yuz beradi',
       notConflictProp: "\"{0}\", \"{1}\" dan foydalanish kerak bo'lganda, aks holda funktsional to'qnashuvlar bo'lishi mumkin",
       unableInsert: "Belgilangan joyda kiritilishi mumkin emas, parametrlar to'g'ri yoki yo'qligini tekshiring",

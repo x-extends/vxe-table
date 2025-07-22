@@ -17,6 +17,7 @@ export default {
       groupTag: '分組列頭應該使用 "{0}" 而不是 "{1}"，這可能會出現錯誤',
       scrollErrProp: '啟用虛擬滾動後不支持該參數 "{0}"',
       errConflicts: '參數 "{0}" 與 "{1}" 有衝突',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '當啟用參數 "{0}" 時不支持 "{1}"，應該為 "{2}"，否則將會出現錯誤',
       notConflictProp: '當使用 "{0}" 時，應該設置 "{1}"，否則可能會存在功能衝突',
       unableInsert: '無法插入到指定位置，請檢查參數是否正確',

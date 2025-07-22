@@ -5927,8 +5927,7 @@ export default defineVxeComponent({
         return nextTick()
       },
       setSort (sortConfs, isUpdate) {
-        // 已废弃，即将去掉事件触发 new Event('click') -> null
-        return handleSortEvent(new Event('click'), sortConfs, isUpdate)
+        return handleSortEvent(null, sortConfs, isUpdate)
       },
       setSortByEvent (evnt, sortConfs, isUpdate) {
         return handleSortEvent(evnt, sortConfs, isUpdate)

@@ -17,6 +17,7 @@ export default {
       groupTag: 'Los encabezados de la columna de agrupación deben usar "{0}" en lugar de "{1}", lo que puede causar errores',
       scrollErrProp: 'Este parámetro "{0}" no es compatible después de que el desplazamiento virtual esté habilitado',
       errConflicts: 'Parámetro "{0}" En conflicto con "{1}"',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '"{1}" no se admite cuando el parámetro "{0}" está habilitado, debería ser "{2}", de lo contrario ocurrirá un error',
       notConflictProp: 'Cuando se usa "{0}", "{1}" debe establecerse, de lo contrario puede haber conflictos funcionales',
       unableInsert: 'No se puede insertar en la ubicación especificada, verifique si los parámetros son correctos',
