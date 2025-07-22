@@ -14,6 +14,8 @@ export class ColumnInfo {
     const tableProps = $xeTable
     const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
 
+    const { field, editRender } = _vm
+
     const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : null
     const formatter = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
@@ -59,11 +61,20 @@ export class ColumnInfo {
       }
     }
 
+    if (field && editRender) {
+      if (editRender.startField && `${editRender.startField}`.indexOf(field) >= 0) {
+        errLog('vxe.error.modelConflicts', [`field=${field}`, `edit-render.startField=${editRender.startField}`])
+      }
+      if (editRender.endField && `${editRender.endField}`.indexOf(field) >= 0) {
+        errLog('vxe.error.modelConflicts', [`field=${field}`, `edit-render.endField=${editRender.endField}`])
+      }
+    }
+
     Object.assign(this, {
       // 基本属性
       type: _vm.type,
       property: _vm.field,
-      field: _vm.field,
+      field: field,
       title: _vm.title,
       width: _vm.width,
       minWidth: _vm.minWidth,
@@ -100,7 +111,7 @@ export class ColumnInfo {
       rowResize: _vm.rowResize,
       cellType: _vm.cellType,
       cellRender: _vm.cellRender,
-      editRender: _vm.editRender,
+      editRender: editRender,
       contentRender: _vm.contentRender,
       headerExportMethod: _vm.headerExportMethod,
       exportMethod: _vm.exportMethod,

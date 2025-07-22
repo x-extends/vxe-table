@@ -17,6 +17,7 @@ export default {
       groupTag: '分组列头应该使用 "{0}" 而不是 "{1}"，这可能会出现错误',
       scrollErrProp: '启用虚拟滚动后不支持该参数 "{0}"',
       errConflicts: '参数 "{0}" 与 "{1}" 有冲突',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '当启用参数 "{0}" 时不支持 "{1}"，应该为 "{2}"，否则将会出现错误',
       notConflictProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会存在功能冲突',
       unableInsert: '无法插入到指定位置，请检查参数是否正确',

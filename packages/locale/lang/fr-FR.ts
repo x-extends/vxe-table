@@ -17,6 +17,7 @@ export default {
       groupTag: 'Le regroupement des en-têtes de colonne doit utiliser "{0}" au lieu de "{1}", ce qui peut entraîner des erreurs',
       scrollErrProp: "Ce paramètre \"{0}\" n'est pas pris en charge après l'activation du défilement virtuel",
       errConflicts: 'Paramètre "{0}" entre en conflit avec "{1}"',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: "\"{1}\" n'est pas pris en charge lorsque le paramètre \"{0}\" est activé, il devrait être \"{2}\", sinon une erreur se produira",
       notConflictProp: 'Lorsque vous utilisez "{0}", "{1}" doit être défini, sinon il peut y avoir des conflits fonctionnels',
       unableInsert: "Ne peut pas être inséré dans l'emplacement spécifié, veuillez vérifier si les paramètres sont corrects",

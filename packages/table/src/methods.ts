@@ -8946,8 +8946,7 @@ const Methods = {
   setSort (sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    // 已废弃，即将去掉事件触发 new Event('click') -> null
-    return handleSortEvent($xeTable, new Event('click'), sortConfs, isUpdate)
+    return handleSortEvent($xeTable, null, sortConfs, isUpdate)
   },
   setSortByEvent (evnt: Event, sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods

@@ -17,6 +17,7 @@ export default {
       groupTag: 'Az oszlopfejlécek csoportosításának a "{0}" -et használni kell a "{1}" helyett, amely hibákat okozhat',
       scrollErrProp: 'Ezt a "{0}" paramétert a virtuális görgetés engedélyezése után nem támogatják',
       errConflicts: 'A "{0}" paraméter konfliktusok "{1}"',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: 'A "{1}" nem támogatott, ha a "{0}" paraméter engedélyezve van, "{2}" -nek kell lennie, különben hiba lép fel',
       notConflictProp: 'A "{0}" használatakor a "{1}" -et be kell állítani, különben funkcionális konfliktusok merülhetnek fel',
       unableInsert: 'Nem lehet beilleszteni a megadott helyre, kérjük, ellenőrizze, hogy a paraméterek helyesek -e',
