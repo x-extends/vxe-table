@@ -17,6 +17,7 @@ export default {
       groupTag: "\"Lim li}\" o'rniga guruh sarlavhalarida \"{1}\" o'rniga \"{0}\" o'rniga \"{0}\" dan foydalanish kerak",
       scrollErrProp: "Virtual aylantirish yoqilgandan so'ng \"{0}\" ushbu parametr qo'llab-quvvatlanmaydi",
       errConflicts: '"{0}" parametr "{1}" bilan ziddiyatlar',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '"{1}" parametri yoqilganda, u "{2}" parametrlari yoqilgan, aks holda xatolik yuz beradi',
       notConflictProp: "\"{0}\", \"{1}\" dan foydalanish kerak bo'lganda, aks holda funktsional to'qnashuvlar bo'lishi mumkin",
       unableInsert: "Belgilangan joyda kiritilishi mumkin emas, parametrlar to'g'ri yoki yo'qligini tekshiring",
@@ -96,9 +97,27 @@ export default {
       operError: "Xato yuz berdi va operatsiya muvaffaqiyatsiz bo'ldi!"
     },
     select: {
+      clear: '清除',
+      allChecked: '全选',
+      total: '{0} / {1}',
       search: 'qidirish',
       loadingText: 'yuklamoq',
-      emptyText: "Hali ma'lumot yo'q"
+      emptyText: "Hali ma'lumot yo'q",
+      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
+      searchEmpty: '未匹配到数据！'
+    },
+    tree: {
+      searchEmpty: '未匹配到数据！'
+    },
+    treeSelect: {
+      clearChecked: '清除',
+      allChecked: '全选',
+      allExpand: '全部展开',
+      clearExpand: '全部收起',
+      total: '{0} / {1}',
+      search: '搜索',
+      emptyText: '暂无数据'
     },
     pager: {
       goto: 'Bormoq',

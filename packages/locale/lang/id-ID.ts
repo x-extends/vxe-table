@@ -17,6 +17,7 @@ export default {
       groupTag: 'Mengelompokkan header kolom harus menggunakan "{0}" bukan "{1}", yang dapat menyebabkan kesalahan',
       scrollErrProp: 'Parameter ini "{0}" tidak didukung setelah pengguliran virtual diaktifkan',
       errConflicts: 'Parameter "{0}" bertentangan dengan "{1}"',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '"{1}" tidak didukung ketika parameter "{0}" diaktifkan, itu harus menjadi "{2}", jika tidak kesalahan akan terjadi',
       notConflictProp: 'Saat menggunakan "{0}", "{1}" harus diatur, jika tidak mungkin ada konflik fungsional',
       unableInsert: 'Tidak dapat dimasukkan ke lokasi yang ditentukan, silakan periksa apakah parameternya benar',
@@ -96,9 +97,27 @@ export default {
       operError: 'Terjadi kesalahan dan operasinya gagal!'
     },
     select: {
+      clear: '清除',
+      allChecked: '全选',
+      total: '{0} / {1}',
       search: 'mencari',
       loadingText: 'memuat',
-      emptyText: 'Belum ada data'
+      emptyText: 'Belum ada data',
+      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
+      searchEmpty: '未匹配到数据！'
+    },
+    tree: {
+      searchEmpty: '未匹配到数据！'
+    },
+    treeSelect: {
+      clearChecked: '清除',
+      allChecked: '全选',
+      allExpand: '全部展开',
+      clearExpand: '全部收起',
+      total: '已选 {0}',
+      search: '搜索',
+      emptyText: '暂无数据'
     },
     pager: {
       goto: 'Pergi',

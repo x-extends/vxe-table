@@ -17,6 +17,7 @@ export default {
       groupTag: 'Gruppierungsspalten -Header sollten "{0}" anstelle von "{1}" verwenden, was zu Fehlern führen kann',
       scrollErrProp: 'Dieser Parameter "{0}" wird nicht unterstützt, nachdem die virtuelle Scrollen aktiviert ist',
       errConflicts: 'Parameter "{0}" Konflikte mit "{1}"',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '"{1}" wird nicht unterstützt, wenn der Parameter "{0}" aktiviert ist. Es sollte "{2}" sein, andernfalls tritt ein Fehler auf',
       notConflictProp: 'Wenn "{0}" verwendet wird, sollte "{1}" festgelegt werden, andernfalls kann es funktionale Konflikte geben',
       unableInsert: 'Kann nicht in den angegebenen Ort eingefügt werden. Überprüfen Sie bitte, ob die Parameter korrekt sind',
@@ -96,9 +97,27 @@ export default {
       operError: 'Ein Fehler ist aufgetreten und die Operation ist fehlgeschlagen!'
     },
     select: {
+      clear: '清除',
+      allChecked: '全选',
+      total: '{0} / {1}',
       search: 'suchen',
       loadingText: 'Laden',
-      emptyText: 'Noch keine Daten'
+      emptyText: 'Noch keine Daten',
+      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
+      searchEmpty: '未匹配到数据！'
+    },
+    tree: {
+      searchEmpty: '未匹配到数据！'
+    },
+    treeSelect: {
+      clearChecked: '清除',
+      allChecked: '全选',
+      allExpand: '全部展开',
+      clearExpand: '全部收起',
+      total: '已选 {0}',
+      search: 'Search',
+      emptyText: '暂无数据'
     },
     pager: {
       goto: 'Gehen',

@@ -17,6 +17,7 @@ export default {
       groupTag: 'Os cabeçalhos da coluna de agrupamento devem usar "{0}" em vez de "{1}", o que pode causar erros',
       scrollErrProp: 'Este parâmetro "{0}" não é suportado após a rolagem virtual ser ativada',
       errConflicts: 'Parâmetro "{0}" conflita com "{1}"',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '"{1}" não é suportado quando o parâmetro "{0}" estiver ativado, ele deve ser "{2}", caso contrário, um erro ocorrerá',
       notConflictProp: 'Ao usar "{0}", "{1}" deve ser definido, caso contrário, pode haver conflitos funcionais',
       unableInsert: 'Não pode ser inserido no local especificado, verifique se os parâmetros estão corretos',
@@ -96,9 +97,27 @@ export default {
       operError: 'Ocorreu um erro e a operação falhou!'
     },
     select: {
+      clear: '清除',
+      allChecked: '全选',
+      total: '{0} / {1}',
       search: 'procurar',
       loadingText: 'carregando',
-      emptyText: 'Ainda não há dados'
+      emptyText: 'Ainda não há dados',
+      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
+      searchEmpty: '未匹配到数据！'
+    },
+    tree: {
+      searchEmpty: '未匹配到数据！'
+    },
+    treeSelect: {
+      clearChecked: '清除',
+      allChecked: '全选',
+      allExpand: '全部展开',
+      clearExpand: '全部收起',
+      total: '已选 {0}',
+      search: '搜索',
+      emptyText: '暂无数据'
     },
     pager: {
       goto: 'Ir',

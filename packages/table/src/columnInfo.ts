@@ -13,6 +13,8 @@ export class ColumnInfo {
     const tableProps = $xeTable.props
     const $xeGrid = $xeTable.xeGrid
 
+    const { field, editRender } = _vm
+
     const formatter: string | any[] = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
 
@@ -50,6 +52,15 @@ export class ColumnInfo {
     if (_vm.aggFunc) {
       if (!$xeTable.handlePivotTableAggregateData && _vm.aggFunc !== true) {
         errLog('vxe.error.errProp', [`column.agg-func=${_vm.aggFunc}`, 'column.agg-func=true'])
+      }
+    }
+
+    if (field && editRender) {
+      if (editRender.startField && `${editRender.startField}`.indexOf(field) >= 0) {
+        errLog('vxe.error.modelConflicts', [`field=${field}`, `edit-render.startField=${editRender.startField}`])
+      }
+      if (editRender.endField && `${editRender.endField}`.indexOf(field) >= 0) {
+        errLog('vxe.error.modelConflicts', [`field=${field}`, `edit-render.endField=${editRender.endField}`])
       }
     }
 

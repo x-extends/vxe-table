@@ -17,6 +17,7 @@ export default {
       groupTag: '열 헤더 그룹화는 "{1}"대신 "{0}"을 사용해야하며 오류가 발생할 수 있습니다.',
       scrollErrProp: '이 매개 변수 "{0}"은 가상 스크롤링이 활성화 된 후에 지원되지 않습니다.',
       errConflicts: '매개 변수 "{0}" "{1}"과 충돌합니다.',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '"{1}"은 "{0}"매개 변수가 활성화 될 때 지원되지 않습니다. "{2}"이어야합니다. 그렇지 않으면 오류가 발생합니다.',
       notConflictProp: '"{0}"을 사용하는 경우 "{1}"을 설정해야합니다. 그렇지 않으면 기능적 충돌이있을 수 있습니다.',
       unableInsert: '지정된 위치에 삽입 할 수 없으므로 매개 변수가 올바른지 확인하십시오.',
@@ -96,9 +97,27 @@ export default {
       operError: '오류가 발생했고 작업이 실패했습니다!'
     },
     select: {
+      clear: '清除',
+      allChecked: '全选',
+      total: '{0} / {1}',
       search: '찾다',
       loadingText: '로딩',
-      emptyText: '아직 데이터가 없습니다'
+      emptyText: '아직 데이터가 없습니다',
+      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
+      searchEmpty: '未匹配到数据！'
+    },
+    tree: {
+      searchEmpty: '未匹配到数据！'
+    },
+    treeSelect: {
+      clearChecked: '清除',
+      allChecked: '全选',
+      allExpand: '全部展开',
+      clearExpand: '全部收起',
+      total: '已选 {0}',
+      search: '搜索',
+      emptyText: '暂无数据'
     },
     pager: {
       goto: '가다',
