@@ -17,6 +17,7 @@ export default {
       groupTag: 'Le regroupement des en-têtes de colonne doit utiliser "{0}" au lieu de "{1}", ce qui peut entraîner des erreurs',
       scrollErrProp: "Ce paramètre \"{0}\" n'est pas pris en charge après l'activation du défilement virtuel",
       errConflicts: 'Paramètre "{0}" entre en conflit avec "{1}"',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: "\"{1}\" n'est pas pris en charge lorsque le paramètre \"{0}\" est activé, il devrait être \"{2}\", sinon une erreur se produira",
       notConflictProp: 'Lorsque vous utilisez "{0}", "{1}" doit être défini, sinon il peut y avoir des conflits fonctionnels',
       unableInsert: "Ne peut pas être inséré dans l'emplacement spécifié, veuillez vérifier si les paramètres sont corrects",
@@ -96,9 +97,27 @@ export default {
       operError: "Une erreur s'est produite et l'opération a échoué!"
     },
     select: {
+      clear: '清除',
+      allChecked: '全选',
+      total: '{0} / {1}',
       search: 'recherche',
       loadingText: 'chargement',
-      emptyText: 'Pas encore de données'
+      emptyText: 'Pas encore de données',
+      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
+      searchEmpty: '未匹配到数据！'
+    },
+    tree: {
+      searchEmpty: '未匹配到数据！'
+    },
+    treeSelect: {
+      clearChecked: '清除',
+      allChecked: '全选',
+      allExpand: '全部展开',
+      clearExpand: '全部收起',
+      total: '已选 {0}',
+      search: '搜索',
+      emptyText: '暂无数据'
     },
     pager: {
       goto: 'Aller',

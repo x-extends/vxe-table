@@ -17,6 +17,7 @@ export default {
       groupTag: 'グループ化列ヘッダーは、「{1}」の代わりに「{0}」を使用する必要があります。',
       scrollErrProp: 'このパラメーター「{0}」は、仮想スクロールが有効になった後にサポートされていません',
       errConflicts: 'パラメーター「{0}」は「{1}」と競合します',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '「{1}」はパラメーター「{0}」が有効になっている場合、「{2}」である必要があります。そうしないと、エラーが発生します。',
       notConflictProp: '「{0}」を使用する場合、「{1}」を設定する必要があります。',
       unableInsert: '指定された場所に挿入できません。パラメーターが正しいかどうかを確認してください',
@@ -96,9 +97,27 @@ export default {
       operError: 'エラーが発生し、操作が失敗しました！'
     },
     select: {
+      clear: '清除',
+      allChecked: '全选',
+      total: '{0} / {1}',
       search: '検索',
       loadingText: '読み込み',
-      emptyText: 'まだデータはありません'
+      emptyText: 'まだデータはありません',
+      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
+      searchEmpty: '未匹配到数据！'
+    },
+    tree: {
+      searchEmpty: '未匹配到数据！'
+    },
+    treeSelect: {
+      clearChecked: '清除',
+      allChecked: '全选',
+      allExpand: '全部展开',
+      clearExpand: '全部收起',
+      total: '已选 {0}',
+      search: '搜索',
+      emptyText: '暂无数据'
     },
     pager: {
       goto: '行く',

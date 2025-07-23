@@ -17,6 +17,7 @@ export default {
       groupTag: 'Nhóm tiêu đề nhóm nên sử dụng "{0}" thay vì "{1}", có thể gây ra lỗi',
       scrollErrProp: 'Tham số này "{0}" không được hỗ trợ sau khi cuộn ảo được bật',
       errConflicts: 'Tham số "{0}" Xung đột với "{1}"',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '"{1}" không được hỗ trợ khi tham số "{0}" được bật, nó phải là "{2}", nếu không sẽ xảy ra lỗi',
       notConflictProp: 'Khi sử dụng "{0}", "{1}" nên được đặt, nếu không có thể có xung đột chức năng',
       unableInsert: 'Không thể được chèn vào vị trí đã chỉ định, vui lòng kiểm tra xem các tham số có đúng không',
@@ -96,9 +97,27 @@ export default {
       operError: 'Một lỗi đã xảy ra và hoạt động không thành công!'
     },
     select: {
+      clear: '清除',
+      allChecked: '全选',
+      total: '{0} / {1}',
       search: 'tìm kiếm',
       loadingText: 'đang tải',
-      emptyText: 'Chưa có dữ liệu'
+      emptyText: 'Chưa có dữ liệu',
+      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
+      searchEmpty: '未匹配到数据！'
+    },
+    tree: {
+      searchEmpty: '未匹配到数据！'
+    },
+    treeSelect: {
+      clearChecked: '清除',
+      allChecked: '全选',
+      allExpand: '全部展开',
+      clearExpand: '全部收起',
+      total: '已选 {0}',
+      search: '搜索',
+      emptyText: '暂无数据'
     },
     pager: {
       goto: 'Đi',

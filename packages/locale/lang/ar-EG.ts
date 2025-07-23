@@ -17,6 +17,7 @@ export default {
       groupTag: 'يجب أن تستخدم رؤوس عمود التجميع "{0}" بدلاً من "{1}" ، والتي قد تسبب أخطاء',
       scrollErrProp: 'لا يتم دعم هذه المعلمة "{0}" بعد تمكين التمرير الظاهري',
       errConflicts: 'المعلمة "{0}" تتعارض مع "{1}"',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: 'لا يتم دعم "{1}" عند تمكين المعلمة "{0}" ، يجب أن يكون "{2}" ، وإلا',
       notConflictProp: 'عند استخدام "{0}" ، يجب تعيين "{1}" ، وإلا قد يكون هناك تعارضات وظيفية',
       unableInsert: 'لا يمكن إدراجها في الموقع المحدد ، يرجى التحقق مما إذا كانت المعلمات صحيحة',
@@ -96,9 +97,27 @@ export default {
       operError: 'حدث خطأ وفشلت العملية!'
     },
     select: {
+      clear: '清除',
+      allChecked: '全选',
+      total: '{0} / {1}',
       search: 'يبحث',
       loadingText: 'تحميل',
-      emptyText: 'لا توجد بيانات حتى الآن'
+      emptyText: 'لا توجد بيانات حتى الآن',
+      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
+      searchEmpty: '未匹配到数据！'
+    },
+    tree: {
+      searchEmpty: '未匹配到数据！'
+    },
+    treeSelect: {
+      clearChecked: '清除',
+      allChecked: '全选',
+      allExpand: '全部展开',
+      clearExpand: '全部收起',
+      total: '已选 {0}',
+      search: 'Search',
+      emptyText: '暂无数据'
     },
     pager: {
       goto: 'يذهب',
