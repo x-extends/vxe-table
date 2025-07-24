@@ -34,14 +34,14 @@ body:
   id: issue_os_version
   attributes:
     label: "操作系统："
-    placeholder: "例如：window10"
+    placeholder: "例如：window11"
   validations:
     required: true
 - type: input
   id: issue_browser_version
   attributes:
     label: "浏览器版本："
-    placeholder: "例如：chrome 95.0.4638.69"
+    placeholder: "例如：chrome 138.0.7204.158"
   validations:
     required: true
 - type: input
