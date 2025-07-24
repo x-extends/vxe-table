@@ -55,7 +55,8 @@ export default {
       treeCrossDrag: '只能拖拽第一層級',
       treeDragChild: '父級不能拖拽到自己的子級中',
       reqPlugin: '擴展插件未安裝 "{1}" https://vxeui.com/other{0}/#/{1}/install',
-      errMaxRow: '超過支持的最大數據量 {0} 行，這可能會導致出現錯誤'
+      errMaxRow: '超過支持的最大數據量 {0} 行，這可能會導致出現錯誤',
+      useNew: '{0} 已经不建议使用，请使用新的方式 {1}'
     },
     table: {
       emptyText: '暫無數據',

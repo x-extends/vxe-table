@@ -291,7 +291,7 @@ export default defineVxeComponent({
       const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
       let isVNPreEmptyStatus = false
-      if (!isMergeCell) {
+      if (overflowX && !isMergeCell) {
         if (!dragRow || getRowid($xeTable, dragRow) !== rowid) {
           if (scrollYLoad && !treeConfig && !virtualYOpts.immediate && (_rowIndex < scrollYStore.visibleStartIndex - scrollYStore.preloadSize || _rowIndex > scrollYStore.visibleEndIndex + scrollYStore.preloadSize)) {
             isVNPreEmptyStatus = true

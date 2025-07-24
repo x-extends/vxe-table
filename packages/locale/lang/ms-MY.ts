@@ -55,7 +55,8 @@ export default {
       treeCrossDrag: 'Hanya seret tahap pertama',
       treeDragChild: 'Ibu bapa tidak boleh menyeret anak mereka sendiri',
       reqPlugin: '"{1}" tidak dipasang di https://vxeui.com/other (0 )/#/ = (1 )/Install',
-      errMaxRow: 'Melebihi baris data yang disokong maksimum {0} baris, ini boleh menyebabkan ralat'
+      errMaxRow: 'Melebihi baris data yang disokong maksimum {0} baris, ini boleh menyebabkan ralat',
+      useNew: '{0} 已经不建议使用，请使用新的方式 {1}'
     },
     table: {
       emptyText: 'Belum ada data',
