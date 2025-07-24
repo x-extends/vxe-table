@@ -131,7 +131,7 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
     const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
     let isVNPreEmptyStatus = false
-    if (isOptimizeMode && !isMergeCell) {
+    if (isOptimizeMode && overflowX && !isMergeCell) {
       if (scrollXLoad && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
         isVNPreEmptyStatus = true
       }
