@@ -532,6 +532,24 @@ function handleRowGroupVirtualExpand ($xeTable: VxeTableConstructor & VxeTablePr
   })
 }
 
+/**
+ * 处理默认展开分组行
+ */
+function handleDefaultRowGroupExpand ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const reactData = $xeTable as unknown as TableReactData
+
+  const { isRowGroupStatus } = reactData
+  if (isRowGroupStatus) {
+    const aggregateOpts = $xeTable.computeAggregateOpts
+    const { expandAll, expandGroupFields } = aggregateOpts
+    if (expandAll) {
+      $xeTable.setAllRowGroupExpand(true)
+    } else if (expandGroupFields && expandGroupFields.length) {
+      $xeTable.setRowGroupExpandByField(expandGroupFields, true)
+    }
+  }
+}
+
 function updateAfterListIndex ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const props = $xeTable
   const internalData = $xeTable as unknown as TableInternalData
@@ -1557,19 +1575,17 @@ const handleDefaultTreeExpand = ($xeTable: VxeTableConstructor) => {
 
   const { treeConfig } = props
   if (treeConfig) {
-    const { tableFullData } = internalData
+    const { fullAllDataRowIdData } = internalData
     const treeOpts = $xeTable.computeTreeOpts
     const { expandAll, expandRowKeys } = treeOpts
-    const childrenField = treeOpts.children || treeOpts.childrenField
     if (expandAll) {
       $xeTable.setAllTreeExpand(true)
     } else if (expandRowKeys) {
       const defExpandeds: any[] = []
-      const rowkey = getRowkey($xeTable)
-      expandRowKeys.forEach((rowid: any) => {
-        const matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), { children: childrenField })
-        if (matchObj) {
-          defExpandeds.push(matchObj.item)
+      expandRowKeys.forEach((rowid) => {
+        const rowRest = fullAllDataRowIdData[rowid]
+        if (rowRest) {
+          defExpandeds.push(rowRest.row)
         }
       })
       $xeTable.setTreeExpand(defExpandeds, true)
@@ -3069,6 +3085,13 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
           }
           reactData.isRowLoading = false
           handleRecalculateStyle($xeTable, false, false, false)
+          // 如果是自动行高，特殊情况需调用 recalculate 手动刷新
+          if (!props.showOverflow) {
+            setTimeout(() => {
+              handleLazyRecalculate($xeTable, false, true, true)
+              setTimeout(() => handleLazyRecalculate($xeTable, false, true, true), 3000)
+            }, 2000)
+          }
           // 是否变更虚拟滚动
           if (oldScrollYLoad === sYLoad) {
             restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop)
@@ -3101,6 +3124,7 @@ function handleLoadDefaults ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
   handleDefaultRadioChecked($xeTable)
   handleDefaultRowExpand($xeTable)
   handleDefaultTreeExpand($xeTable)
+  handleDefaultRowGroupExpand($xeTable)
   handleDefaultMergeCells($xeTable)
   handleDefaultMergeFooterItems($xeTable)
   $xeTable.$nextTick(() => setTimeout(() => $xeTable.recalculate()))
@@ -5359,6 +5383,29 @@ const Methods = {
   handleRefreshColumnQueue () {
     this.reColumnFlag++
   },
+  handleFilterOptions (column: VxeTableDefines.ColumnInfo) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+
+    const { filterStore } = reactData
+    const { filters, filterMultiple, filterRender } = column
+    const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+    const frMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
+    filterStore.multiple = filterMultiple
+    filterStore.options = filters
+    filterStore.column = column
+    // 复原状态
+    filterStore.options.forEach((option: any) => {
+      const { _checked, checked } = option
+      option._checked = checked
+      if (!checked && _checked !== checked) {
+        if (frMethod) {
+          frMethod({ option, column, $table: $xeTable })
+        }
+      }
+    })
+    $xeTable.checkFilterOptions()
+  },
   /**
    * 刷新列配置
    */
@@ -5426,7 +5473,7 @@ const Methods = {
     evnt.preventDefault()
     const { column } = params
     const { columnStore, overflowX, scrollbarHeight } = reactData
-    const { elemStore, visibleColumn } = internalData
+    const { visibleColumn } = internalData
     const { leftList, rightList } = columnStore
     const resizableOpts = $xeTable.computeResizableOpts
     const osbHeight = overflowX ? scrollbarHeight : 0
@@ -5444,25 +5491,30 @@ const Methods = {
     const { clientX: dragClientX } = evnt
     const dragBtnElem = evnt.target as HTMLDivElement
     let resizeColumn = column
-    if (column.children && column.children.length) {
+    const isDragGroupCol = column.children && column.children.length
+    if (isDragGroupCol) {
       XEUtils.eachTree(column.children, childColumn => {
         resizeColumn = childColumn
       })
     }
-    const cell = dragBtnElem.parentNode as HTMLTableCellElement
-    const cellParams = Object.assign(params, { cell })
-    let dragLeft = 0
-    const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
-    if (!bodyScrollElem) {
+    let cell = dragBtnElem.parentElement as HTMLTableCellElement | null
+    if (isDragGroupCol) {
+      const trEl = cell ? cell.parentElement as HTMLTableRowElement : null
+      const theadEl = trEl ? trEl.parentElement as HTMLTableElement : null
+      cell = theadEl ? theadEl.querySelector<HTMLTableCellElement>(`.vxe-header--column[colid="${resizeColumn.id}"]`) : null
+    }
+    if (!cell) {
       return
     }
+    const cellParams = XEUtils.assign(params, { cell })
+    let dragLeft = 0
     const tableRect = tableEl.getBoundingClientRect()
     const rightContainerRect = rightContainerElem ? rightContainerElem.getBoundingClientRect() : null
     const cellRect = cell.getBoundingClientRect()
     const dragBtnRect = dragBtnElem.getBoundingClientRect()
 
     const dragBtnWidth = dragBtnElem.clientWidth
-    const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
+    const dragBtnOffsetWidth = XEUtils.floor(dragBtnWidth / 2)
     const dragPosLeft = dragBtnRect.x - tableRect.x + dragBtnOffsetWidth
 
     const minInterval = getColReMinWidth(cellParams) - dragBtnOffsetWidth // 列之间的最小间距
@@ -7928,8 +7980,8 @@ const Methods = {
         $xeTable.handleHeaderCellDragMousedownEvent(evnt, params)
       }
     }
-    if (!triggerDrag && mouseConfig && mouseOpts.area && $xeTable.handleHeaderCellAreaEvent) {
-      $xeTable.handleHeaderCellAreaEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
+    if (!triggerDrag && mouseConfig && mouseOpts.area && $xeTable.handleHeaderCellAreaModownEvent) {
+      $xeTable.handleHeaderCellAreaModownEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
     }
     $xeTable.focus()
     if ($xeTable.closeMenu) {
@@ -8946,8 +8998,7 @@ const Methods = {
   setSort (sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    // 已废弃，即将去掉事件触发 new Event('click') -> null
-    return handleSortEvent($xeTable, new Event('click'), sortConfs, isUpdate)
+    return handleSortEvent($xeTable, null, sortConfs, isUpdate)
   },
   setSortByEvent (evnt: Event, sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -9044,12 +9095,18 @@ const Methods = {
   },
   setFilterByEvent (evnt: Event, fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>, options: VxeColumnPropTypes.FilterItem[], isUpdate?: boolean) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
 
+    const { filterStore } = reactData
     const column = handleFieldOrColumn($xeTable, fieldOrColumn)
     if (column && column.filters) {
       column.filters = toFilters(options || [])
       if (isUpdate) {
         return $xeTable.handleColumnConfirmFilter(column, evnt)
+      } else {
+        if (filterStore.visible) {
+          $xeTable.handleFilterOptions(column)
+        }
       }
     }
     return $xeTable.$nextTick()
@@ -9475,6 +9532,36 @@ const Methods = {
         rows = [rows]
       }
       return handleRowGroupVirtualExpand($xeTable, rows, expanded)
+    }
+    return $xeTable.$nextTick()
+  },
+  setRowGroupExpandByField (groupFields: string | string[], expanded: boolean) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { isRowGroupStatus } = reactData
+    const aggregateOpts = $xeTable.computeAggregateOpts
+    const { childrenField } = aggregateOpts
+    if (groupFields) {
+      if (!XEUtils.isArray(groupFields)) {
+        groupFields = [groupFields]
+      }
+      if (isRowGroupStatus) {
+        const rows: any[] = []
+        const gfKeys: Record<string, boolean> = {}
+        groupFields.forEach(groupField => {
+          gfKeys[groupField] = true
+        })
+        XEUtils.eachTree(internalData.afterGroupFullData, (row) => {
+          if (row.isAggregate && gfKeys[row.groupField]) {
+            rows.push(row)
+          }
+        }, { children: childrenField })
+        if (rows.length) {
+          return handleRowGroupVirtualExpand($xeTable, rows, expanded)
+        }
+      }
     }
     return $xeTable.$nextTick()
   },
@@ -10531,10 +10618,8 @@ const Methods = {
   },
   /**
    * 如果有滚动条，则滚动到对应的位置
-   * @param {Number} scrollLeft 左距离
-   * @param {Number} scrollTop 上距离
    */
-  scrollTo (scrollLeft: number | null, scrollTop?: number | null) {
+  scrollTo (scrollLeft: { top?: number | null; left?: number | null; } | number | null | undefined, scrollTop?: number | null) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
@@ -10550,6 +10635,12 @@ const Methods = {
 
     internalData.intoRunScroll = true
 
+    if (scrollLeft) {
+      if (!XEUtils.isNumber(scrollLeft)) {
+        scrollTop = scrollLeft.top
+        scrollLeft = scrollLeft.left
+      }
+    }
     if (XEUtils.isNumber(scrollLeft)) {
       setScrollLeft(xHandleEl, scrollLeft)
       setScrollLeft(bodyScrollElem, scrollLeft)

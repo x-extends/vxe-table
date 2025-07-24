@@ -35,14 +35,19 @@ export default {
      * @param {Array} options 选项
      */
     _setFilter (fieldOrColumn: any, options: any, isUpdate: any) {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
-      const column = handleFieldOrColumn(this, fieldOrColumn)
+      const { filterStore } = reactData
+      const column = handleFieldOrColumn($xeTable, fieldOrColumn)
       if (column && column.filters) {
         column.filters = toFilters(options || [])
         if (isUpdate) {
-          // 已废弃，即将去掉事件触发 new Event('click') -> null
-          return $xeTable.handleColumnConfirmFilter(column, new Event('click'))
+          return $xeTable.handleColumnConfirmFilter(column, null)
+        } else {
+          if (filterStore.visible) {
+            $xeTable.handleFilterOptions(column)
+          }
         }
       }
       return $xeTable.$nextTick()
@@ -61,8 +66,8 @@ export default {
      * @param {ColumnInfo} column 列配置
      * @param {Object} params 参数
      */
-    triggerFilterEvent (evnt: any, column: any, params: any) {
-      const $xeTable = this as VxeTableConstructor
+    triggerFilterEvent (evnt: MouseEvent, column: VxeTableDefines.ColumnInfo, params: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
 
@@ -81,27 +86,9 @@ export default {
           const { transfer } = filterOpts
           const tableRect = el.getBoundingClientRect()
           const btnElem = evnt.currentTarget as HTMLDivElement
-          const { filters, filterMultiple, filterRender } = column
-          const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
-          const frMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
+          $xeTable.handleFilterOptions(column)
           internalData._currFilterParams = params
-          Object.assign(filterStore, {
-            multiple: filterMultiple,
-            options: filters,
-            column,
-            style: null
-          })
-          // 复原状态
-          filterStore.options.forEach((option: any) => {
-            const { _checked, checked } = option
-            option._checked = checked
-            if (!checked && _checked !== checked) {
-              if (frMethod) {
-                frMethod({ option, column, $table: $xeTable })
-              }
-            }
-          })
-          this.checkFilterOptions()
+          filterStore.style = null
           filterStore.visible = true
           initStore.filter = true
           $xeTable.$nextTick(() => {

@@ -307,6 +307,7 @@ $btnThemeList: (
 
 .vxe-table--checkbox-range,
 .vxe-table--cell-main-area,
+.vxe-table--cell-item-area,
 .vxe-table--cell-extend-area,
 .vxe-table--cell-active-area,
 .vxe-table--cell-copy-area,
@@ -329,6 +330,7 @@ $btnThemeList: (
 .vxe-table--fixed-right-wrapper {
   .vxe-table--checkbox-range,
   .vxe-table--cell-main-area,
+  .vxe-table--cell-item-area,
   .vxe-table--cell-extend-area,
   .vxe-table--cell-active-area,
   .vxe-table--cell-copy-area,
@@ -340,6 +342,7 @@ $btnThemeList: (
 
 .vxe-table--fixed-left-wrapper {
   .vxe-table--cell-main-area,
+  .vxe-table--cell-item-area,
   .vxe-table--cell-extend-area,
   .vxe-table--cell-active-area {
     &[half="1"] {
@@ -348,13 +351,14 @@ $btnThemeList: (
   }
   .vxe-table--cell-copy-area {
     &[half="1"] {
-      background-size: var(--vxe-ui-table-cell-copy-area-border-width) 12px, 0 12px, 12px var(--vxe-ui-table-cell-copy-area-border-width), 12px var(--vxe-ui-table-cell-copy-area-border-width);
+      background-size: var(--vxe-ui-table-cell-clip-area-border-width) 12px, 0 12px, 12px var(--vxe-ui-table-cell-clip-area-border-width), 12px var(--vxe-ui-table-cell-clip-area-border-width);
     }
   }
 }
 
 .vxe-table--fixed-right-wrapper {
   .vxe-table--cell-main-area,
+  .vxe-table--cell-item-area,
   .vxe-table--cell-extend-area,
   .vxe-table--cell-active-area {
     &[half="1"] {
@@ -363,7 +367,7 @@ $btnThemeList: (
   }
   .vxe-table--cell-copy-area {
     &[half="1"] {
-      background-size: 0 12px, var(--vxe-ui-table-cell-copy-area-border-width) 12px, 12px var(--vxe-ui-table-cell-copy-area-border-width), 12px var(--vxe-ui-table-cell-copy-area-border-width);
+      background-size: 0 12px, var(--vxe-ui-table-cell-clip-area-border-width) 12px, 12px var(--vxe-ui-table-cell-clip-area-border-width), 12px var(--vxe-ui-table-cell-clip-area-border-width);
     }
   }
 }
@@ -420,11 +424,11 @@ $btnThemeList: (
 }
 
 .vxe-table--cell-copy-area {
-  background: linear-gradient(0deg, transparent 6px, var(--vxe-ui-table-cell-copy-area-border-color) 6px) repeat-y,
-              linear-gradient(0deg, transparent 50%, var(--vxe-ui-table-cell-copy-area-border-color) 0) repeat-y,
-              linear-gradient(90deg, transparent 50%, var(--vxe-ui-table-cell-copy-area-border-color) 0) repeat-x,
-              linear-gradient(90deg, transparent 50%, var(--vxe-ui-table-cell-copy-area-border-color) 0) repeat-x;
-  background-size: var(--vxe-ui-table-cell-copy-area-border-width) 12px, var(--vxe-ui-table-cell-copy-area-border-width) 12px, 12px var(--vxe-ui-table-cell-copy-area-border-width), 12px var(--vxe-ui-table-cell-copy-area-border-width);
+  background: linear-gradient(0deg, transparent 6px, var(--vxe-ui-table-cell-clip-area-border-color) 6px) repeat-y,
+              linear-gradient(0deg, transparent 50%, var(--vxe-ui-table-cell-clip-area-border-color) 0) repeat-y,
+              linear-gradient(90deg, transparent 50%, var(--vxe-ui-table-cell-clip-area-border-color) 0) repeat-x,
+              linear-gradient(90deg, transparent 50%, var(--vxe-ui-table-cell-clip-area-border-color) 0) repeat-x;
+  background-size: var(--vxe-ui-table-cell-clip-area-border-width) 12px, var(--vxe-ui-table-cell-clip-area-border-width) 12px, 12px var(--vxe-ui-table-cell-clip-area-border-width), 12px var(--vxe-ui-table-cell-clip-area-border-width);
   background-position: 0 0, 100% 0, 0 0, 0 100%;
   animation: moveCopyCellBorder .5s infinite linear;
 }
@@ -437,7 +441,7 @@ $btnThemeList: (
 }
 
 .vxe-table--cell-multi-area {
-  & > .vxe-table--cell-main-area {
+  & > .vxe-table--cell-item-area {
     background-color: var(--vxe-ui-table-cell-area-background-color);
   }
 }

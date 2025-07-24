@@ -17,6 +17,7 @@ export default {
       groupTag: 'Grouping column headers should use "{0}" instead of "{1}", which may cause errors',
       scrollErrProp: 'This parameter "{0}" is not supported after virtual scrolling is enabled',
       errConflicts: 'Parameter "{0}" conflicts with "{1}"',
+      modelConflicts: 'The bound field values "{0}" and "{1}" conflict, an error will occur.',
       notSupportProp: '"{1}" is not supported when the parameter "{0}" is enabled, it should be "{2}", otherwise an error will occur',
       notConflictProp: 'When using "{0}", "{1}" should be set, otherwise there may be functional conflicts',
       unableInsert: 'Cannot be inserted into the specified location, please check whether the parameters are correct',
@@ -54,7 +55,8 @@ export default {
       treeCrossDrag: 'Only drag the first level',
       treeDragChild: 'Parents cannot drag to their own children',
       reqPlugin: '"{1}" is not installed at https://vxeui.com/other{0}/#/{1}/install',
-      errMaxRow: 'Exceeding the maximum supported data volume {0} rows, this may cause an error'
+      errMaxRow: 'Exceeding the maximum supported data volume {0} rows, this may cause an error',
+      useNew: '{0} is no longer recommended for use. Please use the new method {1} instead.'
     },
     table: {
       emptyText: 'No data yet',

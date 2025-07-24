@@ -1059,9 +1059,12 @@ export default {
       return Object.assign({}, getConfig().table.clipConfig, this.clipConfig)
     },
     fnrOpts () {
-      return this.computeFNROpts
+      return this.computeFnrOpts
     },
     computeFNROpts () {
+      return this.computeFnrOpts
+    },
+    computeFnrOpts () {
       return Object.assign({}, getConfig().table.fnrConfig, this.fnrConfig)
     },
     headerCtxMenu () {
@@ -1686,7 +1689,7 @@ export default {
     if (rowOpts.height && !this.showOverflow) {
       warnLog('vxe.error.notProp', ['table.show-overflow'])
     }
-    if (!$xeTable.triggerCellAreaMousednEvent) {
+    if (!$xeTable.triggerCellAreaModownEvent) {
       if (props.areaConfig) {
         warnLog('vxe.error.notProp', ['area-config'])
       }

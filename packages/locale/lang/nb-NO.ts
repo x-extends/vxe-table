@@ -17,6 +17,7 @@ export default {
       groupTag: 'Gruppering av kolonneoverskrifter bør bruke "{0}" i stedet for "{1}", som kan forårsake feil',
       scrollErrProp: 'Denne parameteren "{0}" støttes ikke etter at virtuell rulling er aktivert',
       errConflicts: 'Parameter "{0}" Konflikter med "{1}"',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '"{1}" støttes ikke når parameteren "{0}" er aktivert, den skal være "{2}", ellers vil det oppstå en feil',
       notConflictProp: 'Når du bruker "{0}", "{1}" skal settes, ellers kan det være funksjonelle konflikter',
       unableInsert: 'Kan ikke settes inn på det spesifiserte stedet, vennligst sjekk om parametrene er riktige',
@@ -54,7 +55,8 @@ export default {
       treeCrossDrag: 'Bare dra det første nivået',
       treeDragChild: 'Foreldre kan ikke dra til sine egne barn',
       reqPlugin: '"{1}" er ikke installert på http',
-      errMaxRow: 'Overskridende det maksimale støttede datavolumet {0} Rader, dette kan føre til en feil'
+      errMaxRow: 'Overskridende det maksimale støttede datavolumet {0} Rader, dette kan føre til en feil',
+      useNew: '{0} 已经不建议使用，请使用新的方式 {1}'
     },
     table: {
       emptyText: 'Ingen data ennå',

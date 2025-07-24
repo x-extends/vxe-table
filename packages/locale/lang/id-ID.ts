@@ -17,6 +17,7 @@ export default {
       groupTag: 'Mengelompokkan header kolom harus menggunakan "{0}" bukan "{1}", yang dapat menyebabkan kesalahan',
       scrollErrProp: 'Parameter ini "{0}" tidak didukung setelah pengguliran virtual diaktifkan',
       errConflicts: 'Parameter "{0}" bertentangan dengan "{1}"',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '"{1}" tidak didukung ketika parameter "{0}" diaktifkan, itu harus menjadi "{2}", jika tidak kesalahan akan terjadi',
       notConflictProp: 'Saat menggunakan "{0}", "{1}" harus diatur, jika tidak mungkin ada konflik fungsional',
       unableInsert: 'Tidak dapat dimasukkan ke lokasi yang ditentukan, silakan periksa apakah parameternya benar',
@@ -54,7 +55,8 @@ export default {
       treeCrossDrag: 'Hanya menyeret level pertama',
       treeDragChild: 'Orang tua tidak bisa menyeret ke anak -anak mereka sendiri',
       reqPlugin: '"{1}" tidak diinstal di https://vxeUi.com/other{ 0',
-      errMaxRow: 'Melebihi volume data yang didukung maksimum {0}, ini dapat menyebabkan kesalahan'
+      errMaxRow: 'Melebihi volume data yang didukung maksimum {0}, ini dapat menyebabkan kesalahan',
+      useNew: '{0} 已经不建议使用，请使用新的方式 {1}'
     },
     table: {
       emptyText: 'Belum ada data',

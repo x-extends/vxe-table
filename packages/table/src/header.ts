@@ -387,7 +387,7 @@ export default {
                 class: 'vxe-table--cell-main-area'
               }),
               h('span', {
-                class: 'vxe-table--cell-copy-area'
+                class: 'vxe-table--cell-clip-area'
               }),
               h('span', {
                 class: 'vxe-table--cell-extend-area'
