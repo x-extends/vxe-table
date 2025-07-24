@@ -55,7 +55,8 @@ export default {
       treeCrossDrag: 'Chỉ kéo cấp độ đầu tiên',
       treeDragChild: 'Cha mẹ không thể kéo đến con cái của họ',
       reqPlugin: '"{1}" không được cài đặt tại https://vxeui.com/other/khác',
-      errMaxRow: 'Vượt quá khối lượng dữ liệu được hỗ trợ tối đa {0}, điều này có thể gây ra lỗi'
+      errMaxRow: 'Vượt quá khối lượng dữ liệu được hỗ trợ tối đa {0}, điều này có thể gây ra lỗi',
+      useNew: '{0} 已经不建议使用，请使用新的方式 {1}'
     },
     table: {
       emptyText: 'Chưa có dữ liệu',
