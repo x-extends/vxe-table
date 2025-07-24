@@ -5,7 +5,7 @@ import { toFilters, handleFieldOrColumn, getRefElem } from '../../src/util'
 import { toCssUnit, triggerEvent, getDomNode } from '../../../ui/src/dom'
 import { isEnableConf } from '../../../ui/src/utils'
 
-import type { TableFilterMethods, TableFilterPrivateMethods } from '../../../../types'
+import type { TableFilterMethods, TableFilterPrivateMethods, VxeTableDefines } from '../../../../types'
 
 const { renderer, hooks } = VxeUI
 
@@ -72,7 +72,7 @@ hooks.add('tableFilterModule', {
        * @param {ColumnInfo} column 列配置
        * @param {Object} params 参数
        */
-      triggerFilterEvent (evnt: MouseEvent, column, params) {
+      triggerFilterEvent (evnt: MouseEvent, column: VxeTableDefines.ColumnInfo, params) {
         const { initStore, filterStore } = reactData
         const { elemStore } = internalData
         if (filterStore.column === column && filterStore.visible) {
@@ -84,27 +84,9 @@ hooks.add('tableFilterModule', {
           const { transfer } = filterOpts
           const tableRect = el.getBoundingClientRect()
           const btnElem = evnt.currentTarget as HTMLDivElement
-          const { filters, filterMultiple, filterRender } = column
-          const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
-          const frMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
+          $xeTable.handleFilterOptions(column)
           internalData._currFilterParams = params
-          Object.assign(filterStore, {
-            multiple: filterMultiple,
-            options: filters,
-            column,
-            style: null
-          })
-          // 复原状态
-          filterStore.options.forEach((option: any) => {
-            const { _checked, checked } = option
-            option._checked = checked
-            if (!checked && _checked !== checked) {
-              if (frMethod) {
-                frMethod({ option, column, $table: $xeTable })
-              }
-            }
-          })
-          this.checkFilterOptions()
+          filterStore.style = null
           filterStore.visible = true
           initStore.filter = true
           nextTick(() => {
@@ -271,12 +253,16 @@ hooks.add('tableFilterModule', {
        * @param {Array} options 选项
        */
       setFilter (fieldOrColumn, options, isUpdate) {
+        const { filterStore } = reactData
         const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column && column.filters) {
           column.filters = toFilters(options || [])
           if (isUpdate) {
-            // 已废弃，即将去掉事件触发 new Event('click') -> null
-            return $xeTable.handleColumnConfirmFilter(column, new Event('click'))
+            return $xeTable.handleColumnConfirmFilter(column, null)
+          } else {
+            if (filterStore.visible) {
+              $xeTable.handleFilterOptions(column)
+            }
           }
         }
         return nextTick()

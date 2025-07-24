@@ -1,57 +1,54 @@
 <template>
   <div>
-    <vxe-button @click="printEvent">自定义打印</vxe-button>
-
-    <vxe-table
-      border
-      height="500"
-      ref="tableRef"
-      :data="tableData">
-      <vxe-column type="seq" width="70"></vxe-column>
-      <vxe-column field="name" title="Name"></vxe-column>
-      <vxe-column field="sex" title="Sex"></vxe-column>
-      <vxe-column field="address" title="Address"></vxe-column>
-    </vxe-table>
+    <vxe-button @click="exportEvent">高级导出</vxe-button>
+    <vxe-button @click="importEvent">高级导入</vxe-button>
+    <vxe-grid ref="gridRef" v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { VxeUI } from 'vxe-pc-ui'
-import { VxeTableInstance } from '../../../types'
+import { ref, reactive } from 'vue'
+import type { VxeGridInstance, VxeGridProps } from '../../../types'
 
 interface RowVO {
   id: number
   name: string
   role: string
   sex: string
+  age: number
   address: string
 }
 
-const tableRef = ref<VxeTableInstance>()
+const gridRef = ref<VxeGridInstance<RowVO>>()
 
-const list: RowVO[] = []
-for (let i = 0; i < 100; i++) {
-  list.push({
-    id: 10000 + i,
-    name: 'Test1',
-    role: 'Develop',
-    sex: 'Man',
-    address: 'test abc'
-  })
+const gridOptions = reactive<VxeGridProps<RowVO>>({
+  importConfig: {},
+  exportConfig: {},
+  columns: [
+    { type: 'seq', width: 70 },
+    { field: 'name', title: '名字' },
+    { field: 'sex', title: '性别' },
+    { field: 'age', title: '年龄' }
+  ],
+  data: [
+    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+    { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+    { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
+  ]
+})
+
+const exportEvent = () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    $grid.openExport()
+  }
 }
 
-const tableData = ref(list)
-
-const printEvent = () => {
-  const $table = tableRef.value
-  if ($table) {
-    $table.getPrintHtml().then(({ html }) => {
-      VxeUI.print({
-        title: '标题1',
-        html: html
-      })
-    })
+const importEvent = () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    $grid.openImport()
   }
 }
 </script>

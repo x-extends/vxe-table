@@ -17,6 +17,7 @@ export default {
       groupTag: 'Le intestazioni della colonna di raggruppamento dovrebbero usare "{0}" invece di "{1}", che può causare errori',
       scrollErrProp: 'Questo parametro "{0}" non è supportato dopo che lo scorrimento virtuale è abilitato',
       errConflicts: 'Parametro "{0}" conflitti con "{1}"',
+      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '"{1}" non è supportato quando il parametro "{0}" è abilitato, dovrebbe essere "{2}", altrimenti si verificherà un errore',
       notConflictProp: 'Quando si utilizza "{0}", "{1}" dovrebbe essere impostato, altrimenti potrebbero esserci conflitti funzionali',
       unableInsert: 'Non può essere inserito nella posizione specificata, si prega di verificare se i parametri sono corretti',
@@ -54,7 +55,8 @@ export default {
       treeCrossDrag: 'Trascina solo il primo livello',
       treeDragChild: 'I genitori non possono trascinare con i propri figli',
       reqPlugin: '"{1}" non è installato su https://vxeui.com/other{0}/#/{1}/install',
-      errMaxRow: 'Superando il volume dei dati supportato massimo {0} righe, questo può causare un errore'
+      errMaxRow: 'Superando il volume dei dati supportato massimo {0} righe, questo può causare un errore',
+      useNew: '{0} 已经不建议使用，请使用新的方式 {1}'
     },
     table: {
       emptyText: 'Nessun dati ancora',
