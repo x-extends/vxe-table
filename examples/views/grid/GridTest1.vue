@@ -1,57 +1,104 @@
 <template>
   <div>
-    <vxe-grid v-bind="gridOptions">
-      <template #rateAddress>
-        <span>标题显示原生 title ___________________________</span>
-      </template>
+    <vxe-button @click="handleSort('role', 'desc')">只修改 role 倒序</vxe-button>
+    <vxe-button @click="handleSort('role', 'asc')">只修改 role 升序</vxe-button>
+    <vxe-button @click="handleUpdateSort($event, 'role', 'desc')">修改并触发 role 倒序</vxe-button>
+    <vxe-button @click="handleUpdateSort($event, 'role', 'asc')">修改并触发 role 升序</vxe-button>
+    <vxe-button @click="handleClearEvent">清除排序</vxe-button>
+
+    <vxe-grid
+      ref="gridRef"
+      v-bind="gridOptions"
+      @sort-change="sortChangeEvent"
+      @clear-all-sort="clearSortSortEvent">
     </vxe-grid>
   </div>
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 export default {
   data () {
     const gridOptions = {
-      showFooter: true,
-      rowConfig: {
-        isHover: true
+      border: true,
+      loading: false,
+      height: 300,
+      sortConfig: {
+        remote: true,
+        multiple: true
       },
       columns: [
         { type: 'seq', width: 70 },
-        { field: 'name', title: '名称', showOverflow: 'ellipsis' },
-        { field: 'role', title: '角色', showOverflow: true },
-        { field: 'date', title: '标题溢出，显示为 tooltip xxxxxxxxxx', showHeaderOverflow: true, showOverflow: 'title', showFooterOverflow: true },
-        { field: 'rate', title: 'Rate', showHeaderOverflow: 'title', slots: { header: 'rateAddress' } },
-        { field: 'address', title: '不换行不换行不换行不换行不换行不换行不换行不换行不换行', width: 160 }
+        { field: 'name', title: 'Name' },
+        { field: 'role', title: 'Role', sortable: true },
+        { field: 'sex', title: 'Sex', sortable: true },
+        { field: 'age', title: 'Age', sortable: true },
+        { field: 'address', title: 'Address', sortable: true }
       ],
-      data: [
-        { name: 'Test1', role: '前端', date: '内容显示原生 title', rate: 5, address: 'address1' },
-        { name: '内容超出隐藏，不显示提示信息xxxxxxxxxxxxxxxxxxx', role: '后端', date: '2020-02-22', rate: 2, address: 'address2\ntooltip文本换行\n换行xx' },
-        { name: 'Test3', role: '内容超出一行显示为 tooltip xxxxxxxxxxxxxx', date: '2020-01-01', rate: 0, address: 'address3\ntooltip文本换行\n换行xx' },
-        { name: 'Test4', role: '设计师', date: '2020-02-23', rate: 1, address: 'address4' },
-        { name: 'Test5', role: '前端', date: '2020-01-20', rate: 3, address: 'address5\ntooltip文本换行\n换行xx' }
-      ],
-      footerMethod ({ columns }) {
-        const footerData = [
-          columns.map((column, columnIndex) => {
-            if (columnIndex === 0) {
-              return '合计'
-            }
-            if (['date'].includes(column.field)) {
-              return '说明 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx长文本内容长文本内容xxxxxxxxxxxxx'
-            }
-            if (['rate'].includes(column.field)) {
-              return '不想换行不想换行不想换行不想换行不想换行不想换行不想换行不想换行'
-            }
-            return null
-          })
-        ]
-        return footerData
-      }
+      data: []
     }
     return {
       gridOptions
     }
+  },
+  methods: {
+    findList (field, order) {
+      this.gridOptions.loading = true
+      // 模拟接口
+      return new Promise(resolve => {
+        setTimeout(() => {
+          this.gridOptions.loading = false
+          const mockList = [
+            { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, num: '3.8', num2: '3.8', address: 'test abc' },
+            { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, num: '511', num2: '511', address: 'Guangzhou' },
+            { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, num: '12.8', num2: '12.8', address: 'Shanghai' },
+            { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, num: '103', num2: '103', address: 'test abc' },
+            { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, num: '56', num2: '56', address: 'Shanghai' },
+            { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 21, num: '49', num2: '49', address: 'test abc' },
+            { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, num: '400.9', num2: '400.9', address: 'test abc' },
+            { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, num: '5000', num2: '5000', address: 'test abc' }
+          ]
+          if (field && order) {
+            const rest = XEUtils.orderBy(mockList, { field, order })
+            this.gridOptions.data = rest
+            resolve(rest)
+          } else {
+            this.gridOptions.data = mockList
+            resolve(mockList)
+          }
+        }, 300)
+      })
+    },
+    sortChangeEvent ({ field, order }) {
+      this.findList(field, order)
+    },
+    clearSortSortEvent () {
+      this.findList('', null)
+    },
+    handleSort (field, order) {
+      const $grid = this.$refs.gridRef
+      if ($grid) {
+        // 设置排序状态，默认不会更新数据，调用该方法不会触发任何事件
+        $grid.setSort({ field, order })
+      }
+    },
+    handleUpdateSort (params, field, order) {
+      const $grid = this.$refs.gridRef
+      if ($grid) {
+        // 设置排序状态，调用该方法会自动触发 sort-change 事件
+        $grid.setSortByEvent(params.$event, { field, order })
+      }
+    },
+    handleClearEvent ({ $event }) {
+      const $grid = this.$refs.gridRef
+      if ($grid) {
+        // 单列排序模式，清除排序，调用该方法会自动触发 clear-sort 与 sort-change 事件
+        $grid.clearSortByEvent($event)
+      }
+    }
+  },
+  created () {
+    this.findList()
   }
 }
 </script>

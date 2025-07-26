@@ -2039,16 +2039,25 @@ function removeFooterMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
 }
 
 function handleSortEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: Event | null, sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { tableFullColumn } = internalData
   const sortOpts = $xeTable.computeSortOpts
   const { multiple, remote, orders } = sortOpts
   if (!XEUtils.isArray(sortConfs)) {
     sortConfs = [sortConfs]
   }
   if (sortConfs && sortConfs.length) {
+    const orderActiveMaps: Record<string, VxeTableDefines.ColumnInfo> = {}
     if (!multiple) {
       sortConfs = [sortConfs[0]]
-      clearAllSort($xeTable)
+      tableFullColumn.forEach((column) => {
+        if (column.order) {
+          orderActiveMaps[column.id] = column
+        }
+      })
     }
+    const sortColMpps: Record<string, VxeTableDefines.ColumnInfo> = {}
     let firstColumn: any = null
     sortConfs.forEach((confs: any, index: number) => {
       let { field, order } = confs
@@ -2067,8 +2076,16 @@ function handleSortEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
           column.order = order
         }
         column.sortTime = Date.now() + index
+        sortColMpps[column.id] = column
       }
     })
+    if (!multiple) {
+      XEUtils.each(orderActiveMaps, (oaCol: VxeTableDefines.ColumnInfo, oaId) => {
+        if (!sortColMpps[oaId]) {
+          oaCol.order = null
+        }
+      })
+    }
     if (isUpdate) {
       if (!remote) {
         $xeTable.handleTableData(true)

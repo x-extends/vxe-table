@@ -31,9 +31,11 @@ function getTableOns (_vm: any) {
   if (proxyConfig) {
     if (proxyOpts.sort) {
       ons['sort-change'] = _vm.sortChangeEvent
+      ons['clear-all-sort'] = _vm.clearAllSortEvent
     }
     if (proxyOpts.filter) {
       ons['filter-change'] = _vm.filterChangeEvent
+      ons['clear-all-filter'] = _vm.clearAllFilterEvent
     }
   }
   return ons
@@ -978,6 +980,24 @@ export default /* define-vxe-component start */ defineVxeComponent({
       $xeGrid.triggerToolbarCommitEvent(tool, evnt)
       $xeGrid.dispatchEvent('toolbar-tool-click', { code: tool.code, tool }, evnt)
     },
+    pageChangeEvent (params: VxePagerDefines.PageChangeEventParams) {
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
+
+      const { proxyConfig } = props
+      const { tablePage } = reactData
+      const { $event, currentPage, pageSize } = params
+      const proxyOpts = $xeGrid.computeProxyOpts
+      tablePage.currentPage = currentPage
+      tablePage.pageSize = pageSize
+      $xeGrid.dispatchEvent('page-change', params, $event)
+      if (proxyConfig && isEnableConf(proxyOpts)) {
+        $xeGrid.commitProxy('query').then((rest) => {
+          $xeGrid.dispatchEvent('proxy-query', rest, $event)
+        })
+      }
+    },
     sortChangeEvent (params: VxeTableDefines.SortChangeEventParams) {
       const $xeGrid = this
       const props = $xeGrid
@@ -999,23 +1019,26 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }
       $xeGrid.dispatchEvent('sort-change', params, params.$event)
     },
-    pageChangeEvent (params: VxePagerDefines.PageChangeEventParams) {
+    clearAllSortEvent (params: VxeTableDefines.SortChangeEventParams) {
       const $xeGrid = this
       const props = $xeGrid
       const reactData = $xeGrid.reactData
+      const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
 
       const { proxyConfig } = props
-      const { tablePage } = reactData
-      const { $event, currentPage, pageSize } = params
       const proxyOpts = $xeGrid.computeProxyOpts
-      tablePage.currentPage = currentPage
-      tablePage.pageSize = pageSize
-      $xeGrid.dispatchEvent('page-change', params, $event)
-      if (proxyConfig && isEnableConf(proxyOpts)) {
-        $xeGrid.commitProxy('query').then((rest) => {
-          $xeGrid.dispatchEvent('proxy-query', rest, $event)
-        })
+      const sortOpts = $xeTable.computeSortOpts
+      // 如果是服务端排序
+      if (sortOpts.remote) {
+        reactData.sortData = params.sortList
+        if (proxyConfig && isEnableConf(proxyOpts)) {
+          reactData.tablePage.currentPage = 1
+          $xeGrid.commitProxy('query').then((rest) => {
+            $xeGrid.dispatchEvent('proxy-query', rest, params.$event)
+          })
+        }
       }
+      $xeGrid.dispatchEvent('clear-all-sort', params, params.$event)
     },
     filterChangeEvent (params: VxeTableDefines.FilterChangeEventParams) {
       const $xeGrid = this
@@ -1037,6 +1060,27 @@ export default /* define-vxe-component start */ defineVxeComponent({
         }
       }
       $xeGrid.dispatchEvent('filter-change', params, params.$event)
+    },
+    clearAllFilterEvent (params: VxeTableDefines.FilterChangeEventParams) {
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
+      const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
+
+      const { proxyConfig } = props
+      const proxyOpts = $xeGrid.computeProxyOpts
+      const filterOpts = $xeTable.computeFilterOpts
+      // 如果是服务端过滤
+      if (filterOpts.remote) {
+        reactData.filterData = params.filterList
+        if (proxyConfig && isEnableConf(proxyOpts)) {
+          reactData.tablePage.currentPage = 1
+          $xeGrid.commitProxy('query').then((rest) => {
+            $xeGrid.dispatchEvent('proxy-query', rest, params.$event)
+          })
+        }
+      }
+      $xeGrid.dispatchEvent('clear-all-filter', params, params.$event)
     },
     submitFormEvent (params: VxeFormDefines.SubmitEventParams) {
       const $xeGrid = this
