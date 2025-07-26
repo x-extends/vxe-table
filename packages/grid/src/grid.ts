@@ -388,7 +388,7 @@ export default defineVxeComponent({
       }
     }
 
-    const sortChangeEvent: VxeTableEvents.SortChange = (params) => {
+    const handleSortEvent = (params: any) => {
       const $xeTable = refTable.value
       const { proxyConfig } = props
       const { computeSortOpts } = $xeTable.getComputeMaps()
@@ -404,10 +404,19 @@ export default defineVxeComponent({
           })
         }
       }
+    }
+
+    const sortChangeEvent: VxeTableEvents.SortChange = (params) => {
+      handleSortEvent(params)
       $xeGrid.dispatchEvent('sort-change', params, params.$event)
     }
 
-    const filterChangeEvent: VxeTableEvents.FilterChange = (params) => {
+    const clearAllSortEvent = (params: any) => {
+      handleSortEvent(params)
+      $xeGrid.dispatchEvent('clear-all-sort', params, params.$event)
+    }
+
+    const handleFilterEvent = (params: any) => {
       const $xeTable = refTable.value
       const { proxyConfig } = props
       const { computeFilterOpts } = $xeTable.getComputeMaps()
@@ -423,7 +432,16 @@ export default defineVxeComponent({
           })
         }
       }
+    }
+
+    const filterChangeEvent: VxeTableEvents.FilterChange = (params) => {
+      handleFilterEvent(params)
       $xeGrid.dispatchEvent('filter-change', params, params.$event)
+    }
+
+    const clearAllFilterEvent = (params: any) => {
+      handleFilterEvent(params)
+      $xeGrid.dispatchEvent('clear-all-filter', params, params.$event)
     }
 
     const submitFormEvent: VxeFormEvents.Submit = (params) => {
@@ -678,7 +696,7 @@ export default defineVxeComponent({
       const { proxyConfig } = props
       const tableProps = computeTableProps.value
       const proxyOpts = computeProxyOpts.value
-      const tableOns = Object.assign({}, tableCompEvents)
+      const tableOns: any = Object.assign({}, tableCompEvents)
       const emptySlot = slots.empty
       const loadingSlot = slots.loading
       const rowDragIconSlot = slots.rowDragIcon || slots['row-drag-icon']
@@ -686,9 +704,11 @@ export default defineVxeComponent({
       if (proxyConfig && isEnableConf(proxyOpts)) {
         if (proxyOpts.sort) {
           tableOns.onSortChange = sortChangeEvent
+          tableOns.onClearAllSort = clearAllSortEvent
         }
         if (proxyOpts.filter) {
           tableOns.onFilterChange = filterChangeEvent
+          tableOns.onClearAllFilter = clearAllFilterEvent
         }
       }
       const slotObj: {
