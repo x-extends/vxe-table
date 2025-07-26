@@ -56,7 +56,7 @@ export default {
       treeDragChild: '부모는 자신의 자녀에게 끌 수 없습니다',
       reqPlugin: '"{1}"은 https://vxeui.com/other {0 }/#/1 }/install에 설치되지 않았습니다',
       errMaxRow: '최대 지원되는 데이터 볼륨 {0} 행을 초과하면 오류가 발생할 수 있습니다.',
-      useNew: '{0} 已经不建议使用，请使用新的方式 {1}'
+      useNew: '不建议使用 {0}，请使用 {1}'
     },
     table: {
       emptyText: '아직 데이터가 없습니다',

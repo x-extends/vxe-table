@@ -5929,8 +5929,8 @@ export default defineVxeComponent({
       setSort (sortConfs, isUpdate) {
         return handleSortEvent(null, sortConfs, isUpdate)
       },
-      setSortByEvent (evnt, sortConfs, isUpdate) {
-        return handleSortEvent(evnt, sortConfs, isUpdate)
+      setSortByEvent (evnt, sortConfs) {
+        return handleSortEvent(evnt, sortConfs, true)
       },
       /**
        * 清空指定列的排序条件
@@ -5958,6 +5958,7 @@ export default defineVxeComponent({
       clearSortByEvent (evnt, fieldOrColumn) {
         const { tableFullColumn } = internalData
         const sortOpts = computeSortOpts.value
+        const { multiple } = sortOpts
         const sortCols: VxeTableDefines.ColumnInfo[] = []
         let column: VxeTableDefines.ColumnInfo<any> | null = null
         if (evnt) {
@@ -5977,11 +5978,18 @@ export default defineVxeComponent({
           if (!sortOpts.remote) {
             $xeTable.handleTableData(true)
           }
-          if (sortCols.length) {
+
+          if (!multiple) {
+            column = sortCols[0]
+          }
+
+          if (column) {
+            $xeTable.handleColumnSortEvent(evnt, column)
+          }
+
+          if (multiple && sortCols.length) {
             const params = { $table: $xeTable, $event: evnt, cols: sortCols, sortList: [] }
             dispatchEvent('clear-all-sort', params, evnt)
-          } else if (column) {
-            $xeTable.handleColumnSortEvent(evnt, column)
           }
         }
         return nextTick().then(() => {
@@ -6012,13 +6020,11 @@ export default defineVxeComponent({
         }
         return sortList
       },
-      setFilterByEvent (evnt, fieldOrColumn, options, isUpdate) {
+      setFilterByEvent (evnt, fieldOrColumn, options) {
         const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column && column.filters) {
           column.filters = toFilters(options || [])
-          if (isUpdate) {
-            return $xeTable.handleColumnConfirmFilter(column, evnt)
-          }
+          return $xeTable.handleColumnConfirmFilter(column, evnt)
         }
         return nextTick()
       },
@@ -6062,6 +6068,7 @@ export default defineVxeComponent({
         const { filterStore } = reactData
         const { tableFullColumn } = internalData
         const filterOpts = computeFilterOpts.value
+        const { multiple } = filterOpts
         const filterCols: VxeTableDefines.ColumnInfo[] = []
         let column: VxeTableDefines.ColumnInfo<any> | null = null
         if (fieldOrColumn) {
@@ -6084,19 +6091,49 @@ export default defineVxeComponent({
             style: null,
             options: [],
             column: null,
-            multiple: false,
+            multiple: false, // 选项是覅多选
             visible: false
           })
         }
+
         if (!filterOpts.remote) {
           $xeTable.updateData()
         }
-        if (filterCols.length) {
+
+        if (!multiple) {
+          column = filterCols[0]
+        }
+
+        if (column) {
+          const filterList = () => $xeTable.getCheckedFilters()
+          const values: any[] = []
+          const datas: any[] = []
+          column.filters.forEach((item: any) => {
+            if (item.checked) {
+              values.push(item.value)
+              datas.push(item.data)
+            }
+          })
+          const params = {
+            $table: $xeTable,
+            $event: evnt as Event,
+            column,
+            field: column.field,
+            property: column.field,
+            values,
+            datas,
+            filters: filterList,
+            filterList
+          }
+          $xeTable.dispatchEvent('filter-change', params, evnt)
+          $xeTable.dispatchEvent('clear-filter', params, evnt)
+        }
+
+        if (multiple && filterCols.length) {
           const params = { $table: $xeTable, $event: evnt, cols: filterCols, filterList: [] }
           dispatchEvent('clear-all-filter', params, evnt)
-        } else if (column) {
-          $xeTable.dispatchEvent('clear-filter', { filterList: () => $xeTable.getCheckedFilters() }, evnt)
         }
+
         return nextTick()
       },
       /**
@@ -11928,7 +11965,10 @@ export default defineVxeComponent({
           warnLog('vxe.error.delProp', ['row-group-config.countFields', 'column.agg-func'])
         }
         if (aggregateOpts.aggregateMethod) {
-          warnLog('vxe.error.delProp', ['row-group-config.aggregateMethod', 'aggregate-config.countMethod'])
+          warnLog('vxe.error.delProp', ['row-group-config.aggregateMethod', 'aggregate-config.calcValuesMethod'])
+        }
+        if (aggregateOpts.countMethod) {
+          warnLog('vxe.error.delProp', ['aggregate-config.countMethod', 'aggregate-config.calcValuesMethod'])
         }
         if (props.treeConfig && treeOpts.children) {
           warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
