@@ -1724,7 +1724,10 @@ export default {
       warnLog('vxe.error.delProp', ['row-group-config.countFields', 'column.agg-func'])
     }
     if (aggregateOpts.aggregateMethod) {
-      warnLog('vxe.error.delProp', ['row-group-config.aggregateMethod', 'aggregate-config.countMethod'])
+      warnLog('vxe.error.delProp', ['row-group-config.aggregateMethod', 'aggregate-config.calcValuesMethod'])
+    }
+    if (aggregateOpts.countMethod) {
+      warnLog('vxe.error.delProp', ['aggregate-config.countMethod', 'aggregate-config.calcValuesMethod'])
     }
     if (props.treeConfig && treeOpts.children) {
       warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
