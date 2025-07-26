@@ -140,6 +140,7 @@ VxeUI.setConfig({
       // filterMethod: null,
       // destroyOnClose: false,
       // isEvery: false,
+      multiple: true,
       showIcon: true
     },
     aggregateConfig: {

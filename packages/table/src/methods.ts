@@ -2038,16 +2038,25 @@ function removeFooterMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
 }
 
 function handleSortEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: Event | null, sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { tableFullColumn } = internalData
   const sortOpts = $xeTable.computeSortOpts
   const { multiple, remote, orders } = sortOpts
   if (!XEUtils.isArray(sortConfs)) {
     sortConfs = [sortConfs]
   }
   if (sortConfs && sortConfs.length) {
+    const orderActiveMaps: Record<string, VxeTableDefines.ColumnInfo> = {}
     if (!multiple) {
       sortConfs = [sortConfs[0]]
-      clearAllSort($xeTable)
+      tableFullColumn.forEach((column) => {
+        if (column.order) {
+          orderActiveMaps[column.id] = column
+        }
+      })
     }
+    const sortColMpps: Record<string, VxeTableDefines.ColumnInfo> = {}
     let firstColumn: any = null
     sortConfs.forEach((confs: any, index: number) => {
       let { field, order } = confs
@@ -2066,8 +2075,16 @@ function handleSortEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
           column.order = order
         }
         column.sortTime = Date.now() + index
+        sortColMpps[column.id] = column
       }
     })
+    if (!multiple) {
+      XEUtils.each(orderActiveMaps, (oaCol: VxeTableDefines.ColumnInfo, oaId) => {
+        if (!sortColMpps[oaId]) {
+          oaCol.order = null
+        }
+      })
+    }
     if (isUpdate) {
       if (!remote) {
         $xeTable.handleTableData(true)
@@ -8744,10 +8761,10 @@ const Methods = {
 
     return handleSortEvent($xeTable, null, sortConfs, isUpdate)
   },
-  setSortByEvent (evnt: Event, sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
+  setSortByEvent (evnt: Event, sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[]) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    return handleSortEvent($xeTable, evnt, sortConfs, isUpdate)
+    return handleSortEvent($xeTable, evnt, sortConfs, true)
   },
   /**
    * 清空指定列的排序条件
@@ -8780,6 +8797,7 @@ const Methods = {
 
     const { tableFullColumn } = internalData
     const sortOpts = $xeTable.computeSortOpts
+    const { multiple } = sortOpts
     const sortCols: VxeTableDefines.ColumnInfo[] = []
     let column: VxeTableDefines.ColumnInfo<any> | null = null
     if (evnt) {
@@ -8799,11 +8817,18 @@ const Methods = {
       if (!sortOpts.remote) {
         $xeTable.handleTableData(true)
       }
-      if (sortCols.length) {
+
+      if (!multiple) {
+        column = sortCols[0]
+      }
+
+      if (column) {
+        $xeTable.handleColumnSortEvent(evnt, column)
+      }
+
+      if (multiple && sortCols.length) {
         const params = { $table: $xeTable, $event: evnt, cols: sortCols, sortList: [] }
         $xeTable.dispatchEvent('clear-all-sort', params, evnt)
-      } else if (column) {
-        $xeTable.handleColumnSortEvent(evnt, column)
       }
     }
     return $xeTable.$nextTick().then(() => {
@@ -8837,15 +8862,13 @@ const Methods = {
     }
     return sortList
   },
-  setFilterByEvent (evnt: Event, fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>, options: VxeColumnPropTypes.FilterItem[], isUpdate?: boolean) {
+  setFilterByEvent (evnt: Event, fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>, options: VxeColumnPropTypes.FilterItem[]) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     const column = handleFieldOrColumn($xeTable, fieldOrColumn)
     if (column && column.filters) {
       column.filters = toFilters(options || [])
-      if (isUpdate) {
-        return $xeTable.handleColumnConfirmFilter(column, evnt)
-      }
+      return $xeTable.handleColumnConfirmFilter(column, evnt)
     }
     return $xeTable.$nextTick()
   },
@@ -8897,6 +8920,7 @@ const Methods = {
     const { filterStore } = reactData
     const { tableFullColumn } = internalData
     const filterOpts = $xeTable.computeFilterOpts
+    const { multiple } = filterOpts
     const filterCols: VxeTableDefines.ColumnInfo[] = []
     let column: VxeTableDefines.ColumnInfo<any> | null = null
     if (fieldOrColumn) {
@@ -8919,19 +8943,49 @@ const Methods = {
         style: null,
         options: [],
         column: null,
-        multiple: false,
+        multiple: false, // 选项是覅多选
         visible: false
       })
     }
+
     if (!filterOpts.remote) {
       $xeTable.updateData()
     }
-    if (filterCols.length) {
+
+    if (!multiple) {
+      column = filterCols[0]
+    }
+
+    if (column) {
+      const filterList = () => $xeTable.getCheckedFilters()
+      const values: any[] = []
+      const datas: any[] = []
+      column.filters.forEach((item: any) => {
+        if (item.checked) {
+          values.push(item.value)
+          datas.push(item.data)
+        }
+      })
+      const params = {
+        $table: $xeTable,
+        $event: evnt as Event,
+        column,
+        field: column.field,
+        property: column.field,
+        values,
+        datas,
+        filters: filterList,
+        filterList
+      }
+      $xeTable.dispatchEvent('filter-change', params, evnt)
+      $xeTable.dispatchEvent('clear-filter', params, evnt)
+    }
+
+    if (multiple && filterCols.length) {
       const params = { $table: $xeTable, $event: evnt, cols: filterCols, filterList: [] }
       $xeTable.dispatchEvent('clear-all-filter', params, evnt)
-    } else if (column) {
-      $xeTable.dispatchEvent('clear-filter', { filterList: () => $xeTable.getCheckedFilters() }, evnt)
     }
+
     return $xeTable.$nextTick()
   },
   /**

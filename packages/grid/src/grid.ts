@@ -194,9 +194,11 @@ function getTableOns (_vm: any) {
   if (proxyConfig) {
     if (proxyOpts.sort) {
       ons['sort-change'] = _vm.sortChangeEvent
+      ons['clear-all-sort'] = _vm.clearAllSortEvent
     }
     if (proxyOpts.filter) {
       ons['filter-change'] = _vm.filterChangeEvent
+      ons['clear-all-filter'] = _vm.clearAllFilterEvent
     }
   }
   return ons
@@ -1273,6 +1275,21 @@ export default {
       }
       this.$emit('sort-change', Object.assign({ $grid: this }, params))
     },
+    clearAllSortEvent (params: any) {
+      const { $table, column, sortList } = params
+      const isRemote = column && XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : $table.sortOpts.remote
+      // 如果是服务端排序
+      if (isRemote) {
+        this.sortData = sortList
+        if (this.proxyConfig) {
+          this.tablePage.currentPage = 1
+          this.commitProxy('query').then((rest: any) => {
+            this.$emit('proxy-query', { ...rest, $grid: this, $event: params.$event })
+          })
+        }
+      }
+      this.$emit('clear-all-sort', Object.assign({ $grid: this }, params))
+    },
     filterChangeEvent (params: any) {
       const { $table, filterList } = params
       // 如果是服务端过滤
@@ -1286,6 +1303,20 @@ export default {
         }
       }
       this.$emit('filter-change', Object.assign({ $grid: this }, params))
+    },
+    clearAllFilterEvent (params: any) {
+      const { $table, filterList } = params
+      // 如果是服务端过滤
+      if ($table.filterOpts.remote) {
+        this.filterData = filterList
+        if (this.proxyConfig) {
+          this.tablePage.currentPage = 1
+          this.commitProxy('query').then((rest: any) => {
+            this.$emit('proxy-query', { ...rest, $grid: this, $event: params.$event })
+          })
+        }
+      }
+      this.$emit('clear-all-filter', Object.assign({ $grid: this }, params))
     },
     submitEvent (params: any) {
       const $xeGrid = this

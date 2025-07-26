@@ -55,7 +55,8 @@ export default {
       treeCrossDrag: 'Solo arrastre el primer nivel',
       treeDragChild: 'Los padres no pueden arrastrar a sus propios hijos',
       reqPlugin: '"{1}" no está instalado en https://vxeui.com/other{0 /#/{1}/install',
-      errMaxRow: 'Al exceder las filas de volumen de datos máximos admitidos, esto puede causar un error'
+      errMaxRow: 'Al exceder las filas de volumen de datos máximos admitidos, esto puede causar un error',
+      useNew: '不建议使用 {0}，请使用 {1}'
     },
     table: {
       emptyText: 'Aún no hay datos',
