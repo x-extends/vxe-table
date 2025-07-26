@@ -55,7 +55,8 @@ export default {
       treeCrossDrag: 'Hanya menyeret level pertama',
       treeDragChild: 'Orang tua tidak bisa menyeret ke anak -anak mereka sendiri',
       reqPlugin: '"{1}" tidak diinstal di https://vxeUi.com/other{ 0',
-      errMaxRow: 'Melebihi volume data yang didukung maksimum {0}, ini dapat menyebabkan kesalahan'
+      errMaxRow: 'Melebihi volume data yang didukung maksimum {0}, ini dapat menyebabkan kesalahan',
+      useNew: '不建议使用 {0}，请使用 {1}'
     },
     table: {
       emptyText: 'Belum ada data',

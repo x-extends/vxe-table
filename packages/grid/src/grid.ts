@@ -18,7 +18,7 @@ const { getConfig, getI18n, commands, hooks, useFns, createEvent, globalEvents, 
 
 const tableComponentPropKeys = Object.keys(tableComponentProps as any)
 
-const tableComponentMethodKeys: (keyof VxeTableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'setRow', 'createData', 'createRow', 'revertData', 'clearData', 'isRemoveByRow', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getFullColumns', 'getData', 'getCheckboxRecords', 'getParentRow', 'getTreeRowChildren', 'getTreeParentRow', 'getRowSeq', 'getRowById', 'getRowid', 'getTableData', 'getFullData', 'setColumnFixed', 'clearColumnFixed', 'setColumnWidth', 'getColumnWidth', 'setRowHeightConf', 'getRowHeightConf', 'setRowHeight', 'getRowHeight', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'closeTooltip', 'isAllCheckboxChecked', 'isAllCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'setCheckboxRowKey', 'isCheckedByCheckboxRow', 'isCheckedByCheckboxRowKey', 'isIndeterminateByCheckboxRow', 'isIndeterminateByCheckboxRowKey', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'isCheckedByRadioRowKey', 'setRadioRow', 'setRadioRowKey', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'setPendingRow', 'togglePendingRow', 'hasPendingByRow', 'isPendingByRow', 'getPendingRecords', 'clearPendingRow', 'sort', 'setSort', 'clearSort', 'clearSortByEvent', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'clearFilterByEvent', 'isActiveFilterByColumn', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadRowExpand', 'reloadRowExpand', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'isRowExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeExpand', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeInsertRow', 'removeMergeCells', 'getMergeCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'getCustomStoreData', 'setRowGroupExpand', 'setAllRowGroupExpand', 'clearRowGroupExpand', 'isRowGroupExpandByRow', 'isRowGroupRecord', 'isAggregateRecord', 'isAggregateExpandByRow', 'getAggregateContentByRow', 'getAggregateRowChildren', 'setRowGroups', 'clearRowGroups', 'openTooltip', 'moveColumnTo', 'moveRowTo', 'getCellLabel', 'getCellElement', 'focus', 'blur', 'connect']
+const tableComponentMethodKeys: (keyof VxeTableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'setRow', 'createData', 'createRow', 'revertData', 'clearData', 'isRemoveByRow', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getFullColumns', 'getData', 'getCheckboxRecords', 'getParentRow', 'getTreeRowChildren', 'getTreeParentRow', 'getRowSeq', 'getRowById', 'getRowid', 'getTableData', 'getFullData', 'setColumnFixed', 'clearColumnFixed', 'setColumnWidth', 'getColumnWidth', 'setRowHeightConf', 'getRowHeightConf', 'setRowHeight', 'getRowHeight', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'closeTooltip', 'isAllCheckboxChecked', 'isAllCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'setCheckboxRowKey', 'isCheckedByCheckboxRow', 'isCheckedByCheckboxRowKey', 'isIndeterminateByCheckboxRow', 'isIndeterminateByCheckboxRowKey', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'isCheckedByRadioRowKey', 'setRadioRow', 'setRadioRowKey', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'setPendingRow', 'togglePendingRow', 'hasPendingByRow', 'isPendingByRow', 'getPendingRecords', 'clearPendingRow', 'setFilterByEvent', 'sort', 'setSort', 'setSortByEvent', 'clearSort', 'clearSortByEvent', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'clearFilterByEvent', 'isActiveFilterByColumn', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadRowExpand', 'reloadRowExpand', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'isRowExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeExpand', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeInsertRow', 'removeMergeCells', 'getMergeCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'getCustomStoreData', 'setRowGroupExpand', 'setAllRowGroupExpand', 'clearRowGroupExpand', 'isRowGroupExpandByRow', 'isRowGroupRecord', 'isAggregateRecord', 'isAggregateExpandByRow', 'getAggregateContentByRow', 'getAggregateRowChildren', 'setRowGroups', 'clearRowGroups', 'openTooltip', 'moveColumnTo', 'moveRowTo', 'getCellLabel', 'getCellElement', 'focus', 'blur', 'connect']
 
 const gridComponentEmits: VxeGridEmits = [
   ...tableComponentEmits,
@@ -379,7 +379,7 @@ export default defineVxeComponent({
       }
     }
 
-    const sortChangeEvent: VxeTableEvents.SortChange = (params) => {
+    const handleSortEvent = (params: any) => {
       const $xeTable = refTable.value
       const { proxyConfig } = props
       const { computeSortOpts } = $xeTable.getComputeMaps()
@@ -390,15 +390,24 @@ export default defineVxeComponent({
         reactData.sortData = params.sortList
         if (proxyConfig && isEnableConf(proxyOpts)) {
           reactData.tablePage.currentPage = 1
-          gridMethods.commitProxy('query').then((rest) => {
-            gridMethods.dispatchEvent('proxy-query', rest, params.$event)
+          $xeGrid.commitProxy('query').then((rest) => {
+            $xeGrid.dispatchEvent('proxy-query', rest, params.$event)
           })
         }
       }
-      gridMethods.dispatchEvent('sort-change', params, params.$event)
     }
 
-    const filterChangeEvent: VxeTableEvents.FilterChange = (params) => {
+    const sortChangeEvent: VxeTableEvents.SortChange = (params) => {
+      handleSortEvent(params)
+      $xeGrid.dispatchEvent('sort-change', params, params.$event)
+    }
+
+    const clearAllSortEvent = (params: any) => {
+      handleSortEvent(params)
+      $xeGrid.dispatchEvent('clear-all-sort', params, params.$event)
+    }
+
+    const handleFilterEvent = (params: any) => {
       const $xeTable = refTable.value
       const { proxyConfig } = props
       const { computeFilterOpts } = $xeTable.getComputeMaps()
@@ -409,12 +418,21 @@ export default defineVxeComponent({
         reactData.filterData = params.filterList
         if (proxyConfig && isEnableConf(proxyOpts)) {
           reactData.tablePage.currentPage = 1
-          gridMethods.commitProxy('query').then((rest) => {
-            gridMethods.dispatchEvent('proxy-query', rest, params.$event)
+          $xeGrid.commitProxy('query').then((rest) => {
+            $xeGrid.dispatchEvent('proxy-query', rest, params.$event)
           })
         }
       }
-      gridMethods.dispatchEvent('filter-change', params, params.$event)
+    }
+
+    const filterChangeEvent: VxeTableEvents.FilterChange = (params) => {
+      handleFilterEvent(params)
+      $xeGrid.dispatchEvent('filter-change', params, params.$event)
+    }
+
+    const clearAllFilterEvent: any = (params: any) => {
+      handleFilterEvent(params)
+      $xeGrid.dispatchEvent('clear-all-filter', params, params.$event)
     }
 
     const submitFormEvent: VxeFormEvents.Submit = (params) => {
@@ -668,7 +686,7 @@ export default defineVxeComponent({
       const { proxyConfig } = props
       const tableProps = computeTableProps.value
       const proxyOpts = computeProxyOpts.value
-      const tableOns = Object.assign({}, tableCompEvents)
+      const tableOns: any = Object.assign({}, tableCompEvents)
       const emptySlot = slots.empty
       const loadingSlot = slots.loading
       const rowDragIconSlot = slots.rowDragIcon || slots['row-drag-icon']
@@ -676,9 +694,11 @@ export default defineVxeComponent({
       if (proxyConfig && isEnableConf(proxyOpts)) {
         if (proxyOpts.sort) {
           tableOns.onSortChange = sortChangeEvent
+          tableOns.onClearAllSort = clearAllSortEvent
         }
         if (proxyOpts.filter) {
           tableOns.onFilterChange = filterChangeEvent
+          tableOns.onClearAllFilter = clearAllFilterEvent
         }
       }
       const slotObj: {

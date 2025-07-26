@@ -55,7 +55,8 @@ export default {
       treeCrossDrag: 'Csak húzza az első szintet',
       treeDragChild: 'A szülők nem tudnak elhúzni a saját gyermekeiket',
       reqPlugin: 'A "{1}" nincs telepítve a https://vxeui.com/other oldalon {0 }/#/ (1 }/install',
-      errMaxRow: 'A maximális támogatott adatmennyiség {0} sorok túllépése, ez hibát okozhat'
+      errMaxRow: 'A maximális támogatott adatmennyiség {0} sorok túllépése, ez hibát okozhat',
+      useNew: '不建议使用 {0}，请使用 {1}'
     },
     table: {
       emptyText: 'Még nincs adat',

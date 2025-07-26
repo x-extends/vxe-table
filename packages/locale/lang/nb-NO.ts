@@ -55,7 +55,8 @@ export default {
       treeCrossDrag: 'Bare dra det første nivået',
       treeDragChild: 'Foreldre kan ikke dra til sine egne barn',
       reqPlugin: '"{1}" er ikke installert på http',
-      errMaxRow: 'Overskridende det maksimale støttede datavolumet {0} Rader, dette kan føre til en feil'
+      errMaxRow: 'Overskridende det maksimale støttede datavolumet {0} Rader, dette kan føre til en feil',
+      useNew: '不建议使用 {0}，请使用 {1}'
     },
     table: {
       emptyText: 'Ingen data ennå',
