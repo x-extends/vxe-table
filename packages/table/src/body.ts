@@ -123,7 +123,7 @@ function renderTdColumn (
   const _columnIndex = colRest._index
   const isEdit = isEnableConf(editRender)
   const resizeHeight = resizeHeightFlag ? rowRest.resizeHeight : 0
-  let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
+  let fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
   const isCellPadding = XEUtils.eqNull(padding) ? (allPadding === null ? cellOpts.padding : allPadding) : padding
   const cellOverflow = XEUtils.eqNull(showOverflow) ? allShowOverflow : showOverflow
   const showEllipsis = cellOverflow === 'ellipsis'
@@ -267,14 +267,14 @@ function renderTdColumn (
     isDirty = $xeTable.isUpdateByRow(row, column.field)
   }
 
-  const isVNAutoHeight = scrollYLoad && !hasEllipsis
+  const isVNAutoHeight = !hasEllipsis && (scrollYLoad || scrollXLoad)
   let cellHeight = getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
 
   const isLastColumn = $columnIndex === columns.length - 1
   const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
   let isVNPreEmptyStatus = false
-  if (!isMergeCell) {
+  if (overflowX && !isMergeCell) {
     if (!dragRow || getRowid($xeTable, dragRow) !== rowid) {
       if (scrollYLoad && !treeConfig && !virtualYOpts.immediate && (_rowIndex < scrollYStore.visibleStartIndex - scrollYStore.preloadSize || _rowIndex > scrollYStore.visibleEndIndex + scrollYStore.preloadSize)) {
         isVNPreEmptyStatus = true
@@ -307,7 +307,7 @@ function renderTdColumn (
     }
     tcStyle.width = `${column.renderWidth + mergeColWidth - cellOffsetWidth}px`
   }
-  if (scrollYLoad || hasEllipsis || isCsHeight || isRsHeight) {
+  if (scrollYLoad || scrollXLoad || hasEllipsis || isCsHeight || isRsHeight) {
     tcStyle.height = `${cellHeight}px`
   } else {
     tcStyle.minHeight = `${cellHeight}px`
@@ -502,14 +502,15 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
       }
     }
     if (rowRest) {
-      rowLevel = rowRest.level
-      if (hasRowGroupAggregate || (treeConfig && transform && seqMode === 'increasing')) {
-        seq = rowRest._index + 1
-      } else {
-        seq = rowRest.seq
-      }
       rowIndex = rowRest.index
       _rowIndex = rowRest._index
+      rowLevel = rowRest.level
+      seq = rowRest.seq
+      if (hasRowGroupAggregate || (treeConfig && transform && seqMode === 'increasing')) {
+        seq = rowRest._index + 1
+      } else if ((treeConfig && seqMode === 'fixed')) {
+        seq = rowRest._tIndex + 1
+      }
     }
     const params = { $table: $xeTable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
     // 行是否被展开

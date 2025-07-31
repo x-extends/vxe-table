@@ -3,7 +3,7 @@ import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTarge
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
-import { getRowUniqueId, clearTableAllStatus, toFilters, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem, getCellRestHeight } from './util'
+import { getRowUniqueId, clearTableAllStatus, getColumnList, toFilters, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem, getCellRestHeight } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from './anime'
 import { warnLog, errLog } from '../../ui/src/log'
@@ -125,44 +125,102 @@ function handleVirtualXVisible ($xeTable: VxeTableConstructor & VxeTablePrivateM
         break
       }
     }
-    return { toVisibleIndex: Math.max(0, toVisibleIndex), visibleSize: Math.max(1, visibleSize) }
+    return { toVisibleIndex: Math.max(0, toVisibleIndex), visibleSize: Math.max(6, visibleSize) }
   }
   return { toVisibleIndex: 0, visibleSize: 6 }
 }
 
 function handleCustomRestore ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, storeData: VxeTableDefines.CustomStoreData) {
+  const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  let { collectColumn } = internalData
-  const { resizableData, sortData, visibleData, fixedData } = storeData
-  let hasCustomSort = false
+  const { aggregateConfig, rowGroupConfig } = props
+  const { collectColumn } = internalData
+  const customOpts = $xeTable.computeCustomOpts
+  const { storage, storeOptions } = customOpts
+  const isAllCustom = storage === true
+  const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {}, storeOptions)
+  const isCustomResizable = hangleStorageDefaultValue(storageOpts.resizable, isAllCustom)
+  const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
+  const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
+  const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
+  const isCustomAggGroup = hangleStorageDefaultValue(storageOpts.aggGroup, isAllCustom)
+  const isCustomAggFunc = hangleStorageDefaultValue(storageOpts.aggFunc, isAllCustom)
+  let { resizableData, sortData, visibleData, fixedData, aggGroupData, aggFuncData } = storeData
   // 处理还原
-  if (resizableData || sortData || visibleData || fixedData) {
+  if ((isCustomResizable && resizableData) || (isCustomSort && sortData) || (isCustomVisible && visibleData) || (isCustomFixed && fixedData) || (isCustomAggGroup && aggGroupData) || (isCustomAggFunc && aggFuncData)) {
+    const sortColMaps: Record<string, {
+      key: string
+      sNum: number
+      pKey: string | null
+    }> = {}
+    if (isCustomSort && sortData) {
+      // 转换兼容老版本数据，即将废弃兼容
+      if (!XEUtils.isArray(sortData)) {
+        const sortRests: {key: string, index: number}[] = []
+        XEUtils.each(sortData, (index: number, colKey: string) => {
+          sortRests.push({ key: colKey, index })
+        })
+        sortData = XEUtils.orderBy(sortRests, { field: 'index', order: 'asc' }).map(item => ({ k: item.key }))
+      }
+      let colNum = 1
+      XEUtils.eachTree(sortData, (sObj, index, sOjs, path, pSObj) => {
+        sortColMaps[sObj.k] = {
+          key: sObj.k,
+          sNum: colNum++,
+          pKey: pSObj ? pSObj.k : null
+        }
+      }, { children: 'c' })
+    }
+    const colKeyMaps: Record<string, VxeTableDefines.ColumnInfo> = {}
+    const allCols: VxeTableDefines.ColumnInfo[] = []
+    const aggGroupConfs: VxeTableDefines.RowGroupItem[] = []
     XEUtils.eachTree(collectColumn, (column, index, items, path, parentColumn) => {
       const colKey = column.getKey()
       // 支持一级
       if (!parentColumn) {
-        if (fixedData && fixedData[colKey] !== undefined) {
+        if (isCustomFixed && fixedData && fixedData[colKey] !== undefined) {
           column.fixed = fixedData[colKey]
         }
-        if (sortData && XEUtils.isNumber(sortData[colKey])) {
-          hasCustomSort = true
-          column.renderSortNumber = sortData[colKey]
-        }
       }
-      if (resizableData && XEUtils.isNumber(resizableData[colKey])) {
+      if (isCustomResizable && resizableData && XEUtils.isNumber(resizableData[colKey])) {
         column.resizeWidth = resizableData[colKey]
       }
-      if (visibleData && XEUtils.isBoolean(visibleData[colKey])) {
+      if (isCustomVisible && visibleData && XEUtils.isBoolean(visibleData[colKey])) {
         column.visible = visibleData[colKey]
       }
+      if (isCustomAggFunc && aggFuncData && (aggregateConfig || rowGroupConfig) && aggFuncData[colKey]) {
+        column.aggFunc = aggFuncData[colKey]
+      }
+      if (isCustomAggGroup && aggGroupData && aggGroupData[colKey]) {
+        aggGroupConfs.push({ field: column.field })
+      }
+      colKeyMaps[colKey] = column
+      allCols.push(column)
     })
+    if ((aggregateConfig || rowGroupConfig) && aggGroupConfs.length) {
+      const groupRest = handleGroupData($xeTable, internalData.tableFullData, aggGroupConfs)
+      internalData.tableFullTreeData = []
+      internalData.tableFullGroupData = groupRest.treeData
+      reactData.isRowGroupStatus = true
+      reactData.rowGroupList = aggGroupConfs
+      $xeTable.cacheRowMap(false)
+    }
     // 如果自定义了顺序
-    if (hasCustomSort) {
-      collectColumn = XEUtils.orderBy(collectColumn, 'renderSortNumber')
-      internalData.collectColumn = collectColumn
-      internalData.tableFullColumn = getColumnList(collectColumn)
+    if (isCustomSort && sortData) {
+      allCols.forEach(column => {
+        const colKey = column.getKey()
+        const scItem = sortColMaps[colKey]
+        if (scItem) {
+          const parentColumn = scItem.pKey ? colKeyMaps[scItem.pKey] : null
+          column.parentId = parentColumn ? parentColumn.id : null
+          column.renderSortNumber = scItem.sNum
+        }
+      })
+      const newCollectCols = XEUtils.toArrayTree(XEUtils.orderBy(allCols, 'renderSortNumber'), { key: 'id', parentKey: 'parentId', children: 'children' })
+      internalData.collectColumn = newCollectCols
+      internalData.tableFullColumn = getColumnList(newCollectCols)
     }
     reactData.isCustomStatus = true
   } else {
@@ -568,7 +626,7 @@ function updateAfterListIndex ($xeTable: VxeTableConstructor & VxeTablePrivateMe
       }
       rowRest._index = index
     } else {
-      const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, treeIndex: -1, items: [], parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+      const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, treeIndex: -1, _tIndex: -1, items: [], parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
       fullAllDataRowIdData[rowid] = rest
       fullDataRowIdData[rowid] = rest
     }
@@ -592,6 +650,7 @@ function updateAfterDataIndex ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   const childrenField = treeOpts.children || treeOpts.childrenField
   const fullMaps: Record<string, any> = {}
   if (treeConfig) {
+    let _treeIndex = 0
     const { handleGetRowId } = createHandleGetRowId($xeTable)
     XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
       const rowid = handleGetRowId(row)
@@ -600,11 +659,13 @@ function updateAfterDataIndex ($xeTable: VxeTableConstructor & VxeTablePrivateMe
       if (rowRest) {
         rowRest.seq = seq
         rowRest.treeIndex = index
+        rowRest._tIndex = _treeIndex
       } else {
-        const rest = { row, rowid, seq, index: -1, $index: -1, _index: -1, treeIndex: -1, items: [], parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+        const rest = { row, rowid, seq, index: -1, $index: -1, _index: -1, treeIndex: -1, _tIndex: _treeIndex, items: [], parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
         fullAllDataRowIdData[rowid] = rest
         fullDataRowIdData[rowid] = rest
       }
+      _treeIndex++
       fullMaps[rowid] = row
     }, { children: transform ? treeOpts.mapChildrenField : childrenField })
     if (transform) {
@@ -2055,16 +2116,25 @@ function removeFooterMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
 }
 
 function handleSortEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: Event | null, sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { tableFullColumn } = internalData
   const sortOpts = $xeTable.computeSortOpts
   const { multiple, remote, orders } = sortOpts
   if (!XEUtils.isArray(sortConfs)) {
     sortConfs = [sortConfs]
   }
   if (sortConfs && sortConfs.length) {
+    const orderActiveMaps: Record<string, VxeTableDefines.ColumnInfo> = {}
     if (!multiple) {
       sortConfs = [sortConfs[0]]
-      clearAllSort($xeTable)
+      tableFullColumn.forEach((column) => {
+        if (column.order) {
+          orderActiveMaps[column.id] = column
+        }
+      })
     }
+    const sortColMpps: Record<string, VxeTableDefines.ColumnInfo> = {}
     let firstColumn: any = null
     sortConfs.forEach((confs: any, index: number) => {
       let { field, order } = confs
@@ -2083,8 +2153,16 @@ function handleSortEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
           column.order = order
         }
         column.sortTime = Date.now() + index
+        sortColMpps[column.id] = column
       }
     })
+    if (!multiple) {
+      XEUtils.each(orderActiveMaps, (oaCol: VxeTableDefines.ColumnInfo, oaId) => {
+        if (!sortColMpps[oaId]) {
+          oaCol.order = null
+        }
+      })
+    }
     if (isUpdate) {
       if (!remote) {
         $xeTable.handleTableData(true)
@@ -2272,7 +2350,7 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
   const { fullAllDataRowIdData } = internalData
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const el = $xeTable.$refs.refElem as HTMLDivElement
-  if (!isAllOverflow && scrollYLoad && el) {
+  if (!isAllOverflow && (scrollYLoad || scrollXLoad) && el) {
     const { handleGetRowId } = createHandleGetRowId($xeTable)
     tableData.forEach(row => {
       const rowid = handleGetRowId(row)
@@ -2792,18 +2870,18 @@ function handleUpdateAggValues ($xeTable: VxeTableConstructor & VxeTablePrivateM
 function handleUpdateRowGroup ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, groupFields?: string[]) {
   const reactData = $xeTable as unknown as TableReactData
 
-  const aggFields: string[] = []
-  const aggConfs: { field: string }[] = []
+  const aggGroupFields: string[] = []
+  const aggGroupConfs: VxeTableDefines.RowGroupItem[] = []
   if (groupFields) {
     (XEUtils.isArray(groupFields) ? groupFields : [groupFields]).forEach(field => {
-      aggFields.push(field)
-      aggConfs.push({
+      aggGroupFields.push(field)
+      aggGroupConfs.push({
         field
       })
     })
   }
-  reactData.rowGroupList = aggConfs
-  reactData.aggHandleFields = aggFields
+  reactData.rowGroupList = aggGroupConfs
+  reactData.aggHandleFields = aggGroupFields
   handleUpdateAggValues($xeTable)
 }
 
@@ -3191,15 +3269,6 @@ function loadScrollXData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   $xeTable.closeTooltip()
 }
 
-// 获取所有的列，排除分组
-function getColumnList (columns: any[]) {
-  const result: any[] = []
-  columns.forEach((column) => {
-    result.push(...(column.children && column.children.length ? getColumnList(column.children) : [column]))
-  })
-  return result
-}
-
 function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, isReset: boolean) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
@@ -3223,7 +3292,7 @@ function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, i
       if (parentColumn && parentColumn.fixed) {
         column.fixed = parentColumn.fixed
       }
-      if (parentColumn && column.fixed !== parentColumn.fixed) {
+      if (parentColumn && (column.fixed || '') !== (parentColumn.fixed || '')) {
         errLog('vxe.error.groupFixed')
       }
       if (isColGroup) {
@@ -3326,18 +3395,22 @@ function parseColumns ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, i
   return $xeTable.updateFooter()
 }
 
-function initColumnSort ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+function initColumnHierarchy ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { collectColumn } = internalData
-  collectColumn.forEach((column, index) => {
-    const sortIndex = index + 1
+  let sortIndex = 1
+  XEUtils.eachTree(collectColumn, (column, index, items, path, parentColumn) => {
+    const parentId = parentColumn ? parentColumn.id : null
+    column.parentId = parentId
+    column.defaultParentId = parentId
     column.sortNumber = sortIndex
     column.renderSortNumber = sortIndex
+    sortIndex++
   })
 }
 
-function handleColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, collectColumn: VxeTableDefines.ColumnInfo[]) {
+function handleInitColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, collectColumn: VxeTableDefines.ColumnInfo[]) {
   const $xeToolbar = $xeTable.$refs.$xeToolbar as VxeToolbarConstructor
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -3347,7 +3420,7 @@ function handleColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
   const tableFullColumn = getColumnList(collectColumn)
   internalData.tableFullColumn = tableFullColumn
   reactData.isColLoading = true
-  initColumnSort($xeTable)
+  initColumnHierarchy($xeTable)
   return Promise.resolve(
     restoreCustomStorage($xeTable)
   ).then(() => {
@@ -4029,7 +4102,7 @@ const Methods = {
 
     const { lastScrollLeft, lastScrollTop } = internalData
     const collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn($xeTable, column), { children: 'children' })
-    return handleColumn($xeTable, collectColumn).then(() => {
+    return handleInitColumn($xeTable, collectColumn).then(() => {
       let targetScrollLeft = lastScrollLeft
       let targetScrollTop = lastScrollTop
       const virtualXOpts = $xeTable.computeVirtualXOpts
@@ -4054,10 +4127,10 @@ const Methods = {
       return this.loadColumn(columns)
     })
   },
-  handleColumn (collectColumn: any[]) {
+  handleInitColumn (collectColumn: any[]) {
     const $xeTable = this
 
-    return handleColumn($xeTable, collectColumn)
+    return handleInitColumn($xeTable, collectColumn)
   },
   /**
    * 更新数据行的 Map
@@ -4078,7 +4151,7 @@ const Methods = {
     const handleRowCache = (row: any, index: number, items: any, currIndex: number, parentRow: any, rowid: string, level: number, seq: string | number) => {
       let rowRest = fullAllDataRowIdMaps[rowid]
       if (!rowRest) {
-        rowRest = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+        rowRest = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, _tIndex: -1, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
       }
       rowRest.treeLoaded = false
       rowRest.expandLoaded = false
@@ -4187,7 +4260,7 @@ const Methods = {
       XEUtils.eachTree(rows, (childRow, index, items, path, parentItem, nodes) => {
         const rowid = getRowid($xeTable, childRow)
         const parentRow = parentItem || parentRest.row
-        const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, treeIndex: -1, items, parent: parentRow, level: parentLevel + nodes.length, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+        const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items, parent: parentRow, level: parentLevel + nodes.length, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
         fullDataRowIdData[rowid] = rest
         fullAllDataRowIdData[rowid] = rest
       }, { children: childrenField })
@@ -5220,8 +5293,9 @@ const Methods = {
     const isCustomResizable = hangleStorageDefaultValue(storageOpts.resizable, isAllCustom)
     const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
     const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
+    const isCustomAggGroup = hangleStorageDefaultValue(storageOpts.aggGroup, isAllCustom)
     const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
-    if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
+    if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomAggGroup || isCustomSort)) {
       if (!tableId) {
         errLog('vxe.error.reqProp', ['id'])
         return
@@ -5244,11 +5318,13 @@ const Methods = {
   getCustomStoreData () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
     const { id } = props
     const customOpts = $xeTable.computeCustomOpts
-    const { collectColumn } = internalData
+    const { isRowGroupStatus, rowGroupList } = reactData
+    const { fullColumnFieldData, collectColumn } = internalData
     const { storage, checkMethod, storeOptions } = customOpts
     const isAllCustom = storage === true
     const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {}, storeOptions)
@@ -5256,17 +5332,20 @@ const Methods = {
     const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
     const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
     const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
+    const isCustomAggGroup = hangleStorageDefaultValue(storageOpts.aggGroup, isAllCustom)
     const isCustomAggFunc = hangleStorageDefaultValue(storageOpts.aggFunc, isAllCustom)
     const resizableData: Record<string, number> = {}
-    const sortData: Record<string, number> = {}
+    const sortData: VxeTableDefines.CustomSortStoreObj[] = []
     const visibleData: Record<string, boolean> = {}
     const fixedData: Record<string, VxeColumnPropTypes.Fixed> = {}
+    const aggGroupData: Record<string, boolean> = {}
     const aggFuncData: Record<string, VxeColumnPropTypes.AggFunc> = {}
     const storeData: VxeTableDefines.CustomStoreData = {
       resizableData: undefined,
       sortData: undefined,
       visibleData: undefined,
       fixedData: undefined,
+      aggGroupData: undefined,
       aggFuncData: undefined
     }
     if (!id) {
@@ -5280,19 +5359,36 @@ const Methods = {
     let hasFixed = 0
     let hasVisible = 0
     let hasAggFunc = 0
+    const sortMaps: Record<string, VxeTableDefines.CustomSortStoreObj> = {}
     XEUtils.eachTree(collectColumn, (column, index, items, path, parentColumn) => {
       const colKey = column.getKey()
       if (!colKey) {
         errLog('vxe.error.reqProp', [`${column.getTitle() || column.type || ''} -> column.field=?`])
         return
       }
-      // 只支持一级
-      if (!parentColumn) {
+      if (parentColumn) {
+        if (isCustomSort) {
+          const pColKey = parentColumn.getKey()
+          const psObj = sortMaps[pColKey]
+          hasSort = 1
+          if (psObj) {
+            const sObj = { k: colKey }
+            sortMaps[colKey] = sObj
+            if (!psObj.c) {
+              psObj.c = []
+            }
+            psObj.c.push(sObj)
+          }
+        }
+      } else {
         if (isCustomSort) {
           hasSort = 1
-          sortData[colKey] = column.renderSortNumber
+          const sObj = { k: colKey }
+          sortMaps[colKey] = sObj
+          sortData.push(sObj)
         }
-        if (isCustomFixed && column.fixed !== column.defaultFixed) {
+        // 只支持一级
+        if (isCustomFixed && (column.fixed || '') !== (column.defaultFixed || '')) {
           hasFixed = 1
           fixedData[colKey] = column.fixed
         }
@@ -5310,7 +5406,7 @@ const Methods = {
           visibleData[colKey] = true
         }
       }
-      if (isCustomAggFunc && column.aggFunc !== column.defaultAggFunc) {
+      if (isCustomAggFunc && (column.aggFunc || '') !== (column.defaultAggFunc || '')) {
         hasAggFunc = 1
         aggFuncData[colKey] = column.aggFunc
       }
@@ -5326,6 +5422,15 @@ const Methods = {
     }
     if (hasVisible) {
       storeData.visibleData = visibleData
+    }
+    if (isCustomAggGroup && isRowGroupStatus) {
+      rowGroupList.forEach(aggConf => {
+        const colRest = fullColumnFieldData[aggConf.field]
+        if (colRest) {
+          aggGroupData[colRest.column.getKey()] = true
+        }
+      })
+      storeData.aggGroupData = aggGroupData
     }
     if (hasAggFunc) {
       storeData.aggFuncData = aggFuncData
@@ -5347,21 +5452,24 @@ const Methods = {
     const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
     const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
     const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
+    const isCustomAggGroup = hangleStorageDefaultValue(storageOpts.aggGroup, isAllCustom)
     const isCustomAggFunc = hangleStorageDefaultValue(storageOpts.aggFunc, isAllCustom)
     if (type !== 'reset') {
       reactData.isCustomStatus = true
     }
-    if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort || isCustomAggFunc)) {
+    if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort || isCustomAggGroup || isCustomAggFunc)) {
       if (!tableId) {
         errLog('vxe.error.reqProp', ['id'])
         return this.$nextTick()
       }
-      const storeData = type === 'reset'
+      const storeData: VxeTableDefines.CustomStoreData = type === 'reset'
         ? {
             resizableData: {},
             sortData: {},
             visibleData: {},
-            fixedData: {}
+            fixedData: {},
+            aggGroupData: {},
+            aggFuncData: {}
           }
         : this.getCustomStoreData()
       if (updateStore) {
@@ -9000,10 +9108,10 @@ const Methods = {
 
     return handleSortEvent($xeTable, null, sortConfs, isUpdate)
   },
-  setSortByEvent (evnt: Event, sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
+  setSortByEvent (evnt: Event, sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[]) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    return handleSortEvent($xeTable, evnt, sortConfs, isUpdate)
+    return handleSortEvent($xeTable, evnt, sortConfs, true)
   },
   /**
    * 清空指定列的排序条件
@@ -9036,6 +9144,7 @@ const Methods = {
 
     const { tableFullColumn } = internalData
     const sortOpts = $xeTable.computeSortOpts
+    const { multiple } = sortOpts
     const sortCols: VxeTableDefines.ColumnInfo[] = []
     let column: VxeTableDefines.ColumnInfo<any> | null = null
     if (evnt) {
@@ -9055,11 +9164,18 @@ const Methods = {
       if (!sortOpts.remote) {
         $xeTable.handleTableData(true)
       }
-      if (sortCols.length) {
+
+      if (!multiple) {
+        column = sortCols[0]
+      }
+
+      if (column) {
+        $xeTable.handleColumnSortEvent(evnt, column)
+      }
+
+      if (multiple && sortCols.length) {
         const params = { $table: $xeTable, $event: evnt, cols: sortCols, sortList: [] }
         $xeTable.dispatchEvent('clear-all-sort', params, evnt)
-      } else if (column) {
-        $xeTable.handleColumnSortEvent(evnt, column)
       }
     }
     return $xeTable.$nextTick().then(() => {
@@ -9093,21 +9209,13 @@ const Methods = {
     }
     return sortList
   },
-  setFilterByEvent (evnt: Event, fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>, options: VxeColumnPropTypes.FilterItem[], isUpdate?: boolean) {
+  setFilterByEvent (evnt: Event, fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>, options: VxeColumnPropTypes.FilterItem[]) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const reactData = $xeTable as unknown as TableReactData
 
-    const { filterStore } = reactData
     const column = handleFieldOrColumn($xeTable, fieldOrColumn)
     if (column && column.filters) {
       column.filters = toFilters(options || [])
-      if (isUpdate) {
-        return $xeTable.handleColumnConfirmFilter(column, evnt)
-      } else {
-        if (filterStore.visible) {
-          $xeTable.handleFilterOptions(column)
-        }
-      }
+      return $xeTable.handleColumnConfirmFilter(column, evnt)
     }
     return $xeTable.$nextTick()
   },
@@ -9159,6 +9267,7 @@ const Methods = {
     const { filterStore } = reactData
     const { tableFullColumn } = internalData
     const filterOpts = $xeTable.computeFilterOpts
+    const { multiple } = filterOpts
     const filterCols: VxeTableDefines.ColumnInfo[] = []
     let column: VxeTableDefines.ColumnInfo<any> | null = null
     if (fieldOrColumn) {
@@ -9181,19 +9290,49 @@ const Methods = {
         style: null,
         options: [],
         column: null,
-        multiple: false,
+        multiple: false, // 选项是覅多选
         visible: false
       })
     }
+
     if (!filterOpts.remote) {
       $xeTable.updateData()
     }
-    if (filterCols.length) {
+
+    if (!multiple) {
+      column = filterCols[0]
+    }
+
+    if (column) {
+      const filterList = () => $xeTable.getCheckedFilters()
+      const values: any[] = []
+      const datas: any[] = []
+      column.filters.forEach((item: any) => {
+        if (item.checked) {
+          values.push(item.value)
+          datas.push(item.data)
+        }
+      })
+      const params = {
+        $table: $xeTable,
+        $event: evnt as Event,
+        column,
+        field: column.field,
+        property: column.field,
+        values,
+        datas,
+        filters: filterList,
+        filterList
+      }
+      $xeTable.dispatchEvent('filter-change', params, evnt)
+      $xeTable.dispatchEvent('clear-filter', params, evnt)
+    }
+
+    if (multiple && filterCols.length) {
       const params = { $table: $xeTable, $event: evnt, cols: filterCols, filterList: [] }
       $xeTable.dispatchEvent('clear-all-filter', params, evnt)
-    } else if (column) {
-      $xeTable.dispatchEvent('clear-filter', { filterList: () => $xeTable.getCheckedFilters() }, evnt)
     }
+
     return $xeTable.$nextTick()
   },
   /**

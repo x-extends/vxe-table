@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "3.17.0-beta.6",
+  "version": "3.17.0",
   "description": "A PC-end table component based on Vxe UI, supporting copy-paste, data pivot table, and high-performance virtual list table solution.",
   "scripts": {
     "update": "npm install --legacy-peer-deps",
@@ -28,7 +28,7 @@
   "style": "lib/style.css",
   "typings": "types/index.d.ts",
   "dependencies": {
-    "vxe-pc-ui": "^3.7.0"
+    "vxe-pc-ui": "^3.8.0"
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.25.7",

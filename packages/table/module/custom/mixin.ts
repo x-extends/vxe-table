@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils'
+import { getColumnList } from '../../src/util'
 
 import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeGridConstructor, VxeTableDefines, GridPrivateMethods, TableReactData, TableInternalData } from '../../../../types'
 
@@ -96,21 +97,20 @@ export default {
         }
       })
       reactData.isCustomStatus = true
-      return $xeTable.saveCustomStore('confirm').then(() => {
-        if (allowGroup && allowValues && ($xeTable as any).handlePivotTableAggregateData) {
-          if (rowGroupList.length !== aggHandleFields.length || rowGroupList.some((conf, i) => conf.field !== aggHandleFields[i])) {
-            // 更新数据分组
-            if (aggHandleFields.length) {
-              $xeTable.setRowGroups(aggHandleFields)
-            } else {
-              $xeTable.clearRowGroups()
-            }
+      if (allowGroup && allowValues && !!$xeTable.handlePivotTableAggregateData) {
+        if (rowGroupList.length !== aggHandleFields.length || rowGroupList.some((conf, i) => conf.field !== aggHandleFields[i])) {
+          // 更新数据分组
+          if (aggHandleFields.length) {
+            $xeTable.setRowGroups(aggHandleFields)
           } else {
-            // 更新聚合函数
-            $xeTable.handleUpdateAggData()
+            $xeTable.clearRowGroups()
           }
+        } else if (allowValues) {
+          // 更新聚合函数
+          $xeTable.handleUpdateAggData()
         }
-      })
+      }
+      return $xeTable.saveCustomStore('confirm')
     },
     _cancelCustom () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -157,6 +157,7 @@ export default {
         sort: options === true,
         aggFunc: options === true
       }, options)
+      const allCols: VxeTableDefines.ColumnInfo[] = []
       XEUtils.eachTree(collectColumn, (column) => {
         if (opts.resizable) {
           column.resizeWidth = 0
@@ -166,6 +167,7 @@ export default {
         }
         if (opts.sort) {
           column.renderSortNumber = column.sortNumber
+          column.parentId = column.defaultParentId
         }
         if (!checkMethod || checkMethod({ $table: $xeTable, column })) {
           column.visible = column.defaultVisible
@@ -175,9 +177,14 @@ export default {
           column.renderAggFn = column.defaultAggFunc
         }
         column.renderResizeWidth = column.renderWidth
+        allCols.push(column)
       })
+      if (opts.sort) {
+        const newCollectCols = XEUtils.toArrayTree(XEUtils.orderBy(allCols, 'renderSortNumber'), { key: 'id', parentKey: 'parentId', children: 'children' })
+        internalData.collectColumn = newCollectCols
+        internalData.tableFullColumn = getColumnList(newCollectCols)
+      }
       reactData.isCustomStatus = false
-      $xeTable.saveCustomStore('reset')
       return $xeTable.handleCustom().then(() => {
         if (opts.aggFunc && ($xeTable as any).handlePivotTableAggregateData) {
           const rowGroupFields = $xeTable.computeRowGroupFields
@@ -191,6 +198,7 @@ export default {
             $xeTable.handleUpdateAggData()
           }
         }
+        $xeTable.saveCustomStore('reset')
       })
     },
     _toggleCustomAllCheckbox () {

@@ -233,6 +233,7 @@ export function assembleColumn (_vm: any) {
     if (!groupConfig.children) {
       groupConfig.children = []
     }
+    columnConfig.defaultParentId = groupConfig.id
     groupConfig.children.splice(XEUtils.arrayIndexOf($xeColumn.$el.children, $el), 0, columnConfig)
   } else {
     staticColumns.splice(XEUtils.arrayIndexOf(($xeTable.$refs.hideColumn as any).children, $el), 0, columnConfig)
@@ -444,6 +445,15 @@ export function clearTableAllStatus (_vm: any) {
 
 export function isColumnInfo (column: any) {
   return column instanceof ColumnInfo
+}
+
+// 获取所有的列，排除分组
+export function getColumnList (columns: VxeTableDefines.ColumnInfo[]) {
+  const result: VxeTableDefines.ColumnInfo[] = []
+  columns.forEach((column) => {
+    result.push(...(column.children && column.children.length ? getColumnList(column.children) : [column]))
+  })
+  return result
 }
 
 export function createColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, options: any, renderOptions: any): any {

@@ -80,7 +80,7 @@ function insertTreeRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
       }
       parentChilds[funcName](item)
       mapChilds[funcName](item)
-      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
     } else {
@@ -89,7 +89,7 @@ function insertTreeRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
       }
       afterFullData[funcName](item)
       tableFullTreeData[funcName](item)
-      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, items: tableFullTreeData, parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: tableFullTreeData, parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
     }
@@ -129,7 +129,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
     } else {
       newRecords.forEach(item => {
         const rowid = getRowid($xeTable, item)
-        const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, items: afterFullData, parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+        const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: afterFullData, parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
         fullDataRowIdData[rowid] = rest
         fullAllDataRowIdData[rowid] = rest
         afterFullData.unshift(item)
@@ -158,7 +158,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
       } else {
         newRecords.forEach(item => {
           const rowid = getRowid($xeTable, item)
-          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, items: afterFullData, parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: afterFullData, parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
           fullDataRowIdData[rowid] = rest
           fullAllDataRowIdData[rowid] = rest
           afterFullData.push(item)
@@ -189,7 +189,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
               targetIndex = targetIndex + 1
             }
             parentMapChilds.splice(targetIndex, 0, item)
-            const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, items: parentMapChilds, parent: parentRow, level: parentLevel + 1, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+            const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: parentMapChilds, parent: parentRow, level: parentLevel + 1, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
             fullDataRowIdData[rowid] = rest
             fullAllDataRowIdData[rowid] = rest
           })

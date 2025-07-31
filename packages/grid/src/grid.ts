@@ -10,7 +10,7 @@ import tableComponentProps from '../../table/src/props'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeFormItemProps, VxeFormDefines, VxeComponentStyleType, VxeComponentSizeType, ValueOf } from 'vxe-pc-ui'
+import type { VxeFormItemProps, VxeFormDefines, VxeComponentStyleType, VxeComponentSizeType, ValueOf, VxeFormInstance, VxeFormItemPropTypes, VxePagerInstance } from 'vxe-pc-ui'
 import type { GridReactData, VxeTablePropTypes, VxeGridConstructor, VxeToolbarPropTypes, VxeToolbarInstance, VxeGridPropTypes, VxeTableMethods, VxeGridEmits, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, TableInternalData } from '../../../types'
 
 const { getConfig, getI18n, commands, globalEvents, globalMixins, createEvent, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
@@ -31,9 +31,11 @@ function getTableOns (_vm: any) {
   if (proxyConfig) {
     if (proxyOpts.sort) {
       ons['sort-change'] = _vm.sortChangeEvent
+      ons['clear-all-sort'] = _vm.clearAllSortEvent
     }
     if (proxyOpts.filter) {
       ons['filter-change'] = _vm.filterChangeEvent
+      ons['clear-all-filter'] = _vm.clearAllFilterEvent
     }
   }
   return ons
@@ -309,6 +311,13 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const pagerOpts = $xeGrid.computePagerOpts as VxeGridPropTypes.PagerConfig
       return pagerOpts.total
     },
+    computePageCount () {
+      const $xeGrid = this
+      const reactData = ($xeGrid as any).reactData as GridReactData
+
+      const { tablePage } = reactData
+      return Math.max(Math.ceil(tablePage.total / tablePage.pageSize), 1)
+    },
     computeIsLoading () {
       const $xeGrid = this
       const props = $xeGrid
@@ -391,7 +400,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
             tablePage.pageSize = pageSize
           }
           if (total) {
-            tablePage.pageSize = total
+            tablePage.total = total
           }
         }
       }
@@ -956,6 +965,108 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }, { children: 'children' })
       return XEUtils.isUndefined(itemIndex) ? itemList : itemList[itemIndex]
     },
+    resetForm () {
+      const $xeGrid = this
+
+      const $form = $xeGrid.$refs.refForm as VxeFormInstance
+      if ($form) {
+        return $form.reset()
+      }
+      return $xeGrid.$nextTick()
+    },
+    validateForm () {
+      const $xeGrid = this
+
+      const $form = $xeGrid.$refs.refForm as VxeFormInstance
+      if ($form) {
+        return $form.validate()
+      }
+      return $xeGrid.$nextTick() as unknown as Promise<VxeFormDefines.ValidateErrorMapParams>
+    },
+    validateFormField (field: VxeFormItemPropTypes.Field | VxeFormItemPropTypes.Field[] | VxeFormDefines.ItemInfo | VxeFormDefines.ItemInfo[] | null) {
+      const $xeGrid = this
+
+      const $form = $xeGrid.$refs.refForm as VxeFormInstance
+      if ($form) {
+        return $form.validateField(field)
+      }
+      return $xeGrid.$nextTick() as unknown as Promise<VxeFormDefines.ValidateErrorMapParams>
+    },
+    clearFormValidate (field?: VxeFormItemPropTypes.Field | VxeFormItemPropTypes.Field[] | VxeFormDefines.ItemInfo | VxeFormDefines.ItemInfo[] | null) {
+      const $xeGrid = this
+
+      const $form = $xeGrid.$refs.refForm as VxeFormInstance
+      if ($form) {
+        return $form.clearValidate(field)
+      }
+      return $xeGrid.$nextTick()
+    },
+    homePage () {
+      const $xeGrid = this
+      const reactData = $xeGrid.reactData
+
+      const { tablePage } = reactData
+      tablePage.currentPage = 1
+      return $xeGrid.$nextTick()
+    },
+    homePageByEvent (evnt: Event) {
+      const $xeGrid = this
+
+      const $pager = $xeGrid.$refs.refPager as VxePagerInstance
+      if ($pager) {
+        $pager.homePageByEvent(evnt)
+      }
+    },
+    endPage () {
+      const $xeGrid = this
+      const reactData = $xeGrid.reactData
+
+      const { tablePage } = reactData
+      const pageCount = $xeGrid.computePageCount
+      tablePage.currentPage = pageCount
+      return $xeGrid.$nextTick()
+    },
+    endPageByEvent (evnt: Event) {
+      const $xeGrid = this
+
+      const $pager = $xeGrid.$refs.refPager as VxePagerInstance
+      if ($pager) {
+        $pager.endPageByEvent(evnt)
+      }
+    },
+    setCurrentPage (currentPage: number | string | null | undefined) {
+      const $xeGrid = this
+      const reactData = $xeGrid.reactData
+
+      const { tablePage } = reactData
+      const pageCount = $xeGrid.computePageCount
+      tablePage.currentPage = Math.min(pageCount, Math.max(1, XEUtils.toNumber(currentPage)))
+      return $xeGrid.$nextTick()
+    },
+    setCurrentPageByEvent (evnt: Event, currentPage: number | string | null | undefined) {
+      const $xeGrid = this
+
+      const $pager = $xeGrid.$refs.refPager as VxePagerInstance
+      if ($pager) {
+        $pager.setCurrentPageByEvent(evnt, currentPage)
+      }
+    },
+    setPageSize (pageSize: number | string | null | undefined) {
+      const $xeGrid = this
+      const reactData = $xeGrid.reactData
+
+      const { tablePage } = reactData
+      tablePage.pageSize = Math.max(1, XEUtils.toNumber(pageSize))
+      return $xeGrid.$nextTick()
+    },
+    setPageSizeByEvent (evnt: Event, pageSize: number | string | null | undefined) {
+      const $xeGrid = this
+
+      const $pager = $xeGrid.$refs.refPager as VxePagerInstance
+      if ($pager) {
+        $pager.setPageSizeByEvent(evnt, pageSize)
+      }
+    },
     triggerToolbarCommitEvent (params: any, evnt: any) {
       const $xeGrid = this
 
@@ -978,27 +1089,6 @@ export default /* define-vxe-component start */ defineVxeComponent({
       $xeGrid.triggerToolbarCommitEvent(tool, evnt)
       $xeGrid.dispatchEvent('toolbar-tool-click', { code: tool.code, tool }, evnt)
     },
-    sortChangeEvent (params: VxeTableDefines.SortChangeEventParams) {
-      const $xeGrid = this
-      const props = $xeGrid
-      const reactData = $xeGrid.reactData
-      const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
-
-      const { proxyConfig } = props
-      const proxyOpts = $xeGrid.computeProxyOpts
-      const sortOpts = $xeTable.computeSortOpts
-      // 如果是服务端排序
-      if (sortOpts.remote) {
-        reactData.sortData = params.sortList
-        if (proxyConfig && isEnableConf(proxyOpts)) {
-          reactData.tablePage.currentPage = 1
-          $xeGrid.commitProxy('query').then((rest) => {
-            $xeGrid.dispatchEvent('proxy-query', rest, params.$event)
-          })
-        }
-      }
-      $xeGrid.dispatchEvent('sort-change', params, params.$event)
-    },
     pageChangeEvent (params: VxePagerDefines.PageChangeEventParams) {
       const $xeGrid = this
       const props = $xeGrid
@@ -1017,7 +1107,39 @@ export default /* define-vxe-component start */ defineVxeComponent({
         })
       }
     },
-    filterChangeEvent (params: VxeTableDefines.FilterChangeEventParams) {
+    handleSortEvent (params: VxeTableDefines.SortChangeEventParams) {
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
+      const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
+
+      const { proxyConfig } = props
+      const proxyOpts = $xeGrid.computeProxyOpts
+      const sortOpts = $xeTable.computeSortOpts
+      // 如果是服务端排序
+      if (sortOpts.remote) {
+        reactData.sortData = params.sortList
+        if (proxyConfig && isEnableConf(proxyOpts)) {
+          reactData.tablePage.currentPage = 1
+          $xeGrid.commitProxy('query').then((rest) => {
+            $xeGrid.dispatchEvent('proxy-query', rest, params.$event)
+          })
+        }
+      }
+    },
+    sortChangeEvent (params: VxeTableDefines.SortChangeEventParams) {
+      const $xeGrid = this
+
+      $xeGrid.handleSortEvent(params)
+      $xeGrid.dispatchEvent('sort-change', params, params.$event)
+    },
+    clearAllSortEvent (params: VxeTableDefines.SortChangeEventParams) {
+      const $xeGrid = this
+
+      $xeGrid.handleSortEvent(params)
+      $xeGrid.dispatchEvent('clear-all-sort', params, params.$event)
+    },
+    handleFilterEvent (params: VxeTableDefines.ClearAllFilterEventParams) {
       const $xeGrid = this
       const props = $xeGrid
       const reactData = $xeGrid.reactData
@@ -1036,7 +1158,18 @@ export default /* define-vxe-component start */ defineVxeComponent({
           })
         }
       }
+    },
+    filterChangeEvent (params: VxeTableDefines.ClearAllFilterEventParams) {
+      const $xeGrid = this
+
+      $xeGrid.handleFilterEvent(params)
       $xeGrid.dispatchEvent('filter-change', params, params.$event)
+    },
+    clearAllFilterEvent (params: VxeTableDefines.ClearAllFilterEventParams) {
+      const $xeGrid = this
+
+      $xeGrid.handleFilterEvent(params)
+      $xeGrid.dispatchEvent('clear-all-filter', params, params.$event)
     },
     submitFormEvent (params: VxeFormDefines.SubmitEventParams) {
       const $xeGrid = this
@@ -1089,6 +1222,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       $xeGrid.zoom()
       $xeGrid.dispatchEvent('zoom', { type: reactData.isZMax ? 'max' : 'revert' }, evnt)
+    },
+    getParams () {
+      const $xeGrid = this
+      const props = $xeGrid
+
+      return (props as any).params
     },
     zoom () {
       const $xeGrid = this

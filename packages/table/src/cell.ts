@@ -395,7 +395,7 @@ export const Cell = {
       const { fullColumnFieldData } = tableInternalData
       const aggregateOpts = $table.computeAggregateOpts
       const { mode, showTotal, totalMethod, countFields, contentMethod, mapChildrenField } = aggregateOpts
-      const aggMethod = aggregateOpts.aggregateMethod || aggregateOpts.countMethod
+      const aggCalcMethod = aggregateOpts.calcValuesMethod || aggregateOpts.countMethod || aggregateOpts.aggregateMethod
       const groupField = aggRow.groupField
       const groupContent = aggRow.groupContent
       const childList = mapChildrenField ? (aggRow[mapChildrenField] || []) : []
@@ -428,9 +428,9 @@ export const Cell = {
       } else if ($table.getPivotTableAggregateCellAggValue) {
         cellValue = $table.getPivotTableAggregateCellAggValue(params)
       } else if (aggFunc === true || (countFields && countFields.includes(field))) {
-        if (aggMethod) {
+        if (aggCalcMethod) {
           ctParams.aggValue = childCount
-          cellValue = `${aggMethod(ctParams)}`
+          cellValue = `${aggCalcMethod(ctParams)}`
         }
       }
     } else {
@@ -480,14 +480,14 @@ export const Cell = {
     const { rowGroupExpandedFlag } = tableReactData
     const { rowGroupExpandedMaps } = tableInternalData
     const aggregateOpts = $table.computeAggregateOpts
-    const { padding, indent } = aggregateOpts
+    const { mode, padding, indent } = aggregateOpts
     const rowid = getRowid($table, row)
     const isExpand = !!rowGroupExpandedFlag && !!rowGroupExpandedMaps[rowid]
     return h('div', {
       class: ['vxe-row-group--tree-node', {
         'is--expanded': isExpand
       }],
-      style: padding && indent
+      style: mode !== 'column' && padding && indent
         ? {
             paddingLeft: `${level * indent}px`
           }

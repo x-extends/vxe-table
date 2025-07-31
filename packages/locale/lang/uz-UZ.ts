@@ -56,7 +56,7 @@ export default {
       treeDragChild: "Ota-onalar o'z farzandlariga sudrab ketolmaydilar",
       reqPlugin: "\"{1}\" https://vxeui.com/oter{/#/#/#/install-da o'rnatilmagan",
       errMaxRow: "Maksimal qo'llab-quvvatlanadigan ma'lumotlar hajmi {0} qatorlar hajmidan oshib ketishi mumkin, bu xatoga olib kelishi mumkin",
-      useNew: '{0} 已经不建议使用，请使用新的方式 {1}'
+      useNew: '不建议使用 {0}，请使用 {1}'
     },
     table: {
       emptyText: "Hali ma'lumot yo'q",

@@ -56,7 +56,7 @@ export default {
       treeDragChild: 'Orang tua tidak bisa menyeret ke anak -anak mereka sendiri',
       reqPlugin: '"{1}" tidak diinstal di https://vxeUi.com/other{ 0',
       errMaxRow: 'Melebihi volume data yang didukung maksimum {0}, ini dapat menyebabkan kesalahan',
-      useNew: '{0} 已经不建议使用，请使用新的方式 {1}'
+      useNew: '不建议使用 {0}，请使用 {1}'
     },
     table: {
       emptyText: 'Belum ada data',

@@ -256,15 +256,16 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
       let rowIndex = -1
       let $rowIndex = -1
       if (rowRest) {
-        rowLevel = rowRest.level
-        if (isRowGroupStatus || (treeConfig && transform && seqMode === 'increasing')) {
-          seq = rowRest._index + 1
-        } else {
-          seq = rowRest.seq
-        }
         rowIndex = rowRest.index
         $rowIndex = rowRest.$index
         _rowIndex = rowRest._index
+        rowLevel = rowRest.level
+        seq = rowRest.seq
+        if (isRowGroupStatus || (treeConfig && transform && seqMode === 'increasing')) {
+          seq = rowRest._index + 1
+        } else if ((treeConfig && seqMode === 'fixed')) {
+          seq = rowRest._tIndex + 1
+        }
       }
       if (expandHeight) {
         cellStyle.height = `${expandHeight}px`
@@ -1368,7 +1369,7 @@ export default {
       })
     },
     staticColumns (value: any) {
-      this.handleColumn(XEUtils.clone(value))
+      this.$nextTick(() => this.handleInitColumn(XEUtils.clone(value)))
     },
     tableColumn () {
       this.analyColumnWidth()
@@ -1727,7 +1728,10 @@ export default {
       warnLog('vxe.error.delProp', ['row-group-config.countFields', 'column.agg-func'])
     }
     if (aggregateOpts.aggregateMethod) {
-      warnLog('vxe.error.delProp', ['row-group-config.aggregateMethod', 'aggregate-config.countMethod'])
+      warnLog('vxe.error.delProp', ['row-group-config.aggregateMethod', 'aggregate-config.calcValuesMethod'])
+    }
+    if (aggregateOpts.countMethod) {
+      warnLog('vxe.error.delProp', ['aggregate-config.countMethod', 'aggregate-config.calcValuesMethod'])
     }
     if (props.treeConfig && treeOpts.children) {
       warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])

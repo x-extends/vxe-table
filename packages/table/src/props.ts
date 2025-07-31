@@ -278,5 +278,5 @@ export default {
   // （可能会被废弃的参数，不要使用）
   delayHover: { type: Number, default: () => getConfig().table.delayHover },
   // 额外的参数
-  params: Object
+  params: Object as PropType<VxeTablePropTypes.Params>
 }
