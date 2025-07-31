@@ -3652,7 +3652,7 @@ export default defineVxeComponent({
           if (parentColumn && parentColumn.fixed) {
             column.fixed = parentColumn.fixed
           }
-          if (parentColumn && column.fixed !== parentColumn.fixed) {
+          if (parentColumn && (column.fixed || '') !== (parentColumn.fixed || '')) {
             errLog('vxe.error.groupFixed')
           }
           if (isColGroup) {
