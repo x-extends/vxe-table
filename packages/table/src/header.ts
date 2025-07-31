@@ -66,7 +66,7 @@ export default defineVxeComponent({
         const renderOpts = editRender || cellRender
         const compConf = renderOpts ? renderer.get(renderOpts.name) : null
         const isColGroup = column.children && column.children.length
-        const fixedHiddenColumn = fixedType ? (column.fixed !== fixedType && !isColGroup) : !!column.fixed && overflowX
+        const fixedHiddenColumn = overflowX && !isColGroup && (fixedType ? column.fixed !== fixedType : !!column.fixed)
         const isPadding = XEUtils.isBoolean(headerCellOpts.padding) ? headerCellOpts.padding : cellOpts.padding
         const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
         const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
@@ -130,7 +130,7 @@ export default defineVxeComponent({
         const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
         let isVNPreEmptyStatus = false
-        if (isOptimizeMode && !isGroup) {
+        if (isOptimizeMode && overflowX && !isGroup) {
           if (!dragCol || dragCol.id !== colid) {
             if (scrollXLoad && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
               isVNPreEmptyStatus = true

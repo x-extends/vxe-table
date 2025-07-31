@@ -56,7 +56,7 @@ export default {
       treeDragChild: 'Os pais não podem arrastar para seus próprios filhos',
       reqPlugin: '"{1}" não está instalado em https://vxeui.com/other {0a }/# {1age/install',
       errMaxRow: 'Excedendo o volume máximo de dados suportado {0} linhas, isso pode causar um erro',
-      useNew: '{0} 已经不建议使用，请使用新的方式 {1}'
+      useNew: '不建议使用 {0}，请使用 {1}'
     },
     table: {
       emptyText: 'Ainda não há dados',

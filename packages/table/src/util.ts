@@ -342,6 +342,15 @@ export function isColumnInfo (column: any): column is ColumnInfo {
   return column && (column.constructor === ColumnInfo || column instanceof ColumnInfo)
 }
 
+// 获取所有的列，排除分组
+export function getColumnList (columns: VxeTableDefines.ColumnInfo[]) {
+  const result: VxeTableDefines.ColumnInfo[] = []
+  columns.forEach((column) => {
+    result.push(...(column.children && column.children.length ? getColumnList(column.children) : [column]))
+  })
+  return result
+}
+
 export function createColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, options: VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo, renderOptions: any): any {
   return isColumnInfo(options) ? options : reactive(new ColumnInfo($xeTable, options, renderOptions))
 }
@@ -369,6 +378,7 @@ export function assembleColumn ($xeTable: VxeTableConstructor & VxeTablePrivateM
   const parentColumn = colgroup ? colgroup.columnConfig : null
   const parentCols = parentColumn ? parentColumn.children : staticColumns
   if (parentElem && parentCols) {
+    column.defaultParentId = parentColumn ? parentColumn.id : null
     parentCols.splice(XEUtils.arrayIndexOf(parentElem.children, elem), 0, column)
     reactData.staticColumns = staticColumns.slice(0)
   }

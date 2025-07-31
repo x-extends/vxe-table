@@ -56,7 +56,7 @@ export default {
       treeDragChild: '父级不能拖拽到自己的子级中',
       reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install',
       errMaxRow: '超过支持的最大数据量 {0} 行，这可能会导致出现错误',
-      useNew: '{0} 已经不建议使用，请使用新的方式 {1}'
+      useNew: '不建议使用 {0}，请使用 {1}'
     },
     table: {
       emptyText: '暂无数据',

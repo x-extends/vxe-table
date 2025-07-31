@@ -119,9 +119,12 @@ export class ColumnInfo {
       parentId: null,
       visible,
       // 内部属性（一旦被使用，将导致不可升级版本）
+      defaultParentId: null,
       halfVisible: false,
       defaultVisible: visible,
       defaultFixed: _vm.fixed,
+
+      defaultAggGroup: _vm.aggGroup,
       defaultAggFunc: _vm.aggFunc,
 
       checked: false,

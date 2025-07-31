@@ -55,7 +55,7 @@ body:
   id: issue_vxe_ui_version
   attributes:
     label: "vxe-pc-ui 版本："
-    placeholder: "例如：4.7.23"
+    placeholder: "例如：4.8.0"
   validations:
     required: true
 - type: input
