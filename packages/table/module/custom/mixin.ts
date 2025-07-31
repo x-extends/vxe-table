@@ -97,7 +97,7 @@ export default {
       })
       reactData.isCustomStatus = true
       return $xeTable.saveCustomStore('confirm').then(() => {
-        if (allowGroup && allowValues && ($xeTable as any).handlePivotTableAggregateData) {
+        if (allowGroup && !!$xeTable.handlePivotTableAggregateData) {
           if (rowGroupList.length !== aggHandleFields.length || rowGroupList.some((conf, i) => conf.field !== aggHandleFields[i])) {
             // 更新数据分组
             if (aggHandleFields.length) {
@@ -105,7 +105,7 @@ export default {
             } else {
               $xeTable.clearRowGroups()
             }
-          } else {
+          } else if (allowValues) {
             // 更新聚合函数
             $xeTable.handleUpdateAggData()
           }
