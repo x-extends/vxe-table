@@ -26,7 +26,7 @@ import validatorMixin from '../module/validator/mixin'
 import customMixin from '../module/custom/mixin'
 
 import type { VxeLoadingComponent, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods } from 'vxe-pc-ui'
-import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, TableReactData, VxeTableDefines } from '../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes, TableInternalData, TableReactData, VxeTableDefines } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 
@@ -791,13 +791,41 @@ export default {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
-      return Object.assign({}, getConfig().table.virtualXConfig || getConfig().table.scrollX, props.virtualXConfig || props.scrollX)
+      const { virtualXConfig, scrollX } = props
+      const globalVirtualXConfig = getConfig().table.virtualXConfig
+      const globalScrollX = getConfig().table.scrollX
+      if (virtualXConfig) {
+        return Object.assign({}, globalVirtualXConfig, virtualXConfig) as VxeTablePropTypes.VirtualXConfig & { gt: number }
+      }
+      if (scrollX) {
+        // 已废弃，保留兼容
+        return Object.assign({}, globalScrollX, scrollX) as VxeTablePropTypes.VirtualXConfig & { gt: number }
+      }
+      if (globalVirtualXConfig) {
+        return Object.assign({}, globalVirtualXConfig, virtualXConfig) as VxeTablePropTypes.VirtualXConfig & { gt: number }
+      }
+      // 已废弃，保留兼容
+      return Object.assign({}, globalScrollX, scrollX) as VxeTablePropTypes.VirtualXConfig & { gt: number }
     },
     computeVirtualYOpts () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
-      return Object.assign({}, getConfig().table.virtualYConfig || getConfig().table.scrollY, props.virtualYConfig || props.scrollY)
+      const { virtualYConfig, scrollY } = props
+      const globalVirtualYConfig = getConfig().table.virtualYConfig
+      const globalScrollY = getConfig().table.scrollY
+      if (virtualYConfig) {
+        return Object.assign({}, globalVirtualYConfig, virtualYConfig) as VxeTablePropTypes.VirtualYConfig & { gt: number }
+      }
+      if (scrollY) {
+        // 已废弃，保留兼容
+        return Object.assign({}, globalScrollY, scrollY) as VxeTablePropTypes.VirtualYConfig & { gt: number }
+      }
+      if (globalVirtualYConfig) {
+        return Object.assign({}, globalVirtualYConfig, virtualYConfig) as VxeTablePropTypes.VirtualYConfig & { gt: number }
+      }
+      // 已废弃，保留兼容
+      return Object.assign({}, globalScrollY, scrollY) as VxeTablePropTypes.VirtualYConfig & { gt: number }
     },
     computeScrollbarOpts () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods

@@ -318,10 +318,10 @@ function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
 
   if (htmlColumn) {
     if (!columnOpts.useKey) {
-      errLog('vxe.error.reqProp', ['column-config.useKey & column.type=html'])
+      errLog('vxe.error.notSupportProp', ['column.type=html', 'column-config.useKey=false', 'column-config.useKey=true'])
     }
     if (!rowOpts.useKey) {
-      errLog('vxe.error.reqProp', ['row-config.useKey & column.type=html'])
+      errLog('vxe.error.notSupportProp', ['column.type=html', 'row-config.useKey=false', 'row-config.useKey=true'])
     }
   }
 
