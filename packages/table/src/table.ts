@@ -514,11 +514,19 @@ export default defineVxeComponent({
     })
 
     const computeVirtualXOpts = computed(() => {
-      return Object.assign({}, getConfig().table.virtualXConfig || getConfig().table.scrollX, props.virtualXConfig || props.scrollX) as VxeTablePropTypes.VirtualXConfig & { gt: number }
+      const { virtualXConfig } = props
+      if (virtualXConfig) {
+        return Object.assign({}, getConfig().table.virtualXConfig, virtualXConfig) as VxeTablePropTypes.VirtualXConfig & { gt: number }
+      }
+      return Object.assign({}, getConfig().table.virtualXConfig, getConfig().table.scrollX, props.scrollX) as VxeTablePropTypes.VirtualXConfig & { gt: number }
     })
 
     const computeVirtualYOpts = computed(() => {
-      return Object.assign({}, getConfig().table.virtualYConfig || getConfig().table.scrollY, props.virtualYConfig || props.scrollY) as VxeTablePropTypes.VirtualYConfig & { gt: number }
+      const { virtualYConfig } = props
+      if (virtualYConfig) {
+        return Object.assign({}, getConfig().table.virtualYConfig, virtualYConfig) as VxeTablePropTypes.VirtualYConfig & { gt: number }
+      }
+      return Object.assign({}, getConfig().table.virtualYConfig, getConfig().table.scrollY, props.scrollY) as VxeTablePropTypes.VirtualYConfig & { gt: number }
     })
 
     const computeScrollbarOpts = computed(() => {
@@ -1709,10 +1717,10 @@ export default defineVxeComponent({
 
       if (htmlColumn) {
         if (!columnOpts.useKey) {
-          errLog('vxe.error.reqProp', ['column-config.useKey & column.type=html'])
+          errLog('vxe.error.notSupportProp', ['column.type=html', 'column-config.useKey=false', 'column-config.useKey=true'])
         }
         if (!rowOpts.useKey) {
-          errLog('vxe.error.reqProp', ['row-config.useKey & column.type=html'])
+          errLog('vxe.error.notSupportProp', ['column.type=html', 'row-config.useKey=false', 'row-config.useKey=true'])
         }
       }
 
