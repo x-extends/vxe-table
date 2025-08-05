@@ -125,6 +125,9 @@ VxeUI.hooks.add('tableCustomModule', {
           $xeTable.handleUpdateAggData()
         }
       }
+      if (allowSort) {
+        internalData.collectColumn = customColumnList
+      }
       return $xeTable.saveCustomStore('confirm')
     }
 
@@ -195,6 +198,10 @@ VxeUI.hooks.add('tableCustomModule', {
     }
 
     const customMethods: TableCustomMethods = {
+      getCustomVisible () {
+        const { customStore } = reactData
+        return customStore.visible
+      },
       openCustom,
       closeCustom,
       toggleCustom,

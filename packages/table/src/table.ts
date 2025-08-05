@@ -514,11 +514,19 @@ export default defineVxeComponent({
     })
 
     const computeVirtualXOpts = computed(() => {
-      return Object.assign({}, getConfig().table.virtualXConfig || getConfig().table.scrollX, props.virtualXConfig || props.scrollX) as VxeTablePropTypes.VirtualXConfig & { gt: number }
+      const { virtualXConfig } = props
+      if (virtualXConfig) {
+        return Object.assign({}, getConfig().table.virtualXConfig, virtualXConfig) as VxeTablePropTypes.VirtualXConfig & { gt: number }
+      }
+      return Object.assign({}, getConfig().table.virtualXConfig, getConfig().table.scrollX, props.scrollX) as VxeTablePropTypes.VirtualXConfig & { gt: number }
     })
 
     const computeVirtualYOpts = computed(() => {
-      return Object.assign({}, getConfig().table.virtualYConfig || getConfig().table.scrollY, props.virtualYConfig || props.scrollY) as VxeTablePropTypes.VirtualYConfig & { gt: number }
+      const { virtualYConfig } = props
+      if (virtualYConfig) {
+        return Object.assign({}, getConfig().table.virtualYConfig, virtualYConfig) as VxeTablePropTypes.VirtualYConfig & { gt: number }
+      }
+      return Object.assign({}, getConfig().table.virtualYConfig, getConfig().table.scrollY, props.scrollY) as VxeTablePropTypes.VirtualYConfig & { gt: number }
     })
 
     const computeScrollbarOpts = computed(() => {
@@ -1669,8 +1677,8 @@ export default defineVxeComponent({
      */
     const cacheColumnMap = () => {
       const { tableFullColumn, collectColumn } = internalData
-      const fullColumnIdData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnIdData = {}
-      const fullColumnFieldData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnFieldData = {}
+      const fullColIdData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnIdData = {}
+      const fullColFieldData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnFieldData = {}
       const mouseOpts = computeMouseOpts.value
       const expandOpts = computeExpandOpts.value
       const columnOpts = computeColumnOpts.value
@@ -1693,10 +1701,10 @@ export default defineVxeComponent({
         const { id: colid, field, fixed, type, treeNode, rowGroupNode } = column
         const rest = { $index: -1, _index: -1, column, colid, index, items, parent: parentColumn || null, width: 0, oLeft: 0 }
         if (field) {
-          if (fullColumnFieldData[field]) {
+          if (fullColFieldData[field]) {
             errLog('vxe.error.colRepet', ['field', field])
           }
-          fullColumnFieldData[field] = rest
+          fullColFieldData[field] = rest
         } else {
           if ((storage && !type) || (columnOpts.drag && (isCrossDrag || isSelfToChildDrag))) {
             errLog('vxe.error.reqProp', [`${column.getTitle() || type || ''} -> column.field=?`])
@@ -1750,10 +1758,10 @@ export default defineVxeComponent({
         if (isAllOverflow && column.showOverflow === false) {
           isAllOverflow = false
         }
-        if (fullColumnIdData[colid]) {
+        if (fullColIdData[colid]) {
           errLog('vxe.error.colRepet', ['colId', colid])
         }
-        fullColumnIdData[colid] = rest
+        fullColIdData[colid] = rest
       }
       if (isGroup) {
         XEUtils.eachTree(collectColumn, (column, index, items, path, parentColumn, nodes) => {
@@ -1773,10 +1781,10 @@ export default defineVxeComponent({
 
       if (htmlColumn) {
         if (!columnOpts.useKey) {
-          errLog('vxe.error.reqProp', ['column-config.useKey & column.type=html'])
+          errLog('vxe.error.notSupportProp', ['column.type=html', 'column-config.useKey=false', 'column-config.useKey=true'])
         }
         if (!rowOpts.useKey) {
-          errLog('vxe.error.reqProp', ['row-config.useKey & column.type=html'])
+          errLog('vxe.error.notSupportProp', ['column.type=html', 'row-config.useKey=false', 'row-config.useKey=true'])
         }
       }
 
@@ -3822,15 +3830,28 @@ export default defineVxeComponent({
 
     const initColumnHierarchy = () => {
       const { collectColumn } = internalData
+      const fullColIdData: Record<string, VxeTableDefines.ColumnCacheItem> = {}
+      const fullColFieldData: Record<string, VxeTableDefines.ColumnCacheItem> = {}
       let sortIndex = 1
       XEUtils.eachTree(collectColumn, (column, index, items, path, parentColumn) => {
+        const { id: colid, field } = column
         const parentId = parentColumn ? parentColumn.id : null
+        const rest = { $index: -1, _index: -1, column, colid, index, items, parent: parentColumn || null, width: 0, oLeft: 0 }
         column.parentId = parentId
         column.defaultParentId = parentId
         column.sortNumber = sortIndex
         column.renderSortNumber = sortIndex
         sortIndex++
+        if (field) {
+          if (fullColFieldData[field]) {
+            errLog('vxe.error.colRepet', ['field', field])
+          }
+          fullColFieldData[field] = rest
+        }
+        fullColIdData[colid] = rest
       })
+      internalData.fullColumnIdData = fullColIdData
+      internalData.fullColumnFieldData = fullColFieldData
     }
 
     const handleInitColumn = (collectColumn: VxeTableDefines.ColumnInfo[]) => {
