@@ -26,7 +26,7 @@ import validatorMixin from '../module/validator/mixin'
 import customMixin from '../module/custom/mixin'
 
 import type { VxeTabsConstructor, VxeTabsPrivateMethods } from 'vxe-pc-ui'
-import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, TableReactData, VxeTableDefines } from '../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes, TableInternalData, TableReactData, VxeTableDefines } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 
@@ -809,13 +809,21 @@ export default {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
-      return Object.assign({}, getConfig().table.virtualXConfig || getConfig().table.scrollX, props.virtualXConfig || props.scrollX)
+      const { virtualXConfig } = props
+      if (virtualXConfig) {
+        return Object.assign({}, getConfig().table.virtualXConfig, virtualXConfig) as VxeTablePropTypes.VirtualXConfig & { gt: number }
+      }
+      return Object.assign({}, getConfig().table.virtualXConfig, getConfig().table.scrollX, props.scrollX) as VxeTablePropTypes.VirtualXConfig & { gt: number }
     },
     computeVirtualYOpts () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
-      return Object.assign({}, getConfig().table.virtualYConfig || getConfig().table.scrollY, props.virtualYConfig || props.scrollY)
+      const { virtualYConfig } = props
+      if (virtualYConfig) {
+        return Object.assign({}, getConfig().table.virtualYConfig, virtualYConfig) as VxeTablePropTypes.VirtualYConfig & { gt: number }
+      }
+      return Object.assign({}, getConfig().table.virtualYConfig, getConfig().table.scrollY, props.scrollY) as VxeTablePropTypes.VirtualYConfig & { gt: number }
     },
     computeScrollbarOpts () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods

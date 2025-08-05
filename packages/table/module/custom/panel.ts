@@ -1124,7 +1124,7 @@ export default {
           }
         }
       }
-      if (!targetFixed !== null) {
+      if (targetFixed !== null) {
         $xeTable.dispatchEvent('custom-fixed-change', { column, fixed: targetFixed }, evnt)
       }
     },
