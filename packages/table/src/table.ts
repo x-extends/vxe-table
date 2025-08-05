@@ -7940,13 +7940,17 @@ export default defineVxeComponent({
       cacheRowMap (isReset) {
         const { treeConfig } = props
         const { isRowGroupStatus } = reactData
-        const { fullAllDataRowIdData, tableFullData, tableFullTreeData, tableFullGroupData, treeExpandedMaps } = internalData
+        const { currKeyField, fullAllDataRowIdData, tableFullData, tableFullTreeData, tableFullGroupData, treeExpandedMaps } = internalData
         const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = isReset ? {} : { ...fullAllDataRowIdData } // 存在已删除数据
         const fullDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
 
+        const idMaps: Record<string, boolean> = {}
         const { handleUpdateRowId } = createHandleUpdateRowId($xeTable)
         const handleRowCache = (row: any, index: number, items: any, currIndex: number, parentRow: any, rowid: string, level: number, seq: string | number) => {
           let rowRest = fullAllDataRowIdMaps[rowid]
+          if (idMaps[rowid]) {
+            errLog('vxe.error.repeatKey', [currKeyField, rowid])
+          }
           if (!rowRest) {
             rowRest = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
             fullDataRowIdMaps[rowid] = rowRest
@@ -7962,6 +7966,7 @@ export default defineVxeComponent({
           rowRest.index = currIndex
           rowRest.treeIndex = index
 
+          idMaps[rowid] = true
           fullDataRowIdMaps[rowid] = rowRest
           fullAllDataRowIdMaps[rowid] = rowRest
         }
