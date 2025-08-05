@@ -25,6 +25,13 @@ function emitCustomEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
 
 export default {
   methods: {
+    _getCustomVisible () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { customStore } = reactData
+      return customStore.visible
+    },
     _openCustom () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
@@ -64,6 +71,7 @@ export default {
     _saveCustom () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
 
       const { customColumnList, aggHandleFields, rowGroupList } = reactData
       const customOpts = $xeTable.computeCustomOpts
@@ -109,6 +117,9 @@ export default {
           // 更新聚合函数
           $xeTable.handleUpdateAggData()
         }
+      }
+      if (allowSort) {
+        internalData.collectColumn = customColumnList
       }
       return $xeTable.saveCustomStore('confirm')
     },

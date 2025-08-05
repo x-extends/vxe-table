@@ -276,8 +276,8 @@ function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
   const internalData = $xeTable as unknown as TableInternalData
 
   const { tableFullColumn, collectColumn } = internalData
-  const fullColumnIdData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnIdData = {}
-  const fullColumnFieldData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnFieldData = {}
+  const fullColIdData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnIdData = {}
+  const fullColFieldData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnFieldData = {}
   const mouseOpts = $xeTable.computeMouseOpts
   const expandOpts = $xeTable.computeExpandOpts
   const columnOpts = $xeTable.computeColumnOpts
@@ -299,10 +299,10 @@ function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
     const { id: colid, field, fixed, type, treeNode, rowGroupNode } = column
     const rest = { $index: -1, _index: -1, column, colid, index, items, parent: parentColumn || null, width: 0, oLeft: 0 }
     if (field) {
-      if (fullColumnFieldData[field]) {
+      if (fullColFieldData[field]) {
         errLog('vxe.error.colRepet', ['field', field])
       }
-      fullColumnFieldData[field] = rest
+      fullColFieldData[field] = rest
     } else {
       if ((storage && !type) || (columnOpts.drag && (isCrossDrag || isSelfToChildDrag))) {
         errLog('vxe.error.reqProp', [`${column.getTitle() || type || ''} -> column.field=?`])
@@ -356,10 +356,10 @@ function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
     if (isAllOverflow && column.showOverflow === false) {
       isAllOverflow = false
     }
-    if (fullColumnIdData[colid]) {
+    if (fullColIdData[colid]) {
       errLog('vxe.error.colRepet', ['colId', colid])
     }
-    fullColumnIdData[colid] = rest
+    fullColIdData[colid] = rest
   }
 
   if (isGroup) {
@@ -377,10 +377,10 @@ function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
 
   if (htmlColumn) {
     if (!columnOpts.useKey) {
-      errLog('vxe.error.reqProp', ['column-config.useKey & column.type=html'])
+      errLog('vxe.error.notSupportProp', ['column.type=html', 'column-config.useKey=false', 'column-config.useKey=true'])
     }
     if (!rowOpts.useKey) {
-      errLog('vxe.error.reqProp', ['row-config.useKey & column.type=html'])
+      errLog('vxe.error.notSupportProp', ['column.type=html', 'row-config.useKey=false', 'row-config.useKey=true'])
     }
   }
 
@@ -3399,15 +3399,28 @@ function initColumnHierarchy ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const internalData = $xeTable as unknown as TableInternalData
 
   const { collectColumn } = internalData
+  const fullColIdData: Record<string, VxeTableDefines.ColumnCacheItem> = {}
+  const fullColFieldData: Record<string, VxeTableDefines.ColumnCacheItem> = {}
   let sortIndex = 1
   XEUtils.eachTree(collectColumn, (column, index, items, path, parentColumn) => {
+    const { id: colid, field } = column
     const parentId = parentColumn ? parentColumn.id : null
+    const rest = { $index: -1, _index: -1, column, colid, index, items, parent: parentColumn || null, width: 0, oLeft: 0 }
     column.parentId = parentId
     column.defaultParentId = parentId
     column.sortNumber = sortIndex
     column.renderSortNumber = sortIndex
     sortIndex++
+    if (field) {
+      if (fullColFieldData[field]) {
+        errLog('vxe.error.colRepet', ['field', field])
+      }
+      fullColFieldData[field] = rest
+    }
+    fullColIdData[colid] = rest
   })
+  internalData.fullColumnIdData = fullColIdData
+  internalData.fullColumnFieldData = fullColFieldData
 }
 
 function handleInitColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, collectColumn: VxeTableDefines.ColumnInfo[]) {
@@ -11167,7 +11180,7 @@ const Methods = {
 } as any
 
 // Module methods
-const funcs = 'setFilter,openFilter,clearFilter,saveFilterPanel,saveFilterPanelByEvent,resetFilterPanel,resetFilterPanelByEvent,getCheckedFilters,updateFilterOptionStatus,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFNR,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,insertNextAt,insertChild,insertChildAt,insertChildNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getEditCell,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,fullValidateField,validateField,openExport,closeExport,openPrint,closePrint,getPrintHtml,exportData,openImport,closeImport,importData,saveFile,readFile,importByFile,print,openCustom,closeCustom,toggleCustom,saveCustom,cancelCustom,resetCustom,toggleCustomAllCheckbox,setCustomAllCheckbox'.split(',')
+const funcs = 'setFilter,openFilter,clearFilter,saveFilterPanel,saveFilterPanelByEvent,resetFilterPanel,resetFilterPanelByEvent,getCheckedFilters,updateFilterOptionStatus,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFNR,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,insertNextAt,insertChild,insertChildAt,insertChildNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getEditCell,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,fullValidateField,validateField,openExport,closeExport,openPrint,closePrint,getPrintHtml,exportData,openImport,closeImport,importData,saveFile,readFile,importByFile,print,getCustomVisible,openCustom,closeCustom,toggleCustom,saveCustom,cancelCustom,resetCustom,toggleCustomAllCheckbox,setCustomAllCheckbox'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args: any[]) {

@@ -228,6 +228,7 @@ VxeUI.setConfig({
     },
     virtualYConfig: {
       // enabled: false,
+      // mode: 'wheel',
       gt: 100,
       preSize: 1,
       oSize: 0
