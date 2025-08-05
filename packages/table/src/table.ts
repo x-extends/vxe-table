@@ -514,19 +514,39 @@ export default defineVxeComponent({
     })
 
     const computeVirtualXOpts = computed(() => {
-      const { virtualXConfig } = props
+      const { virtualXConfig, scrollX } = props
+      const globalVirtualXConfig = getConfig().table.virtualXConfig
+      const globalScrollX = getConfig().table.scrollX
       if (virtualXConfig) {
-        return Object.assign({}, getConfig().table.virtualXConfig, virtualXConfig) as VxeTablePropTypes.VirtualXConfig & { gt: number }
+        return Object.assign({}, globalVirtualXConfig, virtualXConfig) as VxeTablePropTypes.VirtualXConfig & { gt: number }
       }
-      return Object.assign({}, getConfig().table.virtualXConfig, getConfig().table.scrollX, props.scrollX) as VxeTablePropTypes.VirtualXConfig & { gt: number }
+      if (scrollX) {
+        // 已废弃，保留兼容
+        return Object.assign({}, globalScrollX, scrollX) as VxeTablePropTypes.VirtualXConfig & { gt: number }
+      }
+      if (globalVirtualXConfig) {
+        return Object.assign({}, globalVirtualXConfig, virtualXConfig) as VxeTablePropTypes.VirtualXConfig & { gt: number }
+      }
+      // 已废弃，保留兼容
+      return Object.assign({}, globalScrollX, scrollX) as VxeTablePropTypes.VirtualXConfig & { gt: number }
     })
 
     const computeVirtualYOpts = computed(() => {
-      const { virtualYConfig } = props
+      const { virtualYConfig, scrollY } = props
+      const globalVirtualYConfig = getConfig().table.virtualYConfig
+      const globalScrollY = getConfig().table.scrollY
       if (virtualYConfig) {
-        return Object.assign({}, getConfig().table.virtualYConfig, virtualYConfig) as VxeTablePropTypes.VirtualYConfig & { gt: number }
+        return Object.assign({}, globalVirtualYConfig, virtualYConfig) as VxeTablePropTypes.VirtualYConfig & { gt: number }
       }
-      return Object.assign({}, getConfig().table.virtualYConfig, getConfig().table.scrollY, props.scrollY) as VxeTablePropTypes.VirtualYConfig & { gt: number }
+      if (scrollY) {
+        // 已废弃，保留兼容
+        return Object.assign({}, globalScrollY, scrollY) as VxeTablePropTypes.VirtualYConfig & { gt: number }
+      }
+      if (globalVirtualYConfig) {
+        return Object.assign({}, globalVirtualYConfig, virtualYConfig) as VxeTablePropTypes.VirtualYConfig & { gt: number }
+      }
+      // 已废弃，保留兼容
+      return Object.assign({}, globalScrollY, scrollY) as VxeTablePropTypes.VirtualYConfig & { gt: number }
     })
 
     const computeScrollbarOpts = computed(() => {
