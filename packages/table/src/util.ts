@@ -4,7 +4,127 @@ import { ColumnInfo } from './columnInfo'
 import { isPx, isScale, queryElement } from '../../ui/src/dom'
 import { eqEmptyValue } from '../../ui/src/utils'
 
-import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeTablePropTypes } from '../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeTablePropTypes, TableInternalData } from '../../../types'
+
+export function createInternalData (): TableInternalData {
+  return {
+    tZindex: 0,
+    currKeyField: '',
+    isCurrDeepKey: false,
+    elemStore: {},
+    // 存放横向 X 虚拟滚动相关的信息
+    scrollXStore: {
+      preloadSize: 0,
+      offsetSize: 0,
+      visibleSize: 0,
+      visibleStartIndex: 0,
+      visibleEndIndex: 0,
+      startIndex: 0,
+      endIndex: 0
+    },
+    // 存放纵向 Y 虚拟滚动相关信息
+    scrollYStore: {
+      preloadSize: 0,
+      offsetSize: 0,
+      visibleSize: 0,
+      visibleStartIndex: 0,
+      visibleEndIndex: 0,
+      startIndex: 0,
+      endIndex: 0
+    },
+    // 表格宽度
+    tableWidth: 0,
+    // 表格高度
+    tableHeight: 0,
+    // 表头高度
+    headerHeight: 0,
+    // 表尾高度
+    footerHeight: 0,
+    customHeight: 0,
+    customMinHeight: 0,
+    customMaxHeight: 0,
+    // 当前 hover 行
+    hoverRow: null,
+    // 最后滚动位置
+    lastScrollLeft: 0,
+    lastScrollTop: 0,
+    // 单选框属性，已选中保留的行
+    radioReserveRow: null,
+    // 复选框属性，已选中保留的行集合
+    checkboxReserveRowMap: {},
+    // 行数据，已展开保留的行集合
+    rowExpandedReserveRowMap: {},
+    // 树结构数据，已展开保留的行集合
+    treeExpandedReserveRowMap: {},
+    // 树结构数据，不确定状态的集合
+    treeIndeterminateRowMaps: {},
+    // 列表完整数据、条件处理后
+    tableFullData: [],
+    afterFullData: [],
+    afterTreeFullData: [],
+    afterGroupFullData: [],
+    // 列表条件处理后数据集合
+    afterFullRowMaps: {},
+    // 树结构完整数据、条件处理后
+    tableFullTreeData: [],
+    // 行分组全量数据、条件处理后
+    tableFullGroupData: [],
+    tableSynchData: [],
+    tableSourceData: [],
+    // 收集的列配置（带分组）
+    collectColumn: [],
+    // 完整所有列（不带分组）
+    tableFullColumn: [],
+    // 渲染所有列
+    visibleColumn: [],
+    // 全量数据集（包括当前和已删除）
+    fullAllDataRowIdData: {},
+    // 数据集（仅当前）
+    fullDataRowIdData: {},
+    // 数据集（仅可视）
+    visibleDataRowIdData: {},
+    // 渲染中缓存数据
+    sourceDataRowIdData: {},
+    fullColumnIdData: {},
+    fullColumnFieldData: {},
+
+    // 合并单元格的数据
+    mergeBodyList: [],
+    mergeBodyMaps: {},
+    // 合并表尾的数据
+    mergeFooterList: [],
+    mergeFooterMaps: {},
+    // 已合并单元格数据集合
+    mergeBodyCellMaps: {},
+    // 已合并表尾数据集合
+    mergeFooterCellMaps: {},
+    // 已展开的行集合
+    rowExpandedMaps: {},
+    // 懒加载中的展开行的集合
+    rowExpandLazyLoadedMaps: {},
+    // 已展开的分组行
+    rowGroupExpandedMaps: {},
+    // 已展开树节点集合
+    treeExpandedMaps: {},
+    // 懒加载中的树节点的集合
+    treeExpandLazyLoadedMaps: {},
+    // 复选框属性，已选中的行集合
+    selectCheckboxMaps: {},
+    // 已标记的对象集
+    pendingRowMaps: {},
+    // 已新增的临时行
+    insertRowMaps: {},
+    // 已删除行
+    removeRowMaps: {},
+
+    cvCacheMaps: {},
+
+    inited: false,
+    tooltipTimeout: null,
+    initStatus: false,
+    isActivated: false
+  }
+}
 
 const getAllConvertColumns = (columns: any, parentColumn?: any) => {
   const result: any[] = []

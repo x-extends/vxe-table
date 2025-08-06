@@ -12,7 +12,7 @@ import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
 import type { ValueOf, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance, VxeComponentStyleType } from 'vxe-pc-ui'
-import type { VxeTableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxeToolbarInstance, GridPrivateRef, VxeTableProps, VxeTableConstructor, VxeTablePrivateMethods, VxeTableEvents, VxeTableDefines, VxeTableEventProps, VxeGridProps } from '../../../types'
+import type { VxeTableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, GridInternalData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxeToolbarInstance, GridPrivateRef, VxeTableProps, VxeTableConstructor, VxeTablePrivateMethods, VxeTableEvents, VxeTableDefines, VxeTableEventProps, VxeGridProps } from '../../../types'
 
 const { getConfig, getI18n, commands, hooks, useFns, createEvent, globalEvents, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
 
@@ -35,6 +35,12 @@ const gridComponentEmits: VxeGridEmits = [
   'toolbar-tool-click',
   'zoom'
 ]
+
+function createInternalData (): GridInternalData {
+  return {
+    connectTable: null
+  }
+}
 
 export default defineVxeComponent({
   name: 'VxeGrid',
@@ -81,6 +87,8 @@ export default defineVxeComponent({
         currentPage: 1
       }
     })
+
+    const internalData = createInternalData()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refTable = ref() as Ref<ComponentPublicInstance<VxeTableProps, VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods>>
@@ -277,6 +285,7 @@ export default defineVxeComponent({
       props: props as VxeGridProps,
       context,
       reactData,
+      internalData,
       getRefMaps: () => refMaps,
       getComputeMaps: () => computeMaps
     } as VxeGridConstructor & VxeGridPrivateMethods
@@ -1589,6 +1598,7 @@ export default defineVxeComponent({
 
     onUnmounted(() => {
       globalEvents.off($xeGrid, 'keydown')
+      XEUtils.assign(internalData, createInternalData())
     })
 
     $xeGrid.renderVN = renderVN

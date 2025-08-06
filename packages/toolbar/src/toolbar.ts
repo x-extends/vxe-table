@@ -1,4 +1,4 @@
-import { h, ref, computed, inject, createCommentVNode, VNode, reactive, nextTick, PropType } from 'vue'
+import { h, ref, computed, inject, createCommentVNode, VNode, reactive, nextTick, PropType, onUnmounted } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
@@ -9,6 +9,12 @@ import type { ValueOf, VxeButtonEvents, VxeComponentSlotType, VxeButtonDefines }
 import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, ToolbarInternalData, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, ToolbarPrivateRef, ToolbarReactData, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, useFns } = VxeUI
+
+function createInternalData (): ToolbarInternalData {
+  return {
+    connectTable: null
+  }
+}
 
 export default defineVxeComponent({
   name: 'VxeToolbar',
@@ -64,9 +70,7 @@ export default defineVxeComponent({
       columns: []
     })
 
-    const internalData: ToolbarInternalData = {
-      connectTable: null
-    }
+    const internalData = createInternalData()
 
     const refElem = ref<HTMLDivElement>()
 
@@ -706,6 +710,10 @@ export default defineVxeComponent({
           errLog('vxe.error.reqComp', ['vxe-button'])
         }
       }
+    })
+
+    onUnmounted(() => {
+      XEUtils.assign(internalData, createInternalData())
     })
 
     return $xeToolbar
