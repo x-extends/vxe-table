@@ -3359,6 +3359,10 @@ export default defineVxeComponent({
       const expandOpts = computeExpandOpts.value
       const { transform } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
+      let editRecords = []
+      if (keepSource) {
+        editRecords = $xeTable.getUpdateRecords()
+      }
       let treeData = []
       let fullData = reactive(datas ? datas.slice(0) : []) // 转为响应式数据
       if (fullData.length > supportMaxRow) {
@@ -3487,6 +3491,15 @@ export default defineVxeComponent({
         }
 
         handleReserveStatus()
+        if (keepSource) {
+          editRecords.forEach(row => {
+            const rowid = getRowid($xeTable, row)
+            const oRow = $xeTable.getRowById(rowid)
+            if (oRow) {
+              $xeTable.setRow(oRow, row)
+            }
+          })
+        }
         $xeTable.checkSelectionStatus()
         return new Promise<void>(resolve => {
           nextTick()
