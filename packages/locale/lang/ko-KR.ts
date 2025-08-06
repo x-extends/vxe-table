@@ -17,7 +17,7 @@ export default {
       groupTag: '열 헤더 그룹화는 "{1}"대신 "{0}"을 사용해야하며 오류가 발생할 수 있습니다.',
       scrollErrProp: '이 매개 변수 "{0}"은 가상 스크롤링이 활성화 된 후에 지원되지 않습니다.',
       errConflicts: '매개 변수 "{0}" "{1}"과 충돌합니다.',
-      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
+      modelConflicts: '바운드 필드 값 "{0}"및 "{1}"사이에 충돌이 발생하며 오류가 발생합니다.',
       notSupportProp: '"{1}"은 "{0}"매개 변수가 활성화 될 때 지원되지 않습니다. "{2}"이어야합니다. 그렇지 않으면 오류가 발생합니다.',
       notConflictProp: '"{0}"을 사용하는 경우 "{1}"을 설정해야합니다. 그렇지 않으면 기능적 충돌이있을 수 있습니다.',
       unableInsert: '지정된 위치에 삽입 할 수 없으므로 매개 변수가 올바른지 확인하십시오.',
@@ -37,7 +37,7 @@ export default {
       notCommands: '글로벌 지시문 "{0}"은 존재하지 않습니다',
       notSlot: '슬롯 "{0}"은 존재하지 않습니다',
       noTree: '"{0}"은 트리 구조에서 지원되지 않습니다',
-      noGroup: '数据分组后不支持 "{0}"',
+      noGroup: '데이터 그룹화 후 "{0}"은 지원되지 않습니다',
       notProp: '지원되지 않는 매개 변수 "{0}"',
       checkProp: '데이터 볼륨이 너무 커지면 확인란이 말더듬 될 수 있습니다. 렌더링 속도를 향상시키기 위해 매개 변수 "{0}"를 설정하는 것이 좋습니다.',
       coverProp: '"{0}"의 매개 변수 "{1}"이 반복적으로 정의되어 오류가 발생할 수 있습니다.',
@@ -56,7 +56,7 @@ export default {
       treeDragChild: '부모는 자신의 자녀에게 끌 수 없습니다',
       reqPlugin: '"{1}"은 https://vxeui.com/other {0 }/#/1 }/install에 설치되지 않았습니다',
       errMaxRow: '최대 지원되는 데이터 볼륨 {0} 행을 초과하면 오류가 발생할 수 있습니다.',
-      useNew: '不建议使用 {0}，请使用 {1}'
+      useNew: '{0} 권장되지 않습니다. {1}을 사용하십시오.'
     },
     table: {
       emptyText: '아직 데이터가 없습니다',
@@ -69,7 +69,7 @@ export default {
       sortAsc: '오름차순 순서 : 가장 낮거나 가장 높음',
       sortDesc: '하강 순서 : 가장 높거나 가장 낮습니다',
       filter: '선택한 열에 대한 필터링을 활성화합니다',
-      impSuccess: '성공적으로 가져온 {0} 레코드',
+      impSuccess: '{0} 레코드가 성공적으로 가져 왔습니다',
       expLoading: '수출',
       expSuccess: '성공적으로 내보내십시오',
       expError: '내보내기 실패',
@@ -82,11 +82,11 @@ export default {
       customCancel: '취소',
       customRestore: '기본값을 복원하십시오',
       maxFixedCol: '냉동 열의 최대 수는 {0}을 초과 할 수 없습니다.',
-      maxGroupCol: '最大分组字段的数量不能超过 {0} 个',
+      maxGroupCol: '최대 그룹화 필드 수는 {0}을 초과 할 수 없습니다.',
       dragTip: '움직임 : {0}',
       resizeColTip: '너비 : {0} 픽셀',
-      resizeRowTip: '높이 : {0} 픽셀',
-      rowGroupContentTotal: '{0} ({1})'
+      resizeRowTip: '높음 : {0} 픽셀',
+      rowGroupContentTotal: '{0}（{1}）'
     },
     grid: {
       selectOneRecord: '하나 이상의 레코드를 선택하십시오!',
@@ -98,27 +98,27 @@ export default {
       operError: '오류가 발생했고 작업이 실패했습니다!'
     },
     select: {
-      clear: '清除',
-      allChecked: '全选',
+      clear: '분명한',
+      allChecked: '모두를 선택하십시오',
       total: '{0} / {1}',
       search: '찾다',
       loadingText: '로딩',
       emptyText: '아직 데이터가 없습니다',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
-      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
-      searchEmpty: '未匹配到数据！'
+      maxSize: '최대 옵션 수는 {0}을 초과 할 수 없습니다.',
+      overSizeErr: '최대 선택적 숫자 {0}이 초과되었으며 초과는 무시됩니다!',
+      searchEmpty: '데이터가 일치하지 않습니다!'
     },
     tree: {
-      searchEmpty: '未匹配到数据！'
+      searchEmpty: '데이터가 일치하지 않습니다!'
     },
     treeSelect: {
-      clearChecked: '清除',
-      allChecked: '全选',
-      allExpand: '全部展开',
-      clearExpand: '全部收起',
-      total: '已选 {0}',
-      search: '搜索',
-      emptyText: '暂无数据'
+      clearChecked: '분명한',
+      allChecked: '모두를 선택하십시오',
+      allExpand: '모든 것을 확장하십시오',
+      clearExpand: '모두 닫으십시오',
+      total: '선택된 {0}',
+      search: '찾다',
+      emptyText: '아직 데이터가 없습니다'
     },
     pager: {
       goto: '가다',
@@ -159,7 +159,7 @@ export default {
       cstmDragTarget: '움직임 : {0}',
       setting: {
         colSort: '종류',
-        sortHelpTip: '点击并拖动图标可以调整顺序',
+        sortHelpTip: '아이콘을 클릭하고 드래그하여 순서를 조정하십시오',
         colTitle: '열 제목',
         colResizable: '열 폭 (픽셀)',
         colVisible: '표시 여부',
@@ -188,10 +188,10 @@ export default {
     },
     export: {
       types: {
-        csv: 'CSV (쉼표 분리) (*. CSV)',
+        csv: 'CSV (Comma-Separated) (*. CSV)',
         html: '웹 페이지 (*.html)',
         xml: 'XML 데이터 (*.xml)',
-        txt: '텍스트 파일 (탭 분리) (*. txt)',
+        txt: '텍스트 파일 (Tab-Separated) (*. txt)',
         xls: 'Excel 97-2003 통합 문서 (*.xls)',
         xlsx: 'Excel 통합 문서 (*.xlsx)',
         pdf: 'pdf (*.pdf)'
@@ -260,15 +260,15 @@ export default {
       customAll: '모두',
       customConfirm: '확인하다',
       customRestore: '다시 놓기',
-      fixedLeft: '왼쪽으로 동결',
-      fixedRight: '오른쪽 정지',
-      cancelFixed: '녹이다'
+      fixedLeft: '왼쪽에서 얼립니다',
+      fixedRight: '오른쪽에서 얼립니다',
+      cancelFixed: '열매 열이 없습니다'
     },
     datePicker: {
       yearTitle: '{0} 년'
     },
     dateRangePicker: {
-      pleaseRange: '请选择开始日期与结束日期'
+      pleaseRange: '시작 날짜 및 종료 날짜를 선택하십시오'
     },
     input: {
       date: {
@@ -348,8 +348,8 @@ export default {
       fileBtnText: '업로드하려면 클릭하거나 드래그합니다',
       imgBtnText: '업로드하려면 클릭하거나 드래그합니다',
       dragPlaceholder: '업로드하려면 파일을이 영역으로 드래그 앤 드래그하여 떨어 뜨리십시오.',
-      imgSizeHint: '전단지 {0}',
-      imgCountHint: '최대 {0} 그림',
+      imgSizeHint: '싱글 {0}',
+      imgCountHint: '최대 {0}',
       fileTypeHint: '지원 {0} 파일 유형',
       fileSizeHint: '단일 파일 크기가 {0}을 초과하지 않습니다.',
       fileCountHint: '최대 {0} 파일을 업로드 할 수 있습니다',
@@ -357,7 +357,7 @@ export default {
       overCountErr: '{0} 파일 만 최대 선택할 수 있습니다!',
       overCountExtraErr: '{0}의 최대 수가 초과되었고 초과 {1} 파일은 무시됩니다!',
       overSizeErr: '최대 파일 크기는 {0}을 초과 할 수 없습니다!',
-      manualUpload: '点击上传',
+      manualUpload: '업로드하려면 클릭하십시오',
       reUpload: '재 포장',
       uploadProgress: '업로드 {0}%',
       uploadErr: '업로드 실패',
@@ -365,7 +365,7 @@ export default {
       moreBtnText: 'more ({0})',
       viewItemTitle: '보려면 클릭하십시오',
       morePopup: {
-        readTitle: '목록보기',
+        readTitle: '목록을보십시오',
         imageTitle: '사진 업로드',
         fileTitle: '파일 업로드'
       }
@@ -392,10 +392,10 @@ export default {
         btn: '스타일 설정',
         title: '양식 스타일 설정',
         layoutTitle: '제어 레이아웃',
-        verticalLayout: '상단 및 하단 레이아웃',
+        verticalLayout: '위와 아래 레이아웃',
         horizontalLayout: '수평 레이아웃',
         styleTitle: '제목 스타일',
-        boldTitle: '제목 대담한',
+        boldTitle: '두꺼운 제목',
         fontBold: '용감한',
         fontNormal: '전통적인',
         colonTitle: '콜론을 보여주십시오',
@@ -433,7 +433,7 @@ export default {
           VxeTextarea: '텍스트 필드',
           VxeSelect: '아래로 당겨 선택하십시오',
           VxeTreeSelect: '나무 선택',
-          VxeRadioGroup: '라디오 버튼',
+          VxeRadioGroup: '라디오 박스',
           VxeCheckboxGroup: '확인란',
           VxeUploadFile: '문서',
           VxeUploadImage: '그림',
@@ -448,7 +448,7 @@ export default {
         multiple: '여러 선택이 허용됩니다',
         displaySetting: {
           name: '디스플레이 설정',
-          pc: 'PC',
+          pc: '컴퓨터',
           mobile: '이동하는',
           visible: '보여주다',
           hidden: '숨다'
@@ -460,7 +460,7 @@ export default {
           batchEditOption: '배치 편집',
           batchEditTip: '각 행은 옵션에 해당하며 테이블, Excel 및 WPS에서 직접 복사 및 붙여 넣기를 지원합니다.',
           batchEditSubTip: '각 행은 옵션에 해당합니다. 그룹 인 경우 하위 항목은 공간 또는 탭 키로 시작할 수 있으며 테이블, Excel 및 WPS에서 직접 복사 및 붙여 넣기를 지원합니다.',
-          buildOption: '옵션 빌드'
+          buildOption: '옵션을 생성합니다'
         },
         rowProp: {
           colSize: '열 수',
@@ -478,7 +478,7 @@ export default {
           alignRight: '오른쪽에',
           colorTitle: '글꼴 색상',
           sizeTitle: '글꼴 크기',
-          boldTitle: '대담한 글꼴',
+          boldTitle: '더 두꺼운 글꼴',
           fontNormal: '전통적인',
           fontBold: '용감한'
         },
@@ -526,29 +526,29 @@ export default {
     },
     countdown: {
       formats: {
-        yyyy: '년',
-        MM: '월',
-        dd: '일',
-        HH: '시',
-        mm: '분',
-        ss: '초'
+        yyyy: '년도',
+        MM: '달',
+        dd: '하늘',
+        HH: '시간',
+        mm: '가리키다',
+        ss: '두번째'
       }
     },
     plugins: {
       extendCellArea: {
         area: {
           mergeErr: '이 작업은 병합 된 셀에서 수행 할 수 없습니다',
-          multiErr: '이 작업은 여러 선택 영역에서 수행 할 수 없습니다',
-          selectErr: '지정된 범위의 셀에서 작동 할 수 없습니다',
-          extendErr: '확장 범위에 병합 된 셀이 포함 된 경우 모든 병합 된 셀이 같은 크기 여야합니다.',
-          pasteMultiErr: '붙여 넣을 수 없으면이 작업을 수행하려면 복사 및 붙여 넣은 영역이 동일한 크기 여야합니다.',
-          cpInvalidErr: '작업을 수행 할 수 없습니다. 선택한 범위에는 금지 된 열 ({0})이 있습니다.'
+          multiErr: '이 작업은 다중 선택 영역에서 수행 할 수 없습니다',
+          selectErr: '지정된 영역에서 셀을 작동 할 수 없습니다',
+          extendErr: '연장 영역에 병합 된 셀이 포함 된 경우 모든 병합 된 셀이 같은 크기 여야합니다.',
+          pasteMultiErr: '붙여 넣을 수없고 동일한 크기의 영역을 복사하여 붙여 넣어야합니다.',
+          cpInvalidErr: '이 작업을 수행 할 수 없으며 선택한 영역에 금지 된 열이 있습니다 ({0}).'
         },
         fnr: {
           title: '찾아 교체하십시오',
           findLabel: '찾다',
           replaceLabel: '바꾸다',
-          findTitle: '찾기 :',
+          findTitle: '내용 찾기 :',
           replaceTitle: '대체 : :',
           tabs: {
             find: '찾다',
@@ -572,49 +572,49 @@ export default {
             value: '값'
           },
           body: {
-            row: '행 : {0}',
+            row: '라인 : {0}',
             col: '열 : {0}'
           },
           empty: '(널 값)',
           reError: '잘못된 정규 표현',
           recordCount: '{0} 세포가 발견되었습니다',
           notCell: '일치하는 셀을 찾을 수 없습니다',
-          replaceSuccess: '{0} 세포를 성공적으로 대체했습니다'
+          replaceSuccess: '{0} 세포가 성공적으로 대체되었습니다'
         }
       },
       extendPivotTable: {
         aggregation: {
-          grouping: '分组',
-          values: '值',
-          groupPlaceholder: '拖至此处进行分组',
-          valuesPlaceholder: '拖至此处进行聚合',
-          dragExistCol: '该列已存在',
-          sortHelpTip: '点击并拖动图标可以调整顺序'
+          grouping: '그룹화',
+          values: '값',
+          groupPlaceholder: '여기로 끌어 그룹화하십시오',
+          valuesPlaceholder: '집계를 위해 여기를 끌어냅니다',
+          dragExistCol: '이 열은 이미 존재합니다',
+          sortHelpTip: '아이콘을 클릭하고 드래그하여 순서를 조정하십시오'
         },
         aggFuncs: {
-          sum: '求和',
-          count: '计数',
-          avg: '平均值',
-          min: '最小值',
-          max: '最大值',
-          first: '首个值',
-          last: '末尾值'
+          sum: '합계를 요청하십시오',
+          count: '세다',
+          avg: '평균 가치',
+          min: '최소 값',
+          max: '최대 값',
+          first: '첫 번째 가치',
+          last: '최종 가치'
         }
       },
       filterComplexInput: {
         menus: {
           fixedColumn: '동결 열',
-          fixedGroup: '동결 그룹',
-          cancelFixed: '녹이다',
-          fixedLeft: '왼쪽으로 동결',
-          fixedRight: '오른쪽 정지'
+          fixedGroup: '동결 그룹화',
+          cancelFixed: '동결을 취소하십시오',
+          fixedLeft: '왼쪽을 얼립니다',
+          fixedRight: '오른쪽을 얼립니다'
         },
         cases: {
           equal: '동일한',
           gt: '더 큽니다',
           lt: '보다 적습니다',
           begin: '시작은',
-          endin: '끝은',
+          endin: '결말은입니다',
           include: '포함하다',
           isSensitive: '사례에 민감합니다'
         }
@@ -626,13 +626,13 @@ export default {
           sortAsc: '오름차순 순서',
           sortDesc: '하강 순서',
           fixedColumn: '동결 열',
-          fixedGroup: '동결 그룹',
-          cancelFixed: '녹이다',
-          fixedLeft: '왼쪽으로 동결',
-          fixedRight: '오른쪽 정지',
+          fixedGroup: '동결 그룹화',
+          cancelFixed: '동결을 취소하십시오',
+          fixedLeft: '왼쪽을 얼립니다',
+          fixedRight: '오른쪽을 얼립니다',
           clearFilter: '클리어 필터',
-          textOption: '텍스트 필터',
-          numberOption: '수치 필터'
+          textOption: '텍스트 필터링',
+          numberOption: '수치 필터링'
         },
         popup: {
           title: '사용자 정의 필터링 방법',
@@ -650,12 +650,12 @@ export default {
           le: '보다 작거나 동일합니다',
           begin: '시작은',
           notbegin: '처음에는 없습니다',
-          endin: '끝은',
+          endin: '결말은입니다',
           notendin: '결말은 아닙니다',
           include: '포함하다',
           exclude: '포함되지 않습니다',
           between: '사이',
-          custom: '사용자 정의 필터',
+          custom: '사용자 정의 필터링',
           insensitive: '케이스 둔감',
           isSensitive: '사례에 민감합니다'
         },
@@ -666,9 +666,9 @@ export default {
     pro: {
       area: {
         mergeErr: '이 작업은 병합 된 셀에서 수행 할 수 없습니다',
-        multiErr: '이 작업은 여러 선택 영역에서 수행 할 수 없습니다',
-        extendErr: '확장 범위에 병합 된 셀이 포함 된 경우 모든 병합 된 셀이 같은 크기 여야합니다.',
-        pasteMultiErr: '붙여 넣을 수 없으면이 작업을 수행하려면 복사 및 붙여 넣은 영역이 동일한 크기 여야합니다.'
+        multiErr: '이 작업은 다중 선택 영역에서 수행 할 수 없습니다',
+        extendErr: '연장 영역에 병합 된 셀이 포함 된 경우 모든 병합 된 셀이 같은 크기 여야합니다.',
+        pasteMultiErr: '붙여 넣을 수없고 동일한 크기의 영역을 복사하여 붙여 넣어야합니다.'
       },
       fnr: {
         title: '찾아 교체하십시오',
@@ -700,8 +700,8 @@ export default {
         empty: '(널 값)',
         reError: '잘못된 정규 표현',
         recordCount: '{0} 세포가 발견되었습니다',
-        notCell: '일치하는 셀이 발견되지 않았습니다',
-        replaceSuccess: '{0} 세포를 성공적으로 대체했습니다'
+        notCell: '일치하는 셀을 찾을 수 없습니다',
+        replaceSuccess: '{0} 세포가 성공적으로 대체되었습니다'
       }
     },
     renderer: {
@@ -715,12 +715,12 @@ export default {
         le: '보다 작거나 동일합니다',
         begin: '시작은',
         notbegin: '처음에는 없습니다',
-        endin: '끝은',
+        endin: '결말은입니다',
         notendin: '결말은 아닙니다',
         include: '포함하다',
         exclude: '포함되지 않습니다',
         between: '사이',
-        custom: '사용자 정의 필터',
+        custom: '사용자 정의 필터링',
         insensitive: '케이스 둔감',
         isSensitive: '사례에 민감합니다'
       },
@@ -731,10 +731,10 @@ export default {
           sortAsc: '오름차순 순서',
           sortDesc: '하강 순서',
           fixedColumn: '동결 열',
-          fixedGroup: '동결 그룹',
-          cancelFixed: '녹이다',
-          fixedLeft: '왼쪽으로 동결',
-          fixedRight: '오른쪽 정지',
+          fixedGroup: '동결 그룹화',
+          cancelFixed: '동결을 취소하십시오',
+          fixedLeft: '왼쪽으로 얼립니다',
+          fixedRight: '오른쪽으로 얼립니다',
           clearFilter: '클리어 필터',
           textOption: '텍스트 필터링',
           numberOption: '수치 필터링'
