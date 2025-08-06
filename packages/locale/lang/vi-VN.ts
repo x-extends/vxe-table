@@ -17,7 +17,7 @@ export default {
       groupTag: 'Nhóm tiêu đề nhóm nên sử dụng "{0}" thay vì "{1}", có thể gây ra lỗi',
       scrollErrProp: 'Tham số này "{0}" không được hỗ trợ sau khi cuộn ảo được bật',
       errConflicts: 'Tham số "{0}" Xung đột với "{1}"',
-      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
+      modelConflicts: 'Có một xung đột giữa giá trị trường giới hạn "{0}" và "{1}" và sẽ xảy ra lỗi',
       notSupportProp: '"{1}" không được hỗ trợ khi tham số "{0}" được bật, nó phải là "{2}", nếu không sẽ xảy ra lỗi',
       notConflictProp: 'Khi sử dụng "{0}", "{1}" nên được đặt, nếu không có thể có xung đột chức năng',
       unableInsert: 'Không thể được chèn vào vị trí đã chỉ định, vui lòng kiểm tra xem các tham số có đúng không',
@@ -37,7 +37,7 @@ export default {
       notCommands: 'Chỉ thị toàn cầu "{0}" không tồn tại',
       notSlot: 'Khe "{0}" không tồn tại',
       noTree: '"{0}" không được hỗ trợ trong cấu trúc cây',
-      noGroup: '数据分组后不支持 "{0}"',
+      noGroup: '"{0}" không được hỗ trợ sau khi nhóm dữ liệu',
       notProp: 'Tham số không được hỗ trợ "{0}"',
       checkProp: 'Khi khối lượng dữ liệu quá lớn, hộp kiểm có thể được lắp. Bạn nên đặt tham số "{0}" để cải thiện tốc độ kết xuất',
       coverProp: 'Tham số "{1}" của "{0}" được xác định nhiều lần, có thể gây ra lỗi',
@@ -56,7 +56,7 @@ export default {
       treeDragChild: 'Cha mẹ không thể kéo đến con cái của họ',
       reqPlugin: '"{1}" không được cài đặt tại https://vxeui.com/other/khác',
       errMaxRow: 'Vượt quá khối lượng dữ liệu được hỗ trợ tối đa {0}, điều này có thể gây ra lỗi',
-      useNew: '不建议使用 {0}，请使用 {1}'
+      useNew: '{0} không được khuyến nghị, vui lòng sử dụng {1}'
     },
     table: {
       emptyText: 'Chưa có dữ liệu',
@@ -69,7 +69,7 @@ export default {
       sortAsc: 'Lệnh tăng dần: thấp nhất đến cao nhất',
       sortDesc: 'Lệnh giảm dần: Cao nhất đến thấp nhất',
       filter: 'Bật lọc cho các cột đã chọn',
-      impSuccess: 'Nhập thành công {0} bản ghi',
+      impSuccess: '{0} Bản ghi đã được nhập thành công',
       expLoading: 'Xuất khẩu',
       expSuccess: 'Xuất khẩu thành công',
       expError: 'Xuất khẩu không thành công',
@@ -82,11 +82,11 @@ export default {
       customCancel: 'Hủy bỏ',
       customRestore: 'Khôi phục mặc định',
       maxFixedCol: 'Số lượng cột đóng băng tối đa không thể vượt quá {0}',
-      maxGroupCol: '最大分组字段的数量不能超过 {0} 个',
+      maxGroupCol: 'Số lượng trường nhóm tối đa không thể vượt quá {0}',
       dragTip: 'Di chuyển: {0}',
       resizeColTip: 'Chiều rộng: {0} pixel',
-      resizeRowTip: 'Chiều cao: {0} pixel',
-      rowGroupContentTotal: '{0} ({1})'
+      resizeRowTip: 'Cao: {0} pixel',
+      rowGroupContentTotal: '{0}（{1}）'
     },
     grid: {
       selectOneRecord: 'Vui lòng chọn ít nhất một bản ghi!',
@@ -98,27 +98,27 @@ export default {
       operError: 'Một lỗi đã xảy ra và hoạt động không thành công!'
     },
     select: {
-      clear: '清除',
-      allChecked: '全选',
+      clear: 'Thông thoáng',
+      allChecked: 'Chọn tất cả',
       total: '{0} / {1}',
       search: 'tìm kiếm',
       loadingText: 'đang tải',
       emptyText: 'Chưa có dữ liệu',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
-      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
-      searchEmpty: '未匹配到数据！'
+      maxSize: 'Số lượng tùy chọn tối đa không thể vượt quá {0}',
+      overSizeErr: 'Số tùy chọn tối đa {0} đã bị vượt quá và phần vượt quá sẽ bị bỏ qua!',
+      searchEmpty: 'Không có dữ liệu phù hợp!'
     },
     tree: {
-      searchEmpty: '未匹配到数据！'
+      searchEmpty: 'Không có dữ liệu phù hợp!'
     },
     treeSelect: {
-      clearChecked: '清除',
-      allChecked: '全选',
-      allExpand: '全部展开',
-      clearExpand: '全部收起',
-      total: '已选 {0}',
-      search: '搜索',
-      emptyText: '暂无数据'
+      clearChecked: 'Thông thoáng',
+      allChecked: 'Chọn tất cả',
+      allExpand: 'Mở rộng tất cả',
+      clearExpand: 'Đóng tất cả',
+      total: 'Đã chọn {0}',
+      search: 'tìm kiếm',
+      emptyText: 'Chưa có dữ liệu'
     },
     pager: {
       goto: 'Đi',
@@ -159,7 +159,7 @@ export default {
       cstmDragTarget: 'Di chuyển: {0}',
       setting: {
         colSort: 'Loại',
-        sortHelpTip: '点击并拖动图标可以调整顺序',
+        sortHelpTip: 'Nhấp và kéo biểu tượng để điều chỉnh thứ tự',
         colTitle: 'Tiêu đề cột',
         colResizable: 'Chiều rộng cột (pixel)',
         colVisible: 'Có hiển thị không',
@@ -179,7 +179,7 @@ export default {
       },
       impTitle: 'Nhập dữ liệu',
       impFile: 'Tên tập tin',
-      impSelect: 'Chọn Tệp',
+      impSelect: 'Chọn một tập tin',
       impType: 'Loại tệp',
       impOpts: 'Cài đặt tham số',
       impMode: 'Chế độ nhập',
@@ -188,10 +188,10 @@ export default {
     },
     export: {
       types: {
-        csv: 'CSV (dấu phẩy tách ra) (*. CSV)',
+        csv: 'CSV (được phân tách bằng dấu phẩy) (*. CSV)',
         html: 'Trang web (*.html)',
         xml: 'Dữ liệu XML (*.xml)',
-        txt: 'Tệp văn bản (Tab phân tách) (*. TXT)',
+        txt: 'Tệp văn bản (được phân tách tab) (*. TXT)',
         xls: 'Excel 97-2003 sổ làm việc (*.xls)',
         xlsx: 'Excel Workbook (*.xlsx)',
         pdf: 'Pdf (*.pdf)'
@@ -211,7 +211,7 @@ export default {
       expType: 'Lưu loại',
       expMode: 'Chọn dữ liệu',
       expCurrentColumn: 'Tất cả các lĩnh vực',
-      expColumn: 'Chọn trường',
+      expColumn: 'Chọn một trường',
       expOpts: 'Cài đặt tham số',
       expOptHeader: 'Tiêu đề',
       expHeaderTitle: 'Tiêu đề bảng có được yêu cầu không',
@@ -260,15 +260,15 @@ export default {
       customAll: 'tất cả',
       customConfirm: 'xác nhận',
       customRestore: 'Cài lại',
-      fixedLeft: 'Đóng băng trái',
-      fixedRight: 'Đóng băng đúng',
-      cancelFixed: 'Giải phóng'
+      fixedLeft: 'Đóng băng bên trái',
+      fixedRight: 'Đóng băng bên phải',
+      cancelFixed: 'Mở ra cột'
     },
     datePicker: {
       yearTitle: '{0} năm'
     },
     dateRangePicker: {
-      pleaseRange: '请选择开始日期与结束日期'
+      pleaseRange: 'Vui lòng chọn ngày bắt đầu và ngày kết thúc'
     },
     input: {
       date: {
@@ -348,8 +348,8 @@ export default {
       fileBtnText: 'Nhấp hoặc kéo để tải lên',
       imgBtnText: 'Nhấp hoặc kéo để tải lên',
       dragPlaceholder: 'Vui lòng kéo và thả tệp vào khu vực này để tải lên',
-      imgSizeHint: 'Tờ rơi {0}',
-      imgCountHint: 'Hình ảnh tối đa {0}',
+      imgSizeHint: 'Đơn {0}',
+      imgCountHint: 'Lên đến {0}',
       fileTypeHint: 'Hỗ trợ các loại tệp {0}',
       fileSizeHint: 'Một kích thước tệp không vượt quá {0}',
       fileCountHint: 'Có thể tải lên các tệp {0}',
@@ -357,7 +357,7 @@ export default {
       overCountErr: 'Chỉ các tệp {0} có thể được chọn nhiều nhất!',
       overCountExtraErr: 'Số lượng tối đa của {0} đã bị vượt quá và các tệp dư thừa {1} sẽ bị bỏ qua!',
       overSizeErr: 'Kích thước tệp tối đa không thể vượt quá {0}!',
-      manualUpload: '点击上传',
+      manualUpload: 'Bấm để tải lên',
       reUpload: 'Tải lại lại',
       uploadProgress: 'Tải lên {0}%',
       uploadErr: 'Tải lên không thành công',
@@ -392,10 +392,10 @@ export default {
         btn: 'Cài đặt kiểu',
         title: 'Hình thức cài đặt kiểu',
         layoutTitle: 'Bố cục kiểm soát',
-        verticalLayout: 'Bố cục trên và dưới cùng',
+        verticalLayout: 'Bố cục lên và xuống',
         horizontalLayout: 'Bố cục ngang',
         styleTitle: 'Phong cách tiêu đề',
-        boldTitle: 'Tiêu đề đậm',
+        boldTitle: 'Tiêu đề dày',
         fontBold: 'In đậm',
         fontNormal: 'thông thường',
         colonTitle: 'Hiển thị Đại tá',
@@ -433,7 +433,7 @@ export default {
           VxeTextarea: 'Trường văn bản',
           VxeSelect: 'Kéo xuống để chọn',
           VxeTreeSelect: 'Lựa chọn cây',
-          VxeRadioGroup: 'Nút radio',
+          VxeRadioGroup: 'Hộp radio',
           VxeCheckboxGroup: 'Hộp kiểm',
           VxeUploadFile: 'tài liệu',
           VxeUploadImage: 'hình ảnh',
@@ -448,7 +448,7 @@ export default {
         multiple: 'Nhiều lựa chọn được cho phép',
         displaySetting: {
           name: 'Cài đặt hiển thị',
-          pc: 'PC',
+          pc: 'Máy tính',
           mobile: 'Di động',
           visible: 'trình diễn',
           hidden: 'trốn'
@@ -460,7 +460,7 @@ export default {
           batchEditOption: 'Chỉnh sửa hàng loạt',
           batchEditTip: 'Mỗi hàng tương ứng với một tùy chọn, hỗ trợ sao chép trực tiếp và dán từ các bảng, Excel và WPS.',
           batchEditSubTip: 'Mỗi hàng tương ứng với một tùy chọn. Nếu đó là một nhóm, các mục con có thể bắt đầu bằng một khoảng trống hoặc khóa tab và nó hỗ trợ sao chép trực tiếp và dán từ các bảng, excel và wps.',
-          buildOption: 'Tùy chọn xây dựng'
+          buildOption: 'Tạo các tùy chọn'
         },
         rowProp: {
           colSize: 'Số lượng cột',
@@ -478,7 +478,7 @@ export default {
           alignRight: 'Bên phải',
           colorTitle: 'Màu phông chữ',
           sizeTitle: 'Kích thước phông chữ',
-          boldTitle: 'Phông chữ đậm',
+          boldTitle: 'Phông chữ dày hơn',
           fontNormal: 'thông thường',
           fontBold: 'In đậm'
         },
@@ -538,17 +538,17 @@ export default {
       extendCellArea: {
         area: {
           mergeErr: 'Hoạt động này không thể được thực hiện trên các ô hợp nhất',
-          multiErr: 'Hoạt động này không thể được thực hiện trên nhiều khu vực lựa chọn',
-          selectErr: 'Không thể hoạt động trên các ô trong phạm vi được chỉ định',
-          extendErr: 'Nếu phạm vi mở rộng chứa các ô được hợp nhất, tất cả các ô được hợp nhất phải có cùng kích thước',
-          pasteMultiErr: 'Không thể dán, các khu vực được sao chép và dán cần phải có cùng kích thước để thực hiện thao tác này',
-          cpInvalidErr: 'Các hoạt động không thể được thực hiện. Có các cột bị cấm ({0}) trong phạm vi bạn đã chọn.'
+          multiErr: 'Hoạt động này không thể được thực hiện trên khu vực nhiều lựa chọn',
+          selectErr: 'Không thể vận hành các tế bào trong khu vực được chỉ định',
+          extendErr: 'Nếu khu vực mở rộng chứa các ô hợp nhất, tất cả các ô được hợp nhất phải có cùng kích thước',
+          pasteMultiErr: 'Không thể dán, cần sao chép và dán các khu vực có cùng kích thước để làm điều này',
+          cpInvalidErr: 'Hoạt động này không thể được thực hiện, có các cột bị cấm trong khu vực bạn đã chọn ({0})'
         },
         fnr: {
           title: 'Tìm và thay thế',
           findLabel: 'Tìm thấy',
           replaceLabel: 'thay thế',
-          findTitle: 'Tìm những gì:',
+          findTitle: 'Tìm nội dung:',
           replaceTitle: 'Thay thế bằng:',
           tabs: {
             find: 'Tìm thấy',
@@ -560,7 +560,7 @@ export default {
             sensitive: 'trường hợp nhạy cảm'
           },
           btns: {
-            findNext: 'Tìm tiếp theo',
+            findNext: 'Tìm cái tiếp theo',
             findAll: 'Tìm tất cả',
             replace: 'thay thế',
             replaceAll: 'Thay thế tất cả',
@@ -572,42 +572,42 @@ export default {
             value: 'giá trị'
           },
           body: {
-            row: 'Hàng: {0}',
+            row: 'Dòng: {0}',
             col: 'Cột: {0}'
           },
           empty: '(Giá trị null)',
           reError: 'Biểu thức chính quy không hợp lệ',
           recordCount: '{0} Các ô được tìm thấy',
           notCell: 'Không thể tìm thấy ô phù hợp',
-          replaceSuccess: 'Đã thay thế thành công {0} ô'
+          replaceSuccess: '{0} Các tế bào đã được thay thế thành công'
         }
       },
       extendPivotTable: {
         aggregation: {
-          grouping: '分组',
-          values: '值',
-          groupPlaceholder: '拖至此处进行分组',
-          valuesPlaceholder: '拖至此处进行聚合',
-          dragExistCol: '该列已存在',
-          sortHelpTip: '点击并拖动图标可以调整顺序'
+          grouping: 'Nhóm',
+          values: 'giá trị',
+          groupPlaceholder: 'Kéo ở đây để nhóm',
+          valuesPlaceholder: 'Kéo ở đây để tổng hợp',
+          dragExistCol: 'Cột này đã tồn tại',
+          sortHelpTip: 'Nhấp và kéo biểu tượng để điều chỉnh thứ tự'
         },
         aggFuncs: {
-          sum: '求和',
-          count: '计数',
-          avg: '平均值',
-          min: '最小值',
-          max: '最大值',
-          first: '首个值',
-          last: '末尾值'
+          sum: 'Yêu cầu tổng',
+          count: 'đếm',
+          avg: 'giá trị trung bình',
+          min: 'Giá trị tối thiểu',
+          max: 'Giá trị tối đa',
+          first: 'Giá trị đầu tiên',
+          last: 'Giá trị cuối cùng'
         }
       },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Đóng băng cột',
           fixedGroup: 'Đóng băng nhóm',
-          cancelFixed: 'Giải phóng',
-          fixedLeft: 'Đóng băng trái',
-          fixedRight: 'Đóng băng đúng'
+          cancelFixed: 'Hủy đóng băng',
+          fixedLeft: 'Đóng băng bên trái',
+          fixedRight: 'Đóng băng bên phải'
         },
         cases: {
           equal: 'bình đẳng',
@@ -627,12 +627,12 @@ export default {
           sortDesc: 'thứ tự giảm dần',
           fixedColumn: 'Đóng băng cột',
           fixedGroup: 'Đóng băng nhóm',
-          cancelFixed: 'Giải phóng',
-          fixedLeft: 'Đóng băng trái',
-          fixedRight: 'Đóng băng đúng',
+          cancelFixed: 'Hủy đóng băng',
+          fixedLeft: 'Đóng băng bên trái',
+          fixedRight: 'Đóng băng bên phải',
           clearFilter: 'Xóa bộ lọc',
-          textOption: 'Bộ lọc văn bản',
-          numberOption: 'Bộ lọc số'
+          textOption: 'Lọc văn bản',
+          numberOption: 'Lọc số'
         },
         popup: {
           title: 'Phương pháp lọc tùy chỉnh',
@@ -655,7 +655,7 @@ export default {
           include: 'Bao gồm',
           exclude: 'Không bao gồm',
           between: 'Giữa',
-          custom: 'Bộ lọc tùy chỉnh',
+          custom: 'Lọc tùy chỉnh',
           insensitive: 'Trường hợp không nhạy cảm',
           isSensitive: 'trường hợp nhạy cảm'
         },
@@ -666,9 +666,9 @@ export default {
     pro: {
       area: {
         mergeErr: 'Hoạt động này không thể được thực hiện trên các ô hợp nhất',
-        multiErr: 'Hoạt động này không thể được thực hiện trên nhiều khu vực lựa chọn',
-        extendErr: 'Nếu phạm vi mở rộng chứa các ô được hợp nhất, tất cả các ô được hợp nhất phải có cùng kích thước',
-        pasteMultiErr: 'Không thể dán, các khu vực được sao chép và dán cần phải có cùng kích thước để thực hiện thao tác này'
+        multiErr: 'Hoạt động này không thể được thực hiện trên khu vực nhiều lựa chọn',
+        extendErr: 'Nếu khu vực mở rộng chứa các ô hợp nhất, tất cả các ô được hợp nhất phải có cùng kích thước',
+        pasteMultiErr: 'Không thể dán, cần sao chép và dán các khu vực có cùng kích thước để làm điều này'
       },
       fnr: {
         title: 'Tìm và thay thế',
@@ -686,7 +686,7 @@ export default {
           sensitive: 'trường hợp nhạy cảm'
         },
         btns: {
-          findNext: 'Tìm tiếp theo',
+          findNext: 'Tìm cái tiếp theo',
           findAll: 'Tìm tất cả',
           replace: 'thay thế',
           replaceAll: 'Thay thế tất cả',
@@ -700,8 +700,8 @@ export default {
         empty: '(Giá trị null)',
         reError: 'Biểu thức chính quy không hợp lệ',
         recordCount: '{0} Các ô được tìm thấy',
-        notCell: 'Không tìm thấy ô phù hợp',
-        replaceSuccess: 'Đã thay thế thành công {0} ô'
+        notCell: 'Không thể tìm thấy ô phù hợp',
+        replaceSuccess: '{0} Các tế bào đã được thay thế thành công'
       }
     },
     renderer: {
@@ -720,7 +720,7 @@ export default {
         include: 'Bao gồm',
         exclude: 'Không bao gồm',
         between: 'Giữa',
-        custom: 'Bộ lọc tùy chỉnh',
+        custom: 'Lọc tùy chỉnh',
         insensitive: 'Trường hợp không nhạy cảm',
         isSensitive: 'trường hợp nhạy cảm'
       },
@@ -732,9 +732,9 @@ export default {
           sortDesc: 'thứ tự giảm dần',
           fixedColumn: 'Đóng băng cột',
           fixedGroup: 'Đóng băng nhóm',
-          cancelFixed: 'Giải phóng',
-          fixedLeft: 'Đóng băng trái',
-          fixedRight: 'Đóng băng đúng',
+          cancelFixed: 'Hủy đóng băng',
+          fixedLeft: 'Đóng băng bên trái',
+          fixedRight: 'Đóng băng ở bên phải',
           clearFilter: 'Xóa bộ lọc',
           textOption: 'Lọc văn bản',
           numberOption: 'Lọc số'

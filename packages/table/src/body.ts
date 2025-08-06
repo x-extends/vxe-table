@@ -104,7 +104,7 @@ export default defineVxeComponent({
       const $xeGrid = $xeTable.xeGrid
 
       const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, treeConfig, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
-      const { tableData, dragRow, overflowX, currentColumn, scrollXLoad, scrollYLoad, mergeBodyFlag, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, editStore, isAllOverflow, validErrorMaps } = tableReactData
+      const { tableData, dragRow, overflowX, overflowY, currentColumn, scrollXLoad, scrollYLoad, mergeBodyFlag, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, editStore, isAllOverflow, validErrorMaps } = tableReactData
       const { fullAllDataRowIdData, fullColumnIdData, mergeBodyCellMaps, visibleColumn, afterFullData, mergeBodyList, scrollXStore, scrollYStore } = tableInternalData
       const cellOpts = computeCellOpts.value
       const validOpts = computeValidOpts.value
@@ -291,11 +291,11 @@ export default defineVxeComponent({
       const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
       let isVNPreEmptyStatus = false
-      if (overflowX && !isMergeCell) {
+      if (!isMergeCell) {
         if (!dragRow || getRowid($xeTable, dragRow) !== rowid) {
-          if (scrollYLoad && !treeConfig && !virtualYOpts.immediate && (_rowIndex < scrollYStore.visibleStartIndex - scrollYStore.preloadSize || _rowIndex > scrollYStore.visibleEndIndex + scrollYStore.preloadSize)) {
+          if (overflowY && scrollYLoad && !treeConfig && !virtualYOpts.immediate && (_rowIndex < scrollYStore.visibleStartIndex - scrollYStore.preloadSize || _rowIndex > scrollYStore.visibleEndIndex + scrollYStore.preloadSize)) {
             isVNPreEmptyStatus = true
-          } else if (scrollXLoad && !virtualXOpts.immediate && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+          } else if (overflowX && scrollXLoad && !virtualXOpts.immediate && !column.fixed && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
             isVNPreEmptyStatus = true
           }
         }

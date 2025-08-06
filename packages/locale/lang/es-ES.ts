@@ -17,7 +17,7 @@ export default {
       groupTag: 'Los encabezados de la columna de agrupación deben usar "{0}" en lugar de "{1}", lo que puede causar errores',
       scrollErrProp: 'Este parámetro "{0}" no es compatible después de que el desplazamiento virtual esté habilitado',
       errConflicts: 'Parámetro "{0}" En conflicto con "{1}"',
-      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
+      modelConflicts: 'Hay un conflicto entre el valor de campo unido "{0}" y "{1}", y ocurrirá un error',
       notSupportProp: '"{1}" no se admite cuando el parámetro "{0}" está habilitado, debería ser "{2}", de lo contrario ocurrirá un error',
       notConflictProp: 'Cuando se usa "{0}", "{1}" debe establecerse, de lo contrario puede haber conflictos funcionales',
       unableInsert: 'No se puede insertar en la ubicación especificada, verifique si los parámetros son correctos',
@@ -37,7 +37,7 @@ export default {
       notCommands: 'La directiva global "{0}" no existe',
       notSlot: 'La ranura "{0}" no existe',
       noTree: '"{0}" no es compatible con la estructura del árbol',
-      noGroup: '数据分组后不支持 "{0}"',
+      noGroup: '"{0}" no es compatible después de la agrupación de datos',
       notProp: 'Parámetro no compatible "{0}"',
       checkProp: 'Cuando el volumen de datos es demasiado grande, la casilla de verificación puede tartamudear. Se recomienda establecer el parámetro "{0}" para mejorar la velocidad de renderización',
       coverProp: 'El parámetro "{1}" de "{0}" se define repetidamente, lo que puede causar un error',
@@ -56,7 +56,7 @@ export default {
       treeDragChild: 'Los padres no pueden arrastrar a sus propios hijos',
       reqPlugin: '"{1}" no está instalado en https://vxeui.com/other{0 /#/{1}/install',
       errMaxRow: 'Al exceder las filas de volumen de datos máximos admitidos, esto puede causar un error',
-      useNew: '不建议使用 {0}，请使用 {1}'
+      useNew: '{0} no se recomienda, use {1}'
     },
     table: {
       emptyText: 'Aún no hay datos',
@@ -69,7 +69,7 @@ export default {
       sortAsc: 'Orden ascendente: más bajo a más alto',
       sortDesc: 'Orden descendente: más alto a más bajo',
       filter: 'Habilitar el filtrado para columnas seleccionadas',
-      impSuccess: 'Registros {0} importados con éxito',
+      impSuccess: 'Los registros {0} se importaron correctamente',
       expLoading: 'Exportador',
       expSuccess: 'Exportar con éxito',
       expError: 'Exportación fallida',
@@ -82,11 +82,11 @@ export default {
       customCancel: 'Cancelar',
       customRestore: 'Restaurar predeterminado',
       maxFixedCol: 'El número máximo de columnas congeladas no puede exceder {0}',
-      maxGroupCol: '最大分组字段的数量不能超过 {0} 个',
+      maxGroupCol: 'El número de campos de agrupación máximos no puede exceder {0}',
       dragTip: 'Mover: {0}',
       resizeColTip: 'Ancho: {0} píxeles',
-      resizeRowTip: 'Altura: {0} píxeles',
-      rowGroupContentTotal: '{0} ({1})'
+      resizeRowTip: 'Alto: {0} píxeles',
+      rowGroupContentTotal: '{0}（{1}）'
     },
     grid: {
       selectOneRecord: '¡Seleccione al menos un registro!',
@@ -98,27 +98,27 @@ export default {
       operError: '¡Se produjo un error y la operación falló!'
     },
     select: {
-      clear: '清除',
-      allChecked: '全选',
+      clear: 'Claro',
+      allChecked: 'Seleccionar todo',
       total: '{0} / {1}',
       search: 'buscar',
       loadingText: 'cargando',
       emptyText: 'Aún no hay datos',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
-      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
-      searchEmpty: '未匹配到数据！'
+      maxSize: 'El número máximo de opciones no puede exceder {0}',
+      overSizeErr: 'Se ha excedido el número máximo opcional {0}, ¡y el exceso será ignorado!',
+      searchEmpty: '¡No hay datos coincidentes!'
     },
     tree: {
-      searchEmpty: '未匹配到数据！'
+      searchEmpty: '¡No hay datos coincidentes!'
     },
     treeSelect: {
-      clearChecked: '清除',
-      allChecked: '全选',
-      allExpand: '全部展开',
-      clearExpand: '全部收起',
-      total: '已选 {0}',
-      search: '搜索',
-      emptyText: '暂无数据'
+      clearChecked: 'Claro',
+      allChecked: 'Seleccionar todo',
+      allExpand: 'Expandir todo',
+      clearExpand: 'Cerrar todo',
+      total: 'Seleccionado {0}',
+      search: 'buscar',
+      emptyText: 'Aún no hay datos'
     },
     pager: {
       goto: 'Ir',
@@ -159,7 +159,7 @@ export default {
       cstmDragTarget: 'Mover: {0}',
       setting: {
         colSort: 'Clasificar',
-        sortHelpTip: '点击并拖动图标可以调整顺序',
+        sortHelpTip: 'Haga clic y arrastre el icono para ajustar el pedido',
         colTitle: 'Título de columna',
         colResizable: 'Ancho de columna (píxeles)',
         colVisible: 'Si mostrar',
@@ -179,7 +179,7 @@ export default {
       },
       impTitle: 'Importar datos',
       impFile: 'Nombre del archivo',
-      impSelect: 'Seleccionar archivo',
+      impSelect: 'Seleccione un archivo',
       impType: 'Tipo de archivo',
       impOpts: 'Configuración de parámetros',
       impMode: 'Modo de importación',
@@ -188,10 +188,10 @@ export default {
     },
     export: {
       types: {
-        csv: 'CSV (coma separado) (*. CSV)',
+        csv: 'CSV (Comm-separado) (*. CSV)',
         html: 'Página web (*.html)',
         xml: 'Datos XML (*.xml)',
-        txt: 'Archivo de texto (pestaña separado) (*. Txt)',
+        txt: 'Archivo de texto (Tab-separado) (*. Txt)',
         xls: 'Excel 97-2003 Workbook (*.xls)',
         xlsx: 'Excel Workbook (*.xlsx)',
         pdf: 'PDF (*.pdf)'
@@ -211,7 +211,7 @@ export default {
       expType: 'Tipo de guardado',
       expMode: 'Seleccionar datos',
       expCurrentColumn: 'Todos los campos',
-      expColumn: 'Campo de selección',
+      expColumn: 'Seleccione un campo',
       expOpts: 'Configuración de parámetros',
       expOptHeader: 'Encabezamiento',
       expHeaderTitle: '¿Se requiere el encabezado de la tabla?',
@@ -262,13 +262,13 @@ export default {
       customRestore: 'Reiniciar',
       fixedLeft: 'Congelarse a la izquierda',
       fixedRight: 'Congelarse a la derecha',
-      cancelFixed: 'Descongelar'
+      cancelFixed: 'Columnas desenfrenado'
     },
     datePicker: {
       yearTitle: '{0} años'
     },
     dateRangePicker: {
-      pleaseRange: '请选择开始日期与结束日期'
+      pleaseRange: 'Seleccione una fecha de inicio y una fecha de finalización'
     },
     input: {
       date: {
@@ -348,8 +348,8 @@ export default {
       fileBtnText: 'Haga clic o arrastre para cargar',
       imgBtnText: 'Haga clic o arrastre para cargar',
       dragPlaceholder: 'Arrastre y deje caer el archivo a esta área para cargar',
-      imgSizeHint: 'Folleto {0}',
-      imgCountHint: 'Máximo {0} imágenes',
+      imgSizeHint: 'Único {0}',
+      imgCountHint: 'Hasta {0}',
       fileTypeHint: 'Soporte {0} tipos de archivos',
       fileSizeHint: 'Un solo tamaño de archivo no excede {0}',
       fileCountHint: 'Se pueden cargar hasta {0} archivos',
@@ -357,7 +357,7 @@ export default {
       overCountErr: '¡Solo los archivos {0} se pueden seleccionar como máximo!',
       overCountExtraErr: 'Se ha excedido el número máximo de {0}, ¡y los archivos de exceso {1} se ignorarán!',
       overSizeErr: '¡El tamaño máximo del archivo no puede exceder {0}!',
-      manualUpload: '点击上传',
+      manualUpload: 'Haga clic para cargar',
       reUpload: 'Volver a cargar',
       uploadProgress: 'Cargando {0}%',
       uploadErr: 'Carga falló',
@@ -392,10 +392,10 @@ export default {
         btn: 'Configuración de estilo',
         title: 'Configuración de estilo de formulario',
         layoutTitle: 'Diseño de control',
-        verticalLayout: 'Diseño superior e inferior',
+        verticalLayout: 'Diseño hacia arriba y hacia abajo',
         horizontalLayout: 'Diseño horizontal',
         styleTitle: 'Estilo de título',
-        boldTitle: 'Título Bold',
+        boldTitle: 'Título grueso',
         fontBold: 'Atrevido',
         fontNormal: 'convencional',
         colonTitle: 'Mostrar el colon',
@@ -433,8 +433,8 @@ export default {
           VxeTextarea: 'Campo de texto',
           VxeSelect: 'Tire hacia abajo para seleccionar',
           VxeTreeSelect: 'Selección de árboles',
-          VxeRadioGroup: 'Botón de radio',
-          VxeCheckboxGroup: 'Caja',
+          VxeRadioGroup: 'Caja de radio',
+          VxeCheckboxGroup: 'Casilla de verificación',
           VxeUploadFile: 'documento',
           VxeUploadImage: 'imagen',
           VxeRate: 'puntaje',
@@ -448,7 +448,7 @@ export default {
         multiple: 'Se permiten múltiples opciones',
         displaySetting: {
           name: 'Mostrar configuración',
-          pc: 'ordenador personal',
+          pc: 'Computadora',
           mobile: 'Móvil',
           visible: 'espectáculo',
           hidden: 'esconder'
@@ -460,7 +460,7 @@ export default {
           batchEditOption: 'Edición por lotes',
           batchEditTip: 'Cada fila corresponde a una opción, que admite copiar y pegar directamente desde tablas, Excel y WPS.',
           batchEditSubTip: 'Cada fila corresponde a una opción. Si se trata de un grupo, los elementos infantiles pueden comenzar con un espacio o una tecla Tab, y admite copiar y pegar directamente en Tablas, Excel y WPS.',
-          buildOption: 'Construir opciones'
+          buildOption: 'Generar opciones'
         },
         rowProp: {
           colSize: 'Número de columnas',
@@ -478,7 +478,7 @@ export default {
           alignRight: 'A la derecha',
           colorTitle: 'Color de fuente',
           sizeTitle: 'Tamaño de fuente',
-          boldTitle: 'Fuente en negrita',
+          boldTitle: 'Fuente más gruesa',
           fontNormal: 'convencional',
           fontBold: 'Atrevido'
         },
@@ -538,17 +538,17 @@ export default {
       extendCellArea: {
         area: {
           mergeErr: 'Esta operación no se puede realizar en células fusionadas',
-          multiErr: 'Esta operación no se puede realizar en múltiples áreas de selección',
-          selectErr: 'No se puede operar en las celdas en el rango especificado',
-          extendErr: 'Si el rango extendido contiene células fusionadas, todas las células fusionadas deben ser del mismo tamaño',
-          pasteMultiErr: 'Incapaz de pegar, las áreas copiadas y pegadas deben ser del mismo tamaño para realizar esta operación',
-          cpInvalidErr: 'La operación no se puede realizar. Hay columnas prohibidas ({0}) en el rango que seleccionó.'
+          multiErr: 'Esta operación no se puede realizar en el área multi-selecta',
+          selectErr: 'No se puede operar celdas en el área especificada',
+          extendErr: 'Si el área extendida contiene células fusionadas, todas las células fusionadas deben ser del mismo tamaño',
+          pasteMultiErr: 'No se puede pegar, necesita copiar y pegar áreas del mismo tamaño para hacer esto',
+          cpInvalidErr: 'Esta operación no se puede realizar, hay columnas prohibidas en el área que seleccionó ({0})'
         },
         fnr: {
           title: 'Buscar y reemplazar',
           findLabel: 'Encontrar',
           replaceLabel: 'reemplazar',
-          findTitle: 'Encuentra qué:',
+          findTitle: 'Encontrar contenido:',
           replaceTitle: 'Reemplazar con:',
           tabs: {
             find: 'Encontrar',
@@ -560,7 +560,7 @@ export default {
             sensitive: 'distingue mayúsculas y minúsculas'
           },
           btns: {
-            findNext: 'Encontrar a continuación',
+            findNext: 'Encuentra el siguiente',
             findAll: 'Encontrar todo',
             replace: 'reemplazar',
             replaceAll: 'Reemplazar todo',
@@ -572,42 +572,42 @@ export default {
             value: 'valor'
           },
           body: {
-            row: 'Fila: {0}',
+            row: 'Línea: {0}',
             col: 'Columna: {0}'
           },
           empty: '(Valor nulo)',
           reError: 'Expresión regular no válida',
           recordCount: '{0} celdas encontradas',
           notCell: 'La celda correspondiente no se puede encontrar',
-          replaceSuccess: 'Reemplazó con éxito {0} celdas'
+          replaceSuccess: '{0} Las células fueron reemplazadas con éxito'
         }
       },
       extendPivotTable: {
         aggregation: {
-          grouping: '分组',
-          values: '值',
-          groupPlaceholder: '拖至此处进行分组',
-          valuesPlaceholder: '拖至此处进行聚合',
-          dragExistCol: '该列已存在',
-          sortHelpTip: '点击并拖动图标可以调整顺序'
+          grouping: 'Agrupamiento',
+          values: 'valor',
+          groupPlaceholder: 'Arrastre aquí al grupo',
+          valuesPlaceholder: 'Arrastre aquí para agregar',
+          dragExistCol: 'Esta columna ya existe',
+          sortHelpTip: 'Haga clic y arrastre el icono para ajustar el pedido'
         },
         aggFuncs: {
-          sum: '求和',
-          count: '计数',
-          avg: '平均值',
-          min: '最小值',
-          max: '最大值',
-          first: '首个值',
-          last: '末尾值'
+          sum: 'Pedir suma',
+          count: 'contar',
+          avg: 'valor promedio',
+          min: 'Valor mínimo',
+          max: 'Valor máximo',
+          first: 'Primer valor',
+          last: 'El valor final'
         }
       },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Columna de congelación',
-          fixedGroup: 'Grupo de congelación',
-          cancelFixed: 'Descongelar',
-          fixedLeft: 'Congelarse a la izquierda',
-          fixedRight: 'Congelarse a la derecha'
+          fixedGroup: 'Congelamiento',
+          cancelFixed: 'Cancelar congelación',
+          fixedLeft: 'Congelarse del lado izquierdo',
+          fixedRight: 'Congelar el lado derecho'
         },
         cases: {
           equal: 'igual',
@@ -626,13 +626,13 @@ export default {
           sortAsc: 'Orden ascendente',
           sortDesc: 'orden descendente',
           fixedColumn: 'Columna de congelación',
-          fixedGroup: 'Grupo de congelación',
-          cancelFixed: 'Descongelar',
-          fixedLeft: 'Congelarse a la izquierda',
-          fixedRight: 'Congelarse a la derecha',
+          fixedGroup: 'Congelamiento',
+          cancelFixed: 'Cancelar congelación',
+          fixedLeft: 'Congelarse del lado izquierdo',
+          fixedRight: 'Congelar el lado derecho',
           clearFilter: 'Filtro claro',
-          textOption: 'Filtro de texto',
-          numberOption: 'Filtro numérico'
+          textOption: 'Filtrado de texto',
+          numberOption: 'Filtrado numérico'
         },
         popup: {
           title: 'Métodos de filtrado personalizados',
@@ -655,7 +655,7 @@ export default {
           include: 'Incluir',
           exclude: 'No incluido',
           between: 'Entre',
-          custom: 'Filtro personalizado',
+          custom: 'Filtrado personalizado',
           insensitive: 'Caso insensible',
           isSensitive: 'distingue mayúsculas y minúsculas'
         },
@@ -666,9 +666,9 @@ export default {
     pro: {
       area: {
         mergeErr: 'Esta operación no se puede realizar en células fusionadas',
-        multiErr: 'Esta operación no se puede realizar en múltiples áreas de selección',
-        extendErr: 'Si el rango extendido contiene células fusionadas, todas las células fusionadas deben ser del mismo tamaño',
-        pasteMultiErr: 'Incapaz de pegar, las áreas copiadas y pegadas deben ser del mismo tamaño para realizar esta operación'
+        multiErr: 'Esta operación no se puede realizar en el área multi-selecta',
+        extendErr: 'Si el área extendida contiene células fusionadas, todas las células fusionadas deben ser del mismo tamaño',
+        pasteMultiErr: 'No se puede pegar, necesita copiar y pegar áreas del mismo tamaño para hacer esto'
       },
       fnr: {
         title: 'Buscar y reemplazar',
@@ -686,7 +686,7 @@ export default {
           sensitive: 'distingue mayúsculas y minúsculas'
         },
         btns: {
-          findNext: 'Encontrar a continuación',
+          findNext: 'Encuentra el siguiente',
           findAll: 'Encontrar todo',
           replace: 'reemplazar',
           replaceAll: 'Reemplazar todo',
@@ -700,8 +700,8 @@ export default {
         empty: '(Valor nulo)',
         reError: 'Expresión regular no válida',
         recordCount: '{0} celdas encontradas',
-        notCell: 'No se encontró celda a juego',
-        replaceSuccess: 'Reemplazó con éxito {0} celdas'
+        notCell: 'La celda correspondiente no se puede encontrar',
+        replaceSuccess: '{0} Las células fueron reemplazadas con éxito'
       }
     },
     renderer: {
@@ -720,7 +720,7 @@ export default {
         include: 'Incluir',
         exclude: 'No incluido',
         between: 'Entre',
-        custom: 'Filtro personalizado',
+        custom: 'Filtrado personalizado',
         insensitive: 'Caso insensible',
         isSensitive: 'distingue mayúsculas y minúsculas'
       },
@@ -731,8 +731,8 @@ export default {
           sortAsc: 'Orden ascendente',
           sortDesc: 'orden descendente',
           fixedColumn: 'Columna de congelación',
-          fixedGroup: 'Grupo de congelación',
-          cancelFixed: 'Descongelar',
+          fixedGroup: 'Congelamiento',
+          cancelFixed: 'Cancelar congelación',
           fixedLeft: 'Congelarse a la izquierda',
           fixedRight: 'Congelarse a la derecha',
           clearFilter: 'Filtro claro',
