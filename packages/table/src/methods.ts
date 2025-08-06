@@ -4156,13 +4156,17 @@ const Methods = {
 
     const { treeConfig } = props
     const { isRowGroupStatus } = reactData
-    const { fullAllDataRowIdData, tableFullData, tableFullTreeData, tableFullGroupData, treeExpandedMaps } = internalData
+    const { currKeyField, fullAllDataRowIdData, tableFullData, tableFullTreeData, tableFullGroupData, treeExpandedMaps } = internalData
     const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = isReset ? {} : { ...fullAllDataRowIdData } // 存在已删除数据
     const fullDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
 
+    const idMaps: Record<string, boolean> = {}
     const { handleUpdateRowId } = createHandleUpdateRowId($xeTable)
     const handleRowCache = (row: any, index: number, items: any, currIndex: number, parentRow: any, rowid: string, level: number, seq: string | number) => {
       let rowRest = fullAllDataRowIdMaps[rowid]
+      if (idMaps[rowid]) {
+        errLog('vxe.error.repeatKey', [currKeyField, rowid])
+      }
       if (!rowRest) {
         rowRest = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, _tIndex: -1, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
       }
@@ -4176,6 +4180,7 @@ const Methods = {
       rowRest.index = currIndex
       rowRest.treeIndex = index
 
+      idMaps[rowid] = true
       fullDataRowIdMaps[rowid] = rowRest
       fullAllDataRowIdMaps[rowid] = rowRest
     }
@@ -7750,8 +7755,28 @@ const Methods = {
   /**
    * 用于当前行，获取当前行的数据
    */
-  getCurrentRecord () {
-    return this.rowOpts.isCurrent || this.highlightCurrentRow ? this.currentRow : null
+  getCurrentRecord (isFull?: boolean) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { currentRow } = reactData
+    const { fullDataRowIdData, afterFullRowMaps } = internalData
+    const rowOpts = $xeTable.computeRowOpts
+    if (rowOpts.isCurrent || props.highlightCurrentRow) {
+      const rowid = getRowid($xeTable, currentRow)
+      if (isFull) {
+        if (fullDataRowIdData[rowid]) {
+          return currentRow
+        }
+      } else {
+        if (afterFullRowMaps[rowid]) {
+          return currentRow
+        }
+      }
+    }
+    return null
   },
   /**
    * 用于单选行，获取当已选中的数据

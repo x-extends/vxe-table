@@ -17,7 +17,7 @@ export default {
       groupTag: 'グループ化列ヘッダーは、「{1}」の代わりに「{0}」を使用する必要があります。',
       scrollErrProp: 'このパラメーター「{0}」は、仮想スクロールが有効になった後にサポートされていません',
       errConflicts: 'パラメーター「{0}」は「{1}」と競合します',
-      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
+      modelConflicts: 'バインドされたフィールド値「{0}」と「{1}」の間に競合があり、エラーが発生します',
       notSupportProp: '「{1}」はパラメーター「{0}」が有効になっている場合、「{2}」である必要があります。そうしないと、エラーが発生します。',
       notConflictProp: '「{0}」を使用する場合、「{1}」を設定する必要があります。',
       unableInsert: '指定された場所に挿入できません。パラメーターが正しいかどうかを確認してください',
@@ -37,7 +37,7 @@ export default {
       notCommands: 'グローバル指令「{0}」は存在しません',
       notSlot: 'スロット「{0}」は存在しません',
       noTree: '「{0}」はツリー構造ではサポートされていません',
-      noGroup: '数据分组后不支持 "{0}"',
+      noGroup: '「{0}」は、データグループの後にサポートされていません',
       notProp: 'サポートされていないパラメーター "{0}"',
       checkProp: 'データのボリュームが大きすぎると、チェックボックスがutter音を立てる可能性があります。レンダリング速度を改善するためにパラメーター「{0}」を設定することをお勧めします',
       coverProp: '「{0}」のパラメーター「{1}」が繰り返し定義されているため、エラーが発生する可能性があります',
@@ -56,7 +56,7 @@ export default {
       treeDragChild: '親は自分の子供にドラッグすることはできません',
       reqPlugin: '「{1}」はhttps://vxeui.com/other {0 }/#/ {1 }/installにインストールされていません',
       errMaxRow: 'サポートされている最大データボリューム{0}行を超えると、これによりエラーが発生する可能性があります',
-      useNew: '不建议使用 {0}，请使用 {1}'
+      useNew: '{0}はお勧めしません。{1}を使用してください'
     },
     table: {
       emptyText: 'まだデータはありません',
@@ -69,7 +69,7 @@ export default {
       sortAsc: '昇順：最低から最高',
       sortDesc: '降順注文：最高から最低',
       filter: '選択した列のフィルタリングを有効にします',
-      impSuccess: '{0}レコードを正常にインポートしました',
+      impSuccess: '{0}レコードは正常にインポートされました',
       expLoading: 'エクスポート',
       expSuccess: '正常にエクスポート',
       expError: 'エクスポートは失敗しました',
@@ -82,11 +82,11 @@ export default {
       customCancel: 'キャンセル',
       customRestore: 'デフォルトを復元します',
       maxFixedCol: '凍結柱の最大数は{0}を超えることはできません',
-      maxGroupCol: '最大分组字段的数量不能超过 {0} 个',
+      maxGroupCol: '最大グループフィールドの数は{0}を超えることはできません',
       dragTip: '移動：{0}',
       resizeColTip: '幅：{0}ピクセル',
-      resizeRowTip: '高さ：{0}ピクセル',
-      rowGroupContentTotal: '{0} ({1})'
+      resizeRowTip: '高：{0}ピクセル',
+      rowGroupContentTotal: '{0}（{1}）'
     },
     grid: {
       selectOneRecord: '少なくとも1つのレコードを選択してください！',
@@ -98,27 +98,27 @@ export default {
       operError: 'エラーが発生し、操作が失敗しました！'
     },
     select: {
-      clear: '清除',
-      allChecked: '全选',
+      clear: 'クリア',
+      allChecked: 'すべてを選択します',
       total: '{0} / {1}',
       search: '検索',
       loadingText: '読み込み',
       emptyText: 'まだデータはありません',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
-      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
-      searchEmpty: '未匹配到数据！'
+      maxSize: 'オプションの最大数は{0}を超えることはできません',
+      overSizeErr: '最大オプションの数値{0}は超えられており、超過は無視されます！',
+      searchEmpty: '一致するデータはありません！'
     },
     tree: {
-      searchEmpty: '未匹配到数据！'
+      searchEmpty: '一致するデータはありません！'
     },
     treeSelect: {
-      clearChecked: '清除',
-      allChecked: '全选',
-      allExpand: '全部展开',
-      clearExpand: '全部收起',
-      total: '已选 {0}',
-      search: '搜索',
-      emptyText: '暂无数据'
+      clearChecked: 'クリア',
+      allChecked: 'すべてを選択します',
+      allExpand: 'すべて拡張します',
+      clearExpand: 'すべてを閉じます',
+      total: '選択{0}',
+      search: '検索',
+      emptyText: 'まだデータはありません'
     },
     pager: {
       goto: '行く',
@@ -159,7 +159,7 @@ export default {
       cstmDragTarget: '移動：{0}',
       setting: {
         colSort: '選別',
-        sortHelpTip: '点击并拖动图标可以调整顺序',
+        sortHelpTip: 'アイコンをクリックしてドラッグして、注文を調整します',
         colTitle: '列のタイトル',
         colResizable: '列幅（ピクセル）',
         colVisible: '表示するかどうか',
@@ -179,7 +179,7 @@ export default {
       },
       impTitle: 'データをインポートします',
       impFile: 'ファイル名',
-      impSelect: '[ファイル]を選択します',
+      impSelect: 'ファイルを選択します',
       impType: 'ファイルタイプ',
       impOpts: 'パラメーター設定',
       impMode: 'インポートモード',
@@ -188,7 +188,7 @@ export default {
     },
     export: {
       types: {
-        csv: 'CSV（コンマ分離）（*。CSV）',
+        csv: 'csv（commaseparated）（*。CSV）',
         html: 'Webページ（*.html）',
         xml: 'XMLデータ（*.xml）',
         txt: 'テキストファイル（タブ分離）（*。txt）',
@@ -260,15 +260,15 @@ export default {
       customAll: '全て',
       customConfirm: '確認する',
       customRestore: 'リセット',
-      fixedLeft: '左フリーズ',
-      fixedRight: '右フリーズします',
-      cancelFixed: '凍結外'
+      fixedLeft: '左にフリーズします',
+      fixedRight: '右にフリーズします',
+      cancelFixed: '凍結柱'
     },
     datePicker: {
-      yearTitle: '{0} 年'
+      yearTitle: '{0}年'
     },
     dateRangePicker: {
-      pleaseRange: '请选择开始日期与结束日期'
+      pleaseRange: '開始日と終了日を選択してください'
     },
     input: {
       date: {
@@ -348,8 +348,8 @@ export default {
       fileBtnText: 'クリックまたはドラッグしてアップロードします',
       imgBtnText: 'クリックまたはドラッグしてアップロードします',
       dragPlaceholder: 'このエリアにファイルをドラッグアンドドロップしてアップロードしてください',
-      imgSizeHint: 'リーフレット{0}',
-      imgCountHint: '最大{0}写真',
+      imgSizeHint: 'シングル{0}',
+      imgCountHint: '{0}まで',
       fileTypeHint: 'サポート{0}ファイルタイプ',
       fileSizeHint: '単一のファイルサイズが{0}を超えない',
       fileCountHint: '最大{0}ファイルをアップロードできます',
@@ -357,7 +357,7 @@ export default {
       overCountErr: 'せいぜい{0}ファイルのみを選択できます！',
       overCountExtraErr: '{0}の最大数は超えており、過剰な{1}ファイルは無視されます！',
       overSizeErr: '最大ファイルサイズは{0}を超えることはできません！',
-      manualUpload: '点击上传',
+      manualUpload: 'クリックしてアップロードします',
       reUpload: '再アップロード',
       uploadProgress: '{0}％のアップロード',
       uploadErr: 'アップロードに失敗しました',
@@ -392,10 +392,10 @@ export default {
         btn: 'スタイル設定',
         title: 'フォームスタイル設定',
         layoutTitle: 'コントロールレイアウト',
-        verticalLayout: '上部および下部のレイアウト',
+        verticalLayout: '上下のレイアウト',
         horizontalLayout: '水平レイアウト',
         styleTitle: 'タイトルスタイル',
-        boldTitle: 'タイトル太字',
+        boldTitle: '厚いタイトル',
         fontBold: '大胆な',
         fontNormal: '従来の',
         colonTitle: 'コロンを表示します',
@@ -433,7 +433,7 @@ export default {
           VxeTextarea: 'テキストフィールド',
           VxeSelect: 'プルダウンして選択します',
           VxeTreeSelect: 'ツリー選択',
-          VxeRadioGroup: 'ラジオボタン',
+          VxeRadioGroup: 'ラジオボックス',
           VxeCheckboxGroup: 'チェックボックス',
           VxeUploadFile: '書類',
           VxeUploadImage: '写真',
@@ -448,7 +448,7 @@ export default {
         multiple: '複数の選択肢が許可されています',
         displaySetting: {
           name: '設定を表示します',
-          pc: 'PC',
+          pc: 'コンピューター',
           mobile: '携帯',
           visible: '見せる',
           hidden: '隠れる'
@@ -460,7 +460,7 @@ export default {
           batchEditOption: 'バッチ編集',
           batchEditTip: '各行はオプションに対応し、テーブル、Excel、およびWPSからの直接コピーと貼り付けをサポートします。',
           batchEditSubTip: '各行はオプションに対応します。それがグループの場合、子アイテムはスペースまたはタブキーから始めることができ、テーブル、Excel、およびWPSからの直接コピーと貼り付けをサポートします。',
-          buildOption: 'オプションを構築します'
+          buildOption: 'オプションを生成します'
         },
         rowProp: {
           colSize: '列数',
@@ -478,7 +478,7 @@ export default {
           alignRight: '右側に',
           colorTitle: 'フォントカラー',
           sizeTitle: 'フォントサイズ',
-          boldTitle: '大胆なフォント',
+          boldTitle: '厚いフォント',
           fontNormal: '従来の',
           fontBold: '大胆な'
         },
@@ -538,17 +538,17 @@ export default {
       extendCellArea: {
         area: {
           mergeErr: 'この操作は、マージされたセルで実行することはできません',
-          multiErr: 'この操作は、複数の選択領域で実行することはできません',
-          selectErr: '指定された範囲のセルで動作することができません',
-          extendErr: '拡張範囲にマージされたセルが含まれている場合、すべてのマージされたセルは同じサイズでなければなりません',
-          pasteMultiErr: '貼り付けることができないため、この操作を実行するには、コピーされたエリアと貼り付けエリアが同じサイズである必要があります',
-          cpInvalidErr: '操作は実行できません。選択した範囲に禁止された列（{0}）があります。'
+          multiErr: 'この操作は、マルチセレクト領域で実行することはできません',
+          selectErr: '指定された領域でセルを動作させることができません',
+          extendErr: '拡張領域にマージされた細胞が含まれている場合、すべてのマージされた細胞は同じサイズでなければなりません',
+          pasteMultiErr: '貼り付けることができません、これを行うために同じサイズの領域をコピーして貼り付ける必要があります',
+          cpInvalidErr: 'この操作は実行できません。選択した領域に禁止された列があります（{0}）'
         },
         fnr: {
           title: '見つけて交換します',
           findLabel: '探す',
           replaceLabel: '交換する',
-          findTitle: '何を見つける：',
+          findTitle: 'コンテンツを見つける：',
           replaceTitle: '置き換えてください：',
           tabs: {
             find: '探す',
@@ -560,7 +560,7 @@ export default {
             sensitive: '大文字と小文字を区別'
           },
           btns: {
-            findNext: '次を見つけます',
+            findNext: '次のものを見つけます',
             findAll: 'すべてを見つけてください',
             replace: '交換する',
             replaceAll: 'すべてを交換します',
@@ -579,42 +579,42 @@ export default {
           reError: '無効な正規表現',
           recordCount: '{0}セルが見つかりました',
           notCell: '一致するセルは見つかりません',
-          replaceSuccess: '{0}セルを正常に交換しました'
+          replaceSuccess: '{0}細胞は正常に交換されました'
         }
       },
       extendPivotTable: {
         aggregation: {
-          grouping: '分组',
-          values: '值',
-          groupPlaceholder: '拖至此处进行分组',
-          valuesPlaceholder: '拖至此处进行聚合',
-          dragExistCol: '该列已存在',
-          sortHelpTip: '点击并拖动图标可以调整顺序'
+          grouping: 'グループ化',
+          values: '価値',
+          groupPlaceholder: 'ここでグループにドラッグします',
+          valuesPlaceholder: 'ここにドラッグして集約します',
+          dragExistCol: 'このコラムはすでに存在しています',
+          sortHelpTip: 'アイコンをクリックしてドラッグして、注文を調整します'
         },
         aggFuncs: {
-          sum: '求和',
-          count: '计数',
-          avg: '平均值',
-          min: '最小值',
-          max: '最大值',
-          first: '首个值',
-          last: '末尾值'
+          sum: '合計を尋ねます',
+          count: 'カウント',
+          avg: '平均値',
+          min: '最小値',
+          max: '最大値',
+          first: '最初の値',
+          last: '最終値'
         }
       },
       filterComplexInput: {
         menus: {
           fixedColumn: 'フリーズコラム',
-          fixedGroup: '凍結グループ',
-          cancelFixed: '凍結外',
-          fixedLeft: '左フリーズ',
-          fixedRight: '右フリーズします'
+          fixedGroup: 'グループ化フリーズ',
+          cancelFixed: 'キャンセルフリーズ',
+          fixedLeft: '左側をフリーズします',
+          fixedRight: '右側を凍結します'
         },
         cases: {
           equal: '等しい',
           gt: 'より大きい',
           lt: '未満',
           begin: '始まりはです',
-          endin: '終わりです',
+          endin: 'エンディングはです',
           include: '含む',
           isSensitive: '大文字と小文字を区別'
         }
@@ -626,13 +626,13 @@ export default {
           sortAsc: '昇順',
           sortDesc: '降順',
           fixedColumn: 'フリーズコラム',
-          fixedGroup: '凍結グループ',
-          cancelFixed: '凍結外',
-          fixedLeft: '左フリーズ',
-          fixedRight: '右フリーズします',
+          fixedGroup: 'グループ化フリーズ',
+          cancelFixed: 'キャンセルフリーズ',
+          fixedLeft: '左側をフリーズします',
+          fixedRight: '右側を凍結します',
           clearFilter: 'クリアフィルター',
-          textOption: 'テキストフィルター',
-          numberOption: '数値フィルター'
+          textOption: 'テキストフィルタリング',
+          numberOption: '数値フィルタリング'
         },
         popup: {
           title: 'カスタムフィルタリング方法',
@@ -650,12 +650,12 @@ export default {
           le: '以下以上',
           begin: '始まりはです',
           notbegin: '最初はありません',
-          endin: '終わりです',
+          endin: 'エンディングはです',
           notendin: 'エンディングはそうではありません',
           include: '含む',
           exclude: '含まれていません',
           between: '間',
-          custom: 'カスタムフィルター',
+          custom: 'カスタムフィルタリング',
           insensitive: '症例は無感覚です',
           isSensitive: '大文字と小文字を区別'
         },
@@ -666,9 +666,9 @@ export default {
     pro: {
       area: {
         mergeErr: 'この操作は、マージされたセルで実行することはできません',
-        multiErr: 'この操作は、複数の選択領域で実行することはできません',
-        extendErr: '拡張範囲にマージされたセルが含まれている場合、すべてのマージされたセルは同じサイズでなければなりません',
-        pasteMultiErr: '貼り付けることができないため、この操作を実行するには、コピーされたエリアと貼り付けエリアが同じサイズである必要があります'
+        multiErr: 'この操作は、マルチセレクト領域で実行することはできません',
+        extendErr: '拡張領域にマージされた細胞が含まれている場合、すべてのマージされた細胞は同じサイズでなければなりません',
+        pasteMultiErr: '貼り付けることができません、これを行うために同じサイズの領域をコピーして貼り付ける必要があります'
       },
       fnr: {
         title: '見つけて交換します',
@@ -686,7 +686,7 @@ export default {
           sensitive: '大文字と小文字を区別'
         },
         btns: {
-          findNext: '次を見つけます',
+          findNext: '次のものを見つけます',
           findAll: 'すべてを見つけてください',
           replace: '交換する',
           replaceAll: 'すべてを交換します',
@@ -701,7 +701,7 @@ export default {
         reError: '無効な正規表現',
         recordCount: '{0}セルが見つかりました',
         notCell: '一致するセルは見つかりません',
-        replaceSuccess: '{0}セルを正常に交換しました'
+        replaceSuccess: '{0}細胞は正常に交換されました'
       }
     },
     renderer: {
@@ -715,12 +715,12 @@ export default {
         le: '以下以上',
         begin: '始まりはです',
         notbegin: '最初はありません',
-        endin: '終わりです',
+        endin: 'エンディングはです',
         notendin: 'エンディングはそうではありません',
         include: '含む',
         exclude: '含まれていません',
         between: '間',
-        custom: 'カスタムフィルター',
+        custom: 'カスタムフィルタリング',
         insensitive: '症例は無感覚です',
         isSensitive: '大文字と小文字を区別'
       },
@@ -731,10 +731,10 @@ export default {
           sortAsc: '昇順',
           sortDesc: '降順',
           fixedColumn: 'フリーズコラム',
-          fixedGroup: '凍結グループ',
-          cancelFixed: '凍結外',
-          fixedLeft: '左フリーズ',
-          fixedRight: '右フリーズします',
+          fixedGroup: 'グループ化フリーズ',
+          cancelFixed: 'キャンセルフリーズ',
+          fixedLeft: '左に凍結します',
+          fixedRight: '右にフリーズします',
           clearFilter: 'クリアフィルター',
           textOption: 'テキストフィルタリング',
           numberOption: '数値フィルタリング'

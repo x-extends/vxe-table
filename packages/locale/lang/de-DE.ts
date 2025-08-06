@@ -17,7 +17,7 @@ export default {
       groupTag: 'Gruppierungsspalten -Header sollten "{0}" anstelle von "{1}" verwenden, was zu Fehlern führen kann',
       scrollErrProp: 'Dieser Parameter "{0}" wird nicht unterstützt, nachdem die virtuelle Scrollen aktiviert ist',
       errConflicts: 'Parameter "{0}" Konflikte mit "{1}"',
-      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
+      modelConflicts: 'Es gibt einen Konflikt zwischen dem gebundenen Feldwert "{0}" und "{1}", und ein Fehler tritt auf',
       notSupportProp: '"{1}" wird nicht unterstützt, wenn der Parameter "{0}" aktiviert ist. Es sollte "{2}" sein, andernfalls tritt ein Fehler auf',
       notConflictProp: 'Wenn "{0}" verwendet wird, sollte "{1}" festgelegt werden, andernfalls kann es funktionale Konflikte geben',
       unableInsert: 'Kann nicht in den angegebenen Ort eingefügt werden. Überprüfen Sie bitte, ob die Parameter korrekt sind',
@@ -37,7 +37,7 @@ export default {
       notCommands: 'Die globale Richtlinie "{0}" existiert nicht',
       notSlot: 'Slot "{0}" existiert nicht',
       noTree: '"{0}" wird in der Baumstruktur nicht unterstützt',
-      noGroup: '数据分组后不支持 "{0}"',
+      noGroup: '"{0}" wird nach der Datengruppierung nicht unterstützt',
       notProp: 'Nicht unterstützter Parameter "{0}"',
       checkProp: 'Wenn das Datenvolumen zu groß ist, kann das Kontrollkästchen stottern. Es wird empfohlen, den Parameter "{0}" festzulegen, um die Rendering -Geschwindigkeit zu verbessern',
       coverProp: 'Der Parameter "{1}" von "{0}" wird wiederholt definiert, was einen Fehler verursachen kann',
@@ -56,7 +56,7 @@ export default {
       treeDragChild: 'Eltern können nicht zu ihren eigenen Kindern ziehen',
       reqPlugin: '"{1}" ist nicht unter https://vxeui.com/Otheriationation installiert',
       errMaxRow: 'Wenn das maximal unterstützte Datenvolumen {0} Zeilen überschreitet, kann dies einen Fehler verursachen',
-      useNew: '不建议使用 {0}，请使用 {1}'
+      useNew: '{0} wird nicht empfohlen, bitte verwenden Sie {1}'
     },
     table: {
       emptyText: 'Noch keine Daten',
@@ -69,7 +69,7 @@ export default {
       sortAsc: 'Aufsteigende Ordnung: niedrigst bis zum höchsten',
       sortDesc: 'Absteigende Ordnung: höchste bis niedrigste',
       filter: 'Filterung für ausgewählte Spalten aktivieren',
-      impSuccess: 'Erfolgreich importierte {0} Datensätze',
+      impSuccess: '{0} Datensätze wurden erfolgreich importiert',
       expLoading: 'Exportieren',
       expSuccess: 'Erfolgreich exportieren',
       expError: 'Export fehlgeschlagen',
@@ -82,11 +82,11 @@ export default {
       customCancel: 'Stornieren',
       customRestore: 'Standardeinstellung wiederherstellen',
       maxFixedCol: 'Die maximale Anzahl von gefrorenen Spalten darf {0} nicht überschreiten',
-      maxGroupCol: '最大分组字段的数量不能超过 {0} 个',
+      maxGroupCol: 'Die Anzahl der maximalen Gruppierungsfelder darf {0} nicht überschreiten',
       dragTip: 'Bewegung: {0}',
       resizeColTip: 'Breite: {0} Pixel',
-      resizeRowTip: 'Höhe: {0} Pixel',
-      rowGroupContentTotal: '{0} ({1})'
+      resizeRowTip: 'Hoch: {0} Pixel',
+      rowGroupContentTotal: '{0}（{1}）'
     },
     grid: {
       selectOneRecord: 'Bitte wählen Sie mindestens einen Datensatz aus!',
@@ -98,27 +98,27 @@ export default {
       operError: 'Ein Fehler ist aufgetreten und die Operation ist fehlgeschlagen!'
     },
     select: {
-      clear: '清除',
-      allChecked: '全选',
+      clear: 'Klar',
+      allChecked: 'Wählen Sie alle aus',
       total: '{0} / {1}',
       search: 'suchen',
       loadingText: 'Laden',
       emptyText: 'Noch keine Daten',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
-      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
-      searchEmpty: '未匹配到数据！'
+      maxSize: 'Die maximale Anzahl von Optionen kann {0} nicht überschreiten',
+      overSizeErr: 'Die maximale optionale Nummer {0} wurde überschritten und der Überschuss wird ignoriert!',
+      searchEmpty: 'Keine Daten entspricht!'
     },
     tree: {
-      searchEmpty: '未匹配到数据！'
+      searchEmpty: 'Keine Daten entspricht!'
     },
     treeSelect: {
-      clearChecked: '清除',
-      allChecked: '全选',
-      allExpand: '全部展开',
-      clearExpand: '全部收起',
-      total: '已选 {0}',
-      search: 'Search',
-      emptyText: '暂无数据'
+      clearChecked: 'Klar',
+      allChecked: 'Wählen Sie alle aus',
+      allExpand: 'Alle erweitern',
+      clearExpand: 'Alle schließen',
+      total: 'Ausgewählt {0}',
+      search: 'suchen',
+      emptyText: 'Noch keine Daten'
     },
     pager: {
       goto: 'Gehen',
@@ -159,7 +159,7 @@ export default {
       cstmDragTarget: 'Bewegung: {0}',
       setting: {
         colSort: 'Sortieren',
-        sortHelpTip: '点击并拖动图标可以调整顺序',
+        sortHelpTip: 'Klicken Sie auf das Symbol und ziehen Sie das Symbol, um die Bestellung anzupassen',
         colTitle: 'Spaltenentitel',
         colResizable: 'Säulenbreite (Pixel)',
         colVisible: 'Ob angezeigt',
@@ -179,7 +179,7 @@ export default {
       },
       impTitle: 'Daten importieren',
       impFile: 'Dateiname',
-      impSelect: 'Datei auswählen',
+      impSelect: 'Wählen Sie eine Datei aus',
       impType: 'Dateityp',
       impOpts: 'Parametereinstellungen',
       impMode: 'Importmodus',
@@ -188,10 +188,10 @@ export default {
     },
     export: {
       types: {
-        csv: 'CSV (Komma getrennt) (*. CSV)',
+        csv: 'CSV (Comma-getrennt) (*. CSV)',
         html: 'Webseite (*.html)',
         xml: 'XML -Daten (*.xml)',
-        txt: 'Textdatei (Registerkarte getrennt) (*. Txt)',
+        txt: 'Textdatei (tabendressierte) (*. Txt)',
         xls: 'Excel 97-2003 Arbeitsbuch (*.xls)',
         xlsx: 'Excel Workbook (*.xlsx)',
         pdf: 'PDF (*.pdf)'
@@ -211,7 +211,7 @@ export default {
       expType: 'Typ speichern',
       expMode: 'Daten auswählen',
       expCurrentColumn: 'Alle Felder',
-      expColumn: 'Feld auswählen',
+      expColumn: 'Wählen Sie ein Feld aus',
       expOpts: 'Parametereinstellungen',
       expOptHeader: 'Kopfball',
       expHeaderTitle: 'Ist der Tischkopf benötigt',
@@ -260,15 +260,15 @@ export default {
       customAll: 'alle',
       customConfirm: 'bestätigen',
       customRestore: 'Zurücksetzen',
-      fixedLeft: 'Einfrieren links',
-      fixedRight: 'Richtig einfrieren',
-      cancelFixed: 'Entfärben'
+      fixedLeft: 'Links einfrieren',
+      fixedRight: 'Rechts einfrieren',
+      cancelFixed: 'Säulen entfernen'
     },
     datePicker: {
       yearTitle: '{0} Jahre'
     },
     dateRangePicker: {
-      pleaseRange: '请选择开始日期与结束日期'
+      pleaseRange: 'Bitte wählen Sie ein Startdatum und ein Enddatum'
     },
     input: {
       date: {
@@ -348,8 +348,8 @@ export default {
       fileBtnText: 'Klicken Sie auf oder ziehen Sie zum Hochladen',
       imgBtnText: 'Klicken Sie auf oder ziehen Sie zum Hochladen',
       dragPlaceholder: 'Bitte ziehen Sie die Datei zum Hochladen in diesen Bereich und lassen Sie sie ab',
-      imgSizeHint: 'Blättchen {0}',
-      imgCountHint: 'Maximum {0} Bilder',
+      imgSizeHint: 'Single {0}',
+      imgCountHint: 'Bis {0}',
       fileTypeHint: 'Unterstützen Sie {0} Dateitypen',
       fileSizeHint: 'Eine einzelne Dateigröße überschreitet {0} nicht',
       fileCountHint: 'Bis zu {0} -Dateien können hochgeladen werden',
@@ -357,7 +357,7 @@ export default {
       overCountErr: 'Nur {0} -Dateien können höchstens ausgewählt werden!',
       overCountExtraErr: 'Die maximale Anzahl von {0} wurde überschritten, und die überschüssigen {1} -Dateien werden ignoriert!',
       overSizeErr: 'Die maximale Dateigröße darf {0} nicht überschreiten!',
-      manualUpload: '点击上传',
+      manualUpload: 'Klicken Sie hier, um hochzuladen',
       reUpload: 'Wiederbelastung',
       uploadProgress: 'Hochladen {0}%',
       uploadErr: 'Upload fehlgeschlagen',
@@ -365,7 +365,7 @@ export default {
       moreBtnText: 'Mehr ({0})',
       viewItemTitle: 'Klicken Sie hier, um anzuzeigen',
       morePopup: {
-        readTitle: 'Liste anzeigen',
+        readTitle: 'Zeigen Sie die Liste an',
         imageTitle: 'Laden Sie Bilder hoch',
         fileTitle: 'Datei hochladen'
       }
@@ -392,10 +392,10 @@ export default {
         btn: 'Stileinstellungen',
         title: 'Formularstileinstellungen',
         layoutTitle: 'Kontrolllayout',
-        verticalLayout: 'Oberes und unteres Layout',
+        verticalLayout: 'Auf und Ab -Layout',
         horizontalLayout: 'Horizontales Layout',
         styleTitle: 'Titelstil',
-        boldTitle: 'Titel mutig',
+        boldTitle: 'Dicker Titel',
         fontBold: 'Deutlich',
         fontNormal: 'konventionell',
         colonTitle: 'Zeigen Sie Colon',
@@ -433,7 +433,7 @@ export default {
           VxeTextarea: 'Textfeld',
           VxeSelect: 'Runter ziehen, um auszuwählen',
           VxeTreeSelect: 'Baumauswahl',
-          VxeRadioGroup: 'Optionsknopf',
+          VxeRadioGroup: 'Radiobox',
           VxeCheckboxGroup: 'Kontrollkästchen',
           VxeUploadFile: 'dokumentieren',
           VxeUploadImage: 'Bild',
@@ -448,7 +448,7 @@ export default {
         multiple: 'Mehrere Auswahlmöglichkeiten sind erlaubt',
         displaySetting: {
           name: 'Einstellungen anzeigen',
-          pc: 'PC',
+          pc: 'Computer',
           mobile: 'Mobile',
           visible: 'zeigen',
           hidden: 'verstecken'
@@ -460,7 +460,7 @@ export default {
           batchEditOption: 'Batch -Bearbeitung',
           batchEditTip: 'Jede Zeile entspricht einer Option, die direkte Kopie und Einfügen von Tabellen, Excel und WPS unterstützt.',
           batchEditSubTip: 'Jede Zeile entspricht einer Option. Wenn es sich um eine Gruppe handelt, können die untergeordneten Elemente mit einem Speicherplatz oder einem Registerkartenschlüssel beginnen und unterstützt direkte Kopien und Einfügen von Tabellen, Excel und WPS.',
-          buildOption: 'Optionen erstellen'
+          buildOption: 'Optionen generieren'
         },
         rowProp: {
           colSize: 'Anzahl der Spalten',
@@ -478,7 +478,7 @@ export default {
           alignRight: 'Rechts',
           colorTitle: 'Schriftfarbe',
           sizeTitle: 'Schriftgröße',
-          boldTitle: 'Kühne Schrift',
+          boldTitle: 'Dickere Schrift',
           fontNormal: 'konventionell',
           fontBold: 'Deutlich'
         },
@@ -538,17 +538,17 @@ export default {
       extendCellArea: {
         area: {
           mergeErr: 'Diese Operation kann nicht an zusammengeführten Zellen durchgeführt werden',
-          multiErr: 'Dieser Vorgang kann nicht in mehreren Auswahlbereichen durchgeführt werden',
-          selectErr: 'Im angegebenen Bereich kann nicht auf Zellen arbeiten',
+          multiErr: 'Dieser Vorgang kann nicht im Bereich mehrerer Selekten durchgeführt werden',
+          selectErr: 'Zellen im angegebenen Bereich können nicht betrieben werden',
           extendErr: 'Wenn der erweiterte Bereich zusammengeführte Zellen enthält, müssen alle zusammengeführten Zellen die gleiche Größe haben',
-          pasteMultiErr: 'Die kopierten und eingefügten Bereiche müssen nicht einfügen und müssen gleich groß sein, um diesen Vorgang auszuführen',
-          cpInvalidErr: 'Die Operation kann nicht durchgeführt werden. Es gibt verbotene Spalten ({0}) in dem von Ihnen ausgewählten Bereich.'
+          pasteMultiErr: 'Es kann nicht eingefügt werden, müssen dazu Bereiche kopieren und einfügen',
+          cpInvalidErr: 'Diese Operation kann nicht durchgeführt werden, es gibt verbotene Spalten in dem von Ihnen ausgewählten Bereich ({0})'
         },
         fnr: {
           title: 'Finden und ersetzen',
           findLabel: 'Finden',
           replaceLabel: 'ersetzen',
-          findTitle: 'Finden Sie was:',
+          findTitle: 'Inhalt finden:',
           replaceTitle: 'Ersetzen durch:',
           tabs: {
             find: 'Finden',
@@ -560,7 +560,7 @@ export default {
             sensitive: 'Fallempfindlichkeit'
           },
           btns: {
-            findNext: 'Weitere finden',
+            findNext: 'Finden Sie den nächsten',
             findAll: 'Finden Sie alle',
             replace: 'ersetzen',
             replaceAll: 'Alles ersetzen',
@@ -579,35 +579,35 @@ export default {
           reError: 'Ungültiger regulärer Ausdruck',
           recordCount: '{0} Zellen gefunden',
           notCell: 'Die passende Zelle kann nicht gefunden werden',
-          replaceSuccess: 'Erfolgreich ersetzt {0} Zellen'
+          replaceSuccess: '{0} Zellen wurden erfolgreich ersetzt'
         }
       },
       extendPivotTable: {
         aggregation: {
-          grouping: '分组',
-          values: '值',
-          groupPlaceholder: '拖至此处进行分组',
-          valuesPlaceholder: '拖至此处进行聚合',
-          dragExistCol: '该列已存在',
-          sortHelpTip: '点击并拖动图标可以调整顺序'
+          grouping: 'Gruppierung',
+          values: 'Wert',
+          groupPlaceholder: 'Ziehen Sie hier zur Gruppe',
+          valuesPlaceholder: 'Ziehen Sie hierher, um zu aggregieren',
+          dragExistCol: 'Diese Spalte existiert bereits',
+          sortHelpTip: 'Klicken Sie auf das Symbol und ziehen Sie das Symbol, um die Bestellung anzupassen'
         },
         aggFuncs: {
-          sum: '求和',
-          count: '计数',
-          avg: '平均值',
-          min: '最小值',
-          max: '最大值',
-          first: '首个值',
-          last: '末尾值'
+          sum: 'Bitten Sie nach Summe',
+          count: 'zählen',
+          avg: 'Durchschnittswert',
+          min: 'Mindestwert',
+          max: 'Maximalwert',
+          first: 'Erster Wert',
+          last: 'Der Endwert'
         }
       },
       filterComplexInput: {
         menus: {
           fixedColumn: 'Einfrierensäule',
-          fixedGroup: 'Gefriergruppe',
-          cancelFixed: 'Entfärben',
-          fixedLeft: 'Einfrieren links',
-          fixedRight: 'Richtig einfrieren'
+          fixedGroup: 'Gefriergruppierung',
+          cancelFixed: 'Einfrieren abbrechen',
+          fixedLeft: 'Linke Seite einfrieren',
+          fixedRight: 'Die rechte Seite einfrieren'
         },
         cases: {
           equal: 'gleich',
@@ -626,13 +626,13 @@ export default {
           sortAsc: 'Aufsteigende Ordnung',
           sortDesc: 'absteigende Reihenfolge',
           fixedColumn: 'Einfrierensäule',
-          fixedGroup: 'Gefriergruppe',
-          cancelFixed: 'Entfärben',
-          fixedLeft: 'Einfrieren links',
-          fixedRight: 'Richtig einfrieren',
+          fixedGroup: 'Gefriergruppierung',
+          cancelFixed: 'Einfrieren abbrechen',
+          fixedLeft: 'Linke Seite einfrieren',
+          fixedRight: 'Die rechte Seite einfrieren',
           clearFilter: 'Klaren Filter',
-          textOption: 'Textfilter',
-          numberOption: 'Numerischer Filter'
+          textOption: 'Textfilterung',
+          numberOption: 'Numerische Filterung'
         },
         popup: {
           title: 'Benutzerdefinierte Filtermethoden',
@@ -655,7 +655,7 @@ export default {
           include: 'Enthalten',
           exclude: 'Nicht enthalten',
           between: 'Zwischen',
-          custom: 'Benutzerdefinierte Filter',
+          custom: 'Benutzerdefinierte Filterung',
           insensitive: 'Fall unempfindlich',
           isSensitive: 'Fallempfindlichkeit'
         },
@@ -666,9 +666,9 @@ export default {
     pro: {
       area: {
         mergeErr: 'Diese Operation kann nicht an zusammengeführten Zellen durchgeführt werden',
-        multiErr: 'Dieser Vorgang kann nicht in mehreren Auswahlbereichen durchgeführt werden',
+        multiErr: 'Dieser Vorgang kann nicht im Bereich mehrerer Selekten durchgeführt werden',
         extendErr: 'Wenn der erweiterte Bereich zusammengeführte Zellen enthält, müssen alle zusammengeführten Zellen die gleiche Größe haben',
-        pasteMultiErr: 'Die kopierten und eingefügten Bereiche müssen nicht einfügen und müssen gleich groß sein, um diesen Vorgang auszuführen'
+        pasteMultiErr: 'Es kann nicht eingefügt werden, müssen dazu Bereiche kopieren und einfügen'
       },
       fnr: {
         title: 'Finden und ersetzen',
@@ -686,7 +686,7 @@ export default {
           sensitive: 'Fallempfindlichkeit'
         },
         btns: {
-          findNext: 'Weitere finden',
+          findNext: 'Finden Sie den nächsten',
           findAll: 'Finden Sie alle',
           replace: 'ersetzen',
           replaceAll: 'Alles ersetzen',
@@ -700,8 +700,8 @@ export default {
         empty: '(Nullwert)',
         reError: 'Ungültiger regulärer Ausdruck',
         recordCount: '{0} Zellen gefunden',
-        notCell: 'Keine passende Zelle gefunden',
-        replaceSuccess: 'Erfolgreich ersetzt {0} Zellen'
+        notCell: 'Die passende Zelle kann nicht gefunden werden',
+        replaceSuccess: '{0} Zellen wurden erfolgreich ersetzt'
       }
     },
     renderer: {
@@ -720,7 +720,7 @@ export default {
         include: 'Enthalten',
         exclude: 'Nicht enthalten',
         between: 'Zwischen',
-        custom: 'Benutzerdefinierte Filter',
+        custom: 'Benutzerdefinierte Filterung',
         insensitive: 'Fall unempfindlich',
         isSensitive: 'Fallempfindlichkeit'
       },
@@ -731,10 +731,10 @@ export default {
           sortAsc: 'Aufsteigende Ordnung',
           sortDesc: 'absteigende Reihenfolge',
           fixedColumn: 'Einfrierensäule',
-          fixedGroup: 'Gefriergruppe',
-          cancelFixed: 'Entfärben',
-          fixedLeft: 'Einfrieren links',
-          fixedRight: 'Richtig einfrieren',
+          fixedGroup: 'Gefriergruppierung',
+          cancelFixed: 'Einfrieren abbrechen',
+          fixedLeft: 'Nach links einfrieren',
+          fixedRight: 'Nach rechts einfrieren',
           clearFilter: 'Klaren Filter',
           textOption: 'Textfilterung',
           numberOption: 'Numerische Filterung'
