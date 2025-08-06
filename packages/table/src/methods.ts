@@ -3072,9 +3072,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   internalData.cvCacheMaps = {}
   reactData.isRowLoading = true
   reactData.scrollVMLoading = false
-  // internalData.treeExpandedMaps = {}
   reactData.treeExpandedFlag++
-  // internalData.rowExpandedMaps = {}
   reactData.rowExpandedFlag++
   internalData.insertRowMaps = {}
   reactData.insertRowFlag++

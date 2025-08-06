@@ -11,7 +11,7 @@ import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
 import type { VxeFormItemProps, VxeFormDefines, VxeComponentStyleType, VxeComponentSizeType, ValueOf, VxeFormInstance, VxeFormItemPropTypes, VxePagerInstance } from 'vxe-pc-ui'
-import type { GridReactData, VxeTablePropTypes, VxeGridConstructor, VxeToolbarPropTypes, VxeToolbarInstance, VxeGridPropTypes, VxeTableMethods, VxeGridEmits, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, TableInternalData } from '../../../types'
+import type { GridReactData, VxeTablePropTypes, VxeGridConstructor, VxeToolbarPropTypes, VxeToolbarInstance, VxeGridPropTypes, VxeTableMethods, GridInternalData, VxeGridEmits, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, TableInternalData } from '../../../types'
 
 const { getConfig, getI18n, commands, globalEvents, globalMixins, createEvent, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
 
@@ -49,6 +49,12 @@ XEUtils.each(VxeTableComponent.methods, (fn, name) => {
     return $xeTable && $xeTable[name](...args)
   }
 })
+
+function createInternalData (): GridInternalData {
+  return {
+    connectTable: null
+  }
+}
 
 export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeGrid',
@@ -112,9 +118,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }
     }
 
+    const internalData = createInternalData()
+
     return {
       xID,
-      reactData
+      reactData,
+      internalData
     }
   },
   computed: {
@@ -1756,8 +1765,11 @@ export default /* define-vxe-component start */ defineVxeComponent({
   },
   destroyed () {
     const $xeGrid = this
+    const internalData = $xeGrid.internalData
 
     globalEvents.off($xeGrid, 'keydown')
+
+    XEUtils.assign(internalData, createInternalData())
   },
   render (this: any, h) {
     return this.renderVN(h)
