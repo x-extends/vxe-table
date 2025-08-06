@@ -17,7 +17,7 @@ export default {
       groupTag: '分組列頭應該使用 "{0}" 而不是 "{1}"，這可能會出現錯誤',
       scrollErrProp: '啟用虛擬滾動後不支持該參數 "{0}"',
       errConflicts: '參數 "{0}" 與 "{1}" 有衝突',
-      modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
+      modelConflicts: '綁定的字段值 "{0}" 與 "{1}" 存在衝突，將會出現錯誤',
       notSupportProp: '當啟用參數 "{0}" 時不支持 "{1}"，應該為 "{2}"，否則將會出現錯誤',
       notConflictProp: '當使用 "{0}" 時，應該設置 "{1}"，否則可能會存在功能衝突',
       unableInsert: '無法插入到指定位置，請檢查參數是否正確',
@@ -37,7 +37,7 @@ export default {
       notCommands: '全局指令 "{0}" 不存在',
       notSlot: '插槽 "{0}" 不存在',
       noTree: '樹結構不支持 "{0}"',
-      noGroup: '数据分组后不支持 "{0}"',
+      noGroup: '數據分組後不支持 "{0}"',
       notProp: '不支持的參數 "{0}"',
       checkProp: '當數據量過大時可能會導致複選框卡頓，建議設置參數 "{0}" 提升渲染速度',
       coverProp: '"{0}" 的參數 "{1}" 重複定義，這可能會出現錯誤',
@@ -56,7 +56,7 @@ export default {
       treeDragChild: '父級不能拖拽到自己的子級中',
       reqPlugin: '擴展插件未安裝 "{1}" https://vxeui.com/other{0}/#/{1}/install',
       errMaxRow: '超過支持的最大數據量 {0} 行，這可能會導致出現錯誤',
-      useNew: '不建议使用 {0}，请使用 {1}'
+      useNew: '不建議使用 {0}，請使用 {1}'
     },
     table: {
       emptyText: '暫無數據',
@@ -82,7 +82,7 @@ export default {
       customCancel: '取消',
       customRestore: '恢復默認',
       maxFixedCol: '最大凍結列的數量不能超過 {0} 個',
-      maxGroupCol: '最大分組欄位的數量不能超過 {0} 個',
+      maxGroupCol: '最大分組字段的數量不能超過 {0} 個',
       dragTip: '移動：{0}',
       resizeColTip: '寬：{0} 像素',
       resizeRowTip: '高：{0} 像素',
@@ -99,26 +99,26 @@ export default {
     },
     select: {
       clear: '清除',
-      allChecked: '全选',
+      allChecked: '全選',
       total: '{0} / {1}',
       search: '搜尋',
       loadingText: '載入中',
       emptyText: '暫無數據',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
-      overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
-      searchEmpty: '未匹配到数据！'
+      maxSize: '最大可選擇的數量不能超過 {0} 個',
+      overSizeErr: '已超出最大可選數量 {0} 個，超出部分將被忽略！',
+      searchEmpty: '未匹配到數據！'
     },
     tree: {
-      searchEmpty: '未匹配到数据！'
+      searchEmpty: '未匹配到數據！'
     },
     treeSelect: {
       clearChecked: '清除',
-      allChecked: '全选',
-      allExpand: '全部展开',
+      allChecked: '全選',
+      allExpand: '全部展開',
       clearExpand: '全部收起',
-      total: '已选 {0}',
-      search: '搜索',
-      emptyText: '暂无数据'
+      total: '已選 {0}',
+      search: '搜尋',
+      emptyText: '暫無數據'
     },
     pager: {
       goto: '前往',
@@ -268,7 +268,7 @@ export default {
       yearTitle: '{0} 年'
     },
     dateRangePicker: {
-      pleaseRange: '请选择开始日期与结束日期'
+      pleaseRange: '請選擇開始日期與結束日期'
     },
     input: {
       date: {
@@ -357,7 +357,7 @@ export default {
       overCountErr: '最多只能選擇{0}個文件！',
       overCountExtraErr: '已超出最大數量{0}個，超出的{1}個文件將被忽略！',
       overSizeErr: '文件大小最大不能超過{0}！',
-      manualUpload: '点击上传',
+      manualUpload: '點擊上傳',
       reUpload: '重新上傳',
       uploadProgress: '上傳中 {0}%',
       uploadErr: '上傳失敗',
@@ -377,7 +377,7 @@ export default {
       clear: '清除',
       confirm: '確認',
       copySuccess: '已復製到剪貼板：{0}',
-      hex: '十六进制'
+      hex: '十六進位'
     },
     formDesign: {
       formName: '表單名稱',
@@ -586,18 +586,18 @@ export default {
         aggregation: {
           grouping: '分組',
           values: '值',
-          groupPlaceholder: '拖曳至此處進行分組',
-          valuesPlaceholder: '拖曳至此處進行聚合',
+          groupPlaceholder: '拖至此處進行分組',
+          valuesPlaceholder: '拖至此處進行聚合',
           dragExistCol: '該列已存在',
           sortHelpTip: '點擊並拖動圖標可以調整順序'
         },
         aggFuncs: {
           sum: '求和',
-          count: '计数',
+          count: '計數',
           avg: '平均值',
           min: '最小值',
           max: '最大值',
-          first: '首个值',
+          first: '首個值',
           last: '末尾值'
         }
       },
