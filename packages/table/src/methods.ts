@@ -7599,8 +7599,28 @@ const Methods = {
   /**
    * 用于当前行，获取当前行的数据
    */
-  getCurrentRecord () {
-    return this.rowOpts.isCurrent || this.highlightCurrentRow ? this.currentRow : null
+  getCurrentRecord (isFull?: boolean) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { currentRow } = reactData
+    const { fullDataRowIdData, afterFullRowMaps } = internalData
+    const rowOpts = $xeTable.computeRowOpts
+    if (rowOpts.isCurrent || props.highlightCurrentRow) {
+      const rowid = getRowid($xeTable, currentRow)
+      if (isFull) {
+        if (fullDataRowIdData[rowid]) {
+          return currentRow
+        }
+      } else {
+        if (afterFullRowMaps[rowid]) {
+          return currentRow
+        }
+      }
+    }
+    return null
   },
   /**
    * 用于单选行，获取当已选中的数据
