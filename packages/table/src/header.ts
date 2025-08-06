@@ -357,9 +357,9 @@ export default {
             xvm: isOptimizeMode ? '1' : null
           }
         }, [
-        /**
-         * 列宽
-         */
+          /**
+           * 列宽
+           */
           h('colgroup', {
             ref: 'refHeaderColgroup'
           }, renderColumnList.map((column, $columnIndex) => {
@@ -378,32 +378,32 @@ export default {
            */
           h('thead', {
             ref: 'refHeaderTHead'
-          }, renderHeads(h, this, isGroup, isOptimizeMode, renderHeaderList)),
-          mouseConfig && mouseOpts.area
-            ? h('div', {
-              class: 'vxe-table--cell-area'
-            }, [
-              h('span', {
-                class: 'vxe-table--cell-main-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-clip-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-extend-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-multi-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-active-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-col-status-area'
-              })
-            ])
-            : renderEmptyElement($xeTable)
-        ])
+          }, renderHeads(h, this, isGroup, isOptimizeMode, renderHeaderList))
+        ]),
+        mouseConfig && mouseOpts.area
+          ? h('div', {
+            class: 'vxe-table--cell-area'
+          }, [
+            h('span', {
+              class: 'vxe-table--cell-main-area'
+            }),
+            h('span', {
+              class: 'vxe-table--cell-clip-area'
+            }),
+            h('span', {
+              class: 'vxe-table--cell-extend-area'
+            }),
+            h('span', {
+              class: 'vxe-table--cell-multi-area'
+            }),
+            h('span', {
+              class: 'vxe-table--cell-active-area'
+            }),
+            h('span', {
+              class: 'vxe-table--cell-col-status-area'
+            })
+          ])
+          : renderEmptyElement($xeTable)
       ])
     ])
   },
