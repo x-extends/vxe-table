@@ -1030,12 +1030,12 @@ export default {
       const tableReactData = $xeTable as unknown as TableReactData
 
       const { customColumnList } = tableReactData
-      const matchObj = XEUtils.findTree(customColumnList, item => item === column) as any
+      const matchObj = XEUtils.findTree(customColumnList, item => item === column)
       if (matchObj && matchObj.parent) {
         const { parent } = matchObj
         if (parent.children && parent.children.length) {
-          parent.visible = parent.children.every((column: any) => column.visible)
-          parent.halfVisible = !parent.visible && parent.children.some((column: any) => column.visible || column.halfVisible)
+          parent.renderVisible = parent.children.every((column) => column.renderVisible)
+          parent.halfVisible = !parent.renderVisible && parent.children.some((column) => column.renderVisible || column.halfVisible)
           this.handleOptionCheck(parent)
         }
       }
@@ -1045,8 +1045,8 @@ export default {
       const $xeTable = $xeTableCustomPanel.$xeTable
       const tableReactData = $xeTable as unknown as TableReactData
 
-      const customOpts = $xeTable.computeCustomOpts
       const isChecked = !column.renderVisible
+      const customOpts = $xeTable.computeCustomOpts
       if (customOpts.immediate) {
         XEUtils.eachTree([column], (item) => {
           item.visible = isChecked
