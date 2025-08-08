@@ -2332,12 +2332,17 @@ function autoCellWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
 const calcCellAutoHeight = (rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
   const cellElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`)
   let colHeight = rowRest.height
+  let firstCellStyle: CSSStyleDeclaration | null = null
+  let topBottomPadding = 0
   for (let i = 0; i < cellElemList.length; i++) {
-    const cellElem = cellElemList[i] as HTMLElement
-    const tdEl = cellElem.parentElement as HTMLTableCellElement
-    const topBottomPadding = Math.ceil(XEUtils.toNumber(tdEl.style.paddingTop) + XEUtils.toNumber(tdEl.style.paddingBottom))
-    const cellHeight = cellElem ? cellElem.clientHeight : 0
-    colHeight = Math.max(colHeight - topBottomPadding, Math.ceil(cellHeight))
+    const wrapperElem = cellElemList[i] as HTMLElement
+    const cellElem = wrapperElem.parentElement as HTMLTableCellElement
+    if (!firstCellStyle) {
+      firstCellStyle = getComputedStyle(cellElem)
+      topBottomPadding = firstCellStyle ? Math.ceil(XEUtils.toNumber(firstCellStyle.paddingTop) + XEUtils.toNumber(firstCellStyle.paddingBottom)) : 0
+    }
+    const cellHeight = wrapperElem ? wrapperElem.clientHeight : 0
+    colHeight = Math.max(colHeight, Math.ceil(cellHeight + topBottomPadding))
   }
   return colHeight
 }
@@ -5792,12 +5797,14 @@ const Methods = {
   },
   handleRowResizeMousedownEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
     evnt.stopPropagation()
     evnt.preventDefault()
     const { row } = params
+    const { showOverflow } = props
     const { overflowX, scrollbarWidth, overflowY, scrollbarHeight } = reactData
     const { elemStore, fullAllDataRowIdData } = internalData
     const osbWidth = overflowY ? scrollbarWidth : 0
@@ -5826,7 +5833,10 @@ const Methods = {
       return
     }
     const defaultRowHeight = $xeTable.computeDefaultRowHeight
-    const currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+    let currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+    if (!showOverflow) {
+      currCellHeight = tdEl.clientHeight
+    }
     const tableRect = tableEl.getBoundingClientRect()
     const trRect = trEl.getBoundingClientRect()
     const targetOffsetY = dragClientY - trRect.y - trEl.clientHeight
@@ -5991,6 +6001,29 @@ const Methods = {
       }
     })
     return rest
+  },
+  recalcRowHeight (rowOrId: any | any[]) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { fullAllDataRowIdData } = internalData
+    const rows = XEUtils.isArray(rowOrId) ? rowOrId : [rowOrId]
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    if (el) {
+      const { handleGetRowId } = createHandleGetRowId($xeTable)
+      el.setAttribute('data-calc-row', 'Y')
+      rows.forEach(row => {
+        const rowid = XEUtils.isString(row) || XEUtils.isNumber(row) ? row : handleGetRowId(row)
+        const rowRest = fullAllDataRowIdData[rowid]
+        if (rowRest) {
+          rowRest.resizeHeight = calcCellAutoHeight(rowRest, el)
+        }
+        el.removeAttribute('data-calc-row')
+      })
+      reactData.calcCellHeightFlag++
+    }
+    return $xeTable.$nextTick()
   },
   setRowHeight (rowOrId: any | any[], height: number) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods

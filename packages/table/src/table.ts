@@ -1410,28 +1410,20 @@ export default {
     },
 
     computeSize () {
-      this.reScrollFlag++
+      this.reLayoutFlag++
     },
     showHeader () {
-      this.reScrollFlag++
+      this.reLayoutFlag++
     },
     showFooter () {
-      this.reScrollFlag++
+      this.reLayoutFlag++
     },
     overflowX () {
-      this.reScrollFlag++
+      this.reLayoutFlag++
     },
     overflowY () {
-      this.reScrollFlag++
+      this.reLayoutFlag++
     },
-    reScrollFlag () {
-      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-
-      $xeTable.$nextTick(() => {
-        $xeTable.recalculate(true).then(() => $xeTable.refreshScroll())
-      })
-    },
-
     height () {
       this.reLayoutFlag++
     },
