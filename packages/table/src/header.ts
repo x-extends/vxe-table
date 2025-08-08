@@ -308,9 +308,9 @@ export default defineVxeComponent({
             border: 0,
             xvm: isOptimizeMode ? '1' : null
           }, [
-          /**
-           * 列宽
-           */
+            /**
+             * 列宽
+             */
             h('colgroup', {
               ref: refHeaderColgroup
             }, renderColumnList.map((column, $columnIndex) => {
@@ -323,8 +323,8 @@ export default defineVxeComponent({
               })
             })),
             /**
-           * 头部
-           */
+             * 头部
+             */
             h('thead', {
               ref: refHeaderTHead
             }, renderHeads(isGroup, isOptimizeMode, renderHeaderList))

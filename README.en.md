@@ -34,15 +34,11 @@ Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.ne
 
 ```javascript
 // ...
-import VxeTable from 'vxe-table'
+import VxeUITable from 'vxe-table'
 import 'vxe-table/lib/style.css'
 // ...
 
-import VxeUI from 'vxe-pc-ui'
-import 'vxe-pc-ui/lib/style.css'
-// ...
-
-createApp(App).use(VxeUI).use(VxeTable).mount('#app')
+createApp(App).use(VxeUITable).mount('#app')
 ```
 
 ### CDN

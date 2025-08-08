@@ -671,18 +671,9 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
         if (!isCustomCellHeight && showOverflow) {
           return $xeTable.scrollTo(null, ($xeTable.findRowIndexOf(afterFullData, row) - 1) * defaultRowHeight)
         }
-        let scrollTop = 0
         const rowRest = fullAllDataRowIdData[rowid] || {}
         const rHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
-        for (let i = 0; i < afterFullData.length; i++) {
-          const currRow = afterFullData[i]
-          const currRowid = getRowid($xeTable, currRow)
-          if (currRow === row || currRowid === rowid) {
-            break
-          }
-          const currRowRest = fullAllDataRowIdData[currRowid] || {}
-          scrollTop += currRowRest.resizeHeight || cellOpts.height || rowOpts.height || currRowRest.height || defaultRowHeight
-        }
+        const scrollTop = rowRest.oTop
         if (scrollTop < bodyScrollTop) {
           return $xeTable.scrollTo(null, scrollTop - leftFixedWidth - 1)
         }

@@ -1875,12 +1875,17 @@ export default defineVxeComponent({
     const calcCellAutoHeight = (rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
       const cellElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`)
       let colHeight = rowRest.height
+      let firstCellStyle: CSSStyleDeclaration | null = null
+      let topBottomPadding = 0
       for (let i = 0; i < cellElemList.length; i++) {
-        const cellElem = cellElemList[i] as HTMLElement
-        const tdEl = cellElem.parentElement as HTMLTableCellElement
-        const topBottomPadding = Math.ceil(XEUtils.toNumber(tdEl.style.paddingTop) + XEUtils.toNumber(tdEl.style.paddingBottom))
-        const cellHeight = cellElem ? cellElem.clientHeight : 0
-        colHeight = Math.max(colHeight - topBottomPadding, Math.ceil(cellHeight))
+        const wrapperElem = cellElemList[i] as HTMLElement
+        const cellElem = wrapperElem.parentElement as HTMLTableCellElement
+        if (!firstCellStyle) {
+          firstCellStyle = getComputedStyle(cellElem)
+          topBottomPadding = firstCellStyle ? Math.ceil(XEUtils.toNumber(firstCellStyle.paddingTop) + XEUtils.toNumber(firstCellStyle.paddingBottom)) : 0
+        }
+        const cellHeight = wrapperElem ? wrapperElem.clientHeight : 0
+        colHeight = Math.max(colHeight, Math.ceil(cellHeight + topBottomPadding))
       }
       return colHeight
     }
@@ -5358,6 +5363,25 @@ export default defineVxeComponent({
         })
         return rest
       },
+      recalcRowHeight (rowOrId) {
+        const { fullAllDataRowIdData } = internalData
+        const rows = XEUtils.isArray(rowOrId) ? rowOrId : [rowOrId]
+        const el = refElem.value
+        if (el) {
+          const { handleGetRowId } = createHandleGetRowId($xeTable)
+          el.setAttribute('data-calc-row', 'Y')
+          rows.forEach(row => {
+            const rowid = XEUtils.isString(row) || XEUtils.isNumber(row) ? row : handleGetRowId(row)
+            const rowRest = fullAllDataRowIdData[rowid]
+            if (rowRest) {
+              rowRest.resizeHeight = calcCellAutoHeight(rowRest, el)
+            }
+            el.removeAttribute('data-calc-row')
+          })
+          reactData.calcCellHeightFlag++
+        }
+        return nextTick()
+      },
       setRowHeight (rowOrId, height) {
         const { fullAllDataRowIdData } = internalData
         let status = false
@@ -8322,6 +8346,7 @@ export default defineVxeComponent({
         evnt.stopPropagation()
         evnt.preventDefault()
         const { row } = params
+        const { showOverflow } = props
         const { overflowX, scrollbarWidth, overflowY, scrollbarHeight } = reactData
         const { elemStore, fullAllDataRowIdData } = internalData
         const osbWidth = overflowY ? scrollbarWidth : 0
@@ -8350,7 +8375,10 @@ export default defineVxeComponent({
           return
         }
         const defaultRowHeight = computeDefaultRowHeight.value
-        const currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+        let currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+        if (!showOverflow) {
+          currCellHeight = tdEl.clientHeight
+        }
         const tableRect = tableEl.getBoundingClientRect()
         const trRect = trEl.getBoundingClientRect()
         const targetOffsetY = dragClientY - trRect.y - trEl.clientHeight
@@ -11825,29 +11853,22 @@ export default defineVxeComponent({
       })
     })
 
-    const reScrollFlag = ref(0)
+    const reLayoutFlag = ref(0)
     watch(computeSize, () => {
-      reScrollFlag.value++
+      reLayoutFlag.value++
     })
     watch(() => props.showHeader, () => {
-      reScrollFlag.value++
+      reLayoutFlag.value++
     })
     watch(() => props.showFooter, () => {
-      reScrollFlag.value++
+      reLayoutFlag.value++
     })
     watch(() => reactData.overflowX, () => {
-      reScrollFlag.value++
+      reLayoutFlag.value++
     })
     watch(() => reactData.overflowY, () => {
-      reScrollFlag.value++
+      reLayoutFlag.value++
     })
-    watch(reScrollFlag, () => {
-      nextTick(() => {
-        tableMethods.recalculate(true).then(() => tableMethods.refreshScroll())
-      })
-    })
-
-    const reLayoutFlag = ref(0)
     watch(() => props.height, () => {
       reLayoutFlag.value++
     })
@@ -11864,7 +11885,7 @@ export default defineVxeComponent({
       reLayoutFlag.value++
     })
     watch(reLayoutFlag, () => {
-      nextTick(() => tableMethods.recalculate(true))
+      $xeTable.recalculate(true)
     })
 
     const footFlag = ref(0)
@@ -11875,7 +11896,7 @@ export default defineVxeComponent({
       footFlag.value++
     })
     watch(footFlag, () => {
-      tableMethods.updateFooter()
+      $xeTable.updateFooter()
     })
 
     watch(() => props.syncResize, (value) => {
