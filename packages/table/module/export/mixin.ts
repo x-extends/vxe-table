@@ -6,7 +6,7 @@ import { hasClass } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
-import type { VxeTablePropTypes, VxeGridConstructor, VxeTableDefines, TableReactData, VxeTablePrivateMethods, TableInternalData, GridReactData, VxeColumnPropTypes, VxeTableConstructor } from '../../../../types'
+import type { VxeTablePropTypes, VxeTableDefines, TableReactData, VxeTablePrivateMethods, TableInternalData, GridReactData, VxeColumnPropTypes, VxeTableConstructor } from '../../../../types'
 
 const { getI18n, renderer } = VxeUI
 
@@ -1176,7 +1176,8 @@ export default {
       const props = $xeTable
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
-      const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor
+      const $xeGrid = $xeTable.$xeGrid
+      const $xeGantt = $xeTable.$xeGantt
 
       const { treeConfig, showHeader, showFooter } = props
       const { isGroup } = reactData
@@ -1382,6 +1383,7 @@ export default {
               const params = {
                 $table: $xeTable,
                 $grid: $xeGrid,
+                $gantt: $xeGantt,
                 sort: sortData.length ? sortData[0] : {} as any,
                 sorts: sortData as any[],
                 filters: gridReactData.filterData,
@@ -1391,7 +1393,7 @@ export default {
               return Promise.resolve((beforeQueryAll || ajaxMethods)(params))
                 .then(rest => {
                   const listProp = resConfigs.list
-                  handleOptions.data = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: $xeGrid }) : XEUtils.get(rest, listProp)) : rest) || []
+                  handleOptions.data = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }) : XEUtils.get(rest, listProp)) : rest) || []
                   if (afterQueryAll) {
                     afterQueryAll(params)
                   }

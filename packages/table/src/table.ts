@@ -8,7 +8,7 @@ import methods from './methods'
 import TableBodyComponent from './body'
 import TableHeaderComponent from './header'
 import TableFooterComponent from './footer'
-import tableProps from './props'
+import { tableProps } from './props'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 import TableCustomPanelComponent from '../module/custom/panel'
@@ -522,6 +522,12 @@ export default {
       scrollbarHeight: 0,
       // 行高
       rowHeight: 0,
+      // 表头高度
+      tHeaderHeight: 0,
+      // 表体高度
+      tBodyHeight: 0,
+      // 表尾高度
+      tFooterHeight: 0,
       // 表格父容器的高度
       parentHeight: 0,
       // 是否使用分组表头

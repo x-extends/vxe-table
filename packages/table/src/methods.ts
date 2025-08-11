@@ -8,7 +8,7 @@ import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from './anime'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, VxeToolbarConstructor, TableInternalData, VxeGridConstructor, GridPrivateMethods, VxeTablePrivateMethods, VxeTooltipInstance, VxeTablePropTypes } from '../../../types'
+import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, VxeToolbarConstructor, VxeToolbarInstance, TableInternalData, VxeGridConstructor, GridPrivateMethods, VxeTablePrivateMethods, VxeTooltipInstance, VxeTablePropTypes } from '../../../types'
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent } = VxeUI
 
@@ -971,14 +971,15 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
-  const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isAllOverflow, expandColumn, isColLoading } = reactData
-  const { visibleColumn, tableHeight, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
+  const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isAllOverflow, expandColumn, isColLoading, tHeaderHeight, tFooterHeight } = reactData
+  const { visibleColumn, tableHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
+  const $xeGanttView = internalData.xeGanttView
   const el = $xeTable.$refs.refElem as HTMLDivElement
-  if (!el) {
+  if (!el || !el.clientHeight) {
     return
   }
   const containerList = ['main', 'left', 'right']
-  const osbWidth = overflowY ? scrollbarWidth : 0
+  let osbWidth = overflowY ? scrollbarWidth : 0
   const osbHeight = overflowX ? scrollbarHeight : 0
   const emptyPlaceholderElem = $xeTable.$refs.refEmptyPlaceholder as HTMLDivElement
   const mouseOpts = $xeTable.computeMouseOpts
@@ -986,39 +987,49 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
   const bodyTableElem = getRefElem(elemStore['main-body-table'])
   if (emptyPlaceholderElem) {
-    emptyPlaceholderElem.style.top = `${headerHeight}px`
+    emptyPlaceholderElem.style.top = `${tHeaderHeight}px`
     emptyPlaceholderElem.style.height = bodyWrapperElem ? `${bodyWrapperElem.offsetHeight - osbHeight}px` : ''
   }
 
-  let bodyHeight = 0
-  let bodyMaxHeight = 0
-  const bodyMinHeight = customMinHeight - headerHeight - footerHeight - osbHeight
-  if (customMaxHeight) {
-    bodyMaxHeight = Math.max(bodyMinHeight, customMaxHeight - headerHeight - footerHeight - osbHeight)
-  }
-  if (customHeight) {
-    bodyHeight = customHeight - headerHeight - footerHeight - osbHeight
-  }
-  if (!bodyHeight) {
-    if (bodyTableElem) {
-      bodyHeight = bodyTableElem.clientHeight
+  const scrollbarXToTop = $xeTable.computeScrollbarXToTop
+  const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
+
+  const xScrollbarVisible = overflowX ? 'visible' : 'hidden'
+  let yScrollbarVisible = overflowY ? 'visible' : 'hidden'
+  if ($xeGanttView) {
+    if (!scrollbarYToLeft) {
+      osbWidth = 0
+      yScrollbarVisible = 'hidden'
     }
-  }
-  if (bodyHeight) {
-    if (bodyMaxHeight) {
-      bodyHeight = Math.min(bodyMaxHeight, bodyHeight)
-    }
-    bodyHeight = Math.max(bodyMinHeight, bodyHeight)
   }
 
-  const scrollbarXToTop = $xeTable.$refs.computeScrollbarXToTop
+  let tbHeight = 0
+  let bodyMaxHeight = 0
+  const bodyMinHeight = customMinHeight - tHeaderHeight - tFooterHeight - osbHeight
+  if (customMaxHeight) {
+    bodyMaxHeight = Math.max(bodyMinHeight, customMaxHeight - tHeaderHeight - tFooterHeight - osbHeight)
+  }
+  if (customHeight) {
+    tbHeight = customHeight - tHeaderHeight - tFooterHeight - osbHeight
+  }
+  if (!tbHeight) {
+    if (bodyTableElem) {
+      tbHeight = bodyTableElem.clientHeight
+    }
+  }
+  if (tbHeight) {
+    if (bodyMaxHeight) {
+      tbHeight = Math.min(bodyMaxHeight, tbHeight)
+    }
+    tbHeight = Math.max(bodyMinHeight, tbHeight)
+  }
 
   const xLeftCornerEl = $xeTable.$refs.refScrollXLeftCornerElem as HTMLDivElement
   const xRightCornerEl = $xeTable.$refs.refScrollXRightCornerElem as HTMLDivElement
   const scrollXVirtualEl = $xeTable.$refs.refScrollXVirtualElem as HTMLDivElement
   if (scrollXVirtualEl) {
     scrollXVirtualEl.style.height = `${osbHeight}px`
-    scrollXVirtualEl.style.visibility = overflowX ? 'visible' : 'hidden'
+    scrollXVirtualEl.style.visibility = xScrollbarVisible
   }
   const xWrapperEl = $xeTable.$refs.refScrollXWrapperElem as HTMLDivElement
   if (xWrapperEl) {
@@ -1037,31 +1048,33 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const scrollYVirtualEl = $xeTable.$refs.refScrollYVirtualElem as HTMLDivElement
   if (scrollYVirtualEl) {
     scrollYVirtualEl.style.width = `${osbWidth}px`
-    scrollYVirtualEl.style.height = `${bodyHeight + headerHeight + footerHeight}px`
-    scrollYVirtualEl.style.visibility = overflowY ? 'visible' : 'hidden'
+    scrollYVirtualEl.style.height = `${tbHeight + tHeaderHeight + tFooterHeight}px`
+    scrollYVirtualEl.style.visibility = yScrollbarVisible
   }
   const yTopCornerEl = $xeTable.$refs.refScrollYTopCornerElem as HTMLDivElement
   if (yTopCornerEl) {
-    yTopCornerEl.style.height = `${headerHeight}px`
-    yTopCornerEl.style.display = overflowY && headerHeight ? 'block' : ''
+    yTopCornerEl.style.height = `${tHeaderHeight}px`
+    yTopCornerEl.style.display = overflowY && tHeaderHeight ? 'block' : ''
   }
   const yWrapperEl = $xeTable.$refs.refScrollYWrapperElem as HTMLDivElement
   if (yWrapperEl) {
-    yWrapperEl.style.height = `${bodyHeight}px`
-    yWrapperEl.style.top = `${headerHeight}px`
+    yWrapperEl.style.height = `${tbHeight}px`
+    yWrapperEl.style.top = `${tHeaderHeight}px`
   }
   const yBottomCornerEl = $xeTable.$refs.refScrollYBottomCornerElem as HTMLDivElement
   if (yBottomCornerEl) {
-    yBottomCornerEl.style.height = `${footerHeight}px`
-    yBottomCornerEl.style.top = `${headerHeight + bodyHeight}px`
-    yBottomCornerEl.style.display = overflowY && footerHeight ? 'block' : ''
+    yBottomCornerEl.style.height = `${tFooterHeight}px`
+    yBottomCornerEl.style.top = `${tHeaderHeight + tbHeight}px`
+    yBottomCornerEl.style.display = overflowY && tFooterHeight ? 'block' : ''
   }
 
   const rowExpandEl = $xeTable.$refs.refRowExpandElem as HTMLDivElement
   if (rowExpandEl) {
-    rowExpandEl.style.height = `${bodyHeight}px`
-    rowExpandEl.style.top = `${headerHeight}px`
+    rowExpandEl.style.height = `${tbHeight}px`
+    rowExpandEl.style.top = `${tHeaderHeight}px`
   }
+
+  reactData.tBodyHeight = tbHeight
 
   containerList.forEach((name, index) => {
     const fixedType = index > 0 ? name : ''
@@ -1128,7 +1141,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
         }
 
         if (currScrollElem) {
-          currScrollElem.style.height = `${headerHeight}px`
+          currScrollElem.style.height = `${tHeaderHeight}px`
         }
 
         if (tableElem) {
@@ -1137,16 +1150,16 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
       } else if (layout === 'body') {
         if (currScrollElem) {
           currScrollElem.style.maxHeight = customMaxHeight ? `${bodyMaxHeight}px` : ''
-          currScrollElem.style.height = customHeight ? `${bodyHeight}px` : ''
+          currScrollElem.style.height = customHeight ? `${tbHeight}px` : ''
           currScrollElem.style.minHeight = `${bodyMinHeight}px`
         }
 
         // 如果是固定列
         if (fixedWrapperElem) {
           if (wrapperElem) {
-            wrapperElem.style.top = `${headerHeight}px`
+            wrapperElem.style.top = `${tHeaderHeight}px`
           }
-          fixedWrapperElem.style.height = `${customHeight > 0 ? customHeight : (tableHeight + headerHeight + footerHeight + osbHeight)}px`
+          fixedWrapperElem.style.height = `${customHeight > 0 ? customHeight : (tableHeight + tHeaderHeight + tFooterHeight + osbHeight)}px`
           fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, 0)}px`
         }
 
@@ -1229,11 +1242,11 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
         }
 
         if (currScrollElem) {
-          currScrollElem.style.height = `${footerHeight}px`
+          currScrollElem.style.height = `${tFooterHeight}px`
           // 如果是固定列
           if (fixedWrapperElem) {
             if (wrapperElem) {
-              wrapperElem.style.top = `${customHeight > 0 ? customHeight - footerHeight - osbHeight : tableHeight + headerHeight}px`
+              wrapperElem.style.top = `${customHeight > 0 ? customHeight - tFooterHeight - osbHeight : tableHeight + tHeaderHeight}px`
             }
           }
         }
@@ -1248,6 +1261,9 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   }
   if (mouseConfig && mouseOpts.selected && editStore.selected.row && editStore.selected.column) {
     $xeTable.addCellSelectedClass()
+  }
+  if ($xeGanttView) {
+    $xeGanttView.handleUpdateStyle()
   }
   return $xeTable.$nextTick()
 }
@@ -2762,13 +2778,13 @@ function calcScrollbar ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
     }
     reactData.overflowX = overflowX
 
-    const headerHeight = headerTableElem ? headerTableElem.clientHeight : 0
-    const footerHeight = footerTableElem ? footerTableElem.clientHeight : 0
+    const hHeight = headerTableElem ? headerTableElem.clientHeight : 0
+    const fHeight = footerTableElem ? footerTableElem.clientHeight : 0
     internalData.tableHeight = bodyWrapperElem.offsetHeight
-    internalData.headerHeight = headerHeight
-    internalData.footerHeight = footerHeight
-
-    reactData.parentHeight = Math.max(internalData.headerHeight + footerHeight + 20, $xeTable.getParentHeight())
+    reactData.tHeaderHeight = hHeight
+    reactData.tFooterHeight = fHeight
+    reactData.overflowX = overflowX
+    reactData.parentHeight = Math.max(hHeight + fHeight + 20, $xeTable.getParentHeight())
   }
   if (overflowX) {
     $xeTable.checkScrolling()
@@ -2828,6 +2844,7 @@ function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateM
 
   return new Promise<void>(resolve => {
     const { rceTimeout, rceRunTime } = internalData
+    const $xeGanttView = internalData.xeGanttView
     const resizeOpts = $xeTable.computeResizeOpts
     const refreshDelay = resizeOpts.refreshDelay || 20
     const el = $xeTable.$refs.refElem as HTMLElement
@@ -2850,6 +2867,9 @@ function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateM
       resolve(
         handleRecalculateStyle($xeTable, reFull, reWidth, reHeight)
       )
+    }
+    if ($xeGanttView) {
+      $xeGanttView.handleLazyRecalculate()
     }
     internalData.rceTimeout = setTimeout(() => {
       internalData.rceTimeout = undefined
@@ -3658,6 +3678,20 @@ const wheelScrollTopTo = (diffNum: number, cb: (progress: number) => void) => {
   requestAnimationFrame(step)
 }
 
+const syncGanttScrollTop = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, scrollTop: number) => {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const $xeGanttView = internalData.xeGanttView
+  if ($xeGanttView) {
+    const ganttInternalData = $xeGanttView.internalData
+    const { elemStore: ganttElemStore } = ganttInternalData
+    const ganttBodyScrollElem = getRefElem(ganttElemStore['main-body-scroll'])
+    if (ganttBodyScrollElem) {
+      ganttBodyScrollElem.scrollTop = scrollTop
+    }
+  }
+}
+
 function updateHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -3988,6 +4022,7 @@ const Methods = {
 
     const { scrollYLoad } = reactData
     const { scrollYStore, fullDataRowIdData } = internalData
+    const $xeGanttView = internalData.xeGanttView
     let fullList: any[] = internalData.afterFullData
     // 是否进行数据处理
     if (force) {
@@ -4008,6 +4043,9 @@ const Methods = {
     })
     reactData.tableData = tableData
     internalData.visibleDataRowIdData = visibleDataRowIdMaps
+    if ($xeGanttView) {
+      $xeGanttView.updateViewData()
+    }
     return $xeTable.$nextTick()
   },
   /**
@@ -10289,6 +10327,7 @@ const Methods = {
       }
       setScrollTop(yHandleEl, scrollTop)
       setScrollTop(rowExpandEl, scrollTop)
+      syncGanttScrollTop($xeTable, scrollTop)
       if (scrollYLoad) {
         $xeTable.triggerScrollYEvent(evnt)
       }
@@ -10493,6 +10532,7 @@ const Methods = {
         setScrollTop(leftScrollElem, currTopNum)
         setScrollTop(rightScrollElem, currTopNum)
         setScrollTop(rowExpandEl, currTopNum)
+        syncGanttScrollTop($xeTable, currTopNum)
         if (scrollYLoad) {
           $xeTable.triggerScrollYEvent(evnt)
         }
@@ -10509,6 +10549,7 @@ const Methods = {
           setScrollTop(leftScrollElem, currTopNum)
           setScrollTop(rightScrollElem, currTopNum)
           setScrollTop(rowExpandEl, currTopNum)
+          syncGanttScrollTop($xeTable, currTopNum)
           if (scrollYLoad) {
             $xeTable.triggerScrollYEvent(evnt)
           }
@@ -10592,6 +10633,7 @@ const Methods = {
     setScrollTop(leftScrollElem, scrollTop)
     setScrollTop(rightScrollElem, scrollTop)
     setScrollTop(rowExpandEl, scrollTop)
+    syncGanttScrollTop($xeTable, scrollTop)
     if (scrollYLoad) {
       $xeTable.triggerScrollYEvent(evnt)
     }
@@ -10623,6 +10665,7 @@ const Methods = {
 
     const { scrollXLoad, overflowX, scrollXWidth } = reactData
     const { visibleColumn, scrollXStore, elemStore, fullColumnIdData } = internalData
+    const $xeGanttView = internalData.xeGanttView
     const mouseOpts = $xeTable.computeMouseOpts
     const tableBody = $xeTable.$refs.refTableBody
     const tableBodyElem = tableBody ? (tableBody as any).$el as HTMLDivElement : null
@@ -10690,10 +10733,13 @@ const Methods = {
         scrollXSpaceEl.style.width = `${ySpaceWidth}px`
       }
 
+      calcScrollbar($xeTable)
       if (isScrollXBig && mouseOpts.area) {
         errLog('vxe.error.notProp', ['mouse-config.area'])
       }
-      calcScrollbar($xeTable)
+      if ($xeGanttView) {
+        $xeGanttView.updateScrollXSpace()
+      }
       return $xeTable.$nextTick(() => {
         updateStyle($xeTable)
       })
@@ -10717,6 +10763,7 @@ const Methods = {
 
     const { isAllOverflow, scrollYLoad, expandColumn } = reactData
     const { scrollYStore, elemStore, isResizeCellHeight, afterFullData, fullAllDataRowIdData, rowExpandedMaps } = internalData
+    const $xeGanttView = internalData.xeGanttView
     const { startIndex } = scrollYStore
     const mouseOpts = $xeTable.computeMouseOpts
     const expandOpts = $xeTable.computeExpandOpts
@@ -10811,10 +10858,13 @@ const Methods = {
     reactData.scrollYHeight = scrollYHeight
     reactData.isScrollYBig = isScrollYBig
 
+    calcScrollbar($xeTable)
     if (isScrollYBig && mouseOpts.area) {
       errLog('vxe.error.notProp', ['mouse-config.area'])
     }
-    calcScrollbar($xeTable)
+    if ($xeGanttView) {
+      $xeGanttView.updateScrollYSpace()
+    }
     return $xeTable.$nextTick().then(() => {
       updateStyle($xeTable)
     })
@@ -11193,15 +11243,37 @@ const Methods = {
     this.isActivated = false
     return this.$nextTick()
   },
-  // 连接工具栏
-  connect ($toolbar: any) {
+  /**
+   * 已废弃，被 connectToolbar 替换
+   * @deprecated
+   */
+  connect ($toolbar: VxeToolbarConstructor | VxeToolbarInstance) {
+    return this.connectToolbar($toolbar)
+  },
+  /**
+   * 连接工具栏
+   * @param $toolbar
+   */
+  connectToolbar ($toolbar: VxeToolbarConstructor | VxeToolbarInstance) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     if ($toolbar && $toolbar.syncUpdate) {
-      $toolbar.syncUpdate({ collectColumn: this.collectColumn, $table: this })
+      $toolbar.syncUpdate({ collectColumn: this.collectColumn, $table: $xeTable })
       this.$toolbar = $toolbar
     } else {
       errLog('vxe.error.barUnableLink')
     }
     return this.$nextTick()
+  },
+  handleConnectGanttView ($ganttView: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    if ($ganttView && $ganttView.connectUpdate) {
+      $ganttView.connectUpdate({ $table: $xeTable })
+      internalData.xeGanttView = $ganttView
+    }
+    return $xeTable.$nextTick()
   },
 
   /*************************

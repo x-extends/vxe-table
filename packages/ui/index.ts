@@ -235,7 +235,15 @@ VxeUI.setConfig({
     },
     scrollbarConfig: {
       // width: 14,
-      // height: 14
+      // height: 14,
+      x: {
+        // position: 'bottom',
+        visible: true
+      },
+      y: {
+        // position: 'right',
+        visible: true
+      }
     }
   },
   // export: {
@@ -288,7 +296,9 @@ VxeUI.setConfig({
     //   types: ['csv', 'html', 'xml', 'txt']
     // },
     // buttons: []
-  }
+  },
+
+  gantt: {}
 })
 
 const iconPrefix = 'vxe-table-icon-'

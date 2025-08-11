@@ -4,19 +4,19 @@ import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
 import { getOffsetHeight, getPaddingTopBottomSize, getDomNode, toCssUnit } from '../../ui/src/dom'
 import { VxeUI } from '../../ui'
-import VxeTableComponent from '../../table/src/table'
-import VxeToolbarComponent from '../../toolbar/src/toolbar'
-import tableComponentProps from '../../table/src/props'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
+import { tableProps } from '../../table/src/props'
+import VxeTableComponent from '../../table/src/table'
+import VxeToolbarComponent from '../../toolbar/src/toolbar'
 
 import type { VxeFormItemProps, VxeFormDefines, VxeComponentStyleType, VxeComponentSizeType, ValueOf, VxeFormInstance, VxeFormItemPropTypes, VxePagerInstance } from 'vxe-pc-ui'
-import type { GridReactData, VxeTablePropTypes, VxeGridConstructor, VxeToolbarPropTypes, VxeToolbarInstance, VxeGridPropTypes, VxeTableMethods, GridInternalData, VxeGridEmits, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, TableInternalData } from '../../../types'
+import type { GridReactData, VxeTablePropTypes, VxeGridConstructor, VxeToolbarPropTypes, VxeToolbarInstance, VxeGridPropTypes, VxeTableMethods, GridInternalData, VxeGridEmits, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, TableInternalData, VxeTableProps } from '../../../types'
 
 const { getConfig, getI18n, commands, globalEvents, globalMixins, createEvent, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
 
 const tableMethods: VxeTableMethods = {} as VxeTableMethods
-const propKeys = Object.keys(tableComponentProps)
+const propKeys = Object.keys(tableProps) as (keyof VxeTableProps)[]
 
 const defaultLayouts: VxeGridPropTypes.Layouts = [['Form'], ['Toolbar', 'Top', 'Table', 'Bottom', 'Pager']]
 
@@ -42,7 +42,7 @@ function getTableOns (_vm: any) {
 }
 
 XEUtils.each(VxeTableComponent.methods, (fn, name) => {
-  (tableMethods as any)[name] = function (...args: any[]) {
+  tableMethods[name as keyof VxeTableMethods] = function (this: any, ...args: any[]) {
     const $xeGrid = this
     const $xeTable = $xeGrid.$refs.refTable
 
@@ -52,7 +52,6 @@ XEUtils.each(VxeTableComponent.methods, (fn, name) => {
 
 function createInternalData (): GridInternalData {
   return {
-    connectTable: null
   }
 }
 
@@ -75,11 +74,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
     validConfig: Object as PropType<VxeTablePropTypes.ValidConfig>,
     editRules: Object as PropType<VxeTablePropTypes.EditRules>,
     animat: { type: Boolean, default: () => getConfig().table.animat },
-
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    ...(tableComponentProps as {}),
     // 以上仅用于类型
 
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    ...(tableProps as {}),
     layouts: Array as PropType<VxeGridPropTypes.Layouts>,
     columns: Array as PropType<VxeGridPropTypes.Columns<any>>,
     pagerConfig: Object as PropType<VxeGridPropTypes.PagerConfig>,
@@ -385,7 +383,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     ...tableMethods,
     dispatchEvent (type: ValueOf<VxeGridEmits>, params: Record<string, any>, evnt: Event | null) {
       const $xeGrid = this
-      $xeGrid.$emit(type, createEvent(evnt, { $grid: $xeGrid }, params))
+      $xeGrid.$emit(type, createEvent(evnt, { $grid: $xeGrid, $gantt: null }, params))
     },
     initPages (propKey?: 'currentPage' | 'pageSize' | 'total') {
       const $xeGrid = this
@@ -472,7 +470,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
         const $xeToolbar = $xeGrid.$refs.refToolbar as VxeToolbarInstance
         if ($xeTable && $xeToolbar) {
-          $xeTable.connect($xeToolbar)
+          $xeTable.connectToolbar($xeToolbar)
         }
       })
     },
@@ -538,9 +536,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const proxyOpts = $xeGrid.computeProxyOpts
       const resConfigs = proxyOpts.response || proxyOpts.props || {}
       const messageProp = resConfigs.message
+      const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
       let msg
       if (rest && messageProp) {
-        msg = XEUtils.isFunction(messageProp) ? messageProp({ data: rest, $grid: $xeGrid as unknown as VxeGridConstructor }) : XEUtils.get(rest, messageProp)
+        msg = XEUtils.isFunction(messageProp) ? messageProp({ data: rest, $table: $xeTable, $grid: $xeGrid as VxeGridConstructor, $gantt: null }) : XEUtils.get(rest, messageProp)
       }
       return msg || getI18n(defaultMsg)
     },
@@ -727,11 +726,13 @@ export default /* define-vxe-component start */ defineVxeComponent({
               }
             }
             const commitParams = {
+              $table: $xeTable,
+              $grid: $xeGrid as VxeGridConstructor,
+              $gantt: null,
               code,
               button,
               isInited,
               isReload,
-              $grid: $xeGrid as unknown as VxeGridConstructor,
               page: pageParams,
               sort: sortList.length ? sortList[0] : {},
               sorts: sortList,
@@ -750,10 +751,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 if (rest) {
                   if (pagerConfig && isEnableConf(pagerOpts)) {
                     const totalProp = resConfigs.total
-                    const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $grid: $xeGrid as unknown as VxeGridConstructor }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
+                    const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $table: $xeTable, $grid: $xeGrid as VxeGridConstructor, $gantt: null }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
                     tablePage.total = XEUtils.toNumber(total)
                     const resultProp = resConfigs.result
-                    tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $grid: $xeGrid as unknown as VxeGridConstructor }) : XEUtils.get(rest, resultProp || 'result')) || []
+                    tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $table: $xeTable, $grid: $xeGrid as VxeGridConstructor, $gantt: null }) : XEUtils.get(rest, resultProp || 'result')) || []
                     // 检验当前页码，不能超出当前最大页数
                     const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
                     if (tablePage.currentPage > pageCount) {
@@ -761,7 +762,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
                     }
                   } else {
                     const listProp = resConfigs.list
-                    tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: $xeGrid as unknown as VxeGridConstructor }) : XEUtils.get(rest, listProp)) : rest) || []
+                    tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $table: $xeTable, $grid: $xeGrid as VxeGridConstructor, $gantt: null }) : XEUtils.get(rest, listProp)) : rest) || []
                   }
                 }
                 if ($xeTable as any) {
@@ -800,7 +801,16 @@ export default /* define-vxe-component start */ defineVxeComponent({
             const selectRecords = $xeTable.getCheckboxRecords()
             const removeRecords = selectRecords.filter((row) => !$xeTable.isInsertByRow(row))
             const body = { removeRecords }
-            const commitParams = { $grid: $xeGrid, code, button, body, form: formData, options: ajaxMethods }
+            const commitParams = {
+              $table: $xeTable,
+              $grid: $xeGrid as VxeGridConstructor,
+              $gantt: null,
+              code,
+              button,
+              body,
+              form: formData,
+              options: ajaxMethods
+            }
             const applyArgs = [commitParams].concat(args)
             if (selectRecords.length) {
               return $xeGrid.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
@@ -865,7 +875,16 @@ export default /* define-vxe-component start */ defineVxeComponent({
           if (ajaxMethods) {
             const body = $xeGrid.getRecordset()
             const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
-            const commitParams = { $grid: $xeGrid, code, button, body, form: formData, options: ajaxMethods }
+            const commitParams = {
+              $table: $xeTable,
+              $grid: $xeGrid as VxeGridConstructor,
+              $gantt: null,
+              code,
+              button,
+              body,
+              form: formData,
+              options: ajaxMethods
+            }
             const applyArgs = [commitParams].concat(args)
             // 排除掉新增且标记为删除的数据
             if (insertRecords.length) {
@@ -940,8 +959,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
         default: {
           const gCommandOpts = commands.get(code)
           if (gCommandOpts) {
-            if (gCommandOpts.commandMethod) {
-              gCommandOpts.commandMethod({ code, button, $grid: $xeGrid as unknown as VxeGridConstructor, $table: $xeTable }, ...args)
+            const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
+            if (tCommandMethod) {
+              tCommandMethod({ code, button, $grid: $xeGrid as VxeGridConstructor, $table: $xeTable, $gantt: null }, ...args)
             } else {
               errLog('vxe.error.notCommands', [code])
             }
@@ -1431,7 +1451,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           const beforeItem = proxyOpts.beforeItem
           if (proxyOpts && beforeItem) {
             formOpts.items.forEach((item: any) => {
-              beforeItem.call($xeGrid, { $grid: $xeGrid, item })
+              beforeItem.call($xeGrid, { $grid: $xeGrid, $gantt: null, item })
             })
           }
         }
@@ -1478,7 +1498,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           key: 'form',
           ref: 'refFormWrapper',
           class: 'vxe-grid--form-wrapper'
-        }, formSlot ? formSlot.call($xeGrid, { $grid: $xeGrid }) : $xeGrid.renderDefaultForm(h))
+        }, formSlot ? formSlot.call($xeGrid, { $grid: $xeGrid, $gantt: null }) : $xeGrid.renderDefaultForm(h))
       }
       return renderEmptyElement($xeGrid)
     },
@@ -1498,7 +1518,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           ref: 'refToolbarWrapper',
           class: 'vxe-grid--toolbar-wrapper'
         }, toolbarSlot
-          ? toolbarSlot.call($xeGrid, { $grid: $xeGrid })
+          ? toolbarSlot.call($xeGrid, { $grid: $xeGrid, $gantt: null })
           : [
               h(VxeToolbarComponent, {
                 props: Object.assign({}, toolbarOpts, { slots: undefined }),
@@ -1520,7 +1540,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           key: 'top',
           ref: 'refTopWrapper',
           class: 'vxe-grid--top-wrapper'
-        }, topSlot.call($xeGrid, { $grid: $xeGrid }))
+        }, topSlot.call($xeGrid, { $grid: $xeGrid, $gantt: null }))
         : renderEmptyElement($xeGrid)
     },
     renderTableLeft (h: CreateElement) {
@@ -1531,7 +1551,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       if (leftSlot) {
         return h('div', {
           class: 'vxe-grid--left-wrapper'
-        }, leftSlot({ $grid: $xeGrid }))
+        }, leftSlot({ $grid: $xeGrid, $gantt: null }))
       }
       return renderEmptyElement($xeGrid)
     },
@@ -1543,7 +1563,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       if (rightSlot) {
         return h('div', {
           class: 'vxe-grid--right-wrapper'
-        }, rightSlot({ $grid: $xeGrid }))
+        }, rightSlot({ $grid: $xeGrid, $gantt: null }))
       }
       return renderEmptyElement($xeGrid)
     },
@@ -1570,13 +1590,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const slots = $xeGrid.$scopedSlots
 
       const bottomSlot = slots.bottom
-
       return bottomSlot
         ? h('div', {
           key: 'bottom',
           ref: 'refBottomWrapper',
           class: 'vxe-grid--bottom-wrapper'
-        }, bottomSlot.call($xeGrid, { $grid: $xeGrid }))
+        }, bottomSlot.call($xeGrid, { $grid: $xeGrid, $gantt: null }))
         : renderEmptyElement($xeGrid)
     },
     renderPager (h: CreateElement) {
@@ -1597,7 +1616,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           key: 'pager',
           class: 'vxe-grid--pager-wrapper'
         }, pagerSlot
-          ? pagerSlot.call($xeGrid, { $grid: $xeGrid })
+          ? pagerSlot.call($xeGrid, { $grid: $xeGrid, $gantt: null })
           : [
               VxeUIPagerComponent
                 ? h(VxeUIPagerComponent, {
