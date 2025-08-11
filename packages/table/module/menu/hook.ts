@@ -299,5 +299,8 @@ hooks.add('tableMenuModule', {
   },
   setupGrid ($xeGrid) {
     return $xeGrid.extendTableMethods(tableMenuMethodKeys)
+  },
+  setupGantt ($xeGantt) {
+    return $xeGantt.extendTableMethods(tableMenuMethodKeys)
   }
 })

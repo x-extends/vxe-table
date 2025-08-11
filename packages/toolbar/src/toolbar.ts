@@ -310,7 +310,7 @@ export default defineVxeComponent({
             $xeGrid.triggerToolbarBtnEvent(item, $event)
           } else {
             const gCommandOpts = commands.get(code)
-            const params = { code, button: item, $table: $table!, $grid: $xeGrid, $event }
+            const params = { code, button: item, $table: $table as VxeTableConstructor, $grid: $xeGrid, $gantt: null, $event }
             if (gCommandOpts) {
               const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
               if (tCommandMethod) {
@@ -336,7 +336,7 @@ export default defineVxeComponent({
             $xeGrid.triggerToolbarTolEvent(item, $event)
           } else {
             const gCommandOpts = commands.get(code)
-            const params = { code, button: null, tool: item, $table: $table!, $grid: $xeGrid, $event }
+            const params = { code, button: null, tool: item, $table: $table as VxeTableConstructor, $grid: $xeGrid, $gantt: null, $event }
             if (gCommandOpts) {
               const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
               if (tCommandMethod) {

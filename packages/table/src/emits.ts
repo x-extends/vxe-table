@@ -1,6 +1,6 @@
 import { VxeTableEmits } from '../../../types'
 
-export default [
+export const tableEmits: VxeTableEmits = [
   'update:data',
   'keydown-start',
   'keydown',
@@ -106,4 +106,4 @@ export default [
   'cell-area-arrows-end',
   'active-cell-change-start',
   'active-cell-change-end'
-] as VxeTableEmits
+]

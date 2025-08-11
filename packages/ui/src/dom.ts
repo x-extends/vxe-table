@@ -100,7 +100,7 @@ export function getDomNode () {
   }
 }
 
-export function getOffsetHeight (elem: HTMLElement) {
+export function getOffsetHeight (elem?: HTMLElement) {
   return elem ? elem.offsetHeight : 0
 }
 

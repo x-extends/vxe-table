@@ -349,5 +349,8 @@ hooks.add('tableFilterModule', {
   },
   setupGrid ($xeGrid) {
     return $xeGrid.extendTableMethods(tableFilterMethodKeys)
+  },
+  setupGantt ($xeGantt) {
+    return $xeGantt.extendTableMethods(tableFilterMethodKeys)
   }
 })

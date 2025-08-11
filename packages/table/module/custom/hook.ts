@@ -329,5 +329,8 @@ VxeUI.hooks.add('tableCustomModule', {
   },
   setupGrid ($xeGrid) {
     return $xeGrid.extendTableMethods(tableCustomMethodKeys)
+  },
+  setupGantt ($xeGantt) {
+    return $xeGantt.extendTableMethods(tableCustomMethodKeys)
   }
 })

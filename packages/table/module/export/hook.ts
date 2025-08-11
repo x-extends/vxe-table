@@ -7,7 +7,7 @@ import { hasClass } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
-import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTablePropTypes, VxeColumnPropTypes, TableExportMethods, VxeGridPropTypes, VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods } from '../../../../types'
+import type { VxeGridConstructor, VxeTablePropTypes, VxeColumnPropTypes, TableExportMethods, VxeGridPropTypes, VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods } from '../../../../types'
 
 const { getI18n, hooks, renderer } = VxeUI
 
@@ -301,7 +301,8 @@ hooks.add('tableExportModule', {
     const { props, reactData, internalData } = $xeTable
     const { computeTreeOpts, computePrintOpts, computeExportOpts, computeImportOpts, computeCustomOpts, computeSeqOpts, computeRadioOpts, computeCheckboxOpts, computeColumnOpts } = $xeTable.getComputeMaps()
 
-    const $xeGrid = inject('$xeGrid', null as (VxeGridConstructor & VxeGridPrivateMethods) | null)
+    const $xeGrid = inject<VxeGridConstructor | null>('$xeGrid', null)
+    const $xeGantt = inject('$xeGantt', null)
 
     const hasTreeChildren = (row: any) => {
       const treeOpts = computeTreeOpts.value
@@ -1354,6 +1355,7 @@ hooks.add('tableExportModule', {
                 const params = {
                   $table: $xeTable,
                   $grid: $xeGrid,
+                  $gantt: $xeGantt,
                   sort: sortData.length ? sortData[0] : {} as any,
                   sorts: sortData as any[],
                   filters: gridReactData.filterData,
@@ -1363,7 +1365,7 @@ hooks.add('tableExportModule', {
                 return Promise.resolve((beforeQueryAll || ajaxMethods)(params))
                   .then(rest => {
                     const listProp = resConfigs.list
-                    handleOptions.data = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: $xeGrid }) : XEUtils.get(rest, listProp)) : rest) || []
+                    handleOptions.data = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }) : XEUtils.get(rest, listProp)) : rest) || []
                     if (afterQueryAll) {
                       afterQueryAll(params)
                     }
@@ -1608,5 +1610,8 @@ hooks.add('tableExportModule', {
   },
   setupGrid ($xeGrid) {
     return $xeGrid.extendTableMethods(tableExportMethodKeys)
+  },
+  setupGantt ($xeGantt) {
+    return $xeGantt.extendTableMethods(tableExportMethodKeys)
   }
 })

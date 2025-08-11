@@ -36,10 +36,6 @@ export function createInternalData (): TableInternalData {
     tableWidth: 0,
     // 表格高度
     tableHeight: 0,
-    // 表头高度
-    headerHeight: 0,
-    // 表尾高度
-    footerHeight: 0,
     customHeight: 0,
     customMinHeight: 0,
     customMaxHeight: 0,

@@ -5,7 +5,7 @@ import type { VxeTablePropTypes } from '../../../types'
 
 const { getConfig } = VxeUI
 
-export default {
+export const tableProps = {
   /** 基本属性 */
   id: [String, Function] as PropType<VxeTablePropTypes.ID>,
   // 数据

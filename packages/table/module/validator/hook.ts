@@ -623,5 +623,8 @@ hooks.add('tableValidatorModule', {
   },
   setupGrid ($xeGrid) {
     return $xeGrid.extendTableMethods(tableValidatorMethodKeys)
+  },
+  setupGantt ($xeGantt) {
+    return $xeGantt.extendTableMethods(tableValidatorMethodKeys)
   }
 })

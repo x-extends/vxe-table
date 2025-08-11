@@ -972,5 +972,8 @@ hooks.add('tableEditModule', {
   },
   setupGrid ($xeGrid) {
     return $xeGrid.extendTableMethods(tableEditMethodKeys)
+  },
+  setupGantt ($xeGantt) {
+    return $xeGantt.extendTableMethods(tableEditMethodKeys)
   }
 })
