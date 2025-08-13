@@ -11,7 +11,7 @@ import VxeTableComponent from '../../table/src/table'
 import VxeToolbarComponent from '../../toolbar/src/toolbar'
 
 import type { VxeFormItemProps, VxeFormDefines, VxeComponentStyleType, VxeComponentSizeType, ValueOf, VxeFormInstance, VxeFormItemPropTypes, VxePagerInstance } from 'vxe-pc-ui'
-import type { GridReactData, VxeTablePropTypes, VxeGridConstructor, VxeToolbarPropTypes, VxeToolbarInstance, VxeGridPropTypes, VxeTableMethods, GridInternalData, VxeGridEmits, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, TableInternalData, VxeTableProps } from '../../../types'
+import type { GridReactData, VxeTablePropTypes, VxeGridConstructor, VxeToolbarPropTypes, VxeToolbarInstance, VxeGridPropTypes, VxeTableMethods, GridInternalData, VxeGridEmits, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, TableInternalData, VxeTableProps, VxeGridDefines } from '../../../types'
 
 const { getConfig, getI18n, commands, globalEvents, globalMixins, createEvent, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
 
@@ -282,16 +282,16 @@ export default /* define-vxe-component start */ defineVxeComponent({
       } else {
         confs = getConfig().grid.layouts || defaultLayouts
       }
-      let headKeys: VxeGridPropTypes.LayoutKey[] = []
-      let bodyKeys: VxeGridPropTypes.LayoutKey[] = []
-      let footKeys: VxeGridPropTypes.LayoutKey[] = []
+      let headKeys: VxeGridDefines.LayoutKey[] = []
+      let bodyKeys: VxeGridDefines.LayoutKey[] = []
+      let footKeys: VxeGridDefines.LayoutKey[] = []
       if (confs.length) {
         if (XEUtils.isArray(confs[0])) {
-          headKeys = confs[0] as VxeGridPropTypes.LayoutKey[]
-          bodyKeys = (confs[1] || []) as VxeGridPropTypes.LayoutKey[]
-          footKeys = (confs[2] || []) as VxeGridPropTypes.LayoutKey[]
+          headKeys = confs[0] as VxeGridDefines.LayoutKey[]
+          bodyKeys = (confs[1] || []) as VxeGridDefines.LayoutKey[]
+          footKeys = (confs[2] || []) as VxeGridDefines.LayoutKey[]
         } else {
-          bodyKeys = confs as VxeGridPropTypes.LayoutKey[]
+          bodyKeys = confs as VxeGridDefines.LayoutKey[]
         }
       }
       return {
@@ -1635,7 +1635,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }
       return renderEmptyElement($xeGrid)
     },
-    renderChildLayout (h: CreateElement, layoutKeys: VxeGridPropTypes.LayoutKey[]) {
+    renderChildLayout (h: CreateElement, layoutKeys: VxeGridDefines.LayoutKey[]) {
       const $xeGrid = this
 
       const childVNs: VNode[] = []

@@ -388,6 +388,8 @@ function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
   reactData.rowGroupColumn = rowGroupColumn
   reactData.treeNodeColumn = treeNodeColumn
   reactData.expandColumn = expandColumn
+  reactData.checkboxColumn = checkboxColumn
+  reactData.radioColumn = radioColumn
   reactData.isAllOverflow = isAllOverflow
 }
 
@@ -971,8 +973,8 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
-  const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isAllOverflow, expandColumn, isColLoading, tHeaderHeight, tFooterHeight } = reactData
-  const { visibleColumn, tableHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
+  const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isAllOverflow, expandColumn, isColLoading } = reactData
+  const { visibleColumn, tableHeight, elemStore, customHeight, customMinHeight, customMaxHeight, tHeaderHeight, tFooterHeight } = internalData
   const $xeGanttView = internalData.xeGanttView
   const el = $xeTable.$refs.refElem as HTMLDivElement
   if (!el || !el.clientHeight) {
@@ -980,8 +982,9 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   }
   const containerList = ['main', 'left', 'right']
   let osbWidth = overflowY ? scrollbarWidth : 0
-  const osbHeight = overflowX ? scrollbarHeight : 0
+  let osbHeight = overflowX ? scrollbarHeight : 0
   const emptyPlaceholderElem = $xeTable.$refs.refEmptyPlaceholder as HTMLDivElement
+  const scrollbarOpts = $xeTable.computeScrollbarOpts
   const mouseOpts = $xeTable.computeMouseOpts
   const expandOpts = $xeTable.computeExpandOpts
   const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
@@ -994,13 +997,19 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const scrollbarXToTop = $xeTable.computeScrollbarXToTop
   const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
 
-  const xScrollbarVisible = overflowX ? 'visible' : 'hidden'
-  let yScrollbarVisible = overflowY ? 'visible' : 'hidden'
+  let xScrollbarVisible = overflowX ? 'visible' : 'hidden'
   if ($xeGanttView) {
-    if (!scrollbarYToLeft) {
-      osbWidth = 0
-      yScrollbarVisible = 'hidden'
-    }
+    osbHeight = scrollbarHeight
+    xScrollbarVisible = 'visible'
+  } else if (scrollbarOpts.x && scrollbarOpts.x.visible === false) {
+    osbHeight = 0
+    xScrollbarVisible = 'hidden'
+  }
+
+  let yScrollbarVisible = overflowY ? 'visible' : 'hidden'
+  if ((scrollbarOpts.y && scrollbarOpts.y.visible === false) || ($xeGanttView && !scrollbarYToLeft)) {
+    osbWidth = 0
+    yScrollbarVisible = 'hidden'
   }
 
   let tbHeight = 0
@@ -1074,7 +1083,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
     rowExpandEl.style.top = `${tHeaderHeight}px`
   }
 
-  reactData.tBodyHeight = tbHeight
+  internalData.tBodyHeight = tbHeight
 
   containerList.forEach((name, index) => {
     const fixedType = index > 0 ? name : ''
@@ -2781,8 +2790,8 @@ function calcScrollbar ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
     const hHeight = headerTableElem ? headerTableElem.clientHeight : 0
     const fHeight = footerTableElem ? footerTableElem.clientHeight : 0
     internalData.tableHeight = bodyWrapperElem.offsetHeight
-    reactData.tHeaderHeight = hHeight
-    reactData.tFooterHeight = fHeight
+    internalData.tHeaderHeight = hHeight
+    internalData.tFooterHeight = fHeight
     reactData.overflowX = overflowX
     reactData.parentHeight = Math.max(hHeight + fHeight + 20, $xeTable.getParentHeight())
   }
@@ -2876,6 +2885,10 @@ function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateM
       handleRecalculateStyle($xeTable, reFull, reWidth, reHeight)
     }, refreshDelay)
   })
+}
+
+function handleResizeEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  handleLazyRecalculate($xeTable, true, true, true)
 }
 
 function handleUpdateAggValues ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
@@ -3598,12 +3611,12 @@ function checkLastSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { scrollXLoad, scrollYLoad, isAllOverflow } = reactData
   const { lcsTimeout } = internalData
   if (lcsTimeout) {
     clearTimeout(lcsTimeout)
   }
   internalData.lcsTimeout = setTimeout(() => {
+    const { scrollXLoad, scrollYLoad, isAllOverflow } = reactData
     internalData.lcsRunTime = Date.now()
     internalData.lcsTimeout = undefined
     internalData.intoRunScroll = false
@@ -6153,6 +6166,11 @@ const Methods = {
       }, 10)
     })
   },
+  handleResizeEvent () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    handleResizeEvent($xeTable)
+  },
   /**
    * 重新渲染布局
    * 刷新布局
@@ -6749,7 +6767,7 @@ const Methods = {
 
     $xeTable.closeMenu()
     $xeTable.updateCellAreas()
-    handleLazyRecalculate($xeTable, true, true, true)
+    handleResizeEvent($xeTable)
     $xeTable.updateCellAreas()
   },
   /**
@@ -7958,8 +7976,8 @@ const Methods = {
     const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
 
-    const { highlightCurrentRow, highlightCurrentColumn, editConfig } = props
-    const { editStore, isDragResize } = reactData
+    const { treeConfig, highlightCurrentRow, highlightCurrentColumn, editConfig, aggregateConfig, rowGroupConfig } = props
+    const { editStore, isDragResize, expandColumn, checkboxColumn, radioColumn } = reactData
     if (isDragResize) {
       return
     }
@@ -7988,15 +8006,15 @@ const Methods = {
     params = Object.assign({ cell, triggerRadio, triggerCheckbox, triggerTreeNode, triggerExpandNode }, params)
     if (!triggerCheckbox && !triggerRadio) {
       // 如果是展开行
-      if (!triggerExpandNode && (expandOpts.trigger === 'row' || (isExpandType && expandOpts.trigger === 'cell'))) {
+      if (!triggerExpandNode && ((expandColumn && expandOpts.trigger === 'row') || (isExpandType && expandOpts.trigger === 'cell'))) {
         $xeTable.triggerRowExpandEvent(evnt, params)
       }
       // 如果是树形表格
-      if ((treeOpts.trigger === 'row' || (treeNode && treeOpts.trigger === 'cell'))) {
+      if (treeConfig && (treeOpts.trigger === 'row' || (treeNode && treeOpts.trigger === 'cell'))) {
         $xeTable.triggerTreeExpandEvent(evnt, params)
       }
       // 如果是行分组
-      if ((aggregateOpts.trigger === 'row' || (rowGroupNode && aggregateOpts.trigger === 'cell'))) {
+      if ((aggregateConfig || rowGroupConfig) && (aggregateOpts.trigger === 'row' || (rowGroupNode && aggregateOpts.trigger === 'cell'))) {
         $xeTable.triggerRowGroupExpandEvent(evnt, params)
       }
     }
@@ -8016,11 +8034,11 @@ const Methods = {
           }
         }
         // 如果是单选框
-        if (!triggerRadio && (radioOpts.trigger === 'row' || (isRadioType && radioOpts.trigger === 'cell'))) {
+        if (!triggerRadio && ((radioColumn && radioOpts.trigger === 'row') || (isRadioType && radioOpts.trigger === 'cell'))) {
           $xeTable.triggerRadioRowEvent(evnt, params)
         }
         // 如果是复选框
-        if (!triggerCheckbox && (checkboxOpts.trigger === 'row' || (isCheckboxType && checkboxOpts.trigger === 'cell'))) {
+        if (!triggerCheckbox && ((checkboxColumn && checkboxOpts.trigger === 'row') || (isCheckboxType && checkboxOpts.trigger === 'cell'))) {
           $xeTable.handleToggleCheckRowEvent(evnt, params)
         }
       }
