@@ -115,6 +115,13 @@ export function createInternalData (): TableInternalData {
 
     cvCacheMaps: {},
 
+    // 表头高度
+    tHeaderHeight: 0,
+    // 表体高度
+    tBodyHeight: 0,
+    // 表尾高度
+    tFooterHeight: 0,
+
     inited: false,
     tooltipTimeout: null,
     initStatus: false,
