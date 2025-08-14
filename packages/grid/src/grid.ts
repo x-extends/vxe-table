@@ -592,10 +592,11 @@ export default defineVxeComponent({
     const renderToolbar = () => {
       const { toolbarConfig } = props
       const toolbarOpts = computeToolbarOpts.value
-      if ((toolbarConfig && isEnableConf(toolbarOpts)) || slots.toolbar) {
+      const toolbarSlot = slots.toolbar
+      if ((toolbarConfig && isEnableConf(toolbarOpts)) || toolbarSlot) {
         let slotVNs: VNode[] = []
-        if (slots.toolbar) {
-          slotVNs = slots.toolbar({ $grid: $xeGrid, $gantt: null })
+        if (toolbarSlot) {
+          slotVNs = toolbarSlot({ $grid: $xeGrid, $gantt: null })
         } else {
           const toolbarOptSlots = toolbarOpts.slots
           const toolbarSlots: {

@@ -1625,8 +1625,11 @@ export default defineVxeComponent({
           }
           fullColFieldData[field] = rest
         } else {
-          if ((storage && !type) || (columnOpts.drag && (isCrossDrag || isSelfToChildDrag))) {
-            errLog('vxe.error.reqProp', [`${column.getTitle() || type || ''} -> column.field=?`])
+          if (storage && !type) {
+            errLog('vxe.error.reqSupportProp', ['storage', `${column.getTitle() || type || ''} -> field=?`])
+          }
+          if (columnOpts.drag && (isCrossDrag || isSelfToChildDrag)) {
+            errLog('vxe.error.reqSupportProp', ['column-drag-config.isCrossDrag | column-drag-config.isSelfToChildDrag', `${column.getTitle() || type || ''} -> field=?`])
           }
         }
         if (!hasFixed && fixed) {
@@ -5799,6 +5802,7 @@ export default defineVxeComponent({
        * @param {Row} row 行对象
        */
       setCurrentRow (row) {
+        const $xeGanttView = internalData.xeGanttView
         const rowOpts = computeRowOpts.value
         const el = refElem.value
         tableMethods.clearCurrentRow()
@@ -5808,6 +5812,9 @@ export default defineVxeComponent({
           if (el) {
             XEUtils.arrayEach(el.querySelectorAll(`[rowid="${getRowid($xeTable, row)}"]`), elem => addClass(elem, 'row--current'))
           }
+        }
+        if ($xeGanttView) {
+          $xeGanttView.handleUpdateCurrentRow(row)
         }
         return nextTick()
       },
@@ -5848,11 +5855,15 @@ export default defineVxeComponent({
        * 用于当前行，手动清空当前高亮的状态
        */
       clearCurrentRow () {
+        const $xeGanttView = internalData.xeGanttView
         const el = refElem.value
         reactData.currentRow = null
         internalData.hoverRow = null
         if (el) {
           XEUtils.arrayEach(el.querySelectorAll('.row--current'), elem => removeClass(elem, 'row--current'))
+        }
+        if ($xeGanttView) {
+          $xeGanttView.handleUpdateCurrentRow()
         }
         return nextTick()
       },
@@ -11189,6 +11200,7 @@ export default defineVxeComponent({
         tablePrivateMethods.setHoverRow(row)
       },
       setHoverRow (row) {
+        const $xeGanttView = internalData.xeGanttView
         const rowid = getRowid($xeTable, row)
         const el = refElem.value
         tablePrivateMethods.clearHoverRow()
@@ -11196,13 +11208,20 @@ export default defineVxeComponent({
           XEUtils.arrayEach(el.querySelectorAll(`.vxe-body--row[rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
         }
         internalData.hoverRow = row
+        if ($xeGanttView) {
+          $xeGanttView.handleUpdateHoverRow(row)
+        }
       },
       clearHoverRow () {
+        const $xeGanttView = internalData.xeGanttView
         const el = refElem.value
         if (el) {
           XEUtils.arrayEach(el.querySelectorAll('.vxe-body--row.row--hover'), elem => removeClass(elem, 'row--hover'))
         }
         internalData.hoverRow = null
+        if ($xeGanttView) {
+          $xeGanttView.handleUpdateHoverRow()
+        }
       },
       /**
        * 已废弃，被 getCellElement 替换
