@@ -20,7 +20,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
 
   const { fixedType } = props
   const { resizable: allResizable, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
-  const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX } = tableReactData
+  const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX, tableColumn } = tableReactData
   const { fullColumnIdData, scrollXStore } = tableInternalData
   const virtualXOpts = $xeTable.computeVirtualXOpts
   const columnOpts = $xeTable.computeColumnOpts
@@ -102,7 +102,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     let isVNPreEmptyStatus = false
     if (isOptimizeMode && overflowX && !isGroup) {
       if (!dragCol || dragCol.id !== colid) {
-        if (scrollXLoad && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+        if (scrollXLoad && tableColumn.length > 10 && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
           isVNPreEmptyStatus = true
         }
       }

@@ -61,23 +61,24 @@ export default /* define-vxe-component start */ defineVxeComponent({
     globalMixins.sizeMixin
   ],
   props: {
-    // 以下仅用于类型
-    round: { type: Boolean, default: () => getConfig().table.round },
-    height: [Number, String] as PropType<VxeTablePropTypes.Height>,
-    minHeight: { type: [Number, String] as PropType<VxeTablePropTypes.MinHeight>, default: () => getConfig().table.minHeight },
-    maxHeight: [Number, String] as PropType<VxeTablePropTypes.MaxHeight>,
-    seqConfig: Object as PropType<VxeTablePropTypes.SeqConfig>,
-    sortConfig: Object as PropType<VxeTablePropTypes.SortConfig>,
-    filterConfig: Object as PropType<VxeTablePropTypes.FilterConfig>,
-    editConfig: [Boolean, Object] as PropType<VxeTablePropTypes.EditConfig>,
-    loading: Boolean as PropType<VxeTablePropTypes.Loading>,
-    validConfig: Object as PropType<VxeTablePropTypes.ValidConfig>,
-    editRules: Object as PropType<VxeTablePropTypes.EditRules>,
-    animat: { type: Boolean, default: () => getConfig().table.animat },
-    // 以上仅用于类型
+    ...(tableProps as unknown as {
+      border: PropType<VxeTablePropTypes.Border>
+      round: PropType<VxeTablePropTypes.Round>
+      loading: PropType<VxeTablePropTypes.Loading>
+      height: PropType<VxeTablePropTypes.Height>
+      minHeight: PropType<VxeTablePropTypes.MinHeight>
+      maxHeight: PropType<VxeTablePropTypes.MaxHeight>
+      seqConfig: PropType<VxeTablePropTypes.SeqConfig>
+      editConfig: PropType<VxeTablePropTypes.EditConfig>
+      sortConfig: PropType<VxeTablePropTypes.SortConfig>
+      filterConfig: PropType<VxeTablePropTypes.FilterConfig>
+      validConfig: PropType<VxeTablePropTypes.ValidConfig>
+      editRules: PropType<VxeTablePropTypes.EditRules>
+      animat: PropType<VxeTablePropTypes.Animat>
+      scrollbarConfig: PropType<VxeTablePropTypes.ScrollbarConfig>
+      params: PropType<VxeTablePropTypes.Params>
+    }),
 
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    ...(tableProps as {}),
     layouts: Array as PropType<VxeGridPropTypes.Layouts>,
     columns: Array as PropType<VxeGridPropTypes.Columns<any>>,
     pagerConfig: Object as PropType<VxeGridPropTypes.PagerConfig>,
@@ -378,7 +379,6 @@ export default /* define-vxe-component start */ defineVxeComponent({
       $xeGrid.initPages('total')
     }
   },
-
   methods: {
     ...tableMethods,
     dispatchEvent (type: ValueOf<VxeGridEmits>, params: Record<string, any>, evnt: Event | null) {
@@ -1217,7 +1217,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }
       $xeGrid.dispatchEvent('form-submit', params, params.$event)
     },
-    resetFormEvent (params: any) {
+    resetFormEvent (params: VxeFormDefines.ResetEventParams) {
       const $xeGrid = this
       const props = $xeGrid
 
@@ -1262,7 +1262,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const $xeGrid = this
       const reactData = $xeGrid.reactData
 
-      return $xeGrid[reactData.isZMax ? 'revert' : 'maximize']()
+      if (reactData.isZMax) {
+        return $xeGrid.revert()
+      }
+      return $xeGrid.maximize()
     },
     isMaximized () {
       const $xeGrid = this
@@ -1450,13 +1453,13 @@ export default /* define-vxe-component start */ defineVxeComponent({
           (formOpts as any).inited = true
           const beforeItem = proxyOpts.beforeItem
           if (proxyOpts && beforeItem) {
-            formOpts.items.forEach((item: any) => {
+            formOpts.items.forEach((item) => {
               beforeItem.call($xeGrid, { $grid: $xeGrid, $gantt: null, item })
             })
           }
         }
         // 处理插槽
-        formOpts.items.forEach((item: any) => {
+        formOpts.items.forEach((item) => {
           XEUtils.each(item.slots, (func) => {
             if (!XEUtils.isFunction(func)) {
               if (slots[func]) {
@@ -1572,7 +1575,6 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const slots = $xeGrid.$scopedSlots
 
       const tableProps = $xeGrid.computeTableProps
-
       return h('div', {
         class: 'vxe-grid--table-wrapper'
       }, [
