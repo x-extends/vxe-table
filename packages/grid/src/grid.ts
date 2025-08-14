@@ -1,4 +1,4 @@
-import { h, ref, computed, provide, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted } from 'vue'
+import { h, ref, computed, provide, reactive, onUnmounted, watch, nextTick, VNode, onMounted } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
@@ -62,7 +62,7 @@ export default defineVxeComponent({
     const internalData = createInternalData()
 
     const refElem = ref<HTMLDivElement>()
-    const refTable = ref<ComponentPublicInstance<VxeTableProps, VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods>>()
+    const refTable = ref<VxeTableConstructor & VxeTablePrivateMethods>()
     const refForm = ref<VxeFormInstance>()
     const refToolbar = ref<VxeToolbarInstance>()
     const refPager = ref<VxePagerInstance>()

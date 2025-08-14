@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import { VxeUI } from '@vxe-ui/core'
+import { VxeUI } from './ui'
 
 import { VxeColumn } from './column'
 import { VxeColgroup } from './colgroup'

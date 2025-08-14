@@ -48,7 +48,7 @@ export default defineVxeComponent({
 
       const { fixedType } = props
       const { resizable: allResizable, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
-      const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX } = tableReactData
+      const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX, tableColumn } = tableReactData
       const { fullColumnIdData, scrollXStore } = tableInternalData
       const virtualXOpts = computeVirtualXOpts.value
       const columnOpts = computeColumnOpts.value
@@ -132,7 +132,7 @@ export default defineVxeComponent({
         let isVNPreEmptyStatus = false
         if (isOptimizeMode && overflowX && !isGroup) {
           if (!dragCol || dragCol.id !== colid) {
-            if (scrollXLoad && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
+            if (scrollXLoad && tableColumn.length > 10 && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
               isVNPreEmptyStatus = true
             }
           }
