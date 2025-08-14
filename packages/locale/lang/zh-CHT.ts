@@ -19,6 +19,7 @@ export default {
       errConflicts: '參數 "{0}" 與 "{1}" 有衝突',
       modelConflicts: '綁定的字段值 "{0}" 與 "{1}" 存在衝突，將會出現錯誤',
       notSupportProp: '當啟用參數 "{0}" 時不支持 "{1}"，應該為 "{2}"，否則將會出現錯誤',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notConflictProp: '當使用 "{0}" 時，應該設置 "{1}"，否則可能會存在功能衝突',
       unableInsert: '無法插入到指定位置，請檢查參數是否正確',
       useErr: '安裝 "{0}" 模塊時發生錯誤，可能順序不正確，依賴的模塊需要在 Table 之前安裝',
@@ -56,7 +57,8 @@ export default {
       treeDragChild: '父級不能拖拽到自己的子級中',
       reqPlugin: '擴展插件未安裝 "{1}" https://vxeui.com/other{0}/#/{1}/install',
       errMaxRow: '超過支持的最大數據量 {0} 行，這可能會導致出現錯誤',
-      useNew: '不建議使用 {0}，請使用 {1}'
+      useNew: '不建議使用 {0}，請使用 {1}',
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
     },
     table: {
       emptyText: '暫無數據',

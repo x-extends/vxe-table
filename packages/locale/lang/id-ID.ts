@@ -18,6 +18,7 @@ export default {
       scrollErrProp: 'Parameter ini "{0}" tidak didukung setelah pengguliran virtual diaktifkan',
       errConflicts: 'Parameter "{0}" bertentangan dengan "{1}"',
       modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notSupportProp: '"{1}" tidak didukung ketika parameter "{0}" diaktifkan, itu harus menjadi "{2}", jika tidak kesalahan akan terjadi',
       notConflictProp: 'Saat menggunakan "{0}", "{1}" harus diatur, jika tidak mungkin ada konflik fungsional',
       unableInsert: 'Tidak dapat dimasukkan ke lokasi yang ditentukan, silakan periksa apakah parameternya benar',
@@ -56,7 +57,8 @@ export default {
       treeDragChild: 'Orang tua tidak bisa menyeret ke anak -anak mereka sendiri',
       reqPlugin: '"{1}" tidak diinstal di https://vxeUi.com/other{ 0',
       errMaxRow: 'Melebihi volume data yang didukung maksimum {0}, ini dapat menyebabkan kesalahan',
-      useNew: '不建议使用 {0}，请使用 {1}'
+      useNew: '不建议使用 {0}，请使用 {1}',
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
     },
     table: {
       emptyText: 'Belum ada data',

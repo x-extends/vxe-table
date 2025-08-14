@@ -19,6 +19,7 @@ export default {
       errConflicts: 'Parámetro "{0}" En conflicto con "{1}"',
       modelConflicts: 'Hay un conflicto entre el valor de campo unido "{0}" y "{1}", y ocurrirá un error',
       notSupportProp: '"{1}" no se admite cuando el parámetro "{0}" está habilitado, debería ser "{2}", de lo contrario ocurrirá un error',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notConflictProp: 'Cuando se usa "{0}", "{1}" debe establecerse, de lo contrario puede haber conflictos funcionales',
       unableInsert: 'No se puede insertar en la ubicación especificada, verifique si los parámetros son correctos',
       useErr: 'Se produjo un error al instalar el módulo "{0}". El pedido puede ser incorrecto. El módulo dependiente debe instalarse antes de la tabla',
@@ -56,7 +57,8 @@ export default {
       treeDragChild: 'Los padres no pueden arrastrar a sus propios hijos',
       reqPlugin: '"{1}" no está instalado en https://vxeui.com/other{0 /#/{1}/install',
       errMaxRow: 'Al exceder las filas de volumen de datos máximos admitidos, esto puede causar un error',
-      useNew: '{0} no se recomienda, use {1}'
+      useNew: '{0} no se recomienda, use {1}',
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
     },
     table: {
       emptyText: 'Aún no hay datos',

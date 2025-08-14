@@ -1223,9 +1223,6 @@ $btnThemeList: (
   // }
   
   /*边框*/
-  .vxe-table--footer-wrapper {
-    border-top: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
-  }
   &.border--default,
   &.border--full,
   &.border--outer,
@@ -1320,6 +1317,13 @@ $btnThemeList: (
       background-repeat: no-repeat;
       background-size: 100% var(--vxe-ui-table-border-width);
       background-position: right bottom;
+    }
+  }
+  &.border--default,
+  &.border--full,
+  &.border--inner {
+    .vxe-table--footer-wrapper {
+      border-top: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
     }
   }
   &.border--default,

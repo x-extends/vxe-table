@@ -304,8 +304,11 @@ function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
       }
       fullColFieldData[field] = rest
     } else {
-      if ((storage && !type) || (columnOpts.drag && (isCrossDrag || isSelfToChildDrag))) {
-        errLog('vxe.error.reqProp', [`${column.getTitle() || type || ''} -> column.field=?`])
+      if (storage && !type) {
+        errLog('vxe.error.reqSupportProp', ['storage', `${column.getTitle() || type || ''} -> field=?`])
+      }
+      if (columnOpts.drag && (isCrossDrag || isSelfToChildDrag)) {
+        errLog('vxe.error.reqSupportProp', ['column-drag-config.isCrossDrag | column-drag-config.isSelfToChildDrag', `${column.getTitle() || type || ''} -> field=?`])
       }
     }
     if (!hasFixed && fixed) {
@@ -7765,14 +7768,22 @@ const Methods = {
    * @param {Row} row 行对象
    */
   setCurrentRow (row: any) {
-    const { $el, rowOpts } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const $xeGanttView = internalData.xeGanttView
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    const rowOpts = $xeTable.computeRowOpts
     this.clearCurrentRow()
     // this.clearCurrentColumn()
     this.currentRow = row
     if (rowOpts.isCurrent || this.highlightCurrentRow) {
-      if ($el) {
-        XEUtils.arrayEach($el.querySelectorAll(`[rowid="${getRowid(this, row)}"]`), elem => addClass(elem, 'row--current'))
+      if (el) {
+        XEUtils.arrayEach(el.querySelectorAll(`[rowid="${getRowid($xeTable, row)}"]`), elem => addClass(elem, 'row--current'))
       }
+    }
+    if ($xeGanttView) {
+      $xeGanttView.handleUpdateCurrentRow(row)
     }
     return this.$nextTick()
   },
@@ -7824,13 +7835,21 @@ const Methods = {
    * 用于当前行，手动清空当前高亮的状态
    */
   clearCurrentRow () {
-    const { $el } = this
-    this.currentRow = null
-    this.hoverRow = null
-    if ($el) {
-      XEUtils.arrayEach($el.querySelectorAll('.row--current'), elem => removeClass(elem, 'row--current'))
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const $xeGanttView = internalData.xeGanttView
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    reactData.currentRow = null
+    internalData.hoverRow = null
+    if (el) {
+      XEUtils.arrayEach(el.querySelectorAll('.row--current'), elem => removeClass(elem, 'row--current'))
     }
-    return this.$nextTick()
+    if ($xeGanttView) {
+      $xeGanttView.handleUpdateCurrentRow()
+    }
+    return $xeTable.$nextTick()
   },
   /**
    * 用于单选行，手动清空用户的选择
@@ -7891,20 +7910,33 @@ const Methods = {
     this.setHoverRow(row)
   },
   setHoverRow (row: any) {
-    const { $el } = this
-    const rowid = getRowid(this, row)
-    this.clearHoverRow()
-    if ($el) {
-      XEUtils.arrayEach($el.querySelectorAll(`.vxe-body--row[rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const $xeGanttView = internalData.xeGanttView
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    $xeTable.clearHoverRow()
+    if (el) {
+      XEUtils.arrayEach(el.querySelectorAll(`.vxe-body--row[rowid="${getRowid($xeTable, row)}"]`), elem => addClass(elem, 'row--hover'))
     }
-    this.hoverRow = row
+    internalData.hoverRow = row
+    if ($xeGanttView) {
+      $xeGanttView.handleUpdateHoverRow(row)
+    }
   },
   clearHoverRow () {
-    const { $el } = this
-    if ($el) {
-      XEUtils.arrayEach($el.querySelectorAll('.vxe-body--row.row--hover'), elem => removeClass(elem, 'row--hover'))
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const $xeGanttView = internalData.xeGanttView
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    if (el) {
+      XEUtils.arrayEach(el.querySelectorAll('.vxe-body--row.row--hover'), elem => removeClass(elem, 'row--hover'))
     }
-    this.hoverRow = null
+    internalData.hoverRow = null
+    if ($xeGanttView) {
+      $xeGanttView.handleUpdateHoverRow()
+    }
   },
   triggerHeaderCellClickEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods

@@ -1512,10 +1512,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       const { toolbarConfig } = props
       const toolbarSlot = slots.toolbar
-      const hasToolbar = !!(toolbarSlot || isEnableConf(toolbarConfig) || toolbar)
       const toolbarOpts = $xeGrid.computeToolbarOpts
 
-      if (hasToolbar) {
+      if ((toolbarConfig && isEnableConf(toolbarOpts)) || toolbarSlot) {
         return h('div', {
           key: 'toolbar',
           ref: 'refToolbarWrapper',
