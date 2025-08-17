@@ -1271,9 +1271,6 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   if (mouseConfig && mouseOpts.selected && editStore.selected.row && editStore.selected.column) {
     $xeTable.addCellSelectedClass()
   }
-  if ($xeGanttView) {
-    $xeGanttView.handleUpdateStyle()
-  }
   return $xeTable.$nextTick()
 }
 
@@ -2853,7 +2850,6 @@ function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateM
 
   return new Promise<void>(resolve => {
     const { rceTimeout, rceRunTime } = internalData
-    const $xeGanttView = internalData.xeGanttView
     const resizeOpts = $xeTable.computeResizeOpts
     const refreshDelay = resizeOpts.refreshDelay || 20
     const el = $xeTable.$refs.refElem as HTMLElement
@@ -2876,9 +2872,6 @@ function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateM
       resolve(
         handleRecalculateStyle($xeTable, reFull, reWidth, reHeight)
       )
-    }
-    if ($xeGanttView) {
-      $xeGanttView.handleLazyRecalculate()
     }
     internalData.rceTimeout = setTimeout(() => {
       internalData.rceTimeout = undefined
@@ -3691,20 +3684,6 @@ const wheelScrollTopTo = (diffNum: number, cb: (progress: number) => void) => {
   requestAnimationFrame(step)
 }
 
-const syncGanttScrollTop = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, scrollTop: number) => {
-  const internalData = $xeTable as unknown as TableInternalData
-
-  const $xeGanttView = internalData.xeGanttView
-  if ($xeGanttView) {
-    const ganttInternalData = $xeGanttView.internalData
-    const { elemStore: ganttElemStore } = ganttInternalData
-    const ganttBodyScrollElem = getRefElem(ganttElemStore['main-body-scroll'])
-    if (ganttBodyScrollElem) {
-      ganttBodyScrollElem.scrollTop = scrollTop
-    }
-  }
-}
-
 function updateHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -4035,7 +4014,6 @@ const Methods = {
 
     const { scrollYLoad } = reactData
     const { scrollYStore, fullDataRowIdData } = internalData
-    const $xeGanttView = internalData.xeGanttView
     let fullList: any[] = internalData.afterFullData
     // 是否进行数据处理
     if (force) {
@@ -4056,9 +4034,6 @@ const Methods = {
     })
     reactData.tableData = tableData
     internalData.visibleDataRowIdData = visibleDataRowIdMaps
-    if ($xeGanttView) {
-      $xeGanttView.updateViewData()
-    }
     return $xeTable.$nextTick()
   },
   /**
@@ -5046,6 +5021,32 @@ const Methods = {
       }
     }
     return []
+  },
+  /**
+   * 只对 tree-config 有效，用于树形结构，获取指定行的层级
+   */
+  getTreeRowLevel (rowOrRowid: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeConfig } = props
+    const { fullAllDataRowIdData } = internalData
+    if (rowOrRowid && treeConfig) {
+      let rowid
+      if (XEUtils.isString(rowOrRowid)) {
+        rowid = rowOrRowid
+      } else {
+        rowid = getRowid($xeTable, rowOrRowid)
+      }
+      if (rowid) {
+        const rest = fullAllDataRowIdData[rowid]
+        if (rest) {
+          return rest.level
+        }
+      }
+    }
+    return -1
   },
   /**
    * 只对 tree-config 有效，获取行的父级
@@ -10345,7 +10346,6 @@ const Methods = {
       }
       setScrollTop(yHandleEl, scrollTop)
       setScrollTop(rowExpandEl, scrollTop)
-      syncGanttScrollTop($xeTable, scrollTop)
       if (scrollYLoad) {
         $xeTable.triggerScrollYEvent(evnt)
       }
@@ -10550,7 +10550,6 @@ const Methods = {
         setScrollTop(leftScrollElem, currTopNum)
         setScrollTop(rightScrollElem, currTopNum)
         setScrollTop(rowExpandEl, currTopNum)
-        syncGanttScrollTop($xeTable, currTopNum)
         if (scrollYLoad) {
           $xeTable.triggerScrollYEvent(evnt)
         }
@@ -10567,7 +10566,6 @@ const Methods = {
           setScrollTop(leftScrollElem, currTopNum)
           setScrollTop(rightScrollElem, currTopNum)
           setScrollTop(rowExpandEl, currTopNum)
-          syncGanttScrollTop($xeTable, currTopNum)
           if (scrollYLoad) {
             $xeTable.triggerScrollYEvent(evnt)
           }
@@ -10651,7 +10649,6 @@ const Methods = {
     setScrollTop(leftScrollElem, scrollTop)
     setScrollTop(rightScrollElem, scrollTop)
     setScrollTop(rowExpandEl, scrollTop)
-    syncGanttScrollTop($xeTable, scrollTop)
     if (scrollYLoad) {
       $xeTable.triggerScrollYEvent(evnt)
     }
@@ -10683,7 +10680,6 @@ const Methods = {
 
     const { scrollXLoad, overflowX, scrollXWidth } = reactData
     const { visibleColumn, scrollXStore, elemStore, fullColumnIdData } = internalData
-    const $xeGanttView = internalData.xeGanttView
     const mouseOpts = $xeTable.computeMouseOpts
     const tableBody = $xeTable.$refs.refTableBody
     const tableBodyElem = tableBody ? (tableBody as any).$el as HTMLDivElement : null
@@ -10755,9 +10751,6 @@ const Methods = {
       if (isScrollXBig && mouseOpts.area) {
         errLog('vxe.error.notProp', ['mouse-config.area'])
       }
-      if ($xeGanttView) {
-        $xeGanttView.updateScrollXSpace()
-      }
       return $xeTable.$nextTick(() => {
         updateStyle($xeTable)
       })
@@ -10781,7 +10774,6 @@ const Methods = {
 
     const { isAllOverflow, scrollYLoad, expandColumn } = reactData
     const { scrollYStore, elemStore, isResizeCellHeight, afterFullData, fullAllDataRowIdData, rowExpandedMaps } = internalData
-    const $xeGanttView = internalData.xeGanttView
     const { startIndex } = scrollYStore
     const mouseOpts = $xeTable.computeMouseOpts
     const expandOpts = $xeTable.computeExpandOpts
@@ -10879,9 +10871,6 @@ const Methods = {
     calcScrollbar($xeTable)
     if (isScrollYBig && mouseOpts.area) {
       errLog('vxe.error.notProp', ['mouse-config.area'])
-    }
-    if ($xeGanttView) {
-      $xeGanttView.updateScrollYSpace()
     }
     return $xeTable.$nextTick().then(() => {
       updateStyle($xeTable)

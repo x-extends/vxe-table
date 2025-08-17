@@ -19,6 +19,7 @@ export default {
       errConflicts: 'Parameter "{0}" conflicts with "{1}"',
       modelConflicts: 'The bound field values "{0}" and "{1}" conflict, an error will occur.',
       notSupportProp: '"{1}" is not supported when the parameter "{0}" is enabled, it should be "{2}", otherwise an error will occur',
+      reqSupportProp: 'When using "{0}", "{1}" should be set; otherwise, an error may occur.',
       notConflictProp: 'When using "{0}", "{1}" should be set, otherwise there may be functional conflicts',
       unableInsert: 'Cannot be inserted into the specified location, please check whether the parameters are correct',
       useErr: 'An error occurred while installing the "{0}" module. The order may be incorrect. The dependent module needs to be installed before Table',
@@ -56,7 +57,8 @@ export default {
       treeDragChild: 'Parents cannot drag to their own children',
       reqPlugin: '"{1}" is not installed at https://vxeui.com/other{0}/#/{1}/install',
       errMaxRow: 'Exceeding the maximum supported data volume {0} rows, this may cause an error',
-      useNew: 'It is not recommended to use {0}. Please use {1} instead.'
+      useNew: 'It is not recommended to use {0}. Please use {1} instead.',
+      errorVersion: 'Version mismatch. Current version is {0}, while the minimum supported version is {1}.'
     },
     table: {
       emptyText: 'No data yet',

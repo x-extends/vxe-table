@@ -18,6 +18,7 @@ export default {
       scrollErrProp: 'Denne parameteren "{0}" støttes ikke etter at virtuell rulling er aktivert',
       errConflicts: 'Parameter "{0}" Konflikter med "{1}"',
       modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notSupportProp: '"{1}" støttes ikke når parameteren "{0}" er aktivert, den skal være "{2}", ellers vil det oppstå en feil',
       notConflictProp: 'Når du bruker "{0}", "{1}" skal settes, ellers kan det være funksjonelle konflikter',
       unableInsert: 'Kan ikke settes inn på det spesifiserte stedet, vennligst sjekk om parametrene er riktige',
@@ -56,7 +57,8 @@ export default {
       treeDragChild: 'Foreldre kan ikke dra til sine egne barn',
       reqPlugin: '"{1}" er ikke installert på http',
       errMaxRow: 'Overskridende det maksimale støttede datavolumet {0} Rader, dette kan føre til en feil',
-      useNew: '不建议使用 {0}，请使用 {1}'
+      useNew: '不建议使用 {0}，请使用 {1}',
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
     },
     table: {
       emptyText: 'Ingen data ennå',
