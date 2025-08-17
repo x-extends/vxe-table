@@ -2578,9 +2578,6 @@ export default defineVxeComponent({
       if (mouseConfig && mouseOpts.selected && editStore.selected.row && editStore.selected.column) {
         $xeTable.addCellSelectedClass()
       }
-      if ($xeGanttView) {
-        $xeGanttView.handleUpdateStyle()
-      }
       return nextTick()
     }
 
@@ -3227,7 +3224,6 @@ export default defineVxeComponent({
 
     const handleLazyRecalculate = (reFull: boolean, reWidth: boolean, reHeight: boolean) => {
       return new Promise<void>(resolve => {
-        const $xeGanttView = internalData.xeGanttView
         const { rceTimeout, rceRunTime } = internalData
         const resizeOpts = computeResizeOpts.value
         const refreshDelay = resizeOpts.refreshDelay || 20
@@ -3251,9 +3247,6 @@ export default defineVxeComponent({
           resolve(
             handleRecalculateStyle(reFull, reWidth, reHeight)
           )
-        }
-        if ($xeGanttView) {
-          $xeGanttView.handleLazyRecalculate()
         }
         internalData.rceTimeout = setTimeout(() => {
           internalData.rceTimeout = undefined
@@ -4234,18 +4227,6 @@ export default defineVxeComponent({
       requestAnimationFrame(step)
     }
 
-    const syncGanttScrollTop = (scrollTop: number) => {
-      const $xeGanttView = internalData.xeGanttView
-      if ($xeGanttView) {
-        const ganttInternalData = $xeGanttView.internalData
-        const { elemStore: ganttElemStore } = ganttInternalData
-        const ganttBodyScrollElem = getRefElem(ganttElemStore['main-body-scroll'])
-        if (ganttBodyScrollElem) {
-          ganttBodyScrollElem.scrollTop = scrollTop
-        }
-      }
-    }
-
     const dispatchEvent = (type: ValueOf<VxeTableEmits>, params: Record<string, any>, evnt: Event | null) => {
       emit(type, createEvent(evnt, { $table: $xeTable, $grid: $xeGrid }, params))
     }
@@ -5129,6 +5110,28 @@ export default defineVxeComponent({
           }
         }
         return []
+      },
+      /**
+       * 只对 tree-config 有效，用于树形结构，获取指定行的层级
+       */
+      getTreeRowLevel (rowOrRowid) {
+        const { treeConfig } = props
+        const { fullAllDataRowIdData } = internalData
+        if (rowOrRowid && treeConfig) {
+          let rowid
+          if (XEUtils.isString(rowOrRowid)) {
+            rowid = rowOrRowid
+          } else {
+            rowid = getRowid($xeTable, rowOrRowid)
+          }
+          if (rowid) {
+            const rest = fullAllDataRowIdData[rowid]
+            if (rest) {
+              return rest.level
+            }
+          }
+        }
+        return -1
       },
       /**
        * 只对 tree-config 有效，获取行的父级
@@ -8055,7 +8058,6 @@ export default defineVxeComponent({
       handleTableData (force?: boolean) {
         const { scrollYLoad } = reactData
         const { scrollYStore, fullDataRowIdData } = internalData
-        const $xeGanttView = internalData.xeGanttView
         let fullList: any[] = internalData.afterFullData
         // 是否进行数据处理
         if (force) {
@@ -8076,9 +8078,6 @@ export default defineVxeComponent({
         })
         reactData.tableData = tableData
         internalData.visibleDataRowIdData = visibleDataRowIdMaps
-        if ($xeGanttView) {
-          $xeGanttView.updateViewData()
-        }
         return nextTick()
       },
       /**
@@ -10604,7 +10603,6 @@ export default defineVxeComponent({
           }
           setScrollTop(yHandleEl, scrollTop)
           setScrollTop(rowExpandEl, scrollTop)
-          syncGanttScrollTop(scrollTop)
           if (scrollYLoad) {
             $xeTable.triggerScrollYEvent(evnt)
           }
@@ -10798,7 +10796,6 @@ export default defineVxeComponent({
             setScrollTop(leftScrollElem, currTopNum)
             setScrollTop(rightScrollElem, currTopNum)
             setScrollTop(rowExpandEl, currTopNum)
-            syncGanttScrollTop(currTopNum)
             if (scrollYLoad) {
               $xeTable.triggerScrollYEvent(evnt)
             }
@@ -10815,7 +10812,6 @@ export default defineVxeComponent({
               setScrollTop(leftScrollElem, currTopNum)
               setScrollTop(rightScrollElem, currTopNum)
               setScrollTop(rowExpandEl, currTopNum)
-              syncGanttScrollTop(currTopNum)
               if (scrollYLoad) {
                 $xeTable.triggerScrollYEvent(evnt)
               }
@@ -10890,7 +10886,6 @@ export default defineVxeComponent({
         setScrollTop(leftScrollElem, scrollTop)
         setScrollTop(rightScrollElem, scrollTop)
         setScrollTop(rowExpandEl, scrollTop)
-        syncGanttScrollTop(scrollTop)
         if (scrollYLoad) {
           $xeTable.triggerScrollYEvent(evnt)
         }
@@ -10930,7 +10925,6 @@ export default defineVxeComponent({
       updateScrollXSpace () {
         const { scrollXLoad, overflowX, scrollXWidth } = reactData
         const { visibleColumn, scrollXStore, elemStore, fullColumnIdData } = internalData
-        const $xeGanttView = internalData.xeGanttView
         const mouseOpts = computeMouseOpts.value
         const tableBody = refTableBody.value
         const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
@@ -11003,9 +10997,6 @@ export default defineVxeComponent({
           if (isScrollXBig && mouseOpts.area) {
             errLog('vxe.error.notProp', ['mouse-config.area'])
           }
-          if ($xeGanttView) {
-            $xeGanttView.updateScrollXSpace()
-          }
           return nextTick().then(() => {
             updateStyle()
           })
@@ -11015,7 +11006,6 @@ export default defineVxeComponent({
       updateScrollYSpace () {
         const { isAllOverflow, overflowY, scrollYLoad, expandColumn } = reactData
         const { scrollYStore, elemStore, isResizeCellHeight, afterFullData, fullAllDataRowIdData, rowExpandedMaps } = internalData
-        const $xeGanttView = internalData.xeGanttView
         const { startIndex } = scrollYStore
         const mouseOpts = computeMouseOpts.value
         const expandOpts = computeExpandOpts.value
@@ -11116,9 +11106,6 @@ export default defineVxeComponent({
         calcScrollbar()
         if (isScrollYBig && mouseOpts.area) {
           errLog('vxe.error.notProp', ['mouse-config.area'])
-        }
-        if ($xeGanttView) {
-          $xeGanttView.updateScrollYSpace()
         }
         return nextTick().then(() => {
           updateStyle()
