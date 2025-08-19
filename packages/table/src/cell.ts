@@ -389,6 +389,7 @@ export const Cell = {
     const { isRowGroupStatus } = tableReactData
     const { field, slots, editRender, cellRender, rowGroupNode, aggFunc } = column
     const renderOpts = editRender || cellRender
+    const gcSlot = slots ? (slots.groupContent || slots['group-content']) : null
     let cellValue: string | number | null = ''
     if (isRowGroupStatus && field && row.isAggregate) {
       const aggRow: VxeTableDefines.AggregateRowInfo = row
@@ -416,6 +417,9 @@ export const Cell = {
          * @deprecated
          */
         totalValue: childCount
+      }
+      if (gcSlot) {
+        return renderCellBaseVNs(h, params, $table.callSlot(gcSlot, Object.assign({ groupField, groupContent, childCount }, params), h))
       }
       if (mode === 'column' ? field === aggRow.groupField : rowGroupNode) {
         cellValue = groupContent
