@@ -412,6 +412,7 @@ export const Cell = {
     const { field, slots, editRender, cellRender, rowGroupNode, aggFunc } = column
     const renderOpts = editRender || cellRender
     const defaultSlot = slots ? slots.default : null
+    const gcSlot = slots ? (slots.groupContent || slots['group-content']) : null
     let cellValue: string | number | null = ''
     if (isRowGroupStatus && field && row.isAggregate) {
       const aggRow: VxeTableDefines.AggregateRowInfo = row
@@ -440,6 +441,9 @@ export const Cell = {
          * @deprecated
          */
         totalValue: childCount
+      }
+      if (gcSlot) {
+        return renderCellBaseVNs(params, $table.callSlot(gcSlot, Object.assign({ groupField, groupContent, childCount }, params)))
       }
       if (mode === 'column' ? field === aggRow.groupField : rowGroupNode) {
         cellValue = groupContent

@@ -3502,6 +3502,7 @@ export default defineVxeComponent({
       }).then(() => {
         computeScrollLoad()
       }).then(() => {
+        const virtualYOpts = computeVirtualYOpts.value
         // 是否启用了虚拟滚动
         if (sYLoad) {
           scrollYStore.endIndex = scrollYStore.visibleSize
@@ -3510,6 +3511,9 @@ export default defineVxeComponent({
         if (sYLoad) {
           if (reactData.expandColumn && expandOpts.mode !== 'fixed') {
             errLog('vxe.error.notConflictProp', ['column.type="expand', 'expand-config.mode="fixed"'])
+          }
+          if (virtualYOpts.mode === 'scroll' && expandOpts.mode === 'fixed') {
+            warnLog('vxe.error.notConflictProp', ['virtual-y-config.mode=scroll', 'expand-config.mode=inside'])
           }
           // if (showOverflow) {
           //   if (!rowOpts.height) {
