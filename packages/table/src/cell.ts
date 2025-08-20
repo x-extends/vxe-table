@@ -408,7 +408,7 @@ export const Cell = {
         groupColumn: (colRest ? colRest.column : null) as VxeTableDefines.ColumnInfo,
         column,
         groupValue: groupContent,
-        children: childList,
+        childList,
         childCount,
         aggValue: null as any,
 
@@ -416,10 +416,15 @@ export const Cell = {
          * 已废弃
          * @deprecated
          */
+        children: childList,
+        /**
+         * 已废弃
+         * @deprecated
+         */
         totalValue: childCount
       }
       if (gcSlot) {
-        return renderCellBaseVNs(h, params, $table.callSlot(gcSlot, Object.assign({ groupField, groupContent, childCount }, params), h))
+        return renderCellBaseVNs(h, params, $table.callSlot(gcSlot, Object.assign({ groupField, groupContent, childList, childCount }, params), h))
       }
       if (mode === 'column' ? field === aggRow.groupField : rowGroupNode) {
         cellValue = groupContent
@@ -1174,10 +1179,14 @@ export const Cell = {
     return Cell.renderDeepNodeBtn(h, params, Cell.renderCellEdit(h, params))
   },
   runRenderer (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, _vm: any, isEdit: boolean) {
-    const { $table, column } = params
-    const { slots, editRender, formatter } = column
+    const { $table, row, column } = params
+    const tableReactData = $table as unknown as TableReactData
+    const { isRowGroupStatus } = tableReactData
+    const { slots, field, editRender, formatter } = column
     const compConf = renderer.get(editRender.name)
     const rtEdit = compConf ? (compConf.renderTableEdit || compConf.renderEdit) : null
+    const defaultSlot = slots ? slots.default : null
+    const gcSlot = slots ? (slots.groupContent || slots['group-content']) : null
     const cellParams = Object.assign({ $type: '', isEdit }, params)
     if (isEdit) {
       if (slots && slots.edit) {
@@ -1188,9 +1197,24 @@ export const Cell = {
       }
       return []
     }
-    if (slots && slots.default) {
-      return renderCellBaseVNs(h, params, $table.callSlot(slots.default, cellParams, h))
+
+    if (isRowGroupStatus && field && row.isAggregate) {
+      const aggRow: VxeTableDefines.AggregateRowInfo = row
+      const aggregateOpts = $table.computeAggregateOpts
+      const { mapChildrenField } = aggregateOpts
+      const groupField = aggRow.groupField
+      const groupContent = aggRow.groupContent
+      const childList = mapChildrenField ? (aggRow[mapChildrenField] || []) : []
+      const childCount = aggRow.childCount
+      if (gcSlot) {
+        return renderCellBaseVNs(h, params, $table.callSlot(gcSlot, Object.assign({ groupField, groupContent, childList, childCount }, params), h))
+      }
+    } else {
+      if (defaultSlot) {
+        return renderCellBaseVNs(h, params, $table.callSlot(defaultSlot, cellParams, h))
+      }
     }
+
     if (formatter) {
       return renderCellBaseVNs(h, params, [
         h('span', {
