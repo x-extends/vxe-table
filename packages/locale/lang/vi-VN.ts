@@ -19,6 +19,7 @@ export default {
       errConflicts: 'Tham số "{0}" Xung đột với "{1}"',
       modelConflicts: 'Có một xung đột giữa giá trị trường giới hạn "{0}" và "{1}" và sẽ xảy ra lỗi',
       notSupportProp: '"{1}" không được hỗ trợ khi tham số "{0}" được bật, nó phải là "{2}", nếu không sẽ xảy ra lỗi',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notConflictProp: 'Khi sử dụng "{0}", "{1}" nên được đặt, nếu không có thể có xung đột chức năng',
       unableInsert: 'Không thể được chèn vào vị trí đã chỉ định, vui lòng kiểm tra xem các tham số có đúng không',
       useErr: 'Đã xảy ra lỗi trong khi cài đặt mô -đun "{0}". Thứ tự có thể không chính xác. Mô -đun phụ thuộc cần được cài đặt trước bảng',
@@ -56,7 +57,8 @@ export default {
       treeDragChild: 'Cha mẹ không thể kéo đến con cái của họ',
       reqPlugin: '"{1}" không được cài đặt tại https://vxeui.com/other/khác',
       errMaxRow: 'Vượt quá khối lượng dữ liệu được hỗ trợ tối đa {0}, điều này có thể gây ra lỗi',
-      useNew: '{0} không được khuyến nghị, vui lòng sử dụng {1}'
+      useNew: '{0} không được khuyến nghị, vui lòng sử dụng {1}',
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
     },
     table: {
       emptyText: 'Chưa có dữ liệu',

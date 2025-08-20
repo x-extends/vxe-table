@@ -3394,6 +3394,7 @@ export default defineVxeComponent({
       }).then(() => {
         computeScrollLoad()
       }).then(() => {
+        const virtualYOpts = computeVirtualYOpts.value
         // 是否启用了虚拟滚动
         if (sYLoad) {
           scrollYStore.endIndex = scrollYStore.visibleSize
@@ -3402,6 +3403,9 @@ export default defineVxeComponent({
         if (sYLoad) {
           if (reactData.expandColumn && expandOpts.mode !== 'fixed') {
             errLog('vxe.error.notConflictProp', ['column.type="expand', 'expand-config.mode="fixed"'])
+          }
+          if (virtualYOpts.mode === 'scroll' && expandOpts.mode === 'fixed') {
+            warnLog('vxe.error.notConflictProp', ['virtual-y-config.mode=scroll', 'expand-config.mode=inside'])
           }
           // if (showOverflow) {
           //   if (!rowOpts.height) {
@@ -4970,6 +4974,28 @@ export default defineVxeComponent({
           }
         }
         return []
+      },
+      /**
+       * 只对 tree-config 有效，用于树形结构，获取指定行的层级
+       */
+      getTreeRowLevel (rowOrRowid) {
+        const { treeConfig } = props
+        const { fullAllDataRowIdData } = internalData
+        if (rowOrRowid && treeConfig) {
+          let rowid
+          if (XEUtils.isString(rowOrRowid)) {
+            rowid = rowOrRowid
+          } else {
+            rowid = getRowid($xeTable, rowOrRowid)
+          }
+          if (rowid) {
+            const rest = fullAllDataRowIdData[rowid]
+            if (rest) {
+              return rest.level
+            }
+          }
+        }
+        return -1
       },
       /**
        * 只对 tree-config 有效，获取行的父级
@@ -11848,6 +11874,12 @@ export default defineVxeComponent({
         if (props.resizable) {
           warnLog('vxe.error.delProp', ['resizable', 'column-config.resizable'])
         }
+        if (props.virtualXConfig && props.scrollX) {
+          warnLog('vxe.error.notSupportProp', ['virtual-x-config', 'scroll-x', 'scroll-x=null'])
+        }
+        if (props.virtualYConfig && props.scrollY) {
+          warnLog('vxe.error.notSupportProp', ['virtual-y-config', 'scroll-y', 'scroll-y=null'])
+        }
         // if (props.scrollY) {
         //   warnLog('vxe.error.delProp', ['scroll-y', 'virtual-y-config'])
         // }
@@ -11936,6 +11968,15 @@ export default defineVxeComponent({
         }
         if (checkboxOpts.halfField) {
           warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
+        }
+
+        if (treeConfig) {
+          XEUtils.arrayEach(['rowField', 'parentField', 'childrenField', 'hasChildField', 'mapChildrenField'], key => {
+            const val = treeOpts[key as 'rowField']
+            if (val && val.indexOf('.') > -1) {
+              errLog('vxe.error.errProp', [`${key}=${val}`, `${key}=${val.split('.')[0]}`])
+            }
+          })
         }
 
         if (rowOpts.currentMethod) {

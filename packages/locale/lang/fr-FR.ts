@@ -18,6 +18,7 @@ export default {
       scrollErrProp: "Ce paramètre \"{0}\" n'est pas pris en charge après l'activation du défilement virtuel",
       errConflicts: 'Paramètre "{0}" entre en conflit avec "{1}"',
       modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notSupportProp: "\"{1}\" n'est pas pris en charge lorsque le paramètre \"{0}\" est activé, il devrait être \"{2}\", sinon une erreur se produira",
       notConflictProp: 'Lorsque vous utilisez "{0}", "{1}" doit être défini, sinon il peut y avoir des conflits fonctionnels',
       unableInsert: "Ne peut pas être inséré dans l'emplacement spécifié, veuillez vérifier si les paramètres sont corrects",
@@ -56,7 +57,8 @@ export default {
       treeDragChild: 'Les parents ne peuvent pas traîner à leurs propres enfants',
       reqPlugin: "\"{1}\" n'est pas installé sur https://vxeui.com/other {0,/#/{1 }/install",
       errMaxRow: 'Dépassant les lignes maximales du volume de données prises en charge {0}, cela peut entraîner une erreur',
-      useNew: '不建议使用 {0}，请使用 {1}'
+      useNew: '不建议使用 {0}，请使用 {1}',
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
     },
     table: {
       emptyText: 'Pas encore de données',

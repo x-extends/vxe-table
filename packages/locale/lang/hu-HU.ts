@@ -19,6 +19,7 @@ export default {
       errConflicts: 'A "{0}" paraméter konfliktusok "{1}"',
       modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: 'A "{1}" nem támogatott, ha a "{0}" paraméter engedélyezve van, "{2}" -nek kell lennie, különben hiba lép fel',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notConflictProp: 'A "{0}" használatakor a "{1}" -et be kell állítani, különben funkcionális konfliktusok merülhetnek fel',
       unableInsert: 'Nem lehet beilleszteni a megadott helyre, kérjük, ellenőrizze, hogy a paraméterek helyesek -e',
       useErr: 'Hiba történt a "{0}" modul telepítése során. A sorrend helytelen lehet. A függő modult a táblázat előtt kell telepíteni',
@@ -56,7 +57,8 @@ export default {
       treeDragChild: 'A szülők nem tudnak elhúzni a saját gyermekeiket',
       reqPlugin: 'A "{1}" nincs telepítve a https://vxeui.com/other oldalon {0 }/#/ (1 }/install',
       errMaxRow: 'A maximális támogatott adatmennyiség {0} sorok túllépése, ez hibát okozhat',
-      useNew: '不建议使用 {0}，请使用 {1}'
+      useNew: '不建议使用 {0}，请使用 {1}',
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
     },
     table: {
       emptyText: 'Még nincs adat',
