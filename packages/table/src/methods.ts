@@ -3034,6 +3034,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   }).then(() => {
     computeScrollLoad($xeTable)
   }).then(() => {
+    const virtualYOpts = $xeTable.computeVirtualYOpts
     // 是否启用了虚拟滚动
     if (sYLoad) {
       scrollYStore.endIndex = scrollYStore.visibleSize
@@ -3042,6 +3043,9 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
     if (sYLoad) {
       if (reactData.expandColumn && expandOpts.mode !== 'fixed') {
         errLog('vxe.error.notConflictProp', ['column.type="expand', 'expand-config.mode="fixed"'])
+      }
+      if (virtualYOpts.mode === 'scroll' && expandOpts.mode === 'fixed') {
+        warnLog('vxe.error.notConflictProp', ['virtual-y-config.mode=scroll', 'expand-config.mode=inside'])
       }
       // if (showOverflow) {
       //   if (!rowOpts.height) {
@@ -4899,6 +4903,32 @@ const Methods = {
       }
     }
     return []
+  },
+  /**
+   * 只对 tree-config 有效，用于树形结构，获取指定行的层级
+   */
+  getTreeRowLevel (rowOrRowid: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeConfig } = props
+    const { fullAllDataRowIdData } = internalData
+    if (rowOrRowid && treeConfig) {
+      let rowid
+      if (XEUtils.isString(rowOrRowid)) {
+        rowid = rowOrRowid
+      } else {
+        rowid = getRowid($xeTable, rowOrRowid)
+      }
+      if (rowid) {
+        const rest = fullAllDataRowIdData[rowid]
+        if (rest) {
+          return rest.level
+        }
+      }
+    }
+    return -1
   },
   /**
    * 只对 tree-config 有效，获取行的父级

@@ -1577,6 +1577,12 @@ export default {
     if (props.resizable) {
       warnLog('vxe.error.delProp', ['resizable', 'column-config.resizable'])
     }
+    if (props.virtualXConfig && props.scrollX) {
+      warnLog('vxe.error.notSupportProp', ['virtual-x-config', 'scroll-x', 'scroll-x=null'])
+    }
+    if (props.virtualYConfig && props.scrollY) {
+      warnLog('vxe.error.notSupportProp', ['virtual-y-config', 'scroll-y', 'scroll-y=null'])
+    }
     // if (props.scrollY) {
     //   warnLog('vxe.error.delProp', ['scroll-y', 'virtual-y-config'])
     // }
@@ -1665,6 +1671,15 @@ export default {
     }
     if (checkboxOpts.halfField) {
       warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
+    }
+
+    if (treeConfig) {
+      XEUtils.arrayEach(['rowField', 'parentField', 'childrenField', 'hasChildField', 'mapChildrenField'], key => {
+        const val = treeOpts[key as 'rowField']
+        if (val && val.indexOf('.') > -1) {
+          errLog('vxe.error.errProp', [`${key}=${val}`, `${key}=${val.split('.')[0]}`])
+        }
+      })
     }
 
     // 在 v3.0 中废弃 context-menu
