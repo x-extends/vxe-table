@@ -86,6 +86,7 @@ function renderTdColumn (
   const tableReactData = $xeTable as unknown as TableReactData
   const tableInternalData = $xeTable as unknown as TableInternalData
   const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
 
   const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, treeConfig, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
   const { tableData, tableColumn, dragRow, overflowX, overflowY, currentColumn, scrollXLoad, scrollYLoad, mergeBodyFlag, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, editStore, isAllOverflow, validErrorMaps } = tableReactData
@@ -145,6 +146,7 @@ function renderTdColumn (
   } = {
     $table: $xeTable,
     $grid: $xeGrid,
+    $gantt: $xeGantt,
     isEdit: false,
     seq,
     rowid,
@@ -462,6 +464,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
   const tableReactData = $xeTable as unknown as TableReactData
   const tableInternalData = $xeTable as unknown as TableInternalData
   const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
 
   const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
   const { hasFixedColumn, treeExpandedFlag, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, rowExpandHeightFlag, isRowGroupStatus } = tableReactData
@@ -610,6 +613,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
         const expandParams: VxeTableDefines.CellRenderDataParams = {
           $grid: $xeGrid,
           $table: $xeTable,
+          $gantt: $xeGantt,
           seq,
           column: expandColumn as VxeTableDefines.ColumnInfo,
           columnIndex,
@@ -719,6 +723,7 @@ export default {
     const tableReactData = $xeTable as unknown as TableReactData
     const tableInternalData = $xeTable as unknown as TableInternalData
     const $xeGrid = $xeTable.$xeGrid
+    const $xeGantt = $xeTable.$xeGantt
     const slots = $xeTable.$scopedSlots
 
     const { xID } = $xeTable
@@ -803,7 +808,7 @@ export default {
 
     let emptyContent
     const emptySlot = slots ? slots.empty : null
-    const emptyParams = { $table: $xeTable, $grid: $xeGrid }
+    const emptyParams = { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }
     if (emptySlot) {
       emptyContent = emptySlot.call($xeTable, emptyParams)
     } else {

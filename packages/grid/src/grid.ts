@@ -93,9 +93,11 @@ export default /* define-vxe-component start */ defineVxeComponent({
   },
   provide () {
     const $xeGrid = this
+    const $xeGantt = null
 
     return {
-      $xeGrid
+      $xeGrid,
+      $xeGantt
     }
   },
   data () {
@@ -412,7 +414,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         }
       }
     },
-    callSlot (slotFunc: any, params: any, h: CreateElement, vNodes: any) {
+    callSlot (slotFunc: any, params: any, h: CreateElement) {
       const $xeGrid = this
       const slots = $xeGrid.$scopedSlots
 
@@ -421,7 +423,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           slotFunc = slots[slotFunc] || null
         }
         if (XEUtils.isFunction(slotFunc)) {
-          return getSlotVNs(slotFunc.call(this, params, h, vNodes))
+          return getSlotVNs(slotFunc.call(this, params, h))
         }
       }
       return []

@@ -20,10 +20,10 @@ export function moveRowAnimateToTb (elemList: NodeListOf<HTMLElement> | HTMLDivE
   })
 }
 
-export function clearRowAnimate (elem: HTMLElement | undefined) {
+export function clearRowAnimate (elem: HTMLElement | undefined, clss: string[]) {
   setTimeout(() => {
     if (elem) {
-      XEUtils.arrayEach(elem.querySelectorAll(`.vxe-body--row.${rowMoveCls}`), elem => removeClass(elem, rowMoveCls))
+      XEUtils.arrayEach(elem.querySelectorAll(clss.map(cls => `${cls}.${rowMoveCls}`).join(',')), elem => removeClass(elem, rowMoveCls))
     }
   }, 500)
 }
@@ -43,10 +43,10 @@ export function moveColAnimateToLr (elemList: NodeListOf<HTMLElement> | HTMLDivE
   })
 }
 
-export function clearColAnimate (elem: HTMLElement | undefined) {
+export function clearColAnimate (elem: HTMLElement | undefined, clss: string[]) {
   setTimeout(() => {
     if (elem) {
-      XEUtils.arrayEach(elem.querySelectorAll(`.vxe-table--column.${colMoveClass}`), elem => removeClass(elem, colMoveClass))
+      XEUtils.arrayEach(elem.querySelectorAll(clss.map(cls => `${cls}.${rowMoveCls}`).join(',')), elem => removeClass(elem, colMoveClass))
     }
   }, 500)
 }

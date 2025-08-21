@@ -44,6 +44,7 @@ export default {
       coverProp: 'The parameter "{1}" of "{0}" is repeatedly defined, which may cause an error',
       uniField: 'The field name "{0}" is repeatedly defined, which may cause an error',
       repeatKey: 'Repeat the primary key {0}="{1}", which may cause an error',
+      repeatProp: 'Repeat parameters {0}="{1}", which may cause an error',
       delFunc: 'Method "{0}" is deprecated, please use "{1}"',
       delProp: 'Parameter "{0}" is deprecated, please use "{1}"',
       delEvent: 'Event "{0}" is deprecated, please use "{1}"',
@@ -534,6 +535,35 @@ export default {
         HH: 'hour',
         mm: 'point',
         ss: 'Second'
+      }
+    },
+    gantt: {
+      tFullFormat: {
+        year: '{yy}',
+        quarter: 'Quarter {q} of year {yy}',
+        month: '{yy}-{M}',
+        week: 'Week {W} of year {yy}',
+        day: '{yy}-{M}-{d}',
+        hour: '{yy}-{M}-{d} {H}',
+        minute: '{yy}-{M}-{d} {H}:{m}'
+      },
+      tSimpleFormat: {
+        year: '{yy}',
+        quarter: 'Quarter {q}',
+        month: '{M}',
+        week: 'Week {W}',
+        day: '{d}',
+        hour: '{H}',
+        minute: '{m}'
+      },
+      dayss: {
+        w0: 'Sun',
+        w1: 'Mon',
+        w2: 'Tue',
+        w3: 'Wed',
+        w4: 'Thu',
+        w5: 'Fri',
+        w6: 'Sat'
       }
     },
     plugins: {

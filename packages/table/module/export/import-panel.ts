@@ -70,6 +70,7 @@ export default {
   render (this: any, h: CreateElement) {
     const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const $xeGrid = $xeTable.$xeGrid
+    const $xeGantt = $xeTable.$xeGantt
 
     const { hasFile, loading, parseTypeLabel, defaultOptions, storeData, selectName } = this
     const slots = defaultOptions.slots || {}
@@ -107,6 +108,7 @@ export default {
           const params = {
             $table: $xeTable,
             $grid: $xeGrid,
+            $gantt: $xeGantt,
             options: defaultOptions,
             params: defaultOptions.params as any
           }
@@ -198,6 +200,7 @@ export default {
           const params = {
             $table: $xeTable,
             $grid: $xeGrid,
+            $gantt: $xeGantt,
             options: defaultOptions,
             params: defaultOptions.params as any
           }

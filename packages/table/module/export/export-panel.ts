@@ -86,6 +86,7 @@ export default {
   render (this: any, h: CreateElement) {
     const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
     const $xeGrid = $xeTable.$xeGrid
+    const $xeGantt = $xeTable.$xeGantt
 
     const { _e, checkedAll, isAll: isAllChecked, isIndeterminate: isAllIndeterminate, showSheet, supportMerge, supportStyle, defaultOptions, storeData } = this
     const { hasTree, hasMerge, isPrint, hasColgroup, columns } = storeData
@@ -170,6 +171,7 @@ export default {
           const params = {
             $table: $xeTable,
             $grid: $xeGrid,
+            $gantt: $xeGantt,
             options: defaultOptions,
             columns,
             params: defaultOptions.params as any
@@ -455,6 +457,7 @@ export default {
           const params = {
             $table: $xeTable,
             $grid: $xeGrid,
+            $gantt: $xeGantt,
             options: defaultOptions,
             columns,
             params: defaultOptions.params as any

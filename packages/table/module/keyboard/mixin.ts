@@ -346,8 +346,8 @@ export default {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const { editConfig, editOpts, handleSelected, checkboxConfig, checkboxOpts, mouseConfig, mouseOpts } = this
-      if (mouseConfig && mouseOpts.area && $xeTable.triggerCellAreaModownEvent) {
-        return $xeTable.triggerCellAreaModownEvent(evnt, params)
+      if (mouseConfig && mouseOpts.area && $xeTable.triggerCellAreaModnEvent) {
+        return $xeTable.triggerCellAreaModnEvent(evnt, params)
       } else {
         if (checkboxConfig && checkboxOpts.range) {
           this.handleCheckboxRangeEvent(evnt, params)

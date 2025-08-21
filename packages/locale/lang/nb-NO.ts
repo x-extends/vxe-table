@@ -44,6 +44,7 @@ export default {
       coverProp: 'Parameteren "{1}" av "{0}" er gjentatte ganger definert, noe som kan forårsake en feil',
       uniField: 'Feltnavnet "{0}" er gjentatte ganger definert, noe som kan forårsake en feil',
       repeatKey: 'Gjenta den primære tasten {0} = "{1}", som kan forårsake en feil',
+      repeatProp: '参数重复 {0}="{1}"，这可能会出现错误',
       delFunc: 'Metode "{0}" er utdatert, bruk "{1}"',
       delProp: 'Parameter "{0}" er utdatert, bruk "{1}"',
       delEvent: 'Hendelse "{0}" er utdatert, bruk "{1}"',
@@ -534,6 +535,35 @@ export default {
         HH: 'time',
         mm: 'punkt',
         ss: 'Sekund'
+      }
+    },
+    gantt: {
+      tFullFormat: {
+        year: '{yy}年',
+        quarter: '{yy}年第{q}季度',
+        month: '{yy}年{M}月',
+        week: '{yy}年第{W}周',
+        day: '{yy}年{M}月{d}日',
+        hour: '{yy}年 {M}月{d}日{H}时',
+        minute: '{yy}年{M}月{d}日{H}时{m}分'
+      },
+      tSimpleFormat: {
+        year: '{yy}年',
+        quarter: '{q}季度',
+        month: '{M}月',
+        week: '{W}周',
+        day: '{d}',
+        hour: '{H}时',
+        minute: '{m}分'
+      },
+      dayss: {
+        w0: '日',
+        w1: '一',
+        w2: '二',
+        w3: '三',
+        w4: '四',
+        w5: '五',
+        w6: '六'
       }
     },
     plugins: {

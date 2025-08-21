@@ -121,6 +121,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
   const tableProps = $xeTable
   const tableReactData = $xeTable as unknown as TableReactData
   const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
 
   const { customStore } = props
   const { treeConfig, rowGroupConfig, aggregateConfig } = tableProps
@@ -150,6 +151,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
   const params = {
     $table: $xeTable,
     $grid: $xeGrid,
+    $gantt: $xeGantt,
     columns: customColumnList,
     isAllChecked,
     isAllIndeterminate,
@@ -285,6 +287,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
     }
   })
   return h('div', {
+    ref: 'refElem',
     key: 'simple',
     class: ['vxe-table-custom-wrapper', `placement--${placement}`, {
       'is--active': customStore.visible
@@ -438,7 +441,7 @@ const renderPopupPanel = (h: CreateElement, $xeTableCustomPanel: VxeTableCustomP
   const VxeUIModalComponent = VxeUI.getComponent('VxeModal')
   const VxeUIDrawerComponent = VxeUI.getComponent('VxeDrawer')
   const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
-  const VxeUINumberInputComponent = VxeUI.getComponent('VxeInput')
+  const VxeUINumberInputComponent = VxeUI.getComponent('VxeNumberInput')
 
   const _vm = $xeTableCustomPanel as any
   const props = $xeTableCustomPanel
@@ -447,6 +450,7 @@ const renderPopupPanel = (h: CreateElement, $xeTableCustomPanel: VxeTableCustomP
   const tableProps = $xeTable
   const tableReactData = $xeTable as unknown as TableReactData
   const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
 
   const { customStore } = props
   const { treeConfig, rowGroupConfig, aggregateConfig, resizable: allResizable } = tableProps
@@ -475,6 +479,7 @@ const renderPopupPanel = (h: CreateElement, $xeTableCustomPanel: VxeTableCustomP
   const params = {
     $table: $xeTable,
     $grid: $xeGrid,
+    $gantt: $xeGantt,
     columns: customColumnList,
     isAllChecked,
     isAllIndeterminate,
@@ -934,7 +939,7 @@ export default {
         errLog('vxe.error.reqComp', ['vxe-button'])
       }
       if (!VxeUINumberInputComponent) {
-        errLog('vxe.error.reqComp', ['vxe-input'])
+        errLog('vxe.error.reqComp', ['vxe-number-input'])
       }
       if (!VxeUIRadioGroupComponent) {
         errLog('vxe.error.reqComp', ['vxe-radio-group'])

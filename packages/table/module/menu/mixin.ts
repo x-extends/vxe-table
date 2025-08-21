@@ -4,7 +4,7 @@ import { getDomNode, getAbsolutePos, getEventTargetNode } from '../../../ui/src/
 import { isEnableConf, hasChildrenList } from '../../../ui/src/utils'
 import { warnLog } from '../../../ui/src/log'
 
-import type { VxeTableConstructor, VxeTablePrivateMethods, VxeGridConstructor, GridPrivateMethods, TableInternalData } from '../../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData } from '../../../../types'
 
 const { menus, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
 
@@ -60,7 +60,8 @@ export default {
      */
     handleGlobalContextmenuEvent (evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-      const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+      const $xeGrid = $xeTable.$xeGrid
+      const $xeGantt = $xeTable.$xeGantt
       const internalData = $xeTable as unknown as TableInternalData
 
       const { $refs, tId, editStore, menuConfig, contextMenu, ctxMenuStore, ctxMenuOpts, mouseConfig, mouseOpts } = this
@@ -74,7 +75,7 @@ export default {
         }
         if (internalData._keyCtx) {
           const type = 'body'
-          const params: any = { type, $grid: $xeGrid, $table: this, keyboard: true, columns: this.visibleColumn.slice(0), $event: evnt }
+          const params: any = { type, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, keyboard: true, columns: this.visibleColumn.slice(0), $event: evnt }
           // 如果开启单元格区域
           if (mouseConfig && mouseOpts.area) {
             const activeArea = this.getActiveCellArea()
@@ -101,7 +102,7 @@ export default {
             // target=td|th，直接向上找 table 去匹配即可
             return target.parentNode.parentNode.parentNode.getAttribute('xid') === tId
           })
-          const params: any = { type: layout, $grid: $xeGrid, $table: this, columns: this.visibleColumn.slice(0), $event: evnt }
+          const params: any = { type: layout, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, columns: this.visibleColumn.slice(0), $event: evnt }
           if (columnTargetNode.flag) {
             const cell = columnTargetNode.targetElem
             const column = this.getColumnNode(cell).item
@@ -257,12 +258,13 @@ export default {
      */
     ctxMenuLinkEvent (evnt: any, menu: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-      const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+      const $xeGrid = $xeTable.$xeGrid
+      const $xeGantt = $xeTable.$xeGantt
 
       // 如果一级菜单有配置 code 则允许点击，否则不能点击
       if (!menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
         const gMenuOpts = menus.get(menu.code)
-        const params = Object.assign({ menu, $grid: $xeGrid, $table: this, $event: evnt }, this.ctxMenuStore.args)
+        const params = Object.assign({ menu, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, $event: evnt }, this.ctxMenuStore.args)
         if (gMenuOpts && gMenuOpts.menuMethod) {
           gMenuOpts.menuMethod(params, evnt)
         }

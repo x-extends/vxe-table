@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getClass } from '../../ui/src/utils'
 import { updateCellTitle } from '../../ui/src/dom'
-import { getCellHeight } from './util'
+import { getCalcHeight } from './util'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, TableReactData, TableInternalData, VxeComponentStyleType } from '../../../types'
 
@@ -18,6 +18,7 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
   const tableReactData = $xeTable as unknown as TableReactData
   const tableInternalData = $xeTable as unknown as TableInternalData
   const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
 
   const { fixedType } = props
   const { resizable: allResizable, border, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
@@ -31,7 +32,7 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const cellOpts = $xeTable.computeCellOpts
   const footerCellOpts = $xeTable.computeFooterCellOpts
-  const currCellHeight = getCellHeight(footerCellOpts.height) || defaultRowHeight
+  const currCellHeight = getCalcHeight(footerCellOpts.height) || defaultRowHeight
 
   return tableColumn.map((column: any, $columnIndex: any) => {
     const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
@@ -59,6 +60,7 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
     } = {
       $table: $xeTable,
       $grid: $xeGrid,
+      $gantt: $xeGantt,
       row,
       rowIndex: _rowIndex,
       _rowIndex,

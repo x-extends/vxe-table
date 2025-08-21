@@ -11,7 +11,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
   provide () {
     return {
       $xeColumn: this,
-      $xeGrid: null
+      $xeGrid: null,
+      $xeGantt: null
     }
   },
   inject: {

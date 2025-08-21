@@ -2,7 +2,7 @@ import { CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { getFuncText, isEnableConf } from '../../ui/src/utils'
 import { initTpImg } from '../../ui/src/dom'
-import { createInternalData, createHandleGetRowId, getCellHeight, hasDeepKey } from './util'
+import { createInternalData, createHandleGetRowId, getCalcHeight, hasDeepKey } from './util'
 import { VxeUI } from '../../ui'
 import methods from './methods'
 import TableBodyComponent from './body'
@@ -111,11 +111,12 @@ function renderFixed (h: CreateElement, $xeTable: VxeTableConstructor & VxeTable
 function renderEmptyBody (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const slots = $xeTable.$scopedSlots
   const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
 
   const emptyOpts = $xeTable.computeEmptyOpts
   const emptySlot = slots.empty
   let emptyContent: any = ''
-  const emptyParams = { $table: $xeTable, $grid: $xeGrid }
+  const emptyParams = { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }
   if (emptySlot) {
     emptyContent = emptySlot.call($xeTable, emptyParams)
   } else {
@@ -221,6 +222,7 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
   const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
 
   const { treeConfig } = props
   const { expandColumn, isRowGroupStatus } = reactData
@@ -282,8 +284,9 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
         _columnIndex = colRest._index
       }
       const expandParams: VxeTableDefines.CellRenderDataParams = {
-        $grid: $xeGrid,
         $table: $xeTable,
+        $grid: $xeGrid,
+        $gantt: $xeGantt,
         seq,
         column: expandColumn,
         columnIndex,
@@ -492,6 +495,9 @@ export default {
       default: null
     },
     $xeGrid: {
+      default: null
+    },
+    $xeGantt: {
       default: null
     }
   },
@@ -760,11 +766,12 @@ export default {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
       const $xeGrid = $xeTable.$xeGrid
+      const $xeGantt = $xeTable.$xeGantt
 
       const { id } = props
       if (id) {
         if (XEUtils.isFunction(id)) {
-          return `${id({ $table: $xeTable, $grid: $xeGrid }) || ''}`
+          return `${id({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }) || ''}`
         }
         return `${id}`
       }
@@ -919,11 +926,21 @@ export default {
     },
     computeHeaderCellOpts () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const $xeGantt = $xeTable.$xeGantt
       const props = $xeTable
 
       const headerCellOpts = Object.assign({}, getConfig().table.headerCellConfig, props.headerCellConfig)
+      const defaultRowHeight = $xeTable.computeDefaultRowHeight
       const cellOpts = $xeTable.computeCellOpts
-      headerCellOpts.height = XEUtils.toNumber(getCellHeight(headerCellOpts.height || cellOpts.height))
+      let headCellHeight = XEUtils.toNumber(getCalcHeight(headerCellOpts.height || cellOpts.height))
+      if ($xeGantt) {
+        const taskScaleConfs = $xeGantt.computeTaskScaleConfs
+        if (taskScaleConfs && taskScaleConfs.length > 2) {
+          const ganttMinHeadCellHeight = defaultRowHeight / 2 * taskScaleConfs.length
+          headCellHeight = Math.max(ganttMinHeadCellHeight, headCellHeight)
+        }
+      }
+      headerCellOpts.height = headCellHeight
       return headerCellOpts
     },
     computeFooterCellOpts () {
@@ -932,7 +949,7 @@ export default {
 
       const footerCellOpts = Object.assign({}, getConfig().table.footerCellConfig, props.footerCellConfig)
       const cellOpts = $xeTable.computeCellOpts
-      footerCellOpts.height = XEUtils.toNumber(getCellHeight(footerCellOpts.height || cellOpts.height))
+      footerCellOpts.height = XEUtils.toNumber(getCalcHeight(footerCellOpts.height || cellOpts.height))
       return footerCellOpts
     },
     rowOpts () {
@@ -1575,6 +1592,15 @@ export default {
     if (props.resizable) {
       warnLog('vxe.error.delProp', ['resizable', 'column-config.resizable'])
     }
+    if (props.virtualXConfig && props.scrollX) {
+      warnLog('vxe.error.notSupportProp', ['virtual-x-config', 'scroll-x', 'scroll-x=null'])
+    }
+    if (props.virtualYConfig && props.scrollY) {
+      warnLog('vxe.error.notSupportProp', ['virtual-y-config', 'scroll-y', 'scroll-y=null'])
+    }
+    if (props.aggregateConfig && props.rowGroupConfig) {
+      warnLog('vxe.error.notSupportProp', ['aggregate-config', 'row-group-config', 'row-group-config=null'])
+    }
     // if (props.scrollY) {
     //   warnLog('vxe.error.delProp', ['scroll-y', 'virtual-y-config'])
     // }
@@ -1600,7 +1626,7 @@ export default {
     if (rowOpts.height && !this.showOverflow) {
       warnLog('vxe.error.notProp', ['table.show-overflow'])
     }
-    if (!$xeTable.triggerCellAreaModownEvent) {
+    if (!$xeTable.triggerCellAreaModnEvent) {
       if (props.areaConfig) {
         warnLog('vxe.error.notProp', ['area-config'])
       }
@@ -1663,6 +1689,15 @@ export default {
     }
     if (checkboxOpts.halfField) {
       warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
+    }
+
+    if (treeConfig) {
+      XEUtils.arrayEach(['rowField', 'parentField', 'childrenField', 'hasChildField', 'mapChildrenField'], key => {
+        const val = treeOpts[key as 'rowField']
+        if (val && val.indexOf('.') > -1) {
+          errLog('vxe.error.errProp', [`${key}=${val}`, `${key}=${val.split('.')[0]}`])
+        }
+      })
     }
 
     // 在 v3.0 中废弃 context-menu
@@ -1776,11 +1811,24 @@ export default {
   mounted () {
     const $xeTable = this
     const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+    const $xeGantt = $xeTable.$xeGantt
 
     const columnOpts = $xeTable.computeColumnOpts
     const rowOpts = $xeTable.computeRowOpts
     const customOpts = $xeTable.computeCustomOpts
     const virtualYOpts = $xeTable.computeVirtualYOpts
+
+    if ($xeGantt) {
+      const classifyWrapperEl = $xeGantt.$refs.refClassifyWrapperElem as HTMLDivElement
+      const teleportWrapperEl = $xeTable.$refs.refTeleportWrapper as HTMLDivElement
+      if (classifyWrapperEl) {
+        if (teleportWrapperEl) {
+          classifyWrapperEl.appendChild(teleportWrapperEl)
+        }
+        internalData.teleportToWrapperElem = classifyWrapperEl
+      }
+    }
 
     if (columnOpts.drag || rowOpts.drag || customOpts.allowSort) {
       initTpImg()
@@ -1863,6 +1911,10 @@ export default {
   beforeDestroy () {
     const $xeTable = this
 
+    const teleportWrapperEl = $xeTable.$refs.refTeleportWrapper as HTMLDivElement
+    if (teleportWrapperEl && teleportWrapperEl.parentElement) {
+      teleportWrapperEl.parentElement.removeChild(teleportWrapperEl)
+    }
     const tableViewportEl = $xeTable.$refs.refTableViewportElem as HTMLDivElement
     if (tableViewportEl) {
       tableViewportEl.removeEventListener('wheel', $xeTable.triggerBodyWheelEvent)
@@ -1900,6 +1952,7 @@ export default {
 
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const $xeGrid = $xeTable.$xeGrid
+    const $xeGantt = $xeTable.$xeGantt
     const props = $xeTable
     const slots = $xeTable.$scopedSlots
     const reactData = $xeTable as unknown as TableReactData
@@ -2039,57 +2092,69 @@ export default {
             })
           ]
         : []),
-      /**
-       * 行高线
-       */
       h('div', {
-        key: 'trl',
-        ref: 'refRowResizeBar',
-        class: 'vxe-table--resizable-row-bar'
-      }, resizableOpts.showDragTip
-        ? [
-            h('div', {
-              class: 'vxe-table--resizable-number-tip'
-            })
-          ]
-        : []),
-      /**
-       * 加载中
-       */
-      VxeUILoadingComponent
-        ? h(VxeUILoadingComponent, {
-          key: 'lg',
-          class: 'vxe-table--loading',
-          props: {
-            value: currLoading,
-            icon: loadingOpts.icon,
-            text: loadingOpts.text
-          },
-          scopedSlots: loadingSlot
-            ? {
-                default: () => $xeTable.callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, loading: currLoading }, h)
+        key: 'ttw'
+      }, [
+        h('div', {
+          ref: 'refTeleportWrapper'
+        }, [
+          /**
+           * 行高线
+           */
+          h('div', {
+            key: 'trl',
+            ref: 'refRowResizeBar',
+            class: 'vxe-table--resizable-row-bar'
+          }, resizableOpts.showDragTip
+            ? [
+                h('div', {
+                  class: 'vxe-table--resizable-number-tip'
+                })
+              ]
+            : []),
+          /**
+           * 自定义列
+           */
+          initStore.custom
+            ? h(TableCustomPanelComponent, {
+              key: 'cs',
+              ref: 'refTableCustom',
+              props: {
+                customStore
               }
-            : {}
-        })
-        : loadingSlot
-          ? h('div', {
-            class: ['vxe-loading--custom-wrapper', {
-              'is--visible': currLoading
-            }]
-          }, $xeTable.callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, loading: currLoading }, h))
-          : renderEmptyElement($xeTable),
-      /**
-       * 自定义列
-       */
-      initStore.custom
-        ? h(TableCustomPanelComponent, {
-          key: 'cs',
-          ref: 'refTableCustom',
-          props: {
-            customStore
-          }
-        })
-        : renderEmptyElement($xeTable),
+            })
+            : renderEmptyElement($xeTable),
+          /**
+           * 加载中
+           */
+          VxeUILoadingComponent
+            ? h(VxeUILoadingComponent, {
+              key: 'lg',
+              class: 'vxe-table--loading',
+              props: {
+                value: currLoading,
+                icon: loadingOpts.icon,
+                text: loadingOpts.text
+              },
+              scopedSlots: loadingSlot
+                ? {
+                    default: () => $xeTable.callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, loading: currLoading }, h)
+                  }
+                : {}
+            })
+            : loadingSlot
+              ? h('div', {
+                class: ['vxe-loading--custom-wrapper', {
+                  'is--visible': currLoading
+                }]
+              }, $xeTable.callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, loading: currLoading }, h))
+              : renderEmptyElement($xeTable),
+          /**
+           * 拖拽提示
+           */
+          renderDragTip(h, this)
+        ])
+      ]),
       /**
        * 筛选
        */
@@ -2127,8 +2192,8 @@ export default {
         })
         : renderEmptyElement($xeTable),
       /**
-         * 快捷菜单
-         */
+       * 快捷菜单
+       */
       isMenu
         ? h(TableMenuPanelComponent, {
           key: 'tm',
@@ -2139,10 +2204,6 @@ export default {
           }
         })
         : renderEmptyElement($xeTable),
-      /**
-       * 拖拽提示
-       */
-      renderDragTip(h, this),
       h('div', {}, [
         /**
          * 提示相关

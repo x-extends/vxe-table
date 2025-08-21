@@ -1,25 +1,33 @@
 import XEUtils from 'xe-utils'
 import { getColumnList } from '../../src/util'
 
-import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeGridConstructor, VxeTableDefines, GridPrivateMethods, TableReactData, TableInternalData } from '../../../../types'
+import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, TableReactData, TableInternalData } from '../../../../types'
 
 function calcMaxHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const $xeGantt = $xeTable.$xeGantt
   const reactData = $xeTable as unknown as TableReactData
 
   const { customStore } = reactData
-  const el = $xeTable.$refs.refElem as HTMLDivElement
+  let wrapperEl = $xeTable.$refs.refElem as HTMLDivElement
   // 判断面板不能大于表格高度
   let tableHeight = 0
-  if (el) {
-    tableHeight = el.clientHeight - 28
+  if ($xeGantt) {
+    const ganttContainerElem = $xeGantt.$refs.refGanttContainerElem as HTMLDivElement
+    if (ganttContainerElem) {
+      wrapperEl = ganttContainerElem
+    }
+  }
+  if (wrapperEl) {
+    tableHeight = wrapperEl.clientHeight - 28
   }
   customStore.maxHeight = Math.max(88, tableHeight)
 }
 
 function emitCustomEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, type: VxeTableDefines.CustomType, evnt: Event) {
-  const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+  const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
 
-  const comp = $xeGrid || $xeTable
+  const comp = $xeGrid || $xeGantt || $xeTable
   comp.dispatchEvent('custom', { type }, evnt)
 }
 
@@ -271,9 +279,10 @@ export default {
     },
     emitCustomEvent (type: any, evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-      const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+      const $xeGrid = $xeTable.$xeGrid
+      const $xeGantt = $xeTable.$xeGantt
 
-      const comp = $xeGrid || $xeTable
+      const comp = $xeGrid || $xeGantt || $xeTable
       comp.dispatchEvent('custom', { type }, evnt)
     },
     triggerCustomEvent (evnt: any) {

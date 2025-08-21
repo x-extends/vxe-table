@@ -212,10 +212,13 @@ function getBodyLabelData ($xeTable: VxeTableConstructor, opts: VxeTablePropType
 }
 
 function getExportData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions) {
+  const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
+
   const { columns, dataFilterMethod } = opts
   let datas = opts.data
   if (dataFilterMethod) {
-    datas = datas.filter((row, index) => dataFilterMethod({ $table: $xeTable, row, $rowIndex: index }))
+    datas = datas.filter((row, index) => dataFilterMethod({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, row, $rowIndex: index }))
   }
   return getBodyLabelData($xeTable, opts, columns, datas)
 }
@@ -255,8 +258,11 @@ function getFooterCellValue ($xeTable: any, opts: VxeTablePropTypes.ExportHandle
 }
 
 function getFooterData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, footerTableData: any[]) {
+  const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
+
   const { footerFilterMethod } = opts
-  return footerFilterMethod ? footerTableData.filter((items: any, index: any) => footerFilterMethod({ $table: $xeTable, items, $rowIndex: index })) : footerTableData
+  return footerFilterMethod ? footerTableData.filter((items: any, index: any) => footerFilterMethod({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, items, $rowIndex: index })) : footerTableData
 }
 
 function getCsvCellTypeLabel (column: any, cellValue: any) {
@@ -599,11 +605,12 @@ function clearColumnConvert (columns: any) {
 
 function handleExport ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions) {
   const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
 
   const { remote, columns, colgroups, exportMethod, afterExportMethod } = opts
   return new Promise(resolve => {
     if (remote) {
-      const params = { options: opts, $table: $xeTable, $grid: $xeGrid }
+      const params = { options: opts, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }
       resolve(exportMethod ? exportMethod(params) : params)
     } else {
       const datas = getExportData($xeTable, opts)
@@ -617,7 +624,7 @@ function handleExport ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, o
     clearColumnConvert(columns)
     if (!opts.print) {
       if (afterExportMethod) {
-        afterExportMethod({ status: true, options: opts, $table: $xeTable, $grid: $xeGrid })
+        afterExportMethod({ status: true, options: opts, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
       }
     }
     return Object.assign({ status: true }, params)
@@ -625,7 +632,7 @@ function handleExport ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, o
     clearColumnConvert(columns)
     if (!opts.print) {
       if (afterExportMethod) {
-        afterExportMethod({ status: false, options: opts, $table: $xeTable, $grid: $xeGrid })
+        afterExportMethod({ status: false, options: opts, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
       }
     }
     const params = { status: false }
@@ -995,6 +1002,8 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
   const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
+  const $xeGGWrapper = $xeGrid || $xeGantt
 
   const { treeConfig, showHeader, showFooter } = props
   const { initStore, isGroup, footerTableData, exportStore, exportParams } = reactData
@@ -1003,7 +1012,7 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
   const hasTree = treeConfig
   const customOpts = $xeTable.computeCustomOpts
   const selectRecords = $xeTable.getCheckboxRecords()
-  const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : {}
+  const proxyOpts = $xeGGWrapper ? $xeGGWrapper.computeProxyOpts : {}
   const hasFooter = !!footerTableData.length
   const hasMerge = !!(mergeBodyList.length || mergeFooterList.length)
   const defOpts = Object.assign({
@@ -1078,7 +1087,8 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
       exportParams.filename = filename({
         options: defOpts,
         $table: $xeTable,
-        $grid: $xeGrid
+        $grid: $xeGrid,
+        $gantt: $xeGantt
       })
     } else {
       exportParams.filename = `${filename}`
@@ -1089,7 +1099,8 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
       exportParams.sheetName = sheetName({
         options: defOpts,
         $table: $xeTable,
-        $grid: $xeGrid
+        $grid: $xeGrid,
+        $gantt: $xeGantt
       })
     } else {
       exportParams.sheetName = `${sheetName}`
@@ -1178,13 +1189,14 @@ export default {
       const internalData = $xeTable as unknown as TableInternalData
       const $xeGrid = $xeTable.$xeGrid
       const $xeGantt = $xeTable.$xeGantt
+      const $xeGGWrapper = $xeGrid || $xeGantt
 
       const { treeConfig, showHeader, showFooter } = props
       const { isGroup } = reactData
       const { tableFullColumn, afterFullData, afterTreeFullData, collectColumn, mergeBodyList, mergeFooterList } = internalData
       const exportOpts = $xeTable.computeExportOpts
       const treeOpts = $xeTable.computeTreeOpts
-      const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : {}
+      const proxyOpts = $xeGGWrapper ? $xeGGWrapper.computeProxyOpts : {}
       const hasMerge = !!(mergeBodyList.length || mergeFooterList.length)
       const opts = Object.assign({
         message: true,
@@ -1285,7 +1297,7 @@ export default {
             children: 'childNodes',
             mapChildren: '_children'
           }),
-          (column, index) => isColumnInfo(column) && (!columnFilterMethod || columnFilterMethod({ $table: $xeTable, column: column as any, $columnIndex: index })),
+          (column, index) => isColumnInfo(column) && (!columnFilterMethod || columnFilterMethod({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, column: column as any, $columnIndex: index })),
           {
             children: '_children',
             mapChildren: 'childNodes',
@@ -1293,7 +1305,7 @@ export default {
           }
         )
       } else {
-        groups = XEUtils.searchTree(isGroup ? collectColumn : tableFullColumn, (column, index) => column.visible && (!columnFilterMethod || columnFilterMethod({ $table: $xeTable, column, $columnIndex: index })), { children: 'children', mapChildren: 'childNodes', original: true })
+        groups = XEUtils.searchTree(isGroup ? collectColumn : tableFullColumn, (column, index) => column.visible && (!columnFilterMethod || columnFilterMethod({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, column, $columnIndex: index })), { children: 'children', mapChildren: 'childNodes', original: true })
       }
       // 获取所有列
       const cols: VxeTableDefines.ColumnInfo[] = []
@@ -1311,7 +1323,8 @@ export default {
           handleOptions.filename = filename({
             options: opts,
             $table: $xeTable,
-            $grid: $xeGrid
+            $grid: $xeGrid,
+            $gantt: $xeGantt
           })
         } else {
           handleOptions.filename = `${filename}`
@@ -1326,7 +1339,8 @@ export default {
           handleOptions.sheetName = sheetName({
             options: opts,
             $table: $xeTable,
-            $grid: $xeGrid
+            $grid: $xeGrid,
+            $gantt: $xeGantt
           })
         } else {
           handleOptions.sheetName = `${sheetName}`
@@ -1348,7 +1362,7 @@ export default {
 
       if (!handleOptions.print) {
         if (beforeExportMethod) {
-          beforeExportMethod({ options: handleOptions, $table: $xeTable, $grid: $xeGrid })
+          beforeExportMethod({ options: handleOptions, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
         }
       }
 
@@ -1361,13 +1375,13 @@ export default {
             handleOptions.data = selectRecords
           }
         } else if (mode === 'all') {
-          if (!$xeGrid) {
+          if (!$xeGGWrapper) {
             errLog('vxe.error.errProp', ['all', 'mode=current,selected'])
           }
 
-          if ($xeGrid && !handleOptions.remote) {
-            const gridReactData = $xeGrid as unknown as GridReactData
-            const proxyOpts = $xeGrid.computeProxyOpts
+          if ($xeGGWrapper && !handleOptions.remote) {
+            const gridReactData = $xeGGWrapper as unknown as GridReactData
+            const proxyOpts = $xeGGWrapper.computeProxyOpts
             const { sortData } = gridReactData
             const { beforeQueryAll, afterQueryAll, ajax = {} } = proxyOpts
             const resConfigs = proxyOpts.response || proxyOpts.props || {}
@@ -1467,11 +1481,13 @@ export default {
     _print (options?: VxeTablePropTypes.PrintConfig) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const $xeGrid = $xeTable.$xeGrid
+      const $xeGantt = $xeTable.$xeGantt
 
+      const printOpts = $xeTable.computePrintOpts
       const opts = Object.assign({
         original: false
         // beforePrintMethod
-      }, this.printOpts, options, {
+      }, printOpts, options, {
         type: 'html',
         download: false,
         remote: false,
@@ -1485,7 +1501,8 @@ export default {
           printTitle = sheetName({
             options: opts,
             $table: $xeTable,
-            $grid: $xeGrid
+            $grid: $xeGrid,
+            $gantt: $xeGantt
           })
         } else {
           printTitle = `${sheetName}`
@@ -1511,7 +1528,9 @@ export default {
                         html,
                         content: html,
                         options: opts,
-                        $table: $xeTable
+                        $table: $xeTable,
+                        $grid: $xeGrid,
+                        $gantt: $xeGantt
                       })
                     }
                   : undefined
@@ -1530,7 +1549,9 @@ export default {
                           html,
                           content: html,
                           options: opts,
-                          $table: $xeTable
+                          $table: $xeTable,
+                          $grid: $xeGrid,
+                          $gantt: $xeGantt
                         })
                       }
                     : undefined

@@ -2,7 +2,7 @@ import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getClass } from '../../ui/src/utils'
-import { getCellHeight, convertHeaderColumnToRows } from './util'
+import { getCalcHeight, convertHeaderColumnToRows } from './util'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes, TableReactData, TableInternalData, VxeComponentStyleType } from '../../../types'
 
@@ -14,6 +14,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
   const tableProps = $xeTable
   const tableReactData = $xeTable as unknown as TableReactData
   const tableInternalData = $xeTable as unknown as TableInternalData
@@ -28,7 +29,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
   const cellOpts = $xeTable.computeCellOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const headerCellOpts = $xeTable.computeHeaderCellOpts
-  const currCellHeight = getCellHeight(headerCellOpts.height) || defaultRowHeight
+  const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
   const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
   return cols.map((column: any, $columnIndex: any) => {
     const { type, showHeaderOverflow, headerAlign, align, filters, headerClassName, editRender, cellRender } = column
@@ -54,9 +55,12 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     }
     const columnIndex = colRest.index
     const _columnIndex = colRest._index
-    const cellParams = {
+    const cellParams: VxeTableDefines.CellRenderHeaderParams & {
+      $table: VxeTableConstructor & VxeTablePrivateMethods
+    } = {
       $table: $xeTable,
       $grid: $xeGrid,
+      $gantt: $xeGantt,
       $rowIndex,
       column,
       columnIndex,

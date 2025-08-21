@@ -56,6 +56,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
   inject: {
     $xeGrid: {
       default: null
+    },
+    $xeGantt: {
+      default: null
     }
   },
   data () {
@@ -76,6 +79,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     ...({} as {
       computeSize(): VxeComponentSizeType
       $xeGrid(): (VxeGridConstructor & GridPrivateMethods) | null
+      $xeGantt(): any
     }),
     computeRefreshOpts () {
       const $xeToolbar = this
@@ -212,6 +216,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const $xeToolbar = this
       const reactData = $xeToolbar.reactData
       const $xeGrid = $xeToolbar.$xeGrid
+      const $xeGantt = $xeToolbar.$xeGantt
+      const $xeGGWrapper = $xeGrid || $xeGantt
 
       const { isRefresh } = reactData
       const refreshOpts = $xeToolbar.computeRefreshOpts
@@ -226,9 +232,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
           } catch (e) {
             reactData.isRefresh = false
           }
-        } else if ($xeGrid) {
+        } else if ($xeGGWrapper) {
           reactData.isRefresh = true
-          $xeGrid.triggerToolbarCommitEvent({ code: refreshOpts.code || 'reload' }, $event).catch((e) => e).then(() => {
+          $xeGGWrapper.triggerToolbarCommitEvent({ code: refreshOpts.code || 'reload' }, $event).catch(() => {}).then(() => {
             reactData.isRefresh = false
           })
         }
@@ -237,9 +243,11 @@ export default /* define-vxe-component start */ defineVxeComponent({
     zoomEvent ({ $event }: any) {
       const $xeToolbar = this
       const $xeGrid = $xeToolbar.$xeGrid
+      const $xeGantt = $xeToolbar.$xeGantt
+      const $xeGGWrapper = $xeGrid || $xeGantt
 
-      if ($xeGrid) {
-        $xeGrid.triggerZoomEvent($event)
+      if ($xeGGWrapper) {
+        $xeGGWrapper.triggerZoomEvent($event)
       } else {
         warnLog('vxe.error.notProp', ['zoom'])
       }
@@ -356,6 +364,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const $xeToolbar = this
       const internalData = $xeToolbar.internalData
       const $xeGrid = $xeToolbar.$xeGrid
+      const $xeGantt = $xeToolbar.$xeGantt
+      const $xeGGWrapper = $xeGrid || $xeGantt
 
       const { $event } = eventParams
       const { connectTable } = internalData
@@ -363,11 +373,11 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const { code } = item
       if (code) {
         $xeToolbar.handleDefaultCodeEvent(eventParams, item, () => {
-          if ($xeGrid) {
-            $xeGrid.triggerToolbarBtnEvent(item, $event)
+          if ($xeGGWrapper) {
+            $xeGGWrapper.triggerToolbarBtnEvent(item, $event)
           } else {
             const gCommandOpts = commands.get(code)
-            const params = { code, button: item, $table: $table as VxeTableConstructor, $grid: $xeGrid, $gantt: null, $event }
+            const params = { code, button: item, $table: $table as VxeTableConstructor, $grid: $xeGrid, $gantt: $xeGantt, $event }
             if (gCommandOpts) {
               const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
               if (tCommandMethod) {
@@ -385,6 +395,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const $xeToolbar = this
       const internalData = $xeToolbar.internalData
       const $xeGrid = $xeToolbar.$xeGrid
+      const $xeGantt = $xeToolbar.$xeGantt
+      const $xeGGWrapper = $xeGrid || $xeGantt
 
       const { $event } = eventParams
       const { connectTable } = internalData
@@ -392,11 +404,11 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const { code } = item
       if (code) {
         $xeToolbar.handleDefaultCodeEvent(eventParams, item, () => {
-          if ($xeGrid) {
-            $xeGrid.triggerToolbarTolEvent(item, $event)
+          if ($xeGGWrapper) {
+            $xeGGWrapper.triggerToolbarTolEvent(item, $event)
           } else {
             const gCommandOpts = commands.get(code)
-            const params = { code, button: null, tool: item, $table: $table as VxeTableConstructor, $grid: $xeGrid, $gantt: null, $event }
+            const params = { code, button: null, tool: item, $table: $table as VxeTableConstructor, $grid: $xeGrid, $gantt: $xeGantt, $event }
             if (gCommandOpts) {
               const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
               if (tCommandMethod) {
@@ -467,6 +479,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const slots = $xeToolbar.$scopedSlots
       const internalData = $xeToolbar.internalData
       const $xeGrid = $xeToolbar.$xeGrid
+      const $xeGantt = $xeToolbar.$xeGantt
 
       const { buttons } = props
       const { connectTable } = internalData
@@ -475,7 +488,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const buttonSuffixSlot = slots.buttonSuffix || slots['button-suffix']
       const btnVNs: VxeComponentSlotType[] = []
       if (buttonPrefixSlot) {
-        btnVNs.push(...getSlotVNs(buttonPrefixSlot.call($xeToolbar, { buttons: buttons || [], $grid: $xeGrid, $table: $table })))
+        btnVNs.push(...getSlotVNs(buttonPrefixSlot.call($xeToolbar, { buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })))
       }
       if (buttons) {
         buttons.forEach((item) => {
@@ -484,7 +497,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
             const compConf = buttonRender ? renderer.get(buttonRender.name) : null
             if (buttonRender && compConf && compConf.renderToolbarButton) {
               const toolbarButtonClassName = compConf.toolbarButtonClassName
-              const params = { $grid: $xeGrid, $table: $table!, button: item }
+              const params = { $grid: $xeGrid, $gantt: $xeGantt, $table: $table!, button: item }
               btnVNs.push(
                 h('span', {
                   class: ['vxe-button--item', toolbarButtonClassName ? (XEUtils.isFunction(toolbarButtonClassName) ? toolbarButtonClassName(params) : toolbarButtonClassName) : '']
@@ -529,7 +542,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         })
       }
       if (buttonSuffixSlot) {
-        btnVNs.push(...getSlotVNs(buttonSuffixSlot.call($xeToolbar, { buttons: buttons || [], $grid: $xeGrid, $table: $table })))
+        btnVNs.push(...getSlotVNs(buttonSuffixSlot.call($xeToolbar, { buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })))
       }
       return btnVNs
     },
@@ -545,6 +558,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const slots = $xeToolbar.$scopedSlots
       const internalData = $xeToolbar.internalData
       const $xeGrid = $xeToolbar.$xeGrid
+      const $xeGantt = $xeToolbar.$xeGantt
 
       const { tools } = props
       const { connectTable } = internalData
@@ -553,7 +567,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const toolSuffixSlot = slots.toolSuffix || slots['tool-suffix']
       const btnVNs: VxeComponentSlotType[] = []
       if (toolPrefixSlot) {
-        btnVNs.push(...getSlotVNs(toolPrefixSlot.call($xeToolbar, { tools: tools || [], $grid: $xeGrid, $table: $table })))
+        btnVNs.push(...getSlotVNs(toolPrefixSlot.call($xeToolbar, { tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })))
       }
       if (tools) {
         tools.forEach((item, tIndex) => {
@@ -563,7 +577,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
             const compConf = toolRender ? renderer.get(rdName) : null
             if (toolRender && compConf && compConf.renderToolbarTool) {
               const toolbarToolClassName = compConf.toolbarToolClassName
-              const params = { $grid: $xeGrid, $table: $table!, tool: item }
+              const params = { $grid: $xeGrid, $gantt: $xeGantt, $table: $table!, tool: item }
               btnVNs.push(
                 h('span', {
                   key: rdName as string,
@@ -610,7 +624,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         })
       }
       if (toolSuffixSlot) {
-        btnVNs.push(...getSlotVNs(toolSuffixSlot.call($xeToolbar, { tools: tools || [], $grid: $xeGrid, $table: $table })))
+        btnVNs.push(...getSlotVNs(toolSuffixSlot.call($xeToolbar, { tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })))
       }
       return btnVNs
     },
@@ -705,15 +719,17 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       const $xeToolbar = this
       const $xeGrid = $xeToolbar.$xeGrid
+      const $xeGantt = $xeToolbar.$xeGantt
+      const $xeGGWrapper = $xeGrid || $xeGantt
 
       const zoomOpts = $xeToolbar.computeZoomOpts
-      return $xeGrid && VxeUIButtonComponent
+      return $xeGGWrapper && VxeUIButtonComponent
         ? h(VxeUIButtonComponent, {
           key: 'zoom',
           props: {
             circle: true,
-            icon: $xeGrid.isMaximized() ? (zoomOpts.iconOut || getIcon().TOOLBAR_TOOLS_MINIMIZE) : (zoomOpts.iconIn || getIcon().TOOLBAR_TOOLS_FULLSCREEN),
-            title: getI18n(`vxe.toolbar.zoom${$xeGrid.isMaximized() ? 'Out' : 'In'}`)
+            icon: $xeGGWrapper.isMaximized() ? (zoomOpts.iconOut || getIcon().TOOLBAR_TOOLS_MINIMIZE) : (zoomOpts.iconIn || getIcon().TOOLBAR_TOOLS_FULLSCREEN),
+            title: getI18n(`vxe.toolbar.zoom${$xeGGWrapper.isMaximized() ? 'Out' : 'In'}`)
           },
           on: {
             click: $xeToolbar.zoomEvent
@@ -763,6 +779,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const slots = $xeToolbar.$scopedSlots
       const internalData = $xeToolbar.internalData
       const $xeGrid = $xeToolbar.$xeGrid
+      const $xeGantt = $xeToolbar.$xeGantt
+      const $xeGGWrapper = $xeGrid || $xeGantt
 
       const { perfect, loading, refresh, zoom, custom, className } = props
       const { connectTable } = internalData
@@ -780,10 +798,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }, [
         h('div', {
           class: 'vxe-buttons--wrapper'
-        }, buttonsSlot ? buttonsSlot({ $grid: $xeGrid, $table: $table }) : $xeToolbar.renderLeftBtns(h)),
+        }, buttonsSlot ? buttonsSlot({ $grid: $xeGrid, $gantt: $xeGantt, $table: $table }) : $xeToolbar.renderLeftBtns(h)),
         h('div', {
           class: 'vxe-tools--wrapper'
-        }, toolsSlot ? toolsSlot({ $grid: $xeGrid, $table: $table }) : $xeToolbar.renderRightTools(h)),
+        }, toolsSlot ? toolsSlot({ $grid: $xeGrid, $gantt: $xeGantt, $table: $table }) : $xeToolbar.renderRightTools(h)),
         h('div', {
           class: 'vxe-tools--operate'
         }, [
@@ -791,7 +809,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           props.export ? $xeToolbar.renderToolExport(h) : renderEmptyElement($xeToolbar),
           props.print ? $xeToolbar.renderToolPrint(h) : renderEmptyElement($xeToolbar),
           refresh ? $xeToolbar.renderToolRefresh(h) : renderEmptyElement($xeToolbar),
-          zoom && $xeGrid ? $xeToolbar.renderToolZoom(h) : renderEmptyElement($xeToolbar),
+          zoom && $xeGGWrapper ? $xeToolbar.renderToolZoom(h) : renderEmptyElement($xeToolbar),
           custom ? $xeToolbar.renderToolCustom(h) : renderEmptyElement($xeToolbar)
         ])
       ])
@@ -801,12 +819,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
     const $xeToolbar = this
     const props = $xeToolbar
     const $xeGrid = $xeToolbar.$xeGrid
+    const $xeGantt = $xeToolbar.$xeGantt
+    const $xeGGWrapper = $xeGrid || $xeGantt
 
     $xeToolbar.$nextTick(() => {
       const refreshOpts = $xeToolbar.computeRefreshOpts
       const $xeTable = $xeToolbar.fintTable() as any
       const queryMethod = refreshOpts.queryMethod || refreshOpts.query
-      if (props.refresh && !$xeGrid && !queryMethod) {
+      if (props.refresh && !$xeGGWrapper && !queryMethod) {
         warnLog('vxe.error.notFunc', ['queryMethod'])
       }
 

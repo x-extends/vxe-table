@@ -4,7 +4,7 @@ import { toFilters } from './util'
 import { getFuncText } from '../../ui/src/utils'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeTableConstructor, VxeTablePrivateMethods, VxeGridConstructor, GridPrivateMethods } from '../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
 const { getI18n, formats } = VxeUI
 
@@ -12,7 +12,9 @@ export class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   constructor ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
     const tableProps = $xeTable
-    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
+    const $xeGrid = $xeTable.$xeGrid
+    const $xeGantt = $xeTable.$xeGantt
+    const $xeGGWrapper = $xeGrid || $xeGantt
 
     const { field, editRender } = _vm
 
@@ -174,8 +176,10 @@ export class ColumnInfo {
       // 单元格插槽，只对 grid 有效
       slots: _vm.slots
     })
-    if (proxyOpts && proxyOpts.beforeColumn) {
-      proxyOpts.beforeColumn({ $grid: $xeGrid, column: this })
+    if ($xeGGWrapper) {
+      if (proxyOpts && proxyOpts.beforeColumn) {
+        proxyOpts.beforeColumn({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, column: this })
+      }
     }
   }
 
