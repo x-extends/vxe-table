@@ -163,6 +163,7 @@ export default defineVxeComponent({
 
     const renderVN = () => {
       const $xeGrid = $xeTable.xeGrid
+      const $xeGantt = $xeTable.xeGantt
 
       const { defaultOptions, storeData } = props
       const { isAll: isAllChecked, isIndeterminate: isAllIndeterminate } = reactData
@@ -245,6 +246,7 @@ export default defineVxeComponent({
             const params = {
               $table: $xeTable,
               $grid: $xeGrid,
+              $gantt: $xeGantt,
               options: defaultOptions,
               columns,
               params: defaultOptions.params as any
@@ -502,6 +504,7 @@ export default defineVxeComponent({
             const params = {
               $table: $xeTable,
               $grid: $xeGrid,
+              $gantt: $xeGantt,
               options: defaultOptions,
               columns,
               params: defaultOptions.params as any

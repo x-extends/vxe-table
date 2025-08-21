@@ -62,6 +62,10 @@ export default defineVxeComponent({
     // 使用已安装的组件，如果未安装则不渲染
     const VxeUIButtonComponent = VxeUI.getComponent('VxeButton')
 
+    const $xeGrid = inject<(VxeGridConstructor & GridPrivateMethods) | null>('$xeGrid', null)
+    const $xeGantt = inject('$xeGantt', null)
+    const $xeGGWrapper = $xeGrid || $xeGantt
+
     const { computeSize } = useFns.useSize(props)
 
     const reactData = reactive<ToolbarReactData>({
@@ -88,8 +92,6 @@ export default defineVxeComponent({
     } as unknown as VxeToolbarConstructor
 
     let toolbarMethods = {} as ToolbarMethods
-
-    const $xeGrid = inject<(VxeGridConstructor & GridPrivateMethods) | null>('$xeGrid', null)
 
     const computeRefreshOpts = computed(() => {
       return Object.assign({}, XEUtils.clone(getConfig().toolbar.refresh, true), props.refreshOptions, props.refresh) as VxeToolbarPropTypes.RefreshOptions
@@ -187,9 +189,9 @@ export default defineVxeComponent({
           } catch (e) {
             reactData.isRefresh = false
           }
-        } else if ($xeGrid) {
+        } else if ($xeGGWrapper) {
           reactData.isRefresh = true
-          $xeGrid.triggerToolbarCommitEvent({ code: refreshOpts.code || 'reload' }, $event).catch((e) => e).then(() => {
+          $xeGGWrapper.triggerToolbarCommitEvent({ code: refreshOpts.code || 'reload' }, $event).catch(() => {}).then(() => {
             reactData.isRefresh = false
           })
         }
@@ -197,8 +199,8 @@ export default defineVxeComponent({
     }
 
     const zoomEvent: VxeButtonEvents.Click = ({ $event }) => {
-      if ($xeGrid) {
-        $xeGrid.triggerZoomEvent($event)
+      if ($xeGGWrapper) {
+        $xeGGWrapper.triggerZoomEvent($event)
       } else {
         warnLog('vxe.error.notProp', ['zoom'])
       }
@@ -306,11 +308,11 @@ export default defineVxeComponent({
       const { code } = item
       if (code) {
         handleDefaultCodeEvent(eventParams, item, () => {
-          if ($xeGrid) {
-            $xeGrid.triggerToolbarBtnEvent(item, $event)
+          if ($xeGGWrapper) {
+            $xeGGWrapper.triggerToolbarBtnEvent(item, $event)
           } else {
             const gCommandOpts = commands.get(code)
-            const params = { code, button: item, $table: $table as VxeTableConstructor, $grid: $xeGrid, $gantt: null, $event }
+            const params = { code, button: item, $table: $table as VxeTableConstructor, $grid: $xeGrid, $gantt: $xeGantt, $event }
             if (gCommandOpts) {
               const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
               if (tCommandMethod) {
@@ -332,11 +334,11 @@ export default defineVxeComponent({
       const { code } = item
       if (code) {
         handleDefaultCodeEvent(eventParams, item, () => {
-          if ($xeGrid) {
-            $xeGrid.triggerToolbarTolEvent(item, $event)
+          if ($xeGGWrapper) {
+            $xeGGWrapper.triggerToolbarTolEvent(item, $event)
           } else {
             const gCommandOpts = commands.get(code)
-            const params = { code, button: null, tool: item, $table: $table as VxeTableConstructor, $grid: $xeGrid, $gantt: null, $event }
+            const params = { code, button: null, tool: item, $table: $table as VxeTableConstructor, $grid: $xeGrid, $gantt: $xeGantt, $event }
             if (gCommandOpts) {
               const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
               if (tCommandMethod) {
@@ -410,7 +412,7 @@ export default defineVxeComponent({
       const buttonSuffixSlot = slots.buttonSuffix || slots['button-suffix']
       const btnVNs: VxeComponentSlotType[] = []
       if (buttonPrefixSlot) {
-        btnVNs.push(...getSlotVNs(buttonPrefixSlot({ buttons: buttons || [], $grid: $xeGrid, $table: $table })))
+        btnVNs.push(...getSlotVNs(buttonPrefixSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })))
       }
       if (buttons) {
         buttons.forEach((item, index) => {
@@ -419,7 +421,7 @@ export default defineVxeComponent({
             const compConf = buttonRender ? renderer.get(buttonRender.name) : null
             if (buttonRender && compConf && compConf.renderToolbarButton) {
               const toolbarButtonClassName = compConf.toolbarButtonClassName
-              const params = { $grid: $xeGrid, $table: $table!, button: item }
+              const params = { $grid: $xeGrid, $gantt: $xeGantt, $table: $table!, button: item }
               btnVNs.push(
                 h('span', {
                   key: `br${item.code || index}`,
@@ -461,7 +463,7 @@ export default defineVxeComponent({
         })
       }
       if (buttonSuffixSlot) {
-        btnVNs.push(...getSlotVNs(buttonSuffixSlot({ buttons: buttons || [], $grid: $xeGrid, $table: $table })))
+        btnVNs.push(...getSlotVNs(buttonSuffixSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })))
       }
       return btnVNs
     }
@@ -477,7 +479,7 @@ export default defineVxeComponent({
       const toolSuffixSlot = slots.toolSuffix || slots['tool-suffix']
       const btnVNs: VxeComponentSlotType[] = []
       if (toolPrefixSlot) {
-        btnVNs.push(...getSlotVNs(toolPrefixSlot({ tools: tools || [], $grid: $xeGrid, $table: $table })))
+        btnVNs.push(...getSlotVNs(toolPrefixSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })))
       }
       if (tools) {
         tools.forEach((item, tIndex) => {
@@ -487,7 +489,7 @@ export default defineVxeComponent({
             const compConf = toolRender ? renderer.get(rdName) : null
             if (toolRender && compConf && compConf.renderToolbarTool) {
               const toolbarToolClassName = compConf.toolbarToolClassName
-              const params = { $grid: $xeGrid, $table: $table!, tool: item }
+              const params = { $grid: $xeGrid, $gantt: $xeGantt, $table: $table!, tool: item }
               btnVNs.push(
                 h('span', {
                   key: rdName as string,
@@ -529,7 +531,7 @@ export default defineVxeComponent({
         })
       }
       if (toolSuffixSlot) {
-        btnVNs.push(...getSlotVNs(toolSuffixSlot({ tools: tools || [], $grid: $xeGrid, $table: $table })))
+        btnVNs.push(...getSlotVNs(toolSuffixSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })))
       }
       return btnVNs
     }
@@ -588,12 +590,12 @@ export default defineVxeComponent({
 
     const renderToolZoom = () => {
       const zoomOpts = computeZoomOpts.value
-      return $xeGrid && VxeUIButtonComponent
+      return $xeGGWrapper && VxeUIButtonComponent
         ? h(VxeUIButtonComponent, {
           key: 'zoom',
           circle: true,
-          icon: $xeGrid.isMaximized() ? (zoomOpts.iconOut || getIcon().TOOLBAR_TOOLS_MINIMIZE) : (zoomOpts.iconIn || getIcon().TOOLBAR_TOOLS_FULLSCREEN),
-          title: getI18n(`vxe.toolbar.zoom${$xeGrid.isMaximized() ? 'Out' : 'In'}`),
+          icon: $xeGGWrapper.isMaximized() ? (zoomOpts.iconOut || getIcon().TOOLBAR_TOOLS_MINIMIZE) : (zoomOpts.iconIn || getIcon().TOOLBAR_TOOLS_FULLSCREEN),
+          title: getI18n(`vxe.toolbar.zoom${$xeGGWrapper.isMaximized() ? 'Out' : 'In'}`),
           onClick: zoomEvent
         })
         : createCommentVNode()
@@ -647,10 +649,10 @@ export default defineVxeComponent({
       }, [
         h('div', {
           class: 'vxe-buttons--wrapper'
-        }, buttonsSlot ? buttonsSlot({ $grid: $xeGrid, $table: $table }) : renderLeftBtns()),
+        }, buttonsSlot ? buttonsSlot({ $grid: $xeGrid, $gantt: $xeGantt, $table: $table }) : renderLeftBtns()),
         h('div', {
           class: 'vxe-tools--wrapper'
-        }, toolsSlot ? toolsSlot({ $grid: $xeGrid, $table: $table }) : renderRightTools()),
+        }, toolsSlot ? toolsSlot({ $grid: $xeGrid, $gantt: $xeGantt, $table: $table }) : renderRightTools()),
         h('div', {
           class: 'vxe-tools--operate'
         }, [
@@ -658,7 +660,7 @@ export default defineVxeComponent({
           props.export ? renderToolExport() : createCommentVNode(),
           props.print ? renderToolPrint() : createCommentVNode(),
           refresh ? renderToolRefresh() : createCommentVNode(),
-          zoom && $xeGrid ? renderToolZoom() : createCommentVNode(),
+          zoom && $xeGGWrapper ? renderToolZoom() : createCommentVNode(),
           custom ? renderToolCustom() : createCommentVNode()
         ])
       ])
@@ -669,7 +671,7 @@ export default defineVxeComponent({
     nextTick(() => {
       const refreshOpts = computeRefreshOpts.value
       const queryMethod = refreshOpts.queryMethod || refreshOpts.query
-      if (props.refresh && !$xeGrid && !queryMethod) {
+      if (props.refresh && !$xeGGWrapper && !queryMethod) {
         warnLog('vxe.error.notFunc', ['queryMethod'])
       }
 

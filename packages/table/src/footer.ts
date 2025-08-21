@@ -46,6 +46,7 @@ export default defineVxeComponent({
 
     const renderRows = (isOptimizeMode: boolean, tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) => {
       const $xeGrid = $xeTable.xeGrid
+      const $xeGantt = $xeTable.xeGantt
 
       const { fixedType } = props
       const { resizable: allResizable, border, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
@@ -87,6 +88,7 @@ export default defineVxeComponent({
         } = {
           $table: $xeTable,
           $grid: $xeGrid,
+          $gantt: $xeGantt,
           row,
           rowIndex: _rowIndex,
           _rowIndex,

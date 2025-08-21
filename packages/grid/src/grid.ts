@@ -1609,6 +1609,7 @@ export default defineVxeComponent({
     $xeGrid.renderVN = renderVN
 
     provide('$xeGrid', $xeGrid)
+    provide('$xeGantt', null)
 
     return $xeGrid
   },

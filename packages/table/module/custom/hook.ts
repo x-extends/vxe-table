@@ -14,14 +14,22 @@ VxeUI.hooks.add('tableCustomModule', {
     const { refElem } = $xeTable.getRefMaps()
 
     const $xeGrid = $xeTable.xeGrid
+    const $xeGantt = $xeTable.xeGantt
 
     const calcMaxHeight = () => {
       const { customStore } = reactData
-      const el = refElem.value
+      let wrapperEl = refElem.value
       // 判断面板不能大于表格高度
       let tableHeight = 0
-      if (el) {
-        tableHeight = el.clientHeight - 28
+      if ($xeGantt) {
+        const { refGanttContainerElem } = $xeGantt.getRefMaps()
+        const ganttContainerElem = refGanttContainerElem.value
+        if (ganttContainerElem) {
+          wrapperEl = ganttContainerElem
+        }
+      }
+      if (wrapperEl) {
+        tableHeight = wrapperEl.clientHeight - 28
       }
       customStore.maxHeight = Math.max(88, tableHeight)
     }
@@ -281,7 +289,7 @@ VxeUI.hooks.add('tableCustomModule', {
     }
 
     const emitCustomEvent = (type: VxeTableDefines.CustomType, evnt: Event) => {
-      const comp = $xeGrid || $xeTable
+      const comp = $xeGrid || $xeGantt || $xeTable
       comp.dispatchEvent('custom', { type }, evnt)
     }
 

@@ -280,11 +280,12 @@ hooks.add('tableMenuModule', {
        */
       ctxMenuLinkEvent (evnt, menu) {
         const $xeGrid = $xeTable.xeGrid
+        const $xeGantt = $xeTable.xeGantt
 
         // 如果一级菜单有配置 code 则允许点击，否则不能点击
         if (!menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
           const gMenuOpts = menus.get(menu.code)
-          const params = Object.assign({}, internalData._currMenuParams, { menu, $table: $xeTable, $grid: $xeGrid, $event: evnt })
+          const params = Object.assign({}, internalData._currMenuParams, { menu, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, $event: evnt })
           const tmMethod = gMenuOpts ? (gMenuOpts.tableMenuMethod || gMenuOpts.menuMethod) : null
           if (tmMethod) {
             tmMethod(params, evnt)

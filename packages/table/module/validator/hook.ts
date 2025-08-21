@@ -463,6 +463,7 @@ hooks.add('tableValidatorModule', {
        */
       validCellRules (validType, row, column, val) {
         const $xeGrid = $xeTable.xeGrid
+        const $xeGantt = $xeTable.xeGantt
 
         const { editRules } = props
         const { field } = column
@@ -486,7 +487,8 @@ hooks.add('tableValidatorModule', {
                     columnIndex: $xeTable.getColumnIndex(column),
                     field: column.field,
                     $table: $xeTable,
-                    $grid: $xeGrid
+                    $grid: $xeGrid,
+                    $gantt: $xeGantt
                   }
                   let customValid: any
                   if (XEUtils.isString(validator)) {

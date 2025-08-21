@@ -122,6 +122,8 @@ export function createInternalData (): TableInternalData {
     // 表尾高度
     tFooterHeight: 0,
 
+    teleportToWrapperElem: null,
+
     inited: false,
     tooltipTimeout: null,
     initStatus: false,

@@ -12,6 +12,8 @@ export class ColumnInfo {
   constructor ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
     const tableProps = $xeTable.props
     const $xeGrid = $xeTable.xeGrid
+    const $xeGantt = $xeTable.xeGantt
+    const $xeGGWrapper = $xeGrid || $xeGantt
 
     const { field, editRender } = _vm
 
@@ -166,11 +168,11 @@ export class ColumnInfo {
       // 单元格插槽，只对 grid 有效
       slots: _vm.slots
     })
-    if ($xeGrid) {
-      const { computeProxyOpts } = $xeGrid.getComputeMaps()
+    if ($xeGGWrapper) {
+      const { computeProxyOpts } = $xeGGWrapper.getComputeMaps()
       const proxyOpts = computeProxyOpts.value
       if (proxyOpts.beforeColumn) {
-        proxyOpts.beforeColumn({ $grid: $xeGrid, column: this })
+        proxyOpts.beforeColumn({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, column: this })
       }
     }
   }

@@ -102,6 +102,7 @@ export default defineVxeComponent({
       items: any[]
     ) => {
       const $xeGrid = $xeTable.xeGrid
+      const $xeGantt = $xeTable.xeGantt
 
       const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, treeConfig, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
       const { tableData, tableColumn, dragRow, overflowX, overflowY, currentColumn, scrollXLoad, scrollYLoad, mergeBodyFlag, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, editStore, isAllOverflow, validErrorMaps } = tableReactData
@@ -162,6 +163,7 @@ export default defineVxeComponent({
       } = {
         $table: $xeTable,
         $grid: $xeGrid,
+        $gantt: $xeGantt,
         isEdit: false,
         seq,
         rowid,
@@ -469,6 +471,7 @@ export default defineVxeComponent({
 
     const renderRows = (fixedType: 'left' | 'right' | '', isOptimizeMode: boolean, tableData: any[], tableColumn: VxeTableDefines.ColumnInfo[]) => {
       const $xeGrid = $xeTable.xeGrid
+      const $xeGantt = $xeTable.xeGantt
 
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
       const { hasFixedColumn, treeExpandedFlag, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, rowExpandHeightFlag, isRowGroupStatus } = tableReactData
@@ -608,8 +611,9 @@ export default defineVxeComponent({
               _columnIndex = colRest._index
             }
             const expandParams: VxeTableDefines.CellRenderDataParams = {
-              $grid: $xeGrid,
               $table: $xeTable,
+              $grid: $xeGrid,
+              $gantt: $xeGantt,
               seq,
               column: expandColumn as VxeTableDefines.ColumnInfo,
               columnIndex,
@@ -697,6 +701,7 @@ export default defineVxeComponent({
     const renderVN = () => {
       const { slots } = tableContext
       const $xeGrid = $xeTable.xeGrid
+      const $xeGantt = $xeTable.xeGantt
 
       const { fixedColumn, fixedType, tableColumn } = props
       const { spanMethod, footerSpanMethod, mouseConfig } = tableProps
@@ -778,7 +783,7 @@ export default defineVxeComponent({
 
       let emptyContent: string | VxeComponentSlotType | VxeComponentSlotType[]
       const emptySlot = slots ? slots.empty : null
-      const emptyParams = { $table: $xeTable, $grid: $xeGrid }
+      const emptyParams = { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }
       if (emptySlot) {
         emptyContent = $xeTable.callSlot(emptySlot, emptyParams)
       } else {

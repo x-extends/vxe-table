@@ -171,6 +171,7 @@ export default defineVxeComponent({
 
     provide('$xeColumn', $xeColumn)
     provide('$xeGrid', null)
+    provide('$xeGantt', null)
 
     return renderVN
   }

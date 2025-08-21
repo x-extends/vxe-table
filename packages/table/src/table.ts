@@ -1,4 +1,4 @@
-import { h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, onMounted } from 'vue'
+import { h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, Teleport, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, onMounted } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey } from '../../ui/src/dom'
@@ -30,6 +30,7 @@ import '../module/custom/hook'
 import '../render'
 
 import type { VxeTooltipInstance, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType } from 'vxe-pc-ui'
+import type { VxeGanttConstructor, VxeGanttPrivateMethods } from 'vxe-gantt'
 import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableEmits, VxeTableProps, VxeColumnPropTypes, VxeTableCustomPanelConstructor } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
@@ -55,6 +56,9 @@ export default defineVxeComponent({
     const VxeUITooltipComponent = VxeUI.getComponent('VxeTooltip')
 
     const $xeTabs = inject<(VxeTabsConstructor & VxeTabsPrivateMethods) | null>('$xeTabs', null)
+    const $xeGrid = inject<(VxeGridConstructor & VxeGridPrivateMethods) | null>('$xeGrid', null)
+    const $xeGantt = inject<(VxeGanttConstructor & VxeGanttPrivateMethods) | null>('$xeGantt', null)
+    const $xeGGWrapper = $xeGrid || $xeGantt
 
     const { computeSize } = useFns.useSize(props)
 
@@ -334,6 +338,8 @@ export default defineVxeComponent({
     const refTableRightBody = ref() as Ref<ComponentPublicInstance>
     const refTableRightFooter = ref() as Ref<ComponentPublicInstance>
 
+    const refTeleportWrapper = ref<HTMLDivElement>()
+
     const refLeftContainer = ref() as Ref<HTMLDivElement>
     const refRightContainer = ref() as Ref<HTMLDivElement>
     const refColResizeBar = ref() as Ref<HTMLDivElement>
@@ -360,15 +366,13 @@ export default defineVxeComponent({
     const refScrollXSpaceElem = ref<HTMLDivElement>()
     const refScrollYSpaceElem = ref<HTMLDivElement>()
 
-    const $xeGrid = inject<(VxeGridConstructor & VxeGridPrivateMethods) | null>('$xeGrid', null)
-    const $xeGantt = inject('$xeGantt', null)
     let $xeToolbar: VxeToolbarConstructor
 
     const computeTableId = computed(() => {
       const { id } = props
       if (id) {
         if (XEUtils.isFunction(id)) {
-          return `${id({ $table: $xeTable, $grid: $xeGrid }) || ''}`
+          return `${id({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }) || ''}`
         }
         return `${id}`
       }
@@ -496,8 +500,18 @@ export default defineVxeComponent({
 
     const computeHeaderCellOpts = computed(() => {
       const headerCellOpts = Object.assign({}, getConfig().table.headerCellConfig, props.headerCellConfig)
+      const defaultRowHeight = computeDefaultRowHeight.value
       const cellOpts = computeCellOpts.value
-      headerCellOpts.height = XEUtils.toNumber(getCalcHeight(headerCellOpts.height || cellOpts.height))
+      let headCellHeight = XEUtils.toNumber(getCalcHeight(headerCellOpts.height || cellOpts.height))
+      if ($xeGantt) {
+        const { computeTaskScaleConfs } = $xeGantt.getComputeMaps()
+        const taskScaleConfs = computeTaskScaleConfs.value
+        if (taskScaleConfs && taskScaleConfs.length > 2) {
+          const ganttMinHeadCellHeight = defaultRowHeight / 2 * taskScaleConfs.length
+          headCellHeight = Math.max(ganttMinHeadCellHeight, headCellHeight)
+        }
+      }
+      headerCellOpts.height = headCellHeight
       return headerCellOpts
     })
 
@@ -2581,7 +2595,7 @@ export default defineVxeComponent({
       if (mouseConfig && mouseOpts.selected && editStore.selected.row && editStore.selected.column) {
         $xeTable.addCellSelectedClass()
       }
-      if ($xeGanttView) {
+      if ($xeGanttView && $xeGanttView.handleUpdateStyle) {
         $xeGanttView.handleUpdateStyle()
       }
       return nextTick()
@@ -3255,7 +3269,7 @@ export default defineVxeComponent({
             handleRecalculateStyle(reFull, reWidth, reHeight)
           )
         }
-        if ($xeGanttView) {
+        if ($xeGanttView && $xeGanttView.handleLazyRecalculate) {
           $xeGanttView.handleLazyRecalculate()
         }
         internalData.rceTimeout = setTimeout(() => {
@@ -3512,6 +3526,7 @@ export default defineVxeComponent({
       }).then(() => {
         computeScrollLoad()
       }).then(() => {
+        const virtualYOpts = computeVirtualYOpts.value
         // 是否启用了虚拟滚动
         if (sYLoad) {
           scrollYStore.endIndex = scrollYStore.visibleSize
@@ -3520,6 +3535,9 @@ export default defineVxeComponent({
         if (sYLoad) {
           if (reactData.expandColumn && expandOpts.mode !== 'fixed') {
             errLog('vxe.error.notConflictProp', ['column.type="expand', 'expand-config.mode="fixed"'])
+          }
+          if (virtualYOpts.mode === 'scroll' && expandOpts.mode === 'fixed') {
+            warnLog('vxe.error.notConflictProp', ['virtual-y-config.mode=scroll', 'expand-config.mode=inside'])
           }
           // if (showOverflow) {
           //   if (!rowOpts.height) {
@@ -3864,6 +3882,7 @@ export default defineVxeComponent({
 
     const updateScrollYStatus = (fullData?: any[]) => {
       const { treeConfig } = props
+      const $xeGanttView = internalData.xeGanttView
       const virtualYOpts = computeVirtualYOpts.value
       const treeOpts = computeTreeOpts.value
       const { transform } = treeOpts
@@ -3871,6 +3890,9 @@ export default defineVxeComponent({
       // 如果gt为0，则总是启用
       const scrollYLoad = (transform || !treeConfig) && !!virtualYOpts.enabled && virtualYOpts.gt > -1 && (virtualYOpts.gt === 0 || virtualYOpts.gt < allList.length)
       reactData.scrollYLoad = scrollYLoad
+      if ($xeGanttView && $xeGanttView.handleUpdateSYStatus) {
+        $xeGanttView.handleUpdateSYStatus(scrollYLoad)
+      }
       return scrollYLoad
     }
 
@@ -4250,7 +4272,7 @@ export default defineVxeComponent({
     }
 
     const dispatchEvent = (type: ValueOf<VxeTableEmits>, params: Record<string, any>, evnt: Event | null) => {
-      emit(type, createEvent(evnt, { $table: $xeTable, $grid: $xeGrid }, params))
+      emit(type, createEvent(evnt, { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }, params))
     }
 
     const handleScrollToRowColumn = (fieldOrColumn: string | VxeTableDefines.ColumnInfo | null, row?: any) => {
@@ -5134,6 +5156,28 @@ export default defineVxeComponent({
         return []
       },
       /**
+       * 只对 tree-config 有效，用于树形结构，获取指定行的层级
+       */
+      getTreeRowLevel (rowOrRowid) {
+        const { treeConfig } = props
+        const { fullAllDataRowIdData } = internalData
+        if (rowOrRowid && treeConfig) {
+          let rowid
+          if (XEUtils.isString(rowOrRowid)) {
+            rowid = rowOrRowid
+          } else {
+            rowid = getRowid($xeTable, rowOrRowid)
+          }
+          if (rowid) {
+            const rest = fullAllDataRowIdData[rowid]
+            if (rest) {
+              return rest.level
+            }
+          }
+        }
+        return -1
+      },
+      /**
        * 只对 tree-config 有效，获取行的父级
        */
       getTreeParentRow (rowOrRowid) {
@@ -5148,7 +5192,9 @@ export default defineVxeComponent({
           }
           if (rowid) {
             const rest = fullAllDataRowIdData[rowid]
-            return rest ? rest.parent : null
+            if (rest) {
+              return rest.parent
+            }
           }
         }
         return null
@@ -5813,7 +5859,7 @@ export default defineVxeComponent({
             XEUtils.arrayEach(el.querySelectorAll(`[rowid="${getRowid($xeTable, row)}"]`), elem => addClass(elem, 'row--current'))
           }
         }
-        if ($xeGanttView) {
+        if ($xeGanttView && $xeGanttView.handleUpdateCurrentRow) {
           $xeGanttView.handleUpdateCurrentRow(row)
         }
         return nextTick()
@@ -5862,7 +5908,7 @@ export default defineVxeComponent({
         if (el) {
           XEUtils.arrayEach(el.querySelectorAll('.row--current'), elem => removeClass(elem, 'row--current'))
         }
-        if ($xeGanttView) {
+        if ($xeGanttView && $xeGanttView.handleUpdateCurrentRow) {
           $xeGanttView.handleUpdateCurrentRow()
         }
         return nextTick()
@@ -6895,7 +6941,7 @@ export default defineVxeComponent({
         if (showFooter && footerData && footerData.length) {
           footData = footerData.slice(0)
         } else if (showFooter && footerMethod) {
-          footData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: afterFullData, $table: $xeTable, $grid: $xeGrid }) : []
+          footData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: afterFullData, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }) : []
         }
         reactData.footerTableData = footData
         $xeTable.handleUpdateFooterMerge()
@@ -7264,7 +7310,7 @@ export default defineVxeComponent({
           }
         }
       } else if (mouseConfig) {
-        if (!getEventTargetNode(evnt, el).flag && !($xeGrid && getEventTargetNode(evnt, $xeGrid.getRefMaps().refElem.value).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) && !($xeToolbar && getEventTargetNode(evnt, $xeToolbar.getRefMaps().refElem.value).flag)) {
+        if (!getEventTargetNode(evnt, el).flag && !($xeGGWrapper && getEventTargetNode(evnt, $xeGGWrapper.getRefMaps().refElem.value).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) && !($xeToolbar && getEventTargetNode(evnt, $xeToolbar.getRefMaps().refElem.value).flag)) {
           if ($xeTable.clearSelected) {
             $xeTable.clearSelected()
           }
@@ -7288,7 +7334,7 @@ export default defineVxeComponent({
           $xeTable.closeMenu()
         }
       }
-      const isActivated = getEventTargetNode(evnt, $xeGrid ? $xeGrid.getRefMaps().refElem.value : el).flag
+      const isActivated = getEventTargetNode(evnt, $xeGGWrapper ? $xeGGWrapper.getRefMaps().refElem.value : el).flag
       // 如果存在校验，点击了表格之外则清除
       if (!isActivated && editRules && validOpts.autoClear) {
         reactData.validErrorMaps = {}
@@ -7561,7 +7607,8 @@ export default defineVxeComponent({
                 column: selected.column,
                 columnIndex: tableMethods.getColumnIndex(selected.column),
                 $table: $xeTable,
-                $grid: $xeGrid
+                $grid: $xeGrid,
+                $gantt: $xeGantt
               }
               // 是否被禁用
               if (!beforeEditMethod || beforeEditMethod(params)) {
@@ -7586,7 +7633,8 @@ export default defineVxeComponent({
                   column: selected.column,
                   columnIndex: $xeTable.getColumnIndex(selected.column),
                   $table: $xeTable,
-                  $grid: $xeGrid
+                  $grid: $xeGrid,
+                  $gantt: $xeGantt
                 }
                 // 是否被禁用
                 if (!beforeEditMethod || beforeEditMethod(params)) {
@@ -7610,7 +7658,8 @@ export default defineVxeComponent({
                 rowIndex: $xeTable.getRowIndex(parentRow),
                 $rowIndex: $xeTable.getVMRowIndex(parentRow),
                 $table: $xeTable,
-                $grid: $xeGrid
+                $grid: $xeGrid,
+                $gantt: $xeGantt
               }
               $xeTable.setTreeExpand(parentRow, false)
                 .then(() => $xeTable.scrollToRow(parentRow))
@@ -7631,9 +7680,10 @@ export default defineVxeComponent({
                 column: selected.column,
                 columnIndex: $xeTable.getColumnIndex(selected.column),
                 $table: $xeTable,
-                $grid: $xeGrid
+                $grid: $xeGrid,
+                $gantt: $xeGantt
               }
-              if (!beforeEditMethod || beforeEditMethod({ ...selected.args, $table: $xeTable, $grid: $xeGrid })) {
+              if (!beforeEditMethod || beforeEditMethod({ ...selected.args, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })) {
                 if (editMethod) {
                   editMethod(params)
                 } else {
@@ -7821,17 +7871,24 @@ export default defineVxeComponent({
     }
 
     const showDropTip = (evnt: DragEvent | MouseEvent, trEl: HTMLElement | null, thEl: HTMLElement | null, showLine: boolean, dragPos: string) => {
-      const el = refElem.value
-      if (!el) {
+      let wrapperEl = refElem.value
+      if ($xeGantt && trEl) {
+        const { refGanttContainerElem } = $xeGantt.getRefMaps()
+        const ganttContainerElem = refGanttContainerElem.value
+        if (ganttContainerElem) {
+          wrapperEl = ganttContainerElem
+        }
+      }
+      if (!wrapperEl) {
         return
       }
       const { overflowX, scrollbarWidth, overflowY, scrollbarHeight } = reactData
       const { prevDragToChild } = internalData
-      const wrapperRect = el.getBoundingClientRect()
+      const wrapperRect = wrapperEl.getBoundingClientRect()
       const osbWidth = overflowY ? scrollbarWidth : 0
       const osbHeight = overflowX ? scrollbarHeight : 0
-      const tableWrapperWidth = el.clientWidth
-      const tableWrapperHeight = el.clientHeight
+      const tableWrapperWidth = wrapperEl.clientWidth
+      const tableWrapperHeight = wrapperEl.clientHeight
       if (trEl) {
         const rdLineEl = refDragRowLineElem.value
         if (rdLineEl) {
@@ -7895,8 +7952,8 @@ export default defineVxeComponent({
       const rdTipEl = refDragTipElem.value
       if (rdTipEl) {
         rdTipEl.style.display = 'block'
-        rdTipEl.style.top = `${Math.min(el.clientHeight - el.scrollTop - rdTipEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
-        rdTipEl.style.left = `${Math.min(el.clientWidth - el.scrollLeft - rdTipEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
+        rdTipEl.style.top = `${Math.min(wrapperEl.clientHeight - wrapperEl.scrollTop - rdTipEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
+        rdTipEl.style.left = `${Math.min(wrapperEl.clientWidth - wrapperEl.scrollLeft - rdTipEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
         rdTipEl.setAttribute('drag-status', showLine ? (prevDragToChild ? 'sub' : 'normal') : 'disabled')
       }
     }
@@ -7954,8 +8011,8 @@ export default defineVxeComponent({
 
     const callSlot = <T>(slotFunc: ((params: T) => VxeComponentSlotType | VxeComponentSlotType[]) | string | null, params: T): VxeComponentSlotType[] => {
       if (slotFunc) {
-        if ($xeGrid) {
-          return $xeGrid.callSlot(slotFunc, params)
+        if ($xeGGWrapper) {
+          return $xeGGWrapper.callSlot(slotFunc, params)
         }
         // if (XEUtils.isString(slotFunc)) {
         //   slotFunc = slots[slotFunc] || null
@@ -7981,8 +8038,8 @@ export default defineVxeComponent({
        */
       getParentElem () {
         const el = refElem.value
-        if ($xeGrid) {
-          const gridEl = $xeGrid.getRefMaps().refElem.value
+        if ($xeGGWrapper) {
+          const gridEl = $xeGGWrapper.getRefMaps().refElem.value
           return gridEl ? gridEl.parentNode as HTMLElement : null
         }
         return el ? el.parentNode as HTMLElement : null
@@ -7998,8 +8055,8 @@ export default defineVxeComponent({
           const parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
           let parentWrapperHeight = 0
           if (parentElem) {
-            if ($xeGrid && hasClass(parentElem, 'vxe-grid--table-wrapper')) {
-              parentWrapperHeight = $xeGrid.getParentHeight()
+            if ($xeGGWrapper && hasClass(parentElem, 'vxe-grid--table-wrapper')) {
+              parentWrapperHeight = $xeGGWrapper.getParentHeight()
             } else {
               parentWrapperHeight = parentElem.clientHeight
             }
@@ -8014,7 +8071,7 @@ export default defineVxeComponent({
        * 如果存在表尾合计滚动条，则需要排除滚动条高度
        */
       getExcludeHeight () {
-        return $xeGrid ? $xeGrid.getExcludeHeight() : 0
+        return $xeGGWrapper ? $xeGGWrapper.getExcludeHeight() : 0
       },
       /**
        * 定义行数据中的列属性，如果不存在则定义
@@ -8087,7 +8144,7 @@ export default defineVxeComponent({
         })
         reactData.tableData = tableData
         internalData.visibleDataRowIdData = visibleDataRowIdMaps
-        if ($xeGanttView) {
+        if ($xeGanttView && $xeGanttView.updateViewData) {
           $xeGanttView.updateViewData()
         }
         return nextTick()
@@ -8267,7 +8324,7 @@ export default defineVxeComponent({
         if (!cell) {
           return
         }
-        const cellParams = XEUtils.assign(params, { cell })
+        const cellParams = XEUtils.assign(params, { cell, $table: $xeTable })
         let dragLeft = 0
         const tableRect = tableEl.getBoundingClientRect()
         const rightContainerRect = rightContainerElem ? rightContainerElem.getBoundingClientRect() : null
@@ -8401,7 +8458,7 @@ export default defineVxeComponent({
           const colRest = fullColumnIdData[colid]
           const dragBtnElem = evnt.target as HTMLDivElement
           const cell = dragBtnElem.parentNode as HTMLTableCellElement
-          const cellParams = Object.assign(params, { cell })
+          const cellParams = Object.assign(params, { cell, $table: $xeTable })
           const colMinWidth = getColReMinWidth(cellParams)
 
           el.setAttribute('data-calc-col', 'Y')
@@ -8436,7 +8493,14 @@ export default defineVxeComponent({
         const resizableOpts = computeResizableOpts.value
         const rowOpts = computeRowOpts.value
         const cellOpts = computeCellOpts.value
-        const tableEl = refElem.value
+        let tableEl = refElem.value
+        if ($xeGantt) {
+          const { refGanttContainerElem } = $xeGantt.getRefMaps()
+          const ganttContainerElem = refGanttContainerElem.value
+          if (ganttContainerElem) {
+            tableEl = ganttContainerElem
+          }
+        }
         const resizeBarElem = refRowResizeBar.value
         if (!resizeBarElem) {
           return
@@ -8671,7 +8735,7 @@ export default defineVxeComponent({
         let isStop = false
         for (let i = 0; i < evntList.length; i++) {
           const func = evntList[i]
-          const fnRest = func(Object.assign({ $grid: $xeGrid, $table: $xeTable, $event: evnt }, args))
+          const fnRest = func(Object.assign({ $table: $xeTable, $grid: $xeGrid, gantt: $xeGantt, $event: evnt }, args))
           if (fnRest === false) {
             isStop = true
             break
@@ -9667,6 +9731,7 @@ export default defineVxeComponent({
         const { treeConfig, dragConfig } = props
         const rowDragOpts = computeRowDragOpts.value
         const { afterFullData, tableFullData, fullAllDataRowIdData } = internalData
+        const $xeGanttView = internalData.xeGanttView
         const { animation, isPeerDrag, isCrossDrag, isSelfToChildDrag, dragEndMethod, dragToChildMethod } = rowDragOpts
         const treeOpts = computeTreeOpts.value
         const cellOpts = computeCellOpts.value
@@ -9865,7 +9930,15 @@ export default defineVxeComponent({
                 const _newRowIndex = dragRowRest._index
                 const firstRow = tableData[0]
                 const firstRowRest = fullAllDataRowIdData[getRowid($xeTable, firstRow)]
+                let wrapperEl = el
 
+                if ($xeGantt && $xeGanttView) {
+                  const { refGanttContainerElem } = $xeGantt.getRefMaps()
+                  const ganttContainerElem = refGanttContainerElem.value
+                  if (ganttContainerElem) {
+                    wrapperEl = ganttContainerElem
+                  }
+                }
                 if (firstRowRest) {
                   const _firstRowIndex = firstRowRest._index
                   const _lastRowIndex = _firstRowIndex + tableData.length
@@ -9898,15 +9971,27 @@ export default defineVxeComponent({
 
                   const dragRangeList = tableData.slice(rsIndex, reIndex)
                   if (dragRangeList.length) {
-                    const dtTrList = el.querySelectorAll<HTMLElement>(dragRangeList.map(row => `.vxe-body--row[rowid="${getRowid($xeTable, row)}"]`).join(','))
+                    const dtClss: string[] = []
+                    dragRangeList.forEach(row => {
+                      const rowid = getRowid($xeTable, row)
+                      dtClss.push(`.vxe-body--row[rowid="${rowid}"]`)
+                      if ($xeGantt) {
+                        dtClss.push(`.vxe-gantt-view--body-row[rowid="${rowid}"]`, `.vxe-gantt-view--chart-row[rowid="${rowid}"]`)
+                      }
+                    })
+                    const dtTrList = wrapperEl.querySelectorAll<HTMLElement>(dtClss.join(','))
                     moveRowAnimateToTb(dtTrList, offsetRate * dragRowHeight)
                   }
                 }
 
-                const newTrList = el.querySelectorAll<HTMLElement>(`.vxe-body--row[rowid="${dragRowid}"]`)
-                const newTrEl = newTrList[0]
+                const drClss = [`.vxe-body--row[rowid="${dragRowid}"]`]
+                if ($xeGantt) {
+                  drClss.push(`.vxe-gantt-view--body-row[rowid="${dragRowid}"]`, `.vxe-gantt-view--chart-row[rowid="${dragRowid}"]`)
+                }
+                const newDtTrList = wrapperEl.querySelectorAll<HTMLElement>(drClss.join(','))
+                const newTrEl = newDtTrList[0]
                 if (dragOffsetTop > -1 && newTrEl) {
-                  moveRowAnimateToTb(newTrList, dragOffsetTop - newTrEl.offsetTop)
+                  moveRowAnimateToTb(newDtTrList, dragOffsetTop - newTrEl.offsetTop)
                 }
               }
 
@@ -9933,7 +10018,7 @@ export default defineVxeComponent({
         const { lazy } = treeOpts
         const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
         const { prevDragRow, prevDragPos } = internalData
-        const el = refElem.value
+        let wrapperEl = refElem.value
         if (treeConfig && lazy && prevDragToChild) {
           // 懒加载
           const newRowid = getRowid($xeTable, prevDragRow)
@@ -9948,9 +10033,18 @@ export default defineVxeComponent({
         } else {
           $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
         }
+        const dtClss = ['.vxe-body--row']
+        if ($xeGantt) {
+          const { refGanttContainerElem } = $xeGantt.getRefMaps()
+          const ganttContainerElem = refGanttContainerElem.value
+          if (ganttContainerElem) {
+            wrapperEl = ganttContainerElem
+          }
+          dtClss.push('.vxe-gantt-view--body-row', '.vxe-gantt-view--chart-row')
+        }
         hideDropTip()
         clearRowDropOrigin()
-        clearRowAnimate(el)
+        clearRowAnimate(wrapperEl, dtClss)
         internalData.prevDragToChild = false
         reactData.dragRow = null
         reactData.dragCol = null
@@ -10337,7 +10431,7 @@ export default defineVxeComponent({
         $xeTable.handleColDragSwapEvent(evnt, true, dragCol, prevDragCol, prevDragPos, prevDragToChild)
         hideDropTip()
         clearColDropOrigin()
-        clearColAnimate(el)
+        clearColAnimate(el, ['.vxe-table--column'])
         internalData.prevDragToChild = false
         reactData.dragRow = null
         reactData.dragCol = null
@@ -11014,8 +11108,8 @@ export default defineVxeComponent({
           if (isScrollXBig && mouseOpts.area) {
             errLog('vxe.error.notProp', ['mouse-config.area'])
           }
-          if ($xeGanttView) {
-            $xeGanttView.updateScrollXSpace()
+          if ($xeGanttView && $xeGanttView.handleUpdateSXSpace) {
+            $xeGanttView.handleUpdateSXSpace()
           }
           return nextTick().then(() => {
             updateStyle()
@@ -11128,8 +11222,8 @@ export default defineVxeComponent({
         if (isScrollYBig && mouseOpts.area) {
           errLog('vxe.error.notProp', ['mouse-config.area'])
         }
-        if ($xeGanttView) {
-          $xeGanttView.updateScrollYSpace()
+        if ($xeGanttView && $xeGanttView.handleUpdateSYSpace) {
+          $xeGanttView.handleUpdateSYSpace()
         }
         return nextTick().then(() => {
           updateStyle()
@@ -11208,7 +11302,7 @@ export default defineVxeComponent({
           XEUtils.arrayEach(el.querySelectorAll(`.vxe-body--row[rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
         }
         internalData.hoverRow = row
-        if ($xeGanttView) {
+        if ($xeGanttView && $xeGanttView.handleUpdateHoverRow) {
           $xeGanttView.handleUpdateHoverRow(row)
         }
       },
@@ -11219,7 +11313,7 @@ export default defineVxeComponent({
           XEUtils.arrayEach(el.querySelectorAll('.vxe-body--row.row--hover'), elem => removeClass(elem, 'row--hover'))
         }
         internalData.hoverRow = null
-        if ($xeGanttView) {
+        if ($xeGanttView && $xeGanttView.handleUpdateHoverRow) {
           $xeGanttView.handleUpdateHoverRow()
         }
       },
@@ -11312,7 +11406,7 @@ export default defineVxeComponent({
     const renderEmptyBody = () => {
       const emptyOpts = computeEmptyOpts.value
       const emptySlot = slots.empty
-      const emptyParams = { $table: $xeTable, $grid: $xeGrid }
+      const emptyParams = { $table: $xeTable, $grid: $xeGrid, gantt: $xeGantt }
       if (emptySlot) {
         return emptySlot(emptyParams)
       } else {
@@ -11459,8 +11553,9 @@ export default defineVxeComponent({
             _columnIndex = colRest._index
           }
           const expandParams: VxeTableDefines.CellRenderDataParams = {
-            $grid: $xeGrid,
             $table: $xeTable,
+            $grid: $xeGrid,
+            $gantt: $xeGantt,
             seq,
             column: expandColumn,
             columnIndex,
@@ -11633,6 +11728,7 @@ export default defineVxeComponent({
     const renderVN = () => {
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
       const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, isRowGroupStatus, columnStore, filterStore, customStore } = reactData
+      const { teleportToWrapperElem } = internalData
       const { leftList, rightList } = columnStore
       const loadingSlot = slots.loading
       const tableTipConfig = computeTableTipConfig.value
@@ -11758,52 +11854,69 @@ export default defineVxeComponent({
               })
             ]
           : []),
-        /**
-         * 行高线
-         */
         h('div', {
-          key: 'trl',
-          ref: refRowResizeBar,
-          class: 'vxe-table--resizable-row-bar'
-        }, resizableOpts.showDragTip
-          ? [
+          key: 'ttw'
+        }, [
+          h(Teleport, {
+            to: teleportToWrapperElem,
+            disabled: !($xeGantt && teleportToWrapperElem)
+          }, [
+            h('div', {
+              ref: refTeleportWrapper
+            }, [
+              /**
+               * 行高线
+               */
               h('div', {
-                class: 'vxe-table--resizable-number-tip'
-              })
-            ]
-          : []),
-        /**
-         * 加载中
-         */
-        VxeUILoadingComponent
-          ? h(VxeUILoadingComponent, {
-            key: 'lg',
-            class: 'vxe-table--loading',
-            modelValue: currLoading,
-            icon: loadingOpts.icon,
-            text: loadingOpts.text
-          }, loadingSlot
-            ? {
-                default: () => callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, loading: currLoading })
-              }
-            : {})
-          : loadingSlot
-            ? h('div', {
-              class: ['vxe-loading--custom-wrapper', {
-                'is--visible': currLoading
-              }]
-            }, callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, loading: currLoading }))
-            : renderEmptyElement($xeTable),
-        /**
-         * 自定义列
-         */
-        initStore.custom
-          ? h(TableCustomPanelComponent, {
-            key: 'cs',
-            ref: refTableCustom,
-            customStore
-          })
-          : renderEmptyElement($xeTable),
+                key: 'trl',
+                ref: refRowResizeBar,
+                class: 'vxe-table--resizable-row-bar'
+              }, resizableOpts.showDragTip
+                ? [
+                    h('div', {
+                      class: 'vxe-table--resizable-number-tip'
+                    })
+                  ]
+                : []),
+              /**
+               * 自定义列
+               */
+              initStore.custom
+                ? h(TableCustomPanelComponent, {
+                  key: 'cs',
+                  ref: refTableCustom,
+                  customStore
+                })
+                : renderEmptyElement($xeTable),
+              /**
+               * 加载中
+               */
+              VxeUILoadingComponent
+                ? h(VxeUILoadingComponent, {
+                  key: 'lg',
+                  class: 'vxe-table--loading',
+                  modelValue: currLoading,
+                  icon: loadingOpts.icon,
+                  text: loadingOpts.text
+                }, loadingSlot
+                  ? {
+                      default: () => callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, loading: currLoading })
+                    }
+                  : {})
+                : loadingSlot
+                  ? h('div', {
+                    class: ['vxe-loading--custom-wrapper', {
+                      'is--visible': currLoading
+                    }]
+                  }, callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, loading: currLoading }))
+                  : renderEmptyElement($xeTable),
+              /**
+               * 拖拽排序提示
+               */
+              renderDragTip()
+            ])
+          ])
+        ]),
         /**
          * 筛选
          */
@@ -11843,10 +11956,6 @@ export default defineVxeComponent({
             ref: refTableMenu
           })
           : renderEmptyElement($xeTable),
-        /**
-         * 拖拽排序提示
-         */
-        renderDragTip(),
         /**
          * 提示相关
          */
@@ -12095,6 +12204,14 @@ export default defineVxeComponent({
       const virtualYOpts = computeVirtualYOpts.value
       const { groupFields } = aggregateOpts
 
+      if ($xeGantt) {
+        const { refClassifyWrapperElem } = $xeGantt.getRefMaps()
+        const classifyWrapperEl = refClassifyWrapperElem.value
+        if (classifyWrapperEl) {
+          internalData.teleportToWrapperElem = classifyWrapperEl
+        }
+      }
+
       if (columnOpts.drag || rowOpts.drag || customOpts.allowSort) {
         initTpImg()
       }
@@ -12161,6 +12278,16 @@ export default defineVxeComponent({
         if (props.resizable) {
           warnLog('vxe.error.delProp', ['resizable', 'column-config.resizable'])
         }
+        if (props.virtualXConfig && props.scrollX) {
+          warnLog('vxe.error.notSupportProp', ['virtual-x-config', 'scroll-x', 'scroll-x=null'])
+        }
+        if (props.virtualYConfig && props.scrollY) {
+          warnLog('vxe.error.notSupportProp', ['virtual-y-config', 'scroll-y', 'scroll-y=null'])
+        }
+        if (props.aggregateConfig && props.rowGroupConfig) {
+          warnLog('vxe.error.notSupportProp', ['aggregate-config', 'row-group-config', 'row-group-config=null'])
+        }
+
         // if (props.scrollY) {
         //   warnLog('vxe.error.delProp', ['scroll-y', 'virtual-y-config'])
         // }
@@ -12186,7 +12313,7 @@ export default defineVxeComponent({
         if (rowOpts.height && !props.showOverflow) {
           warnLog('vxe.error.notProp', ['table.show-overflow'])
         }
-        if (!$xeTable.triggerCellAreaModownEvent) {
+        if (!$xeTable.triggerCellAreaModnEvent) {
           if (props.areaConfig) {
             warnLog('vxe.error.notProp', ['area-config'])
           }
@@ -12249,6 +12376,15 @@ export default defineVxeComponent({
         }
         if (checkboxOpts.halfField) {
           warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
+        }
+
+        if (treeConfig) {
+          XEUtils.arrayEach(['rowField', 'parentField', 'childrenField', 'hasChildField', 'mapChildrenField'], key => {
+            const val = treeOpts[key as 'rowField']
+            if (val && val.indexOf('.') > -1) {
+              errLog('vxe.error.errProp', [`${key}=${val}`, `${key}=${val.split('.')[0]}`])
+            }
+          })
         }
 
         if (rowOpts.currentMethod) {

@@ -924,6 +924,171 @@ $btnThemeList: (
 }
 
 
+/*拖拽线*/
+.vxe-table--resizable-row-bar,
+.vxe-table--resizable-col-bar {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 13;
+  pointer-events: none;
+  user-select: none;
+  &:before {
+    content: "";
+    display: block;
+    background-color: var(--vxe-ui-table-resizable-drag-line-color);
+  }
+  .vxe-table--resizable-number-tip {
+    position: absolute;
+    padding: 0.25em 0.25em;
+    font-size: 12px;
+    border-radius: var(--vxe-ui-border-radius);
+    white-space: nowrap;
+    color: #ffffff;
+    background-color: var(--vxe-ui-table-resizable-drag-line-color);
+    user-select: none;
+    pointer-events: none;
+  }
+}
+/*列宽线*/
+.vxe-table--resizable-col-bar {
+  width: 1px;
+  height: 100%;
+  cursor: col-resize;
+  &:before {
+    width: 1px;
+    height: 100%;
+  }
+  .vxe-table--resizable-number-tip {
+    left: 0;
+    top: 1em;
+  }
+}
+// 行高线
+.vxe-table--resizable-row-bar {
+  height: 1px;
+  width: 100%;
+  cursor: row-resize;
+  &:before {
+    height: 1px;
+    width: 100%;
+  }
+  .vxe-table--resizable-number-tip {
+    top: 0;
+    left: 0;
+  }
+}
+
+/*拖拽行与列*/
+.vxe-table--drag-col-line,
+.vxe-table--drag-row-line {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 11;
+  pointer-events: none;
+}
+.vxe-table--drag-row-line {
+  width: 100%;
+  height: 1px;
+  border: 2px solid transparent;
+  &[drag-pos="top"] {
+    border-top-color: var(--vxe-ui-font-primary-color);
+  }
+  &[drag-pos="bottom"] {
+    border-bottom-color: var(--vxe-ui-font-primary-color);
+  }
+  &[drag-to-child="y"] {
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: var(--vxe-ui-status-success-color);
+  }
+  &.is--guides {
+    background-color: var( --vxe-ui-table-drag-over-background-color);
+  }
+}
+.vxe-table--drag-col-line {
+  height: 100%;
+  width: 1px;
+  border: 2px solid transparent;
+  &[drag-pos="left"] {
+    border-left-color: var(--vxe-ui-font-primary-color);
+  }
+  &[drag-pos="right"] {
+    border-right-color: var(--vxe-ui-font-primary-color);
+  }
+  &[drag-to-child="y"] {
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: var(--vxe-ui-status-success-color);
+  }
+  &.is--guides {
+    background-color: var( --vxe-ui-table-drag-over-background-color);
+  }
+}
+.vxe-body--row-list-move {
+  transition-property: transform;
+  transition-duration: 0.35s;
+}
+.vxe-table--drag-sort-tip {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.6em 1.4em;
+  max-width: 50%;
+  min-width: 100px;
+  border-radius: var(--vxe-ui-border-radius);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  background-color: var(--vxe-ui-layout-background-color);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  z-index: 33;
+  &[drag-status="normal"] {
+    .vxe-table--drag-sort-tip-normal-status {
+      display: block;
+    }
+  }
+  &[drag-status="sub"] {
+    .vxe-table--drag-sort-tip-sub-status {
+      display: block;
+    }
+  }
+  &[drag-status="disabled"] {
+    .vxe-table--drag-sort-tip-disabled-status {
+      display: block;
+    }
+  }
+}
+.vxe-table--drag-sort-tip-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.vxe-table--drag-sort-tip-status {
+  padding-right: 0.4em;
+}
+.vxe-table--drag-sort-tip-disabled-status {
+  display: none;
+  flex-shrink: 0;
+  color: var(--vxe-ui-status-error-color)
+}
+.vxe-table--drag-sort-tip-normal-status,
+.vxe-table--drag-sort-tip-sub-status {
+  display: none;
+}
+.vxe-table--drag-sort-tip-content {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /*table*/
 .vxe-table--render-default {
   position: relative;
@@ -1622,63 +1787,6 @@ $btnThemeList: (
     float: left;
   }
 
-  .vxe-table--resizable-row-bar,
-  .vxe-table--resizable-col-bar {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 9;
-    pointer-events: none;
-    user-select: none;
-    &:before {
-      content: "";
-      display: block;
-      background-color: var(--vxe-ui-table-resizable-drag-line-color);
-    }
-    .vxe-table--resizable-number-tip {
-      position: absolute;
-      padding: 0.25em 0.25em;
-      font-size: 12px;
-      border-radius: var(--vxe-ui-border-radius);
-      white-space: nowrap;
-      color: #ffffff;
-      background-color: var(--vxe-ui-table-resizable-drag-line-color);
-      user-select: none;
-      pointer-events: none;
-    }
-  }
-
-  /*列宽线*/
-  .vxe-table--resizable-col-bar {
-    width: 1px;
-    height: 100%;
-    cursor: col-resize;
-    &:before {
-      width: 1px;
-      height: 100%;
-    }
-    .vxe-table--resizable-number-tip {
-      left: 0;
-      top: 1em;
-    }
-  }
-
-  // 行高线
-  .vxe-table--resizable-row-bar {
-    height: 1px;
-    width: 100%;
-    cursor: row-resize;
-    &:before {
-      height: 1px;
-      width: 100%;
-    }
-    .vxe-table--resizable-number-tip {
-      top: 0;
-      left: 0;
-    }
-  }
-
   /*边框线*/
   .vxe-table--border-line {
     position: absolute;
@@ -1915,25 +2023,6 @@ $btnThemeList: (
   }
 
   /*拖拽列*/
-  .vxe-table--drag-col-line {
-    height: 100%;
-    width: 1px;
-    border: 2px solid transparent;
-    &[drag-pos="left"] {
-      border-left-color: var(--vxe-ui-font-primary-color);
-    }
-    &[drag-pos="right"] {
-      border-right-color: var(--vxe-ui-font-primary-color);
-    }
-    &[drag-to-child="y"] {
-      border-left-color: transparent;
-      border-right-color: transparent;
-      border-bottom-color: var(--vxe-ui-status-success-color);
-    }
-    &.is--guides {
-      background-color: var( --vxe-ui-table-drag-over-background-color);
-    }
-  }
   .vxe-table--column {
     &.col--drag-move {
       transition: transform 0.5s ease;
@@ -1945,15 +2034,7 @@ $btnThemeList: (
     }
   }
 
-  .vxe-table--drag-col-line,
-  .vxe-table--drag-row-line {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 11;
-    pointer-events: none;
-  }
+  /*拖拽行把柄*/
   .vxe-cell--drag-handle {
     user-select: none;
     & + span {
@@ -1974,26 +2055,6 @@ $btnThemeList: (
     }
   }
 
-  /*拖拽行*/
-  .vxe-table--drag-row-line {
-    width: 100%;
-    height: 1px;
-    border: 2px solid transparent;
-    &[drag-pos="top"] {
-      border-top-color: var(--vxe-ui-font-primary-color);
-    }
-    &[drag-pos="bottom"] {
-      border-bottom-color: var(--vxe-ui-font-primary-color);
-    }
-    &[drag-to-child="y"] {
-      border-top-color: transparent;
-      border-bottom-color: transparent;
-      border-left-color: var(--vxe-ui-status-success-color);
-    }
-    &.is--guides {
-      background-color: var( --vxe-ui-table-drag-over-background-color);
-    }
-  }
   .vxe-body--row {
     &.row--drag-move {
       transition: transform 0.5s ease;
@@ -2023,66 +2084,6 @@ $btnThemeList: (
         cursor: not-allowed;
       }
     }
-  }
-  .vxe-body--row-list-move {
-    transition-property: transform;
-    transition-duration: 0.35s;
-  }
-  .vxe-table--drag-sort-tip {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 0.6em 1.4em;
-    max-width: 50%;
-    min-width: 100px;
-    border-radius: var(--vxe-ui-border-radius);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    user-select: none;
-    pointer-events: none;
-    background-color: var(--vxe-ui-layout-background-color);
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-    z-index: 33;
-    &[drag-status="normal"] {
-      .vxe-table--drag-sort-tip-normal-status {
-        display: block;
-      }
-    }
-    &[drag-status="sub"] {
-      .vxe-table--drag-sort-tip-sub-status {
-        display: block;
-      }
-    }
-    &[drag-status="disabled"] {
-      .vxe-table--drag-sort-tip-disabled-status {
-        display: block;
-      }
-    }
-  }
-  .vxe-table--drag-sort-tip-wrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-  .vxe-table--drag-sort-tip-status {
-    padding-right: 0.4em;
-  }
-  .vxe-table--drag-sort-tip-disabled-status {
-    display: none;
-    flex-shrink: 0;
-    color: var(--vxe-ui-status-error-color)
-  }
-  .vxe-table--drag-sort-tip-normal-status,
-  .vxe-table--drag-sort-tip-sub-status {
-    display: none;
-  }
-  .vxe-table--drag-sort-tip-content {
-    flex-grow: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   &.size--medium {

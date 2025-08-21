@@ -45,6 +45,7 @@ export default defineVxeComponent({
 
     const renderRows = (isGroup: boolean, isOptimizeMode: boolean, cols: VxeTableDefines.ColumnInfo[], $rowIndex: number) => {
       const $xeGrid = $xeTable.xeGrid
+      const $xeGantt = $xeTable.xeGantt
 
       const { fixedType } = props
       const { resizable: allResizable, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
@@ -87,6 +88,7 @@ export default defineVxeComponent({
         } = {
           $table: $xeTable,
           $grid: $xeGrid,
+          $gantt: $xeGantt,
           $rowIndex,
           column,
           columnIndex,

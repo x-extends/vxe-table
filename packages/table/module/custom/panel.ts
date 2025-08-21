@@ -1,4 +1,4 @@
-import { h, inject, ref, Ref, provide, VNode, PropType, nextTick, TransitionGroup, createCommentVNode, reactive } from 'vue'
+import { h, inject, ref, Ref, provide, VNode, PropType, nextTick, TransitionGroup, createCommentVNode, reactive, onUnmounted } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
@@ -10,6 +10,17 @@ import type { VxeButtonEvents } from 'vxe-pc-ui'
 import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableCustomPanelConstructor, TableCustomPanelReactData, TableCustomPanelInternalData, TableCustomPanelPrivateRef, TableCustomPanelPrivateComputed } from '../../../../types'
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
+
+export function createInternalData (): TableCustomPanelInternalData {
+  return {
+    // teleportTo: undefined,
+    // prevDragCol: undefined,
+    // prevDragGroupField: undefined,
+    // prevDragAggFnColid: undefined,
+    // prevDragToChild: false,
+    // prevDragPos: null
+  }
+}
 
 export default defineVxeComponent({
   name: 'TableCustomPanel',
@@ -46,13 +57,7 @@ export default defineVxeComponent({
       dragTipText: ''
     })
 
-    const customPanelInternalData: TableCustomPanelInternalData = {
-      // prevDragCol: undefined,
-      // prevDragGroupField: undefined,
-      // prevDragAggFnColid: undefined,
-      // prevDragToChild: false,
-      // prevDragPos: null
-    }
+    let customPanelInternalData = createInternalData()
 
     const refMaps: TableCustomPanelPrivateRef = {
       refElem,
@@ -598,6 +603,7 @@ export default defineVxeComponent({
 
     const renderSimplePanel = () => {
       const $xeGrid = $xeTable.xeGrid
+      const $xeGantt = $xeTable.xeGantt
       const tableProps = $xeTable.props
 
       const { customStore } = props
@@ -628,6 +634,7 @@ export default defineVxeComponent({
       const params = {
         $table: $xeTable,
         $grid: $xeGrid,
+        $gantt: $xeGantt,
         columns: customColumnList,
         isAllChecked,
         isAllIndeterminate,
@@ -882,6 +889,7 @@ export default defineVxeComponent({
 
     const renderPopupPanel = () => {
       const $xeGrid = $xeTable.xeGrid
+      const $xeGantt = $xeTable.xeGantt
 
       const { customStore } = props
       const { treeConfig, rowGroupConfig, aggregateConfig, resizable: allResizable } = tableProps
@@ -910,6 +918,7 @@ export default defineVxeComponent({
       const params = {
         $table: $xeTable,
         $grid: $xeGrid,
+        $gantt: $xeGantt,
         columns: customColumnList,
         isAllChecked,
         isAllIndeterminate,
@@ -1300,6 +1309,10 @@ export default defineVxeComponent({
       getComputeMaps: () => computeMaps,
       renderVN
     }
+
+    onUnmounted(() => {
+      customPanelInternalData = createInternalData()
+    })
 
     provide('$xeTableCustomPanel', $xeTableCustomPanel)
 
