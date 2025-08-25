@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "4.15.11",
+  "version": "4.15.12",
   "description": "A PC-end table component based on Vxe UI, supporting copy-paste, data pivot table, and high-performance virtual list table solution.",
   "scripts": {
     "update": "npm install --legacy-peer-deps",
