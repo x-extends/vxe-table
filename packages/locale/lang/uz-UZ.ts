@@ -44,6 +44,7 @@ export default {
       coverProp: '"{1}" parametr "{0}" parametr bir necha bor aniqlanadi, bu xatoga olib kelishi mumkin',
       uniField: '"{0}" dagi "{0}" da bir necha bor aniqlanadi, bu xatoga olib kelishi mumkin',
       repeatKey: 'Birlamchi kalit {0} = "{1}" ni takrorlash mumkin, bu xatoga olib kelishi mumkin',
+      repeatProp: '参数重复 {0}="{1}"，这可能会出现错误',
       delFunc: '"{0}" himoyalangan, iltimos "{1}" dan foydalaning',
       delProp: '"{0}" parametri bekor qilinadi, "{1}" dan foydalaning',
       delEvent: '"{0}" bekor qilinadi, iltimos "{1}" dan foydalaning',
@@ -534,6 +535,35 @@ export default {
         HH: 'soat',
         mm: 'nuqta',
         ss: 'Ikkinchi'
+      }
+    },
+    gantt: {
+      tFullFormat: {
+        year: '{yy}年',
+        quarter: '{yy}年第{q}季度',
+        month: '{yy}年{M}月',
+        week: '{yy}年第{W}周',
+        day: '{yy}年{M}月{d}日',
+        hour: '{yy}年 {M}月{d}日{H}时',
+        minute: '{yy}年{M}月{d}日{H}时{m}分'
+      },
+      tSimpleFormat: {
+        year: '{yy}年',
+        quarter: '{q}季度',
+        month: '{M}月',
+        week: '{W}周',
+        day: '{d}',
+        hour: '{H}时',
+        minute: '{m}分'
+      },
+      dayss: {
+        w0: '日',
+        w1: '一',
+        w2: '二',
+        w3: '三',
+        w4: '四',
+        w5: '五',
+        w6: '六'
       }
     },
     plugins: {
