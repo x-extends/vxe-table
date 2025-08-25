@@ -130,6 +130,167 @@ function handleMoveSelected ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
   return params
 }
 
+function handleCheckboxRangeEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: any, params: any) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { elemStore } = internalData
+  const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+  const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
+  const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
+  const { column, cell } = params
+  if (column.type === 'checkbox') {
+    let bodyWrapperElem = bodyScrollElem as HTMLElement
+    if (leftScrollElem && column.fixed === 'left') {
+      bodyWrapperElem = leftScrollElem
+    } else if (rightScrollElem && column.fixed === 'right') {
+      bodyWrapperElem = rightScrollElem
+    }
+    if (!bodyWrapperElem) {
+      return
+    }
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    const disX = evnt.clientX
+    const disY = evnt.clientY
+    const checkboxRangeElem = bodyWrapperElem.querySelector('.vxe-table--checkbox-range') as HTMLElement
+    const trElem = cell.parentNode
+    const selectRecords = $xeTable.getCheckboxRecords()
+    let lastRangeRows = []
+    const marginSize = 1
+    const offsetRest = getTargetOffset(evnt.target, bodyWrapperElem)
+    const startTop = offsetRest.offsetTop + evnt.offsetY
+    const startLeft = offsetRest.offsetLeft + evnt.offsetX
+    const startScrollTop = bodyWrapperElem.scrollTop
+    const rowHeight = trElem.offsetHeight
+    const trRect = trElem.getBoundingClientRect()
+    const offsetClientTop = disY - trRect.y
+    let mouseScrollTimeout: any = null
+    let isMouseScrollDown: any = false
+    let mouseScrollSpaceSize = 1
+    const triggerEvent = (type: any, evnt: any) => {
+      $xeTable.dispatchEvent(`checkbox-range-${type}` as 'checkbox-range-change' | 'checkbox-range-start' | 'checkbox-range-end', {
+        records: () => $xeTable.getCheckboxRecords(),
+        reserves: () => $xeTable.getCheckboxReserveRecords()
+      }, evnt)
+    }
+    const handleChecked = (evnt: any) => {
+      const { clientX, clientY } = evnt
+      const offsetLeft = clientX - disX
+      const offsetTop = clientY - disY + (bodyWrapperElem.scrollTop - startScrollTop)
+      let rangeHeight = Math.abs(offsetTop)
+      let rangeWidth = Math.abs(offsetLeft)
+      let rangeTop = startTop
+      let rangeLeft = startLeft
+      if (offsetTop < marginSize) {
+        // 向上
+        rangeTop += offsetTop
+        if (rangeTop < marginSize) {
+          rangeTop = marginSize
+          rangeHeight = startTop
+        }
+      } else {
+        // 向下
+        rangeHeight = Math.min(rangeHeight, bodyWrapperElem.scrollHeight - startTop - marginSize)
+      }
+      if (offsetLeft < marginSize) {
+        // 向左
+        rangeLeft += offsetLeft
+        if (rangeWidth > startLeft) {
+          rangeLeft = marginSize
+          rangeWidth = startLeft
+        }
+      } else {
+        // 向右
+        rangeWidth = Math.min(rangeWidth, bodyWrapperElem.clientWidth - startLeft - marginSize)
+      }
+      checkboxRangeElem.style.height = `${rangeHeight}px`
+      checkboxRangeElem.style.width = `${rangeWidth}px`
+      checkboxRangeElem.style.left = `${rangeLeft}px`
+      checkboxRangeElem.style.top = `${rangeTop}px`
+      checkboxRangeElem.style.display = 'block'
+      const rangeRows = getCheckboxRangeRows($xeTable, evnt, params, trElem, trRect, offsetClientTop, offsetTop < marginSize ? -rangeHeight : rangeHeight)
+      // 至少滑动 10px 才能有效匹配
+      if (rangeHeight > 10 && rangeRows.length !== lastRangeRows.length) {
+        const isControlKey = hasControlKey(evnt)
+        lastRangeRows = rangeRows
+        if (isControlKey) {
+          rangeRows.forEach((row: any) => {
+            $xeTable.handleBatchSelectRows([row], selectRecords.indexOf(row) === -1)
+          })
+        } else {
+          $xeTable.setAllCheckboxRow(false)
+          $xeTable.handleCheckedCheckboxRow(rangeRows, true, false)
+        }
+        triggerEvent('change', evnt)
+      }
+    }
+    // 停止鼠标滚动
+    const stopMouseScroll = () => {
+      clearTimeout(mouseScrollTimeout)
+      mouseScrollTimeout = null
+    }
+    // 开始鼠标滚动
+    const startMouseScroll = (evnt: any) => {
+      stopMouseScroll()
+      mouseScrollTimeout = setTimeout(() => {
+        if (mouseScrollTimeout) {
+          const { scrollLeft, scrollTop, clientHeight, scrollHeight } = bodyWrapperElem
+          const topSize = Math.ceil(mouseScrollSpaceSize * 50 / rowHeight)
+          if (isMouseScrollDown) {
+            if (scrollTop + clientHeight < scrollHeight) {
+              $xeTable.scrollTo(scrollLeft, scrollTop + topSize)
+              startMouseScroll(evnt)
+              handleChecked(evnt)
+            } else {
+              stopMouseScroll()
+            }
+          } else {
+            if (scrollTop) {
+              $xeTable.scrollTo(scrollLeft, scrollTop - topSize)
+              startMouseScroll(evnt)
+              handleChecked(evnt)
+            } else {
+              stopMouseScroll()
+            }
+          }
+        }
+      }, 50)
+    }
+    addClass(el, 'drag--range')
+    document.onmousemove = evnt => {
+      evnt.preventDefault()
+      evnt.stopPropagation()
+      const { clientY } = evnt
+      const { boundingTop } = getAbsolutePos(bodyWrapperElem)
+      // 如果超过可视区，触发滚动
+      if (clientY < boundingTop) {
+        isMouseScrollDown = false
+        mouseScrollSpaceSize = boundingTop - clientY
+        if (!mouseScrollTimeout) {
+          startMouseScroll(evnt)
+        }
+      } else if (clientY > boundingTop + bodyWrapperElem.clientHeight) {
+        isMouseScrollDown = true
+        mouseScrollSpaceSize = clientY - boundingTop - bodyWrapperElem.clientHeight
+        if (!mouseScrollTimeout) {
+          startMouseScroll(evnt)
+        }
+      } else if (mouseScrollTimeout) {
+        stopMouseScroll()
+      }
+      handleChecked(evnt)
+    }
+    document.onmouseup = (evnt) => {
+      stopMouseScroll()
+      removeClass(el, 'drag--range')
+      checkboxRangeElem.removeAttribute('style')
+      document.onmousemove = null
+      document.onmouseup = null
+      triggerEvent('end', evnt)
+    }
+    triggerEvent('start', evnt)
+  }
+}
+
 export default {
   methods: {
     // 处理 Tab 键移动
@@ -344,181 +505,24 @@ export default {
     },
     handleCellMousedownEvent (evnt: any, params: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
 
-      const { editConfig, editOpts, handleSelected, checkboxConfig, checkboxOpts, mouseConfig, mouseOpts } = this
+      const { editConfig, checkboxConfig, mouseConfig } = props
+      const checkboxOpts = $xeTable.computeCheckboxOpts
+      const mouseOpts = $xeTable.computeMouseOpts
+      const editOpts = $xeTable.computeEditOpts
       if (mouseConfig && mouseOpts.area && $xeTable.triggerCellAreaModnEvent) {
         return $xeTable.triggerCellAreaModnEvent(evnt, params)
       } else {
         if (checkboxConfig && checkboxOpts.range) {
-          this.handleCheckboxRangeEvent(evnt, params)
+          handleCheckboxRangeEvent($xeTable, evnt, params)
         }
         if (mouseConfig && mouseOpts.selected) {
           if (!editConfig || editOpts.mode === 'cell') {
-            handleSelected(params, evnt)
+            $xeTable.handleSelected(params, evnt)
           }
         }
-      }
-    },
-    handleCheckboxRangeEvent (evnt: any, params: any) {
-      const $xeTable = this
-      const internalData = $xeTable
-
-      const { elemStore } = internalData
-      const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
-      const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
-      const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
-      const { column, cell } = params
-      if (column.type === 'checkbox') {
-        let bodyWrapperElem = bodyScrollElem as HTMLElement
-        if (leftScrollElem && column.fixed === 'left') {
-          bodyWrapperElem = leftScrollElem
-        } else if (rightScrollElem && column.fixed === 'right') {
-          bodyWrapperElem = rightScrollElem
-        }
-        if (!bodyWrapperElem) {
-          return
-        }
-        const el = $xeTable.$refs.refElem as HTMLDivElement
-        const disX = evnt.clientX
-        const disY = evnt.clientY
-        const checkboxRangeElem = bodyWrapperElem.querySelector('.vxe-table--checkbox-range') as HTMLElement
-        const trElem = cell.parentNode
-        const selectRecords = this.getCheckboxRecords()
-        let lastRangeRows = []
-        const marginSize = 1
-        const offsetRest = getTargetOffset(evnt.target, bodyWrapperElem)
-        const startTop = offsetRest.offsetTop + evnt.offsetY
-        const startLeft = offsetRest.offsetLeft + evnt.offsetX
-        const startScrollTop = bodyWrapperElem.scrollTop
-        const rowHeight = trElem.offsetHeight
-        const trRect = trElem.getBoundingClientRect()
-        const offsetClientTop = disY - trRect.y
-        let mouseScrollTimeout: any = null
-        let isMouseScrollDown: any = false
-        let mouseScrollSpaceSize = 1
-        const triggerEvent = (type: any, evnt: any) => {
-          this.emitEvent(`checkbox-range-${type}`, {
-            records: () => this.getCheckboxRecords(),
-            reserves: () => this.getCheckboxReserveRecords()
-          }, evnt)
-        }
-        const handleChecked = (evnt: any) => {
-          const { clientX, clientY } = evnt
-          const offsetLeft = clientX - disX
-          const offsetTop = clientY - disY + (bodyWrapperElem.scrollTop - startScrollTop)
-          let rangeHeight = Math.abs(offsetTop)
-          let rangeWidth = Math.abs(offsetLeft)
-          let rangeTop = startTop
-          let rangeLeft = startLeft
-          if (offsetTop < marginSize) {
-            // 向上
-            rangeTop += offsetTop
-            if (rangeTop < marginSize) {
-              rangeTop = marginSize
-              rangeHeight = startTop
-            }
-          } else {
-            // 向下
-            rangeHeight = Math.min(rangeHeight, bodyWrapperElem.scrollHeight - startTop - marginSize)
-          }
-          if (offsetLeft < marginSize) {
-            // 向左
-            rangeLeft += offsetLeft
-            if (rangeWidth > startLeft) {
-              rangeLeft = marginSize
-              rangeWidth = startLeft
-            }
-          } else {
-            // 向右
-            rangeWidth = Math.min(rangeWidth, bodyWrapperElem.clientWidth - startLeft - marginSize)
-          }
-          checkboxRangeElem.style.height = `${rangeHeight}px`
-          checkboxRangeElem.style.width = `${rangeWidth}px`
-          checkboxRangeElem.style.left = `${rangeLeft}px`
-          checkboxRangeElem.style.top = `${rangeTop}px`
-          checkboxRangeElem.style.display = 'block'
-          const rangeRows = getCheckboxRangeRows(this, evnt, params, trElem, trRect, offsetClientTop, offsetTop < marginSize ? -rangeHeight : rangeHeight)
-          // 至少滑动 10px 才能有效匹配
-          if (rangeHeight > 10 && rangeRows.length !== lastRangeRows.length) {
-            const isControlKey = hasControlKey(evnt)
-            lastRangeRows = rangeRows
-            if (isControlKey) {
-              rangeRows.forEach((row: any) => {
-                $xeTable.handleBatchSelectRows([row], selectRecords.indexOf(row) === -1)
-              })
-            } else {
-              this.setAllCheckboxRow(false)
-              this.handleCheckedCheckboxRow(rangeRows, true, false)
-            }
-            triggerEvent('change', evnt)
-          }
-        }
-        // 停止鼠标滚动
-        const stopMouseScroll = () => {
-          clearTimeout(mouseScrollTimeout)
-          mouseScrollTimeout = null
-        }
-        // 开始鼠标滚动
-        const startMouseScroll = (evnt: any) => {
-          stopMouseScroll()
-          mouseScrollTimeout = setTimeout(() => {
-            if (mouseScrollTimeout) {
-              const { scrollLeft, scrollTop, clientHeight, scrollHeight } = bodyWrapperElem
-              const topSize = Math.ceil(mouseScrollSpaceSize * 50 / rowHeight)
-              if (isMouseScrollDown) {
-                if (scrollTop + clientHeight < scrollHeight) {
-                  this.scrollTo(scrollLeft, scrollTop + topSize)
-                  startMouseScroll(evnt)
-                  handleChecked(evnt)
-                } else {
-                  stopMouseScroll()
-                }
-              } else {
-                if (scrollTop) {
-                  this.scrollTo(scrollLeft, scrollTop - topSize)
-                  startMouseScroll(evnt)
-                  handleChecked(evnt)
-                } else {
-                  stopMouseScroll()
-                }
-              }
-            }
-          }, 50)
-        }
-        addClass(el, 'drag--range')
-        document.onmousemove = evnt => {
-          evnt.preventDefault()
-          evnt.stopPropagation()
-          const { clientY } = evnt
-          const { boundingTop } = getAbsolutePos(bodyWrapperElem)
-          // 如果超过可视区，触发滚动
-          if (clientY < boundingTop) {
-            isMouseScrollDown = false
-            mouseScrollSpaceSize = boundingTop - clientY
-            if (!mouseScrollTimeout) {
-              startMouseScroll(evnt)
-            }
-          } else if (clientY > boundingTop + bodyWrapperElem.clientHeight) {
-            isMouseScrollDown = true
-            mouseScrollSpaceSize = clientY - boundingTop - bodyWrapperElem.clientHeight
-            if (!mouseScrollTimeout) {
-              startMouseScroll(evnt)
-            }
-          } else if (mouseScrollTimeout) {
-            stopMouseScroll()
-          }
-          handleChecked(evnt)
-        }
-        document.onmouseup = (evnt) => {
-          stopMouseScroll()
-          removeClass(el, 'drag--range')
-          checkboxRangeElem.removeAttribute('style')
-          document.onmousemove = null
-          document.onmouseup = null
-          triggerEvent('end', evnt)
-        }
-        triggerEvent('start', evnt)
       }
     }
-  } as any
+  }
 }

@@ -1906,6 +1906,16 @@ export default {
     this.preventEvent(null, 'activated')
   },
   deactivated () {
+    const $xeTable = this
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { filterStore } = reactData
+    if (filterStore.visible) {
+      $xeTable.clearFilter()
+    }
+    $xeTable.closeTooltip()
+    internalData.isActivated = false
     this.preventEvent(null, 'deactivated')
   },
   beforeDestroy () {
