@@ -12192,6 +12192,11 @@ export default defineVxeComponent({
     })
 
     onDeactivated(() => {
+      const { filterStore } = reactData
+      if (filterStore.visible) {
+        $xeTable.clearFilter()
+      }
+      $xeTable.closeTooltip()
       internalData.isActivated = false
       tablePrivateMethods.preventEvent(null, 'deactivated', { $table: $xeTable })
     })
