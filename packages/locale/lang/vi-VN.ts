@@ -44,6 +44,7 @@ export default {
       coverProp: 'Tham số "{1}" của "{0}" được xác định nhiều lần, có thể gây ra lỗi',
       uniField: 'Tên trường "{0}" được xác định nhiều lần, có thể gây ra lỗi',
       repeatKey: 'Lặp lại khóa chính {0} = "{1}", có thể gây ra lỗi',
+      repeatProp: '参数重复 {0}="{1}"，这可能会出现错误',
       delFunc: 'Phương thức "{0}" không được dùng nữa, vui lòng sử dụng "{1}"',
       delProp: 'Tham số "{0}" không được dùng, vui lòng sử dụng "{1}"',
       delEvent: 'Sự kiện "{0}" được không dùng nữa, vui lòng sử dụng "{1}"',
@@ -534,6 +535,35 @@ export default {
         HH: 'giờ',
         mm: 'điểm',
         ss: 'Thứ hai'
+      }
+    },
+    gantt: {
+      tFullFormat: {
+        year: '{yy}年',
+        quarter: '{yy}年第{q}季度',
+        month: '{yy}年{M}月',
+        week: '{yy}年第{W}周',
+        day: '{yy}年{M}月{d}日',
+        hour: '{yy}年 {M}月{d}日{H}时',
+        minute: '{yy}年{M}月{d}日{H}时{m}分'
+      },
+      tSimpleFormat: {
+        year: '{yy}年',
+        quarter: '{q}季度',
+        month: '{M}月',
+        week: '{W}周',
+        day: '{d}',
+        hour: '{H}时',
+        minute: '{m}分'
+      },
+      dayss: {
+        w0: '日',
+        w1: '一',
+        w2: '二',
+        w3: '三',
+        w4: '四',
+        w5: '五',
+        w6: '六'
       }
     },
     plugins: {

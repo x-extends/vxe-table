@@ -397,7 +397,7 @@ export default {
         let isMouseScrollDown: any = false
         let mouseScrollSpaceSize = 1
         const triggerEvent = (type: any, evnt: any) => {
-          this.emitEvent(`checkbox-range-${type}`, {
+          this.dispatchEvent(`checkbox-range-${type}`, {
             records: () => this.getCheckboxRecords(),
             reserves: () => this.getCheckboxReserveRecords()
           }, evnt)

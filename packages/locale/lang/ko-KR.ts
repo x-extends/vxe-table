@@ -44,6 +44,7 @@ export default {
       coverProp: '"{0}"의 매개 변수 "{1}"이 반복적으로 정의되어 오류가 발생할 수 있습니다.',
       uniField: '필드 이름 "{0}"은 반복적으로 정의되어 오류가 발생할 수 있습니다.',
       repeatKey: '기본 키 {0} = "{1}"을 반복하여 오류가 발생할 수 있습니다.',
+      repeatProp: '参数重复 {0}="{1}"，这可能会出现错误',
       delFunc: '메소드 "{0}"는 더 이상 사용되지 않습니다. "{1}"을 사용하십시오.',
       delProp: '매개 변수 "{0}"은 더 이상 사용되지 않습니다. "{1}"을 사용하십시오.',
       delEvent: '이벤트 "{0}"는 더 이상 사용되지 않습니다. "{1}"을 사용하십시오.',
@@ -534,6 +535,35 @@ export default {
         HH: '시간',
         mm: '가리키다',
         ss: '두번째'
+      }
+    },
+    gantt: {
+      tFullFormat: {
+        year: '{yy}年',
+        quarter: '{yy}年第{q}季度',
+        month: '{yy}年{M}月',
+        week: '{yy}年第{W}周',
+        day: '{yy}年{M}月{d}日',
+        hour: '{yy}年 {M}月{d}日{H}时',
+        minute: '{yy}年{M}月{d}日{H}时{m}分'
+      },
+      tSimpleFormat: {
+        year: '{yy}年',
+        quarter: '{q}季度',
+        month: '{M}月',
+        week: '{W}周',
+        day: '{d}',
+        hour: '{H}时',
+        minute: '{m}分'
+      },
+      dayss: {
+        w0: '日',
+        w1: '一',
+        w2: '二',
+        w3: '三',
+        w4: '四',
+        w5: '五',
+        w6: '六'
       }
     },
     plugins: {

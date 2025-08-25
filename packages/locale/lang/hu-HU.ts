@@ -44,6 +44,7 @@ export default {
       coverProp: 'A "{1}" paramétert a "{0}" paramétere többször meghatározza, ami hibát okozhat',
       uniField: 'A "{0}" mező nevét többször definiálják, ami hibát okozhat',
       repeatKey: 'Ismételje meg az elsődleges gombot {0} = "{1}", amely hibát okozhat',
+      repeatProp: '参数重复 {0}="{1}"，这可能会出现错误',
       delFunc: 'A "{0}" módszer elavult, kérjük, használja a "{1}" módszert',
       delProp: 'A "{0}" paraméter elavult, kérjük, használja a "{1}" paramétert',
       delEvent: 'A "{0}" esemény elavult, kérjük, használja a "{1}" eseményt',
@@ -534,6 +535,35 @@ export default {
         HH: 'óra',
         mm: 'pont',
         ss: 'Második'
+      }
+    },
+    gantt: {
+      tFullFormat: {
+        year: '{yy}年',
+        quarter: '{yy}年第{q}季度',
+        month: '{yy}年{M}月',
+        week: '{yy}年第{W}周',
+        day: '{yy}年{M}月{d}日',
+        hour: '{yy}年 {M}月{d}日{H}时',
+        minute: '{yy}年{M}月{d}日{H}时{m}分'
+      },
+      tSimpleFormat: {
+        year: '{yy}年',
+        quarter: '{q}季度',
+        month: '{M}月',
+        week: '{W}周',
+        day: '{d}',
+        hour: '{H}时',
+        minute: '{m}分'
+      },
+      dayss: {
+        w0: '日',
+        w1: '一',
+        w2: '二',
+        w3: '三',
+        w4: '四',
+        w5: '五',
+        w6: '六'
       }
     },
     plugins: {
