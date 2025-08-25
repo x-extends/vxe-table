@@ -44,6 +44,7 @@ export default {
       coverProp: 'Il parametro "{1}" di "{0}" è ripetutamente definito, che può causare un errore',
       uniField: 'Il nome del campo "{0}" è ripetutamente definito, il che può causare un errore',
       repeatKey: 'Ripeti la chiave primaria {0} = "{1}", che può causare un errore',
+      repeatProp: '参数重复 {0}="{1}"，这可能会出现错误',
       delFunc: 'Il metodo "{0}" è deprecato, usa "{1}"',
       delProp: 'Il parametro "{0}" è deprecato, usa "{1}"',
       delEvent: "L'evento \"{0}\" è deprecato, usa \"{1}\"",
@@ -534,6 +535,35 @@ export default {
         HH: 'ora',
         mm: 'punto',
         ss: 'Secondo'
+      }
+    },
+    gantt: {
+      tFullFormat: {
+        year: '{yy}年',
+        quarter: '{yy}年第{q}季度',
+        month: '{yy}年{M}月',
+        week: '{yy}年第{W}周',
+        day: '{yy}年{M}月{d}日',
+        hour: '{yy}年 {M}月{d}日{H}时',
+        minute: '{yy}年{M}月{d}日{H}时{m}分'
+      },
+      tSimpleFormat: {
+        year: '{yy}年',
+        quarter: '{q}季度',
+        month: '{M}月',
+        week: '{W}周',
+        day: '{d}',
+        hour: '{H}时',
+        minute: '{m}分'
+      },
+      dayss: {
+        w0: '日',
+        w1: '一',
+        w2: '二',
+        w3: '三',
+        w4: '四',
+        w5: '五',
+        w6: '六'
       }
     },
     plugins: {
