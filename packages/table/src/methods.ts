@@ -11242,9 +11242,8 @@ const Methods = {
   // 已废弃，使用 dispatchEvent
   emitEvent (type: any, params: any, evnt: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & GridPrivateMethods
 
-    this.$emit(type, Object.assign({ $table: $xeTable, $grid: $xeGrid, $event: evnt }, params))
+    $xeTable.dispatchEvent(type, params, evnt)
   },
   focus () {
     this.isActivated = true
