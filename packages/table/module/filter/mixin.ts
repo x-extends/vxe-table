@@ -15,11 +15,13 @@ export default {
      * @param column
      */
     _openFilter (fieldOrColumn: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       const column = handleFieldOrColumn(this, fieldOrColumn)
       if (column && column.filters) {
         const { elemStore } = this
         const { fixed } = column
-        return this.scrollToColumn(column).then(() => {
+        return $xeTable.scrollToColumn(column).then(() => {
           const headerWrapperElem = elemStore[`${fixed || 'main'}-header-wrapper`] || elemStore['main-header-wrapper']
           if (headerWrapperElem) {
             const filterBtnElem = headerWrapperElem.querySelector(`.vxe-header--column.${column.id} .vxe-cell--filter`)
@@ -27,7 +29,7 @@ export default {
           }
         })
       }
-      return this.$nextTick()
+      return $xeTable.$nextTick()
     },
     /**
      * 修改筛选条件列表
@@ -195,9 +197,9 @@ export default {
       return filterList
     },
     handleColumnConfirmFilter (column: VxeTableDefines.ColumnInfo, evnt: Event | null) {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
-      const reactData = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
 
       const { mouseConfig } = props
       const { scrollXLoad: oldScrollXLoad, scrollYLoad: oldScrollYLoad } = reactData
@@ -212,22 +214,22 @@ export default {
           datas.push(item.data)
         }
       })
-      const filterList = this.getCheckedFilters()
-      const params = { $table: this, $event: evnt, column, field, property: field, values, datas, filters: filterList, filterList }
+      const filterList = $xeTable.getCheckedFilters()
+      const params = { $table: $xeTable, $event: evnt as Event, column, field, property: field, values, datas, filters: filterList, filterList }
       // 如果是服务端筛选，则跳过本地筛选处理
       if (!filterOpts.remote) {
-        this.handleTableData(true)
-        this.checkSelectionStatus()
+        $xeTable.handleTableData(true)
+        $xeTable.checkSelectionStatus()
       }
-      if (mouseConfig && mouseOpts.area && this.handleFilterEvent) {
-        $xeTable.handleFilterEvent(evnt, params)
+      if (mouseConfig && mouseOpts.area && $xeTable.handleFilterEvent) {
+        $xeTable.handleFilterEvent(evnt as Event, params)
       }
       if (evnt) {
-        $xeTable.emitEvent('filter-change', params, evnt)
+        $xeTable.dispatchEvent('filter-change', params, evnt)
       }
       $xeTable.closeFilter()
       return $xeTable.updateFooter().then(() => {
-        const { scrollXLoad, scrollYLoad } = this
+        const { scrollXLoad, scrollYLoad } = reactData
         if ((oldScrollXLoad || scrollXLoad) || (oldScrollYLoad || scrollYLoad)) {
           if ((oldScrollXLoad || scrollXLoad)) {
             $xeTable.updateScrollXSpace()
@@ -259,6 +261,8 @@ export default {
       $xeTable.handleColumnConfirmFilter(column, evnt)
     },
     handleClearFilter (column: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       if (column) {
         const { filters, filterRender } = column
         if (filters) {
@@ -272,7 +276,7 @@ export default {
             }
           })
           if (filterResetMethod) {
-            filterResetMethod({ options: filters, column, $table: this })
+            filterResetMethod({ options: filters, column, $table: $xeTable })
           }
         }
       }

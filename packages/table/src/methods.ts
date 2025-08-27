@@ -7,6 +7,7 @@ import { getRowUniqueId, clearTableAllStatus, getColumnList, toFilters, getRowke
 import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from './anime'
 import { warnLog, errLog } from '../../ui/src/log'
+import { getCrossTableDragRowInfo } from './store'
 
 import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, VxeToolbarConstructor, VxeToolbarInstance, TableInternalData, VxeGridConstructor, VxeTablePrivateMethods, VxeTooltipInstance, VxeTablePropTypes, VxeGridPrivateMethods } from '../../../types'
 
@@ -18,6 +19,11 @@ const supportMaxRow = 5e6
 const customStorageKey = 'VXE_CUSTOM_STORE'
 const maxYHeight = 5e6
 const maxXWidth = 5e6
+
+let crossTableDragRowObj: {
+  $oldTable: VxeTableConstructor & VxeTablePrivateMethods
+  $newTable: (VxeTableConstructor & VxeTablePrivateMethods) | null
+} | null = null
 
 function eqCellValue (row1: any, row2: any, field: any) {
   const val1 = XEUtils.get(row1, field)
@@ -1001,22 +1007,27 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
     emptyPlaceholderElem.style.height = bodyWrapperElem ? `${bodyWrapperElem.offsetHeight - osbHeight}px` : ''
   }
 
+  const scrollbarXConf = scrollbarOpts.x || {}
   const scrollbarXToTop = $xeTable.computeScrollbarXToTop
+  const scrollbarYConf = scrollbarOpts.y || {}
   const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
 
   let xScrollbarVisible = overflowX ? 'visible' : 'hidden'
-  if ($xeGanttView) {
+  if (scrollbarXConf.visible === 'visible' || $xeGanttView) {
     osbHeight = scrollbarHeight
     xScrollbarVisible = 'visible'
-  } else if (scrollbarOpts.x && scrollbarOpts.x.visible === false) {
+  } else if (scrollbarXConf.visible === 'hidden' || scrollbarXConf.visible === false) {
     osbHeight = 0
     xScrollbarVisible = 'hidden'
   }
 
   let yScrollbarVisible = overflowY ? 'visible' : 'hidden'
-  if ((scrollbarOpts.y && scrollbarOpts.y.visible === false) || ($xeGanttView && !scrollbarYToLeft)) {
+  if ((scrollbarYConf.visible === 'hidden' || scrollbarYConf.visible === false) || ($xeGanttView && !scrollbarYToLeft)) {
     osbWidth = 0
     yScrollbarVisible = 'hidden'
+  } else if (scrollbarYConf.visible === 'visible') {
+    osbWidth = scrollbarWidth
+    yScrollbarVisible = 'visible'
   }
 
   let tbHeight = 0
@@ -2435,6 +2446,13 @@ function handleTargetEnterEvent ($xeTable: VxeTableConstructor, isClear: boolean
   }
 }
 
+function clearCrossTableDragStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const crossTableDragRowInfo = getCrossTableDragRowInfo($xeTable)
+
+  crossTableDragRowObj = null
+  crossTableDragRowInfo.row = null
+}
+
 function clearDragStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const reactData = $xeTable as unknown as TableReactData
 
@@ -2443,6 +2461,7 @@ function clearDragStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
     clearColDropOrigin($xeTable)
     clearRowDropOrigin($xeTable)
     hideDropTip($xeTable)
+    clearCrossTableDragStatus($xeTable)
     reactData.dragRow = null
     reactData.dragCol = null
   }
@@ -2640,6 +2659,28 @@ function hideDropTip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   if (cdLineEl) {
     cdLineEl.style.display = ''
   }
+}
+
+function clearRowDragData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const $xeGantt = $xeTable.$xeGantt
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  let wrapperEl = $xeTable.$refs.refElem as HTMLDivElement
+  const dtClss = ['.vxe-body--row']
+  if ($xeGantt) {
+    const ganttContainerElem = $xeGantt.$refs.refGanttContainerElem as HTMLDivElement
+    if (ganttContainerElem) {
+      wrapperEl = ganttContainerElem
+    }
+    dtClss.push('.vxe-gantt-view--body-row', '.vxe-gantt-view--chart-row')
+  }
+  hideDropTip($xeTable)
+  clearRowDropOrigin($xeTable)
+  clearRowAnimate(wrapperEl, dtClss)
+  internalData.prevDragToChild = false
+  reactData.dragRow = null
+  reactData.dragCol = null
 }
 
 /**
@@ -4977,7 +5018,9 @@ const Methods = {
         }
       }
     }
-    return $xeTable.handleRowDragSwapEvent(null, true, dragRow, prevDragRow, dragPos || defPos, dragToChild === true)
+    const rest = $xeTable.handleRowDragSwapEvent(null, true, dragRow, prevDragRow, dragPos || defPos, dragToChild === true)
+    clearRowDragData($xeTable)
+    return rest
   },
   /**
    * 获取表格的全量列
@@ -6399,7 +6442,7 @@ const Methods = {
                     !getEventTargetNode(evnt, $el).flag
                 ) {
                   setTimeout(() => {
-                    this.handleClearEdit(evnt).then(() => {
+                    $xeTable.handleClearEdit(evnt).then(() => {
                       // 如果存在校验，点击了表格之外则清除
                       if (!this.isActivated && editRules && validOpts.autoClear) {
                         this.validErrorMaps = {}
@@ -6414,17 +6457,17 @@ const Methods = {
       }
     } else if (mouseConfig) {
       if (!getEventTargetNode(evnt, $el).flag && !($xeGGWrapper && getEventTargetNode(evnt, $xeGGWrapper.$el).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.$el).flag) && !($toolbar && getEventTargetNode(evnt, $toolbar.$el).flag)) {
-        if (this.clearSelected) {
-          this.clearSelected()
+        if ($xeTable.clearSelected) {
+          $xeTable.clearSelected()
         }
         if (areaOpts.autoClear) {
-          if (this.getCellAreas) {
-            const cellAreas = this.getCellAreas()
+          if ($xeTable.getCellAreas) {
+            const cellAreas = $xeTable.getCellAreas()
             if (cellAreas && cellAreas.length && !getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
-              this.preventEvent(evnt, 'event.clearAreas', {}, () => {
-                this.clearCellAreas()
-                this.clearCopyCellArea()
-                this.emitEvent('clear-cell-area-selection', { cellAreas }, evnt)
+              $xeTable.preventEvent(evnt, 'event.clearAreas', {}, () => {
+                $xeTable.clearCellAreas()
+                $xeTable.clearCopyCellArea()
+                $xeTable.dispatchEvent('clear-cell-area-selection', { cellAreas }, evnt)
               })
             }
           }
@@ -6461,13 +6504,15 @@ const Methods = {
    * 表格键盘事件
    */
   keydownEvent (evnt: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     const { filterStore, ctxMenuStore, editStore, keyboardConfig, mouseConfig, mouseOpts, keyboardOpts } = this
     const { actived } = editStore
     const { keyCode } = evnt
     const isEsc = keyCode === 27
     if (isEsc) {
       this.preventEvent(evnt, 'event.keydown', null, () => {
-        this.emitEvent('keydown-start', {}, evnt)
+        $xeTable.dispatchEvent('keydown-start', {}, evnt)
         if (keyboardConfig && mouseConfig && mouseOpts.area && this.handleKeyboardCellAreaEvent) {
           this.handleKeyboardCellAreaEvent(evnt)
         } else if (actived.row || filterStore.visible || ctxMenuStore.visible) {
@@ -6487,8 +6532,8 @@ const Methods = {
             }
           }
         }
-        this.emitEvent('keydown', {}, evnt)
-        this.emitEvent('keydown-end', {}, evnt)
+        $xeTable.dispatchEvent('keydown', {}, evnt)
+        $xeTable.dispatchEvent('keydown-end', {}, evnt)
       })
     }
   },
@@ -6796,6 +6841,8 @@ const Methods = {
     }
   },
   handleGlobalPasteEvent (evnt: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     const { isActivated, keyboardConfig, keyboardOpts, mouseConfig, mouseOpts, editStore, filterStore } = this
     const { actived } = editStore
     if (isActivated && !filterStore.visible) {
@@ -6804,10 +6851,12 @@ const Methods = {
           this.handlePasteCellAreaEvent(evnt)
         }
       }
-      this.emitEvent('paste', {}, evnt)
+      $xeTable.dispatchEvent('paste', {}, evnt)
     }
   },
   handleGlobalCopyEvent (evnt: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     const { isActivated, keyboardConfig, keyboardOpts, mouseConfig, mouseOpts, editStore, filterStore } = this
     const { actived } = editStore
     if (isActivated && !filterStore.visible) {
@@ -6816,10 +6865,12 @@ const Methods = {
           this.handleCopyCellAreaEvent(evnt)
         }
       }
-      this.emitEvent('copy', {}, evnt)
+      $xeTable.dispatchEvent('copy', {}, evnt)
     }
   },
   handleGlobalCutEvent (evnt: any) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     const { isActivated, keyboardConfig, keyboardOpts, mouseConfig, mouseOpts, editStore, filterStore } = this
     const { actived } = editStore
     if (isActivated && !filterStore.visible) {
@@ -6828,7 +6879,7 @@ const Methods = {
           this.handleCutCellAreaEvent(evnt)
         }
       }
-      this.emitEvent('cut', {}, evnt)
+      $xeTable.dispatchEvent('cut', {}, evnt)
     }
   },
   handleGlobalResizeEvent () {
@@ -8028,7 +8079,9 @@ const Methods = {
     return $xeTable.$nextTick()
   },
   triggerHeaderCellDblclickEvent (evnt: any, params: any) {
-    this.emitEvent('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    $xeTable.dispatchEvent('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
   },
   getCurrentColumn () {
     return this.columnOpts.isCurrent || this.highlightCurrentColumn ? this.currentColumn : null
@@ -8213,7 +8266,7 @@ const Methods = {
         }
       }
     }
-    this.emitEvent('cell-dblclick', params, evnt)
+    $xeTable.dispatchEvent('cell-dblclick', params, evnt)
   },
   handleColumnSortEvent (evnt: any, column: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -8659,9 +8712,237 @@ const Methods = {
     }
     return Promise.resolve(errRest)
   },
-  handleRowDragDragendEvent (evnt: DragEvent) {
+  /**
+   * 处理跨表拖拽完成
+   */
+  handleCrossTableRowDragFinishEvent (evnt: DragEvent) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const $xeGantt = $xeTable.$xeGantt
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+    const crossTableDragRowInfo = getCrossTableDragRowInfo($xeTable)
+
+    const { tableData } = reactData
+    const { fullAllDataRowIdData } = internalData
+    const rowOpts = $xeTable.computeRowOpts
+    const cellOpts = $xeTable.computeCellOpts
+    const defaultRowHeight = $xeTable.computeDefaultRowHeight
+    const rowDragOpts = $xeTable.computeRowDragOpts
+    const { animation, isCrossTableDrag } = rowDragOpts
+    const treeOpts = $xeTable.computeTreeOpts
+    const { mapChildrenField } = treeOpts
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    if (isCrossTableDrag && crossTableDragRowObj && crossTableDragRowInfo) {
+      const { row: dragRow } = crossTableDragRowInfo
+      if (dragRow) {
+        const dragRowid = getRowid($xeTable, dragRow)
+        const dragRowRest = fullAllDataRowIdData[dragRowid]
+        let dragRowHeight = 0
+        let rsIndex = -1
+        if (dragRowRest) {
+          if (animation) {
+            dragRowHeight = getCellRestHeight(dragRowRest, cellOpts, rowOpts, defaultRowHeight)
+          }
+          rsIndex = dragRowRest.$index
+        }
+        const dragRangeList = rsIndex > -1 && rsIndex < tableData.length - 1 ? tableData.slice(rsIndex + 1) : []
+        const dragList = XEUtils.toTreeArray([dragRow], {
+          updated: true,
+          children: mapChildrenField
+        })
+        $xeTable.remove(dragList).then(() => {
+          if (animation && dragRowHeight && dragRangeList.length) {
+            const $xeGanttView = internalData.xeGanttView
+            let wrapperEl = el
+            if ($xeGantt && $xeGanttView) {
+              const ganttContainerElem = $xeGantt.$refs.refGanttContainerElem as HTMLDivElement
+              if (ganttContainerElem) {
+                wrapperEl = ganttContainerElem
+              }
+            }
+
+            const dtClss: string[] = []
+            dragRangeList.forEach(row => {
+              const rowid = getRowid($xeTable, row)
+              dtClss.push(`.vxe-body--row[rowid="${rowid}"]`)
+              if ($xeGantt) {
+                dtClss.push(`.vxe-gantt-view--body-row[rowid="${rowid}"]`, `.vxe-gantt-view--chart-row[rowid="${rowid}"]`)
+              }
+            })
+            const dtTrList = wrapperEl.querySelectorAll<HTMLElement>(dtClss.join(','))
+            moveRowAnimateToTb(dtTrList, dragRowHeight)
+          }
+        })
+        $xeTable.dispatchEvent('row-remove-dragend', {
+          row: dragRow
+        }, evnt)
+        clearRowDragData($xeTable)
+        clearCrossTableDragStatus($xeTable)
+      }
+    }
+  },
+  /**
+   * 处理跨表拖至新的空表
+   */
+  handleCrossTableRowDragoverEmptyEvent (evnt: DragEvent) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { tableData } = reactData
+    const rowDragOpts = $xeTable.computeRowDragOpts
+    const { isCrossTableDrag } = rowDragOpts
+    if (isCrossTableDrag && crossTableDragRowObj && !tableData.length) {
+      const { $oldTable } = crossTableDragRowObj
+      if ($oldTable && $oldTable.xID !== $xeTable.xID) {
+        evnt.preventDefault()
+        crossTableDragRowObj.$newTable = $xeTable
+        internalData.prevDragRow = null
+      }
+    }
+  },
+  /**
+   * 处理跨表拖插入
+   */
+  handleCrossTableRowDragInsertEvent (evnt: DragEvent) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGantt = $xeTable.$xeGantt
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+    const crossTableDragRowInfo = getCrossTableDragRowInfo($xeTable)
+
+    const { treeConfig } = props
+    const { prevDragRow, prevDragPos, prevDragToChild } = internalData
+    const rowDragOpts = $xeTable.computeRowDragOpts
+    const { animation, isSelfToChildDrag, isCrossTableDrag, dragEndMethod, dragToChildMethod } = rowDragOpts
+    const rowOpts = $xeTable.computeRowOpts
+    const cellOpts = $xeTable.computeCellOpts
+    const defaultRowHeight = $xeTable.computeDefaultRowHeight
+    const treeOpts = $xeTable.computeTreeOpts
+    const { parentField, mapChildrenField } = treeOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
+    // 跨表拖拽
+    if (isCrossTableDrag && crossTableDragRowObj && crossTableDragRowInfo) {
+      const { row: oldRow } = crossTableDragRowInfo
+      const { $oldTable } = crossTableDragRowObj
+      const el = $xeTable.$refs.refElem as HTMLDivElement
+      if ($oldTable && oldRow) {
+        const dragRow = oldRow
+        let dragOffsetIndex = -1
+        if (prevDragRow) {
+          dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
+        }
+        const dragParams = {
+          oldRow: dragRow,
+          newRow: prevDragRow,
+          dragRow,
+          dragPos: prevDragPos as 'top' | 'bottom',
+          dragToChild: !!prevDragToChild,
+          offsetIndex: dragOffsetIndex as 0 | 1
+        }
+        const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
+        const errRest = {
+          status: false
+        }
+        Promise.resolve(dragEndMethod ? dragEndMethod(dragParams) : true).then((status) => {
+          if (!status) {
+            return errRest
+          }
+          let insertRest: Promise<any> = Promise.resolve()
+          if (treeConfig) {
+            const dragList = XEUtils.toTreeArray([dragRow], {
+              updated: true,
+              children: mapChildrenField
+            })
+            $oldTable.handleCrossTableRowDragFinishEvent(evnt)
+            if (prevDragRow) {
+              dragRow[parentField] = prevDragRow[parentField]
+            } else {
+              dragRow[parentField] = null
+            }
+            dragList.forEach(row => {
+              row[childrenField] = undefined
+              row[mapChildrenField] = undefined
+            })
+            if (prevDragRow) {
+              if (prevDragPos === 'bottom') {
+                insertRest = $xeTable.insertNextAt(dragList, prevDragRow)
+              } else {
+                insertRest = $xeTable.insertAt(dragList, prevDragRow)
+              }
+            } else {
+              insertRest = $xeTable.insert(dragList)
+            }
+          } else {
+            $oldTable.handleCrossTableRowDragFinishEvent(evnt)
+            if (prevDragRow) {
+              if (prevDragPos === 'bottom') {
+                insertRest = $xeTable.insertNextAt(dragRow, prevDragRow)
+              } else {
+                insertRest = $xeTable.insertAt(dragRow, prevDragRow)
+              }
+            } else {
+              insertRest = $xeTable.insert(dragRow)
+            }
+          }
+          $xeTable.dispatchEvent('row-insert-dragend', {
+            oldRow,
+            newRow: prevDragRow,
+            dragRow,
+            dragPos: prevDragPos as any,
+            dragToChild: isDragToChildFlag,
+            offsetIndex: dragOffsetIndex
+          }, evnt)
+          clearRowDragData($xeTable)
+
+          insertRest.then(() => {
+            const { tableData } = reactData
+            const { fullAllDataRowIdData } = internalData
+            const oldRowid = getRowid($xeTable, dragRow)
+            const oldRowRest = fullAllDataRowIdData[oldRowid]
+            let dragRowHeight = 0
+            let rsIndex = -1
+            if (oldRowRest) {
+              if (animation) {
+                dragRowHeight = getCellRestHeight(oldRowRest, cellOpts, rowOpts, defaultRowHeight)
+              }
+              rsIndex = oldRowRest.$index
+            }
+            const dragRangeList = rsIndex > -1 ? tableData.slice(rsIndex) : []
+            if (animation && dragRowHeight && dragRangeList.length) {
+              const $xeGanttView = internalData.xeGanttView
+              let wrapperEl = el
+              if ($xeGantt && $xeGanttView) {
+                const ganttContainerElem = $xeGantt.$refs.refGanttContainerElem as HTMLDivElement
+                if (ganttContainerElem) {
+                  wrapperEl = ganttContainerElem
+                }
+              }
+
+              const dtClss: string[] = []
+              dragRangeList.forEach(row => {
+                const rowid = getRowid($xeTable, row)
+                dtClss.push(`.vxe-body--row[rowid="${rowid}"]`)
+                if ($xeGantt) {
+                  dtClss.push(`.vxe-gantt-view--body-row[rowid="${rowid}"]`, `.vxe-gantt-view--chart-row[rowid="${rowid}"]`)
+                }
+              })
+              const dtTrList = wrapperEl.querySelectorAll<HTMLElement>(dtClss.join(','))
+              moveRowAnimateToTb(dtTrList, -dragRowHeight)
+            }
+          })
+        })
+      }
+    }
+  },
+  hideCrossTableRowDropClearStatus () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    hideDropTip($xeTable)
+  },
+  handleRowDragDragendEvent (evnt: DragEvent) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
@@ -8673,8 +8954,18 @@ const Methods = {
     const { lazy } = treeOpts
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const { prevDragRow, prevDragPos } = internalData
-    let wrapperEl = $xeTable.$refs.refElem as HTMLDivElement
-
+    const rowDragOpts = $xeTable.computeRowDragOpts
+    const { isCrossTableDrag, isCrossDrag } = rowDragOpts
+    // 跨表拖拽
+    if (isCrossTableDrag && crossTableDragRowObj) {
+      const { $newTable } = crossTableDragRowObj
+      if ($newTable && $newTable.xID !== $xeTable.xID) {
+        if (!treeConfig || isCrossDrag) {
+          $newTable.handleCrossTableRowDragInsertEvent(evnt)
+        }
+        return
+      }
+    }
     if (treeConfig && lazy && prevDragToChild) {
       // 懒加载
       const newRowid = getRowid($xeTable, prevDragRow)
@@ -8689,20 +8980,8 @@ const Methods = {
     } else {
       $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
     }
-    const dtClss = ['.vxe-body--row']
-    if ($xeGantt) {
-      const ganttContainerElem = $xeGantt.$refs.refGanttContainerElem as HTMLDivElement
-      if (ganttContainerElem) {
-        wrapperEl = ganttContainerElem
-      }
-      dtClss.push('.vxe-gantt-view--body-row', '.vxe-gantt-view--chart-row')
-    }
-    hideDropTip($xeTable)
-    clearRowDropOrigin($xeTable)
-    clearRowAnimate(wrapperEl, dtClss)
-    internalData.prevDragToChild = false
-    reactData.dragRow = null
-    reactData.dragCol = null
+    clearRowDragData($xeTable)
+    clearCrossTableDragStatus($xeTable)
   },
   handleRowDragDragoverEvent (evnt: DragEvent) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -8717,8 +8996,8 @@ const Methods = {
     const { lazy, transform, parentField } = treeOpts
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowDragOpts = $xeTable.computeRowDragOpts
-    const { isPeerDrag, isCrossDrag, isToChildDrag } = rowDragOpts
-    if (!dragRow) {
+    const { isPeerDrag, isCrossDrag, isToChildDrag, isCrossTableDrag } = rowDragOpts
+    if (!dragRow && !(isCrossTableDrag && (!treeConfig || isCrossDrag) && crossTableDragRowObj)) {
       evnt.preventDefault()
       return
     }
@@ -8727,19 +9006,40 @@ const Methods = {
     const rowid = trEl.getAttribute('rowid') || ''
     const rest = fullAllDataRowIdData[rowid]
     if (rest) {
+      evnt.preventDefault()
       const row = rest.row
       const rowid = getRowid($xeTable, row)
       const rowRest = fullAllDataRowIdData[rowid]
-      evnt.preventDefault()
-      const { dragRow } = reactData
       const offsetY = evnt.clientY - trEl.getBoundingClientRect().y
       const dragPos = offsetY < trEl.clientHeight / 2 ? 'top' : 'bottom'
-      internalData.prevDragToChild = !!(treeConfig && transform && isToChildDrag && isControlKey)
+      internalData.prevDragToChild = !!(treeConfig && transform && (isCrossDrag && isToChildDrag) && isControlKey)
       internalData.prevDragRow = row
       internalData.prevDragPos = dragPos
+      // 跨表拖拽
+      if (isCrossTableDrag && (!treeConfig || isCrossDrag) && crossTableDragRowObj) {
+        const { $oldTable, $newTable } = crossTableDragRowObj
+        if ($oldTable) {
+          const oldTableReactData = $oldTable as unknown as TableReactData
+          if ($oldTable.xID === $xeTable.xID) {
+            if ($newTable) {
+              $newTable.hideCrossTableRowDropClearStatus()
+            }
+            reactData.isCrossDragRow = false
+            oldTableReactData.isCrossDragRow = false
+            crossTableDragRowObj.$newTable = null
+          } else if (!treeConfig || isCrossDrag) {
+            $oldTable.hideCrossTableRowDropClearStatus()
+            oldTableReactData.isCrossDragRow = true
+            reactData.dragTipText = oldTableReactData.dragTipText
+            crossTableDragRowObj.$newTable = $xeTable
+            showDropTip($xeTable, evnt, trEl, null, true, dragPos)
+            return
+          }
+        }
+      }
       if ($xeTable.eqRow(dragRow, row) ||
-        (isControlKey && treeConfig && lazy && row[hasChildField] && rowRest && !rowRest.treeLoaded) ||
-        (!isCrossDrag && treeConfig && transform && (isPeerDrag ? dragRow[parentField] !== row[parentField] : rest.level))
+            (isControlKey && treeConfig && lazy && row[hasChildField] && rowRest && !rowRest.treeLoaded) ||
+            (!isCrossDrag && treeConfig && transform && (isPeerDrag ? dragRow[parentField] !== row[parentField] : rest.level))
       ) {
         showDropTip($xeTable, evnt, trEl, null, false, dragPos)
         return
@@ -8752,15 +9052,19 @@ const Methods = {
       }, evnt)
     }
   },
-  handleCellDragMousedownEvent (evnt: MouseEvent, params: any) {
+  handleCellDragMousedownEvent (evnt: DragEvent, params: {
+    row: any;
+    column: VxeTableDefines.ColumnInfo<any>;
+  }) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
+    const crossTableDragRowInfo = getCrossTableDragRowInfo($xeTable)
 
     evnt.stopPropagation()
     const { dragConfig } = props
     const rowDragOpts = $xeTable.computeRowDragOpts
-    const { trigger, dragStartMethod } = rowDragOpts
+    const { isCrossTableDrag, trigger, dragStartMethod } = rowDragOpts
     const { row } = params
     const dragEl = evnt.currentTarget as HTMLElement
     const tdEl = trigger === 'cell' || trigger === 'row' ? dragEl : dragEl.parentElement?.parentElement as HTMLElement
@@ -8771,10 +9075,16 @@ const Methods = {
       trEl.draggable = false
       reactData.dragRow = null
       reactData.dragCol = null
+      clearCrossTableDragStatus($xeTable)
       hideDropTip($xeTable)
       return
     }
+    if (isCrossTableDrag) {
+      crossTableDragRowInfo.row = row
+      crossTableDragRowObj = { $oldTable: $xeTable, $newTable: null }
+    }
     reactData.dragRow = row
+    reactData.isCrossDragRow = false
     reactData.dragCol = null
     trEl.draggable = true
     updateRowDropOrigin($xeTable, row)
@@ -9113,6 +9423,7 @@ const Methods = {
     internalData.prevDragToChild = false
     reactData.dragRow = null
     reactData.dragCol = null
+    clearCrossTableDragStatus($xeTable)
   },
   handleHeaderCellDragDragoverEvent (evnt: DragEvent) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -9199,11 +9510,13 @@ const Methods = {
       reactData.dragRow = null
       reactData.dragCol = null
       hideDropTip($xeTable)
+      clearCrossTableDragStatus($xeTable)
       return
     }
     reactData.dragCol = column
     reactData.dragRow = null
     thEl.draggable = true
+    clearCrossTableDragStatus($xeTable)
     updateColDropOrigin($xeTable, column)
     updateColDropTipContent($xeTable, thEl)
     $xeTable.dispatchEvent('column-dragstart', params, evnt)
@@ -9214,6 +9527,7 @@ const Methods = {
 
     clearColDropOrigin($xeTable)
     hideDropTip($xeTable)
+    clearCrossTableDragStatus($xeTable)
     reactData.dragRow = null
     reactData.dragCol = null
   },
@@ -11377,10 +11691,8 @@ const Methods = {
   // 已废弃，使用 dispatchEvent
   emitEvent (type: any, params: any, evnt: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const $xeGrid = $xeTable.$xeGrid
-    const $xeGantt = $xeTable.$xeGantt
 
-    $xeTable.$emit(type, createEvent(evnt, { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, $event: evnt }))
+    $xeTable.dispatchEvent(type, params, evnt)
   },
   focus () {
     this.isActivated = true

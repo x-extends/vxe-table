@@ -5,7 +5,7 @@ import { scrollToView } from '../../../ui/src/dom'
 import { handleFieldOrColumn, getRowid } from '../../src/util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
-import type { VxeTableDefines, TableInternalData, TableReactData } from '../../../../types'
+import type { VxeTableDefines, TableInternalData, TableReactData, VxeTableConstructor, VxeTablePrivateMethods } from '../../../../types'
 
 const { getConfig, validators } = VxeUI
 
@@ -185,10 +185,12 @@ export default {
      * 聚焦到校验通过的单元格并弹出校验错误提示
      */
     handleValidError (params: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       const { validOpts } = this
       return new Promise<void>(resolve => {
         if (validOpts.autoPos === false) {
-          this.emitEvent('valid-error', params)
+          $xeTable.dispatchEvent('valid-error', params, null)
           resolve()
         } else {
           this.handleEdit(params, { type: 'valid-error', trigger: 'call' }).then(() => {
@@ -227,7 +229,7 @@ export default {
      * 返回 Promise 对象，或者使用回调方式
      */
     beginValidate (rows: any, cols: VxeTableDefines.ColumnInfo[] | null, cb: any, isFull: any) {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -546,6 +548,8 @@ export default {
      * 弹出校验错误提示
      */
     showValidTooltip (params: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       const { $refs, height, validStore, validErrorMaps, tableData, validOpts } = this
       const { rule, row, column, cell } = params
       const validTip = $refs.refValidTooltip
@@ -570,7 +574,7 @@ export default {
           }
         })
       }
-      this.emitEvent('valid-error', params, null)
+      $xeTable.dispatchEvent('valid-error', params, null)
       if (validTip) {
         if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {
           return validTip.open(cell, content)

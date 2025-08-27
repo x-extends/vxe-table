@@ -105,22 +105,29 @@ export default {
           const params: any = { type: layout, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, columns: this.visibleColumn.slice(0), $event: evnt }
           if (columnTargetNode.flag) {
             const cell = columnTargetNode.targetElem
-            const column = this.getColumnNode(cell).item
+            const columnNodeRest = $xeTable.getColumnNode(cell)
+            const column = columnNodeRest ? columnNodeRest.item : null
             let typePrefix = `${layout}-`
-            Object.assign(params, { column, columnIndex: this.getColumnIndex(column), cell })
-            if (layout === 'body') {
-              const row = this.getRowNode(cell.parentNode).item
-              typePrefix = ''
-              params.row = row
-              params.rowIndex = this.getRowIndex(row)
+            if (column) {
+              Object.assign(params, { column, columnIndex: $xeTable.getColumnIndex(column), cell })
             }
+            if (layout === 'body') {
+              const rowNodeRest = $xeTable.getRowNode(cell.parentNode)
+              const row = rowNodeRest ? rowNodeRest.item : null
+              typePrefix = ''
+              if (row) {
+                params.row = row
+                params.rowIndex = $xeTable.getRowIndex(row)
+              }
+            }
+            const eventType = `${typePrefix}cell-menu` as 'cell-menu' | 'header-cell-menu' | 'footer-cell-menu'
             this.handleOpenMenuEvent(evnt, layout, params)
             // 在 v4 中废弃事件 cell-context-menu、header-cell-context-menu、footer-cell-context-menu
             if (this.$listeners[`${typePrefix}cell-context-menu`]) {
               warnLog('vxe.error.delEvent', [`${typePrefix}cell-context-menu`, `${typePrefix}cell-menu`])
-              this.emitEvent(`${typePrefix}cell-context-menu`, params, evnt)
+              $xeTable.dispatchEvent(`${typePrefix}cell-context-menu` as any, params, evnt)
             } else {
-              this.emitEvent(`${typePrefix}cell-menu`, params, evnt)
+              $xeTable.dispatchEvent(eventType, params, evnt)
             }
             return
           } else if (getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('xid') === tId).flag) {
@@ -271,9 +278,9 @@ export default {
         // 在 v4 中废弃事件 context-menu-click
         if (this.$listeners['context-menu-click']) {
           warnLog('vxe.error.delEvent', ['context-menu-click', 'menu-click'])
-          this.emitEvent('context-menu-click', params, evnt)
+          $xeTable.dispatchEvent('context-menu-click' as any, params, evnt)
         } else {
-          this.emitEvent('menu-click', params, evnt)
+          $xeTable.dispatchEvent('menu-click', params, evnt)
         }
         this.closeMenu()
       }

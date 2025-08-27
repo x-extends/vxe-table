@@ -11,6 +11,7 @@ import TableFooterComponent from './footer'
 import { tableProps } from './props'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
+import { crossTableDragRowGlobal, getCrossTableDragRowInfo } from './store'
 import TableCustomPanelComponent from '../module/custom/panel'
 import TableFilterPanelComponent from '../module/filter/panel'
 import TableImportPanelComponent from '../module/export/import-panel'
@@ -134,6 +135,7 @@ function renderEmptyBody (h: CreateElement, $xeTable: VxeTableConstructor & VxeT
 const renderDragTipContents = (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) => {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
+  const crossTableDragRowInfo = getCrossTableDragRowInfo($xeTable)
 
   const { dragConfig } = props
   const { dragRow, dragCol, dragTipText } = reactData
@@ -143,9 +145,10 @@ const renderDragTipContents = (h: CreateElement, $xeTable: VxeTableConstructor &
   const rTipSlot = rowDragSlots.tip || (dragConfig && dragConfig.slots ? dragConfig.slots.rowTip : null)
   const columnDragSlots = columnDragOpts.slots || {}
   const cTipSlot = columnDragSlots.tip
+  const dRow = dragRow || (rowDragOpts.isCrossTableDrag ? crossTableDragRowInfo.row : null)
 
-  if (dragRow && rTipSlot) {
-    return $xeTable.callSlot(rTipSlot, { row: dragRow }, h)
+  if (dRow && rTipSlot) {
+    return $xeTable.callSlot(rTipSlot, { row: dRow }, h)
   }
   if (dragCol && cTipSlot) {
     return $xeTable.callSlot(cTipSlot, { column: dragCol }, h)
@@ -155,12 +158,14 @@ const renderDragTipContents = (h: CreateElement, $xeTable: VxeTableConstructor &
 
 const renderDragTip = (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) => {
   const reactData = $xeTable as unknown as TableReactData
+  const crossTableDragRowInfo = getCrossTableDragRowInfo($xeTable)
 
   const { dragRow, dragCol } = reactData
   const rowOpts = $xeTable.computeRowOpts
   const columnOpts = $xeTable.computeColumnOpts
   const rowDragOpts = $xeTable.computeRowDragOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
+  const dRow = dragRow || (rowDragOpts.isCrossTableDrag ? crossTableDragRowInfo.row : null)
 
   if (rowOpts.drag || columnOpts.drag) {
     return h('div', {
@@ -178,7 +183,7 @@ const renderDragTip = (h: CreateElement, $xeTable: VxeTableConstructor & VxeTabl
           'is--guides': columnDragOpts.showGuidesStatus
         }]
       }),
-      (dragRow && rowDragOpts.showDragTip) || (dragCol && columnDragOpts.showDragTip)
+      (dRow && rowDragOpts.showDragTip) || (dragCol && columnDragOpts.showDragTip)
         ? h('div', {
           ref: 'refDragTipElem',
           class: 'vxe-table--drag-sort-tip'
@@ -190,7 +195,7 @@ const renderDragTip = (h: CreateElement, $xeTable: VxeTableConstructor & VxeTabl
               class: 'vxe-table--drag-sort-tip-status'
             }, [
               h('span', {
-                class: ['vxe-table--drag-sort-tip-normal-status', dragRow ? getIcon().TABLE_DRAG_STATUS_ROW : getIcon().TABLE_DRAG_STATUS_COLUMN]
+                class: ['vxe-table--drag-sort-tip-normal-status', dRow ? getIcon().TABLE_DRAG_STATUS_ROW : getIcon().TABLE_DRAG_STATUS_COLUMN]
               }),
               h('span', {
                 class: ['vxe-table--drag-sort-tip-sub-status', getIcon().TABLE_DRAG_STATUS_SUB_ROW]
@@ -740,9 +745,9 @@ export default {
 
       isCustomStatus: false,
 
-      isDragRowMove: false,
+      isCrossDragRow: false,
       dragRow: null,
-      isDragColMove: false,
+      isCrossDragCol: false,
       dragCol: null,
       dragTipText: '',
 
@@ -752,7 +757,9 @@ export default {
 
       reScrollFlag: 0,
       reLayoutFlag: 0,
-      footFlag: 0
+      footFlag: 0,
+
+      crossTableDragRowInfo: crossTableDragRowGlobal
     }
   },
   computed: {
@@ -1545,6 +1552,7 @@ export default {
     const currentColumnOpts = $xeTable.computeCurrentColumnOpts
     const keyboardOpts = $xeTable.computeKeyboardOpts
     const aggregateOpts = $xeTable.computeAggregateOpts
+    const rowDragOpts = $xeTable.computeRowDragOpts
     const { groupFields } = aggregateOpts
 
     if (props.rowId) {
@@ -1652,7 +1660,10 @@ export default {
       }
     }
     if (treeConfig && rowOpts.drag && !treeOpts.transform) {
-      warnLog('vxe.error.notSupportProp', ['column-config.drag', 'tree-config.transform=false', 'tree-config.transform=true'])
+      warnLog('vxe.error.notSupportProp', ['row-config.drag', 'tree-config.transform=false', 'tree-config.transform=true'])
+    }
+    if (treeConfig && rowDragOpts.isCrossTableDrag && !rowDragOpts.isCrossDrag) {
+      errLog('vxe.error.reqSupportProp', ['tree-config & row-drag-config.isCrossTableDrag', 'row-drag-config.isCrossDrag'])
     }
     if (props.dragConfig) {
       warnLog('vxe.error.delProp', ['drag-config', 'row-drag-config'])
@@ -1973,6 +1984,7 @@ export default {
     const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, isRowGroupStatus, columnStore, filterStore, customStore } = reactData
     const { leftList, rightList } = columnStore
     const loadingSlot = slots.loading
+    const rowDragOpts = $xeTable.computeRowDragOpts
     const tableTipConfig = $xeTable.computeTableTipConfig
     const validTipConfig = $xeTable.computeValidTipConfig
     const validOpts = $xeTable.computeValidOpts
@@ -1992,6 +2004,11 @@ export default {
     const columnDragOpts = $xeTable.computeColumnDragOpts
     const scrollbarXToTop = $xeTable.computeScrollbarXToTop
     const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
+    const { isCrossTableDrag } = rowDragOpts
+    const rwOns: Record<string, any> = {}
+    if (isCrossTableDrag && !tableData.length) {
+      rwOns.onDragover = $xeTable.handleCrossTableRowDragoverEmptyEvent
+    }
     return h('div', {
       ref: 'refElem',
       class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`, `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`, {
@@ -2058,7 +2075,8 @@ export default {
       ]),
       h('div', {
         key: 'tw',
-        class: 'vxe-table--render-wrapper'
+        class: 'vxe-table--render-wrapper',
+        on: rwOns
       }, scrollbarXToTop
         ? [
             renderScrollX(h, $xeTable),

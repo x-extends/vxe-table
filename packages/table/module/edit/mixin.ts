@@ -107,14 +107,18 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
 
   const { treeConfig } = props
   const { isRowGroupStatus } = reactData
-  const { tableFullTreeData, afterFullData, mergeBodyList, tableFullData, fullDataRowIdData, fullAllDataRowIdData, insertRowMaps } = internalData
+  const { tableFullTreeData, afterFullData, mergeBodyList, tableFullData, fullDataRowIdData, fullAllDataRowIdData, insertRowMaps, removeRowMaps } = internalData
   const treeOpts = $xeTable.computeTreeOpts
-  const { transform, rowField, mapChildrenField } = treeOpts
+  const { transform, parentField, rowField, mapChildrenField } = treeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
   if (!XEUtils.isArray(records)) {
     records = [records]
   }
   const newRecords: any[] = $xeTable.defineField(records.map(record => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record)))
+  let treeRecords: any[] = []
+  if (treeConfig && transform) {
+    treeRecords = XEUtils.toArrayTree(newRecords, { key: rowField, parentKey: parentField, children: childrenField })
+  }
   if (XEUtils.eqNull(targetRow)) {
     // 如果为虚拟树
     if (treeConfig && transform) {
@@ -168,42 +172,49 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
     } else {
       // 如果为虚拟树
       if (treeConfig && transform) {
-        const matchMapObj = XEUtils.findTree(tableFullTreeData, (item: any) => targetRow[rowField] === item[rowField], { children: mapChildrenField })
+        const matchMapObj = XEUtils.findTree(tableFullTreeData, item => targetRow[rowField] === item[rowField], { children: mapChildrenField })
         if (matchMapObj) {
-          const { parent: parentRow } = matchMapObj as any
+          const { parent: parentRow } = matchMapObj
           const parentMapChilds = parentRow ? parentRow[mapChildrenField] : tableFullTreeData
           const parentRest = fullAllDataRowIdData[getRowid($xeTable, parentRow)]
           const parentLevel = parentRest ? parentRest.level : 0
-          newRecords.forEach((item: any, i: any) => {
-            const rowid = getRowid($xeTable, item)
-            if (item[treeOpts.parentField]) {
-              if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
-                errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
-              }
-            }
+          treeRecords.forEach((row, i) => {
             if (parentRow) {
-              item[treeOpts.parentField] = parentRow[rowField]
+              if (row[parentField] !== parentRow[rowField]) {
+                row[parentField] = parentRow[rowField]
+                errLog('vxe.error.errProp', [`${parentField}=${row[parentField]}`, `${parentField}=${parentRow[rowField]}`])
+              }
+            } else {
+              if (row[parentField] !== null) {
+                row[parentField] = null
+                errLog('vxe.error.errProp', [`${parentField}=${row[parentField]}`, 'null'])
+              }
             }
             let targetIndex = matchMapObj.index + i
             if (isInsertNextRow) {
               targetIndex = targetIndex + 1
             }
-            parentMapChilds.splice(targetIndex, 0, item)
+            parentMapChilds.splice(targetIndex, 0, row)
+          })
+          XEUtils.eachTree(treeRecords, (item) => {
+            const rowid = getRowid($xeTable, item)
             const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: parentMapChilds, parent: parentRow, level: parentLevel + 1, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+            if (item[childrenField]) {
+              item[mapChildrenField] = item[childrenField]
+            }
             fullDataRowIdData[rowid] = rest
             fullAllDataRowIdData[rowid] = rest
-          })
-
+          }, { children: childrenField })
           // 源
           if (parentRow) {
-            const matchObj = XEUtils.findTree(tableFullTreeData, (item: any) => targetRow[rowField] === item[rowField], { children: childrenField })
+            const matchObj = XEUtils.findTree(tableFullTreeData, item => targetRow[rowField] === item[rowField], { children: childrenField })
             if (matchObj) {
               const parentChilds = matchObj.items
               let targetIndex = matchObj.index
               if (isInsertNextRow) {
                 targetIndex = targetIndex + 1
               }
-              parentChilds.splice(targetIndex, 0, ...newRecords)
+              parentChilds.splice(targetIndex, 0, ...treeRecords)
             }
           }
         } else {
@@ -234,7 +245,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
           afIndex = Math.min(afterFullData.length, afIndex + 1)
         }
         if (afIndex === -1) {
-          throw new Error(errLog('vxe.error.unableInsert'))
+          throw new Error(getI18n('vxe.error.unableInsert'))
         }
         afterFullData.splice(afIndex, 0, ...newRecords)
         const tfIndex = $xeTable.findRowIndexOf(tableFullData, targetRow)
@@ -255,10 +266,27 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
       }
     }
   }
-  newRecords.forEach(newRow => {
+
+  const handleStatus = (newRow: any) => {
     const rowid = getRowid($xeTable, newRow)
-    insertRowMaps[rowid] = newRow
-  })
+    // 如果是被删除的数据，则还原状态
+    if (removeRowMaps[rowid]) {
+      delete removeRowMaps[rowid]
+      if (insertRowMaps[rowid]) {
+        delete insertRowMaps[rowid]
+      }
+    } else {
+      insertRowMaps[rowid] = newRow
+    }
+  }
+  // 如果为虚拟树
+  if (treeConfig && transform) {
+    XEUtils.eachTree(treeRecords, handleStatus, { children: mapChildrenField })
+  } else {
+    newRecords.forEach(handleStatus)
+  }
+
+  reactData.removeRowFlag++
   reactData.insertRowFlag++
   $xeTable.cacheRowMap(false)
   $xeTable.updateScrollYStatus()
@@ -815,7 +843,12 @@ export default {
       const { editStore } = reactData
       const { row, column } = editStore.actived
       if (column && row) {
-        return { row, column }
+        return {
+          row,
+          rowIndex: $xeTable.getRowIndex(row),
+          column,
+          columnIndex: $xeTable.getColumnIndex(column)
+        }
       }
       return null
     },
@@ -1008,7 +1041,10 @@ export default {
       const { editStore } = reactData
       const { row, column } = editStore.selected
       if (row && column) {
-        return { row, column }
+        return {
+          row,
+          column
+        }
       }
       return null
     },
