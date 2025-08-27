@@ -58,6 +58,8 @@ export const tableEmits: VxeTableEmits = [
   'row-dragstart',
   'row-dragover',
   'row-dragend',
+  'row-remove-dragend',
+  'row-insert-dragend',
   'column-dragstart',
   'column-dragover',
   'column-dragend',
