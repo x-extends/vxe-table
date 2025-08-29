@@ -15,7 +15,7 @@ export const tableProps = {
   // 表格的最小高度
   minHeight: {
     type: [Number, String] as PropType<VxeTablePropTypes.MinHeight>,
-    default: () => getConfig().table.minHeight
+    default: () => null
   },
   // 表格的最大高度
   maxHeight: [Number, String] as PropType<VxeTablePropTypes.MaxHeight>,
@@ -134,9 +134,17 @@ export const tableProps = {
   headerRowStyle: [Object, Function] as PropType<VxeTablePropTypes.HeaderRowStyle>,
   // 给表尾行附加样式
   footerRowStyle: [Object, Function] as PropType<VxeTablePropTypes.FooterRowStyle>,
-  // 合并指定单元格
+  // 用于分组表头，显示为自定义列头，配合 mergeHeaderCells 灵活实现自定义合并
+  showCustomHeader: {
+    type: Boolean as PropType<VxeTablePropTypes.ShowCustomHeader>,
+    default: () => getConfig().table.showCustomHeader
+  },
+  // 临时合并指定的表头单元格
+  mergeHeaderCells: Array as PropType<VxeTablePropTypes.MergeHeaderCells>,
+  // 临时合并指定的单元格
   mergeCells: Array as PropType<VxeTablePropTypes.MergeCells>,
-  // 合并指定的表尾
+  // 临时合并指定的表尾单元格
+  mergeFooterCells: Array as PropType<VxeTablePropTypes.MergeFooterCells>,
   mergeFooterItems: Array as PropType<VxeTablePropTypes.MergeFooterItems>,
   // 自定义合并行或列的方法
   spanMethod: Function as PropType<VxeTablePropTypes.SpanMethod>,

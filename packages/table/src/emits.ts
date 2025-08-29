@@ -9,6 +9,10 @@ export const tableEmits: VxeTableEmits = [
   'copy',
   'cut',
 
+  'columns-change',
+  'data-change',
+  'footer-data-change',
+
   'current-change', // 已废弃
 
   'current-row-change',

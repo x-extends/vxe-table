@@ -1,80 +1,70 @@
 <template>
   <div>
- <button @click='handleEdit'>激活编辑状态</button>
-      <vxe-grid ref='xGrid' v-bind="gridOptions"></vxe-grid>
+    <vxe-table
+      border="inner"
+      show-overflow
+      :column-config="{ resizable: true }"
+      :data="gridOptions.tableData"
+    >
+      <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+      <vxe-column field="name" title="Name" width="500"></vxe-column>
+      <vxe-column field="sex" title="Sex" width="500"></vxe-column>
+      <vxe-column field="date" title="Date" width="500"></vxe-column>
+      <vxe-column
+        field="address"
+        title="Address"
+        width="100"
+        fixed="right"
+      ></vxe-column>
+      <!-- <vxe-column
+        field="address2"
+        title="Address"
+        width="100"
+        fixed="right"
+      ></vxe-column> -->
+    </vxe-table>
   </div>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      tableData: [],
-      gridOptions: {
-        border: true,
-        height: 200,
-        virtualYConfig: {
-          enabled: true,
-          gt: 10
-        },
-        mouseConfig: { selected: true },
-        keyboardConfig: {
-          isArrow: true,
-          isTab: true,
-          isEdit: true,
-          isChecked: true
-        },
-        cellConfig: {
-          height: 30
-        },
-        editConfig: {
-          trigger: 'click',
-          mode: 'cell',
-          showStatus: true,
-          autoFocus: true
-        },
-        columns: [
-          { type: 'seq', width: 60 },
-          {
-            field: 'name',
-            title: 'Name',
-            editRender: {
-              name: 'VxeInput',
-              props: {
-                clearable: true
-              }
-            }
-          },
-          { field: 'sex', title: 'Sex' },
-          { field: 'date', title: 'Date' },
-          { field: 'address', title: 'Address' }
-        ],
-        data: []
-      }
+<script setup>
+import { reactive } from 'vue'
+const gridOptions = reactive({
+  height: 400,
+  tableData: [
+    {
+      id: 10001,
+      name: 'Test1',
+      role: 'Develop',
+      sex: 'Man',
+      age: 38,
+      address: 'test abc'
+    },
+    {
+      id: 10002,
+      name: 'Test2',
+      role: 'Test',
+      sex: 'Women',
+      age: 22,
+      address: 'Guangzhou'
+    },
+    {
+      id: 10003,
+      name: 'Test3',
+      role: 'PM',
+      sex: 'Man',
+      age: 32,
+      address: 'Shanghai'
+    },
+    {
+      id: 10004,
+      name: 'Test4',
+      role: 'Designer',
+      sex: 'Women',
+      age: 24,
+      address: 'Shanghai'
     }
-  },
-  created () {
-    const list2 = []
-    for (let index = 0; index < 300; index++) {
-      list2.push({
-        name: 'test' + index,
-        role: 'developer',
-        sex: 'Man',
-        date: '2019-05-01',
-        time: 1556677810888 + index * 500,
-        region: 'ShenZhen',
-        address: 'address abc' + index
-      })
-    }
-    this.gridOptions.data = list2
-  },
-  methods: {
-    async handleEdit () {
-      const { row } = await this.$refs.xGrid.insertAt({}, -1)
-      // const { row } = await this.$refs.xGrid.insert({})
-      this.$refs.xGrid.setEditRow(row, true)
-      // this.$refs.xGrid.scrollToRow(row)
-    }
-  }
-}
+  ]
+})
 </script>
+
+<style scoped></style>

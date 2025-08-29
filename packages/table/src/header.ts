@@ -2,7 +2,7 @@ import { h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted 
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { getCalcHeight, convertHeaderColumnToRows } from './util'
+import { getCalcHeight, convertHeaderColumnToRows, convertHeaderToGridRows } from './util'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types'
 
@@ -28,7 +28,7 @@ export default defineVxeComponent({
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
     const { computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeMouseOpts, computeHeaderCellOpts, computeDefaultRowHeight, computeVirtualXOpts } = $xeTable.getComputeMaps()
 
-    const headerColumn = ref([] as VxeTableDefines.ColumnInfo[][])
+    const headerColumn = ref<VxeTableDefines.ColumnInfo[][]>([])
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refHeaderScroll = ref() as Ref<HTMLDivElement>
@@ -39,18 +39,28 @@ export default defineVxeComponent({
     const refHeaderBorderRepair = ref() as Ref<HTMLDivElement>
 
     const uploadColumn = () => {
+      const { showCustomHeader } = tableProps
+      const { collectColumn, visibleColumn } = tableInternalData
+      const { tableGroupColumn } = props
       const { isGroup } = tableReactData
-      headerColumn.value = isGroup ? convertHeaderColumnToRows(props.tableGroupColumn) : []
+      let spanColumns: VxeTableDefines.ColumnInfo[][] = isGroup ? convertHeaderColumnToRows(tableGroupColumn) : []
+      let visibleColgroups: VxeTableDefines.ColumnInfo[][] = []
+      if (showCustomHeader && spanColumns.length > 1) {
+        visibleColgroups = convertHeaderToGridRows(spanColumns)
+        spanColumns = visibleColgroups
+      }
+      headerColumn.value = spanColumns
+      $xeTable.dispatchEvent('columns-change', { visibleColgroups, collectColumn, visibleColumn }, null)
     }
 
-    const renderRows = (isGroup: boolean, isOptimizeMode: boolean, cols: VxeTableDefines.ColumnInfo[], $rowIndex: number) => {
+    const renderRows = (isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][], $rowIndex: number, cols: VxeTableDefines.ColumnInfo[]) => {
       const $xeGrid = $xeTable.xeGrid
       const $xeGantt = $xeTable.xeGantt
 
       const { fixedType } = props
-      const { resizable: allResizable, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
-      const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX, tableColumn } = tableReactData
-      const { fullColumnIdData, scrollXStore } = tableInternalData
+      const { resizable: allResizable, columnKey, showCustomHeader, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
+      const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX, mergeHeadFlag, tableColumn } = tableReactData
+      const { fullColumnIdData, scrollXStore, mergeHeaderList, mergeHeaderCellMaps } = tableInternalData
       const virtualXOpts = computeVirtualXOpts.value
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
@@ -59,6 +69,7 @@ export default defineVxeComponent({
       const headerCellOpts = computeHeaderCellOpts.value
       const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
       const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
+      const isLastRow = $rowIndex === headerGroups.length - 1
 
       return cols.map((column, $columnIndex) => {
         const { type, showHeaderOverflow, headerAlign, align, filters, headerClassName, editRender, cellRender } = column
@@ -101,10 +112,32 @@ export default defineVxeComponent({
           hasFilter
         }
         const thAttrs: Record<string, string | number | null> = {
-          colid,
-          colspan: column.colSpan > 1 ? column.colSpan : null,
-          rowspan: column.rowSpan > 1 ? column.rowSpan : null
+          colid
         }
+        let isMergeCell = false
+        // 合并行或列
+        if (!showCustomHeader) {
+          thAttrs.colspan = column.colSpan > 1 ? column.colSpan : null
+          thAttrs.rowspan = column.rowSpan > 1 ? column.rowSpan : null
+        }
+        if (mergeHeadFlag && mergeHeaderList.length && (showCustomHeader || isLastRow)) {
+          const spanRest = mergeHeaderCellMaps[`${$rowIndex}:${showCustomHeader ? $columnIndex : _columnIndex}`]
+          if (spanRest) {
+            const { rowspan, colspan } = spanRest
+            if (!rowspan || !colspan) {
+              return null
+            }
+            if (rowspan > 1) {
+              isMergeCell = true
+              thAttrs.rowspan = rowspan
+            }
+            if (colspan > 1) {
+              isMergeCell = true
+              thAttrs.colspan = colspan
+            }
+          }
+        }
+
         const thOns: any = {
           onClick: (evnt: MouseEvent) => $xeTable.triggerHeaderCellClickEvent(evnt, cellParams),
           onDblclick: (evnt: MouseEvent) => $xeTable.triggerHeaderCellDblclickEvent(evnt, cellParams)
@@ -132,7 +165,7 @@ export default defineVxeComponent({
         const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
         let isVNPreEmptyStatus = false
-        if (isOptimizeMode && overflowX && !isGroup) {
+        if (isOptimizeMode && overflowX && !isGroup && !isMergeCell) {
           if (!dragCol || dragCol.id !== colid) {
             if (scrollXLoad && tableColumn.length > 10 && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
               isVNPreEmptyStatus = true
@@ -148,7 +181,7 @@ export default defineVxeComponent({
         }
 
         return h('th', {
-          class: ['vxe-table--column vxe-header--column', colid, {
+          class: ['vxe-table--column vxe-header--column', colid, fixedHiddenColumn ? 'fixed--hidden' : 'fixed--visible', {
             [`col--${headAlign}`]: headAlign,
             [`col--${type}`]: type,
             'col--last': isLastColumn,
@@ -156,7 +189,6 @@ export default defineVxeComponent({
             'col--group': isColGroup,
             'col--ellipsis': hasEllipsis,
             'fixed--width': !isAutoCellWidth,
-            'fixed--hidden': fixedHiddenColumn,
             'is--padding': isPadding,
             'is--sortable': column.sortable,
             'col--filter': !!filters,
@@ -171,7 +203,7 @@ export default defineVxeComponent({
           style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(cellParams) : headerCellStyle) : null,
           ...thAttrs,
           ...thOns,
-          key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex
+          key: showCustomHeader ? `${colid}${$columnIndex}` : (columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex)
         }, [
           h('div', {
             class: ['vxe-cell', {
@@ -191,7 +223,7 @@ export default defineVxeComponent({
           /**
            * 列宽拖动
            */
-          !fixedHiddenColumn && showResizable
+          !fixedHiddenColumn && showResizable && (!showCustomHeader || isLastRow)
             ? h('div', {
               class: 'vxe-cell--col-resizable',
               onMousedown: (evnt: MouseEvent) => $xeTable.handleColResizeMousedownEvent(evnt, fixedType, cellParams),
@@ -216,7 +248,7 @@ export default defineVxeComponent({
             headerRowClassName ? (XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName) : ''
           ],
           style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) : null
-        }, renderRows(isGroup, isOptimizeMode, cols, $rowIndex))
+        }, renderRows(isGroup, isOptimizeMode, headerGroups, $rowIndex, cols))
       })
     }
 
@@ -227,7 +259,7 @@ export default defineVxeComponent({
       const { visibleColumn, fullColumnIdData } = tableInternalData
 
       const mouseOpts = computeMouseOpts.value
-      let renderHeaderList = headerColumn.value
+      let renderHeaderList = headerColumn.value || []
       let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
       let isOptimizeMode = false
 

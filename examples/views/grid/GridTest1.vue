@@ -1,12 +1,17 @@
 <template>
   <div>
-    <vxe-grid v-bind="gridOptions" class="my-rdah-grid"></vxe-grid>
+    <div>
+      <vxe-button @click="validEvent">校验变动数据</vxe-button>
+      <vxe-button @click="fullValidEvent">校验全量数据</vxe-button>
+    </div>
+    <vxe-grid ref="gridRef" v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue'
-import type { VxeGridProps } from '../../../types'
+import { ref, reactive } from 'vue'
+import { VxeUI } from '../../../packages'
+import { VxeGridProps, VxeGridInstance } from '../../../types'
 
 interface RowVO {
   id: number
@@ -17,39 +22,63 @@ interface RowVO {
   address: string
 }
 
+const gridRef = ref<VxeGridInstance<RowVO>>()
+
 const gridOptions = reactive<VxeGridProps<RowVO>>({
   border: true,
-  height: 400,
-  rowConfig: {
-    resizable: true
+  showOverflow: true,
+  keepSource: true,
+  height: 300,
+  editConfig: {
+    trigger: 'click',
+    mode: 'row',
+    showStatus: true
   },
-  resizableConfig: {
-    isDblclickAutoHeight: true
+  editRules: {
+    role: [
+      { required: true, message: '必须填写' }
+    ]
   },
   columns: [
-    { type: 'seq', width: 70, rowResize: true },
-    { field: 'name', title: 'Name' },
-    { field: 'sex', title: 'Sex' },
-    { field: 'age', title: 'Age' },
-    { field: 'time', title: 'Time' },
-    { field: 'address', title: 'Address', width: 300 }
+    { type: 'checkbox', width: 60 },
+    { type: 'seq', width: 70 },
+    { field: 'name', title: 'Name', editRender: { name: 'VxeInput' } },
+    { field: 'role', title: 'Role', editRender: { name: 'VxeInput' } },
+    { field: 'sex', title: 'Sex', editRender: { name: 'VxeInput' } },
+    { field: 'age', title: 'Age', editRender: { name: 'VxeInput' } },
+    { field: 'date', title: 'Date', editRender: { name: 'VxeInput' } }
   ],
   data: [
-    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
-    { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou Guangzhou Guangzhou Guangzhou Guangzhou Guangzhou Guangzhou Guangzhou Guangzhou Guangzhou Guangzhou Guangzhou Guangzhou Guangzhou Guangzhou Guangzhou Guangzhou  Guangzhou' },
-    { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai Shanghai Shanghai Shanghai Shanghai Shanghai Shanghai Shanghai' },
-    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' },
-    { id: 10005, name: 'Test5', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' },
-    { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 24, address: 'shenzhen' },
-    { id: 10007, name: 'Test7', role: 'Designer', sex: 'Women', age: 24, address: 'shenzhen shenzhen shenzhen shenzhen shenzhen shenzhen shenzhen shenzhen shenzhen shenzhen' },
-    { id: 10008, name: 'Test8', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
+    { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, address: 'test abc' },
+    { id: 10002, name: '', role: 'Test', sex: '1', age: 22, address: 'Guangzhou' },
+    { id: 10003, name: 'Test3', role: 'PM', sex: '', age: 32, address: 'Shanghai' },
+    { id: 10004, name: 'Test4', role: 'Designer', sex: '', age: 23, address: 'test abc' },
+    { id: 10005, name: '', role: '', sex: '1', age: 30, address: 'Shanghai' },
+    { id: 10006, name: 'Test6', role: 'Designer', sex: '1', age: 21, address: 'test abc' }
   ]
 })
-</script>
 
-<style lang="scss" scoped>
-.my-rdah-grid {
-  // 默认行高
-  --vxe-ui-table-row-height-default: 60px;
+const validEvent = async () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    const errMap = await $grid.validate()
+    if (errMap) {
+      VxeUI.modal.message({ status: 'error', content: '校验不通过！' })
+    } else {
+      VxeUI.modal.message({ status: 'success', content: '校验成功！' })
+    }
+  }
 }
-</style>
+
+const fullValidEvent = async () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    const errMap = await $grid.validate(true)
+    if (errMap) {
+      VxeUI.modal.message({ status: 'error', content: '校验不通过！' })
+    } else {
+      VxeUI.modal.message({ status: 'success', content: '校验成功！' })
+    }
+  }
+}
+</script>

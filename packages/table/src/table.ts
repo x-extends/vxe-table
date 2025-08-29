@@ -282,6 +282,8 @@ export default defineVxeComponent({
       pendingRowFlag: 1,
       insertRowFlag: 1,
       removeRowFlag: 1,
+
+      mergeHeadFlag: 1,
       mergeBodyFlag: 1,
       mergeFootFlag: 1,
 
@@ -1249,11 +1251,153 @@ export default defineVxeComponent({
       }
     }
 
+    const removeBodyMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
+      const { mergeBodyList, fullColumnIdData, fullAllDataRowIdData, mergeBodyMaps } = internalData
+      const rest: VxeTableDefines.MergeItem[] = []
+      if (merges) {
+        const { handleGetRowId } = createHandleGetRowId($xeTable)
+        if (!XEUtils.isArray(merges)) {
+          merges = [merges]
+        }
+        merges.forEach((item) => {
+          const { row: margeRow, col: margeCol } = item
+          let mergeRowIndex = -1
+          let mergeColumnIndex = -1
+          if (XEUtils.isNumber(margeRow)) {
+            mergeRowIndex = margeRow
+          } else {
+            const rowid = margeRow ? handleGetRowId(margeRow) : null
+            const rowRest = rowid ? fullAllDataRowIdData[rowid] : null
+            if (rowRest) {
+              mergeRowIndex = rowRest._index
+            }
+          }
+          if (XEUtils.isNumber(margeCol)) {
+            mergeColumnIndex = margeCol
+          } else {
+            const colid = margeCol ? margeCol.id : null
+            const colRest = colid ? fullColumnIdData[colid] : null
+            if (colRest) {
+              mergeColumnIndex = colRest._index
+            }
+          }
+          const mcIndex = XEUtils.findIndexOf(mergeBodyList, item => item.row === mergeRowIndex && item.col === mergeColumnIndex)
+          if (mcIndex > -1) {
+            const rItems = mergeBodyList.splice(mcIndex, 1)
+            const item = rItems[0]
+            if (item) {
+              rest.push(rItems[0])
+              if (mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`]) {
+                delete mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
+              }
+            }
+          }
+        })
+      }
+      return rest
+    }
+
+    const handleUpdateMergeHeaderCells = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
+      internalData.mergeHeaderList = []
+      internalData.mergeHeaderMaps = {}
+      internalData.mergeHeaderCellMaps = {}
+      $xeTable.setMergeHeaderCells(merges)
+    }
+
+    const handleHeaderMerge = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
+      const { footerTableData } = reactData
+      const { mergeHeaderList, mergeHeaderMaps, fullColumnIdData } = internalData
+      if (merges) {
+        const { visibleColumn } = internalData
+        if (!XEUtils.isArray(merges)) {
+          merges = [merges]
+        }
+        merges.forEach((item) => {
+          let { row: margeRow, col: margeCol, rowspan, colspan } = item
+          const mergeRowIndex = XEUtils.isNumber(margeRow) ? margeRow : -1
+          let mergeColumnIndex = -1
+          if (XEUtils.isNumber(margeCol)) {
+            mergeColumnIndex = margeCol
+          } else {
+            const colid = margeCol ? margeCol.id : null
+            const colRest = colid ? fullColumnIdData[colid] : null
+            if (colRest) {
+              mergeColumnIndex = colRest._index
+            }
+          }
+          if (mergeRowIndex > -1 && mergeColumnIndex > -1 && (rowspan || colspan)) {
+            rowspan = XEUtils.toNumber(rowspan) || 1
+            colspan = XEUtils.toNumber(colspan) || 1
+            if (rowspan > 1 || colspan > 1) {
+              const row = footerTableData[mergeRowIndex]
+              const column = visibleColumn[mergeColumnIndex]
+              let mergeItem = mergeHeaderMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
+              if (mergeItem) {
+                mergeItem.rowspan = rowspan
+                mergeItem.colspan = colspan
+                mergeItem._rowspan = rowspan
+                mergeItem._colspan = colspan
+              } else {
+                mergeItem = {
+                  row: mergeRowIndex,
+                  col: mergeColumnIndex,
+                  rowspan,
+                  colspan,
+                  _row: row,
+                  _col: column,
+                  _rowspan: rowspan,
+                  _colspan: colspan
+                }
+                mergeHeaderMaps[`${mergeRowIndex}:${mergeColumnIndex}`] = mergeItem
+                mergeHeaderList.push(mergeItem)
+              }
+            }
+          }
+        })
+      }
+    }
+
+    const removeHeaderMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
+      const { mergeHeaderList, fullColumnIdData, mergeHeaderMaps } = internalData
+      const rest: VxeTableDefines.MergeItem[] = []
+      if (merges) {
+        if (!XEUtils.isArray(merges)) {
+          merges = [merges]
+        }
+        merges.forEach((item) => {
+          const { row: margeRow, col: margeCol } = item
+          const mergeRowIndex = XEUtils.isNumber(margeRow) ? margeRow : -1
+          let mergeColumnIndex = -1
+          if (XEUtils.isNumber(margeCol)) {
+            mergeColumnIndex = margeCol
+          } else {
+            const colid = margeCol ? margeCol.id : null
+            const colRest = colid ? fullColumnIdData[colid] : null
+            if (colRest) {
+              mergeColumnIndex = colRest._index
+            }
+          }
+          const mcIndex = XEUtils.findIndexOf(mergeHeaderList, item => item.row === mergeRowIndex && item.col === mergeColumnIndex)
+          if (mcIndex > -1) {
+            const rItems = mergeHeaderList.splice(mcIndex, 1)
+            const item = rItems[0]
+            if (item) {
+              rest.push(item)
+              if (mergeHeaderMaps[`${mergeRowIndex}:${mergeColumnIndex}`]) {
+                delete mergeHeaderMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
+              }
+            }
+          }
+        })
+      }
+      return rest
+    }
+
     const handleUpdateMergeFooterCells = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
       internalData.mergeFooterList = []
       internalData.mergeFooterMaps = {}
       internalData.mergeFooterCellMaps = {}
-      $xeTable.setMergeFooterItems(merges)
+      $xeTable.setMergeFooterCells(merges)
     }
 
     const handleFooterMerge = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
@@ -1307,52 +1451,6 @@ export default defineVxeComponent({
           }
         })
       }
-    }
-
-    const removeBodyMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
-      const { mergeBodyList, fullColumnIdData, fullAllDataRowIdData, mergeBodyMaps } = internalData
-      const rest: VxeTableDefines.MergeItem[] = []
-      if (merges) {
-        const { handleGetRowId } = createHandleGetRowId($xeTable)
-        if (!XEUtils.isArray(merges)) {
-          merges = [merges]
-        }
-        merges.forEach((item) => {
-          const { row: margeRow, col: margeCol } = item
-          let mergeRowIndex = -1
-          let mergeColumnIndex = -1
-          if (XEUtils.isNumber(margeRow)) {
-            mergeRowIndex = margeRow
-          } else {
-            const rowid = margeRow ? handleGetRowId(margeRow) : null
-            const rowRest = rowid ? fullAllDataRowIdData[rowid] : null
-            if (rowRest) {
-              mergeRowIndex = rowRest._index
-            }
-          }
-          if (XEUtils.isNumber(margeCol)) {
-            mergeColumnIndex = margeCol
-          } else {
-            const colid = margeCol ? margeCol.id : null
-            const colRest = colid ? fullColumnIdData[colid] : null
-            if (colRest) {
-              mergeColumnIndex = colRest._index
-            }
-          }
-          const mcIndex = XEUtils.findIndexOf(mergeBodyList, item => item.row === mergeRowIndex && item.col === mergeColumnIndex)
-          if (mcIndex > -1) {
-            const rItems = mergeBodyList.splice(mcIndex, 1)
-            const item = rItems[0]
-            if (item) {
-              rest.push(rItems[0])
-              if (mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`]) {
-                delete mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
-              }
-            }
-          }
-        })
-      }
-      return rest
     }
 
     const removeFooterMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
@@ -1462,8 +1560,22 @@ export default defineVxeComponent({
     }
 
     const calcTableHeight = (key: 'height' | 'minHeight' | 'maxHeight') => {
+      const { editConfig } = props
       const { parentHeight } = reactData
-      const val = props[key]
+      let val = props[key]
+      if (key === 'minHeight') {
+        const defMinHeight = getConfig().table.minHeight
+        if (XEUtils.eqNull(val)) {
+          if (eqEmptyValue(defMinHeight)) {
+            // 编辑模式默认最小高度
+            if (isEnableConf(editConfig)) {
+              val = 144
+            }
+          } else {
+            val = defMinHeight
+          }
+        }
+      }
       let num = 0
       if (val) {
         if (val === '100%' || val === 'auto') {
@@ -2388,7 +2500,7 @@ export default defineVxeComponent({
       }
       if (xRightCornerEl) {
         xRightCornerEl.style.width = scrollbarXToTop ? '' : `${osbWidth}px`
-        xRightCornerEl.style.display = scrollbarXToTop ? '' : (overflowX && osbHeight ? 'block' : '')
+        xRightCornerEl.style.display = scrollbarXToTop ? '' : (xScrollbarVisible === 'visible' ? 'block' : '')
       }
 
       const scrollYVirtualEl = refScrollYVirtualElem.value
@@ -2400,7 +2512,7 @@ export default defineVxeComponent({
       const yTopCornerEl = refScrollYTopCornerElem.value
       if (yTopCornerEl) {
         yTopCornerEl.style.height = `${tHeaderHeight}px`
-        yTopCornerEl.style.display = overflowY && tHeaderHeight ? 'block' : ''
+        yTopCornerEl.style.display = tHeaderHeight && yScrollbarVisible === 'visible' ? 'block' : ''
       }
       const yWrapperEl = refScrollYWrapperElem.value
       if (yWrapperEl) {
@@ -2411,7 +2523,7 @@ export default defineVxeComponent({
       if (yBottomCornerEl) {
         yBottomCornerEl.style.height = `${tFooterHeight}px`
         yBottomCornerEl.style.top = `${tHeaderHeight + tbHeight}px`
-        yBottomCornerEl.style.display = overflowY && tFooterHeight ? 'block' : ''
+        yBottomCornerEl.style.display = tFooterHeight && yScrollbarVisible === 'visible' ? 'block' : ''
       }
 
       const rowExpandEl = refRowExpandElem.value
@@ -3119,10 +3231,18 @@ export default defineVxeComponent({
       }
     }
 
+    const handleDefaultMergeHeaderItems = () => {
+      const { mergeHeaderCells } = props
+      if (mergeHeaderCells) {
+        $xeTable.setMergeHeaderCells(mergeHeaderCells)
+      }
+    }
+
     const handleDefaultMergeFooterItems = () => {
-      const { mergeFooterItems } = props
-      if (mergeFooterItems) {
-        $xeTable.setMergeFooterItems(mergeFooterItems)
+      const { mergeFooterCells, mergeFooterItems } = props
+      const mFooterCells = mergeFooterCells || mergeFooterItems
+      if (mFooterCells) {
+        $xeTable.setMergeFooterCells(mFooterCells)
       }
     }
 
@@ -3574,6 +3694,10 @@ export default defineVxeComponent({
 
         handleReserveStatus()
         $xeTable.checkSelectionStatus()
+        $xeTable.dispatchEvent('data-change', {
+          visibleColumn: internalData.visibleColumn,
+          visibleData: internalData.afterFullData
+        }, null)
         return new Promise<void>(resolve => {
           nextTick()
             .then(() => handleRecalculateStyle(false, false, false))
@@ -3636,6 +3760,7 @@ export default defineVxeComponent({
       handleDefaultTreeExpand()
       handleDefaultRowGroupExpand()
       handleDefaultMergeCells()
+      handleDefaultMergeHeaderItems()
       handleDefaultMergeFooterItems()
       nextTick(() => setTimeout(() => $xeTable.recalculate()))
     }
@@ -6960,6 +7085,10 @@ export default defineVxeComponent({
         }
         reactData.footerTableData = footData
         $xeTable.handleUpdateFooterMerge()
+        $xeTable.dispatchEvent('footer-data-change', {
+          visibleColumn: internalData.visibleColumn,
+          footData
+        }, null)
         return nextTick()
       },
       /**
@@ -7027,39 +7156,85 @@ export default defineVxeComponent({
           return updateStyle()
         })
       },
-      setMergeFooterItems (merges) {
-        if (props.footerSpanMethod) {
-          errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
-        }
-        handleFooterMerge(merges)
-        $xeTable.handleUpdateFooterMerge()
+      setMergeHeaderCells (merges) {
+        handleHeaderMerge(merges)
+        $xeTable.handleUpdateHeaderMerge()
         return nextTick().then(() => {
-          $xeTable.updateCellAreas()
           return updateStyle()
         })
       },
-      removeMergeFooterItems (merges) {
-        if (props.footerSpanMethod) {
-          errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
-        }
-        const rest = removeFooterMerges(merges)
-        $xeTable.handleUpdateFooterMerge()
+      /**
+       * 移除表头单元格合并 [{row:Row|number, col:ColumnInfo|number}]
+       */
+      removeMergeHeaderCells (merges) {
+        const rest = removeHeaderMerges(merges)
+        $xeTable.handleUpdateHeaderMerge()
         return nextTick().then(() => {
-          $xeTable.updateCellAreas()
           updateStyle()
           return rest
         })
       },
       /**
+       * 获取所有被合并的表头单元格
+       */
+      getMergeHeaderCells () {
+        return internalData.mergeHeaderList.slice(0)
+      },
+      /**
+       * 清除所有表头单元格合并
+       */
+      clearMergeHeaderCells () {
+        internalData.mergeHeaderList = []
+        internalData.mergeHeaderMaps = {}
+        internalData.mergeHeaderCellMaps = {}
+        reactData.mergeHeadFlag++
+        return nextTick().then(() => {
+          return updateStyle()
+        })
+      },
+      setMergeFooterCells (merges) {
+        if (props.footerSpanMethod) {
+          errLog('vxe.error.errConflicts', ['merge-footer-cells | merge-footer-items', 'footer-span-method'])
+        }
+        handleFooterMerge(merges)
+        $xeTable.handleUpdateFooterMerge()
+        return nextTick().then(() => {
+          return updateStyle()
+        })
+      },
+      setMergeFooterItems (merges) {
+        // errLog('vxe.error.delFunc', ['setMergeFooterItems', 'setMergeFooterCells'])
+        return $xeTable.setMergeFooterCells(merges)
+      },
+      removeMergeFooterCells (merges) {
+        if (props.footerSpanMethod) {
+          errLog('vxe.error.errConflicts', ['merge-footer-cells | merge-footer-items', 'footer-span-method'])
+        }
+        const rest = removeFooterMerges(merges)
+        $xeTable.handleUpdateFooterMerge()
+        return nextTick().then(() => {
+          updateStyle()
+          return rest
+        })
+      },
+      removeMergeFooterItems (merges) {
+        // errLog('vxe.error.delFunc', ['removeMergeFooterItems', 'removeMergeFooterCells'])
+        return $xeTable.removeMergeFooterCells(merges)
+      },
+      /**
        * 获取所有被合并的表尾
        */
-      getMergeFooterItems () {
+      getMergeFooterCells () {
         return internalData.mergeFooterList.slice(0)
+      },
+      getMergeFooterItems () {
+        // errLog('vxe.error.delFunc', ['getMergeFooterItems', 'getMergeFooterCells'])
+        return $xeTable.getMergeFooterCells()
       },
       /**
        * 清除所有表尾合并
        */
-      clearMergeFooterItems () {
+      clearMergeFooterCells () {
         internalData.mergeFooterList = []
         internalData.mergeFooterMaps = {}
         internalData.mergeFooterCellMaps = {}
@@ -7067,6 +7242,10 @@ export default defineVxeComponent({
         return nextTick().then(() => {
           return updateStyle()
         })
+      },
+      clearMergeFooterItems () {
+        // errLog('vxe.error.delFunc', ['clearMergeFooterItems', 'clearMergeFooterCells'])
+        return $xeTable.clearMergeFooterCells()
       },
       updateCellAreas () {
         const { mouseConfig } = props
@@ -9108,6 +9287,11 @@ export default defineVxeComponent({
         const { mergeBodyList } = internalData
         internalData.mergeBodyCellMaps = buildMergeData(mergeBodyList)
         reactData.mergeBodyFlag++
+      },
+      handleUpdateHeaderMerge () {
+        const { mergeHeaderList } = internalData
+        internalData.mergeHeaderCellMaps = buildMergeData(mergeHeaderList)
+        reactData.mergeHeadFlag++
       },
       handleUpdateFooterMerge () {
         const { mergeFooterList } = internalData
@@ -11899,7 +12083,10 @@ export default defineVxeComponent({
               ref: refScrollXSpaceElem,
               class: 'vxe-table--scroll-x-space'
             })
-          ])
+          ]),
+          h('div', {
+            class: 'vxe-table--scroll-x-handle-appearance'
+          })
         ]),
         h('div', {
           ref: refScrollXRightCornerElem,
@@ -11930,7 +12117,10 @@ export default defineVxeComponent({
               ref: refScrollYSpaceElem,
               class: 'vxe-table--scroll-y-space'
             })
-          ])
+          ]),
+          h('div', {
+            class: 'vxe-table--scroll-y-handle-appearance'
+          })
         ]),
         h('div', {
           ref: refScrollYBottomCornerElem,
@@ -12425,15 +12615,33 @@ export default defineVxeComponent({
       handleUpdateMergeBodyCells(props.mergeCells || [])
     })
 
-    const mergeFooterItemFlag = ref(0)
+    const mergeHeaderItemFlag = ref(0)
+    watch(() => props.mergeHeaderCells ? props.mergeHeaderCells.length : -1, () => {
+      mergeHeaderItemFlag.value++
+    })
+    watch(() => props.mergeHeaderCells, () => {
+      mergeHeaderItemFlag.value++
+    })
+    watch(mergeHeaderItemFlag, () => {
+      handleUpdateMergeHeaderCells(props.mergeHeaderCells || [])
+    })
+
+    const mergeFooteCellFlag = ref(0)
+    watch(() => props.mergeFooterCells ? props.mergeFooterCells.length : -1, () => {
+      mergeFooteCellFlag.value++
+    })
+    watch(() => props.mergeFooterCells, () => {
+      mergeFooteCellFlag.value++
+    })
     watch(() => props.mergeFooterItems ? props.mergeFooterItems.length : -1, () => {
-      mergeFooterItemFlag.value++
+      mergeFooteCellFlag.value++
     })
     watch(() => props.mergeFooterItems, () => {
-      mergeFooterItemFlag.value++
+      mergeFooteCellFlag.value++
     })
-    watch(mergeFooterItemFlag, () => {
-      handleUpdateMergeFooterCells(props.mergeFooterItems || [])
+    watch(mergeFooteCellFlag, () => {
+      const mFooterCells = props.mergeFooterCells || props.mergeFooterItems
+      handleUpdateMergeFooterCells(mFooterCells || [])
     })
 
     watch(computeRowGroupFields, (val) => {

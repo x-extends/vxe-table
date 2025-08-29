@@ -73,6 +73,7 @@ export function createInternalData (): TableInternalData {
     tableFullColumn: [],
     // 渲染所有列
     visibleColumn: [],
+
     // 全量数据集（包括当前和已删除）
     fullAllDataRowIdData: {},
     // 数据集（仅当前）
@@ -84,16 +85,22 @@ export function createInternalData (): TableInternalData {
     fullColumnIdData: {},
     fullColumnFieldData: {},
 
+    // 合并表头单元格的数据
+    mergeHeaderList: [],
+    mergeHeaderMaps: {},
+    // 已合并单元格数据集合
+    mergeHeaderCellMaps: {},
     // 合并单元格的数据
     mergeBodyList: [],
     mergeBodyMaps: {},
+    // 已合并单元格数据集合
+    mergeBodyCellMaps: {},
     // 合并表尾的数据
     mergeFooterList: [],
     mergeFooterMaps: {},
-    // 已合并单元格数据集合
-    mergeBodyCellMaps: {},
     // 已合并表尾数据集合
     mergeFooterCellMaps: {},
+
     // 已展开的行集合
     rowExpandedMaps: {},
     // 懒加载中的展开行的集合
@@ -192,6 +199,73 @@ export const convertHeaderColumnToRows = (originColumns: any): any[][] => {
   })
 
   return rows
+}
+
+export function convertHeaderToGridRows (spanColumns: VxeTableDefines.ColumnInfo[][]) {
+  const rSize = spanColumns.length
+  const cSize = spanColumns[0].reduce((sum, cell) => sum + cell.colSpan, 0)
+
+  const occupiedRows: boolean[][] = []
+  const fullRows: any[][] = []
+  for (let rIndex = 0; rIndex < rSize; rIndex++) {
+    const oCols: boolean[] = []
+    const dCols: string[] = []
+    for (let cIndex = 0; cIndex < cSize; cIndex++) {
+      oCols.push(false)
+      dCols.push('')
+    }
+    occupiedRows.push(oCols)
+    fullRows.push(dCols)
+  }
+
+  for (let rIndex = 0; rIndex < rSize; rIndex++) {
+    let currColIndex = 0
+    for (const column of spanColumns[rIndex]) {
+      const { colSpan, rowSpan } = column
+      let startColIndex = -1
+      for (let ccIndex = currColIndex; ccIndex <= cSize - colSpan; ccIndex++) {
+        let oFlag = true
+        for (let csIndex = 0; csIndex < colSpan; csIndex++) {
+          if (occupiedRows[rIndex][ccIndex + csIndex]) {
+            oFlag = false
+            break
+          }
+        }
+        if (oFlag) {
+          startColIndex = ccIndex
+          break
+        }
+      }
+      if (startColIndex === -1) {
+        for (let j = 0; j <= cSize - colSpan; j++) {
+          let oFlag = true
+          for (let k = 0; k < colSpan; k++) {
+            if (occupiedRows[rIndex][j + k]) {
+              oFlag = false
+              break
+            }
+          }
+          if (oFlag) {
+            startColIndex = j
+            break
+          }
+        }
+        if (startColIndex === -1) {
+          // error
+          break
+        }
+      }
+
+      for (let srIndex = rIndex; srIndex < rIndex + rowSpan; srIndex++) {
+        for (let scIndex = startColIndex; scIndex < startColIndex + colSpan; scIndex++) {
+          occupiedRows[srIndex][scIndex] = true
+          fullRows[srIndex][scIndex] = column
+        }
+      }
+      currColIndex = startColIndex + colSpan
+    }
+  }
+  return fullRows
 }
 
 export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft: number, scrollTop: number) {
