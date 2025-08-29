@@ -55,9 +55,11 @@ export const columnProps = {
   // 给表尾单元格附加 className
   footerClassName: [String, Function],
   // 格式化显示内容
-  formatter: [Function, Array, String],
+  formatter: [Function, Array, String] as PropType<VxeColumnPropTypes.Formatter<any>>,
+  // 格式化表头显示内容
+  headerFormatter: [Function, Array, String] as PropType<VxeColumnPropTypes.HeaderFormatter>,
   // 格式化表尾显示内容
-  footerFormatter: [Function, Array, String],
+  footerFormatter: [Function, Array, String] as PropType<VxeColumnPropTypes.FooterFormatter>,
   // 是否显示间距
   padding: {
     type: Boolean as PropType<VxeColumnPropTypes.Padding>,

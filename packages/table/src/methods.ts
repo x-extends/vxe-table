@@ -1069,7 +1069,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   }
   if (xRightCornerEl) {
     xRightCornerEl.style.width = scrollbarXToTop ? '' : `${osbWidth}px`
-    xRightCornerEl.style.display = scrollbarXToTop ? '' : (overflowX && osbHeight ? 'block' : '')
+    xRightCornerEl.style.display = scrollbarXToTop ? '' : (xScrollbarVisible === 'visible' ? 'block' : '')
   }
 
   const scrollYVirtualEl = $xeTable.$refs.refScrollYVirtualElem as HTMLDivElement
@@ -1081,7 +1081,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const yTopCornerEl = $xeTable.$refs.refScrollYTopCornerElem as HTMLDivElement
   if (yTopCornerEl) {
     yTopCornerEl.style.height = `${tHeaderHeight}px`
-    yTopCornerEl.style.display = overflowY && tHeaderHeight ? 'block' : ''
+    yTopCornerEl.style.display = tHeaderHeight && yScrollbarVisible === 'visible' ? 'block' : ''
   }
   const yWrapperEl = $xeTable.$refs.refScrollYWrapperElem as HTMLDivElement
   if (yWrapperEl) {
@@ -1092,7 +1092,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   if (yBottomCornerEl) {
     yBottomCornerEl.style.height = `${tFooterHeight}px`
     yBottomCornerEl.style.top = `${tHeaderHeight + tbHeight}px`
-    yBottomCornerEl.style.display = overflowY && tFooterHeight ? 'block' : ''
+    yBottomCornerEl.style.display = tFooterHeight && yScrollbarVisible === 'visible' ? 'block' : ''
   }
 
   const rowExpandEl = $xeTable.$refs.refRowExpandElem as HTMLDivElement
@@ -2016,6 +2016,148 @@ function handleBodyMerge ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   }
 }
 
+function removeBodyMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { mergeBodyList, fullColumnIdData, fullAllDataRowIdData, mergeBodyMaps } = internalData
+  const rest: VxeTableDefines.MergeItem[] = []
+  if (merges) {
+    const { handleGetRowId } = createHandleGetRowId($xeTable)
+    if (!XEUtils.isArray(merges)) {
+      merges = [merges]
+    }
+    merges.forEach((item) => {
+      const { row: margeRow, col: margeCol } = item
+      let mergeRowIndex = -1
+      let mergeColumnIndex = -1
+      if (XEUtils.isNumber(margeRow)) {
+        mergeRowIndex = margeRow
+      } else {
+        const rowid = margeRow ? handleGetRowId(margeRow) : null
+        const rowRest = rowid ? fullAllDataRowIdData[rowid] : null
+        if (rowRest) {
+          mergeRowIndex = rowRest._index
+        }
+      }
+      if (XEUtils.isNumber(margeCol)) {
+        mergeColumnIndex = margeCol
+      } else {
+        const colid = margeCol ? margeCol.id : null
+        const colRest = colid ? fullColumnIdData[colid] : null
+        if (colRest) {
+          mergeColumnIndex = colRest._index
+        }
+      }
+      const mcIndex = XEUtils.findIndexOf(mergeBodyList, item => (item.row === mergeRowIndex) && (item.col === mergeColumnIndex))
+      if (mcIndex > -1) {
+        const rItems = mergeBodyList.splice(mcIndex, 1)
+        const item = rItems[0]
+        if (item) {
+          rest.push(rItems[0])
+          if (mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`]) {
+            delete mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
+          }
+        }
+      }
+    })
+  }
+  return rest
+}
+
+function handleHeaderMerge ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { footerTableData } = reactData
+  const { mergeHeaderList, mergeHeaderMaps, fullColumnIdData } = internalData
+  if (merges) {
+    const { visibleColumn } = internalData
+    if (!XEUtils.isArray(merges)) {
+      merges = [merges]
+    }
+    merges.forEach((item) => {
+      let { row: margeRow, col: margeCol, rowspan, colspan } = item
+      const mergeRowIndex = XEUtils.isNumber(margeRow) ? margeRow : -1
+      let mergeColumnIndex = -1
+      if (XEUtils.isNumber(margeCol)) {
+        mergeColumnIndex = margeCol
+      } else {
+        const colid = margeCol ? margeCol.id : null
+        const colRest = colid ? fullColumnIdData[colid] : null
+        if (colRest) {
+          mergeColumnIndex = colRest._index
+        }
+      }
+      if (mergeRowIndex > -1 && mergeColumnIndex > -1 && (rowspan || colspan)) {
+        rowspan = XEUtils.toNumber(rowspan) || 1
+        colspan = XEUtils.toNumber(colspan) || 1
+        if (rowspan > 1 || colspan > 1) {
+          const row = footerTableData[mergeRowIndex]
+          const column = visibleColumn[mergeColumnIndex]
+          let mergeItem = mergeHeaderMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
+          if (mergeItem) {
+            mergeItem.rowspan = rowspan
+            mergeItem.colspan = colspan
+            mergeItem._rowspan = rowspan
+            mergeItem._colspan = colspan
+          } else {
+            mergeItem = {
+              row: mergeRowIndex,
+              col: mergeColumnIndex,
+              rowspan,
+              colspan,
+              _row: row,
+              _col: column,
+              _rowspan: rowspan,
+              _colspan: colspan
+            }
+            mergeHeaderMaps[`${mergeRowIndex}:${mergeColumnIndex}`] = mergeItem
+            mergeHeaderList.push(mergeItem)
+          }
+        }
+      }
+    })
+  }
+}
+
+function removeHeaderMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { mergeHeaderList, fullColumnIdData, mergeHeaderMaps } = internalData
+  const rest: VxeTableDefines.MergeItem[] = []
+  if (merges) {
+    if (!XEUtils.isArray(merges)) {
+      merges = [merges]
+    }
+    merges.forEach((item) => {
+      const { row: margeRow, col: margeCol } = item
+      const mergeRowIndex = XEUtils.isNumber(margeRow) ? margeRow : -1
+      let mergeColumnIndex = -1
+      if (XEUtils.isNumber(margeCol)) {
+        mergeColumnIndex = margeCol
+      } else {
+        const colid = margeCol ? margeCol.id : null
+        const colRest = colid ? fullColumnIdData[colid] : null
+        if (colRest) {
+          mergeColumnIndex = colRest._index
+        }
+      }
+      const mcIndex = XEUtils.findIndexOf(mergeHeaderList, item => item.row === mergeRowIndex && item.col === mergeColumnIndex)
+      if (mcIndex > -1) {
+        const rItems = mergeHeaderList.splice(mcIndex, 1)
+        const item = rItems[0]
+        if (item) {
+          rest.push(item)
+          if (mergeHeaderMaps[`${mergeRowIndex}:${mergeColumnIndex}`]) {
+            delete mergeHeaderMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
+          }
+        }
+      }
+    })
+  }
+  return rest
+}
+
 function handleFooterMerge ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -2070,54 +2212,6 @@ function handleFooterMerge ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
       }
     })
   }
-}
-
-function removeBodyMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
-  const internalData = $xeTable as unknown as TableInternalData
-
-  const { mergeBodyList, fullColumnIdData, fullAllDataRowIdData, mergeBodyMaps } = internalData
-  const rest: VxeTableDefines.MergeItem[] = []
-  if (merges) {
-    const { handleGetRowId } = createHandleGetRowId($xeTable)
-    if (!XEUtils.isArray(merges)) {
-      merges = [merges]
-    }
-    merges.forEach((item) => {
-      const { row: margeRow, col: margeCol } = item
-      let mergeRowIndex = -1
-      let mergeColumnIndex = -1
-      if (XEUtils.isNumber(margeRow)) {
-        mergeRowIndex = margeRow
-      } else {
-        const rowid = margeRow ? handleGetRowId(margeRow) : null
-        const rowRest = rowid ? fullAllDataRowIdData[rowid] : null
-        if (rowRest) {
-          mergeRowIndex = rowRest._index
-        }
-      }
-      if (XEUtils.isNumber(margeCol)) {
-        mergeColumnIndex = margeCol
-      } else {
-        const colid = margeCol ? margeCol.id : null
-        const colRest = colid ? fullColumnIdData[colid] : null
-        if (colRest) {
-          mergeColumnIndex = colRest._index
-        }
-      }
-      const mcIndex = XEUtils.findIndexOf(mergeBodyList, item => (item.row === mergeRowIndex) && (item.col === mergeColumnIndex))
-      if (mcIndex > -1) {
-        const rItems = mergeBodyList.splice(mcIndex, 1)
-        const item = rItems[0]
-        if (item) {
-          rest.push(rItems[0])
-          if (mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`]) {
-            delete mergeBodyMaps[`${mergeRowIndex}:${mergeColumnIndex}`]
-          }
-        }
-      }
-    })
-  }
-  return rest
 }
 
 function removeFooterMerges ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
@@ -2236,8 +2330,22 @@ function calcTableHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
 
+  const { editConfig } = props
   const { parentHeight } = reactData
-  const val = props[key]
+  let val = props[key]
+  if (key === 'minHeight') {
+    const defMinHeight = getConfig().table.minHeight
+    if (XEUtils.eqNull(val)) {
+      if (eqEmptyValue(defMinHeight)) {
+        // 编辑模式默认最小高度
+        if (isEnableConf(editConfig)) {
+          val = 144
+        }
+      } else {
+        val = defMinHeight
+      }
+    }
+  }
   let num = 0
   if (val) {
     if (val === '100%' || val === 'auto') {
@@ -2756,12 +2864,22 @@ function handleDefaultMergeCells ($xeTable: VxeTableConstructor & VxeTablePrivat
   }
 }
 
+function handleDefaultMergeHeaderItems ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const props = $xeTable
+
+  const { mergeHeaderCells } = props
+  if (mergeHeaderCells) {
+    $xeTable.setMergeHeaderCells(mergeHeaderCells)
+  }
+}
+
 function handleDefaultMergeFooterItems ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const props = $xeTable
 
-  const { mergeFooterItems } = props
-  if (mergeFooterItems) {
-    $xeTable.setMergeFooterItems(mergeFooterItems)
+  const { mergeFooterCells, mergeFooterItems } = props
+  const mFooterCells = mergeFooterCells || mergeFooterItems
+  if (mFooterCells) {
+    $xeTable.setMergeFooterCells(mFooterCells)
   }
 }
 
@@ -3237,6 +3355,10 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
 
     handleReserveStatus($xeTable)
     $xeTable.checkSelectionStatus()
+    $xeTable.dispatchEvent('data-change', {
+      visibleColumn: internalData.visibleColumn,
+      visibleData: internalData.afterFullData
+    }, null)
     return new Promise<void>(resolve => {
       $xeTable.$nextTick()
         .then(() => handleRecalculateStyle($xeTable, false, false, false))
@@ -3299,6 +3421,7 @@ function handleLoadDefaults ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
   handleDefaultTreeExpand($xeTable)
   handleDefaultRowGroupExpand($xeTable)
   handleDefaultMergeCells($xeTable)
+  handleDefaultMergeHeaderItems($xeTable)
   handleDefaultMergeFooterItems($xeTable)
   $xeTable.$nextTick(() => setTimeout(() => $xeTable.recalculate()))
 }
@@ -6901,6 +7024,15 @@ const Methods = {
     const { mergeBodyList } = internalData
     internalData.mergeBodyCellMaps = buildMergeData(mergeBodyList)
     reactData.mergeBodyFlag++
+  },
+  handleUpdateHeaderMerge () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { mergeHeaderList } = internalData
+    internalData.mergeHeaderCellMaps = buildMergeData(mergeHeaderList)
+    reactData.mergeHeadFlag++
   },
   handleUpdateFooterMerge () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -11518,6 +11650,10 @@ const Methods = {
     }
     reactData.footerTableData = footData
     $xeTable.handleUpdateFooterMerge()
+    $xeTable.dispatchEvent('footer-data-change', {
+      visibleColumn: internalData.visibleColumn,
+      footData
+    }, null)
     return $xeTable.$nextTick()
   },
   /**
@@ -11539,7 +11675,7 @@ const Methods = {
   /**
    * 设置合并单元格 [{ row: Row|number, column: ColumnInfo|number, rowspan: number, colspan: number }]
    */
-  setMergeCells (merges: any) {
+  setMergeCells (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
@@ -11563,7 +11699,7 @@ const Methods = {
   /**
    * 移除单元格合并 [{row:Row|number, col:ColumnInfo|number}]
    */
-  removeMergeCells (merges: any) {
+  removeMergeCells (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
 
@@ -11603,48 +11739,111 @@ const Methods = {
       return updateStyle($xeTable)
     })
   },
-  setMergeFooterItems (merges: any) {
+  setMergeHeaderCells (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const props = $xeTable
 
-    if (props.footerSpanMethod) {
-      errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
-    }
-    handleFooterMerge($xeTable, merges)
-    $xeTable.handleUpdateFooterMerge()
+    handleHeaderMerge($xeTable, merges)
+    $xeTable.handleUpdateHeaderMerge()
     return $xeTable.$nextTick().then(() => {
-      $xeTable.updateCellAreas()
       return updateStyle($xeTable)
     })
   },
-  removeMergeFooterItems (merges: any) {
+  /**
+   * 移除表头单元格合并 [{row:Row|number, col:ColumnInfo|number}]
+   */
+  removeMergeHeaderCells (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const props = $xeTable
 
-    if (props.footerSpanMethod) {
-      errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
-    }
-    const rest = removeFooterMerges($xeTable, merges)
-    $xeTable.handleUpdateFooterMerge()
+    const rest = removeHeaderMerges($xeTable, merges)
+    $xeTable.handleUpdateHeaderMerge()
     return $xeTable.$nextTick().then(() => {
-      $xeTable.updateCellAreas()
       updateStyle($xeTable)
       return rest
     })
   },
   /**
+   * 获取所有被合并的表头单元格
+   */
+  getMergeHeaderCells () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    return internalData.mergeHeaderList.slice(0)
+  },
+  /**
+   * 清除所有表头单元格合并
+   */
+  clearMergeHeaderCells () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    internalData.mergeHeaderList = []
+    internalData.mergeHeaderMaps = {}
+    internalData.mergeHeaderCellMaps = {}
+    reactData.mergeHeadFlag++
+    return $xeTable.$nextTick().then(() => {
+      return updateStyle($xeTable)
+    })
+  },
+  setMergeFooterCells (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+
+    if (props.footerSpanMethod) {
+      errLog('vxe.error.errConflicts', ['merge-footer-cells | merge-footer-items', 'footer-span-method'])
+    }
+    handleFooterMerge($xeTable, merges)
+    $xeTable.handleUpdateFooterMerge()
+    return $xeTable.$nextTick().then(() => {
+      return updateStyle($xeTable)
+    })
+  },
+  setMergeFooterItems (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    // errLog('vxe.error.delFunc', ['setMergeFooterItems', 'setMergeFooterCells'])
+    return $xeTable.setMergeFooterCells(merges)
+  },
+  removeMergeFooterCells (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+
+    if (props.footerSpanMethod) {
+      errLog('vxe.error.errConflicts', ['merge-footer-cells | merge-footer-items', 'footer-span-method'])
+    }
+    const rest = removeFooterMerges($xeTable, merges)
+    $xeTable.handleUpdateFooterMerge()
+    return $xeTable.$nextTick().then(() => {
+      updateStyle($xeTable)
+      return rest
+    })
+  },
+  removeMergeFooterItems (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    // errLog('vxe.error.delFunc', ['removeMergeFooterItems', 'removeMergeFooterCells'])
+    return $xeTable.removeMergeFooterCells(merges)
+  },
+  /**
    * 获取所有被合并的表尾
    */
-  getMergeFooterItems () {
+  getMergeFooterCells () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
 
     return internalData.mergeFooterList.slice(0)
   },
+  getMergeFooterItems () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    // errLog('vxe.error.delFunc', ['getMergeFooterItems', 'getMergeFooterCells'])
+    return $xeTable.getMergeFooterCells()
+  },
   /**
    * 清除所有表尾合并
    */
-  clearMergeFooterItems () {
+  clearMergeFooterCells () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
@@ -11656,6 +11855,12 @@ const Methods = {
     return $xeTable.$nextTick().then(() => {
       return updateStyle($xeTable)
     })
+  },
+  clearMergeFooterItems () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    // errLog('vxe.error.delFunc', ['clearMergeFooterItems', 'clearMergeFooterCells'])
+    return $xeTable.clearMergeFooterCells()
   },
   handleUpdateAggData () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods

@@ -2,7 +2,7 @@ import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getClass } from '../../ui/src/utils'
-import { getCalcHeight, convertHeaderColumnToRows } from './util'
+import { getCalcHeight, convertHeaderColumnToRows, convertHeaderToGridRows } from './util'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes, TableReactData, TableInternalData, VxeComponentStyleType } from '../../../types'
 
@@ -10,7 +10,7 @@ const { renderer, renderEmptyElement } = VxeUI
 
 const cellType = 'header'
 
-const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode: boolean, cols: VxeTableDefines.ColumnInfo[], $rowIndex: number) => {
+function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][], $rowIndex: number, cols: VxeTableDefines.ColumnInfo[]) {
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const $xeGrid = $xeTable.$xeGrid
@@ -20,9 +20,9 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
   const tableInternalData = $xeTable as unknown as TableInternalData
 
   const { fixedType } = props
-  const { resizable: allResizable, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
-  const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX, tableColumn } = tableReactData
-  const { fullColumnIdData, scrollXStore } = tableInternalData
+  const { resizable: allResizable, columnKey, showCustomHeader, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
+  const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX, mergeHeadFlag, tableColumn } = tableReactData
+  const { fullColumnIdData, scrollXStore, mergeHeaderList, mergeHeaderCellMaps } = tableInternalData
   const virtualXOpts = $xeTable.computeVirtualXOpts
   const columnOpts = $xeTable.computeColumnOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
@@ -31,7 +31,9 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
   const headerCellOpts = $xeTable.computeHeaderCellOpts
   const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
   const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
-  return cols.map((column: any, $columnIndex: any) => {
+  const isLastRow = $rowIndex === headerGroups.length - 1
+
+  return cols.map((column, $columnIndex) => {
     const { type, showHeaderOverflow, headerAlign, align, filters, headerClassName, editRender, cellRender } = column
     // const { enabled } = tooltipOpts
     const colid = column.id
@@ -54,7 +56,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
       hasFilter = filters.some((item: VxeColumnPropTypes.FilterItem) => item.checked)
     }
     const columnIndex = colRest.index
-    const _columnIndex = colRest._index
+    const _columnIndex = showCustomHeader ? $columnIndex : colRest._index
     const cellParams: VxeTableDefines.CellRenderHeaderParams & {
       $table: VxeTableConstructor & VxeTablePrivateMethods
     } = {
@@ -73,9 +75,30 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
       hasFilter
     }
     const thAttrs: Record<string, string | number | null> = {
-      colid,
-      colspan: column.colSpan > 1 ? column.colSpan : null,
-      rowspan: column.rowSpan > 1 ? column.rowSpan : null
+      colid
+    }
+    let isMergeCell = false
+    // 合并行或列
+    if (!showCustomHeader) {
+      thAttrs.colspan = column.colSpan > 1 ? column.colSpan : null
+      thAttrs.rowspan = column.rowSpan > 1 ? column.rowSpan : null
+    }
+    if (mergeHeadFlag && mergeHeaderList.length && (showCustomHeader || isLastRow)) {
+      const spanRest = mergeHeaderCellMaps[`${$rowIndex}:${showCustomHeader ? $columnIndex : _columnIndex}`]
+      if (spanRest) {
+        const { rowspan, colspan } = spanRest
+        if (!rowspan || !colspan) {
+          return null
+        }
+        if (rowspan > 1) {
+          isMergeCell = true
+          thAttrs.rowspan = rowspan
+        }
+        if (colspan > 1) {
+          isMergeCell = true
+          thAttrs.colspan = colspan
+        }
+      }
     }
     const thOns: any = {
       click: (evnt: MouseEvent) => $xeTable.triggerHeaderCellClickEvent(evnt, cellParams),
@@ -104,7 +127,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
     let isVNPreEmptyStatus = false
-    if (isOptimizeMode && overflowX && !isGroup) {
+    if (isOptimizeMode && overflowX && !isGroup && !isMergeCell) {
       if (!dragCol || dragCol.id !== colid) {
         if (scrollXLoad && tableColumn.length > 10 && !column.fixed && !virtualXOpts.immediate && (_columnIndex < scrollXStore.visibleStartIndex - scrollXStore.preloadSize || _columnIndex > scrollXStore.visibleEndIndex + scrollXStore.preloadSize)) {
           isVNPreEmptyStatus = true
@@ -120,7 +143,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     }
 
     return h('th', {
-      class: ['vxe-table--column vxe-header--column', colid, {
+      class: ['vxe-table--column vxe-header--column', colid, fixedHiddenColumn ? 'fixed--hidden' : 'fixed--visible', {
         [`col--${headAlign}`]: headAlign,
         [`col--${type}`]: type,
         'col--last': isLastColumn,
@@ -128,7 +151,6 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
         'col--group': isColGroup,
         'col--ellipsis': hasEllipsis,
         'fixed--width': !isAutoCellWidth,
-        'fixed--hidden': fixedHiddenColumn,
         'is--padding': isPadding,
         'is--sortable': column.sortable,
         'col--filter': !!filters,
@@ -140,7 +162,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
       attrs: thAttrs,
       style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(cellParams) : headerCellStyle) as VxeComponentStyleType : undefined,
       on: thOns,
-      key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex
+      key: showCustomHeader ? `${colid}${$columnIndex}` : (columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex)
     }, [
       h('div', {
         class: ['vxe-cell', {
@@ -160,9 +182,9 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
             }, column.renderHeader(h, cellParams))
           ]),
       /**
-     * 列宽拖动
-     */
-      !fixedHiddenColumn && showResizable
+       * 列宽拖动
+       */
+      !fixedHiddenColumn && showResizable && (!showCustomHeader || isLastRow)
         ? h('div', {
           class: 'vxe-cell--col-resizable',
           on: {
@@ -175,7 +197,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
   })
 }
 
-function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode: boolean, headerGroups: any[]) {
+function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][]) {
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
@@ -194,7 +216,7 @@ function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMo
         headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName : ''
       ],
       style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) as VxeComponentStyleType : undefined
-    }, renderRows(h, _vm, isGroup, isOptimizeMode, cols, $rowIndex))
+    }, renderRows(h, _vm, isGroup, isOptimizeMode, headerGroups, $rowIndex, cols))
   })
 }
 
@@ -216,15 +238,18 @@ export default {
     }
   },
   watch: {
-    tableColumn (this: any) {
-      this.uploadColumn()
+    tableColumn () {
+      const _vm = this as any
+
+      _vm.uploadColumn()
     }
   },
-  created (this: any) {
-    this.uploadColumn()
+  created () {
+    const _vm = this as any
+    _vm.uploadColumn()
   },
   mounted () {
-    const _vm = this
+    const _vm = this as any
     const props = _vm
     const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
@@ -241,8 +266,9 @@ export default {
     elemStore[`${prefix}repair`] = _vm.$refs.refHeaderBorderRepair
   },
   destroyed () {
-    const props = this
-    const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+    const _vm = this as any
+    const props = _vm
+    const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
 
     const { fixedType } = props
@@ -257,15 +283,16 @@ export default {
     elemStore[`${prefix}repair`] = null
   },
   render (h: CreateElement) {
-    const props = this
-    const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+    const _vm = this as any
+    const props = _vm
+    const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const tableProps = $xeTable
     const tableReactData = $xeTable as unknown as TableReactData
     const tableInternalData = $xeTable as unknown as TableInternalData
 
     const { xID } = $xeTable
     const { fixedType, fixedColumn, tableColumn } = props
-    const { headerColumn } = this
+    const { headerColumn } = _vm
 
     const { mouseConfig, showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
     const { isGroup, isColLoading, overflowX, scrollXLoad, dragCol } = tableReactData
@@ -382,7 +409,7 @@ export default {
            */
           h('thead', {
             ref: 'refHeaderTHead'
-          }, renderHeads(h, this, isGroup, isOptimizeMode, renderHeaderList))
+          }, renderHeads(h, _vm, isGroup, isOptimizeMode, renderHeaderList))
         ]),
         mouseConfig && mouseOpts.area
           ? h('div', {
@@ -413,11 +440,26 @@ export default {
   },
   methods: {
     uploadColumn () {
-      const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+      const _vm = this as any
+      const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
+      const tableProps = $xeTable
       const tableReactData = $xeTable as unknown as TableReactData
+      const tableInternalData = $xeTable as unknown as TableInternalData
 
+      const props = _vm
+
+      const { showCustomHeader } = tableProps
+      const { collectColumn, visibleColumn } = tableInternalData
+      const { tableGroupColumn } = props
       const { isGroup } = tableReactData
-      this.headerColumn = isGroup ? convertHeaderColumnToRows(this.tableGroupColumn) : []
+      let spanColumns: VxeTableDefines.ColumnInfo[][] = isGroup ? convertHeaderColumnToRows(tableGroupColumn) : []
+      let visibleColgroups: VxeTableDefines.ColumnInfo[][] = []
+      if (showCustomHeader && spanColumns.length > 1) {
+        visibleColgroups = convertHeaderToGridRows(spanColumns)
+        spanColumns = visibleColgroups
+      }
+      _vm.headerColumn = spanColumns
+      $xeTable.dispatchEvent('columns-change', { visibleColgroups, collectColumn, visibleColumn }, null)
     }
-  } as any
-} as any
+  }
+}

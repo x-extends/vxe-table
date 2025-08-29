@@ -34,7 +34,7 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
   const footerCellOpts = $xeTable.computeFooterCellOpts
   const currCellHeight = getCalcHeight(footerCellOpts.height) || defaultRowHeight
 
-  return tableColumn.map((column: any, $columnIndex: any) => {
+  return tableColumn.map((column, $columnIndex) => {
     const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
     const colid = column.id
     const colRest = fullColumnIdData[colid] || {}
@@ -240,8 +240,8 @@ export default {
       default: null
     }
   },
-  mounted (this: any) {
-    const _vm = this
+  mounted () {
+    const _vm = this as any
     const props = _vm
     const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const tableInternalData = $xeTable as unknown as TableInternalData
@@ -257,8 +257,9 @@ export default {
     elemStore[`${prefix}xSpace`] = _vm.$refs.refFooterXSpace
   },
   destroyed () {
-    const props = this
-    const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+    const _vm = this as any
+    const props = _vm
+    const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const tableInternalData = $xeTable as unknown as TableInternalData
 
     const { fixedType } = props
@@ -272,8 +273,9 @@ export default {
     elemStore[`${prefix}xSpace`] = null
   },
   render (h: CreateElement) {
-    const props = this
-    const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+    const _vm = this as any
+    const props = _vm
+    const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const tableProps = $xeTable
     const tableReactData = $xeTable as unknown as TableReactData
     const tableInternalData = $xeTable as unknown as TableInternalData
@@ -385,9 +387,9 @@ export default {
          */
           h('tfoot', {
             ref: 'refFooterTFoot'
-          }, renderHeads(h, this, isOptimizeMode, renderColumnList))
+          }, renderHeads(h, _vm, isOptimizeMode, renderColumnList))
         ])
       ])
     ])
   }
-} as any
+}

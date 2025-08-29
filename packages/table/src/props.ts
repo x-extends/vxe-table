@@ -15,7 +15,7 @@ export const tableProps = {
   // 表格的最小高度
   minHeight: {
     type: [Number, String] as PropType<VxeTablePropTypes.MinHeight>,
-    default: () => getConfig().table.minHeight
+    default: () => null
   },
   // 表格的最大高度
   maxHeight: [Number, String] as PropType<VxeTablePropTypes.MaxHeight>,
@@ -131,23 +131,40 @@ export const tableProps = {
   // 给行附加样式
   rowStyle: [Object, Function],
   // 给表头行附加样式
-  headerRowStyle: [Object, Function],
+  headerRowStyle: [Object, Function] as PropType<VxeTablePropTypes.HeaderRowStyle>,
   // 给表尾行附加样式
-  footerRowStyle: [Object, Function],
-  // 合并指定单元格
-  mergeCells: Array,
-  // 合并指定的表尾
-  mergeFooterItems: Array,
+  footerRowStyle: [Object, Function] as PropType<VxeTablePropTypes.FooterRowStyle>,
+  // 用于分组表头，显示为自定义列头，配合 mergeHeaderCells 灵活实现自定义合并
+  showCustomHeader: {
+    type: Boolean as PropType<VxeTablePropTypes.ShowCustomHeader>,
+    default: () => getConfig().table.showCustomHeader
+  },
+  // 临时合并指定的表头单元格
+  mergeHeaderCells: Array as PropType<VxeTablePropTypes.MergeHeaderCells>,
+  // 临时合并指定的单元格
+  mergeCells: Array as PropType<VxeTablePropTypes.MergeCells>,
+  // 临时合并指定的表尾单元格
+  mergeFooterCells: Array as PropType<VxeTablePropTypes.MergeFooterCells>,
+  mergeFooterItems: Array as PropType<VxeTablePropTypes.MergeFooterItems>,
   // 自定义合并行或列的方法
-  spanMethod: Function,
+  spanMethod: Function as PropType<VxeTablePropTypes.SpanMethod>,
   // 表尾合并行或列
-  footerSpanMethod: Function,
+  footerSpanMethod: Function as PropType<VxeTablePropTypes.FooterSpanMethod>,
   // 设置所有内容过长时显示为省略号
-  showOverflow: { type: [Boolean, String], default: () => getConfig().table.showOverflow },
+  showOverflow: {
+    type: [Boolean, String] as PropType<VxeTablePropTypes.ShowOverflow>,
+    default: () => getConfig().table.showOverflow
+  },
   // 设置表头所有内容过长时显示为省略号
-  showHeaderOverflow: { type: [Boolean, String], default: () => getConfig().table.showHeaderOverflow },
+  showHeaderOverflow: {
+    type: [Boolean, String] as PropType<VxeTablePropTypes.ShowHeaderOverflow>,
+    default: () => getConfig().table.showHeaderOverflow
+  },
   // 设置表尾所有内容过长时显示为省略号
-  showFooterOverflow: { type: [Boolean, String], default: () => getConfig().table.showFooterOverflow },
+  showFooterOverflow: {
+    type: [Boolean, String] as PropType<VxeTablePropTypes.ShowFooterOverflow>,
+    default: () => getConfig().table.showFooterOverflow
+  },
 
   /** 高级属性 */
   /**

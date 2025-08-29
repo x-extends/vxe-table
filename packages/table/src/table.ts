@@ -40,13 +40,22 @@ function handleUpdateMergeBodyCells ($xeTable: VxeTableConstructor & VxeTablePri
   $xeTable.setMergeCells(merges)
 }
 
+function handleUpdateMergeHeaderCells ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  internalData.mergeHeaderList = []
+  internalData.mergeHeaderMaps = {}
+  internalData.mergeHeaderCellMaps = {}
+  $xeTable.setMergeHeaderCells(merges)
+}
+
 function handleUpdateMergeFooterCells ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
   const internalData = $xeTable as unknown as TableInternalData
 
   internalData.mergeFooterList = []
   internalData.mergeFooterMaps = {}
   internalData.mergeFooterCellMaps = {}
-  $xeTable.setMergeFooterItems(merges)
+  $xeTable.setMergeFooterCells(merges)
 }
 
 function handleKeyField ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
@@ -358,7 +367,10 @@ function renderScrollX (h: CreateElement, $xeTable: VxeTableConstructor & VxeTab
           ref: 'refScrollXSpaceElem',
           class: 'vxe-table--scroll-x-space'
         })
-      ])
+      ]),
+      h('div', {
+        class: 'vxe-table--scroll-x-handle-appearance'
+      })
     ]),
     h('div', {
       ref: 'refScrollXRightCornerElem',
@@ -508,9 +520,8 @@ export default {
   },
   data () {
     const xID = XEUtils.uniqueId()
-    return {
-      xID,
-      tId: xID,
+
+    const reactData: TableReactData = {
       // 低性能的静态列
       staticColumns: [],
       // 渲染的列分组
@@ -531,6 +542,8 @@ export default {
       scrollbarWidth: 0,
       // 横向滚动条的高度
       scrollbarHeight: 0,
+      // 最后滚动时间戳
+      lastScrollTime: 0,
       // 行高
       rowHeight: 0,
       // 表格父容器的高度
@@ -556,9 +569,13 @@ export default {
       expandColumn: null,
       checkboxColumn: null,
       radioColumn: null,
-      hasFixedColumn: false,
       // 树节点列信息
       treeNodeColumn: null,
+      hasFixedColumn: false,
+      // 刷新列标识，当列筛选被改变时，触发表格刷新数据
+      upDataFlag: 0,
+      // 刷新列标识，当列的特定属性被改变时，触发表格刷新列
+      reColumnFlag: 0,
       // 初始化标识
       initStore: {
         filter: false,
@@ -566,11 +583,6 @@ export default {
         export: false,
         custom: false
       },
-      customColumnList: [],
-      // 刷新列标识，当列筛选被改变时，触发表格刷新数据
-      upDataFlag: 0,
-      // 刷新列标识，当列的特定属性被改变时，触发表格刷新列
-      reColumnFlag: 0,
       // 自定义列相关的信息
       customStore: {
         btnEl: null,
@@ -584,6 +596,7 @@ export default {
         oldFixedMaps: {},
         oldVisibleMaps: {}
       },
+      customColumnList: [],
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -652,6 +665,7 @@ export default {
       tooltipStore: {
         row: null,
         column: null,
+        content: null,
         visible: false,
         currOpts: {}
       },
@@ -684,8 +698,8 @@ export default {
         columns: [],
         isPrint: false,
         hasFooter: false,
-        hasTree: false,
         hasMerge: false,
+        hasTree: false,
         hasColgroup: false,
         visible: false
       },
@@ -719,6 +733,8 @@ export default {
       pendingRowFlag: 1,
       insertRowFlag: 1,
       removeRowFlag: 1,
+
+      mergeHeadFlag: 1,
       mergeBodyFlag: 1,
       mergeFootFlag: 1,
 
@@ -738,6 +754,8 @@ export default {
       scrollXWidth: 0,
       isScrollXBig: false,
 
+      lazScrollLoading: false,
+
       rowExpandHeightFlag: 1,
       calcCellHeightFlag: 1,
       resizeHeightFlag: 1,
@@ -753,12 +771,18 @@ export default {
 
       isDragResize: false,
       isRowLoading: false,
-      isColLoading: false,
+      isColLoading: false
+    }
 
+    return {
+      xID,
+      ...reactData,
+
+      // 私有属性
       reScrollFlag: 0,
       reLayoutFlag: 0,
       footFlag: 0,
-
+      mergeFooteCellFlag: 0,
       crossTableDragRowInfo: crossTableDragRowGlobal
     }
   },
@@ -1499,10 +1523,23 @@ export default {
 
       handleUpdateMergeBodyCells($xeTable, value)
     },
-    mergeFooterItems (value: any) {
+    mergeHeaderCells (value: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      handleUpdateMergeFooterCells($xeTable, value)
+      handleUpdateMergeHeaderCells($xeTable, value)
+    },
+    mergeFooterCells () {
+      this.mergeFooteCellFlag++
+    },
+    mergeFooterItems () {
+      this.mergeFooteCellFlag++
+    },
+    mergeFooteCellFlag () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      const mFooterCells = props.mergeFooterCells || props.mergeFooterItems
+      handleUpdateMergeFooterCells($xeTable, mFooterCells || [])
     },
 
     computeRowGroupFields (val: any) {

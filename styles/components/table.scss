@@ -645,9 +645,6 @@ $btnThemeList: (
     overflow-x: scroll;
     height: 18px;
   }
-  .vxe-table--scroll-x-wrapper {
-    height: 100%;
-  }
   .vxe-table--scroll-y-handle,
   .vxe-table--scroll-y-wrapper {
     width: 100%;
@@ -890,13 +887,6 @@ $btnThemeList: (
   .vxe-cell--col-resizable {
     right: auto;
     left: -0.3em;
-  }
-  .vxe-header--column {
-    &:last-child {
-      & > .vxe-cell--col-resizable {
-        left: 0;
-      }
-    }
   }
 }
 
@@ -1415,32 +1405,25 @@ $btnThemeList: (
     .vxe-table--scroll-y-bottom-corner {
       border-top: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
     }
-    .vxe-table--scroll-x-wrapper {
-      &::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        pointer-events: none;
-      }
+    .vxe-table--scroll-x-handle-appearance {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
     }
     &.sx-pos--top {
-      .vxe-table--scroll-x-wrapper {
-        &::after {
-          top: 0;
-          border-bottom: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
-        }
+      .vxe-table--scroll-x-handle-appearance {
+        top: 0;
+        border-bottom: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
       }
     }
     &.sx-pos--bottom {
-      .vxe-table--scroll-x-wrapper {
-        &::after {
-          bottom: 0;
-          height: calc(100% + var(--vxe-ui-table-border-width));
-          border-top: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
-        }
+      .vxe-table--scroll-x-handle-appearance {
+        bottom: 0;
+        height: calc(100% + var(--vxe-ui-table-border-width));
+        border-top: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
       }
     }
   }
@@ -1514,32 +1497,25 @@ $btnThemeList: (
         }
       }
     }
-    .vxe-table--scroll-y-wrapper {
-      &::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        pointer-events: none;
-      }
+    .vxe-table--scroll-y-handle-appearance {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
     }
     &.sy-pos--left {
-      .vxe-table--scroll-y-wrapper {
-        &::after {
-          left: 0;
-          border-right: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
-        }
+      .vxe-table--scroll-y-handle-appearance {
+        left: 0;
+        border-right: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
       }
     }
     &.sy-pos--right {
-      .vxe-table--scroll-y-wrapper {
-        &::after {
-          right: 0;
-          width: calc(100% + var(--vxe-ui-table-border-width));
-          border-left: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
-        }
+      .vxe-table--scroll-y-handle-appearance {
+        right: 0;
+        width: calc(100% + var(--vxe-ui-table-border-width));
+        border-left: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
       }
     }
   }
@@ -2159,8 +2135,8 @@ $btnThemeList: (
       position: absolute;
       left: 50%;
       font-size: 12px;
-      line-height: 1.2em;
-      transform: translateX(-50%);
+      line-height: 1em;
+      transform: translate(-50%, -50%);
       text-align: left;
       z-index: 4;
       padding: 0 var(--vxe-ui-table-cell-padding-default);
@@ -2172,7 +2148,7 @@ $btnThemeList: (
       pointer-events: auto;
     }
     .vxe-cell--valid-error-theme-beautify {
-      padding: 0.2em 0.6em 0.3em 0.6em;
+      padding: 0.2em 0.6em 0.25em 0.6em;
       color: #fff;
       background-color: var(--vxe-ui-table-validate-error-color);
       .vxe-cell--valid-error-msg {
@@ -2204,10 +2180,12 @@ $btnThemeList: (
       &:last-child {
         .vxe-cell--valid-error-tip {
           bottom: calc(100%);
+          transform: translate(-50%, 50%);
         }
         &:first-child {
           .vxe-cell--valid-error-tip {
             bottom: auto;
+            transform: translate(-50%, -50%);
           }
         }
       }

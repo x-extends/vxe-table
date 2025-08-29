@@ -93,6 +93,7 @@ export class ColumnInfo {
       headerClassName: _vm.headerClassName,
       footerClassName: _vm.footerClassName,
       formatter,
+      headerFormatter: _vm.headerFormatter,
       footerFormatter: _vm.footerFormatter,
       padding: _vm.padding,
       verticalAlign: _vm.verticalAlign,
