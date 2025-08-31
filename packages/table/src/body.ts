@@ -194,14 +194,13 @@ export default defineVxeComponent({
       // hover 进入事件
       if (showTitle || showTooltip || showAllTip || tooltipConfig) {
         tdOns.onMouseenter = (evnt: MouseEvent) => {
-          if (isVMScrollProcess()) {
-            return
-          }
-          if (showTitle) {
-            updateCellTitle(evnt.currentTarget, column)
-          } else if (showTooltip || showAllTip) {
-            // 如果配置了显示 tooltip
-            $xeTable.triggerBodyTooltipEvent(evnt, cellParams)
+          if (!isVMScrollProcess()) {
+            if (showTitle) {
+              updateCellTitle(evnt.currentTarget, column)
+            } else if (showTooltip || showAllTip) {
+              // 如果配置了显示 tooltip
+              $xeTable.triggerBodyTooltipEvent(evnt, cellParams)
+            }
           }
           $xeTable.dispatchEvent('cell-mouseenter', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
         }
@@ -209,11 +208,10 @@ export default defineVxeComponent({
       // hover 退出事件
       if (showTooltip || showAllTip || tooltipConfig) {
         tdOns.onMouseleave = (evnt: MouseEvent) => {
-          if (isVMScrollProcess()) {
-            return
-          }
-          if (showTooltip || showAllTip) {
-            $xeTable.handleTargetLeaveEvent(evnt)
+          if (!isVMScrollProcess()) {
+            if (showTooltip || showAllTip) {
+              $xeTable.handleTargetLeaveEvent(evnt)
+            }
           }
           $xeTable.dispatchEvent('cell-mouseleave', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
         }
