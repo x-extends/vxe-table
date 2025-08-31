@@ -4,7 +4,7 @@ import { getDomNode, getAbsolutePos, getEventTargetNode } from '../../../ui/src/
 import { isEnableConf, hasChildrenList } from '../../../ui/src/utils'
 import { warnLog } from '../../../ui/src/log'
 
-import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData } from '../../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, TableReactData } from '../../../../types'
 
 const { menus, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
 
@@ -14,17 +14,20 @@ export default {
      * 关闭快捷菜单
      */
     _closeMenu () {
-      Object.assign(this.ctxMenuStore, {
+      const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      Object.assign(reactData.ctxMenuStore, {
         visible: false,
         selected: null,
         selectChild: null,
         showChild: false
       })
-      return this.$nextTick()
+      return $xeTable.$nextTick()
     },
     // 处理菜单的移动
     moveCtxMenu (evnt: KeyboardEvent, ctxMenuStore: any, property: 'selectChild' | 'selected', hasOper: boolean, operRest: any, menuList: any[]) {
-      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
 
       let selectItem
       const selectIndex = XEUtils.findIndexOf(menuList, item => ctxMenuStore[property] === item)
@@ -59,30 +62,40 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt: any) {
-      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
       const $xeGrid = $xeTable.$xeGrid
       const $xeGantt = $xeTable.$xeGantt
+      const props = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
 
-      const { $refs, tId, editStore, menuConfig, contextMenu, ctxMenuStore, ctxMenuOpts, mouseConfig, mouseOpts } = this
-      const { selected } = editStore
+      const { xID } = $xeTable
+
+      const { mouseConfig, menuConfig } = props
+      const { editStore, ctxMenuStore } = reactData
+      const { visibleColumn } = internalData
       const tableFilter = $xeTable.$refs.refTableFilter
+      const tableMenu = $xeTable.$refs.refTableMenu
+      const mouseOpts = $xeTable.computeMouseOpts
+      const menuOpts = $xeTable.computeMenuOpts
+      const el = $xeTable.$refs.refElem as HTMLDivElement
+      const { selected } = editStore
       const layoutList = ['header', 'body', 'footer']
-      if (isEnableConf(menuConfig) || contextMenu) {
-        if (ctxMenuStore.visible && $refs.refTableMenu && getEventTargetNode(evnt, $refs.refTableMenu.$el).flag) {
+      if (isEnableConf(menuConfig)) {
+        if (ctxMenuStore.visible && tableMenu && getEventTargetNode(evnt, (tableMenu as any).$el).flag) {
           evnt.preventDefault()
           return
         }
         if (internalData._keyCtx) {
           const type = 'body'
-          const params: any = { type, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, keyboard: true, columns: this.visibleColumn.slice(0), $event: evnt }
+          const params: any = { type, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, keyboard: true, columns: visibleColumn.slice(0), $event: evnt }
           // 如果开启单元格区域
           if (mouseConfig && mouseOpts.area) {
-            const activeArea = this.getActiveCellArea()
+            const activeArea = $xeTable.getActiveCellArea()
             if (activeArea && activeArea.row && activeArea.column) {
               params.row = activeArea.row
               params.column = activeArea.column
-              this.handleOpenMenuEvent(evnt, type, params)
+              $xeTable.handleOpenMenuEvent(evnt, type, params)
               return
             }
           } else if (mouseConfig && mouseOpts.selected) {
@@ -90,19 +103,19 @@ export default {
             if (selected.row && selected.column) {
               params.row = selected.row
               params.column = selected.column
-              this.handleOpenMenuEvent(evnt, type, params)
+              $xeTable.handleOpenMenuEvent(evnt, type, params)
               return
             }
           }
         }
         // 分别匹配表尾、内容、表尾的快捷菜单
         for (let index = 0; index < layoutList.length; index++) {
-          const layout = layoutList[index]
-          const columnTargetNode = getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`, (target: any) => {
+          const layout = layoutList[index] as 'header' | 'body' | 'footer'
+          const columnTargetNode = getEventTargetNode(evnt, el, `vxe-${layout}--column`, (target: any) => {
             // target=td|th，直接向上找 table 去匹配即可
-            return target.parentNode.parentNode.parentNode.getAttribute('xid') === tId
+            return target.parentNode.parentNode.parentNode.getAttribute('xid') === xID
           })
-          const params: any = { type: layout, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, columns: this.visibleColumn.slice(0), $event: evnt }
+          const params: any = { type: layout, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, columns: visibleColumn.slice(0), $event: evnt }
           if (columnTargetNode.flag) {
             const cell = columnTargetNode.targetElem
             const columnNodeRest = $xeTable.getColumnNode(cell)
@@ -121,66 +134,73 @@ export default {
               }
             }
             const eventType = `${typePrefix}cell-menu` as 'cell-menu' | 'header-cell-menu' | 'footer-cell-menu'
-            this.handleOpenMenuEvent(evnt, layout, params)
+            $xeTable.handleOpenMenuEvent(evnt, layout, params)
             // 在 v4 中废弃事件 cell-context-menu、header-cell-context-menu、footer-cell-context-menu
-            if (this.$listeners[`${typePrefix}cell-context-menu`]) {
+            if ($xeTable.$listeners[`${typePrefix}cell-context-menu`]) {
               warnLog('vxe.error.delEvent', [`${typePrefix}cell-context-menu`, `${typePrefix}cell-menu`])
               $xeTable.dispatchEvent(`${typePrefix}cell-context-menu` as any, params, evnt)
             } else {
               $xeTable.dispatchEvent(eventType, params, evnt)
             }
             return
-          } else if (getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('xid') === tId).flag) {
-            if (ctxMenuOpts.trigger === 'cell') {
+          } else if (getEventTargetNode(evnt, $xeTable.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('xid') === xID).flag) {
+            if (menuOpts.trigger === 'cell') {
               evnt.preventDefault()
             } else {
-              this.handleOpenMenuEvent(evnt, layout, params)
+              $xeTable.handleOpenMenuEvent(evnt, layout, params)
             }
             return
           }
         }
       }
       if (tableFilter && !getEventTargetNode(evnt, (tableFilter as any).$el).flag) {
-        this.closeFilter()
+        $xeTable.closeFilter()
       }
-      this.closeMenu()
+      $xeTable.closeMenu()
     },
     /**
      * 显示快捷菜单
      */
-    handleOpenMenuEvent (evnt: any, type: any, params: any) {
-      const { isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
-      const config = ctxMenuOpts[type]
-      const visibleMethod = ctxMenuOpts.visibleMethod
+    handleOpenMenuEvent (evnt: any, type: 'header' | 'body' | 'footer', params: any) {
+      const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { ctxMenuStore } = reactData
+      const isMenu = $xeTable.computeIsMenu
+      const menuOpts = $xeTable.computeMenuOpts
+      const config = menuOpts[type]
+      const visibleMethod = menuOpts.visibleMethod
       if (config) {
         const { options, disabled } = config
         if (disabled) {
           evnt.preventDefault()
-        } else if (isCtxMenu && options && options.length) {
+        } else if (isMenu && options && options.length) {
           params.options = options
-          this.preventEvent(evnt, 'event.showMenu', params, () => {
+          $xeTable.preventEvent(evnt, 'event.showMenu', params, () => {
             if (!visibleMethod || visibleMethod(params)) {
               evnt.preventDefault()
-              this.updateZindex()
+              $xeTable.updateZindex()
               const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
               let top = evnt.clientY + scrollTop
               let left = evnt.clientX + scrollLeft
               const handleVisible = () => {
+                internalData._currMenuParams = params
                 Object.assign(ctxMenuStore, {
-                  args: params,
                   visible: true,
                   list: options,
                   selected: null,
                   selectChild: null,
                   showChild: false,
                   style: {
-                    zIndex: this.tZindex,
+                    zIndex: internalData.tZindex,
                     top: `${top}px`,
                     left: `${left}px`
                   }
                 })
-                this.$nextTick(() => {
-                  const ctxElem = this.$refs.refTableMenu.$el
+                $xeTable.$nextTick(() => {
+                  const tableMenu = $xeTable.$refs.refTableMenu
+                  const ctxElem = (tableMenu as any).$el
                   const clientHeight = ctxElem.clientHeight
                   const clientWidth = ctxElem.clientWidth
                   const { boundingTop, boundingLeft } = getAbsolutePos(ctxElem)
@@ -196,27 +216,32 @@ export default {
               }
               const { keyboard, row, column } = params
               if (keyboard && row && column) {
-                this.scrollToRow(row, column).then(() => {
-                  const cell = this.getCellElement(row, column)
-                  const { boundingTop, boundingLeft } = getAbsolutePos(cell)
-                  top = boundingTop + scrollTop + Math.floor(cell.offsetHeight / 2)
-                  left = boundingLeft + scrollLeft + Math.floor(cell.offsetWidth / 2)
+                $xeTable.scrollToRow(row, column).then(() => {
+                  const cell = $xeTable.getCellElement(row, column)
+                  if (cell) {
+                    const { boundingTop, boundingLeft } = getAbsolutePos(cell)
+                    top = boundingTop + scrollTop + Math.floor(cell.offsetHeight / 2)
+                    left = boundingLeft + scrollLeft + Math.floor(cell.offsetWidth / 2)
+                  }
                   handleVisible()
                 })
               } else {
                 handleVisible()
               }
             } else {
-              this.closeMenu()
+              $xeTable.closeMenu()
             }
           })
         }
       }
-      this.closeFilter()
+      $xeTable.closeFilter()
     },
     ctxMenuMouseoverEvent (evnt: any, item: any, child: any) {
+      const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
       const menuElem = evnt.currentTarget
-      const ctxMenuStore = this.ctxMenuStore
+      const { ctxMenuStore } = reactData
       evnt.preventDefault()
       evnt.stopPropagation()
       ctxMenuStore.selected = item
@@ -224,7 +249,7 @@ export default {
       if (!child) {
         ctxMenuStore.showChild = hasChildrenList(item)
         if (ctxMenuStore.showChild) {
-          this.$nextTick(() => {
+          $xeTable.$nextTick(() => {
             const childWrapperElem = menuElem.nextElementSibling
             if (childWrapperElem) {
               const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = getAbsolutePos(menuElem)
@@ -254,7 +279,10 @@ export default {
       }
     },
     ctxMenuMouseoutEvent (evnt: any, item: any) {
-      const ctxMenuStore = this.ctxMenuStore
+      const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { ctxMenuStore } = reactData
       if (!item.children) {
         ctxMenuStore.selected = null
       }
@@ -264,26 +292,27 @@ export default {
      * 快捷菜单点击事件
      */
     ctxMenuLinkEvent (evnt: any, menu: any) {
-      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
       const $xeGrid = $xeTable.$xeGrid
       const $xeGantt = $xeTable.$xeGantt
+      const internalData = $xeTable as unknown as TableInternalData
 
       // 如果一级菜单有配置 code 则允许点击，否则不能点击
       if (!menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
         const gMenuOpts = menus.get(menu.code)
-        const params = Object.assign({ menu, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, $event: evnt }, this.ctxMenuStore.args)
+        const params = Object.assign({}, internalData._currMenuParams, { menu, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, $event: evnt })
         if (gMenuOpts && gMenuOpts.menuMethod) {
           gMenuOpts.menuMethod(params, evnt)
         }
         // 在 v4 中废弃事件 context-menu-click
-        if (this.$listeners['context-menu-click']) {
+        if ($xeTable.$listeners['context-menu-click']) {
           warnLog('vxe.error.delEvent', ['context-menu-click', 'menu-click'])
           $xeTable.dispatchEvent('context-menu-click' as any, params, evnt)
         } else {
           $xeTable.dispatchEvent('menu-click', params, evnt)
         }
-        this.closeMenu()
+        $xeTable.closeMenu()
       }
     }
-  } as any
+  }
 }

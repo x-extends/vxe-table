@@ -839,7 +839,6 @@ $btnThemeList: (
   }
   .vxe-cell-title-prefix-icon,
   .vxe-cell-title-suffix-icon {
-    cursor: help;
     @for $index from 0 to list.length($btnThemeList) {
       $item: list.nth($btnThemeList, $index + 1);
       &.theme--#{map.get($item, name)} {

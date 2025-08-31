@@ -487,11 +487,15 @@ export default /* define-vxe-component start */ defineVxeComponent({
           if (field) {
             let itemValue: any = null
             if (itemRender) {
-              const { defaultValue } = itemRender
+              const { startField, endField, defaultValue } = itemRender
               if (XEUtils.isFunction(defaultValue)) {
                 itemValue = defaultValue({ item })
               } else if (!XEUtils.isUndefined(defaultValue)) {
                 itemValue = defaultValue
+              }
+              if (startField && endField) {
+                XEUtils.set(fData, startField, null)
+                XEUtils.set(fData, endField, null)
               }
             }
             fData[field] = itemValue

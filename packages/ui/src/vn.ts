@@ -6,26 +6,31 @@ export function getOnName (type: string) {
   return XEUtils.kebabCase(type)
 }
 
-export function getModelEvent (renderOpts: any) {
-  switch (renderOpts.name) {
-    case 'input':
-    case 'textarea':
-      return 'input'
+export function getModelEvent (name: string) {
+  switch (name) {
+    case 'VxeInput':
+    case 'VxeTextarea':
+    case 'VxeNumberInput':
+    case 'VxeSelect':
+    case 'VxeTreeSelect':
+    case 'VxeTableSelect':
+    case 'VxeDatePicker':
+    case 'VxeDateRangePicker':
+      return 'modelValue'
     case 'select':
       return 'change'
   }
-  return 'modelValue'
+  return 'input'
 }
 
-export function getChangeEvent (renderOpts: any) {
-  switch (renderOpts.name) {
+export function getChangeEvent (name: string) {
+  switch (name) {
     case 'input':
     case 'textarea':
     case 'VxeInput':
-    case 'VxeNumberInput':
     case 'VxeTextarea':
-    case '$input':
-    case '$textarea':
+    case '$input':// 已废弃
+    case '$textarea':// 已废弃
       return 'input'
   }
   return 'change'

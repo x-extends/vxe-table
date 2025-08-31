@@ -2,9 +2,9 @@ import { CreateElement } from 'vue'
 import { VxeUI } from '../../../ui'
 import { getFuncText } from '../../../ui/src/utils'
 
-import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods, TableReactData } from '../../../../types'
 
-const { getIcon } = VxeUI
+const { getIcon, renderEmptyElement } = VxeUI
 
 export default {
   name: 'VxeTableMenuPanel',
@@ -23,16 +23,18 @@ export default {
   },
   render (this: any, h: CreateElement) {
     const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
+    const tableReactData = $xeTable as unknown as TableReactData
 
-    const { _e, ctxMenuOpts, ctxMenuStore } = this
+    const { ctxMenuStore } = tableReactData
+    const menuOpts = $xeTable.computeMenuOpts
     return h('div', {
-      class: ['vxe-table--context-menu-wrapper', ctxMenuOpts.className, {
+      class: ['vxe-table--context-menu-wrapper', menuOpts.className, {
         'is--visible': ctxMenuStore.visible
       }],
       style: ctxMenuStore.style
     }, ctxMenuStore.list.map((options: any, gIndex: any) => {
       return options.every((item: any) => item.visible === false)
-        ? _e()
+        ? renderEmptyElement($xeTable)
         : h('ul', {
           class: 'vxe-context-menu--option-wrapper',
           key: gIndex
@@ -70,7 +72,7 @@ export default {
                   h('i', {
                     class: prefixOpts.icon || item.prefixIcon
                   }),
-                  prefixOpts.content ? h('span', {}, `${prefixOpts.content}`) : _e()
+                  prefixOpts.content ? h('span', {}, `${prefixOpts.content}`) : renderEmptyElement($xeTable)
                 ]),
                 h('span', {
                   class: 'vxe-context-menu--link-content',
@@ -84,7 +86,7 @@ export default {
                   h('i', {
                     class: (suffixOpts.icon || item.suffixIcon) || (hasChildMenus ? getIcon().TABLE_MENU_OPTIONS : '')
                   }),
-                  suffixOpts.content ? h('span', `${suffixOpts.content}`) : _e()
+                  suffixOpts.content ? h('span', `${suffixOpts.content}`) : renderEmptyElement($xeTable)
                 ])
               ]),
               hasChildMenus
@@ -125,7 +127,7 @@ export default {
                           h('i', {
                             class: childPrefixOpts.icon || child.prefixIcon
                           }),
-                          childPrefixOpts.content ? h('span', `${childPrefixOpts.content}`) : _e()
+                          childPrefixOpts.content ? h('span', `${childPrefixOpts.content}`) : renderEmptyElement($xeTable)
                         ]),
                         h('span', {
                           class: 'vxe-context-menu--link-content',
@@ -139,7 +141,7 @@ export default {
                           h('i', {
                             class: childSuffixOpts.icon
                           }),
-                          childSuffixOpts.content ? h('span', `${childSuffixOpts.content}`) : _e()
+                          childSuffixOpts.content ? h('span', `${childSuffixOpts.content}`) : renderEmptyElement($xeTable)
                         ])
                       ])
                     ])

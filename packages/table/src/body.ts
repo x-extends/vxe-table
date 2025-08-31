@@ -177,14 +177,13 @@ function renderTdColumn (
   // hover 进入事件
   if (showTitle || showTooltip || showAllTip || tooltipConfig) {
     tdOns.mouseenter = (evnt: MouseEvent) => {
-      if (isVMScrollProcess($xeTable)) {
-        return
-      }
-      if (showTitle) {
-        updateCellTitle(evnt.currentTarget, column)
-      } else if (showTooltip || showAllTip) {
-        // 如果配置了显示 tooltip
-        $xeTable.triggerBodyTooltipEvent(evnt, cellParams)
+      if (!isVMScrollProcess($xeTable)) {
+        if (showTitle) {
+          updateCellTitle(evnt.currentTarget, column)
+        } else if (showTooltip || showAllTip) {
+          // 如果配置了显示 tooltip
+          $xeTable.triggerBodyTooltipEvent(evnt, cellParams)
+        }
       }
       $xeTable.dispatchEvent('cell-mouseenter', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
     }
@@ -192,11 +191,10 @@ function renderTdColumn (
   // hover 退出事件
   if (showTooltip || showAllTip || tooltipConfig) {
     tdOns.mouseleave = (evnt: MouseEvent) => {
-      if (isVMScrollProcess($xeTable)) {
-        return
-      }
-      if (showTooltip || showAllTip) {
-        $xeTable.handleTargetLeaveEvent(evnt)
+      if (!isVMScrollProcess($xeTable)) {
+        if (showTooltip || showAllTip) {
+          $xeTable.handleTargetLeaveEvent(evnt)
+        }
       }
       $xeTable.dispatchEvent('cell-mouseleave', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
     }
