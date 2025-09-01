@@ -56,7 +56,7 @@ function handleConfirmFilter (params: any, checked: any, option: any) {
   $panel.changeOption({}, checked, option)
 }
 
-function getNativeAttrs (renderOpts: any) {
+function getNativeAttrs (renderOpts: VxeGlobalRendererHandles.RenderTableCellOptions) {
   let { name, attrs } = renderOpts
   if (name === 'input') {
     attrs = Object.assign({ type: 'text' }, attrs)
@@ -83,7 +83,7 @@ function getCellEditProps (renderOpts: VxeColumnPropTypes.EditRender, params: Vx
   return XEUtils.assign({ immediate: getInputImmediateModel(renderOpts) }, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
 }
 
-function getCellEditFilterProps (renderOpts: any, params: any, value: any, defaultProps?: any) {
+function getCellEditFilterProps (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: any, value: any, defaultProps?: any) {
   return XEUtils.assign({}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
 }
 
@@ -91,7 +91,7 @@ function isImmediateCell (renderOpts: VxeColumnPropTypes.EditRender, params: any
   return params.$type === 'cell' || getInputImmediateModel(renderOpts)
 }
 
-function getCellLabelVNs (renderOpts: any, params: any, cellLabel: any, opts?: {
+function getCellLabelVNs (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: any, cellLabel: any, opts?: {
   class?: string
 }) {
   const { placeholder } = renderOpts
@@ -115,7 +115,7 @@ function getCellLabelVNs (renderOpts: any, params: any, cellLabel: any, opts?: {
  * @param modelFunc
  * @param changeFunc
  */
-function getNativeElementOns (renderOpts: any, params: any, eFns?: {
+function getNativeElementOns (renderOpts: VxeGlobalRendererHandles.RenderTableCellOptions | VxeGlobalRendererHandles.RenderTableFilterOptions, params: any, eFns?: {
   model: (evnt: Event) => void
   change?: (evnt: Event) => void
   blur?: (evnt: Event) => void
@@ -172,7 +172,7 @@ const blurEvent = 'blur'
  * @param modelFunc
  * @param changeFunc
  */
-function getComponentOns (renderOpts: any, params: any, eFns?: {
+function getComponentOns (renderOpts: VxeGlobalRendererHandles.RenderTableCellOptions | VxeGlobalRendererHandles.RenderTableFilterOptions, params: any, eFns?: {
   model: (cellValue: any) => void
   change?: (...args: any[]) => void
   blur?: (...args: any[]) => void
@@ -252,7 +252,7 @@ function getEditOns (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions
   })
 }
 
-function getFilterOns (renderOpts: any, params: any, option: any) {
+function getFilterOns (renderOpts: VxeGlobalRendererHandles.RenderTableFilterOptions, params: any, option: any) {
   return getComponentOns(renderOpts, params, {
     model (value: any) {
       // 处理 model 值双向绑定
@@ -267,7 +267,7 @@ function getFilterOns (renderOpts: any, params: any, option: any) {
   })
 }
 
-function getNativeEditOns (renderOpts: any, params: any) {
+function getNativeEditOns (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: any) {
   const { $table, row, column } = params
   const { model } = column
   return getNativeElementOns(renderOpts, params, {
@@ -302,7 +302,7 @@ function getNativeEditOns (renderOpts: any, params: any) {
   })
 }
 
-function getNativeFilterOns (renderOpts: any, params: any, option: any) {
+function getNativeFilterOns (renderOpts: VxeGlobalRendererHandles.RenderTableFilterOptions, params: any, option: any) {
   return getNativeElementOns(renderOpts, params, {
     model (evnt) {
       // 处理 model 值双向绑定
@@ -324,12 +324,12 @@ function getNativeFilterOns (renderOpts: any, params: any, option: any) {
  * 单元格可编辑渲染-原生的标签
  * input、textarea、select
  */
-function nativeEditRender (renderOpts: any, params: any) {
+function nativeEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: any) {
   const { row, column } = params
   const { name } = renderOpts
   const cellValue = isImmediateCell(renderOpts, params) ? getCellValue(row, column) : column.model.value
   return [
-    h(name, {
+    h(`${name}`, {
       class: `vxe-default-${name}`,
       ...getNativeAttrs(renderOpts),
       value: cellValue,
@@ -338,7 +338,7 @@ function nativeEditRender (renderOpts: any, params: any) {
   ]
 }
 
-function buttonCellRender (renderOpts: any, params: any) {
+function buttonCellRender (renderOpts: VxeGlobalRendererHandles.RenderTableCellOptions, params: any) {
   return [
     h(getDefaultComponent(renderOpts), {
       ...getCellEditProps(renderOpts, params, null),
@@ -401,7 +401,7 @@ function oldEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOpti
  * 已废弃
  * @deprecated
  */
-function oldButtonEditRender (renderOpts: any, params: any) {
+function oldButtonEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: any) {
   return [
     h(getComponent('vxe-button'), {
       ...getCellEditProps(renderOpts, params, null),
@@ -414,11 +414,12 @@ function oldButtonEditRender (renderOpts: any, params: any) {
  * 已废弃
  * @deprecated
  */
-function oldButtonsEditRender (renderOpts: any, params: any) {
-  return renderOpts.children.map((childRenderOpts: any) => oldButtonEditRender(childRenderOpts, params)[0])
+function oldButtonsEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: any) {
+  const { children } = renderOpts
+  return children ? children.map((childRenderOpts: any) => oldButtonEditRender(childRenderOpts, params)[0]) : []
 }
 
-function renderNativeOptgroups (renderOpts: any, params: any, renderOptionsMethods: any) {
+function renderNativeOptgroups (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: any, renderOptionsMethods: any) {
   const { optionGroups, optionGroupProps = {} } = renderOpts
   const groupOptions = optionGroupProps.options || 'options'
   const groupLabel = optionGroupProps.label || 'label'
@@ -436,7 +437,7 @@ function renderNativeOptgroups (renderOpts: any, params: any, renderOptionsMetho
 /**
  * 渲染原生的 option 标签
  */
-function renderNativeOptions (options: any, renderOpts: any, params: any) {
+function renderNativeOptions (options: any, renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: any) {
   const { optionProps = {} } = renderOpts
   const { row, column } = params
   const labelProp = optionProps.label || 'label'
@@ -457,12 +458,12 @@ function renderNativeOptions (options: any, renderOpts: any, params: any) {
   return []
 }
 
-function nativeFilterRender (renderOpts: any, params: any) {
+function nativeFilterRender (renderOpts: VxeGlobalRendererHandles.RenderTableFilterOptions, params: any) {
   const { column } = params
   const { name } = renderOpts
   const attrs = getNativeAttrs(renderOpts)
   return column.filters.map((option: any, oIndex: any) => {
-    return h(name, {
+    return h(`${name}`, {
       key: oIndex,
       class: `vxe-default-${name}`,
       ...attrs,
@@ -472,7 +473,7 @@ function nativeFilterRender (renderOpts: any, params: any) {
   })
 }
 
-function defaultFilterRender (renderOpts: any, params: any) {
+function defaultFilterRender (renderOpts: VxeGlobalRendererHandles.RenderTableFilterOptions, params: any) {
   const { column } = params
   return column.filters.map((option: any, oIndex: any) => {
     const optionValue = option.data
@@ -488,7 +489,7 @@ function defaultFilterRender (renderOpts: any, params: any) {
  * 已废弃
  * @deprecated
  */
-function oldFilterRender (renderOpts: any, params: any) {
+function oldFilterRender (renderOpts: VxeGlobalRendererHandles.RenderTableFilterOptions, params: any) {
   const { column } = params
   return column.filters.map((option: any, oIndex: any) => {
     const optionValue = option.data
@@ -514,7 +515,7 @@ function handleInputFilterMethod ({ option, row, column }: any) {
   return XEUtils.toValueString(cellValue).indexOf(data) > -1
 }
 
-function nativeSelectEditRender (renderOpts: any, params: any) {
+function nativeSelectEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: any) {
   return [
     h('select', {
       class: 'vxe-default-select',
@@ -525,7 +526,7 @@ function nativeSelectEditRender (renderOpts: any, params: any) {
   ]
 }
 
-function defaultSelectEditRender (renderOpts: any, params: any) {
+function defaultSelectEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: any) {
   const { row, column } = params
   const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
   const cellValue = getCellValue(row, column)
@@ -537,7 +538,7 @@ function defaultSelectEditRender (renderOpts: any, params: any) {
   ]
 }
 
-function defaultTableOrTreeSelectEditRender (renderOpts: any, params: any) {
+function defaultTableOrTreeSelectEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: any) {
   const { row, column } = params
   const { options, optionProps } = renderOpts
   const cellValue = getCellValue(row, column)
@@ -553,7 +554,7 @@ function defaultTableOrTreeSelectEditRender (renderOpts: any, params: any) {
  * 已废弃
  * @deprecated
  */
-function oldSelectEditRender (renderOpts: any, params: any) {
+function oldSelectEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: any) {
   const { row, column } = params
   const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
   const cellValue = getCellValue(row, column)
@@ -565,7 +566,7 @@ function oldSelectEditRender (renderOpts: any, params: any) {
   ]
 }
 
-function getSelectCellValue (renderOpts: any, { row, column }: any) {
+function getSelectCellValue (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, { row, column }: any) {
   const { options, optionGroups, optionProps = {}, optionGroupProps = {} } = renderOpts
   const cellValue = XEUtils.get(row, column.field)
   let selectItem: any
@@ -600,7 +601,7 @@ function handleExportSelectMethod (params: any) {
   return options.original ? getCellValue(row, column) : getSelectCellValue(column.editRender || column.cellRender, params)
 }
 
-function getTreeSelectCellValue (renderOpts: any, { row, column }: any) {
+function getTreeSelectCellValue (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, { row, column }: any) {
   const { options, optionProps = {} } = renderOpts
   const cellValue = XEUtils.get(row, column.field)
   const labelProp = optionProps.label || 'label'

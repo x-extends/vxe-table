@@ -1,12 +1,13 @@
 import XEUtils from 'xe-utils'
 
+import type { VxeGlobalRendererHandles } from 'vxe-pc-ui'
 import type { VxeComponentSlotType } from '../../../types'
 
 export function getOnName (type: string) {
   return 'on' + type.substring(0, 1).toLocaleUpperCase() + type.substring(1)
 }
 
-export function getModelEvent (renderOpts: any) {
+export function getModelEvent (renderOpts: VxeGlobalRendererHandles.RenderOptions) {
   switch (renderOpts.name) {
     case 'input':
     case 'textarea':
@@ -17,7 +18,7 @@ export function getModelEvent (renderOpts: any) {
   return 'update:modelValue'
 }
 
-export function getChangeEvent (renderOpts: any) {
+export function getChangeEvent (renderOpts: VxeGlobalRendererHandles.RenderOptions) {
   switch (renderOpts.name) {
     case 'input':
     case 'textarea':

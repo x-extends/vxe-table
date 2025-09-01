@@ -10306,11 +10306,20 @@ export default defineVxeComponent({
         const rowDragOpts = computeRowDragOpts.value
         const { isCrossTableDrag } = rowDragOpts
         if (isCrossTableDrag && crossTableDragRowObj && !tableData.length) {
-          const { $oldTable } = crossTableDragRowObj
-          if ($oldTable && $oldTable.xID !== $xeTable.xID) {
-            evnt.preventDefault()
-            crossTableDragRowObj.$newTable = $xeTable
-            internalData.prevDragRow = null
+          const { $oldTable, $newTable } = crossTableDragRowObj
+          if ($oldTable) {
+            const oldTableReactData = $oldTable.reactData
+            if ($oldTable.xID !== $xeTable.xID) {
+              if ($newTable && $newTable.xID !== $xeTable.xID) {
+                $newTable.hideCrossTableRowDropClearStatus()
+              }
+              evnt.preventDefault()
+              $oldTable.hideCrossTableRowDropClearStatus()
+              crossTableDragRowObj.$newTable = $xeTable
+              internalData.prevDragRow = null
+              reactData.dragTipText = oldTableReactData.dragTipText
+              showDropTip(evnt, evnt.currentTarget as HTMLDivElement, null, true, '')
+            }
           }
         }
       },
@@ -10521,6 +10530,9 @@ export default defineVxeComponent({
                 oldTableReactData.isCrossDragRow = false
                 crossTableDragRowObj.$newTable = null
               } else {
+                if ($newTable && $newTable.xID !== $xeTable.xID) {
+                  $newTable.hideCrossTableRowDropClearStatus()
+                }
                 $oldTable.hideCrossTableRowDropClearStatus()
                 oldTableReactData.isCrossDragRow = true
                 reactData.dragTipText = oldTableReactData.dragTipText
@@ -12223,9 +12235,14 @@ export default defineVxeComponent({
       const scrollbarXToTop = computeScrollbarXToTop.value
       const scrollbarYToLeft = computeScrollbarYToLeft.value
       const { isCrossTableDrag } = rowDragOpts
-      const rwOns: Record<string, any> = {}
+      const tbOns: {
+        onKeydown: (...args: any[]) => void
+        onDragover?: (...args: any[]) => void
+      } = {
+        onKeydown: keydownEvent
+      }
       if (isCrossTableDrag && !tableData.length) {
-        rwOns.onDragover = $xeTable.handleCrossTableRowDragoverEmptyEvent
+        tbOns.onDragover = $xeTable.handleCrossTableRowDragoverEmptyEvent
       }
       return h('div', {
         ref: refElem,
@@ -12261,7 +12278,7 @@ export default defineVxeComponent({
           'is--virtual-y': scrollYLoad
         }],
         spellcheck: false,
-        onKeydown: keydownEvent
+        ...tbOns
       }, [
         /**
          * 隐藏列
@@ -12288,8 +12305,7 @@ export default defineVxeComponent({
         ]),
         h('div', {
           key: 'tw',
-          class: 'vxe-table--render-wrapper',
-          ...rwOns
+          class: 'vxe-table--render-wrapper'
         }, scrollbarXToTop
           ? [
               renderScrollX(),
