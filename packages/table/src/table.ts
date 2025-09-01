@@ -2042,9 +2042,14 @@ export default {
     const scrollbarXToTop = $xeTable.computeScrollbarXToTop
     const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
     const { isCrossTableDrag } = rowDragOpts
-    const rwOns: Record<string, any> = {}
+    const tbOns: {
+        keydown: (...args: any[]) => void
+        dragover?: (...args: any[]) => void
+      } = {
+        keydown: this.keydownEvent
+      }
     if (isCrossTableDrag && !tableData.length) {
-      rwOns.onDragover = $xeTable.handleCrossTableRowDragoverEmptyEvent
+      tbOns.dragover = $xeTable.handleCrossTableRowDragoverEmptyEvent
     }
     return h('div', {
       ref: 'refElem',
@@ -2082,9 +2087,7 @@ export default {
       attrs: {
         spellcheck: false
       },
-      on: {
-        keydown: this.keydownEvent
-      }
+      on: tbOns
     }, [
       /**
        * 隐藏列
@@ -2112,8 +2115,7 @@ export default {
       ]),
       h('div', {
         key: 'tw',
-        class: 'vxe-table--render-wrapper',
-        on: rwOns
+        class: 'vxe-table--render-wrapper'
       }, scrollbarXToTop
         ? [
             renderScrollX(h, $xeTable),

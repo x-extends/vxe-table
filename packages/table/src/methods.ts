@@ -8925,11 +8925,20 @@ const Methods = {
     const rowDragOpts = $xeTable.computeRowDragOpts
     const { isCrossTableDrag } = rowDragOpts
     if (isCrossTableDrag && crossTableDragRowObj && !tableData.length) {
-      const { $oldTable } = crossTableDragRowObj
-      if ($oldTable && $oldTable.xID !== $xeTable.xID) {
-        evnt.preventDefault()
-        crossTableDragRowObj.$newTable = $xeTable
-        internalData.prevDragRow = null
+      const { $oldTable, $newTable } = crossTableDragRowObj
+      if ($oldTable) {
+        const oldTableReactData = $oldTable as unknown as TableReactData
+        if ($oldTable.xID !== $xeTable.xID) {
+          if ($newTable && $newTable.xID !== $xeTable.xID) {
+            $newTable.hideCrossTableRowDropClearStatus()
+          }
+          evnt.preventDefault()
+          $oldTable.hideCrossTableRowDropClearStatus()
+          crossTableDragRowObj.$newTable = $xeTable
+          internalData.prevDragRow = null
+          reactData.dragTipText = oldTableReactData.dragTipText
+          showDropTip($xeTable, evnt, evnt.currentTarget as HTMLDivElement, null, true, '')
+        }
       }
     }
   },
@@ -9160,6 +9169,9 @@ const Methods = {
             oldTableReactData.isCrossDragRow = false
             crossTableDragRowObj.$newTable = null
           } else if (!treeConfig || isCrossDrag) {
+            if ($newTable && $newTable.xID !== $xeTable.xID) {
+              $newTable.hideCrossTableRowDropClearStatus()
+            }
             $oldTable.hideCrossTableRowDropClearStatus()
             oldTableReactData.isCrossDragRow = true
             reactData.dragTipText = oldTableReactData.dragTipText

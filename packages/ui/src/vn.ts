@@ -1,21 +1,27 @@
 import XEUtils from 'xe-utils'
 
+import type { VxeGlobalRendererHandles } from 'vxe-pc-ui'
 import type { VxeComponentSlotType } from '../../../types'
 
 export function getOnName (type: string) {
   return XEUtils.kebabCase(type)
 }
 
-export function getModelEvent (name: string) {
-  switch (name) {
+export function getModelEvent (renderOpts: VxeGlobalRendererHandles.RenderOptions) {
+  switch (renderOpts.name) {
     case 'VxeInput':
     case 'VxeTextarea':
     case 'VxeNumberInput':
+    case 'VxePasswordInput':
     case 'VxeSelect':
     case 'VxeTreeSelect':
     case 'VxeTableSelect':
     case 'VxeDatePicker':
     case 'VxeDateRangePicker':
+    case 'VxeIconPicker':
+    case 'VxeColorPicker':
+    case 'VxeSlider':
+    case 'VxeUpload':
       return 'modelValue'
     case 'select':
       return 'change'
@@ -23,8 +29,8 @@ export function getModelEvent (name: string) {
   return 'input'
 }
 
-export function getChangeEvent (name: string) {
-  switch (name) {
+export function getChangeEvent (renderOpts: VxeGlobalRendererHandles.RenderOptions) {
+  switch (renderOpts.name) {
     case 'input':
     case 'textarea':
     case 'VxeInput':
