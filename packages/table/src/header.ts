@@ -10,6 +10,22 @@ const { renderer, renderEmptyElement } = VxeUI
 
 const cellType = 'header'
 
+function getColumnFirstChild (column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
+  const { children } = column
+  if (children && children.length) {
+    return getColumnFirstChild(children[0])
+  }
+  return column
+}
+
+function getColumnLastChild (column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
+  const { children } = column
+  if (children && children.length) {
+    return getColumnLastChild(children[children.length - 1])
+  }
+  return column
+}
+
 function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][], $rowIndex: number, cols: VxeTableDefines.ColumnInfo[]) {
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
@@ -140,6 +156,18 @@ function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMod
       tcStyle.height = `${currCellHeight}px`
     } else {
       tcStyle.minHeight = `${currCellHeight}px`
+    }
+
+    if (isColGroup && !isLastRow) {
+      const firstCol = getColumnFirstChild(column)
+      const lastCol = getColumnLastChild(column)
+      if (firstCol && lastCol && firstCol.id !== lastCol.id) {
+        const firstColRest = fullColumnIdData[firstCol.id]
+        const lastColRest = fullColumnIdData[lastCol.id]
+        if (firstColRest && lastColRest) {
+          tcStyle.width = `${lastColRest.oLeft - firstColRest.oLeft + lastCol.renderWidth}px`
+        }
+      }
     }
 
     return h('th', {
