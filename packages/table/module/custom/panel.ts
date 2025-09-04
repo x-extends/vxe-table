@@ -544,8 +544,7 @@ export default defineVxeComponent({
           !dragCol ||
           (dragCol && dragCol.id === column.id) ||
           (!isCrossDrag && column.level > 1) ||
-          (!immediate && column.level > 1) ||
-          column.renderFixed
+          (!immediate && column.level > 1)
         ) {
           showDropTip(evnt, optEl, false, dragPos)
           return
@@ -689,10 +688,10 @@ export default defineVxeComponent({
                   }, [
                     h('span', {
                       class: ['vxe-table-custom--sort-btn', {
-                        'is--disabled': isDisabled || isHidden || column.renderFixed
+                        'is--disabled': isDisabled || isHidden
                       }],
                       title: getI18n('vxe.custom.setting.sortHelpTip'),
-                      ...(isDisabled || isHidden || column.renderFixed
+                      ...(isDisabled || isHidden
                         ? {}
                         : {
                             onMousedown: sortMousedownEvent,
@@ -996,10 +995,10 @@ export default defineVxeComponent({
                     ? ((isCrossDrag ? immediate : false) || column.level === 1
                         ? h('div', {
                           class: ['vxe-table-custom-popup--column-sort-btn', {
-                            'is--disabled': isDisabled || isHidden || column.renderFixed
+                            'is--disabled': isDisabled || isHidden
                           }],
                           title: getI18n('vxe.custom.setting.sortHelpTip'),
-                          ...(isDisabled || isHidden || column.renderFixed
+                          ...(isDisabled || isHidden
                             ? {}
                             : {
                                 onMousedown: sortMousedownEvent,
