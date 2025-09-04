@@ -214,12 +214,12 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
               }, [
                 h('span', {
                   class: ['vxe-table-custom--sort-btn', {
-                    'is--disabled': isDisabled || isHidden || column.renderFixed
+                    'is--disabled': isDisabled || isHidden
                   }],
                   attrs: {
                     title: getI18n('vxe.custom.setting.sortHelpTip')
                   },
-                  on: isDisabled || isHidden || column.renderFixed
+                  on: isDisabled || isHidden
                     ? {}
                     : {
                         mousedown: _vm.sortMousedownEvent,
@@ -565,12 +565,12 @@ const renderPopupPanel = (h: CreateElement, $xeTableCustomPanel: VxeTableCustomP
                 ? ((isCrossDrag ? immediate : false) || column.level === 1
                     ? h('div', {
                       class: ['vxe-table-custom-popup--column-sort-btn', {
-                        'is--disabled': isDisabled || isHidden || column.renderFixed
+                        'is--disabled': isDisabled || isHidden
                       }],
                       attrs: {
                         title: getI18n('vxe.custom.setting.sortHelpTip')
                       },
-                      on: (isDisabled || isHidden || column.renderFixed
+                      on: (isDisabled || isHidden
                         ? {}
                         : {
                             mousedown: _vm.sortMousedownEvent,
@@ -1431,8 +1431,7 @@ export default {
           !dragCol ||
           (dragCol && dragCol.id === column.id) ||
           (!isCrossDrag && column.level > 1) ||
-          (!immediate && column.level > 1) ||
-          column.renderFixed
+          (!immediate && column.level > 1)
         ) {
           showDropTip($xeTableCustomPanel, evnt, optEl, false, dragPos)
           return
