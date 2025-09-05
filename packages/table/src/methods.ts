@@ -10314,6 +10314,31 @@ const Methods = {
     }
     return $xeTable.$nextTick()
   },
+  getRowGroups () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { aggregateConfig, rowGroupConfig } = props
+    const { fullColumnFieldData } = internalData
+    if (aggregateConfig || rowGroupConfig) {
+      const { rowGroupList } = reactData
+      return rowGroupList.map(({ field }) => {
+        const colRet = fullColumnFieldData[field]
+        if (colRet) {
+          return colRet.column
+        }
+        return { field }
+      })
+    }
+    return []
+  },
+  getRowGroupFields () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    return $xeTable.getRowGroups().map(item => item.field)
+  },
   clearRowGroups () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
