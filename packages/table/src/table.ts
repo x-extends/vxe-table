@@ -6661,6 +6661,24 @@ export default defineVxeComponent({
         }
         return nextTick()
       },
+      getRowGroups () {
+        const { aggregateConfig, rowGroupConfig } = props
+        const { fullColumnFieldData } = internalData
+        if (aggregateConfig || rowGroupConfig) {
+          const { rowGroupList } = reactData
+          return rowGroupList.map(({ field }) => {
+            const colRet = fullColumnFieldData[field]
+            if (colRet) {
+              return colRet.column
+            }
+            return { field }
+          })
+        }
+        return []
+      },
+      getRowGroupFields () {
+        return $xeTable.getRowGroups().map(item => item.field)
+      },
       clearRowGroups () {
         const { aggregateConfig, rowGroupConfig } = props
         if (!(aggregateConfig || rowGroupConfig)) {
