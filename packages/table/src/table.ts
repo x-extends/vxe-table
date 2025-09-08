@@ -667,6 +667,7 @@ export default {
         column: null,
         content: null,
         visible: false,
+        type: null,
         currOpts: {}
       },
       // 存放数据校验相关信息
@@ -2018,9 +2019,15 @@ export default {
     const { xID } = $xeTable
 
     const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
-    const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, isRowGroupStatus, columnStore, filterStore, customStore } = reactData
+    const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, isRowGroupStatus, columnStore, filterStore, customStore, tooltipStore } = reactData
     const { leftList, rightList } = columnStore
     const loadingSlot = slots.loading
+    const tipSlots = {
+      header: slots.headerTooltip || slots['header-tooltip'],
+      body: slots.tooltip,
+      footer: slots.footerTooltip || slots['footer-tooltip']
+    }
+    const currTooltipSlot = tooltipStore.visible && tooltipStore.type ? tipSlots[tooltipStore.type] : null
     const rowDragOpts = $xeTable.computeRowDragOpts
     const tableTipConfig = $xeTable.computeTableTipConfig
     const validTipConfig = $xeTable.computeValidTipConfig
@@ -2297,8 +2304,39 @@ export default {
               enterable: tableTipConfig.enterable,
               enterDelay: tableTipConfig.enterDelay,
               leaveDelay: tableTipConfig.leaveDelay,
-              useHTML: tableTipConfig.useHTML
-            }
+              useHTML: tableTipConfig.useHTML,
+              width: tableTipConfig.width,
+              height: tableTipConfig.height,
+              minWidth: tableTipConfig.minWidth,
+              minHeight: tableTipConfig.minHeight,
+              maxWidth: tableTipConfig.maxWidth,
+              maxHeight: tableTipConfig.maxHeight
+            },
+            scopedSlots: currTooltipSlot
+              ? {
+                  content: () => {
+                    const { type, row, column, content: tooltipContent } = tooltipStore
+                    if (currTooltipSlot) {
+                      if (column && type === 'header') {
+                        return h('div', {
+                          key: type
+                        }, currTooltipSlot({ column, tooltipContent, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }))
+                      }
+                      if (row && column && type === 'body') {
+                        return h('div', {
+                          key: type
+                        }, currTooltipSlot({ row, column, tooltipContent, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }))
+                      }
+                      if (row && column && type === 'footer') {
+                        return h('div', {
+                          key: type
+                        }, currTooltipSlot({ row, column, tooltipContent, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }))
+                      }
+                    }
+                    return renderEmptyElement($xeTable)
+                  }
+                }
+              : {}
           })
           : renderEmptyElement($xeTable),
         /**

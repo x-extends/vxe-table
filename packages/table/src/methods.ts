@@ -2796,7 +2796,7 @@ function clearRowDragData ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
  * @param {Event} evnt 事件
  * @param {Row} row 行对象
  */
-function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: MouseEvent, tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, tipElem: HTMLElement | null, params: any) {
+function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: MouseEvent, type: 'header' | 'body' | 'footer', tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, tipElem: HTMLElement | null, params: any) {
   const reactData = $xeTable as unknown as TableReactData
 
   const tipOverEl = overflowElem || tdEl
@@ -2813,16 +2813,19 @@ function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   const content = useCustom ? customContent : XEUtils.toString(column.type === 'html' ? tipOverEl.innerText : tipOverEl.textContent).trim()
   const isOver = tipOverEl.scrollWidth > tipOverEl.clientWidth
   if (content && (showAll || useCustom || isOver)) {
+    const tipContent = formatText(content)
     Object.assign(tooltipStore, {
       row,
       column,
       visible: true,
+      content: tipContent,
+      type,
       currOpts: {}
     })
     $xeTable.$nextTick(() => {
       const $tooltip = $xeTable.$refs.refTooltip as VxeTooltipInstance
       if ($tooltip && $tooltip.open) {
-        $tooltip.open(isOver ? tipOverEl : tipElem, formatText(content))
+        $tooltip.open(isOver ? tipOverEl : tipElem, tipContent)
       }
     })
   }
@@ -7118,7 +7121,7 @@ const Methods = {
     }
     if (tooltipStore.column !== column || !tooltipStore.visible) {
       const ctEl = thEl.querySelector<HTMLElement>('.vxe-cell--title')
-      handleTooltip($xeTable, evnt, thEl, (hasClass(thEl, 'col--ellipsis') ? ctEl : cWrapperEl) || cWrapperEl, ctEl || cellEl, params)
+      handleTooltip($xeTable, evnt, 'header', thEl, (hasClass(thEl, 'col--ellipsis') ? ctEl : cWrapperEl) || cWrapperEl, ctEl || cellEl, params)
     }
   },
   /**
@@ -7158,7 +7161,7 @@ const Methods = {
       if (!tipEl) {
         tipEl = ctEl
       }
-      handleTooltip($xeTable, evnt, tdEl, ovEl || ctEl, tipEl, params)
+      handleTooltip($xeTable, evnt, 'body', tdEl, ovEl || ctEl, tipEl, params)
     }
   },
   /**
@@ -7182,7 +7185,7 @@ const Methods = {
       if (!tipEl) {
         tipEl = ctEl
       }
-      handleTooltip($xeTable, evnt, tdEl, ovEl || ctEl, tipEl, params)
+      handleTooltip($xeTable, evnt, 'footer', tdEl, ovEl || ctEl, tipEl, params)
     }
   },
   openTooltip (target: HTMLElement, content: string | number) {
@@ -7209,6 +7212,7 @@ const Methods = {
         column: null,
         content: null,
         visible: false,
+        type: null,
         currOpts: {}
       })
       if (tooltip) {
