@@ -697,6 +697,9 @@ export default defineVxeComponent({
       const loadingSlot = slots.loading
       const rowDragIconSlot = slots.rowDragIcon || slots['row-drag-icon']
       const columnDragIconSlot = slots.columnDragIcon || slots['column-drag-icon']
+      const headerTooltipSlot = slots.headerTooltip || slots['header-tooltip']
+      const tooltipSlot = slots.tooltip
+      const footerTooltipSlot = slots.footerTooltip || slots['footer-tooltip']
       if (proxyConfig && isEnableConf(proxyOpts)) {
         if (proxyOpts.sort) {
           tableOns.onSortChange = sortChangeEvent
@@ -712,6 +715,9 @@ export default defineVxeComponent({
         loading?(params: any): any
         rowDragIcon?(params: any): any
         columnDragIcon?(params: any): any
+        headerTooltip?(params: any): any
+        tooltip?(params: any): any
+        footerTooltip?(params: any): any
       } = {}
       if (emptySlot) {
         slotObj.empty = emptySlot
@@ -724,6 +730,15 @@ export default defineVxeComponent({
       }
       if (columnDragIconSlot) {
         slotObj.columnDragIcon = columnDragIconSlot
+      }
+      if (headerTooltipSlot) {
+        slotObj.headerTooltip = headerTooltipSlot
+      }
+      if (tooltipSlot) {
+        slotObj.tooltip = tooltipSlot
+      }
+      if (footerTooltipSlot) {
+        slotObj.footerTooltip = footerTooltipSlot
       }
       return h('div', {
         class: 'vxe-grid--table-wrapper'

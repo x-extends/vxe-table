@@ -216,6 +216,7 @@ export default defineVxeComponent({
         column: null,
         content: null,
         visible: false,
+        type: null,
         currOpts: {}
       },
       // 存放数据校验相关信息
@@ -5740,6 +5741,7 @@ export default defineVxeComponent({
             column: null,
             content: null,
             visible: false,
+            type: null,
             currOpts: {}
           })
           if ($tooltip && $tooltip.close) {
@@ -8215,7 +8217,7 @@ export default defineVxeComponent({
      * @param {Event} evnt 事件
      * @param {Row} row 行对象
      */
-    const handleTooltip = (evnt: MouseEvent, tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, tipElem: HTMLElement | null, params: any) => {
+    const handleTooltip = (evnt: MouseEvent, type: 'header' | 'body' | 'footer', tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, tipElem: HTMLElement | null, params: any) => {
       const tipOverEl = overflowElem || tdEl
       if (!tipOverEl) {
         return nextTick()
@@ -8230,16 +8232,19 @@ export default defineVxeComponent({
       const content = useCustom ? customContent : XEUtils.toString(column.type === 'html' ? tipOverEl.innerText : tipOverEl.textContent).trim()
       const isOver = tipOverEl.scrollWidth > tipOverEl.clientWidth
       if (content && (showAll || useCustom || isOver)) {
+        const tipContent = formatText(content)
         Object.assign(tooltipStore, {
           row,
           column,
           visible: true,
+          content: tipContent,
+          type,
           currOpts: {}
         })
         nextTick(() => {
           const $tooltip = refTooltip.value
           if ($tooltip && $tooltip.open) {
-            $tooltip.open(isOver ? tipOverEl : tipElem, formatText(content))
+            $tooltip.open(isOver ? tipOverEl : tipElem, tipContent)
           }
         })
       }
@@ -9363,7 +9368,7 @@ export default defineVxeComponent({
         }
         if (tooltipStore.column !== column || !tooltipStore.visible) {
           const ctEl = thEl.querySelector<HTMLElement>('.vxe-cell--title')
-          handleTooltip(evnt, thEl, (hasClass(thEl, 'col--ellipsis') ? ctEl : cWrapperEl) || cWrapperEl, ctEl || cellEl, params)
+          handleTooltip(evnt, 'header', thEl, (hasClass(thEl, 'col--ellipsis') ? ctEl : cWrapperEl) || cWrapperEl, ctEl || cellEl, params)
         }
       },
       /**
@@ -9399,7 +9404,7 @@ export default defineVxeComponent({
           if (!tipEl) {
             tipEl = ctEl
           }
-          handleTooltip(evnt, tdEl, ovEl || ctEl, tipEl, params)
+          handleTooltip(evnt, 'body', tdEl, ovEl || ctEl, tipEl, params)
         }
       },
       /**
@@ -9420,7 +9425,7 @@ export default defineVxeComponent({
           if (!tipEl) {
             tipEl = ctEl
           }
-          handleTooltip(evnt, tdEl, ovEl || ctEl, tipEl, params)
+          handleTooltip(evnt, 'footer', tdEl, ovEl || ctEl, tipEl, params)
         }
       },
       handleTargetLeaveEvent () {
@@ -12228,10 +12233,16 @@ export default defineVxeComponent({
 
     const renderVN = () => {
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
-      const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, isRowGroupStatus, columnStore, filterStore, customStore } = reactData
+      const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, isRowGroupStatus, columnStore, filterStore, customStore, tooltipStore } = reactData
       const { teleportToWrapperElem } = internalData
       const { leftList, rightList } = columnStore
       const loadingSlot = slots.loading
+      const tipSlots = {
+        header: slots.headerTooltip || slots['header-tooltip'],
+        body: slots.tooltip,
+        footer: slots.footerTooltip || slots['footer-tooltip']
+      }
+      const currTooltipSlot = tooltipStore.visible && tooltipStore.type ? tipSlots[tooltipStore.type] : null
       const rowDragOpts = computeRowDragOpts.value
       const tableTipConfig = computeTableTipConfig.value
       const validTipConfig = computeValidTipConfig.value
@@ -12492,8 +12503,38 @@ export default defineVxeComponent({
               enterable: tableTipConfig.enterable,
               enterDelay: tableTipConfig.enterDelay,
               leaveDelay: tableTipConfig.leaveDelay,
-              useHTML: tableTipConfig.useHTML
-            }),
+              useHTML: tableTipConfig.useHTML,
+              width: tableTipConfig.width,
+              height: tableTipConfig.height,
+              minWidth: tableTipConfig.minWidth,
+              minHeight: tableTipConfig.minHeight,
+              maxWidth: tableTipConfig.maxWidth,
+              maxHeight: tableTipConfig.maxHeight
+            }, currTooltipSlot
+              ? {
+                  content: () => {
+                    const { type, row, column, content: tooltipContent } = tooltipStore
+                    if (currTooltipSlot) {
+                      if (column && type === 'header') {
+                        return h('div', {
+                          key: type
+                        }, currTooltipSlot({ column, tooltipContent, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }))
+                      }
+                      if (row && column && type === 'body') {
+                        return h('div', {
+                          key: type
+                        }, currTooltipSlot({ row, column, tooltipContent, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }))
+                      }
+                      if (row && column && type === 'footer') {
+                        return h('div', {
+                          key: type
+                        }, currTooltipSlot({ row, column, tooltipContent, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }))
+                      }
+                    }
+                    return renderEmptyElement($xeTable)
+                  }
+                }
+              : {}),
             /**
               * 校验提示
               */
