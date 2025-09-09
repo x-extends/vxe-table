@@ -1730,6 +1730,7 @@ export default defineVxeComponent({
      * 牺牲数据组装的耗时，用来换取使用过程中的流畅
      */
     const cacheColumnMap = () => {
+      const { treeConfig, showOverflow } = props
       const { tableFullColumn, collectColumn } = internalData
       const fullColIdData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnIdData = {}
       const fullColFieldData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnFieldData = {}
@@ -1740,10 +1741,11 @@ export default defineVxeComponent({
       const virtualYOpts = computeVirtualYOpts.value
       const { isCrossDrag, isSelfToChildDrag } = columnDragOpts
       const customOpts = computeCustomOpts.value
+      const treeOpts = computeTreeOpts.value
       const { storage } = customOpts
       const rowOpts = computeRowOpts.value
       const isGroup = collectColumn.some(hasChildrenList)
-      let isAllOverflow = !!props.showOverflow
+      let isAllOverflow = !!showOverflow
       let rowGroupColumn: VxeTableDefines.ColumnInfo | undefined
       let expandColumn: VxeTableDefines.ColumnInfo | undefined
       let treeNodeColumn: VxeTableDefines.ColumnInfo | undefined
@@ -1834,6 +1836,9 @@ export default defineVxeComponent({
       }
       if ((expandColumn && expandOpts.mode !== 'fixed') && mouseOpts.area) {
         errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
+      }
+      if (expandColumn && expandOpts.mode !== 'inside' && (treeConfig && !treeOpts.transform)) {
+        errLog('vxe.error.notConflictProp', ['tree-config.transform=false', 'expand-config.mode=fixed'])
       }
 
       if (htmlColumn) {

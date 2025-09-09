@@ -250,9 +250,6 @@ VxeUI.setConfig({
       }
     }
   },
-  // export: {
-  //   types: {}
-  // },
   grid: {
     // size: null,
     // zoomConfig: {
