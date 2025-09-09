@@ -281,6 +281,7 @@ function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
+  const { treeConfig, showOverflow } = props
   const { tableFullColumn, collectColumn } = internalData
   const fullColIdData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnIdData = {}
   const fullColFieldData: Record<string, VxeTableDefines.ColumnCacheItem> = internalData.fullColumnFieldData = {}
@@ -288,12 +289,14 @@ function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
   const expandOpts = $xeTable.computeExpandOpts
   const columnOpts = $xeTable.computeColumnOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
+  const virtualYOpts = $xeTable.computeVirtualYOpts
   const { isCrossDrag, isSelfToChildDrag } = columnDragOpts
   const customOpts = $xeTable.computeCustomOpts
+  const treeOpts = $xeTable.computeTreeOpts
   const { storage } = customOpts
   const rowOpts = $xeTable.computeRowOpts
   const isGroup = collectColumn.some(hasChildrenList)
-  let isAllOverflow = !!props.showOverflow
+  let isAllOverflow = !!showOverflow
   let rowGroupColumn: VxeTableDefines.ColumnInfo | undefined
   let expandColumn: VxeTableDefines.ColumnInfo | undefined
   let treeNodeColumn: VxeTableDefines.ColumnInfo | undefined
@@ -380,8 +383,14 @@ function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
     tableFullColumn.forEach(handleFunc)
   }
 
+  if (expandColumn && expandOpts.mode !== 'fixed' && virtualYOpts.enabled) {
+    warnLog('vxe.error.notConflictProp', ['column.type="expand', 'virtual-y-config.enabled=false'])
+  }
   if ((expandColumn && expandOpts.mode !== 'fixed') && mouseOpts.area) {
     errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
+  }
+  if (expandColumn && expandOpts.mode !== 'inside' && (treeConfig && !treeOpts.transform)) {
+    errLog('vxe.error.notConflictProp', ['tree-config.transform=false', 'expand-config.mode=fixed'])
   }
 
   if (htmlColumn) {
