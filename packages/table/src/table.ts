@@ -674,6 +674,11 @@ export default defineVxeComponent({
     })
 
     const computeIsMenu = computed(() => {
+      const isContentMenu = computeIsContentMenu.value
+      return isContentMenu
+    })
+
+    const computeIsContentMenu = computed(() => {
       const menuOpts = computeMenuOpts.value
       const headerMenu = computeHeaderMenu.value
       const bodyMenu = computeBodyMenu.value
@@ -903,6 +908,7 @@ export default defineVxeComponent({
       computeBodyMenu,
       computeFooterMenu,
       computeIsMenu,
+      computeIsContentMenu,
       computeMenuList,
       computeMenuOpts,
       computeExportOpts,
@@ -7632,7 +7638,7 @@ export default defineVxeComponent({
           const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow, highlightCurrentColumn } = props
           const { ctxMenuStore, editStore, currentRow } = reactData
           const { afterFullData } = internalData
-          const isMenu = computeIsMenu.value
+          const isContentMenu = computeIsContentMenu.value
           const bodyMenu = computeBodyMenu.value
           const keyboardOpts = computeKeyboardOpts.value
           const mouseOpts = computeMouseOpts.value
@@ -7660,7 +7666,7 @@ export default defineVxeComponent({
           const hasShiftKey = evnt.shiftKey
           const isAltKey = evnt.altKey
           const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
-          const operCtxMenu = isMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
+          const operCtxMenu = isContentMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
           const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
           const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
           if (operCtxMenu) {
@@ -8302,8 +8308,10 @@ export default defineVxeComponent({
           const parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
           let parentWrapperHeight = 0
           if (parentElem) {
-            if ($xeGGWrapper && hasClass(parentElem, 'vxe-grid--table-wrapper')) {
-              parentWrapperHeight = $xeGGWrapper.getParentHeight()
+            if ($xeGantt && hasClass(parentElem, 'vxe-gantt--table-wrapper')) {
+              parentWrapperHeight = $xeGantt.getParentHeight()
+            } else if ($xeGrid && hasClass(parentElem, 'vxe-grid--table-wrapper')) {
+              parentWrapperHeight = $xeGrid.getParentHeight()
             } else {
               parentWrapperHeight = parentElem.clientHeight
             }
@@ -12261,7 +12269,7 @@ export default defineVxeComponent({
       const mouseOpts = computeMouseOpts.value
       const areaOpts = computeAreaOpts.value
       const loadingOpts = computeLoadingOpts.value
-      const isMenu = computeIsMenu.value
+      const isContentMenu = computeIsContentMenu.value
       const currLoading = reactData.isColLoading || reactData.isRowLoading || loading
       const resizableOpts = computeResizableOpts.value
       const isArea = mouseConfig && mouseOpts.area
@@ -12478,7 +12486,7 @@ export default defineVxeComponent({
         /**
          * 快捷菜单
          */
-        isMenu
+        isContentMenu
           ? h(TableMenuPanelComponent, {
             key: 'tm',
             ref: refTableMenu

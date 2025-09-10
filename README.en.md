@@ -14,7 +14,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-A PC-end table component based on [Vxe UI](https://github.com/x-extends/vxe-pc-ui), supporting copy-paste, data pivot table, and high-performance virtual list table solution.
+A PC-end table component based on [Vxe UI](https://github.com/x-extends/vxe-pc-ui), enterprise-level table solution with support for copy-paste, data pivot tables, and virtual lists, featuring high performance.
 
 ## Browser Support
 

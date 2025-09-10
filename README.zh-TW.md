@@ -13,7 +13,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-一個基於 [Vxe UI](https://github.com/x-extends/vxe-pc-ui) 的 PC 端表格元件，支援複製貼上、資料透視表、虛擬清單高效能的表格解決方案
+一個基於 [Vxe UI](https://github.com/x-extends/vxe-pc-ui) 的 PC 端表格元件，支持複製粘貼、數據透視錶、虛擬清單高性能的企業級表格解決方案
 
 ## 瀏覽器支持
 

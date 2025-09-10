@@ -13,7 +13,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-[Vxe UI](https://github.com/x-extends/vxe-pc-ui) に基づく PC サイド テーブル コンポーネント。コピー アンド ペースト、ピボット テーブル、仮想リスト、高性能テーブル ソリューションをサポートします。
+[Vxe UI](https://github.com/x-extends/vxe-pc-ui) エンドの表構成要素をベースに、コピペ、データ透視テーブル、仮想リストをサポートする高性能な企業向け表作成ソリューションです。  
 
 ## ブラウザサポート
 

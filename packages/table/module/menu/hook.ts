@@ -14,7 +14,7 @@ hooks.add('tableMenuModule', {
   setupTable ($xeTable) {
     const { xID, props, reactData, internalData } = $xeTable
     const { refElem, refTableFilter, refTableMenu } = $xeTable.getRefMaps()
-    const { computeMouseOpts, computeIsMenu, computeMenuOpts } = $xeTable.getComputeMaps()
+    const { computeMouseOpts, computeIsContentMenu, computeMenuOpts } = $xeTable.getComputeMaps()
 
     let menuMethods = {} as TableMenuMethods
     let menuPrivateMethods = {} as TableMenuPrivateMethods
@@ -24,7 +24,7 @@ hooks.add('tableMenuModule', {
      */
     const handleOpenMenuEvent = (evnt: any, type: 'header' | 'body' | 'footer', params: any) => {
       const { ctxMenuStore } = reactData
-      const isMenu = computeIsMenu.value
+      const isContentMenu = computeIsContentMenu.value
       const menuOpts = computeMenuOpts.value
       const config = menuOpts[type]
       const visibleMethod = menuOpts.visibleMethod
@@ -32,7 +32,7 @@ hooks.add('tableMenuModule', {
         const { options, disabled } = config
         if (disabled) {
           evnt.preventDefault()
-        } else if (isMenu && options && options.length) {
+        } else if (isContentMenu && options && options.length) {
           params.options = options
           $xeTable.preventEvent(evnt, 'event.showMenu', params, () => {
             if (!visibleMethod || visibleMethod(params)) {
