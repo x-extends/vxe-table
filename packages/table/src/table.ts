@@ -1178,9 +1178,12 @@ export default {
       return footerOpts && footerOpts.options ? footerOpts.options : []
     },
     isCtxMenu () {
-      return this.computeIsMenu
+      return this.computeIsContentMenu
     },
     computeIsMenu () {
+      return this.computeIsContentMenu
+    },
+    computeIsContentMenu () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
@@ -2041,7 +2044,7 @@ export default {
     const mouseOpts = $xeTable.computeMouseOpts
     const areaOpts = $xeTable.computeAreaOpts
     const loadingOpts = $xeTable.computeLoadingOpts
-    const isMenu = $xeTable.computeIsMenu
+    const isContentMenu = $xeTable.computeIsContentMenu
     const currLoading = reactData.isColLoading || reactData.isRowLoading || loading
     const resizableOpts = $xeTable.computeResizableOpts
     const isArea = mouseConfig && mouseOpts.area
@@ -2268,7 +2271,7 @@ export default {
       /**
        * 快捷菜单
        */
-      isMenu
+      isContentMenu
         ? h(TableMenuPanelComponent, {
           key: 'tm',
           ref: 'refTableMenu',

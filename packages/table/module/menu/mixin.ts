@@ -167,7 +167,7 @@ export default {
       const internalData = $xeTable as unknown as TableInternalData
 
       const { ctxMenuStore } = reactData
-      const isMenu = $xeTable.computeIsMenu
+      const isContentMenu = $xeTable.computeIsContentMenu
       const menuOpts = $xeTable.computeMenuOpts
       const config = menuOpts[type]
       const visibleMethod = menuOpts.visibleMethod
@@ -175,7 +175,7 @@ export default {
         const { options, disabled } = config
         if (disabled) {
           evnt.preventDefault()
-        } else if (isMenu && options && options.length) {
+        } else if (isContentMenu && options && options.length) {
           params.options = options
           $xeTable.preventEvent(evnt, 'event.showMenu', params, () => {
             if (!visibleMethod || visibleMethod(params)) {

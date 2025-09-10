@@ -9,6 +9,7 @@ import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimat
 import { warnLog, errLog } from '../../ui/src/log'
 import { getCrossTableDragRowInfo } from './store'
 
+import type { VxeGanttConstructor, VxeGanttPrivateMethods } from 'vxe-gantt'
 import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, VxeToolbarConstructor, VxeToolbarInstance, TableInternalData, VxeGridConstructor, VxeTablePrivateMethods, VxeTooltipInstance, VxeTablePropTypes, VxeGridPrivateMethods } from '../../../types'
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent } = VxeUI
@@ -4141,8 +4142,7 @@ const Methods = {
   getParentHeight () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & VxeGridPrivateMethods
-    const $xeGantt = $xeTable.$xeGantt
-    const $xeGGWrapper = $xeGrid || $xeGantt
+    const $xeGantt = $xeTable.$xeGantt as VxeGanttConstructor & VxeGanttPrivateMethods
     const props = $xeTable
 
     const { height } = props
@@ -4152,8 +4152,10 @@ const Methods = {
       const parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
       let parentWrapperHeight = 0
       if (parentElem) {
-        if ($xeGGWrapper && hasClass(parentElem, 'vxe-grid--table-wrapper')) {
-          parentWrapperHeight = $xeGGWrapper.getParentHeight()
+        if ($xeGantt && hasClass(parentElem, 'vxe-gantt--table-wrapper')) {
+          parentWrapperHeight = $xeGantt.getParentHeight()
+        } else if ($xeGrid && hasClass(parentElem, 'vxe-grid--table-wrapper')) {
+          parentWrapperHeight = $xeGrid.getParentHeight()
         } else {
           parentWrapperHeight = parentElem.clientHeight
         }
@@ -6689,7 +6691,7 @@ const Methods = {
         const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow, highlightCurrentColumn } = props
         const { ctxMenuStore, editStore, currentRow } = reactData
         const { afterFullData } = internalData
-        const isMenu = $xeTable.computeIsMenu
+        const isContentMenu = $xeTable.computeIsContentMenu
         const bodyMenu = $xeTable.computeBodyMenu
         const keyboardOpts = $xeTable.computeKeyboardOpts
         const mouseOpts = $xeTable.computeMouseOpts
@@ -6716,7 +6718,7 @@ const Methods = {
         const hasShiftKey = evnt.shiftKey
         const hasAltKey = evnt.altKey
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
-        const operCtxMenu = isMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
+        const operCtxMenu = isContentMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
         const childrenField = treeOpts.children || treeOpts.childrenField
         const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
