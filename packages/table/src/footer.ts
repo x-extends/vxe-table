@@ -25,7 +25,7 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
   const { scrollXLoad, scrollYLoad, overflowX, currentColumn, mergeFootFlag } = tableReactData
   const { fullColumnIdData, mergeFooterList, mergeFooterCellMaps, scrollXStore } = tableInternalData
   const virtualXOpts = $xeTable.computeVirtualXOpts
-  const tooltipOpts = $xeTable.computeTooltipOpts
+  const footerTooltipOpts = $xeTable.computeFooterTooltipOpts
   const resizableOpts = $xeTable.resizableOpts
   const { isAllColumnDrag } = resizableOpts
   const columnOpts = $xeTable.computeColumnOpts
@@ -40,7 +40,7 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
     const colRest = fullColumnIdData[colid] || {}
     const renderOpts = editRender || cellRender
     const compConf = renderOpts ? renderer.get(renderOpts.name) : null
-    const showAllTip = tooltipOpts.showAll
+    const showAllTip = footerTooltipOpts.showAll
     const fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
     const isPadding = XEUtils.isBoolean(footerCellOpts.padding) ? footerCellOpts.padding : cellOpts.padding
     const footOverflow = XEUtils.eqNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow

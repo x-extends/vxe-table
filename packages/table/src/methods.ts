@@ -2806,7 +2806,7 @@ function clearRowDragData ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
  * @param {Event} evnt 事件
  * @param {Row} row 行对象
  */
-function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: MouseEvent, type: 'header' | 'body' | 'footer', tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, tipElem: HTMLElement | null, params: any) {
+function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: MouseEvent, tipOpts: VxeTablePropTypes.TooltipConfig | VxeTablePropTypes.HeaderTooltipConfig | VxeTablePropTypes.FooterTooltipConfig, type: 'header' | 'body' | 'footer', tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, tipElem: HTMLElement | null, params: any) {
   const reactData = $xeTable as unknown as TableReactData
 
   const tipOverEl = overflowElem || tdEl
@@ -2815,9 +2815,8 @@ function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   }
   params.cell = tdEl
   const { tooltipStore } = reactData
-  const tooltipOpts = $xeTable.computeTooltipOpts
   const { column, row } = params
-  const { showAll, contentMethod } = tooltipOpts
+  const { showAll, contentMethod } = tipOpts
   const customContent = contentMethod ? contentMethod(params) : null
   const useCustom = contentMethod && !XEUtils.eqNull(customContent)
   const content = useCustom ? customContent : XEUtils.toString(column.type === 'html' ? tipOverEl.innerText : tipOverEl.textContent).trim()
@@ -2830,7 +2829,7 @@ function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
       visible: true,
       content: tipContent,
       type,
-      currOpts: {}
+      currOpts: tipOpts
     })
     $xeTable.$nextTick(() => {
       const $tooltip = $xeTable.$refs.refTooltip as VxeTooltipInstance
@@ -7112,6 +7111,7 @@ const Methods = {
     const reactData = $xeTable as unknown as TableReactData
 
     const { tooltipStore } = reactData
+    const headerTooltipOpts = $xeTable.computeHeaderTooltipOpts
     const { column } = params
     handleTargetEnterEvent($xeTable, true)
     const titleElem = evnt.currentTarget as HTMLDivElement
@@ -7132,7 +7132,7 @@ const Methods = {
     }
     if (tooltipStore.column !== column || !tooltipStore.visible) {
       const ctEl = thEl.querySelector<HTMLElement>('.vxe-cell--title')
-      handleTooltip($xeTable, evnt, 'header', thEl, (hasClass(thEl, 'col--ellipsis') ? ctEl : cWrapperEl) || cWrapperEl, ctEl || cellEl, params)
+      handleTooltip($xeTable, evnt, headerTooltipOpts, 'header', thEl, (hasClass(thEl, 'col--ellipsis') ? ctEl : cWrapperEl) || cWrapperEl, ctEl || cellEl, params)
     }
   },
   /**
@@ -7146,6 +7146,7 @@ const Methods = {
     const { editConfig } = props
     const { editStore } = reactData
     const { tooltipStore } = reactData
+    const tooltipOpts = $xeTable.computeTooltipOpts
     const editOpts = $xeTable.computeEditOpts
     const { actived } = editStore
     const { row, column } = params
@@ -7172,7 +7173,7 @@ const Methods = {
       if (!tipEl) {
         tipEl = ctEl
       }
-      handleTooltip($xeTable, evnt, 'body', tdEl, ovEl || ctEl, tipEl, params)
+      handleTooltip($xeTable, evnt, tooltipOpts, 'body', tdEl, ovEl || ctEl, tipEl, params)
     }
   },
   /**
@@ -7184,6 +7185,7 @@ const Methods = {
 
     const { column } = params
     const { tooltipStore } = reactData
+    const footerTooltipOpts = $xeTable.computeFooterTooltipOpts
     const tdEl = evnt.currentTarget as HTMLTableCellElement
     handleTargetEnterEvent($xeTable, tooltipStore.column !== column || !!tooltipStore.row)
     if (tooltipStore.column !== column || !tooltipStore.visible) {
@@ -7196,7 +7198,7 @@ const Methods = {
       if (!tipEl) {
         tipEl = ctEl
       }
-      handleTooltip($xeTable, evnt, 'footer', tdEl, ovEl || ctEl, tipEl, params)
+      handleTooltip($xeTable, evnt, footerTooltipOpts, 'footer', tdEl, ovEl || ctEl, tipEl, params)
     }
   },
   openTooltip (target: HTMLElement, content: string | number) {
@@ -7532,7 +7534,7 @@ const Methods = {
         }
       }
     }
-    if (!checkMethod || checkMethod({ $table: $xeTable, row })) {
+    if (isRowGroupStatus || !checkMethod || checkMethod({ $table: $xeTable, row })) {
       $xeTable.handleBatchSelectRows([row], checked)
       $xeTable.checkSelectionStatus()
       $xeTable.dispatchEvent('checkbox-change', Object.assign({
@@ -7719,6 +7721,8 @@ const Methods = {
     const { treeConfig } = props
     const { isRowGroupStatus } = reactData
     const { afterFullData, afterTreeFullData, afterGroupFullData, checkboxReserveRowMap, selectCheckboxMaps, treeIndeterminateRowMaps } = internalData
+    const aggregateOpts = $xeTable.computeAggregateOpts
+    const { mapChildrenField } = aggregateOpts
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const { checkField, checkMethod, showReserveStatus } = checkboxOpts
     const { handleGetRowId } = createHandleGetRowId($xeTable)
@@ -7734,7 +7738,18 @@ const Methods = {
       ? row => {
         const childRowid = handleGetRowId(row)
         const selected = checkField ? XEUtils.get(row, checkField) : selectCheckboxMaps[childRowid]
-        if (checkMethod({ $table: $xeTable, row })) {
+        if (isRowGroupStatus && $xeTable.isAggregateRecord(row)) {
+          const childList: any[] = row[mapChildrenField || '']
+          if (selected) {
+            vLen++
+            sLen++
+          } else if (treeIndeterminateRowMaps[childRowid]) {
+            vLen++
+            hLen++
+          } else if (childList && childList.length && childList.some(item => checkMethod({ $table: $xeTable, row: item }))) {
+            vLen++
+          }
+        } else if (checkMethod({ $table: $xeTable, row })) {
           if (selected) {
             sLen++
           } else if (treeIndeterminateRowMaps[childRowid]) {

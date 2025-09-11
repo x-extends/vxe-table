@@ -69,6 +69,12 @@ VxeUI.setConfig({
     tooltipConfig: {
       enterable: true
     },
+    headerTooltipConfig: {
+      enterable: true
+    },
+    footerTooltipConfig: {
+      enterable: true
+    },
     validConfig: {
       showMessage: true,
       autoClear: true,
@@ -78,6 +84,11 @@ VxeUI.setConfig({
       theme: 'beautify'
     },
     columnConfig: {
+      autoOptions: {
+        isCalcHeader: true,
+        isCalcBody: true,
+        isCalcFooter: true
+      },
       maxFixedSize: 4
     },
     cellConfig: {
