@@ -581,6 +581,14 @@ export default defineVxeComponent({
       return Object.assign({}, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
     })
 
+    const computeHeaderTooltipOpts = computed(() => {
+      return Object.assign({}, getConfig().tooltip, getConfig().table.headerTooltipConfig, props.headerTooltipConfig)
+    })
+
+    const computeFooterTooltipOpts = computed(() => {
+      return Object.assign({}, getConfig().tooltip, getConfig().table.footerTooltipConfig, props.footerTooltipConfig)
+    })
+
     const computeTableTipConfig = computed(() => {
       const { tooltipStore } = reactData
       const tooltipOpts = computeTooltipOpts.value
@@ -896,6 +904,8 @@ export default defineVxeComponent({
       computeRadioOpts,
       computeCheckboxOpts,
       computeTooltipOpts,
+      computeHeaderTooltipOpts,
+      computeFooterTooltipOpts,
       computeEditOpts,
       computeSortOpts,
       computeFilterOpts,
@@ -8228,16 +8238,15 @@ export default defineVxeComponent({
      * @param {Event} evnt 事件
      * @param {Row} row 行对象
      */
-    const handleTooltip = (evnt: MouseEvent, type: 'header' | 'body' | 'footer', tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, tipElem: HTMLElement | null, params: any) => {
+    const handleTooltip = (evnt: MouseEvent, tipOpts: VxeTablePropTypes.TooltipConfig | VxeTablePropTypes.HeaderTooltipConfig | VxeTablePropTypes.FooterTooltipConfig, type: 'header' | 'body' | 'footer', tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, tipElem: HTMLElement | null, params: any) => {
       const tipOverEl = overflowElem || tdEl
       if (!tipOverEl) {
         return nextTick()
       }
       params.cell = tdEl
       const { tooltipStore } = reactData
-      const tooltipOpts = computeTooltipOpts.value
       const { column, row } = params
-      const { showAll, contentMethod } = tooltipOpts
+      const { showAll, contentMethod } = tipOpts
       const customContent = contentMethod ? contentMethod(params) : null
       const useCustom = contentMethod && !XEUtils.eqNull(customContent)
       const content = useCustom ? customContent : XEUtils.toString(column.type === 'html' ? tipOverEl.innerText : tipOverEl.textContent).trim()
@@ -8250,7 +8259,7 @@ export default defineVxeComponent({
           visible: true,
           content: tipContent,
           type,
-          currOpts: {}
+          currOpts: tipOpts
         })
         nextTick(() => {
           const $tooltip = refTooltip.value
@@ -9152,6 +9161,8 @@ export default defineVxeComponent({
         const { treeConfig } = props
         const { isRowGroupStatus } = reactData
         const { afterFullData, afterTreeFullData, afterGroupFullData, checkboxReserveRowMap, selectCheckboxMaps, treeIndeterminateRowMaps } = internalData
+        const aggregateOpts = computeAggregateOpts.value
+        const { mapChildrenField } = aggregateOpts
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField, checkMethod, showReserveStatus } = checkboxOpts
         const { handleGetRowId } = createHandleGetRowId($xeTable)
@@ -9167,7 +9178,18 @@ export default defineVxeComponent({
           ? row => {
             const childRowid = handleGetRowId(row)
             const selected = checkField ? XEUtils.get(row, checkField) : selectCheckboxMaps[childRowid]
-            if (checkMethod({ $table: $xeTable, row })) {
+            if (isRowGroupStatus && $xeTable.isAggregateRecord(row)) {
+              const childList: any[] = row[mapChildrenField || '']
+              if (selected) {
+                vLen++
+                sLen++
+              } else if (treeIndeterminateRowMaps[childRowid]) {
+                vLen++
+                hLen++
+              } else if (childList && childList.length && childList.some(item => checkMethod({ $table: $xeTable, row: item }))) {
+                vLen++
+              }
+            } else if (checkMethod({ $table: $xeTable, row })) {
               if (selected) {
                 sLen++
               } else if (treeIndeterminateRowMaps[childRowid]) {
@@ -9361,6 +9383,7 @@ export default defineVxeComponent({
        */
       triggerHeaderTooltipEvent (evnt, params) {
         const { tooltipStore } = reactData
+        const headerTooltipOpts = computeHeaderTooltipOpts.value
         const { column } = params
         handleTargetEnterEvent(true)
         const titleElem = evnt.currentTarget as HTMLDivElement
@@ -9381,7 +9404,7 @@ export default defineVxeComponent({
         }
         if (tooltipStore.column !== column || !tooltipStore.visible) {
           const ctEl = thEl.querySelector<HTMLElement>('.vxe-cell--title')
-          handleTooltip(evnt, 'header', thEl, (hasClass(thEl, 'col--ellipsis') ? ctEl : cWrapperEl) || cWrapperEl, ctEl || cellEl, params)
+          handleTooltip(evnt, headerTooltipOpts, 'header', thEl, (hasClass(thEl, 'col--ellipsis') ? ctEl : cWrapperEl) || cWrapperEl, ctEl || cellEl, params)
         }
       },
       /**
@@ -9391,6 +9414,7 @@ export default defineVxeComponent({
         const { editConfig } = props
         const { editStore } = reactData
         const { tooltipStore } = reactData
+        const tooltipOpts = computeTooltipOpts.value
         const editOpts = computeEditOpts.value
         const { actived } = editStore
         const { row, column } = params
@@ -9417,7 +9441,7 @@ export default defineVxeComponent({
           if (!tipEl) {
             tipEl = ctEl
           }
-          handleTooltip(evnt, 'body', tdEl, ovEl || ctEl, tipEl, params)
+          handleTooltip(evnt, tooltipOpts, 'body', tdEl, ovEl || ctEl, tipEl, params)
         }
       },
       /**
@@ -9426,6 +9450,7 @@ export default defineVxeComponent({
       triggerFooterTooltipEvent (evnt, params) {
         const { column } = params
         const { tooltipStore } = reactData
+        const footerTooltipOpts = computeFooterTooltipOpts.value
         const tdEl = evnt.currentTarget as HTMLTableCellElement
         handleTargetEnterEvent(tooltipStore.column !== column || !!tooltipStore.row)
         if (tooltipStore.column !== column || !tooltipStore.visible) {
@@ -9438,7 +9463,7 @@ export default defineVxeComponent({
           if (!tipEl) {
             tipEl = ctEl
           }
-          handleTooltip(evnt, 'footer', tdEl, ovEl || ctEl, tipEl, params)
+          handleTooltip(evnt, footerTooltipOpts, 'footer', tdEl, ovEl || ctEl, tipEl, params)
         }
       },
       handleTargetLeaveEvent () {
@@ -9671,7 +9696,7 @@ export default defineVxeComponent({
             }
           }
         }
-        if (!checkMethod || checkMethod({ $table: $xeTable, row })) {
+        if (isRowGroupStatus || !checkMethod || checkMethod({ $table: $xeTable, row })) {
           $xeTable.handleBatchSelectRows([row], checked)
           $xeTable.checkSelectionStatus()
           dispatchEvent('checkbox-change', Object.assign({

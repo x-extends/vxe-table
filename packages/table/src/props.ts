@@ -247,6 +247,10 @@ export const tableProps = {
   checkboxConfig: Object as PropType<VxeTablePropTypes.CheckboxConfig>,
   // tooltip 配置项
   tooltipConfig: Object as PropType<VxeTablePropTypes.TooltipConfig>,
+  // 表头 tooltip 配置项
+  headerTooltipConfig: Object as PropType<VxeTablePropTypes.HeaderTooltipConfig>,
+  // 表尾 tooltip 配置项
+  footerTooltipConfig: Object as PropType<VxeTablePropTypes.FooterTooltipConfig>,
   // 导出配置项
   exportConfig: Object as PropType<VxeTablePropTypes.ExportConfig>,
   // 导入配置项

@@ -35,7 +35,7 @@ export default defineVxeComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeTooltipOpts, computeColumnOpts, computeCellOpts, computeFooterCellOpts, computeDefaultRowHeight, computeResizableOpts, computeVirtualXOpts } = $xeTable.getComputeMaps()
+    const { computeFooterTooltipOpts, computeColumnOpts, computeCellOpts, computeFooterCellOpts, computeDefaultRowHeight, computeResizableOpts, computeVirtualXOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refFooterScroll = ref() as Ref<HTMLDivElement>
@@ -53,7 +53,7 @@ export default defineVxeComponent({
       const { scrollXLoad, scrollYLoad, overflowX, currentColumn, mergeFootFlag } = tableReactData
       const { fullColumnIdData, mergeFooterList, mergeFooterCellMaps, scrollXStore } = tableInternalData
       const virtualXOpts = computeVirtualXOpts.value
-      const tooltipOpts = computeTooltipOpts.value
+      const footerTooltipOpts = computeFooterTooltipOpts.value
       const resizableOpts = computeResizableOpts.value
       const { isAllColumnDrag } = resizableOpts
       const columnOpts = computeColumnOpts.value
@@ -68,7 +68,7 @@ export default defineVxeComponent({
         const colRest = fullColumnIdData[colid] || {}
         const renderOpts = editRender || cellRender
         const compConf = renderOpts ? renderer.get(renderOpts.name) : null
-        const showAllTip = tooltipOpts.showAll
+        const showAllTip = footerTooltipOpts.showAll
         const fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
         const isPadding = XEUtils.isBoolean(footerCellOpts.padding) ? footerCellOpts.padding : cellOpts.padding
         const footOverflow = XEUtils.eqNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow

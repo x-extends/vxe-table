@@ -183,12 +183,12 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams & { 
   const { $table, column } = params
   const tableProps = $table.props
   const tableReactData = $table.reactData
-  const { computeTooltipOpts } = $table.getComputeMaps()
+  const { computeHeaderTooltipOpts } = $table.getComputeMaps()
   const { showHeaderOverflow: allColumnHeaderOverflow } = tableProps
   const { isRowGroupStatus } = tableReactData
   const { showHeaderOverflow } = column
-  const tooltipOpts = computeTooltipOpts.value
-  const showAllTip = tooltipOpts.showAll
+  const headerTooltipOpts = computeHeaderTooltipOpts.value
+  const showAllTip = headerTooltipOpts.showAll
   const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
   const showTitle = headOverflow === 'title'
   const showTooltip = headOverflow === true || headOverflow === 'tooltip'
@@ -810,7 +810,9 @@ export const Cell = {
     const { treeConfig } = tableProps
     const { updateCheckboxFlag, isRowGroupStatus } = tableReactData
     const { selectCheckboxMaps, treeIndeterminateRowMaps } = tableInternalData
-    const { computeCheckboxOpts } = $table.getComputeMaps()
+    const { computeCheckboxOpts, computeAggregateOpts } = $table.getComputeMaps()
+    const aggregateOpts = computeAggregateOpts.value
+    const { mapChildrenField } = aggregateOpts
     const checkboxOpts = computeCheckboxOpts.value
     const { labelField, checkMethod, visibleMethod } = checkboxOpts
     const { slots } = column
@@ -818,22 +820,28 @@ export const Cell = {
     const checkboxSlot = slots ? slots.checkbox : null
     let indeterminate = false
     let isChecked = false
-    const isVisible = !visibleMethod || visibleMethod({ $table, row })
-    let isDisabled = !!checkMethod
+    let isVisible = true
+    let isDisabled = false
     const ons: Record<string, any> = {}
     if (!isHidden) {
       const rowid = getRowid($table, row)
       isChecked = !!updateCheckboxFlag && !!selectCheckboxMaps[rowid]
+      if (checkMethod && isRowGroupStatus && $table.isAggregateRecord(row)) {
+        const childList: any[] = row[mapChildrenField || '']
+        if (!childList || !childList.length || childList.every(item => !checkMethod({ $table, row: item }))) {
+          isDisabled = true
+        }
+      } else {
+        isVisible = !visibleMethod || visibleMethod({ $table, row })
+        isDisabled = checkMethod ? !checkMethod({ $table, row }) : !!checkMethod
+      }
+      if (treeConfig || isRowGroupStatus) {
+        indeterminate = !!treeIndeterminateRowMaps[rowid]
+      }
       ons.onClick = (evnt: MouseEvent) => {
         if (!isDisabled && isVisible) {
           $table.triggerCheckRowEvent(evnt, params, !isChecked)
         }
-      }
-      if (checkMethod) {
-        isDisabled = !checkMethod({ $table, row })
-      }
-      if (treeConfig || isRowGroupStatus) {
-        indeterminate = !!treeIndeterminateRowMaps[rowid]
       }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
@@ -878,34 +886,42 @@ export const Cell = {
     const { treeConfig } = tableProps
     const { updateCheckboxFlag, isRowGroupStatus } = tableReactData
     const { treeIndeterminateRowMaps } = tableInternalData
-    const { computeCheckboxOpts } = $table.getComputeMaps()
+    const { computeCheckboxOpts, computeAggregateOpts } = $table.getComputeMaps()
+    const aggregateOpts = computeAggregateOpts.value
+    const { mapChildrenField } = aggregateOpts
     const checkboxOpts = computeCheckboxOpts.value
     const { labelField, checkField, checkMethod, visibleMethod } = checkboxOpts
     const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     const checkboxSlot = slots ? slots.checkbox : null
-    let isIndeterminate = false
+    let indeterminate = false
     let isChecked = false
-    const isVisible = !visibleMethod || visibleMethod({ $table, row })
-    let isDisabled = !!checkMethod
+    let isVisible = true
+    let isDisabled = false
     const ons: Record<string, any> = {}
     if (!isHidden) {
       const rowid = getRowid($table, row)
       isChecked = !!updateCheckboxFlag && XEUtils.get(row, checkField)
+      if (checkMethod && isRowGroupStatus && $table.isAggregateRecord(row)) {
+        const childList: any[] = row[mapChildrenField || '']
+        if (!childList || !childList.length || childList.every(item => !checkMethod({ $table, row: item }))) {
+          isDisabled = true
+        }
+      } else {
+        isVisible = !visibleMethod || visibleMethod({ $table, row })
+        isDisabled = checkMethod ? !checkMethod({ $table, row }) : !!checkMethod
+      }
+      if (treeConfig || isRowGroupStatus) {
+        indeterminate = !!treeIndeterminateRowMaps[rowid]
+      }
       ons.onClick = (evnt: MouseEvent) => {
         if (!isDisabled && isVisible) {
           $table.triggerCheckRowEvent(evnt, params, !isChecked)
         }
       }
-      if (checkMethod) {
-        isDisabled = !checkMethod({ $table, row })
-      }
-      if (treeConfig || isRowGroupStatus) {
-        isIndeterminate = !!treeIndeterminateRowMaps[rowid]
-      }
     }
-    const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate: isIndeterminate }
+    const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
     if (checkboxSlot) {
       return renderCellBaseVNs(params, $table.callSlot(checkboxSlot, checkboxParams))
     }
@@ -913,7 +929,7 @@ export const Cell = {
     if (isVisible) {
       checkVNs.push(
         h('span', {
-          class: ['vxe-checkbox--icon', isIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : (isDisabled ? getIcon().TABLE_CHECKBOX_DISABLED_UNCHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED))]
+          class: ['vxe-checkbox--icon', indeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : (isDisabled ? getIcon().TABLE_CHECKBOX_DISABLED_UNCHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED))]
         })
       )
       if (defaultSlot || labelField) {
@@ -929,7 +945,7 @@ export const Cell = {
         class: ['vxe-cell--checkbox', {
           'is--checked': isChecked,
           'is--disabled': isDisabled,
-          'is--indeterminate': indeterminateField && !isChecked ? row[indeterminateField] : isIndeterminate,
+          'is--indeterminate': indeterminateField && !isChecked ? row[indeterminateField] : indeterminate,
           'is--hidden': !isVisible
         }],
         ...ons

@@ -68,6 +68,12 @@ VxeUI.setConfig({
     tooltipConfig: {
       enterable: true
     },
+    headerTooltipConfig: {
+      enterable: true
+    },
+    footerTooltipConfig: {
+      enterable: true
+    },
     validConfig: {
       showMessage: true,
       autoClear: true,
