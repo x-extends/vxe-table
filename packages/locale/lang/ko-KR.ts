@@ -18,6 +18,7 @@ export default {
       scrollErrProp: '이 매개 변수 "{0}"은 가상 스크롤링이 활성화 된 후에 지원되지 않습니다.',
       errConflicts: '매개 변수 "{0}" "{1}"과 충돌합니다.',
       modelConflicts: '바운드 필드 값 "{0}"및 "{1}"사이에 충돌이 발생하며 오류가 발생합니다.',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notSupportProp: '"{1}"은 "{0}"매개 변수가 활성화 될 때 지원되지 않습니다. "{2}"이어야합니다. 그렇지 않으면 오류가 발생합니다.',
       notConflictProp: '"{0}"을 사용하는 경우 "{1}"을 설정해야합니다. 그렇지 않으면 기능적 충돌이있을 수 있습니다.',
       unableInsert: '지정된 위치에 삽입 할 수 없으므로 매개 변수가 올바른지 확인하십시오.',
@@ -43,6 +44,7 @@ export default {
       coverProp: '"{0}"의 매개 변수 "{1}"이 반복적으로 정의되어 오류가 발생할 수 있습니다.',
       uniField: '필드 이름 "{0}"은 반복적으로 정의되어 오류가 발생할 수 있습니다.',
       repeatKey: '기본 키 {0} = "{1}"을 반복하여 오류가 발생할 수 있습니다.',
+      repeatProp: '参数重复 {0}="{1}"，这可能会出现错误',
       delFunc: '메소드 "{0}"는 더 이상 사용되지 않습니다. "{1}"을 사용하십시오.',
       delProp: '매개 변수 "{0}"은 더 이상 사용되지 않습니다. "{1}"을 사용하십시오.',
       delEvent: '이벤트 "{0}"는 더 이상 사용되지 않습니다. "{1}"을 사용하십시오.',
@@ -56,7 +58,8 @@ export default {
       treeDragChild: '부모는 자신의 자녀에게 끌 수 없습니다',
       reqPlugin: '"{1}"은 https://vxeui.com/other {0 }/#/1 }/install에 설치되지 않았습니다',
       errMaxRow: '최대 지원되는 데이터 볼륨 {0} 행을 초과하면 오류가 발생할 수 있습니다.',
-      useNew: '{0} 권장되지 않습니다. {1}을 사용하십시오.'
+      useNew: '{0} 권장되지 않습니다. {1}을 사용하십시오.',
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
     },
     table: {
       emptyText: '아직 데이터가 없습니다',
@@ -532,6 +535,35 @@ export default {
         HH: '시간',
         mm: '가리키다',
         ss: '두번째'
+      }
+    },
+    gantt: {
+      tFullFormat: {
+        year: '{yy}年',
+        quarter: '{yy}年第{q}季度',
+        month: '{yy}年{M}月',
+        week: '{yy}年第{W}周',
+        day: '{yy}年{M}月{d}日',
+        hour: '{yy}年 {M}月{d}日{H}时',
+        minute: '{yy}年{M}月{d}日{H}时{m}分'
+      },
+      tSimpleFormat: {
+        year: '{yy}年',
+        quarter: '{q}季度',
+        month: '{M}月',
+        week: '{W}周',
+        day: '{d}',
+        hour: '{H}时',
+        minute: '{m}分'
+      },
+      dayss: {
+        w0: '日',
+        w1: '一',
+        w2: '二',
+        w3: '三',
+        w4: '四',
+        w5: '五',
+        w6: '六'
       }
     },
     plugins: {

@@ -19,6 +19,7 @@ export default {
       errConflicts: 'Parameter "{0}" conflicts with "{1}"',
       modelConflicts: 'The bound field values "{0}" and "{1}" conflict, an error will occur.',
       notSupportProp: '"{1}" is not supported when the parameter "{0}" is enabled, it should be "{2}", otherwise an error will occur',
+      reqSupportProp: 'When using "{0}", "{1}" should be set; otherwise, an error may occur.',
       notConflictProp: 'When using "{0}", "{1}" should be set, otherwise there may be functional conflicts',
       unableInsert: 'Cannot be inserted into the specified location, please check whether the parameters are correct',
       useErr: 'An error occurred while installing the "{0}" module. The order may be incorrect. The dependent module needs to be installed before Table',
@@ -43,6 +44,7 @@ export default {
       coverProp: 'The parameter "{1}" of "{0}" is repeatedly defined, which may cause an error',
       uniField: 'The field name "{0}" is repeatedly defined, which may cause an error',
       repeatKey: 'Repeat the primary key {0}="{1}", which may cause an error',
+      repeatProp: 'Repeat parameters {0}="{1}", which may cause an error',
       delFunc: 'Method "{0}" is deprecated, please use "{1}"',
       delProp: 'Parameter "{0}" is deprecated, please use "{1}"',
       delEvent: 'Event "{0}" is deprecated, please use "{1}"',
@@ -56,16 +58,17 @@ export default {
       treeDragChild: 'Parents cannot drag to their own children',
       reqPlugin: '"{1}" is not installed at https://vxeui.com/other{0}/#/{1}/install',
       errMaxRow: 'Exceeding the maximum supported data volume {0} rows, this may cause an error',
-      useNew: 'It is not recommended to use {0}. Please use {1} instead.'
+      useNew: 'It is not recommended to use {0}. Please use {1} instead.',
+      errorVersion: 'Version mismatch. Current version is {0}, while the minimum supported version is {1}.'
     },
     table: {
       emptyText: 'No data yet',
       allTitle: 'Select all/cancel',
       seqTitle: 'Number',
-      actionTitle: 'operate',
-      confirmFilter: 'filter',
+      actionTitle: 'Operate',
+      confirmFilter: 'Filter',
       resetFilter: 'Reset',
-      allFilter: 'all',
+      allFilter: 'All',
       sortAsc: 'Ascending order: lowest to highest',
       sortDesc: 'Descending order: highest to lowest',
       filter: 'Enable filtering for selected columns',
@@ -76,9 +79,9 @@ export default {
       expFilename: 'Export_{0}',
       expOriginFilename: 'Export_source_{0}',
       customTitle: 'Column settings',
-      customAll: 'all',
-      customConfirm: 'confirm',
-      customClose: 'closure',
+      customAll: 'All',
+      customConfirm: 'Confirm',
+      customClose: 'Closure',
       customCancel: 'Cancel',
       customRestore: 'Restore default',
       maxFixedCol: 'The maximum number of frozen columns cannot exceed {0}',
@@ -143,7 +146,7 @@ export default {
       title: 'System prompts'
     },
     button: {
-      confirm: 'confirm',
+      confirm: 'Confirm',
       cancel: 'Cancel',
       clear: 'Clear'
     },
@@ -253,12 +256,12 @@ export default {
       import: 'Import',
       export: 'Export',
       print: 'Print',
-      refresh: 'refresh',
-      zoomIn: 'full screen',
+      refresh: 'Refresh',
+      zoomIn: 'Full screen',
       zoomOut: 'reduction',
       custom: 'Column settings',
-      customAll: 'all',
-      customConfirm: 'confirm',
+      customAll: 'All',
+      customConfirm: 'Confirm',
       customRestore: 'Reset',
       fixedLeft: 'Freeze left',
       fixedRight: 'Freeze right',
@@ -375,7 +378,7 @@ export default {
     },
     colorPicker: {
       clear: 'Clear',
-      confirm: 'confirm',
+      confirm: 'Confirm',
       copySuccess: 'Copyed to clipboard: {0}',
       hex: 'HEX'
     },
@@ -532,6 +535,35 @@ export default {
         HH: 'hour',
         mm: 'point',
         ss: 'Second'
+      }
+    },
+    gantt: {
+      tFullFormat: {
+        year: '{yy}',
+        quarter: 'Quarter {q} of year {yy}',
+        month: '{yy}-{M}',
+        week: 'Week {W} of year {yy}',
+        day: '{yy}-{M}-{d}',
+        hour: '{yy}-{M}-{d} {H}',
+        minute: '{yy}-{M}-{d} {H}:{m}'
+      },
+      tSimpleFormat: {
+        year: '{yy}',
+        quarter: 'Quarter {q}',
+        month: '{M}',
+        week: 'Week {W}',
+        day: '{d}',
+        hour: '{H}',
+        minute: '{m}'
+      },
+      dayss: {
+        w0: 'Sun',
+        w1: 'Mon',
+        w2: 'Tue',
+        w3: 'Wed',
+        w4: 'Thu',
+        w5: 'Fri',
+        w6: 'Sat'
       }
     },
     plugins: {

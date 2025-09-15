@@ -348,7 +348,8 @@ export default defineVxeComponent({
           ]),
           mouseConfig && mouseOpts.area
             ? h('div', {
-              class: 'vxe-table--cell-area'
+              class: 'vxe-table--cell-area',
+              xid: xID
             }, [
               h('span', {
                 class: 'vxe-table--cell-main-area'

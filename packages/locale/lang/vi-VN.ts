@@ -19,6 +19,7 @@ export default {
       errConflicts: 'Tham số "{0}" Xung đột với "{1}"',
       modelConflicts: 'Có một xung đột giữa giá trị trường giới hạn "{0}" và "{1}" và sẽ xảy ra lỗi',
       notSupportProp: '"{1}" không được hỗ trợ khi tham số "{0}" được bật, nó phải là "{2}", nếu không sẽ xảy ra lỗi',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notConflictProp: 'Khi sử dụng "{0}", "{1}" nên được đặt, nếu không có thể có xung đột chức năng',
       unableInsert: 'Không thể được chèn vào vị trí đã chỉ định, vui lòng kiểm tra xem các tham số có đúng không',
       useErr: 'Đã xảy ra lỗi trong khi cài đặt mô -đun "{0}". Thứ tự có thể không chính xác. Mô -đun phụ thuộc cần được cài đặt trước bảng',
@@ -43,6 +44,7 @@ export default {
       coverProp: 'Tham số "{1}" của "{0}" được xác định nhiều lần, có thể gây ra lỗi',
       uniField: 'Tên trường "{0}" được xác định nhiều lần, có thể gây ra lỗi',
       repeatKey: 'Lặp lại khóa chính {0} = "{1}", có thể gây ra lỗi',
+      repeatProp: '参数重复 {0}="{1}"，这可能会出现错误',
       delFunc: 'Phương thức "{0}" không được dùng nữa, vui lòng sử dụng "{1}"',
       delProp: 'Tham số "{0}" không được dùng, vui lòng sử dụng "{1}"',
       delEvent: 'Sự kiện "{0}" được không dùng nữa, vui lòng sử dụng "{1}"',
@@ -56,7 +58,8 @@ export default {
       treeDragChild: 'Cha mẹ không thể kéo đến con cái của họ',
       reqPlugin: '"{1}" không được cài đặt tại https://vxeui.com/other/khác',
       errMaxRow: 'Vượt quá khối lượng dữ liệu được hỗ trợ tối đa {0}, điều này có thể gây ra lỗi',
-      useNew: '{0} không được khuyến nghị, vui lòng sử dụng {1}'
+      useNew: '{0} không được khuyến nghị, vui lòng sử dụng {1}',
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
     },
     table: {
       emptyText: 'Chưa có dữ liệu',
@@ -532,6 +535,35 @@ export default {
         HH: 'giờ',
         mm: 'điểm',
         ss: 'Thứ hai'
+      }
+    },
+    gantt: {
+      tFullFormat: {
+        year: '{yy}年',
+        quarter: '{yy}年第{q}季度',
+        month: '{yy}年{M}月',
+        week: '{yy}年第{W}周',
+        day: '{yy}年{M}月{d}日',
+        hour: '{yy}年 {M}月{d}日{H}时',
+        minute: '{yy}年{M}月{d}日{H}时{m}分'
+      },
+      tSimpleFormat: {
+        year: '{yy}年',
+        quarter: '{q}季度',
+        month: '{M}月',
+        week: '{W}周',
+        day: '{d}',
+        hour: '{H}时',
+        minute: '{m}分'
+      },
+      dayss: {
+        w0: '日',
+        w1: '一',
+        w2: '二',
+        w3: '三',
+        w4: '四',
+        w5: '五',
+        w6: '六'
       }
     },
     plugins: {

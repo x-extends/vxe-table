@@ -19,6 +19,7 @@ export default {
       errConflicts: '"{0}" parametr "{1}" bilan ziddiyatlar',
       modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: '"{1}" parametri yoqilganda, u "{2}" parametrlari yoqilgan, aks holda xatolik yuz beradi',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notConflictProp: "\"{0}\", \"{1}\" dan foydalanish kerak bo'lganda, aks holda funktsional to'qnashuvlar bo'lishi mumkin",
       unableInsert: "Belgilangan joyda kiritilishi mumkin emas, parametrlar to'g'ri yoki yo'qligini tekshiring",
       useErr: "\"{0}\" modulini o'rnatishda xatolik yuz berdi. Buyurtma noto'g'ri bo'lishi mumkin. Qaram modul jadvaldan oldin o'rnatilishi kerak",
@@ -43,6 +44,7 @@ export default {
       coverProp: '"{1}" parametr "{0}" parametr bir necha bor aniqlanadi, bu xatoga olib kelishi mumkin',
       uniField: '"{0}" dagi "{0}" da bir necha bor aniqlanadi, bu xatoga olib kelishi mumkin',
       repeatKey: 'Birlamchi kalit {0} = "{1}" ni takrorlash mumkin, bu xatoga olib kelishi mumkin',
+      repeatProp: '参数重复 {0}="{1}"，这可能会出现错误',
       delFunc: '"{0}" himoyalangan, iltimos "{1}" dan foydalaning',
       delProp: '"{0}" parametri bekor qilinadi, "{1}" dan foydalaning',
       delEvent: '"{0}" bekor qilinadi, iltimos "{1}" dan foydalaning',
@@ -56,7 +58,8 @@ export default {
       treeDragChild: "Ota-onalar o'z farzandlariga sudrab ketolmaydilar",
       reqPlugin: "\"{1}\" https://vxeui.com/oter{/#/#/#/install-da o'rnatilmagan",
       errMaxRow: "Maksimal qo'llab-quvvatlanadigan ma'lumotlar hajmi {0} qatorlar hajmidan oshib ketishi mumkin, bu xatoga olib kelishi mumkin",
-      useNew: '不建议使用 {0}，请使用 {1}'
+      useNew: '不建议使用 {0}，请使用 {1}',
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
     },
     table: {
       emptyText: "Hali ma'lumot yo'q",
@@ -532,6 +535,35 @@ export default {
         HH: 'soat',
         mm: 'nuqta',
         ss: 'Ikkinchi'
+      }
+    },
+    gantt: {
+      tFullFormat: {
+        year: '{yy}年',
+        quarter: '{yy}年第{q}季度',
+        month: '{yy}年{M}月',
+        week: '{yy}年第{W}周',
+        day: '{yy}年{M}月{d}日',
+        hour: '{yy}年 {M}月{d}日{H}时',
+        minute: '{yy}年{M}月{d}日{H}时{m}分'
+      },
+      tSimpleFormat: {
+        year: '{yy}年',
+        quarter: '{q}季度',
+        month: '{M}月',
+        week: '{W}周',
+        day: '{d}',
+        hour: '{H}时',
+        minute: '{m}分'
+      },
+      dayss: {
+        w0: '日',
+        w1: '一',
+        w2: '二',
+        w3: '三',
+        w4: '四',
+        w5: '五',
+        w6: '六'
       }
     },
     plugins: {

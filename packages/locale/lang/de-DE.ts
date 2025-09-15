@@ -19,6 +19,7 @@ export default {
       errConflicts: 'Parameter "{0}" Konflikte mit "{1}"',
       modelConflicts: 'Es gibt einen Konflikt zwischen dem gebundenen Feldwert "{0}" und "{1}", und ein Fehler tritt auf',
       notSupportProp: '"{1}" wird nicht unterstützt, wenn der Parameter "{0}" aktiviert ist. Es sollte "{2}" sein, andernfalls tritt ein Fehler auf',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notConflictProp: 'Wenn "{0}" verwendet wird, sollte "{1}" festgelegt werden, andernfalls kann es funktionale Konflikte geben',
       unableInsert: 'Kann nicht in den angegebenen Ort eingefügt werden. Überprüfen Sie bitte, ob die Parameter korrekt sind',
       useErr: 'Bei der Installation des Moduls "{0}" trat ein Fehler auf. Die Bestellung kann falsch sein. Das abhängige Modul muss vor der Tabelle installiert werden',
@@ -43,6 +44,7 @@ export default {
       coverProp: 'Der Parameter "{1}" von "{0}" wird wiederholt definiert, was einen Fehler verursachen kann',
       uniField: 'Der Feldname "{0}" wird wiederholt definiert, was einen Fehler verursachen kann',
       repeatKey: 'Wiederholen Sie den Primärschlüssel {0} = "{1}", der einen Fehler verursachen kann',
+      repeatProp: '参数重复 {0}="{1}"，这可能会出现错误',
       delFunc: 'Methode "{0}" ist veraltet, bitte verwenden Sie "{1}".',
       delProp: 'Parameter "{0}" ist veraltet, bitte verwenden Sie "{1}".',
       delEvent: 'Ereignis "{0}" ist veraltet, bitte verwenden Sie "{1}".',
@@ -56,7 +58,8 @@ export default {
       treeDragChild: 'Eltern können nicht zu ihren eigenen Kindern ziehen',
       reqPlugin: '"{1}" ist nicht unter https://vxeui.com/Otheriationation installiert',
       errMaxRow: 'Wenn das maximal unterstützte Datenvolumen {0} Zeilen überschreitet, kann dies einen Fehler verursachen',
-      useNew: '{0} wird nicht empfohlen, bitte verwenden Sie {1}'
+      useNew: '{0} wird nicht empfohlen, bitte verwenden Sie {1}',
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
     },
     table: {
       emptyText: 'Noch keine Daten',
@@ -532,6 +535,35 @@ export default {
         HH: 'Stunde',
         mm: 'Punkt',
         ss: 'Zweite'
+      }
+    },
+    gantt: {
+      tFullFormat: {
+        year: '{yy}年',
+        quarter: '{yy}年第{q}季度',
+        month: '{yy}年{M}月',
+        week: '{yy}年第{W}周',
+        day: '{yy}年{M}月{d}日',
+        hour: '{yy}年 {M}月{d}日{H}时',
+        minute: '{yy}年{M}月{d}日{H}时{m}分'
+      },
+      tSimpleFormat: {
+        year: '{yy}年',
+        quarter: '{q}季度',
+        month: '{M}月',
+        week: '{W}周',
+        day: '{d}',
+        hour: '{H}时',
+        minute: '{m}分'
+      },
+      dayss: {
+        w0: '日',
+        w1: '一',
+        w2: '二',
+        w3: '三',
+        w4: '四',
+        w5: '五',
+        w6: '六'
       }
     },
     plugins: {

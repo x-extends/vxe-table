@@ -629,6 +629,11 @@ export default defineVxeComponent({
     })
 
     const computeIsMenu = computed(() => {
+      const isContentMenu = computeIsContentMenu.value
+      return isContentMenu
+    })
+
+    const computeIsContentMenu = computed(() => {
       const menuOpts = computeMenuOpts.value
       const headerMenu = computeHeaderMenu.value
       const bodyMenu = computeBodyMenu.value
