@@ -18,6 +18,7 @@ export default {
       scrollErrProp: "Ce paramètre \"{0}\" n'est pas pris en charge après l'activation du défilement virtuel",
       errConflicts: 'Paramètre "{0}" entre en conflit avec "{1}"',
       modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notSupportProp: "\"{1}\" n'est pas pris en charge lorsque le paramètre \"{0}\" est activé, il devrait être \"{2}\", sinon une erreur se produira",
       notConflictProp: 'Lorsque vous utilisez "{0}", "{1}" doit être défini, sinon il peut y avoir des conflits fonctionnels',
       unableInsert: "Ne peut pas être inséré dans l'emplacement spécifié, veuillez vérifier si les paramètres sont corrects",
@@ -43,6 +44,7 @@ export default {
       coverProp: 'Le paramètre "{1}" de "{0}" est défini à plusieurs reprises, ce qui peut provoquer une erreur',
       uniField: 'Le nom de champ "{0}" est défini à plusieurs reprises, ce qui peut provoquer une erreur',
       repeatKey: 'Répétez la clé primaire {0} = "{1}", qui peut provoquer une erreur',
+      repeatProp: '参数重复 {0}="{1}"，这可能会出现错误',
       delFunc: 'Méthode "{0}" est obsolète, veuillez utiliser "{1}"',
       delProp: 'Le paramètre "{0}" est obsolète, veuillez utiliser "{1}"',
       delEvent: "L'événement \"{0}\" est obsolète, veuillez utiliser \"{1}\"",
@@ -56,7 +58,8 @@ export default {
       treeDragChild: 'Les parents ne peuvent pas traîner à leurs propres enfants',
       reqPlugin: "\"{1}\" n'est pas installé sur https://vxeui.com/other {0,/#/{1 }/install",
       errMaxRow: 'Dépassant les lignes maximales du volume de données prises en charge {0}, cela peut entraîner une erreur',
-      useNew: '不建议使用 {0}，请使用 {1}'
+      useNew: '不建议使用 {0}，请使用 {1}',
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
     },
     table: {
       emptyText: 'Pas encore de données',
@@ -532,6 +535,35 @@ export default {
         HH: 'heure',
         mm: 'indiquer',
         ss: 'Deuxième'
+      }
+    },
+    gantt: {
+      tFullFormat: {
+        year: '{yy}年',
+        quarter: '{yy}年第{q}季度',
+        month: '{yy}年{M}月',
+        week: '{yy}年第{W}周',
+        day: '{yy}年{M}月{d}日',
+        hour: '{yy}年 {M}月{d}日{H}时',
+        minute: '{yy}年{M}月{d}日{H}时{m}分'
+      },
+      tSimpleFormat: {
+        year: '{yy}年',
+        quarter: '{q}季度',
+        month: '{M}月',
+        week: '{W}周',
+        day: '{d}',
+        hour: '{H}时',
+        minute: '{m}分'
+      },
+      dayss: {
+        w0: '日',
+        w1: '一',
+        w2: '二',
+        w3: '三',
+        w4: '四',
+        w5: '五',
+        w6: '六'
       }
     },
     plugins: {
