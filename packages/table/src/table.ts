@@ -1129,9 +1129,12 @@ export default {
       return footerOpts && footerOpts.options ? footerOpts.options : []
     },
     isCtxMenu () {
-      return this.computeIsMenu
+      return this.computeIsContentMenu
     },
     computeIsMenu () {
+      return this.computeIsContentMenu
+    },
+    computeIsContentMenu () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
