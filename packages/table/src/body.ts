@@ -176,7 +176,7 @@ function renderTdColumn (
   }
   // hover 进入事件
   if (showTitle || showTooltip || showAllTip || tooltipConfig) {
-    tdOns.mouseenter = (evnt: MouseEvent) => {
+    tdOns.mouseover = (evnt: MouseEvent) => {
       if (!isVMScrollProcess($xeTable)) {
         if (showTitle) {
           updateCellTitle(evnt.currentTarget, column)
@@ -489,7 +489,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
     const hasRowGroupAggregate = isRowGroupStatus && row.isAggregate
     // 当前行事件
     if (rowOpts.isHover || highlightHoverRow) {
-      trOn.mouseenter = (evnt: MouseEvent) => {
+      trOn.mouseover = (evnt: MouseEvent) => {
         if (isVMScrollProcess($xeTable)) {
           return
         }
