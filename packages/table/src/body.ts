@@ -193,7 +193,7 @@ export default defineVxeComponent({
       }
       // hover 进入事件
       if (showTitle || showTooltip || showAllTip || tooltipConfig) {
-        tdOns.onMouseenter = (evnt: MouseEvent) => {
+        tdOns.onMouseover = (evnt: MouseEvent) => {
           if (!isVMScrollProcess()) {
             if (showTitle) {
               updateCellTitle(evnt.currentTarget, column)
@@ -496,7 +496,7 @@ export default defineVxeComponent({
         const trOn: Record<string, any> = {}
         // 当前行事件
         if (rowOpts.isHover || highlightHoverRow) {
-          trOn.onMouseenter = (evnt: MouseEvent) => {
+          trOn.onMouseover = (evnt: MouseEvent) => {
             if (isVMScrollProcess()) {
               return
             }
