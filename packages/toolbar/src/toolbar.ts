@@ -379,20 +379,10 @@ export default defineVxeComponent({
           return VxeUIButtonComponent
             ? h(VxeUIButtonComponent, {
               key: index,
-              disabled: child.disabled,
-              loading: child.loading,
-              type: child.type,
-              mode: child.mode,
-              icon: child.icon,
-              circle: child.circle,
-              round: child.round,
-              status: child.status,
-              content: child.name,
-              title: child.title,
-              routerLink: child.routerLink,
-              permissionCode: child.permissionCode,
-              prefixTooltip: child.prefixTooltip,
-              suffixTooltip: child.suffixTooltip,
+              ...Object.assign({}, child, {
+                content: child.name,
+                options: undefined
+              }),
               onClick: (eventParams) => isBtn ? btnEvent(eventParams, child) : tolEvent(eventParams, child)
             })
             : createCommentVNode()
@@ -433,23 +423,10 @@ export default defineVxeComponent({
                 btnVNs.push(
                   h(VxeUIButtonComponent, {
                     key: `bd${item.code || index}`,
-                    disabled: item.disabled,
-                    loading: item.loading,
-                    type: item.type,
-                    mode: item.mode,
-                    icon: item.icon,
-                    circle: item.circle,
-                    round: item.round,
-                    status: item.status,
-                    content: item.name,
-                    title: item.title,
-                    routerLink: item.routerLink,
-                    permissionCode: item.permissionCode,
-                    prefixTooltip: item.prefixTooltip,
-                    suffixTooltip: item.suffixTooltip,
-                    destroyOnClose: item.destroyOnClose,
-                    placement: item.placement,
-                    transfer: item.transfer,
+                    ...Object.assign({}, item, {
+                      content: item.name,
+                      options: undefined
+                    }),
                     onClick: (eventParams) => btnEvent(eventParams, item)
                   }, dropdowns && dropdowns.length
                     ? {
@@ -501,23 +478,10 @@ export default defineVxeComponent({
                 btnVNs.push(
                   h(VxeUIButtonComponent, {
                     key: tIndex,
-                    disabled: item.disabled,
-                    loading: item.loading,
-                    type: item.type,
-                    mode: item.mode,
-                    icon: item.icon,
-                    circle: item.circle,
-                    round: item.round,
-                    status: item.status,
-                    content: item.name,
-                    title: item.title,
-                    routerLink: item.routerLink,
-                    permissionCode: item.permissionCode,
-                    prefixTooltip: item.prefixTooltip,
-                    suffixTooltip: item.suffixTooltip,
-                    destroyOnClose: item.destroyOnClose,
-                    placement: item.placement,
-                    transfer: item.transfer,
+                    ...Object.assign({}, item, {
+                      content: item.name,
+                      options: undefined
+                    }),
                     onClick: (eventParams) => tolEvent(eventParams, item)
                   }, dropdowns && dropdowns.length
                     ? {
