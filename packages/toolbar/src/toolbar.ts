@@ -442,22 +442,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
           return VxeUIButtonComponent
             ? h(VxeUIButtonComponent, {
               key: index,
-              props: {
-                disabled: child.disabled,
-                loading: child.loading,
-                type: child.type,
-                mode: child.mode,
-                icon: child.icon,
-                circle: child.circle,
-                round: child.round,
-                status: child.status,
+              props: Object.assign({}, child, {
                 content: child.name,
-                title: child.title,
-                routerLink: child.routerLink,
-                permissionCode: child.permissionCode,
-                prefixTooltip: child.prefixTooltip,
-                suffixTooltip: child.suffixTooltip
-              },
+                options: undefined
+              }),
               on: {
                 click: (eventParams: VxeButtonDefines.ClickEventParams) => isBtn ? $xeToolbar.btnEvent(eventParams, child) : $xeToolbar.tolEvent(eventParams, child)
               }
@@ -507,25 +495,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
               if (VxeUIButtonComponent) {
                 btnVNs.push(
                   h(VxeUIButtonComponent, {
-                    props: {
-                      disabled: item.disabled,
-                      loading: item.loading,
-                      type: item.type,
-                      mode: item.mode,
-                      icon: item.icon,
-                      circle: item.circle,
-                      round: item.round,
-                      status: item.status,
+                    props: Object.assign({}, item, {
                       content: item.name,
-                      title: item.title,
-                      routerLink: item.routerLink,
-                      permissionCode: item.permissionCode,
-                      prefixTooltip: item.prefixTooltip,
-                      suffixTooltip: item.suffixTooltip,
-                      destroyOnClose: item.destroyOnClose,
-                      placement: item.placement,
-                      transfer: item.transfer
-                    },
+                      options: undefined
+                    }),
                     on: {
                       click: (eventParams: VxeButtonDefines.ClickEventParams) => $xeToolbar.btnEvent(eventParams, item)
                     },
@@ -589,25 +562,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 btnVNs.push(
                   h(VxeUIButtonComponent, {
                     key: tIndex,
-                    props: {
-                      disabled: item.disabled,
-                      loading: item.loading,
-                      type: item.type,
-                      mode: item.mode,
-                      icon: item.icon,
-                      circle: item.circle,
-                      round: item.round,
-                      status: item.status,
+                    props: Object.assign({}, item, {
                       content: item.name,
-                      title: item.title,
-                      routerLink: item.routerLink,
-                      permissionCode: item.permissionCode,
-                      prefixTooltip: item.prefixTooltip,
-                      suffixTooltip: item.suffixTooltip,
-                      destroyOnClose: item.destroyOnClose,
-                      placement: item.placement,
-                      transfer: item.transfer
-                    },
+                      options: undefined
+                    }),
                     on: {
                       click: (eventParams: VxeButtonDefines.ClickEventParams) => $xeToolbar.tolEvent(eventParams, item)
                     },

@@ -166,8 +166,8 @@ function handleCheckboxRangeEvent ($xeTable: VxeTableConstructor & VxeTablePriva
     let mouseScrollTimeout: any = null
     let isMouseScrollDown: any = false
     let mouseScrollSpaceSize = 1
-    const triggerEvent = (type: any, evnt: any) => {
-      $xeTable.dispatchEvent(`checkbox-range-${type}` as 'checkbox-range-change' | 'checkbox-range-start' | 'checkbox-range-end', {
+    const triggerEvent = (type: 'change' | 'start' | 'end', evnt: Event) => {
+      $xeTable.dispatchEvent(`checkbox-range-${type}`, {
         records: () => $xeTable.getCheckboxRecords(),
         reserves: () => $xeTable.getCheckboxReserveRecords()
       }, evnt)
