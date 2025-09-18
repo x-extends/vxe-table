@@ -202,7 +202,7 @@ export default defineVxeComponent({
       if ($xeGGWrapper) {
         $xeGGWrapper.triggerZoomEvent($event)
       } else {
-        warnLog('vxe.error.notProp', ['zoom'])
+        warnLog('vxe.error.notProp', ['[toolbar] zoom'])
       }
     }
 
@@ -318,7 +318,7 @@ export default defineVxeComponent({
               if (tCommandMethod) {
                 tCommandMethod(params)
               } else {
-                errLog('vxe.error.notCommands', [code])
+                errLog('vxe.error.notCommands', [`[toolbar] ${code}`])
               }
             }
             $xeToolbar.dispatchEvent('button-click', params, $event)
@@ -344,7 +344,7 @@ export default defineVxeComponent({
               if (tCommandMethod) {
                 tCommandMethod(params)
               } else {
-                errLog('vxe.error.notCommands', [code])
+                errLog('vxe.error.notCommands', [`[toolbar] ${code}`])
               }
             }
             $xeToolbar.dispatchEvent('tool-click', params, $event)
@@ -636,40 +636,40 @@ export default defineVxeComponent({
       const refreshOpts = computeRefreshOpts.value
       const queryMethod = refreshOpts.queryMethod || refreshOpts.query
       if (props.refresh && !$xeGGWrapper && !queryMethod) {
-        warnLog('vxe.error.notFunc', ['queryMethod'])
+        warnLog('vxe.error.notFunc', ['[toolbar] queryMethod'])
       }
 
       if (XEUtils.isPlainObject(props.custom)) {
-        warnLog('vxe.error.delProp', ['custom={...}', 'custom=boolean & custom-options={...}'])
+        warnLog('vxe.error.delProp', ['[toolbar] custom={...}', 'custom=boolean & custom-options={...}'])
       }
       if (XEUtils.isPlainObject(props.print)) {
-        warnLog('vxe.error.delProp', ['print={...}', 'print=boolean & print-options={...}'])
+        warnLog('vxe.error.delProp', ['[toolbar] print={...}', 'print=boolean & print-options={...}'])
       }
       if (XEUtils.isPlainObject(props.export)) {
-        warnLog('vxe.error.delProp', ['export={...}', 'export=boolean & export-options={...}'])
+        warnLog('vxe.error.delProp', ['[toolbar] export={...}', 'export=boolean & export-options={...}'])
       }
       if (XEUtils.isPlainObject(props.import)) {
-        warnLog('vxe.error.delProp', ['import={...}', 'import=boolean & import-options={...}'])
+        warnLog('vxe.error.delProp', ['[toolbar] import={...}', 'import=boolean & import-options={...}'])
       }
       if (XEUtils.isPlainObject(props.refresh)) {
-        warnLog('vxe.error.delProp', ['refresh={...}', 'refresh=boolean & refresh-options={...}'])
+        warnLog('vxe.error.delProp', ['[toolbar] refresh={...}', 'refresh=boolean & refresh-options={...}'])
       }
       if (XEUtils.isPlainObject(props.refresh)) {
-        warnLog('vxe.error.delProp', ['zoom={...}', 'zoom=boolean & zoom-options={...}'])
+        warnLog('vxe.error.delProp', ['[toolbar] zoom={...}', 'zoom=boolean & zoom-options={...}'])
       }
 
       const customOpts = computeCustomOpts.value
       if (customOpts.isFooter) {
-        warnLog('vxe.error.delProp', ['toolbar.custom.isFooter', 'table.custom-config.showFooter'])
+        warnLog('vxe.error.delProp', ['[toolbar] toolbar.custom.isFooter', 'table.custom-config.showFooter'])
       }
       if (customOpts.showFooter) {
-        warnLog('vxe.error.delProp', ['toolbar.custom.showFooter', 'table.custom-config.showFooter'])
+        warnLog('vxe.error.delProp', ['[toolbar] toolbar.custom.showFooter', 'table.custom-config.showFooter'])
       }
       if (customOpts.immediate) {
-        warnLog('vxe.error.delProp', ['toolbar.custom.immediate', 'table.custom-config.immediate'])
+        warnLog('vxe.error.delProp', ['[toolbar] toolbar.custom.immediate', 'table.custom-config.immediate'])
       }
       if (customOpts.trigger) {
-        warnLog('vxe.error.delProp', ['toolbar.custom.trigger', 'table.custom-config.trigger'])
+        warnLog('vxe.error.delProp', ['[toolbar] toolbar.custom.trigger', 'table.custom-config.trigger'])
       }
       if (props.refresh || props.import || props.export || props.print || props.zoom) {
         if (!VxeUIButtonComponent) {

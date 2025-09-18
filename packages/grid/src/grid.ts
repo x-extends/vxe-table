@@ -500,7 +500,7 @@ export default defineVxeComponent({
           if (slots[funcSlot]) {
             return slots[funcSlot]
           } else {
-            errLog('vxe.error.notSlot', [funcSlot])
+            errLog('vxe.error.notSlot', [`[grid] ${funcSlot}`])
           }
         } else {
           return funcSlot
@@ -517,7 +517,7 @@ export default defineVxeComponent({
             if (slots[slotFunc]) {
               slotConf[slotKey] = slots[slotFunc]
             } else {
-              errLog('vxe.error.notSlot', [slotFunc])
+              errLog('vxe.error.notSlot', [`[grid] ${slotFunc}`])
             }
           } else {
             slotConf[slotKey] = slotFunc
@@ -826,7 +826,7 @@ export default defineVxeComponent({
             childVNs.push(renderPager())
             break
           default:
-            errLog('vxe.error.notProp', [`layouts -> ${key}`])
+            errLog('vxe.error.notProp', [`[grid] layouts -> ${key}`])
             break
         }
       })
@@ -1132,7 +1132,7 @@ export default defineVxeComponent({
                   return { status: false }
                 })
             } else {
-              errLog('vxe.error.notFunc', ['proxy-config.ajax.query'])
+              errLog('vxe.error.notFunc', ['[grid] proxy-config.ajax.query'])
             }
             break
           }
@@ -1200,7 +1200,7 @@ export default defineVxeComponent({
                 }
               }
             } else {
-              errLog('vxe.error.notFunc', ['proxy-config.ajax.delete'])
+              errLog('vxe.error.notFunc', ['[grid] proxy-config.ajax.delete'])
             }
             break
           }
@@ -1281,7 +1281,7 @@ export default defineVxeComponent({
                 }
               })
             } else {
-              errLog('vxe.error.notFunc', ['proxy-config.ajax.save'])
+              errLog('vxe.error.notFunc', ['[grid] proxy-config.ajax.save'])
             }
             break
           }
@@ -1292,7 +1292,7 @@ export default defineVxeComponent({
               if (tCommandMethod) {
                 tCommandMethod({ code, button, $grid: $xeGrid, $table: $xeTable, $gantt: null }, ...args)
               } else {
-                errLog('vxe.error.notCommands', [code])
+                errLog('vxe.error.notCommands', [`[grid] ${code}`])
               }
             }
           }
@@ -1508,7 +1508,7 @@ export default defineVxeComponent({
             XEUtils.each(column.slots, (func) => {
               if (!XEUtils.isFunction(func)) {
                 if (!slots[func]) {
-                  errLog('vxe.error.notSlot', [func])
+                  errLog('vxe.error.notSlot', [`[grid] ${func}`])
                 }
               }
             })
@@ -1604,11 +1604,11 @@ export default defineVxeComponent({
         // const { data, columns, proxyConfig } = props
         // const formOpts = computeFormOpts.value
         // if (isEnableConf(proxyConfig) && (data || (proxyOpts.form && formOpts.data))) {
-        //   errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
+        //   errLog('vxe.error.errConflicts', ['[grid] data', 'proxy-config'])
         // }
 
         if (proxyOpts.props) {
-          warnLog('vxe.error.delProp', ['proxy-config.props', 'proxy-config.response'])
+          warnLog('vxe.error.delProp', ['[grid] proxy-config.props', 'proxy-config.response'])
         }
 
         if (columns && columns.length) {

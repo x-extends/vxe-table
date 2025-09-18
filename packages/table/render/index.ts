@@ -939,6 +939,36 @@ renderer.mixin({
     tableFilterDefaultMethod: handleFilterMethod,
     tableExportMethod: handleExportSelectMethod
   },
+  VxeText: {
+    renderTableDefault (renderOpts, params) {
+      const { $table, row, column } = params
+      const { props } = renderOpts
+      const cellLabel = $table.getCellLabel(row, column)
+      return [
+        h(getDefaultComponent(renderOpts), {
+          ...(props || {}),
+          content: cellLabel,
+          ...getComponentOns(renderOpts, params)
+        })
+      ]
+    }
+  },
+  VxeLink: {
+    renderTableDefault (renderOpts, params) {
+      const { $table, row, column } = params
+      const { props } = renderOpts
+      const { href } = props || {}
+      const cellLabel = $table.getCellLabel(row, column)
+      return [
+        h(getDefaultComponent(renderOpts), {
+          ...(props || {}),
+          content: cellLabel,
+          href: XEUtils.toFormatString(href, params),
+          ...getComponentOns(renderOpts, params)
+        })
+      ]
+    }
+  },
   /**
    * 已废弃，被 FormatSelect 替换
    * @deprecated
