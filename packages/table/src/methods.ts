@@ -10825,7 +10825,7 @@ const Methods = {
       const xThreshold = $xeTable.computeScrollXThreshold
       isLeft = scrollLeft <= 0
       if (!isLeft) {
-        isRight = scrollLeft + bodyWidth >= scrollWidth
+        isRight = scrollLeft + bodyWidth >= scrollWidth - 1
       }
       if (scrollLeft > lastScrollLeft) {
         direction = 'right'
@@ -10845,7 +10845,7 @@ const Methods = {
       const yThreshold = $xeTable.computeScrollYThreshold
       isTop = scrollTop <= 0
       if (!isTop) {
-        isBottom = scrollTop + bodyHeight >= scrollHeight
+        isBottom = scrollTop + bodyHeight >= scrollHeight - 1
       }
       if (scrollTop > lastScrollTop) {
         direction = 'bottom'
