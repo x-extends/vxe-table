@@ -11111,9 +11111,9 @@ export default defineVxeComponent({
         }
         if (isRollY) {
           const yThreshold = computeScrollYThreshold.value
-          isTop = scrollTop <= 0
+          isTop = scrollTop <= 1
           if (!isTop) {
-            isBottom = scrollTop + bodyHeight >= scrollHeight
+            isBottom = scrollTop + bodyHeight >= scrollHeight - 1
           }
           if (scrollTop > lastScrollTop) {
             direction = 'bottom'
