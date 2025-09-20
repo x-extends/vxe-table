@@ -199,12 +199,13 @@ export default {
     const tableProps = $xeTable
     const vSize = $xeFilterPanel.computeSize
     const filterOpts = $xeTable.computeFilterOpts
-    const { destroyOnClose } = filterOpts
+    const { destroyOnClose, className } = filterOpts
     return h('div', {
       ref: 'refElem',
       class: [
         'vxe-table--filter-wrapper',
         'filter--prevent-default',
+        className,
         compConf && compConf.className ? compConf.className : '',
         getClass(filterClassName, params),
         {

@@ -100,9 +100,11 @@ VxeUI.setConfig({
     footerCellConfig: {
       height: 'unset'
     },
-    // menuConfig: {
-    //   visibleMethod () {}
-    // },
+    menuConfig: {
+      // visibleMethod () {},
+      // transfer: false,
+      destroyOnClose: true
+    },
     customConfig: {
       // enabled: false,
       allowVisible: true,
@@ -149,8 +151,9 @@ VxeUI.setConfig({
     filterConfig: {
       // remote: false,
       // filterMethod: null,
-      // destroyOnClose: false,
       // isEvery: false,
+      // transfer: false,
+      destroyOnClose: true,
       multiple: true,
       showIcon: true
     },

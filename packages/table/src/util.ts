@@ -130,6 +130,7 @@ export function createInternalData (): TableInternalData {
     tFooterHeight: 0,
 
     teleportToWrapperElem: null,
+    popupToWrapperElem: null,
 
     inited: false,
     tooltipTimeout: null,
@@ -527,6 +528,22 @@ export function getColReMinWidth (params: any) {
     }
   }
   return mWidth
+}
+
+export function getFirstChildColumn (column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
+  const { children } = column
+  if (children && children.length) {
+    return getFirstChildColumn(XEUtils.first(children))
+  }
+  return column
+}
+
+export function getLastChildColumn (column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
+  const { children } = column
+  if (children && children.length) {
+    return getFirstChildColumn(XEUtils.last(children))
+  }
+  return column
 }
 
 const lineOffsetSizes: Record<string, any> = {

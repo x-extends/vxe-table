@@ -3,7 +3,7 @@ import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTarge
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
-import { getRowUniqueId, clearTableAllStatus, getColumnList, toFilters, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem, getCellRestHeight } from './util'
+import { getRowUniqueId, clearTableAllStatus, getColumnList, toFilters, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem, getCellRestHeight, getLastChildColumn } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from './anime'
 import { warnLog, errLog } from '../../ui/src/log'
@@ -3654,6 +3654,7 @@ function initColumnHierarchy ($xeTable: VxeTableConstructor & VxeTablePrivateMet
 }
 
 function handleInitColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, collectColumn: VxeTableDefines.ColumnInfo[]) {
+  const props = $xeTable
   const $xeToolbar = $xeTable.$refs.$xeToolbar as VxeToolbarConstructor
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -3692,6 +3693,10 @@ function handleInitColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
       }
       if ($xeTable.handleUpdateCustomColumn) {
         $xeTable.handleUpdateCustomColumn()
+      }
+      const columnOpts = $xeTable.computeColumnOpts
+      if (props.showCustomHeader && reactData.isGroup && (columnOpts.resizable || props.resizable)) {
+        warnLog('vxe.error.notConflictProp', ['show-custom-header & colgroup', 'column-config.resizable=false'])
       }
       reactData.isColLoading = false
       return handleLazyRecalculate($xeTable, false, true, true)
@@ -5903,18 +5908,16 @@ const Methods = {
     const scrollbarXToTop = $xeTable.computeScrollbarXToTop
     const { clientX: dragClientX } = evnt
     const dragBtnElem = evnt.target as HTMLDivElement
+    let cell = dragBtnElem.parentElement as HTMLTableCellElement | null
     let resizeColumn = column
     const isDragGroupCol = column.children && column.children.length
     if (isDragGroupCol) {
-      XEUtils.eachTree(column.children, childColumn => {
-        resizeColumn = childColumn
-      })
-    }
-    let cell = dragBtnElem.parentElement as HTMLTableCellElement | null
-    if (isDragGroupCol) {
-      const trEl = cell ? cell.parentElement as HTMLTableRowElement : null
-      const theadEl = trEl ? trEl.parentElement as HTMLTableElement : null
-      cell = theadEl ? theadEl.querySelector<HTMLTableCellElement>(`.vxe-header--column[colid="${resizeColumn.id}"]`) : null
+      resizeColumn = getLastChildColumn(column)
+      if (isDragGroupCol) {
+        const trEl = cell ? cell.parentElement as HTMLTableRowElement : null
+        const theadEl = trEl ? trEl.parentElement as HTMLTableElement : null
+        cell = theadEl ? theadEl.querySelector<HTMLTableCellElement>(`.vxe-header--column[colid="${resizeColumn.id}"]`) : null
+      }
     }
     if (!cell) {
       return

@@ -1713,7 +1713,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
         ]),
         h('div', {
           class: 'vxe-grid--layout-footer-wrapper'
-        }, $xeGrid.renderChildLayout(h, footKeys))
+        }, $xeGrid.renderChildLayout(h, footKeys)),
+        h('div', {
+          ref: 'refPopupContainerElem'
+        })
       ]
     },
     renderVN (h: CreateElement): VNode {

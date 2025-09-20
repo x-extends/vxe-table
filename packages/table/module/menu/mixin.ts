@@ -170,7 +170,7 @@ export default {
       const isContentMenu = $xeTable.computeIsContentMenu
       const menuOpts = $xeTable.computeMenuOpts
       const config = menuOpts[type]
-      const visibleMethod = menuOpts.visibleMethod
+      const { transfer, visibleMethod } = menuOpts
       if (config) {
         const { options, disabled } = config
         if (disabled) {
@@ -181,9 +181,17 @@ export default {
             if (!visibleMethod || visibleMethod(params)) {
               evnt.preventDefault()
               $xeTable.updateZindex()
+              const el = $xeTable.$refs.refElem as HTMLDivElement
+              const tableRect = el.getBoundingClientRect()
               const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
-              let top = evnt.clientY + scrollTop
-              let left = evnt.clientX + scrollLeft
+
+              let top = evnt.clientY - tableRect.y
+              let left = evnt.clientX - tableRect.x
+              if (transfer) {
+                top = evnt.clientY + scrollTop
+                left = evnt.clientX + scrollLeft
+              }
+
               const handleVisible = () => {
                 internalData._currMenuParams = params
                 Object.assign(ctxMenuStore, {

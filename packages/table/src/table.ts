@@ -1876,7 +1876,9 @@ export default {
     const $xeTable = this
     const props = $xeTable
     const internalData = $xeTable as unknown as TableInternalData
+    const $xeGrid = $xeTable.$xeGrid
     const $xeGantt = $xeTable.$xeGantt
+    const $xeGGWrapper = $xeGrid || $xeGantt
 
     const columnOpts = $xeTable.computeColumnOpts
     const rowOpts = $xeTable.computeRowOpts
@@ -1893,6 +1895,16 @@ export default {
         internalData.teleportToWrapperElem = classifyWrapperEl
       }
     }
+    if ($xeGGWrapper) {
+      const popupContainerElem = $xeGantt.$refs.refPopupContainerElem as HTMLDivElement
+      const popupWrapperEl = $xeTable.$refs.refPopupWrapperElem as HTMLDivElement
+      if (popupContainerElem) {
+        if (popupWrapperEl) {
+          popupContainerElem.appendChild(popupWrapperEl)
+        }
+        internalData.popupToWrapperElem = popupContainerElem
+      }
+    }
 
     if (columnOpts.drag || rowOpts.drag || customOpts.allowSort) {
       initTpImg()
@@ -1906,11 +1918,11 @@ export default {
       warnLog('vxe.error.reqProp', ['tooltip-config'])
     }
 
-    // 使用已安装的组件，如果未安装则不渲染
-    const VxeUILoadingComponent = VxeUI.getComponent('VxeLoading')
-    const VxeUITooltipComponent = VxeUI.getComponent('VxeTooltip')
-
     $xeTable.$nextTick(() => {
+      // 使用已安装的组件，如果未安装则不渲染
+      const VxeUILoadingComponent = VxeUI.getComponent('VxeLoading')
+      const VxeUITooltipComponent = VxeUI.getComponent('VxeTooltip')
+
       if (props.loading) {
         if (!VxeUILoadingComponent && !this.$scopedSlots.loading) {
           errLog('vxe.error.errProp', ['loading=true', 'loading=false | <template #loading>...</template>'])
@@ -1988,6 +2000,10 @@ export default {
     const teleportWrapperEl = $xeTable.$refs.refTeleportWrapper as HTMLDivElement
     if (teleportWrapperEl && teleportWrapperEl.parentElement) {
       teleportWrapperEl.parentElement.removeChild(teleportWrapperEl)
+    }
+    const popupWrapperEl = $xeTable.$refs.refPopupWrapperElem as HTMLDivElement
+    if (popupWrapperEl && popupWrapperEl.parentElement) {
+      popupWrapperEl.parentElement.removeChild(popupWrapperEl)
     }
     const tableViewportEl = $xeTable.$refs.refTableViewportElem as HTMLDivElement
     if (tableViewportEl) {
@@ -2244,18 +2260,39 @@ export default {
           renderDragTip(h, this)
         ])
       ]),
-      /**
-       * 筛选
-       */
-      initStore.filter
-        ? h(TableFilterPanelComponent, {
-          key: 'tf',
-          ref: 'refTableFilter',
-          props: {
-            filterStore
-          }
-        })
-        : renderEmptyElement($xeTable),
+      h('div', {
+        key: 'tpw'
+      }, [
+        h('div', {
+          ref: 'refPopupWrapperElem'
+        }, [
+          /**
+           * 筛选
+           */
+          initStore.filter
+            ? h(TableFilterPanelComponent, {
+              key: 'tf',
+              ref: 'refTableFilter',
+              props: {
+                filterStore
+              }
+            })
+            : renderEmptyElement($xeTable),
+          /**
+           * 快捷菜单
+           */
+          isContentMenu
+            ? h(TableMenuPanelComponent, {
+              key: 'tm',
+              ref: 'refTableMenu',
+              props: {
+                ctxMenuStore: this.ctxMenuStore,
+                ctxMenuOpts: this.ctxMenuOpts
+              }
+            })
+            : renderEmptyElement($xeTable)
+        ])
+      ]),
       /**
        * 导入
        */
@@ -2277,19 +2314,6 @@ export default {
           props: {
             defaultOptions: this.exportParams,
             storeData: this.exportStore
-          }
-        })
-        : renderEmptyElement($xeTable),
-      /**
-       * 快捷菜单
-       */
-      isContentMenu
-        ? h(TableMenuPanelComponent, {
-          key: 'tm',
-          ref: 'refTableMenu',
-          props: {
-            ctxMenuStore: this.ctxMenuStore,
-            ctxMenuOpts: this.ctxMenuOpts
           }
         })
         : renderEmptyElement($xeTable),
