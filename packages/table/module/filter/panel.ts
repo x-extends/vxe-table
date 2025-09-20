@@ -239,7 +239,7 @@ export default defineVxeComponent({
       const { computeSize } = $xeTable.getComputeMaps()
       const vSize = computeSize.value
       const filterOpts = computeFilterOpts.value
-      const { transfer, destroyOnClose } = filterOpts
+      const { transfer, destroyOnClose, className } = filterOpts
       return h(Teleport, {
         to: 'body',
         disabled: !transfer
@@ -249,6 +249,7 @@ export default defineVxeComponent({
           class: [
             'vxe-table--filter-wrapper',
             'filter--prevent-default',
+            className,
             getPropClass(filterClassName, params),
             {
               [`size--${vSize}`]: vSize,

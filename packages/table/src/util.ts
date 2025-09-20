@@ -130,6 +130,7 @@ export function createInternalData (): TableInternalData {
     tFooterHeight: 0,
 
     teleportToWrapperElem: null,
+    popupToWrapperElem: null,
 
     inited: false,
     tooltipTimeout: null,
@@ -611,6 +612,22 @@ export function getRootColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   return column
 }
 
+export function getFirstChildColumn (column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
+  const { children } = column
+  if (children && children.length) {
+    return getFirstChildColumn(XEUtils.first(children))
+  }
+  return column
+}
+
+export function getLastChildColumn (column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
+  const { children } = column
+  if (children && children.length) {
+    return getFirstChildColumn(XEUtils.last(children))
+  }
+  return column
+}
+
 const lineOffsetSizes = {
   mini: 3,
   small: 2,
@@ -618,7 +635,7 @@ const lineOffsetSizes = {
   large: 0
 }
 
-const countTreeExpand = (prevRow: any, params: VxeTableDefines.CellRenderBodyParams) => {
+function countTreeExpand (prevRow: any, params: VxeTableDefines.CellRenderBodyParams) {
   let count = 1
   if (!prevRow) {
     return count
@@ -641,7 +658,7 @@ const countTreeExpand = (prevRow: any, params: VxeTableDefines.CellRenderBodyPar
   return count
 }
 
-export const getOffsetSize = ($xeTable: VxeTableConstructor) => {
+export function getOffsetSize ($xeTable: VxeTableConstructor) {
   const { computeSize } = $xeTable.getComputeMaps()
   const vSize = computeSize.value
   if (vSize) {

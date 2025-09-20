@@ -196,7 +196,9 @@ export default defineVxeComponent({
           tcStyle.minHeight = `${currCellHeight}px`
         }
 
-        if (isColGroup && !isLastRow) {
+        if (showCustomHeader) {
+          // custom
+        } else if (isColGroup && !isLastRow) {
           const firstCol = getColumnFirstChild(column)
           const lastCol = getColumnLastChild(column)
           if (firstCol && lastCol && firstCol.id !== lastCol.id) {

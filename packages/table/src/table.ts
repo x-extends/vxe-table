@@ -4,7 +4,7 @@ import XEUtils from 'xe-utils'
 import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
-import { createInternalData, getRowUniqueId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight } from './util'
+import { createInternalData, getRowUniqueId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from './anime'
 import { warnLog, errLog } from '../../ui/src/log'
@@ -350,6 +350,7 @@ export default defineVxeComponent({
     const refTableRightFooter = ref() as Ref<ComponentPublicInstance>
 
     const refTeleportWrapper = ref<HTMLDivElement>()
+    const refPopupWrapperElem = ref<HTMLDivElement>()
 
     const refLeftContainer = ref() as Ref<HTMLDivElement>
     const refRightContainer = ref() as Ref<HTMLDivElement>
@@ -4024,6 +4025,10 @@ export default defineVxeComponent({
           }
           if ($xeTable.handleUpdateCustomColumn) {
             $xeTable.handleUpdateCustomColumn()
+          }
+          const columnOpts = computeColumnOpts.value
+          if (props.showCustomHeader && reactData.isGroup && (columnOpts.resizable || props.resizable)) {
+            warnLog('vxe.error.notConflictProp', ['show-custom-header & colgroup', 'column-config.resizable=false'])
           }
           reactData.isColLoading = false
           return handleLazyRecalculate(false, true, true)
@@ -8572,18 +8577,16 @@ export default defineVxeComponent({
         const scrollbarXToTop = computeScrollbarXToTop.value
         const { clientX: dragClientX } = evnt
         const dragBtnElem = evnt.target as HTMLDivElement
+        let cell = dragBtnElem.parentElement as HTMLTableCellElement | null
         let resizeColumn = column
         const isDragGroupCol = column.children && column.children.length
         if (isDragGroupCol) {
-          XEUtils.eachTree(column.children, childColumn => {
-            resizeColumn = childColumn
-          })
-        }
-        let cell = dragBtnElem.parentElement as HTMLTableCellElement | null
-        if (isDragGroupCol) {
-          const trEl = cell ? cell.parentElement as HTMLTableRowElement : null
-          const theadEl = trEl ? trEl.parentElement as HTMLTableElement : null
-          cell = theadEl ? theadEl.querySelector<HTMLTableCellElement>(`.vxe-header--column[colid="${resizeColumn.id}"]`) : null
+          resizeColumn = getLastChildColumn(column)
+          if (isDragGroupCol) {
+            const trEl = cell ? cell.parentElement as HTMLTableRowElement : null
+            const theadEl = trEl ? trEl.parentElement as HTMLTableElement : null
+            cell = theadEl ? theadEl.querySelector<HTMLTableCellElement>(`.vxe-header--column[colid="${resizeColumn.id}"]`) : null
+          }
         }
         if (!cell) {
           return
@@ -12272,7 +12275,7 @@ export default defineVxeComponent({
     const renderVN = () => {
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
       const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, isRowGroupStatus, columnStore, filterStore, customStore, tooltipStore } = reactData
-      const { teleportToWrapperElem } = internalData
+      const { teleportToWrapperElem, popupToWrapperElem } = internalData
       const { leftList, rightList } = columnStore
       const loadingSlot = slots.loading
       const tipSlots = {
@@ -12478,16 +12481,38 @@ export default defineVxeComponent({
             ])
           ])
         ]),
-        /**
-         * 筛选
-         */
-        initStore.filter
-          ? h(TableFilterPanelComponent, {
-            key: 'tf',
-            ref: refTableFilter,
-            filterStore
-          })
-          : renderEmptyElement($xeTable),
+        h('div', {
+          key: 'tpw'
+        }, [
+          h(Teleport, {
+            to: popupToWrapperElem,
+            disabled: !($xeGGWrapper && popupToWrapperElem)
+          }, [
+            h('div', {
+              ref: refPopupWrapperElem
+            }, [
+              /**
+               * 筛选
+               */
+              initStore.filter
+                ? h(TableFilterPanelComponent, {
+                  key: 'tf',
+                  ref: refTableFilter,
+                  filterStore
+                })
+                : renderEmptyElement($xeTable),
+              /**
+               * 快捷菜单
+               */
+              isContentMenu
+                ? h(TableMenuPanelComponent, {
+                  key: 'tm',
+                  ref: refTableMenu
+                })
+                : renderEmptyElement($xeTable)
+            ])
+          ])
+        ]),
         /**
          * 导入
          */
@@ -12506,15 +12531,6 @@ export default defineVxeComponent({
             key: 'et',
             defaultOptions: reactData.exportParams,
             storeData: reactData.exportStore
-          })
-          : renderEmptyElement($xeTable),
-        /**
-         * 快捷菜单
-         */
-        isContentMenu
-          ? h(TableMenuPanelComponent, {
-            key: 'tm',
-            ref: refTableMenu
           })
           : renderEmptyElement($xeTable),
         /**
@@ -12823,6 +12839,13 @@ export default defineVxeComponent({
         const classifyWrapperEl = refClassifyWrapperElem.value
         if (classifyWrapperEl) {
           internalData.teleportToWrapperElem = classifyWrapperEl
+        }
+      }
+      if ($xeGGWrapper) {
+        const { refPopupContainerElem } = $xeGGWrapper.getRefMaps()
+        const popupContainerEl = refPopupContainerElem.value
+        if (popupContainerEl) {
+          internalData.popupToWrapperElem = popupContainerEl
         }
       }
 

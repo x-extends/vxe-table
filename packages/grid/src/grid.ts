@@ -67,6 +67,8 @@ export default defineVxeComponent({
     const refToolbar = ref<VxeToolbarInstance>()
     const refPager = ref<VxePagerInstance>()
 
+    const refPopupContainerElem = ref<HTMLDivElement>()
+
     const refFormWrapper = ref<HTMLDivElement>()
     const refToolbarWrapper = ref<HTMLDivElement>()
     const refTopWrapper = ref<HTMLDivElement>()
@@ -239,7 +241,8 @@ export default defineVxeComponent({
       refTable,
       refForm,
       refToolbar,
-      refPager
+      refPager,
+      refPopupContainerElem
     }
 
     const computeMaps: VxeGridPrivateComputed = {
@@ -861,7 +864,10 @@ export default defineVxeComponent({
         ]),
         h('div', {
           class: 'vxe-grid--layout-footer-wrapper'
-        }, renderChildLayout(footKeys))
+        }, renderChildLayout(footKeys)),
+        h('div', {
+          ref: refPopupContainerElem
+        })
       ]
     }
 

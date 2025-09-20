@@ -64,7 +64,7 @@ export default {
     table: {
       emptyText: 'No data yet',
       allTitle: 'Select all/cancel',
-      seqTitle: 'Number',
+      seqTitle: 'No.',
       actionTitle: 'Operate',
       confirmFilter: 'Filter',
       resetFilter: 'Reset',
@@ -486,7 +486,7 @@ export default {
           fontBold: 'Bold'
         },
         subtableProp: {
-          seqTitle: 'Number',
+          seqTitle: 'No.',
           showSeq: 'Show serial number',
           showCheckbox: 'Multiple choices are allowed',
           errSubDrag: 'The subtable does not support this control, please use other controls',
