@@ -12052,19 +12052,19 @@ const funcs = 'setFilter,openFilter,clearFilter,saveFilterPanel,saveFilterPanelB
 
 funcs.forEach(name => {
   Methods[name] = function (...args: any[]) {
-    if (!this[`_${name}`]) {
-      if ('openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').includes(name)) {
-        errLog('vxe.error.reqModule', ['Export'])
-      } else if ('fullValidate,validate'.split(',').includes(name)) {
-        errLog('vxe.error.reqModule', ['Validator'])
-      } else if ('setFilter,openFilter,clearFilter,getCheckedFilters'.split(',').includes(name)) {
-        errLog('vxe.error.reqModule', ['Filter'])
-      } else if ('insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,getEditRecord,getEditCell,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell'.split(',').includes(name)) {
-        errLog('vxe.error.reqModule', ['Edit'])
-      } else if ('openCustom'.split(',').includes(name)) {
-        errLog('vxe.error.reqModule', ['Custom'])
-      }
-    }
+    // if (!this[`_${name}`]) {
+    //   if ('openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').includes(name)) {
+    //     errLog('vxe.error.reqModule', ['Export'])
+    //   } else if ('fullValidate,validate'.split(',').includes(name)) {
+    //     errLog('vxe.error.reqModule', ['Validator'])
+    //   } else if ('setFilter,openFilter,clearFilter,getCheckedFilters'.split(',').includes(name)) {
+    //     errLog('vxe.error.reqModule', ['Filter'])
+    //   } else if ('insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,getEditRecord,getEditCell,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell'.split(',').includes(name)) {
+    //     errLog('vxe.error.reqModule', ['Edit'])
+    //   } else if ('openCustom'.split(',').includes(name)) {
+    //     errLog('vxe.error.reqModule', ['Custom'])
+    //   }
+    // }
     return this[`_${name}`] ? this[`_${name}`](...args) : null
   }
 })
