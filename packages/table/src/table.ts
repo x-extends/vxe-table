@@ -1323,6 +1323,7 @@ export default defineVxeComponent({
     }
 
     const handleHeaderMerge = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) => {
+      const { showCustomHeader } = props
       const { footerTableData } = reactData
       const { mergeHeaderList, mergeHeaderMaps, fullColumnIdData } = internalData
       if (merges) {
@@ -1346,6 +1347,10 @@ export default defineVxeComponent({
           if (mergeRowIndex > -1 && mergeColumnIndex > -1 && (rowspan || colspan)) {
             rowspan = XEUtils.toNumber(rowspan) || 1
             colspan = XEUtils.toNumber(colspan) || 1
+            if (!showCustomHeader && rowspan > 1) {
+              errLog('vxe.error.notSupportProp', ['[table] show-custom-header=false', `rowspan=${rowspan}`, 'rowspan=1'])
+              return
+            }
             if (rowspan > 1 || colspan > 1) {
               const row = footerTableData[mergeRowIndex]
               const column = visibleColumn[mergeColumnIndex]
