@@ -1,5 +1,6 @@
 import { VxeUI } from '../../../ui'
-import { formatText, isEnableConf, getClass } from '../../../ui/src/utils'
+import { formatText, isEnableConf } from '../../../ui/src/utils'
+import { getPropClass, toCssUnit } from '../../../ui/src/dom'
 import { getSlotVNs } from '../../../ui/src/vn'
 import { warnLog } from '../../../ui/src/log'
 import { CreateElement } from 'vue'
@@ -25,7 +26,7 @@ function renderOptions ($xeFilterPanel: any, h: CreateElement, filterRender: any
         class: 'vxe-table--filter-template',
         style: maxHeight
           ? {
-              maxHeight: `${maxHeight}px`
+              maxHeight: toCssUnit(maxHeight)
             }
           : {}
       }, $xeTable.callSlot(filterSlot, params, h))
@@ -36,7 +37,7 @@ function renderOptions ($xeFilterPanel: any, h: CreateElement, filterRender: any
         class: 'vxe-table--filter-template',
         style: maxHeight
           ? {
-              maxHeight: `${maxHeight}px`
+              maxHeight: toCssUnit(maxHeight)
             }
           : {}
       }, getSlotVNs(rtFilter.call($xeTable, h, filterRender, params)))
@@ -77,7 +78,7 @@ function renderOptions ($xeFilterPanel: any, h: CreateElement, filterRender: any
       class: 'vxe-table--filter-body',
       style: maxHeight
         ? {
-            maxHeight: `${maxHeight}px`
+            maxHeight: toCssUnit(maxHeight)
           }
         : {}
     }, filterStore.options.map((item: any) => {
@@ -207,7 +208,7 @@ export default {
         'filter--prevent-default',
         className,
         compConf && compConf.className ? compConf.className : '',
-        getClass(filterClassName, params),
+        getPropClass(filterClassName, params),
         {
           [`size--${vSize}`]: vSize,
           'is--animat': tableProps.animat,

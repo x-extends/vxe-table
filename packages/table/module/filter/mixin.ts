@@ -70,8 +70,11 @@ export default {
      */
     triggerFilterEvent (evnt: MouseEvent, column: VxeTableDefines.ColumnInfo, params: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const $xeGrid = $xeTable.$xeGrid
+      const $xeGantt = $xeTable.$xeGantt
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
+      const $xeGGWrapper = $xeGrid || $xeGantt
 
       const { filterStore } = this
       if (filterStore.column === column && filterStore.visible) {
@@ -82,12 +85,14 @@ export default {
         if (filterStore.column === column && filterStore.visible) {
           filterStore.visible = false
         } else {
-          const el = $xeTable.$refs.refElem as HTMLDivElement
+          const tableEl = $xeTable.$refs.refElem as HTMLDivElement
           const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
           const filterOpts = $xeTable.computeFilterOpts
           const { transfer } = filterOpts
-          const tableRect = el.getBoundingClientRect()
+          const tableRect = tableEl.getBoundingClientRect()
           const btnElem = evnt.currentTarget as HTMLDivElement
+          const filterRender = column ? column.filterRender : null
+          const compConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
           $xeTable.handleFilterOptions(column)
           internalData._currFilterParams = params
           filterStore.style = null
@@ -123,16 +128,27 @@ export default {
             } else {
               left = btnRect.left - tableRect.left - centerWidth
               top = btnRect.top - tableRect.top + btnElem.clientHeight
-              maxHeight = Math.max(40, el.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
+              maxHeight = Math.max(40, tableEl.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
               if (left < 1) {
                 left = 1
-              } else if (left > (el.clientWidth - filterWidth - 1)) {
-                left = el.clientWidth - filterWidth - 1
+              } else if (left > (tableEl.clientWidth - filterWidth - 1)) {
+                left = tableEl.clientWidth - filterWidth - 1
+              }
+              if ($xeGGWrapper) {
+                const wrapperEl = $xeGGWrapper.$refs.refElem as HTMLDivElement
+                if (wrapperEl) {
+                  const wrapperRect = wrapperEl.getBoundingClientRect()
+                  top += tableRect.top - wrapperRect.top
+                }
               }
             }
             filterStore.style = {
               top: toCssUnit(top),
               left: toCssUnit(left)
+            }
+            // 筛选面板是自适应表格高度
+            if (compConf ? !compConf.tableFilterAutoHeight : false) {
+              maxHeight = 0
             }
             // 判断面板不能大于表格高度
             filterStore.maxHeight = maxHeight

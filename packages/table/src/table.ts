@@ -1896,7 +1896,7 @@ export default {
       }
     }
     if ($xeGGWrapper) {
-      const popupContainerElem = $xeGantt.$refs.refPopupContainerElem as HTMLDivElement
+      const popupContainerElem = $xeGGWrapper.$refs.refPopupContainerElem as HTMLDivElement
       const popupWrapperEl = $xeTable.$refs.refPopupWrapperElem as HTMLDivElement
       if (popupContainerElem) {
         if (popupWrapperEl) {
