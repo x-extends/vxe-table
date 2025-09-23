@@ -2,7 +2,7 @@ import { h, ref, computed, inject, Teleport } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import { formatText, isEnableConf } from '../../../ui/src/utils'
-import { getPropClass } from '../../../ui/src/dom'
+import { getPropClass, toCssUnit } from '../../../ui/src/dom'
 import { getSlotVNs } from '../../../ui/src/vn'
 import { warnLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
@@ -122,7 +122,7 @@ export default defineVxeComponent({
             class: 'vxe-table--filter-template',
             style: maxHeight
               ? {
-                  maxHeight: `${maxHeight}px`
+                  maxHeight: toCssUnit(maxHeight)
                 }
               : {}
           }, $xeTable.callSlot(filterSlot, params))
@@ -133,7 +133,7 @@ export default defineVxeComponent({
             class: 'vxe-table--filter-template',
             style: maxHeight
               ? {
-                  maxHeight: `${maxHeight}px`
+                  maxHeight: toCssUnit(maxHeight)
                 }
               : {}
           }, getSlotVNs(rtFilter(filterRender, params)))
@@ -170,7 +170,7 @@ export default defineVxeComponent({
           class: 'vxe-table--filter-body',
           style: maxHeight
             ? {
-                maxHeight: `${maxHeight}px`
+                maxHeight: toCssUnit(maxHeight)
               }
             : {}
         }, filterStore.options.map((item: any) => {

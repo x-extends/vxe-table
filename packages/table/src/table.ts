@@ -11890,16 +11890,16 @@ export default defineVxeComponent({
     }
 
     // 检测对应模块是否安装
-    'openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').forEach(name => {
-      ($xeTable as any)[name] = function () {
-        errLog('vxe.error.reqModule', ['Export'])
-      }
-    })
-    'clearValidate,fullValidate,validate'.split(',').forEach(name => {
-      ($xeTable as any)[name] = function () {
-        errLog('vxe.error.reqModule', ['Validator'])
-      }
-    })
+    // 'openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').forEach(name => {
+    //   ($xeTable as any)[name] = function () {
+    //     errLog('vxe.error.reqModule', ['Export'])
+    //   }
+    // })
+    // 'clearValidate,fullValidate,validate'.split(',').forEach(name => {
+    //   ($xeTable as any)[name] = function () {
+    //     errLog('vxe.error.reqModule', ['Validator'])
+    //   }
+    // })
 
     Object.assign($xeTable, tableMethods, tablePrivateMethods)
 
@@ -13062,18 +13062,18 @@ export default defineVxeComponent({
         // }
 
         // 检查是否有安装需要的模块
-        if (props.editConfig && !$xeTable.insert) {
-          errLog('vxe.error.reqModule', ['Edit'])
-        }
-        if (props.editRules && !$xeTable.validate) {
-          errLog('vxe.error.reqModule', ['Validator'])
-        }
-        if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xeTable.handleCellMousedownEvent) {
-          errLog('vxe.error.reqModule', ['Keyboard'])
-        }
-        if ((props.printConfig || props.importConfig || props.exportConfig) && !$xeTable.exportData) {
-          errLog('vxe.error.reqModule', ['Export'])
-        }
+        // if (props.editConfig && !$xeTable.insert) {
+        //   errLog('vxe.error.reqModule', ['Edit'])
+        // }
+        // if (props.editRules && !$xeTable.validate) {
+        //   errLog('vxe.error.reqModule', ['Validator'])
+        // }
+        // if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xeTable.handleCellMousedownEvent) {
+        //   errLog('vxe.error.reqModule', ['Keyboard'])
+        // }
+        // if ((props.printConfig || props.importConfig || props.exportConfig) && !$xeTable.exportData) {
+        //   errLog('vxe.error.reqModule', ['Export'])
+        // }
 
         Object.assign(scrollYStore, {
           startIndex: 0,

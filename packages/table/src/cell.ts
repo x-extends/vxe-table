@@ -1165,22 +1165,25 @@ export const Cell = {
     }
     let editIconVNs: VNode[] = []
     if (isEnableConf(editConfig)) {
+      const { showAsterisk, showIcon, icon } = editOpts
       editIconVNs = [
-        isRequired && editOpts.showAsterisk
+        isRequired && showAsterisk
           ? h('span', {
             class: 'vxe-cell--required-icon'
           }, [
             h('i')
           ])
           : renderEmptyElement($table),
-        isEnableConf(editRender) && editOpts.showIcon
+        isEnableConf(editRender) && showIcon
           ? h('span', {
             class: 'vxe-cell--edit-icon'
-          }, [
-            h('i', {
-              class: editOpts.icon || getIcon().TABLE_EDIT
-            })
-          ])
+          }, XEUtils.isFunction(icon)
+            ? getSlotVNs(icon({}))
+            : [
+                h('i', {
+                  class: icon || getIcon().TABLE_EDIT
+                })
+              ])
           : renderEmptyElement($table)
       ]
     }

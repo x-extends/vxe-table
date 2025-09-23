@@ -4,7 +4,11 @@
     <vxe-button @click="setMerge2">设置合并2</vxe-button>
     <vxe-button status="success" @click="saveMergeData">获取合并规则</vxe-button>
 
-    <vxe-grid  ref="gridRef" v-bind="gridOptions"></vxe-grid>
+    <vxe-grid  ref="gridRef" v-bind="gridOptions">
+      <template #form>
+        <div>3233</div>
+      </template>
+    </vxe-grid>
   </div>
 </template>
 
@@ -51,7 +55,7 @@ const gridOptions = reactive<VxeGridProps<RowVO>>({
       headerAlign: 'center',
       children: [
         { field: 'sex', title: 'Sex' },
-        { field: 'age', title: 'Age' }
+        { field: 'age', title: 'Age', filters: [{ label: 'v', value: '2' }] }
       ]
     },
     {
