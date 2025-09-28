@@ -3,10 +3,10 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getCellValue, setCellValue } from '../../table/src/util'
 import { getFuncText, formatText, isEmptyValue } from '../../ui/src/utils'
-import { getOnName, getModelEvent, getChangeEvent } from '../../ui/src/vn'
+import { getOnName, getModelEvent, getChangeEvent, hasInputType } from '../../ui/src/vn'
 import { errLog } from '../../ui/src/log'
 
-import type { VxeGlobalRendererHandles, VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
+import type { VxeGlobalRendererHandles, VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines } from '../../../types'
 
 const { getConfig, renderer, getI18n, getComponent } = VxeUI
 
@@ -51,9 +51,14 @@ function getOldComponent ({ name }: any) {
   return resolveComponent(getOldComponentName(name)) as ComponentOptions
 }
 
-function handleConfirmFilter (params: any, checked: any, option: any) {
-  const { $panel } = params
-  $panel.changeOption({}, checked, option)
+function updateFilterChangeOption (params: VxeGlobalRendererHandles.RenderTableFilterParams | VxeGlobalRendererHandles.RenderTableFloatingFilterParams, checked: boolean, option: VxeTableDefines.FilterOption) {
+  const { $table } = params
+  $table.updateFilterOptionStatus(option, checked)
+}
+
+function saveFilterEvent (params: VxeGlobalRendererHandles.RenderTableFilterParams | VxeGlobalRendererHandles.RenderTableFloatingFilterParams) {
+  const { $table, column } = params
+  $table.saveFilterByEvent(new Event('change'), column)
 }
 
 function getNativeAttrs (renderOpts: VxeGlobalRendererHandles.RenderTableCellOptions) {
@@ -164,6 +169,7 @@ function getNativeElementOns (renderOpts: VxeGlobalRendererHandles.RenderTableCe
 }
 
 const blurEvent = 'blur'
+const clearEvent = 'clear'
 
 /**
  * 组件事件处理
@@ -176,11 +182,12 @@ function getComponentOns (renderOpts: VxeGlobalRendererHandles.RenderTableCellOp
   model: (cellValue: any) => void
   change?: (...args: any[]) => void
   blur?: (...args: any[]) => void
+  clear?: (...args: any[]) => void
 }, eventOns?: Record<string, any>) {
   const { events } = renderOpts
   const modelEvent = getModelEvent(renderOpts)
   const changeEvent = getChangeEvent(renderOpts)
-  const { model: modelFunc, change: changeFunc, blur: blurFunc } = eFns || {}
+  const { model: modelFunc, change: changeFunc, blur: blurFunc, clear: clearFunc } = eFns || {}
   const ons: any = {}
   XEUtils.objectEach(events, (func, key: any) => {
     ons[getOnName(key)] = function (...args: any[]) {
@@ -211,6 +218,14 @@ function getComponentOns (renderOpts: VxeGlobalRendererHandles.RenderTableCellOp
       blurFunc(...args)
       if (events && events[blurEvent]) {
         events[blurEvent](params, ...args)
+      }
+    }
+  }
+  if (clearFunc) {
+    ons[getOnName(clearEvent)] = function (...args: any[]) {
+      clearFunc(...args)
+      if (events && events[clearEvent]) {
+        events[clearEvent](params, ...args)
       }
     }
   }
@@ -252,17 +267,64 @@ function getEditOns (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions
   })
 }
 
-function getFilterOns (renderOpts: VxeGlobalRendererHandles.RenderTableFilterOptions, params: any, option: any) {
+function getFilterOns (renderOpts: VxeGlobalRendererHandles.RenderTableFilterOptions, params: VxeGlobalRendererHandles.RenderTableFilterParams, option: VxeTableDefines.FilterOption) {
   return getComponentOns(renderOpts, params, {
     model (value: any) {
       // 处理 model 值双向绑定
       option.data = value
     },
     change () {
-      handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
+      updateFilterChangeOption(params, !isEmptyValue(option.data), option)
     },
     blur () {
-      handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
+      updateFilterChangeOption(params, !isEmptyValue(option.data), option)
+    }
+  })
+}
+
+function getFloatingFilterOns (renderOpts: VxeGlobalRendererHandles.RenderTableFilterOptions, params: VxeGlobalRendererHandles.RenderTableFloatingFilterParams, option: VxeTableDefines.FilterOption) {
+  const { $table, column } = params
+  if (hasInputType(renderOpts)) {
+    return getComponentOns(renderOpts, params, {
+      model (value: any) {
+        // 处理 model 值双向绑定
+        option.data = value
+      },
+      change () {
+        updateFilterChangeOption(params, !isEmptyValue(option.data), option)
+      },
+      clear () {
+        updateFilterChangeOption(params, !isEmptyValue(option.data), option)
+        saveFilterEvent(params)
+      },
+      blur () {
+        $table.saveFilterByEvent(new Event('change'), column)
+      }
+    }, renderOpts.name === 'VxeNumberInput'
+      ? {
+          [getOnName('plus-number')] () {
+            updateFilterChangeOption(params, !isEmptyValue(option.data), option)
+            saveFilterEvent(params)
+          },
+          [getOnName('minus-number')] () {
+            updateFilterChangeOption(params, !isEmptyValue(option.data), option)
+            saveFilterEvent(params)
+          }
+        }
+      : {})
+  }
+  return getComponentOns(renderOpts, params, {
+    model (value: any) {
+      // 处理 model 值双向绑定
+      option.data = value
+    },
+    clear () {
+      updateFilterChangeOption(params, !isEmptyValue(option.data), option)
+      $table.saveFilterByEvent(new Event('change'), column)
+    },
+    change () {
+      updateFilterChangeOption(params, !isEmptyValue(option.data), option)
+      $table.saveFilterByEvent(new Event('change'), column)
     }
   })
 }
@@ -312,10 +374,10 @@ function getNativeFilterOns (renderOpts: VxeGlobalRendererHandles.RenderTableFil
       }
     },
     change () {
-      handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
+      updateFilterChangeOption(params, !XEUtils.eqNull(option.data), option)
     },
     blur () {
-      handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
+      updateFilterChangeOption(params, !XEUtils.eqNull(option.data), option)
     }
   })
 }
@@ -458,11 +520,11 @@ function renderNativeOptions (options: any, renderOpts: VxeGlobalRendererHandles
   return []
 }
 
-function nativeFilterRender (renderOpts: VxeGlobalRendererHandles.RenderTableFilterOptions, params: any) {
+function nativeFilterRender (renderOpts: VxeGlobalRendererHandles.RenderTableFilterOptions, params: VxeGlobalRendererHandles.RenderTableFilterParams) {
   const { column } = params
   const { name } = renderOpts
   const attrs = getNativeAttrs(renderOpts)
-  return column.filters.map((option: any, oIndex: any) => {
+  return column.filters.map((option, oIndex) => {
     return h(`${name}`, {
       key: oIndex,
       class: `vxe-default-${name}`,
@@ -473,9 +535,9 @@ function nativeFilterRender (renderOpts: VxeGlobalRendererHandles.RenderTableFil
   })
 }
 
-function defaultFilterRender (renderOpts: VxeGlobalRendererHandles.RenderTableFilterOptions, params: any) {
+function defaultFilterRender (renderOpts: VxeGlobalRendererHandles.RenderTableFilterOptions, params: VxeGlobalRendererHandles.RenderTableFilterParams) {
   const { column } = params
-  return column.filters.map((option: any, oIndex: any) => {
+  return column.filters.map((option, oIndex) => {
     const optionValue = option.data
     return h(getDefaultComponent(renderOpts), {
       key: oIndex,
@@ -483,6 +545,23 @@ function defaultFilterRender (renderOpts: VxeGlobalRendererHandles.RenderTableFi
       ...getFilterOns(renderOpts, params, option)
     })
   })
+}
+
+function defaultFloatingFilterRender (renderOpts: VxeGlobalRendererHandles.RenderTableFloatingFilterOptions, params: VxeGlobalRendererHandles.RenderTableFloatingFilterParams) {
+  const { option } = params
+  const optionValue = option.data
+  return [
+    h(getDefaultComponent(renderOpts), {
+      ...getCellEditFilterProps(renderOpts, renderOpts, optionValue),
+      ...getFloatingFilterOns(renderOpts, params, option)
+    })
+  ]
+}
+
+function defaultFilterOptions () {
+  return [
+    { data: null }
+  ]
 }
 
 /**
@@ -744,7 +823,9 @@ renderer.mixin({
       return getCellLabelVNs(renderOpts, params, cellValue)
     },
     renderTableDefault: defaultEditRender,
+    createTableFilterOptions: defaultFilterOptions,
     renderTableFilter: defaultFilterRender,
+    renderTableFloatingFilter: defaultFloatingFilterRender,
     tableFilterDefaultMethod: handleInputFilterMethod
   },
   FormatNumberInput: {
@@ -797,7 +878,9 @@ renderer.mixin({
       return getFuncText(itemValue, 1)
     },
     renderTableDefault: defaultEditRender,
+    createTableFilterOptions: defaultFilterOptions,
     renderTableFilter: defaultFilterRender,
+    renderTableFloatingFilter: defaultFloatingFilterRender,
     tableFilterDefaultMethod: handleInputFilterMethod,
     tableExportMethod (params) {
       const { row, column } = params
@@ -820,7 +903,9 @@ renderer.mixin({
       return getCellLabelVNs(renderOpts, params, cellValue)
     },
     renderTableDefault: defaultEditRender,
+    createTableFilterOptions: defaultFilterOptions,
     renderTableFilter: defaultFilterRender,
+    renderTableFloatingFilter: defaultFloatingFilterRender,
     tableFilterDefaultMethod: handleFilterMethod
   },
   VxeDateRangePicker: {
@@ -924,6 +1009,7 @@ renderer.mixin({
     renderTableCell (renderOpts, params) {
       return getCellLabelVNs(renderOpts, params, getSelectCellValue(renderOpts, params))
     },
+    createTableFilterOptions: defaultFilterOptions,
     renderTableFilter (renderOpts, params) {
       const { column } = params
       const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
@@ -934,6 +1020,15 @@ renderer.mixin({
           ...getCellEditFilterProps(renderOpts, params, optionValue, { options, optionProps, optionGroups, optionGroupProps }),
           ...getFilterOns(renderOpts, params, option)
         })
+      })
+    },
+    renderTableFloatingFilter (renderOpts, params) {
+      const { option } = params
+      const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
+      const optionValue = option.data
+      return h(getDefaultComponent(renderOpts), {
+        ...getCellEditFilterProps(renderOpts, params, optionValue, { options, optionProps, optionGroups, optionGroupProps }),
+        ...getFloatingFilterOns(renderOpts, params, option)
       })
     },
     tableFilterDefaultMethod: handleFilterMethod,

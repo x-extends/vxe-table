@@ -318,7 +318,7 @@ function renderCellHandle (params: VxeTableDefines.CellRenderBodyParams & {
     case 'html':
       return isDeepCell ? Cell.renderDeepHTMLCell(params) : Cell.renderHTMLCell(params)
   }
-  if (isEnableConf(editConfig) && editRender) {
+  if (editConfig && isEnableConf(editOpts) && editRender) {
     return editOpts.mode === 'cell' ? (isDeepCell ? Cell.renderDeepCellEdit(params) : Cell.renderCellEdit(params)) : (isDeepCell ? Cell.renderDeepRowEdit(params) : Cell.renderRowEdit(params))
   }
   return isDeepCell ? Cell.renderDeepCell(params) : Cell.renderDefaultCell(params)
@@ -329,7 +329,9 @@ function renderHeaderHandle (params: VxeTableDefines.CellRenderHeaderParams & {
 }) {
   const { column, $table } = params
   const tableProps = $table.props
+  const { computeEditOpts } = $table.getComputeMaps()
   const { editConfig } = tableProps
+  const editOpts = computeEditOpts.value
   const { type, filters, sortable, editRender } = column
   switch (type) {
     case 'seq':
@@ -348,7 +350,7 @@ function renderHeaderHandle (params: VxeTableDefines.CellRenderHeaderParams & {
       }
       break
   }
-  if (editConfig && editRender) {
+  if (editConfig && isEnableConf(editOpts) && editRender) {
     return Cell.renderEditHeader(params)
   } else if (filters && sortable) {
     return Cell.renderSortAndFilterHeader(params)
@@ -406,11 +408,15 @@ export const Cell = {
   },
   renderDefaultCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, row, column } = params
+    const tableProps = $table.props
     const tableReactData = $table.reactData
     const tableInternalData = $table.internalData
     const { isRowGroupStatus } = tableReactData
+    const { computeEditOpts } = $table.getComputeMaps()
+    const { editConfig } = tableProps
+    const editOpts = computeEditOpts.value
     const { field, slots, editRender, cellRender, rowGroupNode, aggFunc } = column
-    const renderOpts = editRender || cellRender
+    const renderOpts = editConfig && isEnableConf(editOpts) && editRender ? editRender : cellRender
     const defaultSlot = slots ? slots.default : null
     const gcSlot = slots ? (slots.groupContent || slots['group-content']) : null
     let cellValue: string | number | null = ''

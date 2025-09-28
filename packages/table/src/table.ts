@@ -151,9 +151,7 @@ export default defineVxeComponent({
         isAllSelected: false,
         isIndeterminate: false,
         style: null,
-        options: [],
         column: null,
-        multiple: false,
         visible: false,
         maxHeight: null
       },
@@ -613,6 +611,10 @@ export default defineVxeComponent({
       return Object.assign({}, getConfig().table.filterConfig, props.filterConfig) as VxeTablePropTypes.FilterOpts
     })
 
+    const computeFloatingFilterOpts = computed(() => {
+      return Object.assign({}, getConfig().table.floatingFilterConfig, props.floatingFilterConfig)
+    })
+
     const computeMouseOpts = computed(() => {
       return Object.assign({}, getConfig().table.mouseConfig, props.mouseConfig) as VxeTablePropTypes.MouseOpts
     })
@@ -910,6 +912,7 @@ export default defineVxeComponent({
       computeEditOpts,
       computeSortOpts,
       computeFilterOpts,
+      computeFloatingFilterOpts,
       computeMouseOpts,
       computeAreaOpts,
       computeKeyboardOpts,
@@ -1785,7 +1788,7 @@ export default defineVxeComponent({
           fullColFieldData[field] = rest
         } else {
           if (storage && !type) {
-            errLog('vxe.error.reqSupportProp', ['storage', `${column.getTitle() || type || ''} -> field=?`])
+            errLog('vxe.error.reqSupportProp', ['storage', `[${type ? `type=${type}` : `title=${column.getTitle()}`}]field=?`])
           }
           if (columnOpts.drag && (isCrossDrag || isSelfToChildDrag)) {
             errLog('vxe.error.reqSupportProp', ['column-drag-config.isCrossDrag | column-drag-config.isSelfToChildDrag', `${column.getTitle() || type || ''} -> field=?`])
@@ -6372,7 +6375,7 @@ export default defineVxeComponent({
       setFilterByEvent (evnt, fieldOrColumn, options) {
         const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column && column.filters) {
-          column.filters = toFilters(options || [])
+          column.filters = toFilters(options || [], column.id)
           return $xeTable.handleColumnConfirmFilter(column, evnt)
         }
         return nextTick()
@@ -6386,13 +6389,13 @@ export default defineVxeComponent({
         const { column, visible } = filterStore
         filterStore.isAllSelected = false
         filterStore.isIndeterminate = false
-        filterStore.options = []
         filterStore.visible = false
         if (visible) {
+          const field = column ? column.field : null
           dispatchEvent('filter-visible', {
             column,
-            property: column.field,
-            field: column.field,
+            property: field,
+            field,
             filterList: () => $xeTable.getCheckedFilters(),
             visible: false
           }, null)
@@ -7457,7 +7460,7 @@ export default defineVxeComponent({
      * 全局按下事件处理
      */
     const handleGlobalMousedownEvent = (evnt: MouseEvent) => {
-      const { editStore, ctxMenuStore, filterStore, customStore } = reactData
+      const { editStore, ctxMenuStore, customStore } = reactData
       const { mouseConfig, editRules } = props
       const el = refElem.value
       const editOpts = computeEditOpts.value
@@ -7476,7 +7479,7 @@ export default defineVxeComponent({
           // 如果点击筛选容器
         } else {
           if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
-            tablePrivateMethods.preventEvent(evnt, 'event.clearFilter', filterStore.args, tableMethods.closeFilter)
+            tablePrivateMethods.preventEvent(evnt, 'event.clearFilter', internalData._currFilterParams, tableMethods.closeFilter)
           }
         }
       }
@@ -8972,24 +8975,25 @@ export default defineVxeComponent({
         reactData.reColumnFlag++
       },
       handleFilterOptions (column) {
-        const { filterStore } = reactData
-        const { filters, filterMultiple, filterRender } = column
-        const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
-        const frMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
-        filterStore.multiple = filterMultiple
-        filterStore.options = filters
-        filterStore.column = column
-        // 复原状态
-        filterStore.options.forEach((option: any) => {
-          const { _checked, checked } = option
-          option._checked = checked
-          if (!checked && _checked !== checked) {
-            if (frMethod) {
-              frMethod({ option, column, $table: $xeTable })
+        if (column) {
+          const { filterStore } = reactData
+          const { filterRender, filters } = column
+          const filterOptions = filters || []
+          const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+          const frMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
+          filterStore.column = column
+          // 复原状态
+          filterOptions.forEach((option: any) => {
+            const { _checked, checked } = option
+            option._checked = checked
+            if (!checked && _checked !== checked) {
+              if (frMethod) {
+                frMethod({ option, column, $table: $xeTable })
+              }
             }
-          }
-        })
-        $xeTable.checkFilterOptions()
+          })
+          $xeTable.checkFilterOptions()
+        }
       },
       preventEvent (evnt, type, args, next, end) {
         let evntList = interceptor.get(type)

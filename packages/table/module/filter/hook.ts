@@ -21,51 +21,15 @@ hooks.add('tableFilterModule', {
     const { refElem, refTableFilter } = $xeTable.getRefMaps()
     const { computeFilterOpts, computeMouseOpts } = $xeTable.getComputeMaps()
 
-    // 确认筛选
-    const handleFilterConfirmFilter = (evnt: Event | null) => {
-      const { filterStore } = reactData
-      filterStore.options.forEach((option: any) => {
-        option.checked = option._checked
-      })
-      $xeTable.confirmFilterEvent(evnt)
-    }
-
-    // （单选）筛选发生改变
-    const changeRadioOption = (evnt: Event, checked: boolean, item: any) => {
-      const { filterStore } = reactData
-      filterStore.options.forEach((option: any) => {
-        option._checked = false
-      })
-      item._checked = checked
-      $xeTable.checkFilterOptions()
-      handleFilterConfirmFilter(evnt)
-    }
-
-    // （多选）筛选发生改变
-    const changeMultipleOption = (evnt: Event, checked: boolean, item: any) => {
-      item._checked = checked
-      $xeTable.checkFilterOptions()
-    }
-
-    /**
-     * 重置筛选
-     * 当筛选面板中的重置按钮被按下时触发
-     * @param {Event} evnt 事件
-     */
-    const handleFilterResetFilter = (evnt: Event | null) => {
-      const { filterStore } = reactData
-      $xeTable.handleClearFilter(filterStore.column)
-      $xeTable.confirmFilterEvent(evnt)
-      if (evnt) {
-        $xeTable.dispatchEvent('clear-filter', { filterList: [] }, evnt)
-      }
-    }
-
     const filterPrivateMethods: TableFilterPrivateMethods = {
       checkFilterOptions () {
         const { filterStore } = reactData
-        filterStore.isAllSelected = filterStore.options.every((item: any) => item._checked)
-        filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some((item: any) => item._checked)
+        const { column } = filterStore
+        if (column) {
+          const filterOptions = (column.filters || []) as VxeTableDefines.FilterOption[]
+          filterStore.isAllSelected = filterOptions.every((item) => item._checked)
+          filterStore.isIndeterminate = !filterStore.isAllSelected && filterOptions.some((item) => item._checked)
+        }
       },
       /**
        * 点击筛选事件
@@ -177,10 +141,11 @@ hooks.add('tableFilterModule', {
         const { scrollXLoad: oldScrollXLoad, scrollYLoad: oldScrollYLoad } = reactData
         const filterOpts = computeFilterOpts.value
         const mouseOpts = computeMouseOpts.value
-        const { field } = column
+        const { field, filters } = column
+        const filterOptions = filters || []
         const values: any[] = []
         const datas: any[] = []
-        column.filters.forEach((item: any) => {
+        filterOptions.forEach((item) => {
           if (item.checked) {
             values.push(item.value)
             datas.push(item.data)
@@ -222,26 +187,74 @@ hooks.add('tableFilterModule', {
       /**
        * 确认筛选
        * 当筛选面板中的确定按钮被按下时触发
-       * @param {Event} evnt 事件
        */
-      confirmFilterEvent (evnt: Event) {
-        const { filterStore } = reactData
-        const { column } = filterStore
-        $xeTable.handleColumnConfirmFilter(column, evnt)
-      },
-      handleFilterChangeRadioOption: changeRadioOption,
-      handleFilterChangeMultipleOption: changeMultipleOption,
-      // 筛选发生改变
-      handleFilterChangeOption (evnt: Event, checked: boolean, item: any) {
-        const { filterStore } = reactData
-        if (filterStore.multiple) {
-          changeMultipleOption(evnt, checked, item)
-        } else {
-          changeRadioOption(evnt, checked, item)
+      confirmFilterEvent (evnt, column) {
+        if (column) {
+          $xeTable.handleColumnConfirmFilter(column, evnt)
         }
       },
-      handleFilterConfirmFilter,
-      handleFilterResetFilter
+      // （单选）筛选发生改变
+      handleFilterChangeRadioOption (evnt, checked, item) {
+        const { filterStore } = reactData
+        const { column } = filterStore
+        if (column) {
+          const filterOptions = (column.filters || []) as VxeTableDefines.FilterOption[]
+          filterOptions.forEach((option) => {
+            option._checked = false
+          })
+          item._checked = checked
+          $xeTable.checkFilterOptions()
+          $xeTable.handleFilterConfirmFilter(evnt, column)
+        }
+      },
+      // （多选）筛选发生改变
+      handleFilterChangeMultipleOption (evnt, checked, item) {
+        item._checked = checked
+        $xeTable.checkFilterOptions()
+      },
+      // 筛选发生改变
+      handleFilterChangeOption (evnt, checked, item) {
+        const { filterStore } = reactData
+        const { fullColumnIdData } = internalData
+        let column = filterStore.column
+        if (!column) {
+          const colRest = fullColumnIdData[item._colId]
+          if (colRest) {
+            column = colRest.column
+            filterStore.column = column
+          }
+        }
+        if (column) {
+          if (column.filterMultiple) {
+            $xeTable.handleFilterChangeMultipleOption(evnt, checked, item)
+          } else {
+            $xeTable.handleFilterChangeRadioOption(evnt, checked, item)
+          }
+        }
+      },
+      // 确认筛选
+      handleFilterConfirmFilter (evnt, column) {
+        if (column) {
+          const filterOptions = (column.filters || []) as VxeTableDefines.FilterOption[]
+          filterOptions.forEach((option) => {
+            option.checked = option._checked
+          })
+          $xeTable.confirmFilterEvent(evnt, column)
+        }
+      },
+      /**
+       * 重置筛选
+       * 当筛选面板中的重置按钮被按下时触发
+       */
+      handleFilterResetFilter (evnt: Event, column) {
+        if (column) {
+          $xeTable.handleClearFilter(column)
+          $xeTable.confirmFilterEvent(evnt, column)
+          if (evnt) {
+            $xeTable.dispatchEvent('clear-filter', { filterList: [] }, evnt)
+          }
+        }
+      }
     }
 
     const filterMethods: TableFilterMethods = {
@@ -273,7 +286,7 @@ hooks.add('tableFilterModule', {
         const { filterStore } = reactData
         const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column && column.filters) {
-          column.filters = toFilters(options || [])
+          column.filters = toFilters(options || [], column.id)
           if (isUpdate) {
             return $xeTable.handleColumnConfirmFilter(column, null)
           } else {
@@ -318,31 +331,64 @@ hooks.add('tableFilterModule', {
         }
         return nextTick()
       },
+      saveFilter (fieldOrColumn) {
+        if (fieldOrColumn) {
+          const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+          $xeTable.handleFilterConfirmFilter(null, column)
+        }
+        return nextTick()
+      },
+      saveFilterByEvent (evnt, fieldOrColumn) {
+        if (fieldOrColumn) {
+          const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+          $xeTable.handleFilterConfirmFilter(evnt, column)
+        }
+        return nextTick()
+      },
+      resetFilter (fieldOrColumn) {
+        if (fieldOrColumn) {
+          const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+          $xeTable.handleFilterResetFilter(null, column)
+        }
+        return nextTick()
+      },
+      resetFilterByEvent (evnt, fieldOrColumn) {
+        if (fieldOrColumn) {
+          const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+          $xeTable.handleFilterResetFilter(evnt, column)
+        }
+        return nextTick()
+      },
       saveFilterPanel () {
-        handleFilterConfirmFilter(null)
+        const { filterStore } = reactData
+        $xeTable.handleFilterConfirmFilter(null, filterStore.column || null)
         return nextTick()
       },
       saveFilterPanelByEvent (evnt) {
-        handleFilterConfirmFilter(evnt)
+        const { filterStore } = reactData
+        $xeTable.handleFilterConfirmFilter(evnt, filterStore.column || null)
         return nextTick()
       },
       resetFilterPanel () {
-        handleFilterResetFilter(null)
+        const { filterStore } = reactData
+        $xeTable.handleFilterResetFilter(null, filterStore.column || null)
         return nextTick()
       },
       resetFilterPanelByEvent (evnt) {
-        handleFilterResetFilter(evnt)
+        const { filterStore } = reactData
+        $xeTable.handleFilterResetFilter(evnt, filterStore.column || null)
         return nextTick()
       },
       getCheckedFilters () {
         const { tableFullColumn } = internalData
-        const filterList: any[] = []
+        const filterList: VxeTableDefines.FilterCheckedParams[] = []
         tableFullColumn.forEach((column) => {
           const { field, filters } = column
+          const filterOptions = filters || []
           const valueList: any[] = []
           const dataList: any[] = []
-          if (filters && filters.length) {
-            filters.forEach((item) => {
+          if (filterOptions) {
+            filterOptions.forEach((item) => {
               if (item.checked) {
                 valueList.push(item.value)
                 dataList.push(item.data)

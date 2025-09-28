@@ -408,11 +408,14 @@ function getElementMarginAndWidth (elem: HTMLElement | null) {
   return 0
 }
 
-export function toFilters (filters: any) {
-  if (filters && XEUtils.isArray(filters)) {
-    return filters.map(({ label, value, data, resetValue, checked }) => {
-      return { label, value, data, resetValue, checked: !!checked, _checked: !!checked }
-    })
+export function toFilters (filters: any, colid?: string) {
+  if (filters) {
+    if (XEUtils.isArray(filters)) {
+      return filters.map(({ label, value, data, resetValue, checked }) => {
+        return { label, value, data, resetValue, checked: !!checked, _checked: !!checked, _colId: colid }
+      })
+    }
+    return []
   }
   return filters
 }

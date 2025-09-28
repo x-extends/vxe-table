@@ -41,7 +41,10 @@
   box-shadow: var(--vxe-ui-base-popup-box-shadow);
   z-index: 10;
   &:not(.is--multiple) {
-    text-align: center;
+    .vxe-table--filter-header,
+    .vxe-table--filter-body {
+      text-align: center;
+    }
   }
   &.is--active {
     display: block;

@@ -1,20 +1,13 @@
 <template>
   <div>
-    <vxe-button @click="setMerge1">设置合并1</vxe-button>
-    <vxe-button @click="setMerge2">设置合并2</vxe-button>
-    <vxe-button status="success" @click="saveMergeData">获取合并规则</vxe-button>
-
-    <vxe-grid  ref="gridRef" v-bind="gridOptions">
-      <template #form>
-        <div>3233</div>
-      </template>
-    </vxe-grid>
+    显示图标按钮：<vxe-switch v-model="filterConfig.showIcon"></vxe-switch>
+    <vxe-grid v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import type { VxeGridInstance, VxeGridProps } from '../../../types'
+import { reactive } from 'vue'
+import { VxeGridProps, VxeTablePropTypes, VxeColumnPropTypes } from '../../../types'
 
 interface RowVO {
   id: number
@@ -22,104 +15,48 @@ interface RowVO {
   role: string
   sex: string
   age: number
-  attr3: number
-  attr4: number
-  attr5: number
-  attr6: number
-  address: string
+  date: string
 }
 
-const gridRef = ref<VxeGridInstance<RowVO>>()
+const filterConfig = reactive<VxeTablePropTypes.FilterConfig<RowVO>>({
+  showIcon: true
+})
 
-const gridOptions = reactive<VxeGridProps<RowVO>>({
-  border: true,
-  showCustomHeader: true,
-  height: 400,
-  // columnConfig: {
-  //   resizable: true
-  // },
-  mergeHeaderCells: [
-    { row: 0, col: 0, rowspan: 2, colspan: 1 },
-    { row: 0, col: 1, rowspan: 2, colspan: 1 },
-    { row: 0, col: 2, rowspan: 1, colspan: 2 },
-    { row: 0, col: 4, rowspan: 1, colspan: 2 },
-    { row: 1, col: 6, rowspan: 1, colspan: 2 },
-    { row: 0, col: 8, rowspan: 2, colspan: 1 }
-  ],
-  columns: [
-    { type: 'seq', width: 70 },
-    { field: 'name', title: 'Name' },
-    {
-      title: 'Group1',
-      field: 'group1',
-      headerAlign: 'center',
-      children: [
-        { field: 'sex', title: 'Sex' },
-        { field: 'age', title: 'Age', filters: [{ label: 'v', value: '2' }] }
-      ]
-    },
-    {
-      field: 'group3',
-      title: 'Group3',
-      headerAlign: 'center',
-      children: [
-        { field: 'attr5', title: 'Attr5' },
-        { field: 'attr6', title: 'Attr6' }
-      ]
-    },
-    {
-      field: 'group6',
-      title: 'Attr3',
-      children: [
-        { field: 'attr3', title: 'Group8', headerAlign: 'center' }
-      ]
-    },
-    {
-      field: 'group8',
-      title: 'Attr4',
-      children: [
-        { field: 'attr4', title: 'Attr4' }
-      ]
-    },
-    { field: 'address', title: 'Address' }
-  ],
-  data: [
-    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 46, attr3: 22, attr4: 100, attr5: 66, attr6: 86, address: 'Guangzhou' },
-    { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 0, attr3: 0, attr4: 0, attr5: 0, attr6: 0, address: 'Shenzheng' },
-    { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 0, attr3: 22, attr4: 0, attr5: 0, attr6: 0, address: 'Shanghai' },
-    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 0, attr3: 0, attr4: 0, attr5: 0, attr6: 0, address: 'Guangzhou' },
-    { id: 10005, name: 'Test5', role: 'Test', sex: 'Women', age: 0, attr3: 0, attr4: 0, attr5: 0, attr6: 0, address: 'Shenzheng' },
-    { id: 10006, name: 'Test6', role: 'Develop', sex: 'Man', age: 0, attr3: 0, attr4: 0, attr5: 0, attr6: 0, address: 'Guangzhou' },
-    { id: 10007, name: 'Test7', role: 'Designer', sex: 'Women', age: 0, attr3: 0, attr4: 0, attr5: 0, attr6: 0, address: 'Guangzhou' },
-    { id: 10008, name: 'Test8', role: 'Test', sex: 'Man', age: 0, attr3: 0, attr4: 0, attr5: 0, attr6: 0, address: 'Guangzhou' }
+const sexFilterRender = reactive<VxeColumnPropTypes.FilterRender>({
+  name: 'VxeSelect',
+  props: {
+    clearable: true
+  },
+  options: [
+    { label: 'Man', value: 'Man' },
+    { label: 'Woman', value: 'Woman' }
   ]
 })
 
-const setMerge1 = () => {
-  gridOptions.mergeHeaderCells = [
-    { row: 0, col: 0, rowspan: 2, colspan: 1 },
-    { row: 0, col: 1, rowspan: 2, colspan: 1 },
-    { row: 0, col: 2, rowspan: 1, colspan: 2 },
-    { row: 0, col: 4, rowspan: 1, colspan: 2 },
-    { row: 1, col: 6, rowspan: 1, colspan: 2 },
-    { row: 0, col: 8, rowspan: 2, colspan: 1 }
+const gridOptions = reactive<VxeGridProps<RowVO>>({
+  border: true,
+  height: 400,
+  filterConfig,
+  floatingFilterConfig: {
+    enabled: true
+  },
+  columns: [
+    { field: 'name', title: 'Name', filterRender: { name: 'VxeInput', props: { clearable: true } } },
+    { field: 'sex', title: 'Sex', filterRender: sexFilterRender },
+    { field: 'age', title: 'Age', filterRender: { name: 'VxeNumberInput', props: { clearable: true } } },
+    { field: 'date', title: 'Date', filterRender: { name: 'VxeDatePicker', props: { clearable: true } } }
+  ],
+  data: [
+    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Woman', age: 28, date: '2025-10-01' },
+    { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', age: 22, date: '2025-10-02' },
+    { id: 10003, name: 'Test3', role: 'PM', sex: 'Woman', age: 32, date: '2025-10-05' },
+    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Man', age: 54, date: '2025-10-14' },
+    { id: 10005, name: 'Test5', role: 'Develop', sex: 'Man', age: 44, date: '2025-09-01' },
+    { id: 10006, name: 'Test6', role: 'Develop', sex: 'Woman', age: 24, date: '2025-08-15' },
+    { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 52, date: '2025-11-12' },
+    { id: 10008, name: 'Test8', role: 'PM', sex: 'Woman', age: 34, date: '2025-11-27' },
+    { id: 10009, name: 'Test9', role: 'PM', sex: 'Man', age: 24, date: '2025-10-18' },
+    { id: 100010, name: 'Test10', role: 'Develop', sex: 'Woman', age: 24, date: '2025-10-25' }
   ]
-}
-
-const setMerge2 = () => {
-  gridOptions.mergeHeaderCells = [
-    { row: 0, col: 0, rowspan: 2, colspan: 1 },
-    { row: 0, col: 1, rowspan: 2, colspan: 1 },
-    { row: 0, col: 2, rowspan: 1, colspan: 4 },
-    { row: 1, col: 6, rowspan: 1, colspan: 3 }
-  ]
-}
-
-const saveMergeData = () => {
-  const $grid = gridRef.value
-  if ($grid) {
-    const mergeList = $grid.getMergeHeaderCells()
-    console.log(mergeList)
-  }
-}
+})
 </script>
