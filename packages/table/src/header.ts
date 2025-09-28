@@ -1,14 +1,15 @@
 import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { getClass } from '../../ui/src/utils'
+import { isEnableConf, getClass } from '../../ui/src/utils'
 import { getCalcHeight, convertHeaderColumnToRows, convertHeaderToGridRows } from './util'
+import { getSlotVNs } from '../../ui/src/vn'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes, TableReactData, TableInternalData, VxeComponentStyleType } from '../../../types'
 
 const { renderer, renderEmptyElement } = VxeUI
 
-const cellType = 'header'
+const renderType = 'header'
 
 function getColumnFirstChild (column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
   const { children } = column
@@ -86,7 +87,7 @@ function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMod
       _columnIndex,
       firstFilterOption,
       fixed: fixedType,
-      type: cellType,
+      type: renderType,
       isHidden: fixedHiddenColumn,
       hasFilter
     }
@@ -227,18 +228,139 @@ function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMod
   })
 }
 
+function renderFilterRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, cols: VxeTableDefines.ColumnInfo[]) {
+  const props = _vm
+  const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
+  const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
+  const tableProps = $xeTable
+  const tableReactData = $xeTable as unknown as TableReactData
+  const tableInternalData = $xeTable as unknown as TableInternalData
+
+  const { fixedType } = props
+  const { showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign } = tableProps
+  const { currentColumn, overflowX } = tableReactData
+  const { fullColumnIdData } = tableInternalData
+  const cellOpts = $xeTable.computeCellOpts
+  const defaultRowHeight = $xeTable.computeDefaultRowHeight
+  const headerCellOpts = $xeTable.computeHeaderCellOpts
+  const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
+
+  return cols.map((column, $columnIndex) => {
+    const { type, showHeaderOverflow, headerAlign, align, filters, editRender, cellRender, floatingFilters, filterRender, slots } = column
+    const colid = column.id
+    const colRest = fullColumnIdData[colid] || {}
+    const renderOpts = editRender || cellRender
+    const compConf = renderOpts ? renderer.get(renderOpts.name) : null
+    const flCompConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+    const rtFloatingFilter = flCompConf ? flCompConf.renderTableFloatingFilter : null
+    const flSlot = slots ? (slots.floatingFilter || slots['floating-filter']) : null
+    const fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
+    const isPadding = XEUtils.isBoolean(headerCellOpts.padding) ? headerCellOpts.padding : cellOpts.padding
+    const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+    const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
+    const showEllipsis = headOverflow === 'ellipsis'
+    const showTitle = headOverflow === 'title'
+    const showTooltip = headOverflow === true || headOverflow === 'tooltip'
+    const hasEllipsis = showTitle || showTooltip || showEllipsis
+    let hasFilter = false
+    let firstFilterOption: VxeTableDefines.FilterOption | null = null
+    if (filters) {
+      firstFilterOption = filters[0] as VxeTableDefines.FilterOption
+      hasFilter = filters.some((item) => item.checked)
+    }
+    const columnIndex = colRest.index
+    const _columnIndex = colRest._index
+    const cellParams: VxeTableDefines.CellFloatingFilterParams & {
+      $table: VxeTableConstructor & VxeTablePrivateMethods
+    } = {
+      $table: $xeTable,
+      $grid: $xeGrid,
+      $gantt: $xeGantt,
+      column: column,
+      columnIndex,
+      $columnIndex,
+      _columnIndex,
+      option: firstFilterOption,
+      fixed: fixedType,
+      type: renderType,
+      isHidden: fixedHiddenColumn,
+      hasFilter
+    }
+    const thAttrs: Record<string, string | number | null> = {
+      colid
+    }
+
+    const isLastColumn = $columnIndex === cols.length - 1
+    const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
+
+    const tcStyle: Record<string, string> = {}
+    if (hasEllipsis) {
+      tcStyle.height = `${currCellHeight}px`
+    } else {
+      tcStyle.minHeight = `${currCellHeight}px`
+    }
+
+    return h('th', {
+      class: ['vxe-table--column vxe-header--column', colid, fixedHiddenColumn ? 'fixed--hidden' : 'fixed--visible', {
+        [`col--${headAlign}`]: headAlign,
+        [`col--${type}`]: type,
+        'col--last': isLastColumn,
+        'col--fixed': column.fixed,
+        'col--ellipsis': hasEllipsis,
+        'fixed--width': !isAutoCellWidth,
+        'is--padding': isPadding,
+        'is--sortable': column.sortable,
+        'col--current': currentColumn === column
+      }
+      ],
+      key: colid,
+      attrs: thAttrs
+    }, [
+      h('div', {
+        class: ['vxe-cell', {
+          'c--title': showTitle,
+          'c--tooltip': showTooltip,
+          'c--ellipsis': showEllipsis
+        }],
+        style: tcStyle
+      }, isOptimizeMode && fixedHiddenColumn && !floatingFilters
+        ? []
+        : [
+            h('div', {
+              attrs: {
+                colid
+              },
+              class: 'vxe-cell--wrapper vxe-header-cell--wrapper'
+            }, flSlot
+              ? $xeTable.callSlot(flSlot, cellParams, h)
+              : (rtFloatingFilter && firstFilterOption
+                  ? getSlotVNs(rtFloatingFilter.call($xeTable, h, filterRender, {
+                    $table: $xeTable,
+                    option: firstFilterOption,
+                    column: column as any,
+                    columnIndex,
+                    $columnIndex
+                  }))
+                  : []))
+          ])
+    ])
+  })
+}
+
 function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][]) {
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
+  const tableInternalData = $xeTable as unknown as TableInternalData
 
-  const { fixedType } = props
+  const { fixedType, fixedColumn } = props
 
   const { headerRowClassName, headerRowStyle } = tableProps
-
-  return headerGroups.map((cols: any, $rowIndex: any) => {
-    const params = { $table: $xeTable, $rowIndex, fixed: fixedType, type: cellType }
-
+  const { visibleColumn } = tableInternalData
+  const floatingFilterOpts = $xeTable.computeFloatingFilterOpts
+  const rowVNs = headerGroups.map((cols: any, $rowIndex: any) => {
+    const params = { $table: $xeTable, $rowIndex, fixed: fixedType, type: renderType }
     return h('tr', {
       key: $rowIndex,
       class: [
@@ -248,6 +370,19 @@ function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMo
       style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) as VxeComponentStyleType : undefined
     }, renderRows(h, _vm, isGroup, isOptimizeMode, headerGroups, $rowIndex, cols))
   })
+
+  if (floatingFilterOpts.enabled) {
+    rowVNs.push(
+      h('tr', {
+        key: 'ff',
+        class: [
+          'vxe-header--row'
+        ]
+      }, renderFilterRows(h, _vm, isOptimizeMode, isOptimizeMode && fixedType ? fixedColumn as VxeTableDefines.ColumnInfo[] : visibleColumn))
+    )
+  }
+
+  return rowVNs
 }
 
 export default {

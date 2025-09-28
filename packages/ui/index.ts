@@ -157,6 +157,9 @@ VxeUI.setConfig({
       multiple: true,
       showIcon: true
     },
+    floatingFilterConfig: {
+      // enabled: false
+    },
     aggregateConfig: {
       padding: true,
       rowField: 'id',

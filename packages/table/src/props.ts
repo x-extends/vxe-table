@@ -229,6 +229,8 @@ export const tableProps = {
   sortConfig: Object as PropType<VxeTablePropTypes.SortConfig>,
   // 筛选配置项
   filterConfig: Object as PropType<VxeTablePropTypes.FilterConfig>,
+  // 浮动筛选配置项
+  floatingFilterConfig: Object as PropType<VxeTablePropTypes.FloatingFilterConfig>,
   // 单选框配置
   radioConfig: Object as PropType<VxeTablePropTypes.RadioConfig>,
   // 复选框配置项

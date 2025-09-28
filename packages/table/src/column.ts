@@ -94,13 +94,15 @@ export const columnProps = {
     default: true
   },
   // 自定义筛选方法
-  filterMethod: Function,
+  filterMethod: Function as PropType<VxeColumnPropTypes.FilterMethod<any>>,
   // 筛选重置方法
-  filterResetMethod: Function,
+  filterResetMethod: Function as PropType<VxeColumnPropTypes.FilterResetMethod>,
   // 筛选复原方法
-  filterRecoverMethod: Function,
+  filterRecoverMethod: Function as PropType<VxeColumnPropTypes.FilterRecoverMethod>,
   // 筛选模板配置项
-  filterRender: Object,
+  filterRender: Object as PropType<VxeColumnPropTypes.FilterRender>,
+  // 是否显示浮动筛选
+  floatingFilters: Object as PropType<VxeColumnPropTypes.FloatingFilters>,
   // 设置为分组节点
   rowGroupNode: Boolean as PropType<VxeColumnPropTypes.RowGroupNode>,
   // 设置为树节点
@@ -111,7 +113,8 @@ export const columnProps = {
   rowResize: Boolean as PropType<VxeColumnPropTypes.RowResize>,
   // 是否可视
   visible: {
-    type: Boolean, default: null
+    type: Boolean as PropType<VxeColumnPropTypes.Visible>,
+    default: null
   },
   // 表头单元格数据导出方法
   headerExportMethod: Function,

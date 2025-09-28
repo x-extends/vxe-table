@@ -602,9 +602,7 @@ export default {
         isAllSelected: false,
         isIndeterminate: false,
         style: null,
-        options: [],
         column: null,
-        multiple: false,
         visible: false,
         maxHeight: null
       },
@@ -1124,7 +1122,16 @@ export default {
       return this.computeFilterOpts
     },
     computeFilterOpts () {
-      return Object.assign({}, getConfig().table.filterConfig, this.filterConfig)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.filterConfig, props.filterConfig)
+    },
+    computeFloatingFilterOpts () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.floatingFilterConfig, props.floatingFilterConfig)
     },
     mouseOpts () {
       return this.computeMouseOpts

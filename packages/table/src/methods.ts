@@ -315,7 +315,7 @@ function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
       fullColFieldData[field] = rest
     } else {
       if (storage && !type) {
-        errLog('vxe.error.reqSupportProp', ['storage', `${column.getTitle() || type || ''} -> field=?`])
+        errLog('vxe.error.reqSupportProp', ['storage', `[${type ? `type=${type}` : `title=${column.getTitle()}`}]field=?`])
       }
       if (columnOpts.drag && (isCrossDrag || isSelfToChildDrag)) {
         errLog('vxe.error.reqSupportProp', ['column-drag-config.isCrossDrag | column-drag-config.isSelfToChildDrag', `${column.getTitle() || type || ''} -> field=?`])
@@ -5811,24 +5811,25 @@ const Methods = {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
 
-    const { filterStore } = reactData
-    const { filters, filterMultiple, filterRender } = column
-    const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
-    const frMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
-    filterStore.multiple = filterMultiple
-    filterStore.options = filters
-    filterStore.column = column
-    // 复原状态
-    filterStore.options.forEach((option: any) => {
-      const { _checked, checked } = option
-      option._checked = checked
-      if (!checked && _checked !== checked) {
-        if (frMethod) {
-          frMethod({ option, column, $table: $xeTable })
+    if (column) {
+      const { filterStore } = reactData
+      const { filterRender, filters } = column
+      const filterOptions = filters || []
+      const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+      const frMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
+      filterStore.column = column
+      // 复原状态
+      filterOptions.forEach((option: any) => {
+        const { _checked, checked } = option
+        option._checked = checked
+        if (!checked && _checked !== checked) {
+          if (frMethod) {
+            frMethod({ option, column, $table: $xeTable })
+          }
         }
-      }
-    })
-    $xeTable.checkFilterOptions()
+      })
+      $xeTable.checkFilterOptions()
+    }
   },
   /**
    * 刷新列配置
@@ -6510,25 +6511,33 @@ const Methods = {
    */
   handleGlobalMousedownEvent (evnt: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
     const $xeGrid = $xeTable.$xeGrid
     const $xeGantt = $xeTable.$xeGantt
     const $xeGGWrapper = $xeGrid || $xeGantt
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { $el, $refs, $toolbar, mouseConfig, editStore, ctxMenuStore, editRules, editOpts, validOpts, areaOpts, filterStore, customStore, getRowNode } = this
+    const { editStore, ctxMenuStore, customStore } = reactData
+    const { mouseConfig, editRules } = props
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    const editOpts = $xeTable.computeEditOpts
+    const validOpts = $xeTable.computeValidOpts
+    const areaOpts = $xeTable.computeAreaOpts
     const { actived } = editStore
-    const tableFilter = $refs.refTableFilter
-    const tableMenu = $refs.refTableMenu
-    const tableCustom = $refs.refTableCustom
-    const validTooltip = $refs.refValidTooltip
+    const tableFilter = $xeTable.$refs.refTableFilter as Vue
+    const tableMenu = $xeTable.$refs.refTableMenu as Vue
+    const tableCustom = $xeTable.$refs.refTableCustom as Vue
+    const validTooltip = $xeTable.$refs.refValidTooltip as Vue
     // 筛选
     if (tableFilter) {
-      if (getEventTargetNode(evnt, $el, 'vxe-cell--filter').flag) {
+      if (getEventTargetNode(evnt, el, 'vxe-cell--filter').flag) {
         // 如果点击了筛选按钮
       } else if (getEventTargetNode(evnt, tableFilter.$el).flag) {
         // 如果点击筛选容器
       } else {
         if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
-          this.preventEvent(evnt, 'event.clearFilter', filterStore.args, this.closeFilter)
+          this.preventEvent(evnt, 'event.clearFilter', internalData._currFilterParams, this.closeFilter)
         }
       }
     }
@@ -6559,20 +6568,21 @@ const Methods = {
               this.preventEvent(evnt, 'event.clearEdit', actived.args, () => {
                 let isClear
                 if (editOpts.mode === 'row') {
-                  const rowNode = getEventTargetNode(evnt, $el, 'vxe-body--row')
+                  const rowTargetNode = getEventTargetNode(evnt, el, 'vxe-body--row')
+                  const rowNodeRest = rowTargetNode.flag ? $xeTable.getRowNode(rowTargetNode.targetElem) : null
                   // row 方式，如果点击了不同行
-                  isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== actived.args.row : false
+                  isClear = rowNodeRest ? !$xeTable.eqRow(rowNodeRest.item, actived.args.row) : false
                 } else {
                   // cell 方式，如果是非编辑列
-                  isClear = !getEventTargetNode(evnt, $el, 'col--edit').flag
+                  isClear = !getEventTargetNode(evnt, el, 'col--edit').flag
                 }
                 // 如果点击表头行，则清除激活状态
                 if (!isClear) {
-                  isClear = getEventTargetNode(evnt, $el, 'vxe-header--row').flag
+                  isClear = getEventTargetNode(evnt, el, 'vxe-header--row').flag
                 }
                 // 如果点击表尾行，则清除激活状态
                 if (!isClear) {
-                  isClear = getEventTargetNode(evnt, $el, 'vxe-footer--row').flag
+                  isClear = getEventTargetNode(evnt, el, 'vxe-footer--row').flag
                 }
                 // 如果固定了高度且点击了行之外的空白处，则清除激活状态
                 if (!isClear && this.height && !this.overflowY) {
@@ -6584,7 +6594,7 @@ const Methods = {
                 if (
                   isClear ||
                     // 如果点击了当前表格之外
-                    !getEventTargetNode(evnt, $el).flag
+                    !getEventTargetNode(evnt, el).flag
                 ) {
                   setTimeout(() => {
                     $xeTable.handleClearEdit(evnt).then(() => {
@@ -6601,7 +6611,7 @@ const Methods = {
         }
       }
     } else if (mouseConfig) {
-      if (!getEventTargetNode(evnt, $el).flag && !($xeGGWrapper && getEventTargetNode(evnt, $xeGGWrapper.$el).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.$el).flag) && !($toolbar && getEventTargetNode(evnt, $toolbar.$el).flag)) {
+      if (!getEventTargetNode(evnt, el).flag && !($xeGGWrapper && getEventTargetNode(evnt, $xeGGWrapper.$el).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.$el).flag) && !(this.$toolbar && getEventTargetNode(evnt, this.$toolbar.$el).flag)) {
         if ($xeTable.clearSelected) {
           $xeTable.clearSelected()
         }
@@ -9962,7 +9972,7 @@ const Methods = {
 
     const column = handleFieldOrColumn($xeTable, fieldOrColumn)
     if (column && column.filters) {
-      column.filters = toFilters(options || [])
+      column.filters = toFilters(options || [], column.id)
       return $xeTable.handleColumnConfirmFilter(column, evnt)
     }
     return $xeTable.$nextTick()
@@ -9979,13 +9989,13 @@ const Methods = {
     const { column, visible } = filterStore
     filterStore.isAllSelected = false
     filterStore.isIndeterminate = false
-    filterStore.options = []
     filterStore.visible = false
     if (visible) {
+      const field = column ? column.field : null
       $xeTable.dispatchEvent('filter-visible', {
         column,
-        field: column.field,
-        property: column.field,
+        property: field,
+        field,
         filterList: () => $xeTable.getCheckedFilters(),
         visible: false
       }, null)
@@ -12048,7 +12058,7 @@ const Methods = {
 } as any
 
 // Module methods
-const funcs = 'setFilter,openFilter,clearFilter,saveFilterPanel,saveFilterPanelByEvent,resetFilterPanel,resetFilterPanelByEvent,getCheckedFilters,updateFilterOptionStatus,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFNR,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,insertNextAt,insertChild,insertChildAt,insertChildNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getEditCell,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,fullValidateField,validateField,openExport,closeExport,openPrint,closePrint,getPrintHtml,exportData,openImport,closeImport,importData,saveFile,readFile,importByFile,print,getCustomVisible,openCustom,closeCustom,toggleCustom,saveCustom,cancelCustom,resetCustom,toggleCustomAllCheckbox,setCustomAllCheckbox'.split(',')
+const funcs = 'setFilter,openFilter,clearFilter,saveFilter,saveFilterByEvent,resetFilter,resetFilterByEvent,saveFilterPanel,saveFilterPanelByEvent,resetFilterPanel,resetFilterPanelByEvent,getCheckedFilters,updateFilterOptionStatus,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFNR,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,insertNextAt,insertChild,insertChildAt,insertChildNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getEditCell,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,fullValidateField,validateField,openExport,closeExport,openPrint,closePrint,getPrintHtml,exportData,openImport,closeImport,importData,saveFile,readFile,importByFile,print,getCustomVisible,openCustom,closeCustom,toggleCustom,saveCustom,cancelCustom,resetCustom,toggleCustomAllCheckbox,setCustomAllCheckbox'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args: any[]) {

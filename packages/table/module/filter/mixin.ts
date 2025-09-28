@@ -4,7 +4,7 @@ import { toFilters, handleFieldOrColumn, getRefElem } from '../../src/util'
 import { toCssUnit, triggerEvent, getDomNode } from '../../../ui/src/dom'
 import { isEnableConf } from '../../../ui/src/utils'
 
-import type { VxeTableConstructor, VxeTableDefines, TableReactData, TableInternalData, VxeTablePrivateMethods } from '../../../../types'
+import type { VxeTableConstructor, VxeTableDefines, TableReactData, TableInternalData, VxeColumnPropTypes, VxeTablePrivateMethods } from '../../../../types'
 
 const { renderer } = VxeUI
 
@@ -43,7 +43,7 @@ export default {
       const { filterStore } = reactData
       const column = handleFieldOrColumn($xeTable, fieldOrColumn)
       if (column && column.filters) {
-        column.filters = toFilters(options || [])
+        column.filters = toFilters(options || [], column.id)
         if (isUpdate) {
           return $xeTable.handleColumnConfirmFilter(column, null)
         } else {
@@ -55,9 +55,16 @@ export default {
       return $xeTable.$nextTick()
     },
     checkFilterOptions () {
-      const { filterStore } = this
-      filterStore.isAllSelected = filterStore.options.every((item: any) => item._checked)
-      filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some((item: any) => item._checked)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { filterStore } = reactData
+      const { column } = filterStore
+      if (column) {
+        const filterOptions = (column.filters || []) as VxeTableDefines.FilterOption[]
+        filterStore.isAllSelected = filterOptions.every((item) => item._checked)
+        filterStore.isIndeterminate = !filterStore.isAllSelected && filterOptions.some((item) => item._checked)
+      }
     },
     /**
      * 点击筛选事件
@@ -76,130 +83,223 @@ export default {
       const internalData = $xeTable as unknown as TableInternalData
       const $xeGGWrapper = $xeGrid || $xeGantt
 
-      const { filterStore } = this
+      const { initStore, filterStore } = reactData
+      const { elemStore } = internalData
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
-        const { initStore, filterStore } = reactData
-        const { elemStore } = internalData
-        if (filterStore.column === column && filterStore.visible) {
-          filterStore.visible = false
-        } else {
-          const tableEl = $xeTable.$refs.refElem as HTMLDivElement
-          const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
-          const filterOpts = $xeTable.computeFilterOpts
-          const { transfer } = filterOpts
-          const tableRect = tableEl.getBoundingClientRect()
-          const btnElem = evnt.currentTarget as HTMLDivElement
-          const filterRender = column ? column.filterRender : null
-          const compConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
-          $xeTable.handleFilterOptions(column)
-          internalData._currFilterParams = params
-          filterStore.style = null
-          filterStore.visible = true
-          initStore.filter = true
-          $xeTable.$nextTick(() => {
-            const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
-            if (!headerScrollElem) {
-              return
+        const tableEl = $xeTable.$refs.refElem as HTMLDivElement
+        const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
+        const filterOpts = $xeTable.computeFilterOpts
+        const { transfer } = filterOpts
+        const tableRect = tableEl.getBoundingClientRect()
+        const btnElem = evnt.currentTarget as HTMLDivElement
+        const filterRender = column ? column.filterRender : null
+        const compConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+        $xeTable.handleFilterOptions(column)
+        internalData._currFilterParams = params
+        filterStore.style = null
+        filterStore.visible = true
+        initStore.filter = true
+        $xeTable.$nextTick(() => {
+          const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
+          if (!headerScrollElem) {
+            return
+          }
+          const tableFilter = $xeTable.$refs.refTableFilter
+          const filterWrapperElem = tableFilter ? (tableFilter as any).$el as HTMLDivElement : null
+          if (!filterWrapperElem) {
+            return
+          }
+          const btnRect = btnElem.getBoundingClientRect()
+          const filterHeadElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-header')
+          const filterFootElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-footer')
+          const filterWidth = filterWrapperElem.offsetWidth
+          const centerWidth = filterWidth / 2
+          let left = 0
+          let top = 0
+          let maxHeight = 0
+          if (transfer) {
+            left = btnRect.left - centerWidth + scrollLeft
+            top = btnRect.top + btnElem.clientHeight + scrollTop
+            maxHeight = Math.min(Math.max(tableRect.height, Math.floor(visibleHeight / 2)), Math.max(80, visibleHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 28))
+            if (left < 16) {
+              left = 16
+            } else if (left > (visibleWidth - filterWidth - 16)) {
+              left = visibleWidth - filterWidth - 16
             }
-            const tableFilter = $xeTable.$refs.refTableFilter
-            const filterWrapperElem = tableFilter ? (tableFilter as any).$el as HTMLDivElement : null
-            if (!filterWrapperElem) {
-              return
+          } else {
+            left = btnRect.left - tableRect.left - centerWidth
+            top = btnRect.top - tableRect.top + btnElem.clientHeight
+            maxHeight = Math.max(40, tableEl.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
+            if (left < 1) {
+              left = 1
+            } else if (left > (tableEl.clientWidth - filterWidth - 1)) {
+              left = tableEl.clientWidth - filterWidth - 1
             }
-            const btnRect = btnElem.getBoundingClientRect()
-            const filterHeadElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-header')
-            const filterFootElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-footer')
-            const filterWidth = filterWrapperElem.offsetWidth
-            const centerWidth = filterWidth / 2
-            let left = 0
-            let top = 0
-            let maxHeight = 0
-            if (transfer) {
-              left = btnRect.left - centerWidth + scrollLeft
-              top = btnRect.top + btnElem.clientHeight + scrollTop
-              maxHeight = Math.min(Math.max(tableRect.height, Math.floor(visibleHeight / 2)), Math.max(80, visibleHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 28))
-              if (left < 16) {
-                left = 16
-              } else if (left > (visibleWidth - filterWidth - 16)) {
-                left = visibleWidth - filterWidth - 16
-              }
-            } else {
-              left = btnRect.left - tableRect.left - centerWidth
-              top = btnRect.top - tableRect.top + btnElem.clientHeight
-              maxHeight = Math.max(40, tableEl.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
-              if (left < 1) {
-                left = 1
-              } else if (left > (tableEl.clientWidth - filterWidth - 1)) {
-                left = tableEl.clientWidth - filterWidth - 1
-              }
-              if ($xeGGWrapper) {
-                const wrapperEl = $xeGGWrapper.$refs.refElem as HTMLDivElement
-                if (wrapperEl) {
-                  const wrapperRect = wrapperEl.getBoundingClientRect()
-                  top += tableRect.top - wrapperRect.top
-                }
+            if ($xeGGWrapper) {
+              const wrapperEl = $xeGGWrapper.$refs.refElem as HTMLDivElement
+              if (wrapperEl) {
+                const wrapperRect = wrapperEl.getBoundingClientRect()
+                top += tableRect.top - wrapperRect.top
               }
             }
-            filterStore.style = {
-              top: toCssUnit(top),
-              left: toCssUnit(left)
-            }
-            // 筛选面板是自适应表格高度
-            if (compConf ? !compConf.tableFilterAutoHeight : false) {
-              maxHeight = 0
-            }
-            // 判断面板不能大于表格高度
-            filterStore.maxHeight = maxHeight
-          })
-        }
-        $xeTable.dispatchEvent('filter-visible', { column, field: column.field, property: column.field, filterList: $xeTable.getCheckedFilters(), visible: filterStore.visible }, evnt)
+          }
+          filterStore.style = {
+            top: toCssUnit(top),
+            left: toCssUnit(left)
+          }
+          // 筛选面板是自适应表格高度
+          if (compConf ? !compConf.tableFilterAutoHeight : false) {
+            maxHeight = 0
+          }
+          // 判断面板不能大于表格高度
+          filterStore.maxHeight = maxHeight
+        })
       }
+      $xeTable.dispatchEvent('filter-visible', { column, field: column.field, property: column.field, filterList: $xeTable.getCheckedFilters(), visible: filterStore.visible }, evnt)
     },
-    handleFilterConfirmFilter (evnt: Event | null) {
-      const $xeTable = this
-      const reactData = $xeTable
+    // （单选）筛选发生改变
+    handleFilterChangeRadioOption (evnt: Event, checked: boolean, item: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
       const { filterStore } = reactData
-      filterStore.options.forEach((option: any) => {
-        option.checked = option._checked
-      })
-      $xeTable.confirmFilterEvent(evnt)
+      const { column } = filterStore
+      if (column) {
+        const filterOptions = (column.filters || []) as VxeTableDefines.FilterOption[]
+        filterOptions.forEach((option) => {
+          option._checked = false
+        })
+        item._checked = checked
+        $xeTable.checkFilterOptions()
+        $xeTable.handleFilterConfirmFilter(evnt, column)
+      }
+    },
+    // （多选）筛选发生改变
+    handleFilterChangeMultipleOption (evnt: Event, checked: boolean, item: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      item._checked = checked
+      $xeTable.checkFilterOptions()
+    },
+    // 筛选发生改变
+    handleFilterChangeOption (evnt: Event, checked: boolean, item: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { filterStore } = reactData
+      const { fullColumnIdData } = internalData
+      let column = filterStore.column
+      if (!column) {
+        const colRest = fullColumnIdData[item._colId]
+        if (colRest) {
+          column = colRest.column
+          filterStore.column = column
+        }
+      }
+      if (column) {
+        if (column.filterMultiple) {
+          $xeTable.handleFilterChangeMultipleOption(evnt, checked, item)
+        } else {
+          $xeTable.handleFilterChangeRadioOption(evnt, checked, item)
+        }
+      }
+    },
+    // 确认筛选
+    handleFilterConfirmFilter (evnt: Event | null, column: VxeTableDefines.ColumnInfo) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      if (column) {
+        const filterOptions = (column.filters || []) as VxeTableDefines.FilterOption[]
+        filterOptions.forEach((option) => {
+          option.checked = option._checked
+        })
+        $xeTable.confirmFilterEvent(evnt, column)
+      }
+    },
+    _saveFilter (fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      if (fieldOrColumn) {
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        $xeTable.handleFilterConfirmFilter(null, column)
+      }
+      return $xeTable.$nextTick()
+    },
+    _saveFilterByEvent (evnt: Event, fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      if (fieldOrColumn) {
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        $xeTable.handleFilterConfirmFilter(evnt, column)
+      }
+      return $xeTable.$nextTick()
+    },
+    _resetFilter (fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      if (fieldOrColumn) {
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        $xeTable.handleFilterResetFilter(null, column)
+      }
+      return $xeTable.$nextTick()
+    },
+    _resetFilterByEvent (evnt: Event, fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      if (fieldOrColumn) {
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        $xeTable.handleFilterResetFilter(evnt, column)
+      }
+      return $xeTable.$nextTick()
     },
     _saveFilterPanel () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
-      $xeTable.handleFilterConfirmFilter(null)
+      const { filterStore } = reactData
+      $xeTable.handleFilterConfirmFilter(null, filterStore.column || null)
       return $xeTable.$nextTick()
     },
     _saveFilterPanelByEvent (evnt: Event) {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
-      $xeTable.handleFilterConfirmFilter(evnt)
+      const { filterStore } = reactData
+      $xeTable.handleFilterConfirmFilter(evnt, filterStore.column || null)
       return $xeTable.$nextTick()
     },
     _resetFilterPanel () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
-      $xeTable.handleFilterResetFilter(null)
+      const { filterStore } = reactData
+      $xeTable.handleFilterResetFilter(null, filterStore.column || null)
       return $xeTable.$nextTick()
     },
     _resetFilterPanelByEvent (evnt: Event) {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
-      $xeTable.handleFilterResetFilter(evnt)
+      const { filterStore } = reactData
+      $xeTable.handleFilterResetFilter(evnt, filterStore.column || null)
       return $xeTable.$nextTick()
     },
     _getCheckedFilters () {
-      const { tableFullColumn } = this
-      const filterList: any[] = []
-      tableFullColumn.forEach((column: any) => {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { tableFullColumn } = internalData
+      const filterList: VxeTableDefines.FilterCheckedParams[] = []
+      tableFullColumn.forEach((column) => {
         const { field, filters } = column
+        const filterOptions = filters || []
         const valueList: any[] = []
-        const dataList : any[] = []
-        if (filters && filters.length) {
-          filters.forEach((item: any) => {
+        const dataList: any[] = []
+        if (filterOptions) {
+          filterOptions.forEach((item) => {
             if (item.checked) {
               valueList.push(item.value)
               dataList.push(item.data)
@@ -221,10 +321,11 @@ export default {
       const { scrollXLoad: oldScrollXLoad, scrollYLoad: oldScrollYLoad } = reactData
       const filterOpts = $xeTable.computeFilterOpts
       const mouseOpts = $xeTable.computeMouseOpts
-      const { field } = column
+      const { field, filters } = column
+      const filterOptions = filters || []
       const values: any[] = []
       const datas: any[] = []
-      column.filters.forEach((item: any) => {
+      filterOptions.forEach((item) => {
         if (item.checked) {
           values.push(item.value)
           datas.push(item.data)
@@ -266,15 +367,13 @@ export default {
     /**
      * 确认筛选
      * 当筛选面板中的确定按钮被按下时触发
-     * @param {Event} evnt 事件
      */
-    confirmFilterEvent (evnt: any) {
+    confirmFilterEvent (evnt: Event, column: VxeTableDefines.ColumnInfo) {
       const $xeTable = this
-      const reactData = $xeTable
 
-      const { filterStore } = reactData
-      const { column } = filterStore
-      $xeTable.handleColumnConfirmFilter(column, evnt)
+      if (column) {
+        $xeTable.handleColumnConfirmFilter(column, evnt)
+      }
     },
     handleClearFilter (column: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -302,15 +401,15 @@ export default {
      * 当筛选面板中的重置按钮被按下时触发
      * @param {Event} evnt 事件
      */
-    handleFilterResetFilter (evnt: Event) {
+    handleFilterResetFilter (evnt: Event, column: VxeTableDefines.ColumnInfo) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-      const reactData = $xeTable as unknown as TableReactData
 
-      const { filterStore } = reactData
-      $xeTable.handleClearFilter(filterStore.column)
-      $xeTable.confirmFilterEvent(evnt)
-      if (evnt) {
-        $xeTable.dispatchEvent('clear-filter', { filterList: [] }, evnt)
+      if (column) {
+        $xeTable.handleClearFilter(column)
+        $xeTable.confirmFilterEvent(evnt, column)
+        if (evnt) {
+          $xeTable.dispatchEvent('clear-filter', { filterList: [] }, evnt)
+        }
       }
     },
     /**

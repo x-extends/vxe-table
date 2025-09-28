@@ -42,6 +42,18 @@ export function getChangeEvent (renderOpts: VxeGlobalRendererHandles.RenderOptio
   return 'change'
 }
 
+export function hasInputType (renderOpts: VxeGlobalRendererHandles.RenderOptions) {
+  switch (renderOpts.name) {
+    case 'VxeInput':
+    case 'VxeNumberInput':
+    case 'VxeTextarea':
+    case '$input':
+    case '$textarea':
+      return true
+  }
+  return false
+}
+
 export function getSlotVNs (vns: VxeComponentSlotType | VxeComponentSlotType[] | undefined) {
   if (vns === null || vns === undefined) {
     return []

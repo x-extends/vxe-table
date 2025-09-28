@@ -1,12 +1,12 @@
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { toFilters } from './util'
-import { getFuncText } from '../../ui/src/utils'
+import { isEnableConf, getFuncText } from '../../ui/src/utils'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines } from '../../../types'
 
-const { getI18n, formats } = VxeUI
+const { getI18n, formats, renderer } = VxeUI
 
 export class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -16,11 +16,18 @@ export class ColumnInfo {
     const $xeGantt = $xeTable.$xeGantt
     const $xeGGWrapper = $xeGrid || $xeGantt
 
-    const { field, editRender } = _vm
+    const { field, editRender, filterRender } = _vm
+
+    const colId = _vm.colId || XEUtils.uniqueId('col_')
 
     const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : null
     const formatter = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
+
+    const flCompConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+    const ctFilterOptions = flCompConf ? flCompConf.createTableFilterOptions : null
+
+    const filters = toFilters(_vm.filters, colId)
 
     const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
     if (_vm.type && types.indexOf(_vm.type) === -1) {
@@ -102,12 +109,13 @@ export class ColumnInfo {
       sortType: _vm.sortType,
       sortMethod: _vm.sortMethod,
       remoteSort: _vm.remoteSort,
-      filters: toFilters(_vm.filters),
+      filters: filters,
       filterMultiple: XEUtils.isBoolean(_vm.filterMultiple) ? _vm.filterMultiple : true,
       filterMethod: _vm.filterMethod,
       filterResetMethod: _vm.filterResetMethod,
       filterRecoverMethod: _vm.filterRecoverMethod,
-      filterRender: _vm.filterRender,
+      filterRender: filterRender,
+      floatingFilters: _vm.floatingFilters,
       rowGroupNode: _vm.rowGroupNode,
       treeNode: _vm.treeNode,
       dragSort: _vm.dragSort,
@@ -126,7 +134,7 @@ export class ColumnInfo {
       // 自定义参数
       params: _vm.params,
       // 渲染属性
-      id: _vm.colId || XEUtils.uniqueId('col_'),
+      id: colId,
       parentId: null,
       visible,
       // 内部属性（一旦被使用，将导致不可升级版本）
@@ -177,6 +185,9 @@ export class ColumnInfo {
       // 单元格插槽，只对 grid 有效
       slots: _vm.slots
     })
+    if (ctFilterOptions && (!filters || !filters.length)) {
+      (this as any).filters = toFilters(ctFilterOptions({ $table: $xeTable, column: this as unknown as VxeTableDefines.ColumnInfo }), colId)
+    }
     if ($xeGGWrapper) {
       if (proxyOpts && proxyOpts.beforeColumn) {
         proxyOpts.beforeColumn({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, column: this })
