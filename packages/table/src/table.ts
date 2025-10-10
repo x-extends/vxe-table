@@ -4415,7 +4415,9 @@ export default defineVxeComponent({
       let countTop = 0
       const step = (timestamp: number) => {
         let progress = (timestamp - startTime) / duration
-        if (progress > 1) {
+        if (progress < 0) {
+          progress = 0
+        } else if (progress > 1) {
           progress = 1
         }
         const easedProgress = Math.pow(progress, 2)
@@ -11352,6 +11354,10 @@ export default defineVxeComponent({
       triggerBodyWheelEvent (evnt) {
         const { target, deltaY, deltaX, shiftKey } = evnt
         if (target && /^textarea$/i.test((target as HTMLElement).tagName)) {
+          return
+        }
+        // 如果滚轮未移动或者触摸板未变化位置
+        if (!deltaY && !deltaX) {
           return
         }
 
