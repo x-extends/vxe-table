@@ -176,7 +176,7 @@ hooks.add('tableMenuModule', {
           }
           if (internalData._keyCtx) {
             const type = 'body'
-            const params: any = { type, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, keyboard: true, columns: visibleColumn.slice(0), $event: evnt }
+            const params: any = { source: 'table', type, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, keyboard: true, columns: visibleColumn.slice(0), $event: evnt }
             // 如果开启单元格区域
             if (mouseConfig && mouseOpts.area) {
               const activeArea = $xeTable.getActiveCellArea()
@@ -203,7 +203,7 @@ hooks.add('tableMenuModule', {
               // target=td|th，直接向上找 table 去匹配即可
               return target.parentNode.parentNode.parentNode.getAttribute('xid') === xID
             })
-            const params: any = { type: layout, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, columns: visibleColumn.slice(0), $event: evnt }
+            const params: any = { source: 'table', type: layout, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, columns: visibleColumn.slice(0), $event: evnt }
             if (columnTargetNode.flag) {
               const cell = columnTargetNode.targetElem
               const columnNodeRest = $xeTable.getColumnNode(cell)

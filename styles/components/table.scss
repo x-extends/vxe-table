@@ -74,6 +74,34 @@ $btnThemeList: (
   position: relative;
   overflow: hidden;
   flex-grow: 1;
+  &.x-ob--contain {
+    & > .vxe-table--main-wrapper {
+      & > .vxe-table--header-wrapper {
+        & > .vxe-table--header-inner-wrapper {
+          overscroll-behavior-x: contain;
+        }
+      }
+      & > .vxe-table--body-wrapper {
+        & > .vxe-table--body-inner-wrapper {
+          overscroll-behavior-x: contain;
+        }
+      }
+      & > .vxe-table--footer-wrapper {
+        & > .vxe-table--footer-inner-wrapper {
+          overscroll-behavior-x: contain;
+        }
+      }
+    }
+  }
+  &.y-ob--contain {
+    & > .vxe-table--main-wrapper {
+      & > .vxe-table--body-wrapper {
+        & > .vxe-table--body-inner-wrapper {
+          overscroll-behavior-y: contain;
+        }
+      }
+    }
+  }
 }
 .vxe-table--header-wrapper,
 .vxe-table--body-wrapper,
@@ -639,6 +667,9 @@ $btnThemeList: (
     width: 100%;
     left: 0;
     bottom: 0;
+  }
+  .vxe-table--scroll-x-wrapper {
+    height: 100%;
   }
   .vxe-table--scroll-x-handle {
     overflow-y: hidden;
@@ -1702,6 +1733,13 @@ $btnThemeList: (
     transition: 0.3s box-shadow;
     outline: 0;
     background-color: var(--vxe-ui-layout-background-color);
+    &.y-ob--contain {
+      & > .vxe-table--body-wrapper {
+        & > .vxe-table--body-inner-wrapper {
+          overscroll-behavior-y: contain;
+        }
+      }
+    }
     .vxe-table--body-wrapper {
       outline: 0;
     }

@@ -9,6 +9,7 @@ import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeT
 
 const { renderer, renderEmptyElement } = VxeUI
 
+const sourceType = 'table'
 const renderType = 'footer'
 
 export default defineVxeComponent({
@@ -100,6 +101,7 @@ export default defineVxeComponent({
           itemIndex,
           items: row,
           fixed: fixedType,
+          source: sourceType,
           type: renderType,
           data: footerTableData
         }

@@ -136,7 +136,7 @@ export default defineVxeComponent({
       const { filterMultiple, filters, slots } = column
       const filterOptions = (filters || []) as VxeTableDefines.FilterOption[]
       const filterSlot = slots ? slots.filter : null
-      const params = Object.assign({}, tableInternalData._currFilterParams, { $panel: $xeFilterPanel, $table: $xeTable })
+      const params = Object.assign({}, tableInternalData._currFilterParams, { option: filterOptions[0], $panel: $xeFilterPanel, $table: $xeTable })
       const rtFilter = compConf ? (compConf.renderTableFilter || compConf.renderFilter) : null
       if (filterSlot) {
         return [

@@ -11,6 +11,7 @@ import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeC
 
 const { getI18n, renderer, renderEmptyElement } = VxeUI
 
+const sourceType = 'table'
 const renderType = 'body'
 
 export default defineVxeComponent({
@@ -176,6 +177,7 @@ export default defineVxeComponent({
         $columnIndex,
         _columnIndex,
         fixed: fixedType,
+        source: sourceType,
         type: renderType,
         isHidden: !!fixedHiddenColumn,
         level: rowLevel,
@@ -329,8 +331,6 @@ export default defineVxeComponent({
       } else {
         tcStyle.minHeight = `${cellHeight}px`
       }
-
-      // console.log(lastScrollTime)
 
       const tdVNs: VxeComponentSlotType[] = []
       if (fixedHiddenColumn && isAllOverflow) {
@@ -520,7 +520,18 @@ export default defineVxeComponent({
             seq = rowRest._tIndex + 1
           }
         }
-        const params = { $table: $xeTable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+        const params = {
+          $table: $xeTable,
+          seq,
+          rowid,
+          fixed: fixedType,
+          type: renderType,
+          level: rowLevel,
+          row,
+          rowIndex,
+          $rowIndex,
+          _rowIndex
+        }
         // 行是否被展开
         const isExpandRow = expandColumn && !!rowExpandedFlag && !!rowExpandedMaps[rowid]
         // 树节点是否被展开
@@ -618,6 +629,7 @@ export default defineVxeComponent({
               $columnIndex,
               _columnIndex,
               fixed: fixedType,
+              source: sourceType,
               type: renderType,
               level: rowLevel,
               row,

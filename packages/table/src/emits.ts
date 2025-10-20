@@ -81,6 +81,7 @@ export const tableEmits: VxeTableEmits = [
   'custom-visible-change',
   'custom-visible-all',
   'custom-fixed-change',
+  'custom-sort-change',
 
   'change-fnr', // 废弃
 
@@ -106,6 +107,7 @@ export const tableEmits: VxeTableEmits = [
   'cell-area-extension-start',
   'cell-area-extension-drag',
   'cell-area-extension-end',
+  'cell-area-extension-fill',
   'cell-area-selection-all-start',
   'cell-area-selection-all-end',
   'cell-area-arrows-start',

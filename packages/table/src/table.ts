@@ -463,14 +463,24 @@ export default defineVxeComponent({
       return Object.assign({}, getConfig().table.scrollbarConfig, props.scrollbarConfig)
     })
 
-    const computeScrollbarXToTop = computed(() => {
+    const computeScrollbarXOpts = computed(() => {
       const scrollbarOpts = computeScrollbarOpts.value
-      return !!(scrollbarOpts.x && scrollbarOpts.x.position === 'top')
+      return Object.assign({}, scrollbarOpts.x, props.scrollbarConfig?.x || {})
+    })
+
+    const computeScrollbarYOpts = computed(() => {
+      const scrollbarOpts = computeScrollbarOpts.value
+      return Object.assign({}, scrollbarOpts.y, props.scrollbarConfig?.y || {})
+    })
+
+    const computeScrollbarXToTop = computed(() => {
+      const scrollbarXOpts = computeScrollbarXOpts.value
+      return scrollbarXOpts.position === 'top'
     })
 
     const computeScrollbarYToLeft = computed(() => {
-      const scrollbarOpts = computeScrollbarOpts.value
-      return !!(scrollbarOpts.y && scrollbarOpts.y.position === 'left')
+      const scrollbarYOpts = computeScrollbarYOpts.value
+      return scrollbarYOpts.position === 'left'
     })
 
     const computeScrollYThreshold = computed(() => {
@@ -884,6 +894,8 @@ export default defineVxeComponent({
       computeVirtualXOpts,
       computeVirtualYOpts,
       computeScrollbarOpts,
+      computeScrollbarXOpts,
+      computeScrollbarYOpts,
       computeScrollbarXToTop,
       computeScrollbarYToLeft,
       computeColumnOpts,
@@ -2470,7 +2482,6 @@ export default defineVxeComponent({
       }
 
       const scrollbarXConf = scrollbarOpts.x || {}
-      const scrollbarXToTop = computeScrollbarXToTop.value
       const scrollbarYConf = scrollbarOpts.y || {}
       const scrollbarYToLeft = computeScrollbarYToLeft.value
 
@@ -2522,16 +2533,28 @@ export default defineVxeComponent({
       }
       const xWrapperEl = refScrollXWrapperElem.value
       if (xWrapperEl) {
-        xWrapperEl.style.left = scrollbarXToTop ? `${osbWidth}px` : ''
         xWrapperEl.style.width = `${el.clientWidth - osbWidth}px`
+        if (scrollbarYToLeft) {
+          xWrapperEl.style.left = `${osbWidth}px`
+        } else {
+          xWrapperEl.style.left = ''
+        }
       }
       if (xLeftCornerEl) {
-        xLeftCornerEl.style.width = scrollbarXToTop ? `${osbWidth}px` : ''
-        xLeftCornerEl.style.display = scrollbarXToTop ? (overflowX && osbHeight ? 'block' : '') : ''
+        if (scrollbarYToLeft) {
+          xLeftCornerEl.style.width = `${osbWidth}px`
+          xLeftCornerEl.style.display = overflowY && osbWidth ? 'block' : ''
+        } else {
+          xLeftCornerEl.style.display = ''
+        }
       }
       if (xRightCornerEl) {
-        xRightCornerEl.style.width = scrollbarXToTop ? '' : `${osbWidth}px`
-        xRightCornerEl.style.display = scrollbarXToTop ? '' : (xScrollbarVisible === 'visible' ? 'block' : '')
+        if (scrollbarYToLeft) {
+          xRightCornerEl.style.display = ''
+        } else {
+          xRightCornerEl.style.width = `${osbWidth}px`
+          xRightCornerEl.style.display = xScrollbarVisible === 'visible' ? 'block' : ''
+        }
       }
 
       const scrollYVirtualEl = refScrollYVirtualElem.value
@@ -4149,8 +4172,10 @@ export default defineVxeComponent({
         updateAfterDataIndex()
         return nextTick()
       }).then(() => {
+        updateTreeLineStyle()
         return handleLazyRecalculate(true, true, true)
       }).then(() => {
+        updateTreeLineStyle()
         setTimeout(() => {
           $xeTable.updateCellAreas()
         }, 30)
@@ -4418,7 +4443,9 @@ export default defineVxeComponent({
       let countTop = 0
       const step = (timestamp: number) => {
         let progress = (timestamp - startTime) / duration
-        if (progress > 1) {
+        if (progress < 0) {
+          progress = 0
+        } else if (progress > 1) {
           progress = 1
         }
         const easedProgress = Math.pow(progress, 2)
@@ -4521,6 +4548,9 @@ export default defineVxeComponent({
       }
     }
 
+    /**
+     * 更新展开行样式
+     */
     const updateRowExpandStyle = () => {
       const { expandColumn, scrollYLoad, scrollYTop, isScrollYBig } = reactData
       const expandOpts = computeExpandOpts.value
@@ -4574,6 +4604,13 @@ export default defineVxeComponent({
           }
         }
       }
+    }
+
+    /**
+     * 更新树连接线样式
+     */
+    const updateTreeLineStyle = () => {
+      // 待优化
     }
 
     const handleRowExpandScroll = () => {
@@ -9966,8 +10003,8 @@ export default defineVxeComponent({
             $xeTable.handleHeaderCellDragMousedownEvent(evnt, params)
           }
         }
-        if (!triggerDrag && mouseConfig && mouseOpts.area && $xeTable.handleHeaderCellAreaModownEvent) {
-          $xeTable.handleHeaderCellAreaModownEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
+        if (!triggerDrag && mouseConfig && mouseOpts.area && $xeTable.handleHeaderCellAreaMouseDnEvent) {
+          $xeTable.handleHeaderCellAreaMouseDnEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
         }
         $xeTable.focus()
         if ($xeTable.closeMenu) {
@@ -11358,6 +11395,10 @@ export default defineVxeComponent({
         if (target && /^textarea$/i.test((target as HTMLElement).tagName)) {
           return
         }
+        // 如果滚轮未移动或者触摸板未变化位置
+        if (!deltaY && !deltaX) {
+          return
+        }
 
         const { highlightHoverRow } = tableProps
         const { scrollXLoad, scrollYLoad, expandColumn } = reactData
@@ -11388,20 +11429,24 @@ export default defineVxeComponent({
         }
 
         const wheelSpeed = getWheelSpeed(reactData.lastScrollTime)
-        const deltaTop = shiftKey ? 0 : Math.ceil(deltaY * wheelSpeed)
-        const deltaLeft = shiftKey ? Math.ceil((shiftKey ? (deltaY || deltaX) : deltaX) * wheelSpeed) : 0
+        const deltaTop = shiftKey ? 0 : (deltaY * wheelSpeed)
+        const deltaLeft = (shiftKey ? (deltaX || deltaY) : deltaX) * wheelSpeed
 
-        const isTopWheel = deltaTop < 0
         const currScrollTop = bodyScrollElem.scrollTop
+        const currScrollLeft = bodyScrollElem.scrollLeft
 
-        // 如果滚动位置已经是顶部或底部，则不需要触发
-        if (isTopWheel ? currScrollTop <= 0 : currScrollTop >= bodyScrollElem.scrollHeight - bodyScrollElem.clientHeight) {
-          return
-        }
         const scrollTop = currScrollTop + deltaTop
-        const scrollLeft = bodyScrollElem.scrollLeft + deltaLeft
+        const scrollLeft = currScrollLeft + deltaLeft
         const isRollX = scrollLeft !== lastScrollLeft
         const isRollY = scrollTop !== lastScrollTop
+
+        if (isRollY) {
+          const isTopWheel = deltaTop < 0
+          // 如果滚动位置已经是顶部或底部，则不需要触发
+          if (isTopWheel ? currScrollTop <= 0 : currScrollTop >= bodyScrollElem.scrollHeight - bodyScrollElem.clientHeight) {
+            return
+          }
+        }
 
         if (rowOpts.isHover || highlightHoverRow) {
           $xeTable.clearHoverRow()
@@ -11913,14 +11958,24 @@ export default defineVxeComponent({
      * 如果宽度足够情况下，则不需要渲染固定列
      * @param {String} fixedType 固定列类型
      */
-    const renderFixed = (fixedType: 'left' | 'right') => {
+    const renderViewFixed = (fixedType: 'left' | 'right') => {
       const { showHeader, showFooter } = props
       const { tableData, tableColumn, tableGroupColumn, columnStore, footerTableData } = reactData
+      const scrollbarOpts = computeScrollbarOpts.value
+      const scrollbarXOpts = computeScrollbarXOpts.value
+      const scrollbarYOpts = computeScrollbarYOpts.value
+      const { overscrollBehavior: overscrollXBehavior } = scrollbarXOpts
+      const { overscrollBehavior: overscrollYBehavior } = scrollbarYOpts
       const isFixedLeft = fixedType === 'left'
       const fixedColumn = isFixedLeft ? columnStore.leftList : columnStore.rightList
+      const osXBehavior = XEUtils.eqNull(overscrollXBehavior) ? scrollbarOpts.overscrollBehavior : overscrollXBehavior
+      const osYBehavior = XEUtils.eqNull(overscrollYBehavior) ? scrollbarOpts.overscrollBehavior : overscrollYBehavior
       return h('div', {
         ref: isFixedLeft ? refLeftContainer : refRightContainer,
-        class: `vxe-table--fixed-${fixedType}-wrapper`
+        class: [`vxe-table--fixed-${fixedType}-wrapper`, {
+          [`x-ob--${osXBehavior}`]: osXBehavior,
+          [`y-ob--${osYBehavior}`]: osYBehavior
+        }]
       }, [
         showHeader
           ? h(TableHeaderComponent, {
@@ -12112,6 +12167,7 @@ export default defineVxeComponent({
             $columnIndex,
             _columnIndex,
             fixed: '',
+            source: 'table',
             type: 'body',
             level: rowLevel,
             rowid,
@@ -12217,11 +12273,21 @@ export default defineVxeComponent({
     const renderViewport = () => {
       const { showHeader, showFooter } = props
       const { overflowX, tableData, tableColumn, tableGroupColumn, footerTableData, columnStore } = reactData
+      const scrollbarOpts = computeScrollbarOpts.value
+      const scrollbarXOpts = computeScrollbarXOpts.value
+      const scrollbarYOpts = computeScrollbarYOpts.value
+      const { overscrollBehavior: overscrollXBehavior } = scrollbarXOpts
+      const { overscrollBehavior: overscrollYBehavior } = scrollbarYOpts
       const { leftList, rightList } = columnStore
+      const osXBehavior = XEUtils.eqNull(overscrollXBehavior) ? scrollbarOpts.overscrollBehavior : overscrollXBehavior
+      const osYBehavior = XEUtils.eqNull(overscrollYBehavior) ? scrollbarOpts.overscrollBehavior : overscrollYBehavior
 
       return h('div', {
         ref: refTableViewportElem,
-        class: 'vxe-table--viewport-wrapper'
+        class: ['vxe-table--viewport-wrapper', {
+          [`x-ob--${osXBehavior}`]: osXBehavior,
+          [`y-ob--${osYBehavior}`]: osYBehavior
+        }]
       }, [
         h('div', {
           class: 'vxe-table--main-wrapper'
@@ -12259,8 +12325,8 @@ export default defineVxeComponent({
         h('div', {
           class: 'vxe-table--fixed-wrapper'
         }, [
-          leftList && leftList.length && overflowX ? renderFixed('left') : renderEmptyElement($xeTable),
-          rightList && rightList.length && overflowX ? renderFixed('right') : renderEmptyElement($xeTable)
+          leftList && leftList.length && overflowX ? renderViewFixed('left') : renderEmptyElement($xeTable),
+          rightList && rightList.length && overflowX ? renderViewFixed('right') : renderEmptyElement($xeTable)
         ]),
         renderRowExpandedVNs()
       ])

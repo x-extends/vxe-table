@@ -1,35 +1,11 @@
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { getRefElem } from '../../src/util'
-import { hasClass, getAbsolutePos, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
+import { getAbsolutePos, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
 
 import type { TableKeyboardPrivateMethods, VxeTableDefines } from '../../../../types'
 
 const { hooks } = VxeUI
-
-const browseObj = XEUtils.browse()
-
-function getTargetOffset (target: any, container: any) {
-  let offsetTop = 0
-  let offsetLeft = 0
-  const triggerCheckboxLabel = !browseObj.firefox && hasClass(target, 'vxe-checkbox--label')
-  if (triggerCheckboxLabel) {
-    const checkboxLabelStyle = getComputedStyle(target)
-    offsetTop -= XEUtils.toNumber(checkboxLabelStyle.paddingTop)
-    offsetLeft -= XEUtils.toNumber(checkboxLabelStyle.paddingLeft)
-  }
-  while (target && target !== container) {
-    offsetTop += target.offsetTop
-    offsetLeft += target.offsetLeft
-    target = target.offsetParent
-    if (triggerCheckboxLabel) {
-      const checkboxStyle = getComputedStyle(target)
-      offsetTop -= XEUtils.toNumber(checkboxStyle.paddingTop)
-      offsetLeft -= XEUtils.toNumber(checkboxStyle.paddingLeft)
-    }
-  }
-  return { offsetTop, offsetLeft }
-}
 
 hooks.add('tableKeyboardModule', {
   setupTable ($xeTable) {
@@ -119,6 +95,7 @@ hooks.add('tableKeyboardModule', {
         if (!bodyWrapperElem) {
           return
         }
+        const bodyRect = bodyWrapperElem.getBoundingClientRect()
         const el = refElem.value
         const disX = evnt.clientX
         const disY = evnt.clientY
@@ -127,9 +104,8 @@ hooks.add('tableKeyboardModule', {
         const selectRecords = $xeTable.getCheckboxRecords()
         let lastRangeRows: any[] = []
         const marginSize = 1
-        const offsetRest = getTargetOffset(evnt.target, bodyWrapperElem)
-        const startTop = offsetRest.offsetTop + evnt.offsetY
-        const startLeft = offsetRest.offsetLeft + evnt.offsetX
+        const startTop = evnt.clientY - bodyRect.y + bodyWrapperElem.scrollTop
+        const startLeft = evnt.clientX - bodyRect.x + bodyWrapperElem.scrollLeft
         const startScrollTop = bodyWrapperElem.scrollTop
         const rowHeight = trElem.offsetHeight
         const trRect = trElem.getBoundingClientRect()

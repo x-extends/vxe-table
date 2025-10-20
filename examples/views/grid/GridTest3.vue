@@ -23,17 +23,21 @@ const gridOptions = reactive<VxeGridProps<RowVO>>({
   height: 400,
   scrollbarConfig: {
     x: {
-      visible: 'visible'
+      visible: 'visible',
+      overscrollBehavior: 'contain'
     },
     y: {
-      visible: 'visible'
+      visible: 'visible',
+      overscrollBehavior: 'contain'
     }
   },
   columns: [
-    { field: 'seq', type: 'seq', width: 70 },
-    { field: 'name', title: 'Name' },
-    { field: 'sex', title: 'Sex' },
-    { field: 'age', title: 'Age' }
+    { type: 'seq', width: 200, fixed: 'left' },
+    { field: 'name', title: 'Name', width: 400 },
+    { field: 'sex', title: 'Sex', width: 400 },
+    { field: 'age', title: 'Age', width: 400 },
+    { field: 'time', title: 'Time', width: 400 },
+    { field: 'address', title: 'Address', width: 200, fixed: 'right' }
   ],
   data: [
     { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },

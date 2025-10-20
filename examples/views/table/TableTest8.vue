@@ -48,7 +48,15 @@ const gridOptions = reactive<VxeGridProps<RowVO>>({
   showHeaderOverflow: true,
   showFooterOverflow: true,
   height: 600,
-  scrollbarConfig: { y: { position: 'left' } },
+  scrollbarConfig: {
+    overscrollBehavior: 'contain',
+    x: {
+      // position: 'top'
+    },
+    y: {
+      // position: 'left'
+    }
+  },
   scrollY: {
     enabled: true,
     gt: 0

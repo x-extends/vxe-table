@@ -1,4 +1,4 @@
-import { h, inject, ref, Ref, provide, VNode, PropType, nextTick, TransitionGroup, createCommentVNode, reactive, onUnmounted } from 'vue'
+import { h, inject, ref, Ref, provide, VNode, PropType, nextTick, TransitionGroup, reactive, onUnmounted } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
@@ -490,7 +490,7 @@ export default defineVxeComponent({
               }
             }
 
-            $xeTable.dispatchEvent('column-dragend', {
+            const csParams = {
               oldColumn: dragColumn,
               newColumn,
               dragColumn,
@@ -500,7 +500,9 @@ export default defineVxeComponent({
                 newIndex: nafIndex,
                 oldIndex: oafIndex
               }
-            }, evnt)
+            }
+            $xeTable.dispatchEvent('custom-sort-change', csParams, evnt)
+            $xeTable.dispatchEvent('column-dragend', csParams, evnt)
 
             if (immediate) {
               tableReactData.customColumnList = collectColumn.slice(0)
@@ -678,7 +680,7 @@ export default defineVxeComponent({
                     class: ['vxe-checkbox--icon', isIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
                   })
                 ])
-                : createCommentVNode(),
+                : renderEmptyElement($xeTable),
               h('div', {
                 class: 'vxe-table-custom--name-option'
               }, [
@@ -703,7 +705,7 @@ export default defineVxeComponent({
                       })
                     ])
                   ])
-                  : createCommentVNode(),
+                  : renderEmptyElement($xeTable),
                 column.type === 'html'
                   ? h('div', {
                     key: '1',
@@ -730,7 +732,7 @@ export default defineVxeComponent({
                         changeFixedOption(column, 'left', $event)
                       }
                     })
-                    : createCommentVNode(),
+                    : renderEmptyElement($xeTable),
                   VxeUIButtonComponent
                     ? h(VxeUIButtonComponent, {
                       mode: 'text',
@@ -742,9 +744,9 @@ export default defineVxeComponent({
                         changeFixedOption(column, 'right', $event)
                       }
                     })
-                    : createCommentVNode()
+                    : renderEmptyElement($xeTable)
                 ])
-                : createCommentVNode()
+                : renderEmptyElement($xeTable)
             ])
           )
         }
@@ -850,7 +852,7 @@ export default defineVxeComponent({
                               disabled: !isCustomStatus,
                               onClick: resetCustomEvent
                             })
-                            : createCommentVNode(),
+                            : renderEmptyElement($xeTable),
                           immediate
                             ? (VxeUIButtonComponent
                                 ? h(VxeUIButtonComponent, {
@@ -858,16 +860,16 @@ export default defineVxeComponent({
                                   content: customOpts.closeButtonText || getI18n('vxe.table.customClose'),
                                   onClick: cancelCloseEvent
                                 })
-                                : createCommentVNode())
+                                : renderEmptyElement($xeTable))
                             : (VxeUIButtonComponent
                                 ? h(VxeUIButtonComponent, {
                                   mode: 'text',
                                   content: customOpts.cancelButtonText || getI18n('vxe.table.customCancel'),
                                   onClick: cancelCustomEvent
                                 })
-                                : createCommentVNode()),
+                                : renderEmptyElement($xeTable)),
                           immediate
-                            ? createCommentVNode()
+                            ? renderEmptyElement($xeTable)
                             : (VxeUIButtonComponent
                                 ? h(VxeUIButtonComponent, {
                                   mode: 'text',
@@ -875,7 +877,7 @@ export default defineVxeComponent({
                                   content: customOpts.confirmButtonText || getI18n('vxe.table.customConfirm'),
                                   onClick: confirmCustomEvent
                                 })
-                                : createCommentVNode())
+                                : renderEmptyElement($xeTable))
                         ])
                       ])
                   : null
@@ -984,7 +986,7 @@ export default defineVxeComponent({
                     })
                   ])
                 ])
-                : createCommentVNode(),
+                : renderEmptyElement($xeTable),
               h('td', {
                 class: 'vxe-table-custom-popup--column-item col--name'
               }, [
@@ -1012,7 +1014,7 @@ export default defineVxeComponent({
                         : h('div', {
                           class: 'vxe-table-custom-popup--column-sort-placeholder'
                         }))
-                    : createCommentVNode(),
+                    : renderEmptyElement($xeTable),
                   column.type === 'html'
                     ? h('div', {
                       key: '1',
@@ -1052,10 +1054,10 @@ export default defineVxeComponent({
                               changeColumnWidth(column)
                             }
                           })
-                          : createCommentVNode()
+                          : renderEmptyElement($xeTable)
                       )
                 ])
-                : createCommentVNode(),
+                : renderEmptyElement($xeTable),
               allowFixed
                 ? h('td', {
                   class: 'vxe-table-custom-popup--column-item col--fixed'
@@ -1078,10 +1080,10 @@ export default defineVxeComponent({
                               changeFixedOption(column, label, $event)
                             }
                           })
-                          : createCommentVNode()
+                          : renderEmptyElement($xeTable)
                       )
                 ])
-                : createCommentVNode()
+                : renderEmptyElement($xeTable)
             ])
           )
         }
@@ -1112,7 +1114,7 @@ export default defineVxeComponent({
                           ? h('col', {
                             class: 'vxe-table-custom-popup--table-col-seq'
                           })
-                          : createCommentVNode(),
+                          : renderEmptyElement($xeTable),
                         h('col', {
                           class: 'vxe-table-custom-popup--table-col-title'
                         }),
@@ -1120,12 +1122,12 @@ export default defineVxeComponent({
                           ? h('col', {
                             class: 'vxe-table-custom-popup--table-col-width'
                           })
-                          : createCommentVNode(),
+                          : renderEmptyElement($xeTable),
                         allowFixed
                           ? h('col', {
                             class: 'vxe-table-custom-popup--table-col-fixed'
                           })
-                          : createCommentVNode()
+                          : renderEmptyElement($xeTable)
                       ]),
                       h('thead', {}, [
                         h('tr', {}, [
@@ -1147,14 +1149,14 @@ export default defineVxeComponent({
                                 }, getI18n('vxe.toolbar.customAll'))
                               ])
                             ])
-                            : createCommentVNode(),
+                            : renderEmptyElement($xeTable),
                           h('th', {}, getI18n('vxe.custom.setting.colTitle')),
                           allowResizable
                             ? h('th', {}, getI18n('vxe.custom.setting.colResizable'))
-                            : createCommentVNode(),
+                            : renderEmptyElement($xeTable),
                           allowFixed
                             ? h('th', {}, getI18n(`vxe.custom.setting.${maxFixedSize ? 'colFixedMax' : 'colFixed'}`, [maxFixedSize]))
-                            : createCommentVNode()
+                            : renderEmptyElement($xeTable)
                         ])
                       ]),
                       h(TransitionGroup, {
@@ -1193,29 +1195,29 @@ export default defineVxeComponent({
                 disabled: !isCustomStatus,
                 onClick: resetCustomEvent
               })
-              : createCommentVNode(),
+              : renderEmptyElement($xeTable),
             immediate
               ? (VxeUIButtonComponent
                   ? h(VxeUIButtonComponent, {
                     content: customOpts.closeButtonText || getI18n('vxe.table.customClose'),
                     onClick: cancelCloseEvent
                   })
-                  : createCommentVNode())
+                  : renderEmptyElement($xeTable))
               : (VxeUIButtonComponent
                   ? h(VxeUIButtonComponent, {
                     content: customOpts.cancelButtonText || getI18n('vxe.table.customCancel'),
                     onClick: cancelCustomEvent
                   })
-                  : createCommentVNode()),
+                  : renderEmptyElement($xeTable)),
             immediate
-              ? createCommentVNode()
+              ? renderEmptyElement($xeTable)
               : (VxeUIButtonComponent
                   ? h(VxeUIButtonComponent, {
                     status: 'primary',
                     content: customOpts.confirmButtonText || getI18n('vxe.custom.cstmConfirm'),
                     onClick: confirmCustomEvent
                   })
-                  : createCommentVNode())
+                  : renderEmptyElement($xeTable))
           ])
         }
       }
@@ -1240,7 +1242,7 @@ export default defineVxeComponent({
               customStore.visible = value
             }
           }, scopedSlots)
-          : createCommentVNode()
+          : renderEmptyElement($xeTable)
       }
       return VxeUIModalComponent
         ? h(VxeUIModalComponent, {
@@ -1266,7 +1268,7 @@ export default defineVxeComponent({
             customStore.visible = value
           }
         }, scopedSlots)
-        : createCommentVNode()
+        : renderEmptyElement($xeTable)
     }
 
     const renderVN = () => {

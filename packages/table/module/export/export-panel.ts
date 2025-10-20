@@ -1,4 +1,4 @@
-import { h, createCommentVNode, ref, Ref, computed, reactive, inject, nextTick } from 'vue'
+import { h, ref, Ref, computed, reactive, inject, nextTick } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
@@ -7,7 +7,7 @@ import { errLog } from '../../../ui/src/log'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
 
-const { getI18n, getIcon } = VxeUI
+const { getI18n, getIcon, renderEmptyElement } = VxeUI
 
 export default defineVxeComponent({
   name: 'VxeTableExportPanel',
@@ -260,7 +260,7 @@ export default defineVxeComponent({
                 ? h('div', {
                   class: 'vxe-table-export--panel-top'
                 }, $xeTable.callSlot(topSlot, params))
-                : createCommentVNode(),
+                : renderEmptyElement($xeTable),
               h('div', {
                 class: 'vxe-table-export--panel-body'
               }, defaultSlot
@@ -275,7 +275,7 @@ export default defineVxeComponent({
                       h('tbody', [
                         [
                           isPrint
-                            ? createCommentVNode()
+                            ? renderEmptyElement($xeTable)
                             : h('tr', [
                               h('td', getI18n('vxe.export.expName')),
                               h('td', [
@@ -290,11 +290,11 @@ export default defineVxeComponent({
                                       defaultOptions.filename = value
                                     }
                                   })
-                                  : createCommentVNode()
+                                  : renderEmptyElement($xeTable)
                               ])
                             ]),
                           isPrint
-                            ? createCommentVNode()
+                            ? renderEmptyElement($xeTable)
                             : h('tr', [
                               h('td', getI18n('vxe.export.expType')),
                               h('td', [
@@ -306,7 +306,7 @@ export default defineVxeComponent({
                                       defaultOptions.type = value
                                     }
                                   })
-                                  : createCommentVNode()
+                                  : renderEmptyElement($xeTable)
                               ])
                             ]),
                           isPrint || showSheet
@@ -324,10 +324,10 @@ export default defineVxeComponent({
                                       defaultOptions.sheetName = value
                                     }
                                   })
-                                  : createCommentVNode()
+                                  : renderEmptyElement($xeTable)
                               ])
                             ])
-                            : createCommentVNode(),
+                            : renderEmptyElement($xeTable),
                           h('tr', [
                             h('td', getI18n('vxe.export.expMode')),
                             h('td', [
@@ -344,7 +344,7 @@ export default defineVxeComponent({
                                     defaultOptions.mode = value
                                   }
                                 })
-                                : createCommentVNode()
+                                : renderEmptyElement($xeTable)
                             ])
                           ]),
                           h('tr', [
@@ -400,7 +400,7 @@ export default defineVxeComponent({
                                         defaultOptions.isHeader = value
                                       }
                                     })
-                                    : createCommentVNode(),
+                                    : renderEmptyElement($xeTable),
                                   VxeUICheckboxComponent
                                     ? h(VxeUICheckboxComponent, {
                                       modelValue: isHeader ? defaultOptions.isTitle : false,
@@ -411,7 +411,7 @@ export default defineVxeComponent({
                                         defaultOptions.isTitle = value
                                       }
                                     })
-                                    : createCommentVNode(),
+                                    : renderEmptyElement($xeTable),
                                   VxeUICheckboxComponent
                                     ? h(VxeUICheckboxComponent, {
                                       modelValue: isHeader && hasColgroup && supportMerge ? defaultOptions.isColgroup : false,
@@ -422,7 +422,7 @@ export default defineVxeComponent({
                                         defaultOptions.isColgroup = value
                                       }
                                     })
-                                    : createCommentVNode()
+                                    : renderEmptyElement($xeTable)
                                 ]),
                                 h('div', {
                                   class: 'vxe-table-export--panel-option-row'
@@ -437,7 +437,7 @@ export default defineVxeComponent({
                                         defaultOptions.original = value
                                       }
                                     })
-                                    : createCommentVNode(),
+                                    : renderEmptyElement($xeTable),
                                   VxeUICheckboxComponent
                                     ? h(VxeUICheckboxComponent, {
                                       modelValue: hasMerge && supportMerge && checkedAll ? defaultOptions.isMerge : false,
@@ -448,9 +448,9 @@ export default defineVxeComponent({
                                         defaultOptions.isMerge = value
                                       }
                                     })
-                                    : createCommentVNode(),
+                                    : renderEmptyElement($xeTable),
                                   isPrint || !VxeUICheckboxComponent
-                                    ? createCommentVNode()
+                                    ? renderEmptyElement($xeTable)
                                     : h(VxeUICheckboxComponent, {
                                       modelValue: supportStyle ? defaultOptions.useStyle : false,
                                       disabled: !supportStyle,
@@ -470,7 +470,7 @@ export default defineVxeComponent({
                                         defaultOptions.isAllExpand = value
                                       }
                                     })
-                                    : createCommentVNode()
+                                    : renderEmptyElement($xeTable)
                                 ]),
                                 h('div', {
                                   class: 'vxe-table-export--panel-option-row'
@@ -485,7 +485,7 @@ export default defineVxeComponent({
                                         defaultOptions.isFooter = value
                                       }
                                     })
-                                    : createCommentVNode()
+                                    : renderEmptyElement($xeTable)
                                 ])
                               ])
                           ])
@@ -497,7 +497,7 @@ export default defineVxeComponent({
                 ? h('div', {
                   class: 'vxe-table-export--panel-bottom'
                 }, $xeTable.callSlot(bottomSlot, params))
-                : createCommentVNode()
+                : renderEmptyElement($xeTable)
             ])
           },
           footer () {
@@ -522,7 +522,7 @@ export default defineVxeComponent({
                         content: getI18n('vxe.export.expCancel'),
                         onClick: cancelEvent
                       })
-                      : createCommentVNode(),
+                      : renderEmptyElement($xeTable),
                     VxeUIButtonComponent
                       ? h(VxeUIButtonComponent, {
                         ref: xButtonConfirm,
@@ -530,12 +530,12 @@ export default defineVxeComponent({
                         content: getI18n(isPrint ? 'vxe.export.expPrint' : 'vxe.export.expConfirm'),
                         onClick: confirmEvent
                       })
-                      : createCommentVNode()
+                      : renderEmptyElement($xeTable)
                   ])
                 ])
           }
         })
-        : createCommentVNode()
+        : renderEmptyElement($xeTable)
     }
 
     nextTick(() => {

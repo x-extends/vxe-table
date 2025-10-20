@@ -10,6 +10,7 @@ import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeT
 
 const { renderer, renderEmptyElement } = VxeUI
 
+const sourceType = 'table'
 const renderType = 'header'
 
 function getColumnFirstChild (column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
@@ -123,8 +124,9 @@ export default defineVxeComponent({
           columnIndex,
           $columnIndex,
           _columnIndex,
-          firstFilterOption,
+          firstFilterOption: firstFilterOption as VxeTableDefines.FilterOption,
           fixed: fixedType,
+          source: sourceType,
           type: renderType,
           isHidden: fixedHiddenColumn,
           hasFilter
@@ -314,8 +316,9 @@ export default defineVxeComponent({
           columnIndex,
           $columnIndex,
           _columnIndex,
-          option: firstFilterOption,
+          option: firstFilterOption as VxeTableDefines.FilterOption,
           fixed: fixedType,
+          source: sourceType,
           type: renderType,
           isHidden: fixedHiddenColumn,
           hasFilter

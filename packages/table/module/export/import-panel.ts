@@ -1,4 +1,4 @@
-import { h, ref, Ref, computed, inject, reactive, nextTick, createCommentVNode } from 'vue'
+import { h, ref, Ref, computed, inject, reactive, nextTick } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
@@ -7,7 +7,7 @@ import { errLog } from '../../../ui/src/log'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
 
-const { getI18n, getIcon } = VxeUI
+const { getI18n, getIcon, renderEmptyElement } = VxeUI
 
 export default defineVxeComponent({
   name: 'VxeTableImportPanel',
@@ -142,7 +142,7 @@ export default defineVxeComponent({
                 ? h('div', {
                   class: 'vxe-table-export--panel-top'
                 }, $xeTable.callSlot(topSlot, params))
-                : createCommentVNode(),
+                : renderEmptyElement($xeTable),
               h('div', {
                 class: 'vxe-table-export--panel-body'
               }, defaultSlot
@@ -191,7 +191,7 @@ export default defineVxeComponent({
                                   defaultOptions.mode = value
                                 }
                               })
-                              : createCommentVNode()
+                              : renderEmptyElement($xeTable)
                           ])
                         ])
                       ])
@@ -202,7 +202,7 @@ export default defineVxeComponent({
                 ? h('div', {
                   class: 'vxe-table-export--panel-bottom'
                 }, $xeTable.callSlot(bottomSlot, params))
-                : createCommentVNode()
+                : renderEmptyElement($xeTable)
             ])
           },
           footer () {
@@ -226,7 +226,7 @@ export default defineVxeComponent({
                         content: getI18n('vxe.import.impCancel'),
                         onClick: cancelEvent
                       })
-                      : createCommentVNode(),
+                      : renderEmptyElement($xeTable),
                     VxeUIButtonComponent
                       ? h(VxeUIButtonComponent, {
                         status: 'primary',
@@ -234,13 +234,13 @@ export default defineVxeComponent({
                         content: getI18n('vxe.import.impConfirm'),
                         onClick: importEvent
                       })
-                      : createCommentVNode()
+                      : renderEmptyElement($xeTable)
                   ])
                 ]
             )
           }
         })
-        : createCommentVNode()
+        : renderEmptyElement($xeTable)
     }
 
     nextTick(() => {

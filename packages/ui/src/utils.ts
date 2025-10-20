@@ -2,6 +2,8 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '@vxe-ui/core'
 import DomZIndex from 'dom-zindex'
 
+const { getConfig } = VxeUI
+
 export function isEnableConf (conf: any): boolean {
   return conf && conf.enabled !== false
 }
@@ -31,15 +33,15 @@ export function hasChildrenList (item: any) {
 }
 
 export function getFuncText (content?: string | number | boolean | null, args?: any) {
-  if (content) {
-    const translate = VxeUI.getConfig().translate
-    return XEUtils.toValueString(translate ? translate('' + content, args) : content)
+  if (XEUtils.eqNull(content)) {
+    return ''
   }
-  return ''
+  const translate = getConfig().translate
+  return `${translate ? translate('' + content, args) : content}`
 }
 
 export function formatText (value: any, placeholder?: any) {
-  return '' + (isEmptyValue(value) ? (placeholder ? VxeUI.getConfig().emptyCell : '') : value)
+  return '' + (isEmptyValue(value) ? (placeholder ? getConfig().emptyCell : '') : value)
 }
 
 /**
