@@ -556,7 +556,7 @@ const lineOffsetSizes: Record<string, any> = {
   large: 0
 }
 
-function countTreeExpand (prevRow: any, params: VxeTableDefines.CellRenderBodyParams) {
+function countTreeExpandSize (prevRow: any, params: VxeTableDefines.CellRenderBodyParams) {
   let count = 1
   if (!prevRow) {
     return count
@@ -572,7 +572,7 @@ function countTreeExpand (prevRow: any, params: VxeTableDefines.CellRenderBodyPa
   const rowChildren = prevRow[transform ? mapChildrenField : childrenField]
   if (rowChildren && treeExpandedFlag && treeExpandedMaps[getRowid($table, prevRow)]) {
     for (let index = 0; index < rowChildren.length; index++) {
-      count += countTreeExpand(rowChildren[index], params)
+      count += countTreeExpandSize(rowChildren[index], params)
     }
   }
   return count
@@ -603,7 +603,7 @@ export function calcTreeLine (params: VxeTableDefines.CellRenderBodyParams, prev
   const currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
   let expandSize = 1
   if (prevRow) {
-    expandSize = countTreeExpand(prevRow, params)
+    expandSize = countTreeExpandSize(prevRow, params)
   }
   let cellHeight = currCellHeight
   const vnHeight = rowRest.height

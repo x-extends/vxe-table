@@ -529,8 +529,10 @@ function handleVirtualTreeExpand ($xeTable: VxeTableConstructor & VxeTablePrivat
     updateAfterDataIndex($xeTable)
     return $xeTable.$nextTick()
   }).then(() => {
+    updateTreeLineStyle($xeTable)
     return handleLazyRecalculate($xeTable, true, true, true)
   }).then(() => {
+    updateTreeLineStyle($xeTable)
     setTimeout(() => {
       $xeTable.updateCellAreas()
     }, 30)
@@ -1018,7 +1020,6 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   }
 
   const scrollbarXConf = scrollbarOpts.x || {}
-  const scrollbarXToTop = $xeTable.computeScrollbarXToTop
   const scrollbarYConf = scrollbarOpts.y || {}
   const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
 
@@ -1070,16 +1071,28 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   }
   const xWrapperEl = $xeTable.$refs.refScrollXWrapperElem as HTMLDivElement
   if (xWrapperEl) {
-    xWrapperEl.style.left = scrollbarXToTop ? `${osbWidth}px` : ''
     xWrapperEl.style.width = `${el.clientWidth - osbWidth}px`
+    if (scrollbarYToLeft) {
+      xWrapperEl.style.left = `${osbWidth}px`
+    } else {
+      xWrapperEl.style.left = ''
+    }
   }
   if (xLeftCornerEl) {
-    xLeftCornerEl.style.width = scrollbarXToTop ? `${osbWidth}px` : ''
-    xLeftCornerEl.style.display = scrollbarXToTop ? (overflowX && osbHeight ? 'block' : '') : ''
+    if (scrollbarYToLeft) {
+      xLeftCornerEl.style.width = `${osbWidth}px`
+      xLeftCornerEl.style.display = overflowY && osbWidth ? 'block' : ''
+    } else {
+      xLeftCornerEl.style.display = ''
+    }
   }
   if (xRightCornerEl) {
-    xRightCornerEl.style.width = scrollbarXToTop ? '' : `${osbWidth}px`
-    xRightCornerEl.style.display = scrollbarXToTop ? '' : (xScrollbarVisible === 'visible' ? 'block' : '')
+    if (scrollbarYToLeft) {
+      xRightCornerEl.style.display = ''
+    } else {
+      xRightCornerEl.style.width = `${osbWidth}px`
+      xRightCornerEl.style.display = xScrollbarVisible === 'visible' ? 'block' : ''
+    }
   }
 
   const scrollYVirtualEl = $xeTable.$refs.refScrollYVirtualElem as HTMLDivElement
@@ -3882,7 +3895,9 @@ const wheelScrollTopTo = (diffNum: number, cb: (progress: number) => void) => {
   let countTop = 0
   const step = (timestamp: number) => {
     let progress = (timestamp - startTime) / duration
-    if (progress > 1) {
+    if (progress < 0) {
+      progress = 0
+    } else if (progress > 1) {
       progress = 1
     }
     const easedProgress = Math.pow(progress, 2)
@@ -4039,6 +4054,9 @@ function updateRowOffsetTop ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
   }
 }
 
+/**
+ * 更新展开行样式
+ */
 function updateRowExpandStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -4095,6 +4113,14 @@ function updateRowExpandStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMe
       }
     }
   }
+}
+
+/**
+ * 更新树连接线样式
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function updateTreeLineStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  // 待优化
 }
 
 function handleRowExpandScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
@@ -8545,8 +8571,8 @@ const Methods = {
         $xeTable.handleHeaderCellDragMousedownEvent(evnt, params)
       }
     }
-    if (!triggerDrag && mouseConfig && mouseOpts.area && $xeTable.handleHeaderCellAreaModownEvent) {
-      $xeTable.handleHeaderCellAreaModownEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
+    if (!triggerDrag && mouseConfig && mouseOpts.area && $xeTable.handleHeaderCellAreaMouseDnEvent) {
+      $xeTable.handleHeaderCellAreaMouseDnEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
     }
     $xeTable.focus()
     if ($xeTable.closeMenu) {
@@ -11117,6 +11143,10 @@ const Methods = {
     if (target && /^textarea$/i.test((target as HTMLElement).tagName)) {
       return
     }
+    // 如果滚轮未移动或者触摸板未变化位置
+    if (!deltaY && !deltaX) {
+      return
+    }
 
     const { highlightHoverRow } = tableProps
     const { scrollXLoad, scrollYLoad, expandColumn } = reactData
@@ -11147,20 +11177,24 @@ const Methods = {
     }
 
     const wheelSpeed = getWheelSpeed(reactData.lastScrollTime)
-    const deltaTop = shiftKey ? 0 : Math.ceil(deltaY * wheelSpeed)
-    const deltaLeft = Math.ceil((shiftKey ? (deltaY || deltaX) : deltaX) * wheelSpeed)
+    const deltaTop = shiftKey ? 0 : (deltaY * wheelSpeed)
+    const deltaLeft = (shiftKey ? (deltaX || deltaY) : deltaX) * wheelSpeed
 
-    const isTopWheel = deltaTop < 0
     const currScrollTop = bodyScrollElem.scrollTop
-    // 如果滚动位置已经是顶部或底部，则不需要触发
-    if (isTopWheel ? currScrollTop <= 0 : currScrollTop >= bodyScrollElem.scrollHeight - bodyScrollElem.clientHeight) {
-      return
-    }
+    const currScrollLeft = bodyScrollElem.scrollLeft
 
     const scrollTop = currScrollTop + deltaTop
-    const scrollLeft = bodyScrollElem.scrollLeft + deltaLeft
+    const scrollLeft = currScrollLeft + deltaLeft
     const isRollX = scrollLeft !== lastScrollLeft
     const isRollY = scrollTop !== lastScrollTop
+
+    if (isRollY) {
+      const isTopWheel = deltaTop < 0
+      // 如果滚动位置已经是顶部或底部，则不需要触发
+      if (isTopWheel ? currScrollTop <= 0 : currScrollTop >= bodyScrollElem.scrollHeight - bodyScrollElem.clientHeight) {
+        return
+      }
+    }
 
     if (rowOpts.isHover || highlightHoverRow) {
       $xeTable.clearHoverRow()

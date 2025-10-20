@@ -1373,7 +1373,7 @@ export default {
               }
             }
 
-            $xeTable.dispatchEvent('column-dragend', {
+            const csParams = {
               oldColumn: dragColumn,
               newColumn,
               dragColumn,
@@ -1383,7 +1383,9 @@ export default {
                 newIndex: nafIndex,
                 oldIndex: oafIndex
               }
-            }, evnt)
+            }
+            $xeTable.dispatchEvent('custom-sort-change', csParams, evnt)
+            $xeTable.dispatchEvent('column-dragend', csParams, evnt)
 
             if (immediate) {
               tableReactData.customColumnList = collectColumn.slice(0)

@@ -658,30 +658,39 @@ function oldSelectEditRender (h: CreateElement, renderOpts: VxeGlobalRendererHan
 }
 
 function getSelectCellValue (renderOpts: VxeGlobalRendererHandles.RenderTableCellOptions, { row, column }: any) {
-  const { options, optionGroups, optionProps = {}, optionGroupProps = {} } = renderOpts
+  const { options, optionGroups, optionProps = {}, optionGroupProps = {}, props = {} } = renderOpts
   const cellValue = XEUtils.get(row, column.field)
   let selectItem: any
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
   if (!(cellValue === null || cellValue === undefined)) {
-    return XEUtils.map(XEUtils.isArray(cellValue) ? cellValue : [cellValue],
-      optionGroups
-        ? (value) => {
-            const groupOptions = optionGroupProps.options || 'options'
-            for (let index = 0; index < optionGroups.length; index++) {
-              /* eslint-disable eqeqeq */
-              selectItem = XEUtils.find(optionGroups[index][groupOptions], item => item[valueProp] == value)
-              if (selectItem) {
-                break
-              }
-            }
-            return selectItem ? selectItem[labelProp] : value
-          }
-        : (value) => {
+    let vals = []
+    if (XEUtils.isArray(cellValue)) {
+      vals = cellValue
+    } else {
+      if (props.multiple && `${cellValue}`.indexOf(',') > -1) {
+        vals = `${cellValue}`.split(',')
+      } else {
+        vals = [cellValue]
+      }
+    }
+    return XEUtils.map(vals, optionGroups
+      ? (value) => {
+          const groupOptions = optionGroupProps.options || 'options'
+          for (let index = 0; index < optionGroups.length; index++) {
             /* eslint-disable eqeqeq */
-            selectItem = XEUtils.find(options, item => item[valueProp] == value)
-            return selectItem ? selectItem[labelProp] : value
+            selectItem = XEUtils.find(optionGroups[index][groupOptions], item => item[valueProp] == value)
+            if (selectItem) {
+              break
+            }
           }
+          return selectItem ? selectItem[labelProp] : value
+        }
+      : (value) => {
+          /* eslint-disable eqeqeq */
+          selectItem = XEUtils.find(options, item => item[valueProp] == value)
+          return selectItem ? selectItem[labelProp] : value
+        }
     ).join(', ')
   }
   return ''

@@ -10,6 +10,7 @@ import type { VxeTableConstructor, VxeTableDefines, TableInternalData, VxeTableP
 
 const { getI18n, renderer, renderEmptyElement } = VxeUI
 
+const sourceType = 'table'
 const renderType = 'body'
 
 // 滚动、拖动过程中不需要触发
@@ -159,6 +160,7 @@ function renderTdColumn (
     $columnIndex,
     _columnIndex,
     fixed: fixedType,
+    source: sourceType,
     type: renderType,
     isHidden: !!fixedHiddenColumn,
     level: rowLevel,
@@ -513,7 +515,18 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
         seq = rowRest._tIndex + 1
       }
     }
-    const params = { $table: $xeTable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+    const params = {
+      $table: $xeTable,
+      seq,
+      rowid,
+      fixed: fixedType,
+      type: renderType,
+      level: rowLevel,
+      row,
+      rowIndex,
+      $rowIndex,
+      _rowIndex
+    }
     // 行是否被展开
     const isExpandRow = expandColumn && !!rowExpandedFlag && !!rowExpandedMaps[rowid]
     // 树节点是否被展开
@@ -618,6 +631,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
           $columnIndex,
           _columnIndex,
           fixed: fixedType,
+          source: sourceType,
           type: renderType,
           level: rowLevel,
           row,

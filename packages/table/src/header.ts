@@ -9,6 +9,7 @@ import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeC
 
 const { renderer, renderEmptyElement } = VxeUI
 
+const sourceType = 'table'
 const renderType = 'header'
 
 function getColumnFirstChild (column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
@@ -85,8 +86,9 @@ function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMod
       columnIndex,
       $columnIndex,
       _columnIndex,
-      firstFilterOption,
+      firstFilterOption: firstFilterOption as VxeTableDefines.FilterOption,
       fixed: fixedType,
+      source: sourceType,
       type: renderType,
       isHidden: fixedHiddenColumn,
       hasFilter
@@ -281,8 +283,9 @@ function renderFilterRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, 
       columnIndex,
       $columnIndex,
       _columnIndex,
-      option: firstFilterOption,
+      option: firstFilterOption as VxeTableDefines.FilterOption,
       fixed: fixedType,
+      source: sourceType,
       type: renderType,
       isHidden: fixedHiddenColumn,
       hasFilter

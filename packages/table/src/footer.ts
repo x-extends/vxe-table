@@ -7,6 +7,7 @@ import { getCalcHeight } from './util'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, TableReactData, TableInternalData, VxeComponentStyleType } from '../../../types'
 
+const sourceType = 'table'
 const renderType = 'footer'
 
 const { renderer, renderEmptyElement } = VxeUI
@@ -58,6 +59,7 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
     const cellParams: VxeTableDefines.CellRenderFooterParams & {
       $table: VxeTableConstructor<any> & VxeTablePrivateMethods
     } = {
+      source: sourceType,
       $table: $xeTable,
       $grid: $xeGrid,
       $gantt: $xeGantt,

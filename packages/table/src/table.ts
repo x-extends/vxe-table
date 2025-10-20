@@ -71,17 +71,27 @@ function handleKeyField ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
  * 分别渲染左边固定列和右边固定列
  * 如果宽度足够情况下，则不需要渲染固定列
  */
-function renderFixed (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods, fixedType: any) {
+function renderViewFixed (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods, fixedType: any) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
 
   const { showHeader, showFooter } = props
   const { tableData, tableColumn, tableGroupColumn, columnStore, footerTableData } = reactData
+  const scrollbarOpts = $xeTable.computeScrollbarOpts
+  const scrollbarXOpts = $xeTable.computeScrollbarXOpts
+  const scrollbarYOpts = $xeTable.computeScrollbarYOpts
+  const { overscrollBehavior: overscrollXBehavior } = scrollbarXOpts
+  const { overscrollBehavior: overscrollYBehavior } = scrollbarYOpts
   const isFixedLeft = fixedType === 'left'
   const fixedColumn = isFixedLeft ? columnStore.leftList : columnStore.rightList
+  const osXBehavior = XEUtils.eqNull(overscrollXBehavior) ? scrollbarOpts.overscrollBehavior : overscrollXBehavior
+  const osYBehavior = XEUtils.eqNull(overscrollYBehavior) ? scrollbarOpts.overscrollBehavior : overscrollYBehavior
   return h('div', {
     ref: isFixedLeft ? 'refLeftContainer' : 'refRightContainer',
-    class: `vxe-table--fixed-${fixedType}-wrapper`
+    class: [`vxe-table--fixed-${fixedType}-wrapper`, {
+      [`x-ob--${osXBehavior}`]: osXBehavior,
+      [`y-ob--${osYBehavior}`]: osYBehavior
+    }]
   }, [
     showHeader
       ? h(TableHeaderComponent, {
@@ -307,6 +317,7 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
         $columnIndex,
         _columnIndex,
         fixed: '',
+        source: 'table',
         type: 'body',
         level: rowLevel,
         rowid,
@@ -418,11 +429,21 @@ function renderViewport (h: CreateElement, $xeTable: VxeTableConstructor & VxeTa
 
   const { showHeader, showFooter } = props
   const { overflowX, tableData, tableColumn, tableGroupColumn, footerTableData, columnStore } = reactData
+  const scrollbarOpts = $xeTable.computeScrollbarOpts
+  const scrollbarXOpts = $xeTable.computeScrollbarXOpts
+  const scrollbarYOpts = $xeTable.computeScrollbarYOpts
+  const { overscrollBehavior: overscrollXBehavior } = scrollbarXOpts
+  const { overscrollBehavior: overscrollYBehavior } = scrollbarYOpts
   const { leftList, rightList } = columnStore
+  const osXBehavior = XEUtils.eqNull(overscrollXBehavior) ? scrollbarOpts.overscrollBehavior : overscrollXBehavior
+  const osYBehavior = XEUtils.eqNull(overscrollYBehavior) ? scrollbarOpts.overscrollBehavior : overscrollYBehavior
 
   return h('div', {
     ref: 'refTableViewportElem',
-    class: 'vxe-table--viewport-wrapper'
+    class: ['vxe-table--viewport-wrapper', {
+      [`x-ob--${osXBehavior}`]: osXBehavior,
+      [`y-ob--${osYBehavior}`]: osYBehavior
+    }]
   }, [
     h('div', {
       class: 'vxe-table--main-wrapper'
@@ -466,8 +487,8 @@ function renderViewport (h: CreateElement, $xeTable: VxeTableConstructor & VxeTa
     h('div', {
       class: 'vxe-table--fixed-wrapper'
     }, [
-      leftList && leftList.length && overflowX ? renderFixed(h, $xeTable, 'left') : renderEmptyElement($xeTable),
-      rightList && rightList.length && overflowX ? renderFixed(h, $xeTable, 'right') : renderEmptyElement($xeTable)
+      leftList && leftList.length && overflowX ? renderViewFixed(h, $xeTable, 'left') : renderEmptyElement($xeTable),
+      rightList && rightList.length && overflowX ? renderViewFixed(h, $xeTable, 'right') : renderEmptyElement($xeTable)
     ]),
     renderRowExpandedVNs(h, $xeTable)
   ])
@@ -891,17 +912,31 @@ export default {
 
       return Object.assign({}, getConfig().table.scrollbarConfig, props.scrollbarConfig)
     },
+    computeScrollbarXOpts () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      const scrollbarOpts = $xeTable.computeScrollbarOpts
+      return Object.assign({}, scrollbarOpts.x, props.scrollbarConfig?.x || {})
+    },
+    computeScrollbarYOpts () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      const scrollbarOpts = $xeTable.computeScrollbarOpts
+      return Object.assign({}, scrollbarOpts.y, props.scrollbarConfig?.y || {})
+    },
     computeScrollbarXToTop () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      const scrollbarOpts = $xeTable.computeScrollbarOpts
-      return !!(scrollbarOpts.x && scrollbarOpts.x.position === 'top')
+      const scrollbarXOpts = $xeTable.computeScrollbarXOpts
+      return scrollbarXOpts.position === 'top'
     },
     computeScrollbarYToLeft () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      const scrollbarOpts = $xeTable.computeScrollbarOpts
-      return !!(scrollbarOpts.y && scrollbarOpts.y.position === 'left')
+      const scrollbarYOpts = $xeTable.computeScrollbarYOpts
+      return scrollbarYOpts.position === 'left'
     },
     computeScrollYThreshold () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
