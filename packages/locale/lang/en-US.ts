@@ -7,7 +7,7 @@ export default {
       fullStop: '。'
     },
     loading: {
-      text: 'loading...'
+      text: 'Loading...'
     },
     error: {
       downErr: 'Download failed',
@@ -181,7 +181,7 @@ export default {
         insertBottom: 'Append at the bottom (append new data at the bottom of the table)'
       },
       impTitle: 'Import data',
-      impFile: 'file name',
+      impFile: 'File name',
       impSelect: 'Select file',
       impType: 'File type',
       impOpts: 'Parameter settings',
@@ -207,9 +207,9 @@ export default {
       },
       printTitle: 'Print data',
       expTitle: 'Export data',
-      expName: 'file name',
+      expName: 'File name',
       expNamePlaceholder: 'Please enter a file name',
-      expSheetName: 'title',
+      expSheetName: 'Title',
       expSheetNamePlaceholder: 'Please enter a title',
       expType: 'Save type',
       expMode: 'Select data',
