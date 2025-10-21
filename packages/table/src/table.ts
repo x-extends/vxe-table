@@ -1598,7 +1598,7 @@ export default defineVxeComponent({
     }
 
     const calcTableHeight = (key: 'height' | 'minHeight' | 'maxHeight') => {
-      const { editConfig } = props
+      const { editConfig, editRules } = props
       const { parentHeight } = reactData
       let val = props[key]
       if (key === 'minHeight') {
@@ -1606,7 +1606,7 @@ export default defineVxeComponent({
         if (XEUtils.eqNull(val)) {
           if (eqEmptyValue(defMinHeight)) {
             // 编辑模式默认最小高度
-            if (isEnableConf(editConfig)) {
+            if (editRules && isEnableConf(editConfig)) {
               val = 144
             }
           } else {
@@ -12466,11 +12466,15 @@ export default defineVxeComponent({
         h('div', {
           key: 'tn',
           ref: refEmptyPlaceholder,
-          class: 'vxe-table--empty-placeholder'
+          class: 'vxe-table--empty-place-wrapper'
         }, [
           h('div', {
-            class: 'vxe-table--empty-content'
-          }, renderEmptyBody())
+            class: 'vxe-table--empty-placeholder'
+          }, [
+            h('div', {
+              class: 'vxe-table--empty-content'
+            }, renderEmptyBody())
+          ])
         ]),
         /**
          * 边框线
