@@ -630,29 +630,43 @@ export function getRefElem (refEl: any) {
   return null
 }
 
-export function clearTableDefaultStatus (_vm: any) {
-  _vm.initStatus = false
-  _vm.clearSort()
-  _vm.clearCurrentRow()
-  _vm.clearCurrentColumn()
-  _vm.clearRadioRow()
-  _vm.clearRadioReserve()
-  _vm.clearCheckboxRow()
-  _vm.clearCheckboxReserve()
-  _vm.clearRowExpand()
-  _vm.clearTreeExpand()
-  _vm.clearTreeExpandReserve()
-  if (_vm.clearEdit) {
-    _vm.clearEdit()
+export function clearTableDefaultStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const props = $xeTable
+  const internalData = $xeTable as unknown as TableInternalData
+
+  internalData.initStatus = false
+  const actionList = [
+    $xeTable.clearSort(),
+    $xeTable.clearCurrentRow(),
+    $xeTable.clearCurrentColumn(),
+    $xeTable.clearRadioRow(),
+    $xeTable.clearRadioReserve(),
+    $xeTable.clearCheckboxRow(),
+    $xeTable.clearCheckboxReserve(),
+    $xeTable.clearRowExpand(),
+    $xeTable.clearTreeExpand(),
+    $xeTable.clearTreeExpandReserve(),
+    $xeTable.clearPendingRow()
+  ]
+  if ($xeTable.clearFilter) {
+    actionList.push(
+      $xeTable.clearFilter()
+    )
   }
-  if (_vm.clearSelected && (_vm.keyboardConfig || _vm.mouseConfig)) {
-    _vm.clearSelected()
+  if ($xeTable.clearSelected && (props.keyboardConfig || props.mouseConfig)) {
+    actionList.push(
+      $xeTable.clearSelected()
+    )
   }
-  if (_vm.clearCellAreas && _vm.mouseConfig) {
-    _vm.clearCellAreas()
-    _vm.clearCopyCellArea()
+  if ($xeTable.clearCellAreas && props.mouseConfig) {
+    actionList.push(
+      $xeTable.clearCellAreas(),
+      $xeTable.clearCopyCellArea()
+    )
   }
-  return _vm.clearScroll()
+  return Promise.all(actionList).then(() => {
+    return $xeTable.clearScroll()
+  })
 }
 
 export function clearTableAllStatus (_vm: any) {

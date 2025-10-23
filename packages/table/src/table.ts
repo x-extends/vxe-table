@@ -88,7 +88,7 @@ function renderViewFixed (h: CreateElement, $xeTable: VxeTableConstructor & VxeT
   const osYBehavior = XEUtils.eqNull(overscrollYBehavior) ? scrollbarOpts.overscrollBehavior : overscrollYBehavior
   return h('div', {
     ref: isFixedLeft ? 'refLeftContainer' : 'refRightContainer',
-    class: [`vxe-table--fixed-${fixedType}-wrapper`, {
+    class: [`vxe-table--fixed-${fixedType}-wrapper`, `sx--${scrollbarXOpts.visible}`, `sy--${scrollbarYOpts.visible}`, {
       [`x-ob--${osXBehavior}`]: osXBehavior,
       [`y-ob--${osYBehavior}`]: osYBehavior
     }]
@@ -446,7 +446,7 @@ function renderViewport (h: CreateElement, $xeTable: VxeTableConstructor & VxeTa
     }]
   }, [
     h('div', {
-      class: 'vxe-table--main-wrapper'
+      class: ['vxe-table--main-wrapper', `sx--${scrollbarXOpts.visible}`, `sy--${scrollbarYOpts.visible}`]
     }, [
       /**
          * 表头
@@ -1475,6 +1475,13 @@ export default {
     },
     computeVxeLanguage () {
       return VxeUI.getLanguage()
+    },
+    computeScrollbarVisible () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      const scrollbarXOpts = $xeTable.computeScrollbarXOpts
+      const scrollbarYOpts = $xeTable.computeScrollbarYOpts
+      return `${scrollbarXOpts.visible}${scrollbarYOpts.visible}`
     }
   } as any,
   watch: {
@@ -1545,6 +1552,9 @@ export default {
       this.reLayoutFlag++
     },
     computeVxeLanguage () {
+      this.reLayoutFlag++
+    },
+    computeScrollbarVisible () {
       this.reLayoutFlag++
     },
     reLayoutFlag () {
@@ -2211,11 +2221,15 @@ export default {
       h('div', {
         key: 'tn',
         ref: 'refEmptyPlaceholder',
-        class: 'vxe-table--empty-placeholder'
+        class: 'vxe-table--empty-place-wrapper'
       }, [
         h('div', {
-          class: 'vxe-table--empty-content'
-        }, renderEmptyBody(h, $xeTable))
+          class: 'vxe-table--empty-placeholder'
+        }, [
+          h('div', {
+            class: 'vxe-table--empty-content'
+          }, renderEmptyBody(h, $xeTable))
+        ])
       ]),
       /**
        * 边框线

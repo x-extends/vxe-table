@@ -438,8 +438,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
      */
     getExcludeHeight () {
       const $xeGrid = this
+      const props = $xeGrid
       const reactData = $xeGrid.reactData
 
+      const { height } = props
       const { isZMax } = reactData
       const el = $xeGrid.$refs.refElem as HTMLDivElement
       if (el) {
@@ -449,7 +451,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
         const bottomWrapper = $xeGrid.$refs.refBottomWrapper as HTMLDivElement
         const pagerWrapper = $xeGrid.$refs.refPagerWrapper as HTMLDivElement
         const parentEl = el.parentElement as HTMLElement
-        const parentPaddingSize = isZMax ? 0 : (parentEl ? getPaddingTopBottomSize(parentEl) : 0)
+        let parentPaddingSize = 0
+        if (parentEl && (height === '100%' || height === 'auto')) {
+          parentPaddingSize = isZMax ? 0 : getPaddingTopBottomSize(parentEl)
+        }
         return parentPaddingSize + getPaddingTopBottomSize(el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
       }
       return 0
@@ -673,6 +678,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
             if (!isInited && reactData.tableLoading) {
               return $xeGrid.$nextTick()
             }
+            let operPromise = null
             let sortList: any[] = []
             let filterList: VxeTableDefines.FilterCheckedParams[] = []
             let pageParams: any = {}
@@ -724,7 +730,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
             } else {
               if ($xeTable) {
                 if (isReload) {
-                  $xeTable.clearAll()
+                  operPromise = $xeTable.clearAll()
                 } else {
                   sortList = $xeTable.getSortColumns()
                   filterList = $xeTable.getCheckedFilters()
@@ -749,51 +755,53 @@ export default /* define-vxe-component start */ defineVxeComponent({
             reactData.sortData = sortList
             reactData.filterData = filterList
             reactData.tableLoading = true
-            const applyArgs = [commitParams].concat(args)
-            return Promise.resolve((beforeQuery || ajaxMethods)(...applyArgs))
-              .then(rest => {
-                let tableData: any[] = []
-                reactData.tableLoading = false
-                if (rest) {
-                  if (pagerConfig && isEnableConf(pagerOpts)) {
-                    const totalProp = resConfigs.total
-                    const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $table: $xeTable, $grid: $xeGrid as VxeGridConstructor, $gantt: null }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
-                    tablePage.total = XEUtils.toNumber(total)
-                    const resultProp = resConfigs.result
-                    tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $table: $xeTable, $grid: $xeGrid as VxeGridConstructor, $gantt: null }) : XEUtils.get(rest, resultProp || 'result')) || []
-                    // 检验当前页码，不能超出当前最大页数
-                    const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
-                    if (tablePage.currentPage > pageCount) {
-                      tablePage.currentPage = pageCount
-                    }
-                  } else {
-                    const listProp = resConfigs.list
-                    tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $table: $xeTable, $grid: $xeGrid as VxeGridConstructor, $gantt: null }) : XEUtils.get(rest, listProp)) : rest) || []
+            return Promise.all([
+              Promise.resolve((beforeQuery || ajaxMethods)(commitParams, ...args)),
+              operPromise
+            ]).then(([rest]) => {
+              let tableData: any[] = []
+              reactData.tableLoading = false
+              if (rest) {
+                if (pagerConfig && isEnableConf(pagerOpts)) {
+                  const totalProp = resConfigs.total
+                  const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $table: $xeTable, $grid: $xeGrid as VxeGridConstructor, $gantt: null }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
+                  tablePage.total = XEUtils.toNumber(total)
+                  const resultProp = resConfigs.result
+                  tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $table: $xeTable, $grid: $xeGrid as VxeGridConstructor, $gantt: null }) : XEUtils.get(rest, resultProp || 'result')) || []
+                  // 检验当前页码，不能超出当前最大页数
+                  const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
+                  if (tablePage.currentPage > pageCount) {
+                    tablePage.currentPage = pageCount
                   }
-                }
-                if ($xeTable as any) {
-                  $xeTable.loadData(tableData)
                 } else {
-                  $xeTable.$nextTick(() => {
-                    if ($xeTable) {
-                      $xeTable.loadData(tableData)
-                    }
-                  })
+                  const listProp = resConfigs.list
+                  tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $table: $xeTable, $grid: $xeGrid as VxeGridConstructor, $gantt: null }) : XEUtils.get(rest, listProp)) : rest) || []
                 }
-                if (afterQuery) {
-                  afterQuery(...applyArgs)
-                }
-                if (querySuccessMethods) {
-                  querySuccessMethods({ ...commitParams, response: rest })
-                }
-                return { status: true }
-              }).catch((rest) => {
-                reactData.tableLoading = false
-                if (queryErrorMethods) {
-                  queryErrorMethods({ ...commitParams, response: rest })
-                }
-                return { status: false }
-              })
+              }
+              if ($xeTable) {
+                $xeTable.loadData(tableData)
+              } else {
+                $xeGrid.$nextTick(() => {
+                  const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
+                  if ($xeTable) {
+                    $xeTable.loadData(tableData)
+                  }
+                })
+              }
+              if (afterQuery) {
+                afterQuery(commitParams, ...args)
+              }
+              if (querySuccessMethods) {
+                querySuccessMethods({ ...commitParams, response: rest })
+              }
+              return { status: true }
+            }).catch((rest) => {
+              reactData.tableLoading = false
+              if (queryErrorMethods) {
+                queryErrorMethods({ ...commitParams, response: rest })
+              }
+              return { status: false }
+            })
           } else {
             errLog('vxe.error.notFunc', ['[grid] proxy-config.ajax.query'])
           }
@@ -829,11 +837,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
                     reactData.tableLoading = false
                     $xeTable.setPendingRow(removeRecords, false)
                     if (isRespMsg) {
-                      // 检测弹窗模块
-                      if (!VxeUI.modal) {
-                        errLog('vxe.error.reqModule', ['Modal'])
+                      if (VxeUI.modal) {
+                        VxeUI.modal.message({ content: $xeGrid.getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
                       }
-                      VxeUI.modal.message({ content: $xeGrid.getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
                     }
                     if (afterDelete) {
                       afterDelete(...applyArgs)
@@ -848,11 +854,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
                   .catch(rest => {
                     reactData.tableLoading = false
                     if (isRespMsg) {
-                      // 检测弹窗模块
-                      if (!VxeUI.modal) {
-                        errLog('vxe.error.reqModule', ['Modal'])
+                      if (VxeUI.modal) {
+                        VxeUI.modal.message({ id: code, content: $xeGrid.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                       }
-                      VxeUI.modal.message({ id: code, content: $xeGrid.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
                     if (deleteErrorMethods) {
                       deleteErrorMethods({ ...commitParams, response: rest })
@@ -862,11 +866,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
               })
             } else {
               if (isActiveMsg) {
-                // 检测弹窗模块
-                if (!VxeUI.modal) {
-                  errLog('vxe.error.reqModule', ['Modal'])
+                if (VxeUI.modal) {
+                  VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
                 }
-                VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
               }
             }
           } else {
@@ -917,11 +919,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
                     reactData.tableLoading = false
                     $xeTable.clearPendingRow()
                     if (isRespMsg) {
-                      // 检测弹窗模块
-                      if (!VxeUI.modal) {
-                        errLog('vxe.error.reqModule', ['Modal'])
+                      if (VxeUI.modal) {
+                        VxeUI.modal.message({ content: $xeGrid.getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
                       }
-                      VxeUI.modal.message({ content: $xeGrid.getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
                     }
                     if (afterSave) {
                       afterSave(...applyArgs)
@@ -936,11 +936,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
                   .catch(rest => {
                     reactData.tableLoading = false
                     if (isRespMsg) {
-                      // 检测弹窗模块
-                      if (!VxeUI.modal) {
-                        errLog('vxe.error.reqModule', ['Modal'])
+                      if (VxeUI.modal) {
+                        VxeUI.modal.message({ id: code, content: $xeGrid.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                       }
-                      VxeUI.modal.message({ id: code, content: $xeGrid.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
                     if (saveErrorMethods) {
                       saveErrorMethods({ ...commitParams, response: rest })
@@ -949,11 +947,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
                   })
               } else {
                 if (isActiveMsg) {
-                  // 检测弹窗模块
-                  if (!VxeUI.modal) {
-                    errLog('vxe.error.reqModule', ['Modal'])
+                  if (VxeUI.modal) {
+                    VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.dataUnchanged'), status: 'info' })
                   }
-                  VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.dataUnchanged'), status: 'info' })
                 }
               }
             })

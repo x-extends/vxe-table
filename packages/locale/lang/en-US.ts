@@ -7,7 +7,7 @@ export default {
       fullStop: '。'
     },
     loading: {
-      text: 'loading...'
+      text: 'Loading...'
     },
     error: {
       downErr: 'Download failed',
@@ -181,7 +181,7 @@ export default {
         insertBottom: 'Append at the bottom (append new data at the bottom of the table)'
       },
       impTitle: 'Import data',
-      impFile: 'file name',
+      impFile: 'File name',
       impSelect: 'Select file',
       impType: 'File type',
       impOpts: 'Parameter settings',
@@ -207,9 +207,9 @@ export default {
       },
       printTitle: 'Print data',
       expTitle: 'Export data',
-      expName: 'file name',
+      expName: 'File name',
       expNamePlaceholder: 'Please enter a file name',
-      expSheetName: 'title',
+      expSheetName: 'Title',
       expSheetNamePlaceholder: 'Please enter a title',
       expType: 'Save type',
       expMode: 'Select data',
@@ -643,10 +643,10 @@ export default {
         },
         cases: {
           equal: 'equal',
-          gt: 'Greater than',
-          lt: 'Less than',
-          begin: 'The beginning is',
-          endin: 'The end is',
+          gt: 'Greater',
+          lt: 'Less',
+          begin: 'Start',
+          endin: 'End',
           include: 'Include',
           isSensitive: 'case sensitive'
         }
@@ -675,14 +675,14 @@ export default {
         },
         cases: {
           equal: 'equal',
-          unequal: 'Not equal to',
-          gt: 'Greater than',
-          ge: 'Greater than or equal to',
-          lt: 'Less than',
-          le: 'Less than or equal to',
-          begin: 'The beginning is',
+          unequal: 'Not equal',
+          gt: 'Greater',
+          ge: 'Greater or equal',
+          lt: 'Less',
+          le: 'Less or equal',
+          begin: 'Start',
           notbegin: "It's not at the beginning",
-          endin: 'The end is',
+          endin: 'End',
           notendin: 'The ending is not',
           include: 'Include',
           exclude: 'Not included',
@@ -740,14 +740,14 @@ export default {
       search: 'search',
       cases: {
         equal: 'equal',
-        unequal: 'Not equal to',
-        gt: 'Greater than',
-        ge: 'Greater than or equal to',
-        lt: 'Less than',
-        le: 'Less than or equal to',
-        begin: 'The beginning is',
+        unequal: 'Not equal',
+        gt: 'Greater',
+        ge: 'Greater or equal',
+        lt: 'Less',
+        le: 'Less or equal',
+        begin: 'Start',
         notbegin: "It's not at the beginning",
-        endin: 'The end is',
+        endin: 'End',
         notendin: 'The ending is not',
         include: 'Include',
         exclude: 'Not included',

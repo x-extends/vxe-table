@@ -136,6 +136,51 @@ $btnThemeList: (
   overflow-x: scroll;
 }
 
+// 禁用滚动条
+.vxe-table--main-wrapper {
+  &.sx--hidden {
+    & > .vxe-table--header-wrapper {
+      & > .vxe-table--header-inner-wrapper {
+        overflow-x: hidden;
+      }
+    }
+    & > .vxe-table--body-wrapper {
+      & > .vxe-table--body-inner-wrapper {
+        overflow-x: hidden;
+      }
+    }
+    & > .vxe-table--footer-wrapper {
+      & > .vxe-table--footer-inner-wrapper {
+        overflow-x: hidden;
+      }
+    }
+  }
+  &.sy--hidden {
+    & > .vxe-table--body-wrapper {
+      & > .vxe-table--body-inner-wrapper {
+        overflow-y: hidden;
+      }
+    }
+  }
+}
+.vxe-table--fixed-left-wrapper,
+.vxe-table--fixed-right-wrapper {
+  &.sx--hidden {
+    & > .vxe-table--body-wrapper {
+      & > .vxe-table--body-inner-wrapper {
+        overflow-x: hidden;
+      }
+    }
+  }
+  &.sy--hidden {
+    & > .vxe-table--body-wrapper {
+      & > .vxe-table--body-inner-wrapper {
+        overflow-y: hidden;
+      }
+    }
+  }
+}
+
 .vxe-loading--custom-wrapper {
   display: none;
   position: absolute;
@@ -2141,11 +2186,16 @@ $btnThemeList: (
     display: none;
     visibility: hidden;
   }
-  .vxe-table--empty-placeholder {
+  .vxe-table--empty-place-wrapper {
     display: none;
     position: absolute;
+    width: 100%;
     top: 0;
     z-index: 5;
+    overflow: hidden;
+  }
+  .vxe-table--empty-placeholder {
+    display: flex;
   }
   .vxe-table--empty-content {
     display: block;
@@ -2154,7 +2204,7 @@ $btnThemeList: (
   }
   &.is--empty {
     .vxe-table--empty-block,
-    .vxe-table--empty-placeholder {
+    .vxe-table--empty-place-wrapper{
       display: flex;
     }
   }

@@ -1,6 +1,6 @@
 # vxe-table
 
-[![star](https://gitee.com/x-extends/vxe-table/badge/star.svg?theme=gvp)](https://gitee.com/x-extends/vxe-table/stargazers)
+[![github star](https://img.shields.io/github/stars/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/stargazers)
 [![npm version](https://img.shields.io/npm/v/vxe-table.svg?style=flat-square)](https://www.npmjs.com/package/vxe-table)
 [![NodeJS with Webpack](https://github.com/x-extends/vxe-table/actions/workflows/webpack.yml/badge.svg)](https://github.com/x-extends/vxe-table/actions/workflows/webpack.yml)
 [![npm downloads](https://img.shields.io/npm/dt/vxe-table.svg?style=flat-square)](https://npm-stat.com/charts.html?package=vxe-table)
@@ -10,7 +10,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-一个基于 [Vxe UI](https://github.com/x-extends/vxe-pc-ui) 的 PC 端表格组件，支持增删改查的可编辑表格，支持复制粘贴、数据透视表、虚拟列表高性能的表格解决方案
+一个基于 [Vxe UI](https://github.com/x-extends/vxe-pc-ui) 的 PC 端表格组件，支持增删改查的可编辑表格，支持 Excel 复制粘贴、数据透视表、虚拟列表高性能的表格解决方案
 
 ## 浏览器支持
 

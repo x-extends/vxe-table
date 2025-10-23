@@ -1002,7 +1002,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const { visibleColumn, tableHeight, elemStore, customHeight, customMinHeight, customMaxHeight, tHeaderHeight, tFooterHeight } = internalData
   const $xeGanttView = internalData.xeGanttView
   const el = $xeTable.$refs.refElem as HTMLDivElement
-  if (!el || !el.clientHeight) {
+  if (!el || (internalData.tBodyHeight && !el.clientHeight)) {
     return
   }
   const containerList = ['main', 'left', 'right']
@@ -2359,7 +2359,7 @@ function calcTableHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
 
-  const { editConfig } = props
+  const { editConfig, editRules } = props
   const { parentHeight } = reactData
   let val = props[key]
   if (key === 'minHeight') {
@@ -2367,7 +2367,7 @@ function calcTableHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
     if (XEUtils.eqNull(val)) {
       if (eqEmptyValue(defMinHeight)) {
         // 编辑模式默认最小高度
-        if (isEnableConf(editConfig)) {
+        if (editRules && isEnableConf(editConfig)) {
           val = 144
         }
       } else {
@@ -10824,17 +10824,45 @@ const Methods = {
    */
   getScroll () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    return $xeTable.getScrollData()
+  },
+  /**
+   * 获取表格的滚动数据
+   */
+  getScrollData () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { scrollXLoad, scrollYLoad } = reactData
+    const { scrollXLoad, scrollYLoad, scrollbarHeight, scrollbarWidth } = reactData
     const { elemStore } = internalData
     const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+    const scrollTop = bodyScrollElem ? bodyScrollElem.scrollTop : 0
+    const scrollLeft = bodyScrollElem ? bodyScrollElem.scrollLeft : 0
+    const clientHeight = bodyScrollElem ? bodyScrollElem.clientHeight : 0
+    const clientWidth = bodyScrollElem ? bodyScrollElem.clientWidth : 0
+    const scrollHeight = bodyScrollElem ? bodyScrollElem.scrollHeight : 0
+    const scrollWidth = bodyScrollElem ? bodyScrollElem.scrollWidth : 0
+    const isTop = scrollTop <= 0
+    const isBottom = scrollTop + clientHeight >= scrollHeight
+    const isLeft = scrollLeft <= 0
+    const isRight = scrollLeft + clientWidth >= scrollWidth
     return {
       virtualX: scrollXLoad,
       virtualY: scrollYLoad,
-      scrollTop: bodyScrollElem ? bodyScrollElem.scrollTop : 0,
-      scrollLeft: bodyScrollElem ? bodyScrollElem.scrollLeft : 0
+      isTop,
+      isBottom,
+      isLeft,
+      isRight,
+      scrollbarHeight,
+      scrollbarWidth,
+      scrollTop,
+      scrollLeft,
+      scrollHeight,
+      scrollWidth,
+      clientHeight,
+      clientWidth
     }
   },
   handleScrollEvent (evnt: Event, isRollY: boolean, isRollX: boolean, scrollTop: number, scrollLeft: number, params: any) {
@@ -11152,12 +11180,11 @@ const Methods = {
     const { scrollXLoad, scrollYLoad, expandColumn } = reactData
     const leftFixedWidth = $xeTable.computeLeftFixedWidth
     const rightFixedWidth = $xeTable.computeRightFixedWidth
-    if (!(leftFixedWidth || rightFixedWidth || expandColumn)) {
-      return
-    }
 
     const { elemStore, lastScrollTop, lastScrollLeft } = internalData
     const rowOpts = $xeTable.computeRowOpts
+    const scrollbarXOpts = $xeTable.computeScrollbarXOpts
+    const scrollbarYOpts = $xeTable.computeScrollbarYOpts
     const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
     const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
     const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
@@ -11166,12 +11193,6 @@ const Methods = {
     const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
     const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
     const rowExpandEl = $xeTable.$refs.refRowExpandElem as HTMLDivElement
-    if (!xHandleEl) {
-      return
-    }
-    if (!yHandleEl) {
-      return
-    }
     if (!bodyScrollElem) {
       return
     }
@@ -11188,12 +11209,28 @@ const Methods = {
     const isRollX = scrollLeft !== lastScrollLeft
     const isRollY = scrollTop !== lastScrollTop
 
+    if (isRollX) {
+      // 如果禁用滚动
+      if (scrollbarXOpts.visible === 'hidden') {
+        evnt.preventDefault()
+        return
+      }
+    }
     if (isRollY) {
+      // 如果禁用滚动
+      if (scrollbarYOpts.visible === 'hidden') {
+        evnt.preventDefault()
+        return
+      }
       const isTopWheel = deltaTop < 0
       // 如果滚动位置已经是顶部或底部，则不需要触发
       if (isTopWheel ? currScrollTop <= 0 : currScrollTop >= bodyScrollElem.scrollHeight - bodyScrollElem.clientHeight) {
         return
       }
+    }
+
+    if (!(leftFixedWidth || rightFixedWidth || expandColumn)) {
+      return
     }
 
     if (rowOpts.isHover || highlightHoverRow) {
@@ -11745,7 +11782,10 @@ const Methods = {
     scrollYStore.visibleStartIndex = 0
     scrollYStore.endIndex = scrollYStore.visibleSize
     scrollYStore.visibleEndIndex = scrollYStore.visibleSize
+
     return $xeTable.$nextTick().then(() => {
+      internalData.lastScrollLeft = 0
+      internalData.lastScrollTop = 0
       internalData.intoRunScroll = false
     })
   },
