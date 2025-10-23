@@ -2464,7 +2464,7 @@ export default defineVxeComponent({
       const { visibleColumn, tableHeight, elemStore, customHeight, customMinHeight, customMaxHeight, tHeaderHeight, tFooterHeight } = internalData
       const $xeGanttView = internalData.xeGanttView
       const el = refElem.value
-      if (!el || !el.clientHeight) {
+      if (!el || (internalData.tBodyHeight && !el.clientHeight)) {
         return
       }
       const containerList = ['main', 'left', 'right']
@@ -7027,14 +7027,40 @@ export default defineVxeComponent({
        * 获取表格的滚动状态
        */
       getScroll () {
-        const { scrollXLoad, scrollYLoad } = reactData
+        return $xeTable.getScrollData()
+      },
+      /**
+       * 获取表格的滚动数据
+       */
+      getScrollData () {
+        const { scrollXLoad, scrollYLoad, scrollbarHeight, scrollbarWidth } = reactData
         const { elemStore } = internalData
         const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+        const scrollTop = bodyScrollElem ? bodyScrollElem.scrollTop : 0
+        const scrollLeft = bodyScrollElem ? bodyScrollElem.scrollLeft : 0
+        const clientHeight = bodyScrollElem ? bodyScrollElem.clientHeight : 0
+        const clientWidth = bodyScrollElem ? bodyScrollElem.clientWidth : 0
+        const scrollHeight = bodyScrollElem ? bodyScrollElem.scrollHeight : 0
+        const scrollWidth = bodyScrollElem ? bodyScrollElem.scrollWidth : 0
+        const isTop = scrollTop <= 0
+        const isBottom = scrollTop + clientHeight >= scrollHeight
+        const isLeft = scrollLeft <= 0
+        const isRight = scrollLeft + clientWidth >= scrollWidth
         return {
           virtualX: scrollXLoad,
           virtualY: scrollYLoad,
-          scrollTop: bodyScrollElem ? bodyScrollElem.scrollTop : 0,
-          scrollLeft: bodyScrollElem ? bodyScrollElem.scrollLeft : 0
+          isTop,
+          isBottom,
+          isLeft,
+          isRight,
+          scrollbarHeight,
+          scrollbarWidth,
+          scrollTop,
+          scrollLeft,
+          scrollHeight,
+          scrollWidth,
+          clientHeight,
+          clientWidth
         }
       },
       /**
@@ -7158,7 +7184,10 @@ export default defineVxeComponent({
         scrollYStore.visibleStartIndex = 0
         scrollYStore.endIndex = scrollYStore.visibleSize
         scrollYStore.visibleEndIndex = scrollYStore.visibleSize
+
         return nextTick().then(() => {
+          internalData.lastScrollLeft = 0
+          internalData.lastScrollTop = 0
           internalData.intoRunScroll = false
         })
       },
@@ -8364,7 +8393,7 @@ export default defineVxeComponent({
         const el = refElem.value
         if (el) {
           const parentElem = el.parentNode as HTMLElement
-          const parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
+          let parentPaddingSize = 0
           let parentWrapperHeight = 0
           if (parentElem) {
             if ($xeGantt && hasClass(parentElem, 'vxe-gantt--table-wrapper')) {
@@ -8373,6 +8402,7 @@ export default defineVxeComponent({
               parentWrapperHeight = $xeGrid.getParentHeight()
             } else {
               parentWrapperHeight = parentElem.clientHeight
+              parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
             }
           }
           return Math.floor(parentWrapperHeight - parentPaddingSize)
@@ -11404,12 +11434,11 @@ export default defineVxeComponent({
         const { scrollXLoad, scrollYLoad, expandColumn } = reactData
         const leftFixedWidth = computeLeftFixedWidth.value
         const rightFixedWidth = computeRightFixedWidth.value
-        if (!(leftFixedWidth || rightFixedWidth || expandColumn)) {
-          return
-        }
 
         const { elemStore, lastScrollTop, lastScrollLeft } = internalData
         const rowOpts = computeRowOpts.value
+        const scrollbarXOpts = computeScrollbarXOpts.value
+        const scrollbarYOpts = computeScrollbarYOpts.value
         const xHandleEl = refScrollXHandleElem.value
         const yHandleEl = refScrollYHandleElem.value
         const leftScrollElem = getRefElem(elemStore['left-body-scroll'])
@@ -11418,12 +11447,6 @@ export default defineVxeComponent({
         const footerScrollElem = getRefElem(elemStore['main-footer-scroll'])
         const rightScrollElem = getRefElem(elemStore['right-body-scroll'])
         const rowExpandEl = refRowExpandElem.value
-        if (!xHandleEl) {
-          return
-        }
-        if (!yHandleEl) {
-          return
-        }
         if (!bodyScrollElem) {
           return
         }
@@ -11440,7 +11463,19 @@ export default defineVxeComponent({
         const isRollX = scrollLeft !== lastScrollLeft
         const isRollY = scrollTop !== lastScrollTop
 
+        if (isRollX) {
+          // 如果禁用滚动
+          if (scrollbarXOpts.visible === 'hidden') {
+            evnt.preventDefault()
+            return
+          }
+        }
         if (isRollY) {
+          // 如果禁用滚动
+          if (scrollbarYOpts.visible === 'hidden') {
+            evnt.preventDefault()
+            return
+          }
           const isTopWheel = deltaTop < 0
           // 如果滚动位置已经是顶部或底部，则不需要触发
           if (isTopWheel ? currScrollTop <= 0 : currScrollTop >= bodyScrollElem.scrollHeight - bodyScrollElem.clientHeight) {
@@ -11448,9 +11483,14 @@ export default defineVxeComponent({
           }
         }
 
+        if (!(leftFixedWidth || rightFixedWidth || expandColumn)) {
+          return
+        }
+
         if (rowOpts.isHover || highlightHoverRow) {
           $xeTable.clearHoverRow()
         }
+
         // 用于鼠标纵向滚轮处理
         if (isRollX) {
           evnt.preventDefault()
@@ -11972,7 +12012,7 @@ export default defineVxeComponent({
       const osYBehavior = XEUtils.eqNull(overscrollYBehavior) ? scrollbarOpts.overscrollBehavior : overscrollYBehavior
       return h('div', {
         ref: isFixedLeft ? refLeftContainer : refRightContainer,
-        class: [`vxe-table--fixed-${fixedType}-wrapper`, {
+        class: [`vxe-table--fixed-${fixedType}-wrapper`, `sx--${scrollbarXOpts.visible}`, `sy--${scrollbarYOpts.visible}`, {
           [`x-ob--${osXBehavior}`]: osXBehavior,
           [`y-ob--${osYBehavior}`]: osYBehavior
         }]
@@ -12290,7 +12330,7 @@ export default defineVxeComponent({
         }]
       }, [
         h('div', {
-          class: 'vxe-table--main-wrapper'
+          class: ['vxe-table--main-wrapper', `sx--${scrollbarXOpts.visible}`, `sy--${scrollbarYOpts.visible}`]
         }, [
           /**
            * 表头
@@ -12785,6 +12825,18 @@ export default defineVxeComponent({
       reLayoutFlag.value++
     })
     watch(() => VxeUI.getLanguage(), () => {
+      reLayoutFlag.value++
+    })
+    watch(() => {
+      const scrollbarXOpts = computeScrollbarXOpts.value
+      return scrollbarXOpts.visible
+    }, () => {
+      reLayoutFlag.value++
+    })
+    watch(() => {
+      const scrollbarYOpts = computeScrollbarYOpts.value
+      return scrollbarYOpts.visible
+    }, () => {
       reLayoutFlag.value++
     })
     watch(reLayoutFlag, () => {

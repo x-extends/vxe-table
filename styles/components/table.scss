@@ -136,6 +136,51 @@ $btnThemeList: (
   overflow-x: scroll;
 }
 
+// 禁用滚动条
+.vxe-table--main-wrapper {
+  &.sx--hidden {
+    & > .vxe-table--header-wrapper {
+      & > .vxe-table--header-inner-wrapper {
+        overflow-x: hidden;
+      }
+    }
+    & > .vxe-table--body-wrapper {
+      & > .vxe-table--body-inner-wrapper {
+        overflow-x: hidden;
+      }
+    }
+    & > .vxe-table--footer-wrapper {
+      & > .vxe-table--footer-inner-wrapper {
+        overflow-x: hidden;
+      }
+    }
+  }
+  &.sy--hidden {
+    & > .vxe-table--body-wrapper {
+      & > .vxe-table--body-inner-wrapper {
+        overflow-y: hidden;
+      }
+    }
+  }
+}
+.vxe-table--fixed-left-wrapper,
+.vxe-table--fixed-right-wrapper {
+  &.sx--hidden {
+    & > .vxe-table--body-wrapper {
+      & > .vxe-table--body-inner-wrapper {
+        overflow-x: hidden;
+      }
+    }
+  }
+  &.sy--hidden {
+    & > .vxe-table--body-wrapper {
+      & > .vxe-table--body-inner-wrapper {
+        overflow-y: hidden;
+      }
+    }
+  }
+}
+
 .vxe-loading--custom-wrapper {
   display: none;
   position: absolute;

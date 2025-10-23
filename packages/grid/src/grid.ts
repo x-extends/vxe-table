@@ -19,7 +19,7 @@ import type { VxeTableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, 
 const { getConfig, getI18n, commands, hooks, useFns, createEvent, globalEvents, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
 
 const tableComponentPropKeys = Object.keys(tableProps) as (keyof VxeTableProps)[]
-const tableComponentMethodKeys: (keyof VxeTableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'setRow', 'createData', 'createRow', 'revertData', 'clearData', 'isRemoveByRow', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getFullColumns', 'getData', 'getCheckboxRecords', 'getParentRow', 'getTreeRowChildren', 'getTreeRowLevel', 'getTreeParentRow', 'getRowSeq', 'getRowById', 'getRowid', 'getTableData', 'getFullData', 'setColumnFixed', 'clearColumnFixed', 'setColumnWidth', 'getColumnWidth', 'recalcRowHeight', 'setRowHeightConf', 'getRowHeightConf', 'setRowHeight', 'getRowHeight', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'closeTooltip', 'isAllCheckboxChecked', 'isAllCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'setCheckboxRowKey', 'isCheckedByCheckboxRow', 'isCheckedByCheckboxRowKey', 'isIndeterminateByCheckboxRow', 'isIndeterminateByCheckboxRowKey', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'isCheckedByRadioRowKey', 'setRadioRow', 'setRadioRowKey', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'setPendingRow', 'togglePendingRow', 'hasPendingByRow', 'isPendingByRow', 'getPendingRecords', 'clearPendingRow', 'setFilterByEvent', 'sort', 'setSort', 'setSortByEvent', 'clearSort', 'clearSortByEvent', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'clearFilterByEvent', 'isActiveFilterByColumn', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadRowExpand', 'reloadRowExpand', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'isRowExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeExpand', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeInsertRow', 'removeMergeCells', 'getMergeCells', 'setMergeHeaderCells', 'removeMergeHeaderCells', 'getMergeHeaderCells', 'clearMergeHeaderCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'getCustomStoreData', 'setRowGroupExpand', 'setRowGroupExpandByField', 'setAllRowGroupExpand', 'clearRowGroupExpand', 'isRowGroupExpandByRow', 'isRowGroupRecord', 'isAggregateRecord', 'isAggregateExpandByRow', 'getAggregateContentByRow', 'getAggregateRowChildren', 'setRowGroups', 'clearRowGroups', 'openTooltip', 'moveColumnTo', 'moveRowTo', 'getCellLabel', 'getCellElement', 'focus', 'blur', 'connect', 'connectToolbar']
+const tableComponentMethodKeys: (keyof VxeTableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'setRow', 'createData', 'createRow', 'revertData', 'clearData', 'isRemoveByRow', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getFullColumns', 'getData', 'getCheckboxRecords', 'getParentRow', 'getTreeRowChildren', 'getTreeRowLevel', 'getTreeParentRow', 'getRowSeq', 'getRowById', 'getRowid', 'getTableData', 'getFullData', 'setColumnFixed', 'clearColumnFixed', 'setColumnWidth', 'getColumnWidth', 'recalcRowHeight', 'setRowHeightConf', 'getRowHeightConf', 'setRowHeight', 'getRowHeight', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'closeTooltip', 'isAllCheckboxChecked', 'isAllCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'setCheckboxRowKey', 'isCheckedByCheckboxRow', 'isCheckedByCheckboxRowKey', 'isIndeterminateByCheckboxRow', 'isIndeterminateByCheckboxRowKey', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'isCheckedByRadioRowKey', 'setRadioRow', 'setRadioRowKey', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'setPendingRow', 'togglePendingRow', 'hasPendingByRow', 'isPendingByRow', 'getPendingRecords', 'clearPendingRow', 'setFilterByEvent', 'sort', 'setSort', 'setSortByEvent', 'clearSort', 'clearSortByEvent', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'clearFilterByEvent', 'isActiveFilterByColumn', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadRowExpand', 'reloadRowExpand', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'isRowExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeExpand', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'getScrollData', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeInsertRow', 'removeMergeCells', 'getMergeCells', 'setMergeHeaderCells', 'removeMergeHeaderCells', 'getMergeHeaderCells', 'clearMergeHeaderCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'getCustomStoreData', 'setRowGroupExpand', 'setRowGroupExpandByField', 'setAllRowGroupExpand', 'clearRowGroupExpand', 'isRowGroupExpandByRow', 'isRowGroupRecord', 'isAggregateRecord', 'isAggregateExpandByRow', 'getAggregateContentByRow', 'getAggregateRowChildren', 'setRowGroups', 'clearRowGroups', 'openTooltip', 'moveColumnTo', 'moveRowTo', 'getCellLabel', 'getCellElement', 'focus', 'blur', 'connect', 'connectToolbar']
 
 function createInternalData (): GridInternalData {
   return {
@@ -1015,6 +1015,7 @@ export default defineVxeComponent({
               if (!isInited && reactData.tableLoading) {
                 return nextTick()
               }
+              let operPromise = null
               let sortList: any[] = []
               let filterList: VxeTableDefines.FilterCheckedParams[] = []
               let pageParams: any = {}
@@ -1068,7 +1069,7 @@ export default defineVxeComponent({
               } else {
                 if ($xeTable) {
                   if (isReload) {
-                    $xeTable.clearAll()
+                    operPromise = $xeTable.clearAll()
                   } else {
                     sortList = $xeTable.getSortColumns()
                     filterList = $xeTable.getCheckedFilters()
@@ -1093,50 +1094,53 @@ export default defineVxeComponent({
               reactData.sortData = sortList
               reactData.filterData = filterList
               reactData.tableLoading = true
-              return Promise.resolve((beforeQuery || ajaxMethods)(commitParams, ...args))
-                .then(rest => {
-                  let tableData: any[] = []
-                  reactData.tableLoading = false
-                  if (rest) {
-                    if (pagerConfig && isEnableConf(pagerOpts)) {
-                      const totalProp = resConfigs.total
-                      const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $table: $xeTable, $grid: $xeGrid, $gantt: null }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
-                      tablePage.total = XEUtils.toNumber(total)
-                      const resultProp = resConfigs.result
-                      tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $table: $xeTable, $grid: $xeGrid, $gantt: null }) : XEUtils.get(rest, resultProp || 'result')) || []
-                      // 检验当前页码，不能超出当前最大页数
-                      const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
-                      if (tablePage.currentPage > pageCount) {
-                        tablePage.currentPage = pageCount
-                      }
-                    } else {
-                      const listProp = resConfigs.list
-                      tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $table: $xeTable, $grid: $xeGrid, $gantt: null }) : XEUtils.get(rest, listProp)) : rest) || []
+              return Promise.all([
+                Promise.resolve((beforeQuery || ajaxMethods)(commitParams, ...args)),
+                operPromise
+              ]).then(([rest]) => {
+                let tableData: any[] = []
+                reactData.tableLoading = false
+                if (rest) {
+                  if (pagerConfig && isEnableConf(pagerOpts)) {
+                    const totalProp = resConfigs.total
+                    const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $table: $xeTable, $grid: $xeGrid, $gantt: null }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
+                    tablePage.total = XEUtils.toNumber(total)
+                    const resultProp = resConfigs.result
+                    tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $table: $xeTable, $grid: $xeGrid, $gantt: null }) : XEUtils.get(rest, resultProp || 'result')) || []
+                    // 检验当前页码，不能超出当前最大页数
+                    const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
+                    if (tablePage.currentPage > pageCount) {
+                      tablePage.currentPage = pageCount
                     }
-                  }
-                  if ($xeTable as any) {
-                    $xeTable.loadData(tableData)
                   } else {
-                    nextTick(() => {
-                      if ($xeTable) {
-                        $xeTable.loadData(tableData)
-                      }
-                    })
+                    const listProp = resConfigs.list
+                    tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $table: $xeTable, $grid: $xeGrid, $gantt: null }) : XEUtils.get(rest, listProp)) : rest) || []
                   }
-                  if (afterQuery) {
-                    afterQuery(commitParams, ...args)
-                  }
-                  if (querySuccessMethods) {
-                    querySuccessMethods({ ...commitParams, response: rest })
-                  }
-                  return { status: true }
-                }).catch((rest) => {
-                  reactData.tableLoading = false
-                  if (queryErrorMethods) {
-                    queryErrorMethods({ ...commitParams, response: rest })
-                  }
-                  return { status: false }
-                })
+                }
+                if ($xeTable) {
+                  $xeTable.loadData(tableData)
+                } else {
+                  nextTick(() => {
+                    const $xeTable = refTable.value
+                    if ($xeTable) {
+                      $xeTable.loadData(tableData)
+                    }
+                  })
+                }
+                if (afterQuery) {
+                  afterQuery(commitParams, ...args)
+                }
+                if (querySuccessMethods) {
+                  querySuccessMethods({ ...commitParams, response: rest })
+                }
+                return { status: true }
+              }).catch((rest) => {
+                reactData.tableLoading = false
+                if (queryErrorMethods) {
+                  queryErrorMethods({ ...commitParams, response: rest })
+                }
+                return { status: false }
+              })
             } else {
               errLog('vxe.error.notFunc', ['[grid] proxy-config.ajax.query'])
             }
@@ -1469,6 +1473,7 @@ export default defineVxeComponent({
        * 获取需要排除的高度
        */
       getExcludeHeight () {
+        const { height } = props
         const { isZMax } = reactData
         const el = refElem.value
         if (el) {
@@ -1477,8 +1482,11 @@ export default defineVxeComponent({
           const topWrapper = refTopWrapper.value
           const bottomWrapper = refBottomWrapper.value
           const pagerWrapper = refPagerWrapper.value
-          const parentEl = el.parentElement as HTMLElement
-          const parentPaddingSize = isZMax ? 0 : (parentEl ? getPaddingTopBottomSize(parentEl) : 0)
+          const parentEl = el.parentElement
+          let parentPaddingSize = 0
+          if (parentEl && (height === '100%' || height === 'auto')) {
+            parentPaddingSize = isZMax ? 0 : getPaddingTopBottomSize(parentEl)
+          }
           return parentPaddingSize + getPaddingTopBottomSize(el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
         }
         return 0

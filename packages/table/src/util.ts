@@ -702,29 +702,40 @@ export function calcTreeLine (params: VxeTableDefines.CellRenderBodyParams, prev
 
 export function clearTableDefaultStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const { props, internalData } = $xeTable
+
   internalData.initStatus = false
-  $xeTable.clearSort()
-  $xeTable.clearCurrentRow()
-  $xeTable.clearCurrentColumn()
-  $xeTable.clearRadioRow()
-  $xeTable.clearRadioReserve()
-  $xeTable.clearCheckboxRow()
-  $xeTable.clearCheckboxReserve()
-  $xeTable.clearRowExpand()
-  $xeTable.clearTreeExpand()
-  $xeTable.clearTreeExpandReserve()
-  $xeTable.clearPendingRow()
+  const actionList = [
+    $xeTable.clearSort(),
+    $xeTable.clearCurrentRow(),
+    $xeTable.clearCurrentColumn(),
+    $xeTable.clearRadioRow(),
+    $xeTable.clearRadioReserve(),
+    $xeTable.clearCheckboxRow(),
+    $xeTable.clearCheckboxReserve(),
+    $xeTable.clearRowExpand(),
+    $xeTable.clearTreeExpand(),
+    $xeTable.clearTreeExpandReserve(),
+    $xeTable.clearPendingRow()
+  ]
   if ($xeTable.clearFilter) {
-    $xeTable.clearFilter()
+    actionList.push(
+      $xeTable.clearFilter()
+    )
   }
   if ($xeTable.clearSelected && (props.keyboardConfig || props.mouseConfig)) {
-    $xeTable.clearSelected()
+    actionList.push(
+      $xeTable.clearSelected()
+    )
   }
   if ($xeTable.clearCellAreas && props.mouseConfig) {
-    $xeTable.clearCellAreas()
-    $xeTable.clearCopyCellArea()
+    actionList.push(
+      $xeTable.clearCellAreas(),
+      $xeTable.clearCopyCellArea()
+    )
   }
-  return $xeTable.clearScroll()
+  return Promise.all(actionList).then(() => {
+    return $xeTable.clearScroll()
+  })
 }
 
 export function clearTableAllStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
