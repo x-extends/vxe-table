@@ -1,12 +1,26 @@
 <template>
   <div>
     <vxe-button @click="insertEvent">新增</vxe-button>
+    <vxe-toolbar ref="toolbarRef" custom></vxe-toolbar>
     <vxe-table
+      id="id"
       border
       show-overflow
       ref="tableRef"
       :edit-config="editConfig"
       :data="tableData"
+      :toolbar-config="{
+        custom: true,
+      }"
+      :column-config="{
+        resizable: true,
+      }"
+      :custom-config="{
+          storage: true,
+          storeOptions: {
+            resizable: false,
+          },
+        }"
       @edit-activated="editActivatedEvent">
       <vxe-column type="seq" width="70"></vxe-column>
       <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
@@ -17,8 +31,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import type { VxeTableInstance, VxeTablePropTypes } from '../../../types'
+import { nextTick, onMounted, ref } from 'vue'
+import type { VxeTableInstance, VxeTablePropTypes, VxeToolbarInstance } from '../../../types'
 
 interface RowVO {
   id: number
@@ -58,4 +72,14 @@ const insertEvent = async () => {
 const editActivatedEvent = (params: any) => {
   console.log(params)
 }
+
+const toolbarRef = ref<VxeToolbarInstance>()
+
+onMounted(() => {
+  const $toolbar = toolbarRef.value
+  const $table = tableRef.value
+  if ($toolbar && $table) {
+    $table.connect($toolbar)
+  }
+})
 </script>
