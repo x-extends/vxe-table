@@ -30,36 +30,13 @@ Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.ne
 
 ### NPM
 
-```shell
-npm install vxe-table@3 vxe-pc-ui@3
-```
-
-### 只使用表格
-
 ```javascript
-import Vue from 'vue'
 // ...
-import VxeTable from 'vxe-table'
+import VxeUITable from 'vxe-table'
 import 'vxe-table/lib/style.css'
 // ...
 
-Vue.use(VxeTable)
-```
-
-### 使用表格与 UI 库
-
-```javascript
-import Vue from 'vue'
-// ...
-import VxeTable from 'vxe-table'
-import 'vxe-table/lib/style.css'
-
-import VxeUI from 'vxe-pc-ui'
-import 'vxe-pc-ui/lib/style.css'
-// ...
-
-Vue.use(VxeUI)
-Vue.use(VxeTable)
+createApp(App).use(VxeUITable).mount('#app')
 ```
 
 ### CDN

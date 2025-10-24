@@ -6563,7 +6563,7 @@ const Methods = {
         // 如果点击筛选容器
       } else {
         if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
-          this.preventEvent(evnt, 'event.clearFilter', internalData._currFilterParams, this.closeFilter)
+          $xeTable.preventEvent(evnt, 'event.clearFilter', internalData._currFilterParams, $xeTable.closeFilter)
         }
       }
     }
@@ -6575,7 +6575,12 @@ const Methods = {
         // 如果点击自定义列容器
       } else {
         if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
-          this.preventEvent(evnt, 'event.clearCustom', {}, () => this.closeCustom())
+          if (customStore.visible && $xeTable.closeCustom) {
+            $xeTable.preventEvent(evnt, 'event.clearCustom', {}, () => {
+              $xeTable.closeCustom()
+              $xeTable.dispatchEvent('custom', { type: 'close' }, evnt)
+            })
+          }
         }
       }
     }
@@ -6588,10 +6593,10 @@ const Methods = {
         if ((!cell || !getEventTargetNode(evnt, cell).flag)) {
           if (validTooltip && getEventTargetNode(evnt, validTooltip.$el).flag) {
             // 如果是激活状态，且点击了校验提示框
-          } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
+          } else if (!internalData._lastCallTime || internalData._lastCallTime + 50 < Date.now()) {
             if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
               // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
-              this.preventEvent(evnt, 'event.clearEdit', actived.args, () => {
+              $xeTable.preventEvent(evnt, 'event.clearEdit', actived.args, () => {
                 let isClear
                 if (editOpts.mode === 'row') {
                   const rowTargetNode = getEventTargetNode(evnt, el, 'vxe-body--row')
@@ -6611,7 +6616,7 @@ const Methods = {
                   isClear = getEventTargetNode(evnt, el, 'vxe-footer--row').flag
                 }
                 // 如果固定了高度且点击了行之外的空白处，则清除激活状态
-                if (!isClear && this.height && !this.overflowY) {
+                if (!isClear && props.height && !reactData.overflowY) {
                   const bodyWrapperElem = evnt.target
                   if (hasClass(bodyWrapperElem, 'vxe-table--body-wrapper')) {
                     isClear = evnt.offsetY < bodyWrapperElem.clientHeight
@@ -6625,8 +6630,8 @@ const Methods = {
                   setTimeout(() => {
                     $xeTable.handleClearEdit(evnt).then(() => {
                       // 如果存在校验，点击了表格之外则清除
-                      if (!this.isActivated && editRules && validOpts.autoClear) {
-                        this.validErrorMaps = {}
+                      if (!internalData.isActivated && editRules && validOpts.autoClear) {
+                        reactData.validErrorMaps = {}
                       }
                     })
                   })
@@ -6657,29 +6662,33 @@ const Methods = {
     }
     // 如果配置了快捷菜单且，点击了其他地方则关闭
     if (ctxMenuStore.visible && tableMenu && !getEventTargetNode(evnt, tableMenu.$el).flag) {
-      this.closeMenu()
+      $xeTable.closeMenu()
     }
     const isActivated = getEventTargetNode(evnt, ($xeGGWrapper || $xeTable).$el).flag
     // 如果存在校验，点击了表格之外则清除
     if (!isActivated && editRules && validOpts.autoClear) {
-      this.validErrorMaps = {}
+      reactData.validErrorMaps = {}
     }
     // 最后激活的表格
-    this.isActivated = isActivated
+    internalData.isActivated = isActivated
   },
   /**
    * 窗口失焦事件处理
    */
   handleGlobalBlurEvent () {
-    this.closeFilter()
-    this.closeMenu()
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    $xeTable.closeFilter()
+    $xeTable.closeMenu()
   },
   /**
    * 全局滚动事件
    */
   handleGlobalMousewheelEvent () {
-    this.closeTooltip()
-    this.closeMenu()
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    $xeTable.closeTooltip()
+    $xeTable.closeMenu()
   },
   /**
    * 表格键盘事件

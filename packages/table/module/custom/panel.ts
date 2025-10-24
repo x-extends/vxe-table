@@ -990,6 +990,7 @@ export default {
       $xeTable.saveCustom()
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('confirm', $event)
+      $xeTable.emitCustomEvent('close', $event)
     },
     cancelCloseEvent ({ $event }: VxeButtonDefines.ClickEventParams) {
       const $xeTableCustomPanel = this as unknown as VxeTableCustomPanelConstructor
@@ -1005,6 +1006,7 @@ export default {
       $xeTable.cancelCustom()
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('cancel', $event)
+      $xeTable.emitCustomEvent('close', $event)
     },
     handleResetCustomEvent (evnt: Event) {
       const $xeTableCustomPanel = this as unknown as VxeTableCustomPanelConstructor
@@ -1013,6 +1015,7 @@ export default {
       $xeTable.resetCustom(true)
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('reset', evnt)
+      $xeTable.emitCustomEvent('close', evnt)
     },
     resetCustomEvent  (evnt: Event) {
       if (VxeUI.modal) {

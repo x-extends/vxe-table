@@ -163,6 +163,9 @@ export default {
      */
     handleOpenMenuEvent (evnt: any, type: 'header' | 'body' | 'footer', params: any) {
       const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
+      const $xeGrid = $xeTable.$xeGrid
+      const $xeGantt = $xeTable.$xeGantt
+      const $xeGGWrapper = $xeGrid || $xeGantt
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
 
@@ -181,7 +184,7 @@ export default {
             if (!visibleMethod || visibleMethod(params)) {
               evnt.preventDefault()
               $xeTable.updateZindex()
-              const el = $xeTable.$refs.refElem as HTMLDivElement
+              const el = $xeGGWrapper ? $xeGGWrapper.$refs.refElem as HTMLDivElement : $xeTable.$refs.refElem as HTMLDivElement
               const tableRect = el.getBoundingClientRect()
               const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
 

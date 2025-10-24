@@ -279,11 +279,8 @@ export default {
     },
     emitCustomEvent (type: any, evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-      const $xeGrid = $xeTable.$xeGrid
-      const $xeGantt = $xeTable.$xeGantt
 
-      const comp = $xeGrid || $xeGantt || $xeTable
-      comp.dispatchEvent('custom', { type }, evnt)
+      $xeTable.dispatchEvent('custom', { type }, evnt)
     },
     triggerCustomEvent (evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
