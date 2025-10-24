@@ -5,7 +5,7 @@ import { getColumnList } from '../../src/util'
 
 import type { TableCustomMethods, TableCustomPrivateMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../../types'
 
-const tableCustomMethodKeys: (keyof TableCustomMethods)[] = ['openCustom', 'closeCustom', 'toggleCustom', 'saveCustom', 'cancelCustom', 'resetCustom', 'toggleCustomAllCheckbox', 'setCustomAllCheckbox']
+const tableCustomMethodKeys: (keyof TableCustomMethods)[] = ['openCustom', 'closeCustom', 'getCustomVisible', 'toggleCustom', 'saveCustom', 'cancelCustom', 'resetCustom', 'toggleCustomAllCheckbox', 'setCustomAllCheckbox']
 
 VxeUI.hooks.add('tableCustomModule', {
   setupTable ($xeTable) {
@@ -13,7 +13,6 @@ VxeUI.hooks.add('tableCustomModule', {
     const { computeCustomOpts, computeRowGroupFields } = $xeTable.getComputeMaps()
     const { refElem } = $xeTable.getRefMaps()
 
-    const $xeGrid = $xeTable.xeGrid
     const $xeGantt = $xeTable.xeGantt
 
     const calcMaxHeight = () => {
@@ -289,8 +288,7 @@ VxeUI.hooks.add('tableCustomModule', {
     }
 
     const emitCustomEvent = (type: VxeTableDefines.CustomType, evnt: Event) => {
-      const comp = $xeGrid || $xeGantt || $xeTable
-      comp.dispatchEvent('custom', { type }, evnt)
+      $xeTable.dispatchEvent('custom', { type }, evnt)
     }
 
     const customPrivateMethods: TableCustomPrivateMethods = {

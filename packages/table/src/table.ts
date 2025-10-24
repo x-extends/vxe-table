@@ -7557,11 +7557,12 @@ export default defineVxeComponent({
           // 如果点击自定义列容器
         } else {
           if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
-            tablePrivateMethods.preventEvent(evnt, 'event.clearCustom', {}, () => {
-              if ($xeTable.closeCustom) {
+            if (customStore.visible && $xeTable.closeCustom) {
+              tablePrivateMethods.preventEvent(evnt, 'event.clearCustom', {}, () => {
                 $xeTable.closeCustom()
-              }
-            })
+                $xeTable.dispatchEvent('custom', { type: 'close' }, evnt)
+              })
+            }
           }
         }
       }

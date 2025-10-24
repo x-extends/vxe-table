@@ -412,11 +412,9 @@ export const Cell = {
     const tableReactData = $table.reactData
     const tableInternalData = $table.internalData
     const { isRowGroupStatus } = tableReactData
-    const { computeEditOpts } = $table.getComputeMaps()
     const { editConfig } = tableProps
-    const editOpts = computeEditOpts.value
-    const { field, slots, editRender, cellRender, rowGroupNode, aggFunc } = column
-    const renderOpts = editConfig && isEnableConf(editOpts) && editRender ? editRender : cellRender
+    const { field, slots, editRender, cellRender, rowGroupNode, aggFunc, formatter } = column
+    const renderOpts = editConfig && isEnableConf(editRender) ? editRender : (isEnableConf(cellRender) ? cellRender : null)
     const defaultSlot = slots ? slots.default : null
     const gcSlot = slots ? (slots.groupContent || slots['group-content']) : null
     let cellValue: string | number | null = ''
@@ -476,7 +474,8 @@ export const Cell = {
       if (defaultSlot) {
         return renderCellBaseVNs(params, $table.callSlot(defaultSlot, params))
       }
-      if (renderOpts) {
+      // formatter > (renderTableCell | renderTableDefault)
+      if (renderOpts && !formatter) {
         const compConf = renderer.get(renderOpts.name)
         if (compConf) {
           const rtCell = compConf.renderTableCell || compConf.renderCell

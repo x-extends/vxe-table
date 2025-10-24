@@ -16,6 +16,10 @@ hooks.add('tableMenuModule', {
     const { refElem, refTableFilter, refTableMenu } = $xeTable.getRefMaps()
     const { computeMouseOpts, computeIsContentMenu, computeMenuOpts } = $xeTable.getComputeMaps()
 
+    const $xeGrid = $xeTable.xeGrid
+    const $xeGantt = $xeTable.xeGantt
+    const $xeGGWrapper = $xeGrid || $xeGantt
+
     let menuMethods = {} as TableMenuMethods
     let menuPrivateMethods = {} as TableMenuPrivateMethods
 
@@ -38,7 +42,10 @@ hooks.add('tableMenuModule', {
             if (!visibleMethod || visibleMethod(params)) {
               evnt.preventDefault()
               $xeTable.updateZindex()
-              const el = refElem.value
+              const el = $xeGGWrapper ? $xeGGWrapper.getRefMaps().refElem.value : refElem.value
+              if (!el) {
+                return
+              }
               const tableRect = el.getBoundingClientRect()
               const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
 

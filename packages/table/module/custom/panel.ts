@@ -91,6 +91,7 @@ export default defineVxeComponent({
       $xeTable.saveCustom()
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('confirm', $event)
+      $xeTable.emitCustomEvent('close', $event)
     }
 
     const cancelCloseEvent: VxeButtonEvents.Click = ({ $event }) => {
@@ -102,12 +103,14 @@ export default defineVxeComponent({
       $xeTable.cancelCustom()
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('cancel', $event)
+      $xeTable.emitCustomEvent('close', $event)
     }
 
     const handleResetCustomEvent = (evnt: Event) => {
       $xeTable.resetCustom(true)
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('reset', evnt)
+      $xeTable.emitCustomEvent('close', evnt)
     }
 
     const resetCustomEvent: VxeButtonEvents.Click = ({ $event }) => {
