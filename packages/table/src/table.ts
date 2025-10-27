@@ -3406,6 +3406,9 @@ export default defineVxeComponent({
       calcScrollbar()
       updateStyle()
       updateRowExpandStyle()
+      if (reFull) {
+        updateTreeLineStyle()
+      }
       return computeScrollLoad().then(() => {
         // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
         if (reWidth) {
@@ -3423,6 +3426,9 @@ export default defineVxeComponent({
           updateRowOffsetTop()
         }
         updateRowExpandStyle()
+        if (reFull) {
+          updateTreeLineStyle()
+        }
         if (reFull) {
           return computeScrollLoad()
         }
@@ -4154,6 +4160,7 @@ export default defineVxeComponent({
       }
       reactData.treeExpandedFlag++
       return Promise.all(result).then(() => {
+        updateTreeLineStyle()
         return $xeTable.recalculate()
       })
     }
@@ -4610,7 +4617,32 @@ export default defineVxeComponent({
      * 更新树连接线样式
      */
     const updateTreeLineStyle = () => {
-      // 待优化
+      // const { tableData } = reactData
+      // const { rowExpandedMaps } = internalData
+      // const treeOpts = computeTreeOpts.value
+      // const { transform, mapChildrenField } = treeOpts
+      // const childrenField = treeOpts.children || treeOpts.childrenField
+      // const { handleGetRowId } = createHandleGetRowId($xeTable)
+      // // 待优化
+      // if (transform) {
+      //   // x
+      // } else {
+      //   // x
+      // }
+      // const handleNodeRow = (row: any, parentRow: any) => {
+      //   const childList: any[] = row[transform ? mapChildrenField : childrenField]
+      //   if (childList && childList.length) {
+      //     childList.forEach(childRow => {
+      //       const childRowid = handleGetRowId(childRow)
+      //       if (rowExpandedMaps[childRowid]) {
+      //         handleNodeRow(childRow, row)
+      //       }
+      //     })
+      //   }
+      // }
+      // tableData.forEach(row => {
+      //   handleNodeRow(row, null)
+      // })
     }
 
     const handleRowExpandScroll = () => {
@@ -7014,6 +7046,7 @@ export default defineVxeComponent({
           }
           reactData.treeExpandedFlag++
         }).then(() => {
+          updateTreeLineStyle()
           if (expList.length) {
             return $xeTable.recalculate()
           }
