@@ -18,10 +18,9 @@ import { VxeGridProps, VxeGridInstance } from '../../../types'
 interface RowVO {
   id: number
   name: string
-  role: string
-  sex: string
-  age: number
-  address: string
+  date: string
+  size: number
+  type: string
   parentId: any
 }
 
