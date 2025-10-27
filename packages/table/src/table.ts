@@ -1636,14 +1636,13 @@ export default defineVxeComponent({
       const { collectColumn } = internalData
       const customOpts = computeCustomOpts.value
       const { storage, storeOptions } = customOpts
-      const isAllCustom = storage === true
-      const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {}, storeOptions)
-      const isCustomResizable = hangleStorageDefaultValue(storageOpts.resizable, isAllCustom)
-      const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
-      const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
-      const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, isAllCustom)
-      const isCustomAggGroup = hangleStorageDefaultValue(storageOpts.aggGroup, isAllCustom)
-      const isCustomAggFunc = hangleStorageDefaultValue(storageOpts.aggFunc, isAllCustom)
+      const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign({}, XEUtils.isBoolean(storage) ? {} : storage || {}, storeOptions)
+      const isCustomResizable = hangleStorageDefaultValue(storageOpts.resizable, true)
+      const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, true)
+      const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, true)
+      const isCustomSort = hangleStorageDefaultValue(storageOpts.sort, true)
+      const isCustomAggGroup = hangleStorageDefaultValue(storageOpts.aggGroup, true)
+      const isCustomAggFunc = hangleStorageDefaultValue(storageOpts.aggFunc, true)
       let { resizableData, sortData, visibleData, fixedData, aggGroupData, aggFuncData } = storeData
       // 处理还原
       if ((isCustomResizable && resizableData) || (isCustomSort && sortData) || (isCustomVisible && visibleData) || (isCustomFixed && fixedData) || (isCustomAggGroup && aggGroupData) || (isCustomAggFunc && aggFuncData)) {
