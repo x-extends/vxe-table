@@ -147,7 +147,7 @@ function handleCustomRestore ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const customOpts = $xeTable.computeCustomOpts
   const { storage, storeOptions } = customOpts
   const isAllCustom = storage === true
-  const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {}, storeOptions)
+  const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign({}, isAllCustom ? {} : storage || {}, storeOptions)
   const isCustomResizable = hangleStorageDefaultValue(storageOpts.resizable, isAllCustom)
   const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
   const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
@@ -246,7 +246,7 @@ function restoreCustomStorage ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   const customOpts = $xeTable.computeCustomOpts
   const { storage, restoreStore, storeOptions } = customOpts
   const isAllCustom = storage === true
-  const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {}, storeOptions)
+  const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign({}, isAllCustom ? {} : storage || {}, storeOptions)
   const isCustomResizable = hangleStorageDefaultValue(storageOpts.resizable, isAllCustom)
   const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
   const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
@@ -509,6 +509,7 @@ function handleBaseTreeExpand ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   }
   reactData.treeExpandedFlag++
   return Promise.all(result).then(() => {
+    updateTreeLineStyle($xeTable)
     return $xeTable.recalculate()
   })
 }
@@ -3029,6 +3030,9 @@ function handleRecalculateStyle ($xeTable: VxeTableConstructor & VxeTablePrivate
   calcScrollbar($xeTable)
   updateStyle($xeTable)
   updateRowExpandStyle($xeTable)
+  if (reFull) {
+    updateTreeLineStyle($xeTable)
+  }
   return computeScrollLoad($xeTable).then(() => {
     // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
     if (reWidth) {
@@ -3046,6 +3050,9 @@ function handleRecalculateStyle ($xeTable: VxeTableConstructor & VxeTablePrivate
       updateRowOffsetTop($xeTable)
     }
     updateRowExpandStyle($xeTable)
+    if (reFull) {
+      updateTreeLineStyle($xeTable)
+    }
     if (reFull) {
       return computeScrollLoad($xeTable)
     }
@@ -5631,7 +5638,7 @@ const Methods = {
     const customOpts = $xeTable.computeCustomOpts
     const { storage, restoreStore, storeOptions } = customOpts
     const isAllCustom = storage === true
-    const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {}, storeOptions)
+    const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign({}, isAllCustom ? {} : storage || {}, storeOptions)
     const isCustomResizable = hangleStorageDefaultValue(storageOpts.resizable, isAllCustom)
     const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
     const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
@@ -5669,7 +5676,7 @@ const Methods = {
     const { fullColumnFieldData, collectColumn } = internalData
     const { storage, checkMethod, storeOptions } = customOpts
     const isAllCustom = storage === true
-    const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {}, storeOptions)
+    const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign({}, isAllCustom ? {} : storage || {}, storeOptions)
     const isCustomResizable = hangleStorageDefaultValue(storageOpts.resizable, isAllCustom)
     const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
     const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
@@ -5789,7 +5796,7 @@ const Methods = {
     const customOpts = $xeTable.computeCustomOpts
     const { updateStore, storage, storeOptions } = customOpts
     const isAllCustom = storage === true
-    const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {}, storeOptions)
+    const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign({}, isAllCustom ? {} : storage || {}, storeOptions)
     const isCustomResizable = hangleStorageDefaultValue(storageOpts.resizable, isAllCustom)
     const isCustomVisible = hangleStorageDefaultValue(storageOpts.visible, isAllCustom)
     const isCustomFixed = hangleStorageDefaultValue(storageOpts.fixed, isAllCustom)
@@ -10819,6 +10826,7 @@ const Methods = {
       }
       reactData.treeExpandedFlag++
     }).then(() => {
+      updateTreeLineStyle($xeTable)
       if (expList.length) {
         $xeTable.recalculate()
       }
