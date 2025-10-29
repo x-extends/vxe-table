@@ -2510,6 +2510,9 @@ function autoCellWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
   updateHeight($xeTable)
 }
 
+/**
+ * 计算自适应行高
+ */
 const calcCellAutoHeight = (rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
   const cellElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`)
   let colHeight = rowRest.height
@@ -2528,15 +2531,21 @@ const calcCellAutoHeight = (rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HT
   return colHeight
 }
 
+/**
+ * 自适应行高
+ */
 const calcCellHeight = ($xeTable: VxeTableConstructor) => {
+  const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
+  const { treeConfig } = props
   const { tableData, isAllOverflow, scrollYLoad, scrollXLoad } = reactData
   const { fullAllDataRowIdData } = internalData
+  const treeOpts = $xeTable.computeTreeOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const el = $xeTable.$refs.refElem as HTMLDivElement
-  if (!isAllOverflow && (scrollYLoad || scrollXLoad) && el) {
+  if (!isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine)) && el) {
     const { handleGetRowId } = createHandleGetRowId($xeTable)
     tableData.forEach(row => {
       const rowid = handleGetRowId(row)
@@ -3418,6 +3427,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
           }
           reactData.isRowLoading = false
           handleRecalculateStyle($xeTable, false, false, false)
+          updateTreeLineStyle($xeTable)
           // 如果是自动行高，特殊情况需调用 recalculate 手动刷新
           if (!props.showOverflow) {
             setTimeout(() => {
@@ -3431,6 +3441,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
               .then(() => {
                 handleRecalculateStyle($xeTable, false, true, true)
                 updateRowOffsetTop($xeTable)
+                updateTreeLineStyle($xeTable)
                 resolve()
               })
           } else {
@@ -3439,6 +3450,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
                 .then(() => {
                   handleRecalculateStyle($xeTable, false, true, true)
                   updateRowOffsetTop($xeTable)
+                  updateTreeLineStyle($xeTable)
                   resolve()
                 })
             })
@@ -3946,6 +3958,9 @@ function updateHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   }
 }
 
+/**
+ * 计算自适应列宽
+ */
 function calcColumnAutoWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: VxeTableDefines.ColumnInfo, wrapperEl: HTMLDivElement) {
   const columnOpts = $xeTable.computeColumnOpts
   const { autoOptions } = columnOpts
@@ -3975,6 +3990,9 @@ function calcColumnAutoWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   return colWidth + leftRightPadding
 }
 
+/**
+ * 自适应列宽
+ */
 function calcCellWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -4125,9 +4143,97 @@ function updateRowExpandStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMe
 /**
  * 更新树连接线样式
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function updateTreeLineStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
-  // 待优化
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { treeConfig } = props
+  if (!treeConfig) {
+    return
+  }
+  const { tableData } = reactData
+  const { fullAllDataRowIdData, treeExpandedMaps } = internalData
+  const cellOpts = $xeTable.computeCellOpts
+  const rowOpts = $xeTable.computeRowOpts
+  const defaultRowHeight = $xeTable.computeDefaultRowHeight
+  const treeOpts = $xeTable.computeTreeOpts
+  const { transform, mapChildrenField } = treeOpts
+  const childrenField = treeOpts.children || treeOpts.childrenField
+  const { handleGetRowId } = createHandleGetRowId($xeTable)
+  const expParentList: {
+        row: any
+        prevRow: any
+        nextRow: any
+      }[] = []
+
+  const handleNodeRow = (row: any, rIndex: number, rows: any[]) => {
+    const rowid = handleGetRowId(row)
+    const rowRest = fullAllDataRowIdData[rowid] || {}
+    const childList: any[] = row[transform ? mapChildrenField : childrenField]
+    const prevRow = rows[rIndex - 1] || null
+    const nextRow = rows[rIndex + 1] || null
+    if (childList && childList.length && treeExpandedMaps[rowid]) {
+      expParentList.push({ row, prevRow, nextRow })
+      childList.forEach((childRow, crIndex) => {
+        const childRowid = handleGetRowId(childRow)
+        if (treeExpandedMaps[childRowid]) {
+          handleNodeRow(childRow, crIndex, childList)
+        }
+      })
+    } else {
+      if (nextRow) {
+        const nextRowid = handleGetRowId(nextRow)
+        const nextRowRest = fullAllDataRowIdData[nextRowid] || {}
+        const currCellHeight = getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
+        const nextCellHeight = getCellRestHeight(nextRowRest, cellOpts, rowOpts, defaultRowHeight)
+        rowRest.oHeight = currCellHeight
+        rowRest.lineHeight = Math.floor(currCellHeight / 2 + nextCellHeight / 2)
+      } else {
+        rowRest.oHeight = 0
+        rowRest.lineHeight = 0
+      }
+    }
+  }
+  tableData.forEach((row, rIndex) => {
+    handleNodeRow(row, rIndex, tableData)
+  })
+
+  XEUtils.lastArrayEach(expParentList, ({ row, nextRow }) => {
+    const rowid = handleGetRowId(row)
+    const childList: any[] = row[transform ? mapChildrenField : childrenField]
+    const rowRest = fullAllDataRowIdData[rowid]
+    if (rowRest) {
+      const currCellHeight = getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
+      let countOffsetHeight = currCellHeight
+      let countLineHeight = 0
+      childList.forEach((childRow) => {
+        const childRowid = handleGetRowId(childRow)
+        const childRowRest = fullAllDataRowIdData[childRowid] || {}
+        const childList: any[] = childRow[transform ? mapChildrenField : childrenField]
+        if (treeExpandedMaps[childRowid] && childList && childList.length) {
+          countOffsetHeight += (childRowRest.oHeight || 0)
+          countLineHeight += (childRowRest.oHeight || 0)
+        } else {
+          const cellHeight = getCellRestHeight(childRowRest, cellOpts, rowOpts, defaultRowHeight)
+          childRowRest.oHeight = cellHeight
+          childRowRest.lineHeight = cellHeight
+          countOffsetHeight += cellHeight
+          countLineHeight += cellHeight
+        }
+      })
+      if (nextRow) {
+        const nextRowid = handleGetRowId(nextRow)
+        const nextRowRest = fullAllDataRowIdData[nextRowid] || {}
+        const currCellHeight = getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
+        const nextCellHeight = getCellRestHeight(nextRowRest, cellOpts, rowOpts, defaultRowHeight)
+        countOffsetHeight += currCellHeight
+        countLineHeight += Math.floor(currCellHeight / 2 + nextCellHeight / 2)
+      }
+      rowRest.lineHeight = countLineHeight
+      rowRest.oHeight = countOffsetHeight
+    }
+  })
 }
 
 function handleRowExpandScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {

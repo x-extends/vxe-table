@@ -2,7 +2,7 @@ import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { isEnableConf, getClass } from '../../ui/src/utils'
-import { getOffsetSize, calcTreeLine, getRowid, createHandleGetRowId, getCellRestHeight } from './util'
+import { getRowid, createHandleGetRowId, getCellRestHeight } from './util'
 import { updateCellTitle } from '../../ui/src/dom'
 import { getSlotVNs } from '../../ui/src/vn'
 
@@ -28,22 +28,37 @@ function renderLine (h: CreateElement, $xeTable : VxeTableConstructor & VxeTable
   const tableInternalData = $xeTable as unknown as TableInternalData
 
   const { column } = params
-  const { afterFullData } = tableInternalData
   const { treeConfig } = tableProps
+  const cellOpts = $xeTable.computeCellOpts
+  const rowOpts = $xeTable.computeRowOpts
+  const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const treeOpts = $xeTable.computeTreeOpts
   const { slots, treeNode } = column
   const { fullAllDataRowIdData } = tableInternalData
-  if (slots && (slots as any).line) {
-    return $xeTable.callSlot((slots as any).line, params, h)
-  }
-  const rowRest = fullAllDataRowIdData[rowid]
-  let rLevel = 0
-  let prevRow = null
-  if (rowRest) {
-    rLevel = rowRest.level
-    prevRow = rowRest.items[rowRest.treeIndex - 1]
-  }
   if (treeConfig && treeNode && (treeOpts.showLine || treeOpts.line)) {
+    if (slots && (slots as any).line) {
+      return $xeTable.callSlot((slots as any).line, params, h)
+    }
+    const rowRest = fullAllDataRowIdData[rowid]
+    let rLevel = 0
+    let prevRow = null
+    let parentRow = null
+    let lineHeight = ''
+    if (rowRest) {
+      rLevel = rowRest.level
+      prevRow = rowRest.items[rowRest.treeIndex - 1]
+      parentRow = rowRest.parent
+    }
+    if (!rLevel && !treeOpts.showRootLine) {
+      return []
+    }
+    if (prevRow) {
+      const prevRowRest = fullAllDataRowIdData[getRowid($xeTable, prevRow)] || {}
+      lineHeight = `${prevRowRest.lineHeight || 0}px`
+    } else if (rLevel && parentRow) {
+      const parentRowRest = fullAllDataRowIdData[getRowid($xeTable, parentRow)] || {}
+      lineHeight = `calc(-1em + ${Math.floor(cellHeight / 2 + getCellRestHeight(parentRowRest, cellOpts, rowOpts, defaultRowHeight) / 2)}px)`
+    }
     return [
       h('div', {
         key: 'tl',
@@ -52,9 +67,9 @@ function renderLine (h: CreateElement, $xeTable : VxeTableConstructor & VxeTable
         h('div', {
           class: 'vxe-tree--line',
           style: {
-            height: `${getRowid($xeTable, afterFullData[0]) === rowid ? 1 : calcTreeLine(params, prevRow)}px`,
+            height: lineHeight,
             bottom: `-${Math.floor(cellHeight / 2)}px`,
-            left: `${(rLevel * treeOpts.indent) + (rLevel ? 2 - getOffsetSize($xeTable) : 0) + 16}px`
+            left: `calc(${(rLevel * treeOpts.indent)}px + 1em)`
           }
         })
       ])

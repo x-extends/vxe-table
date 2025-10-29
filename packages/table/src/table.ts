@@ -1640,7 +1640,7 @@ export default {
 
     handleKeyField($xeTable)
 
-    const { data, exportConfig, importConfig, treeConfig, showOverflow, highlightCurrentRow, highlightCurrentColumn } = props
+    const { data, exportConfig, importConfig, treeConfig, highlightCurrentRow, highlightCurrentColumn } = props
     const { scrollXStore, scrollYStore } = internalData
     const columnOpts = $xeTable.computeColumnOpts
     const editOpts = $xeTable.computeEditOpts
@@ -1675,9 +1675,9 @@ export default {
     if (props.editConfig && editOpts.showStatus && !props.keepSource) {
       warnLog('vxe.error.reqProp', ['keep-source'])
     }
-    if (treeConfig && (treeOpts.showLine || treeOpts.line) && !showOverflow) {
-      warnLog('vxe.error.reqProp', ['show-overflow'])
-    }
+    // if (treeConfig && (treeOpts.showLine || treeOpts.line) && !showOverflow) {
+    //   warnLog('vxe.error.reqProp', ['show-overflow'])
+    // }
     if (treeConfig && !treeOpts.transform && props.stripe) {
       warnLog('vxe.error.noTree', ['stripe'])
     }
