@@ -84,7 +84,7 @@ hooks.add('tableEditModule', {
             parentChilds = parentRow[childrenField] = []
           }
           if (!XEUtils.isArray(mapChilds)) {
-            mapChilds = parentRow[childrenField] = []
+            mapChilds = parentRow[mapChildrenField] = []
           }
           parentChilds[funcName](item)
           mapChilds[funcName](item)
