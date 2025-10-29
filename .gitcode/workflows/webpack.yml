@@ -1,0 +1,18 @@
+name: Npm build
+on:  
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: euleros-2.10.1
+    steps:
+      - uses: checkout-action@0.0.1
+      - name: Use Node.js
+        uses: setup-node@0.0.1
+        with:
+          node-version: '24.10.0'
+      - run: cd repo_workspace && npm run update
+      - run: cd repo_workspace && npm run lib

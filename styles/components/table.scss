@@ -2223,16 +2223,28 @@ $btnThemeList: (
       left: 50%;
       font-size: 12px;
       line-height: 1em;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -2px);
       text-align: left;
       z-index: 4;
       padding: 0 var(--vxe-ui-table-cell-padding-default);
       pointer-events: none;
     }
     .vxe-cell--valid-error-wrapper {
+      position: relative;
       display: inline-block;
       border-radius: var(--vxe-ui-border-radius);
       pointer-events: auto;
+      // &::before {
+      //   content: "";
+      //   position: absolute;
+      //   top: -0.75em;
+      //   left: 50%;
+      //   bottom: auto;
+      //   transform: translateX(-50%);
+      //   border-width: 0.5em;
+      //   border-style: solid;
+      //   border-color: transparent transparent var(--vxe-ui-table-validate-error-color) transparent;
+      // }
     }
     .vxe-cell--valid-error-theme-beautify {
       padding: 0.2em 0.6em 0.25em 0.6em;
@@ -2267,12 +2279,26 @@ $btnThemeList: (
       &:last-child {
         .vxe-cell--valid-error-tip {
           bottom: calc(100%);
-          transform: translate(-50%, 50%);
+          transform: translate(-50%, 0);
+          // .vxe-cell--valid-error-wrapper {
+          //   &::before {
+          //     bottom: -0.75em;
+          //     top: auto;
+          //     border-color: var(--vxe-ui-table-validate-error-color) transparent transparent transparent;
+          //   }
+          // }
         }
         &:first-child {
           .vxe-cell--valid-error-tip {
             bottom: auto;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -2px);
+            // .vxe-cell--valid-error-wrapper {
+            //   &::before {
+            //     top: -0.75em;
+            //     bottom: auto;
+            //     border-color: transparent transparent var(--vxe-ui-table-validate-error-color) transparent;
+            //   }
+            // }
           }
         }
       }
@@ -2308,6 +2334,11 @@ $btnThemeList: (
             background-color: #f56c6c;
             pointer-events: auto;
           }
+          // .vxe-cell--valid-error-wrapper {
+          //   &::before {
+          //     display: none;
+          //   }
+          // }
         }
       }
     }

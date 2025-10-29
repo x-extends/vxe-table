@@ -1,7 +1,7 @@
 import { h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, Teleport, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, onMounted } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
-import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey } from '../../ui/src/dom'
+import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import { createInternalData, getRowUniqueId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn } from './util'
@@ -62,6 +62,7 @@ export default defineVxeComponent({
     const VxeUITooltipComponent = VxeUI.getComponent('VxeTooltip')
 
     const $xeTabs = inject<(VxeTabsConstructor & VxeTabsPrivateMethods) | null>('$xeTabs', null)
+    const $xeParentTable = inject<(VxeTableConstructor & VxeTablePrivateMethods) | null>('$xeTable', null)
     const $xeGrid = inject<(VxeGridConstructor & VxeGridPrivateMethods) | null>('$xeGrid', null)
     const $xeGantt = inject<(VxeGanttConstructor & VxeGanttPrivateMethods) | null>('$xeGantt', null)
     const $xeGGWrapper = $xeGrid || $xeGantt
@@ -11594,6 +11595,22 @@ export default defineVxeComponent({
           }
         }
 
+        // 展开行处理，如果展开行嵌入表格中
+        if ($xeParentTable) {
+          if (isRollY) {
+            if (checkTargetElement(evnt.target, [leftScrollElem, bodyScrollElem, rightScrollElem], evnt.currentTarget)) {
+              evnt.stopPropagation()
+              return
+            }
+          }
+          if (isRollX) {
+            if (checkTargetElement(evnt.target, [headerScrollElem, bodyScrollElem, footerScrollElem], evnt.currentTarget)) {
+              evnt.stopPropagation()
+              return
+            }
+          }
+        }
+
         if (!(leftFixedWidth || rightFixedWidth || expandColumn)) {
           return
         }
@@ -12850,7 +12867,7 @@ export default defineVxeComponent({
     watch(dataFlag, () => {
       const { initStatus } = internalData
       const value = props.data || []
-      if (value && value.length >= 50000) {
+      if (value && value.length >= 20000) {
         warnLog('vxe.error.errLargeData', ['loadData(data), reloadData(data)'])
       }
       loadTableData(value, true).then(() => {

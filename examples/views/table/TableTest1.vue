@@ -1,100 +1,209 @@
 <template>
   <div>
-    <vxe-button status="primary" @click="updateHeight(gridOptions.data[1], 80)">设置第二行=80</vxe-button>
-    <vxe-button status="primary" @click="updateHeight(gridOptions.data[1], 140)">设置第二行=140</vxe-button>
-    <vxe-button status="primary" @click="updateBatchHeight()">批量设置高度</vxe-button>
-    <vxe-button status="success" @click="getHeight(gridOptions.data[1])">获取第二行</vxe-button>
-    <vxe-button status="success" @click="getHeight(gridOptions.data[1])">获取 gridOptions.data[1]</vxe-button>
-
-    <vxe-grid ref="gridRef" v-bind="gridOptions"></vxe-grid>
+    <vxe-table
+      border
+      height="400"
+      :data="tableData">
+      <vxe-column type="seq" width="70"></vxe-column>
+      <vxe-column type="expand" width="60">
+        <template #content="{ row }">
+          <div class="expand-wrapper">
+            <vxe-table border :data="row.childList" height="200">
+              <vxe-column field="name" title="Name"></vxe-column>
+              <vxe-column field="sex" title="Sex"></vxe-column>
+              <vxe-column field="age" title="Age"></vxe-column>
+            </vxe-table>
+          </div>
+        </template>
+      </vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+    </vxe-table>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import { VxeUI } from 'vxe-pc-ui'
-import { VxeGridProps, VxeGridInstance } from '../../../types'
+import { ref } from 'vue'
 
 interface RowVO {
   id: number
   name: string
-  date: string
-  size: number
-  type: string
-  parentId: any
+  role: string
+  sex: string
+  age: number
+  address: string
+  childList?: RowVO[]
 }
 
-const gridRef = ref<VxeGridInstance<RowVO>>()
-
-const gridOptions = reactive<VxeGridProps<RowVO> & { data: RowVO[] }>({
-  border: true,
-  // size: 'mini',
-  rowConfig: {
-    resizable: true,
-    keyField: 'id'
+const tableData = ref<RowVO[]>([
+  {
+    id: 10001,
+    name: 'Test1',
+    role: 'Develop',
+    sex: 'Man',
+    age: 28,
+    address: 'test abc',
+    childList: [
+      { id: 10011, name: 'Test112', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+      { id: 10012, name: 'Test134', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' }
+    ]
   },
-  treeConfig: {
-    transform: true,
-    showLine: true,
-    showRootLine: false
+  {
+    id: 10002,
+    name: 'Test2',
+    role: 'Test',
+    sex: 'Women',
+    age: 22,
+    address: 'Guangzhou',
+    childList: [
+      { id: 10021, name: 'Test233', role: 'Designer', sex: 'Man', age: 34, address: 'test 234324' }
+    ]
   },
-  columns: [
-    { type: 'checkbox', width: 200, treeNode: true },
-    { field: 'name', title: 'Name' },
-    { field: 'sex', title: 'Sex' },
-    { field: 'age', title: 'Age' },
-    { field: 'time', title: 'Time' },
-    { field: 'address', title: 'Address' }
-  ],
-  data: [
-    { id: 10000, parentId: null, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
-    { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: 0, date: '2021-04-01' },
-    { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-    { id: 20045, parentId: 24300, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
-    { id: 10053, parentId: 24300, name: 'Test5', type: 'avi', size: 0, date: '2021-04-01' },
-    { id: 24330, parentId: 10053, name: 'Test6', type: 'txt', size: 25, date: '2021-10-01' },
-    { id: 21011, parentId: 10053, name: 'Test7', type: 'pdf', size: 512, date: '2020-01-01' },
-    { id: 22200, parentId: 10053, name: 'Test8', type: 'js', size: 1024, date: '2021-06-01' },
-    { id: 23666, parentId: null, name: 'Test9', type: 'xlsx', size: 2048, date: '2020-11-01' },
-    { id: 23677, parentId: 23666, name: 'Test10', type: 'js', size: 1024, date: '2021-06-01' },
-    { id: 23671, parentId: 23677, name: 'Test11', type: 'js', size: 1024, date: '2021-06-01' },
-    { id: 23672, parentId: 23677, name: 'Test12', type: 'js', size: 1024, date: '2021-06-01' },
-    { id: 23688, parentId: 23666, name: 'Test13', type: 'js', size: 1024, date: '2021-06-01' },
-    { id: 29688, parentId: 23666, name: 'Test19', type: 'js', size: 1024, date: '2021-06-01' },
-    { id: 23681, parentId: 23688, name: 'Test14', type: 'js', size: 1024, date: '2021-06-01' },
-    { id: 23682, parentId: 23688, name: 'Test15', type: 'js', size: 1024, date: '2021-06-01' },
-    { id: 24555, parentId: null, name: 'Test16', type: 'avi', size: 224, date: '2020-10-01' },
-    { id: 24566, parentId: 24555, name: 'Test17', type: 'js', size: 1024, date: '2021-06-01' },
-    { id: 24577, parentId: 24555, name: 'Test18', type: 'js', size: 1024, date: '2021-06-01' }
-  ]
-})
-
-const updateHeight = (rowOrId: RowVO | string | number, height: number) => {
-  const $grid = gridRef.value
-  if ($grid) {
-    $grid.setRowHeight(rowOrId, height)
+  {
+    id: 10003,
+    name: 'Test3',
+    role: 'PM',
+    sex: 'Man',
+    age: 32,
+    address: 'Shanghai',
+    childList: [
+      { id: 10031, name: 'Test366', role: 'Test', sex: 'Man', age: 76, address: 'test rtyty' },
+      { id: 10032, name: 'Test345', role: 'Develop', sex: 'Women', age: 56, address: 'Guangzhou' },
+      { id: 10032, name: 'Test361', role: 'Test', sex: 'Women', age: 21, address: 'Guangzhou' },
+      { id: 10033, name: 'Test367', role: 'Develop', sex: 'Women', age: 28, address: 'Guangzhou' },
+      { id: 10034, name: 'Test3213', role: 'Test', sex: 'Man', age: 35, address: 'Guangzhou' },
+      { id: 10032, name: 'Test345', role: 'Develop', sex: 'Women', age: 56, address: 'Guangzhou' },
+      { id: 10032, name: 'Test361', role: 'Test', sex: 'Women', age: 21, address: 'Guangzhou' },
+      { id: 10033, name: 'Test367', role: 'Develop', sex: 'Women', age: 28, address: 'Guangzhou' },
+      { id: 10034, name: 'Test3213', role: 'Test', sex: 'Man', age: 35, address: 'Guangzhou' },
+      { id: 10032, name: 'Test345', role: 'Develop', sex: 'Women', age: 56, address: 'Guangzhou' },
+      { id: 10032, name: 'Test361', role: 'Test', sex: 'Women', age: 21, address: 'Guangzhou' },
+      { id: 10033, name: 'Test367', role: 'Develop', sex: 'Women', age: 28, address: 'Guangzhou' },
+      { id: 10034, name: 'Test3213', role: 'Test', sex: 'Man', age: 35, address: 'Guangzhou' }
+    ]
+  },
+  {
+    id: 10004,
+    name: 'Test4',
+    role: 'Designer',
+    sex: 'Women',
+    age: 24,
+    address: 'Shanghai',
+    childList: [
+      { id: 10041, name: 'Test456', role: 'Designer', sex: 'Man', age: 19, address: 'test 3444444' },
+      { id: 10042, name: 'Test457', role: 'Test', sex: 'Women', age: 29, address: 'rtyty sdfsdf' }
+    ]
+  },
+  {
+    id: 10005,
+    name: 'Test5',
+    role: 'Designer',
+    sex: 'Women',
+    age: 24,
+    address: 'Shanghai',
+    childList: [
+      { id: 10041, name: 'Test456', role: 'Designer', sex: 'Man', age: 19, address: 'test 3444444' },
+      { id: 10042, name: 'Test457', role: 'Test', sex: 'Women', age: 29, address: 'rtyty sdfsdf' },
+      { id: 10032, name: 'Test345', role: 'Develop', sex: 'Women', age: 56, address: 'Guangzhou' },
+      { id: 10032, name: 'Test361', role: 'Test', sex: 'Women', age: 21, address: 'Guangzhou' },
+      { id: 10033, name: 'Test367', role: 'Develop', sex: 'Women', age: 28, address: 'Guangzhou' },
+      { id: 10034, name: 'Test3213', role: 'Test', sex: 'Man', age: 35, address: 'Guangzhou' },
+      { id: 10032, name: 'Test345', role: 'Develop', sex: 'Women', age: 56, address: 'Guangzhou' },
+      { id: 10032, name: 'Test361', role: 'Test', sex: 'Women', age: 21, address: 'Guangzhou' },
+      { id: 10033, name: 'Test367', role: 'Develop', sex: 'Women', age: 28, address: 'Guangzhou' },
+      { id: 10034, name: 'Test3213', role: 'Test', sex: 'Man', age: 35, address: 'Guangzhou' },
+      { id: 10032, name: 'Test345', role: 'Develop', sex: 'Women', age: 56, address: 'Guangzhou' },
+      { id: 10032, name: 'Test361', role: 'Test', sex: 'Women', age: 21, address: 'Guangzhou' },
+      { id: 10033, name: 'Test367', role: 'Develop', sex: 'Women', age: 28, address: 'Guangzhou' },
+      { id: 10034, name: 'Test3213', role: 'Test', sex: 'Man', age: 35, address: 'Guangzhou' }
+    ]
+  },
+  {
+    id: 10006,
+    name: 'Test6',
+    role: 'Designer',
+    sex: 'Women',
+    age: 24,
+    address: 'Shanghai',
+    childList: [
+      { id: 10041, name: 'Test456', role: 'Designer', sex: 'Man', age: 19, address: 'test 3444444' },
+      { id: 10042, name: 'Test457', role: 'Test', sex: 'Women', age: 29, address: 'rtyty sdfsdf' }
+    ]
+  },
+  {
+    id: 10007,
+    name: 'Test7',
+    role: 'Designer',
+    sex: 'Women',
+    age: 24,
+    address: 'Shanghai',
+    childList: [
+      { id: 10041, name: 'Test456', role: 'Designer', sex: 'Man', age: 19, address: 'test 3444444' },
+      { id: 10042, name: 'Test457', role: 'Test', sex: 'Women', age: 29, address: 'rtyty sdfsdf' }
+    ]
+  },
+  {
+    id: 10008,
+    name: 'Test8',
+    role: 'Designer',
+    sex: 'Women',
+    age: 24,
+    address: 'Shanghai',
+    childList: [
+      { id: 10041, name: 'Test456', role: 'Designer', sex: 'Man', age: 19, address: 'test 3444444' },
+      { id: 10042, name: 'Test457', role: 'Test', sex: 'Women', age: 29, address: 'rtyty sdfsdf' },
+      { id: 10032, name: 'Test345', role: 'Develop', sex: 'Women', age: 56, address: 'Guangzhou' },
+      { id: 10032, name: 'Test361', role: 'Test', sex: 'Women', age: 21, address: 'Guangzhou' },
+      { id: 10033, name: 'Test367', role: 'Develop', sex: 'Women', age: 28, address: 'Guangzhou' },
+      { id: 10034, name: 'Test3213', role: 'Test', sex: 'Man', age: 35, address: 'Guangzhou' },
+      { id: 10032, name: 'Test345', role: 'Develop', sex: 'Women', age: 56, address: 'Guangzhou' },
+      { id: 10032, name: 'Test361', role: 'Test', sex: 'Women', age: 21, address: 'Guangzhou' },
+      { id: 10033, name: 'Test367', role: 'Develop', sex: 'Women', age: 28, address: 'Guangzhou' },
+      { id: 10034, name: 'Test3213', role: 'Test', sex: 'Man', age: 35, address: 'Guangzhou' },
+      { id: 10032, name: 'Test345', role: 'Develop', sex: 'Women', age: 56, address: 'Guangzhou' },
+      { id: 10032, name: 'Test361', role: 'Test', sex: 'Women', age: 21, address: 'Guangzhou' },
+      { id: 10033, name: 'Test367', role: 'Develop', sex: 'Women', age: 28, address: 'Guangzhou' },
+      { id: 10034, name: 'Test3213', role: 'Test', sex: 'Man', age: 35, address: 'Guangzhou' }
+    ]
+  },
+  {
+    id: 10009,
+    name: 'Test9',
+    role: 'Designer',
+    sex: 'Women',
+    age: 24,
+    address: 'Shanghai',
+    childList: [
+      { id: 10041, name: 'Test456', role: 'Designer', sex: 'Man', age: 19, address: 'test 3444444' },
+      { id: 10042, name: 'Test457', role: 'Test', sex: 'Women', age: 29, address: 'rtyty sdfsdf' }
+    ]
+  },
+  {
+    id: 10010,
+    name: 'Test10',
+    role: 'Designer',
+    sex: 'Women',
+    age: 24,
+    address: 'Shanghai',
+    childList: [
+      { id: 10041, name: 'Test456', role: 'Designer', sex: 'Man', age: 19, address: 'test 3444444' },
+      { id: 10042, name: 'Test457', role: 'Test', sex: 'Women', age: 29, address: 'rtyty sdfsdf' },
+      { id: 10032, name: 'Test345', role: 'Develop', sex: 'Women', age: 56, address: 'Guangzhou' },
+      { id: 10032, name: 'Test361', role: 'Test', sex: 'Women', age: 21, address: 'Guangzhou' },
+      { id: 10033, name: 'Test367', role: 'Develop', sex: 'Women', age: 28, address: 'Guangzhou' },
+      { id: 10034, name: 'Test3213', role: 'Test', sex: 'Man', age: 35, address: 'Guangzhou' },
+      { id: 10032, name: 'Test345', role: 'Develop', sex: 'Women', age: 56, address: 'Guangzhou' },
+      { id: 10032, name: 'Test361', role: 'Test', sex: 'Women', age: 21, address: 'Guangzhou' },
+      { id: 10033, name: 'Test367', role: 'Develop', sex: 'Women', age: 28, address: 'Guangzhou' },
+      { id: 10034, name: 'Test3213', role: 'Test', sex: 'Man', age: 35, address: 'Guangzhou' }
+    ]
   }
-}
-
-const updateBatchHeight = () => {
-  const $grid = gridRef.value
-  if ($grid) {
-    const heightConf = {
-      10001: 60,
-      10003: 90,
-      10004: 50
-    }
-    $grid.setRowHeightConf(heightConf)
-  }
-}
-
-const getHeight = (rowOrId: RowVO | string | number) => {
-  const $grid = gridRef.value
-  if ($grid) {
-    VxeUI.modal.message({
-      title: '获取高度',
-      content: `高度：${$grid.getRowHeight(rowOrId)}px`
-    })
-  }
-}
+])
 </script>
+
+<style lang="scss" scoped>
+.expand-wrapper {
+  padding: 16px;
+}
+</style>
