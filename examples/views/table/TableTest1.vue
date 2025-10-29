@@ -28,16 +28,18 @@ const gridRef = ref<VxeGridInstance<RowVO>>()
 
 const gridOptions = reactive<VxeGridProps<RowVO> & { data: RowVO[] }>({
   border: true,
+  // size: 'mini',
   rowConfig: {
     resizable: true,
     keyField: 'id'
   },
   treeConfig: {
     transform: true,
-    showLine: true
+    showLine: true,
+    showRootLine: false
   },
   columns: [
-    { type: 'seq', width: 200, treeNode: true },
+    { type: 'checkbox', width: 200, treeNode: true },
     { field: 'name', title: 'Name' },
     { field: 'sex', title: 'Sex' },
     { field: 'age', title: 'Age' },
@@ -58,6 +60,7 @@ const gridOptions = reactive<VxeGridProps<RowVO> & { data: RowVO[] }>({
     { id: 23671, parentId: 23677, name: 'Test11', type: 'js', size: 1024, date: '2021-06-01' },
     { id: 23672, parentId: 23677, name: 'Test12', type: 'js', size: 1024, date: '2021-06-01' },
     { id: 23688, parentId: 23666, name: 'Test13', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 29688, parentId: 23666, name: 'Test19', type: 'js', size: 1024, date: '2021-06-01' },
     { id: 23681, parentId: 23688, name: 'Test14', type: 'js', size: 1024, date: '2021-06-01' },
     { id: 23682, parentId: 23688, name: 'Test15', type: 'js', size: 1024, date: '2021-06-01' },
     { id: 24555, parentId: null, name: 'Test16', type: 'avi', size: 224, date: '2020-10-01' },

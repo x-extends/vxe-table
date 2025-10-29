@@ -178,7 +178,8 @@ VxeUI.setConfig({
       hasChildField: 'hasChild',
       mapChildrenField: '_X_ROW_CHILD',
       indent: 20,
-      showIcon: true
+      showIcon: true,
+      showRootLine: true
     },
     expandConfig: {
       // trigger: 'default',
