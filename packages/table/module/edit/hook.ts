@@ -78,17 +78,17 @@ hooks.add('tableEditModule', {
           const { item: parentRow } = matchObj
           const parentRest = fullAllDataRowIdData[getRowid($xeTable, parentRow)]
           const parentLevel = parentRest ? parentRest.level : 0
-          let parentChilds = parentRow[childrenField]
-          let mapChilds = parentRow[mapChildrenField]
-          if (!XEUtils.isArray(parentChilds)) {
-            parentChilds = parentRow[childrenField] = []
+          let pChilds = parentRow[childrenField]
+          let pMapChilds = parentRow[mapChildrenField]
+          if (!XEUtils.isArray(pChilds)) {
+            pChilds = parentRow[childrenField] = []
           }
-          if (!XEUtils.isArray(mapChilds)) {
-            mapChilds = parentRow[mapChildrenField] = []
+          if (!XEUtils.isArray(pMapChilds)) {
+            pMapChilds = parentRow[mapChildrenField] = []
           }
-          parentChilds[funcName](item)
-          mapChilds[funcName](item)
-          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+          pChilds[funcName](item)
+          pMapChilds[funcName](item)
+          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: pChilds, parent: parentRow, level: parentLevel + 1, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
           fullDataRowIdData[rowid] = rest
           fullAllDataRowIdData[rowid] = rest
         } else {
@@ -185,13 +185,15 @@ hooks.add('tableEditModule', {
               treeRecords.forEach((row, i) => {
                 if (parentRow) {
                   if (row[parentField] !== parentRow[rowField]) {
-                    row[parentField] = parentRow[rowField]
                     errLog('vxe.error.errProp', [`${parentField}=${row[parentField]}`, `${parentField}=${parentRow[rowField]}`])
+                    row[parentField] = parentRow[rowField]
                   }
                 } else {
                   if (row[parentField] !== null) {
+                    if (!XEUtils.eqNull(row[parentField])) {
+                      errLog('vxe.error.errProp', [`${parentField}=${row[parentField]}`, 'null'])
+                    }
                     row[parentField] = null
-                    errLog('vxe.error.errProp', [`${parentField}=${row[parentField]}`, 'null'])
                   }
                 }
                 let targetIndex = matchMapObj.index + i
