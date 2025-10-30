@@ -532,6 +532,10 @@ export default {
     $xeTabs: {
       default: null
     },
+    $xeParentTable: {
+      from: '$xeTable',
+      default: null
+    },
     $xeGrid: {
       default: null
     },
@@ -1490,7 +1494,7 @@ export default {
       const reactData = $xeTable as unknown as TableReactData
 
       const { initStatus } = this
-      if (value && value.length >= 50000) {
+      if (value && value.length >= 20000) {
         warnLog('vxe.error.errLargeData', ['loadData(data), reloadData(data)'])
       }
       this.loadTableData(value || [], true).then(() => {

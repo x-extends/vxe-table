@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey } from '../../ui/src/dom'
+import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
@@ -11286,6 +11286,7 @@ const Methods = {
   },
   triggerBodyWheelEvent (evnt: WheelEvent) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeParentTable = $xeTable.$xeParentTable as VxeTableConstructor & VxeTablePrivateMethods
     const tableProps = $xeTable
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
@@ -11349,6 +11350,22 @@ const Methods = {
       // 如果滚动位置已经是顶部或底部，则不需要触发
       if (isTopWheel ? currScrollTop <= 0 : currScrollTop >= bodyScrollElem.scrollHeight - bodyScrollElem.clientHeight) {
         return
+      }
+    }
+
+    // 展开行处理，如果展开行嵌入表格中
+    if ($xeParentTable) {
+      if (isRollY) {
+        if (checkTargetElement(evnt.target, [leftScrollElem, bodyScrollElem, rightScrollElem], evnt.currentTarget)) {
+          evnt.stopPropagation()
+          return
+        }
+      }
+      if (isRollX) {
+        if (checkTargetElement(evnt.target, [headerScrollElem, bodyScrollElem, footerScrollElem], evnt.currentTarget)) {
+          evnt.stopPropagation()
+          return
+        }
       }
     }
 

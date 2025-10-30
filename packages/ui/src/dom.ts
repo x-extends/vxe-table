@@ -140,6 +140,24 @@ export function updateCellTitle (overflowElem: any, column: any) {
   }
 }
 
+export function checkTargetElement (target: HTMLElement | EventTarget | null, exEls: (HTMLElement | null)[], endEl?: HTMLElement | EventTarget | null) {
+  let targetEl = target
+  if (!exEls || !exEls.length) {
+    return false
+  }
+  const [exEl1, exEl2, exEl3] = exEls
+  while (targetEl) {
+    if (exEl1 === targetEl || (exEl2 && targetEl === exEl2) || (exEl3 && targetEl === exEl3)) {
+      return true
+    }
+    if (endEl && targetEl === endEl) {
+      return false
+    }
+    targetEl = (targetEl as HTMLElement).parentElement
+  }
+  return false
+}
+
 /**
  * 检查触发源是否属于目标节点
  */
