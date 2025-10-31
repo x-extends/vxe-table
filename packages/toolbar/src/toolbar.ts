@@ -380,7 +380,7 @@ export default defineVxeComponent({
             ? h(VxeUIButtonComponent, {
               key: index,
               ...Object.assign({}, child, {
-                content: child.name,
+                content: child.content || child.name,
                 options: undefined
               }),
               onClick: (eventParams) => isBtn ? btnEvent(eventParams, child) : tolEvent(eventParams, child)
@@ -424,7 +424,7 @@ export default defineVxeComponent({
                   h(VxeUIButtonComponent, {
                     key: `bd${item.code || index}`,
                     ...Object.assign({}, item, {
-                      content: item.name,
+                      content: item.content || item.name,
                       options: undefined
                     }),
                     onClick: (eventParams) => btnEvent(eventParams, item)
@@ -479,7 +479,7 @@ export default defineVxeComponent({
                   h(VxeUIButtonComponent, {
                     key: tIndex,
                     ...Object.assign({}, item, {
-                      content: item.name,
+                      content: item.content || item.name,
                       options: undefined
                     }),
                     onClick: (eventParams) => tolEvent(eventParams, item)

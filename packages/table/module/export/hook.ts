@@ -312,15 +312,17 @@ hooks.add('tableExportModule', {
 
     const getSeq = (cellValue: any, row: any, $rowIndex: number, column: VxeTableDefines.ColumnInfo, $columnIndex: number) => {
       const seqOpts = computeSeqOpts.value
-      const seqMethod = seqOpts.seqMethod || (column as any).seqMethod
-      if (seqMethod) {
-        return seqMethod({
+      const seqMd = seqOpts.seqMethod || (column as any).seqMethod
+      if (seqMd) {
+        return seqMd({
           $table: $xeTable,
           row,
           rowIndex: $xeTable.getRowIndex(row),
+          _rowIndex: $xeTable.getVTRowIndex(row),
           $rowIndex,
           column,
           columnIndex: $xeTable.getColumnIndex(column),
+          _columnIndex: $xeTable.getVTColumnIndex(column),
           $columnIndex
         })
       }
