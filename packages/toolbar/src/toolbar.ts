@@ -443,7 +443,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
             ? h(VxeUIButtonComponent, {
               key: index,
               props: Object.assign({}, child, {
-                content: child.name,
+                content: child.content || child.name,
                 options: undefined
               }),
               on: {
@@ -496,7 +496,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 btnVNs.push(
                   h(VxeUIButtonComponent, {
                     props: Object.assign({}, item, {
-                      content: item.name,
+                      content: item.content || item.name,
                       options: undefined
                     }),
                     on: {
@@ -563,7 +563,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
                   h(VxeUIButtonComponent, {
                     key: tIndex,
                     props: Object.assign({}, item, {
-                      content: item.name,
+                      content: item.content || item.name,
                       options: undefined
                     }),
                     on: {

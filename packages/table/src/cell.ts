@@ -633,9 +633,9 @@ export const Cell = {
       return renderCellBaseVNs(h, params, $table.callSlot(slots.default, params, h))
     }
     const { seq } = params
-    const seqMethod = seqOpts.seqMethod
+    const seqMd = seqOpts.seqMethod
     return renderCellBaseVNs(h, params, [
-      h('span', `${formatText(seqMethod ? seqMethod(params) : treeConfig ? seq : (seqOpts.startIndex || 0) + (seq as number), 1)}`)
+      h('span', `${formatText(seqMd ? seqMd(params) : treeConfig ? seq : (seqOpts.startIndex || 0) + (seq as number), 1)}`)
     ])
   },
   renderDeepIndexCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {

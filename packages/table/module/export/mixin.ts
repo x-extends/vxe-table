@@ -23,15 +23,17 @@ function hasTreeChildren ($xeTable: VxeTableConstructor, row: any) {
 
 function getSeq ($xeTable: VxeTableConstructor, cellValue: any, row: any, $rowIndex: number, column: VxeTableDefines.ColumnInfo, $columnIndex: number) {
   const seqOpts = $xeTable.computeSeqOpts
-  const seqMethod = seqOpts.seqMethod || (column as any).seqMethod
-  if (seqMethod) {
-    return seqMethod({
+  const seqMd = seqOpts.seqMethod || (column as any).seqMethod
+  if (seqMd) {
+    return seqMd({
       $table: $xeTable,
       row,
       rowIndex: $xeTable.getRowIndex(row),
+      _rowIndex: $xeTable.getVTRowIndex(row),
       $rowIndex,
       column,
       columnIndex: $xeTable.getColumnIndex(column),
+      _columnIndex: $xeTable.getVTColumnIndex(column),
       $columnIndex
     })
   }
