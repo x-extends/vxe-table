@@ -185,7 +185,8 @@ function renderTitleContent (h: CreateElement, params: VxeTableDefines.CellRende
   const tableReactData = $table as unknown as TableReactData
   const { showHeaderOverflow: allColumnHeaderOverflow } = tableProps
   const { isRowGroupStatus } = tableReactData
-  const { showHeaderOverflow } = column
+  const { showHeaderOverflow, slots } = column
+  const titleSlot = slots ? slots.title : null
   const headerTooltipOpts = $table.computeHeaderTooltipOpts
   const showAllTip = headerTooltipOpts.showAll
   const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -221,9 +222,11 @@ function renderTitleContent (h: CreateElement, params: VxeTableDefines.CellRende
       on: ons
     }, isRowGroupStatus && column.aggFunc && $table.getPivotTableAggregateRenderColTitles
       ? $table.getPivotTableAggregateRenderColTitles(h, column, titleVN)
-      : [
-          titleVN
-        ])
+      : titleSlot
+        ? $table.callSlot(titleSlot, params, h)
+        : [
+            titleVN
+          ])
   ]
 }
 
@@ -1049,45 +1052,49 @@ export const Cell = {
     const { $table, column } = params
     const sortOpts = $table.computeSortOpts
     const { showIcon, allowBtn, ascTitle, descTitle, iconLayout, iconAsc, iconDesc, iconVisibleMethod } = sortOpts
+    const { order, slots } = column
     if (showIcon && (!iconVisibleMethod || iconVisibleMethod(params))) {
-      return [
-        h('span', {
-          class: ['vxe-cell--sort', `vxe-cell--sort-${iconLayout}-layout`]
-        }, [
-          h('i', {
-            class: ['vxe-sort--asc-btn', iconAsc || getIcon().TABLE_SORT_ASC, {
-              'sort--active': column.order === 'asc'
-            }],
-            attrs: {
-              title: XEUtils.eqNull(ascTitle) ? getI18n('vxe.table.sortAsc') : `${ascTitle || ''}`
-            },
-            on: allowBtn
-              ? {
-                  click (evnt: any) {
-                    evnt.stopPropagation()
-                    $table.triggerSortEvent(evnt, column, 'asc')
-                  }
-                }
-              : undefined
-          }),
-          h('i', {
-            class: ['vxe-sort--desc-btn', iconDesc || getIcon().TABLE_SORT_DESC, {
-              'sort--active': column.order === 'desc'
-            }],
-            attrs: {
-              title: XEUtils.eqNull(descTitle) ? getI18n('vxe.table.sortDesc') : `${descTitle || ''}`
-            },
-            on: allowBtn
-              ? {
-                  click (evnt: any) {
-                    evnt.stopPropagation()
-                    $table.triggerSortEvent(evnt, column, 'desc')
-                  }
-                }
-              : undefined
-          })
-        ])
-      ]
+      const sortSlot = slots ? slots.sort : null
+      return sortSlot
+        ? getSlotVNs($table.callSlot(sortSlot, params, h)) as VNode[]
+        : [
+            h('span', {
+              class: ['vxe-cell--sort', `vxe-cell--sort-${iconLayout}-layout`]
+            }, [
+              h('i', {
+                class: ['vxe-sort--asc-btn', iconAsc || getIcon().TABLE_SORT_ASC, {
+                  'sort--active': order === 'asc'
+                }],
+                attrs: {
+                  title: XEUtils.eqNull(ascTitle) ? getI18n('vxe.table.sortAsc') : `${ascTitle || ''}`
+                },
+                on: allowBtn
+                  ? {
+                      click (evnt: any) {
+                        evnt.stopPropagation()
+                        $table.triggerSortEvent(evnt, column, 'asc')
+                      }
+                    }
+                  : undefined
+              }),
+              h('i', {
+                class: ['vxe-sort--desc-btn', iconDesc || getIcon().TABLE_SORT_DESC, {
+                  'sort--active': order === 'desc'
+                }],
+                attrs: {
+                  title: XEUtils.eqNull(descTitle) ? getI18n('vxe.table.sortDesc') : `${descTitle || ''}`
+                },
+                on: allowBtn
+                  ? {
+                      click (evnt: any) {
+                        evnt.stopPropagation()
+                        $table.triggerSortEvent(evnt, column, 'desc')
+                      }
+                    }
+                  : undefined
+              })
+            ])
+          ]
     }
     return []
   },

@@ -462,27 +462,19 @@ export default {
     const { fixedType, fixedColumn, tableColumn } = props
     const { headerColumn } = _vm
 
-    const { mouseConfig, showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
+    const { mouseConfig } = tableProps
     const { isGroup, isColLoading, overflowX, scrollXLoad, dragCol } = tableReactData
     const { visibleColumn, fullColumnIdData } = tableInternalData
 
     const mouseOpts = $xeTable.computeMouseOpts
+    const isHeaderRenderOptimize = $xeTable.computeIsHeaderRenderOptimize
     let renderHeaderList = headerColumn as VxeTableDefines.ColumnInfo[][]
     let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
-    let isOptimizeMode = false
+    const isOptimizeMode = isHeaderRenderOptimize
 
     if (isGroup) {
       renderColumnList = visibleColumn
     } else {
-      // 如果是使用优化模式
-      if (scrollXLoad && allColumnHeaderOverflow) {
-        if (spanMethod || footerSpanMethod) {
-          // 如果不支持优化模式
-        } else {
-          isOptimizeMode = true
-        }
-      }
-
       if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
         renderColumnList = visibleColumn
       }

@@ -530,8 +530,7 @@ function handleVirtualTreeExpand ($xeTable: VxeTableConstructor & VxeTablePrivat
     updateAfterDataIndex($xeTable)
     return $xeTable.$nextTick()
   }).then(() => {
-    updateTreeLineStyle($xeTable)
-    return handleLazyRecalculate($xeTable, true, true, true)
+    return handleRecalculateStyle($xeTable, true, true, true)
   }).then(() => {
     updateTreeLineStyle($xeTable)
     setTimeout(() => {
@@ -998,8 +997,8 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
-  const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isAllOverflow, expandColumn, isColLoading } = reactData
+  const { mouseConfig } = props
+  const { isGroup, currentRow, tableColumn, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isColLoading } = reactData
   const { visibleColumn, tableHeight, elemStore, customHeight, customMinHeight, customMaxHeight, tHeaderHeight, tFooterHeight } = internalData
   const $xeGanttView = internalData.xeGanttView
   const el = $xeTable.$refs.refElem as HTMLDivElement
@@ -1007,12 +1006,15 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
     return
   }
   const containerList = ['main', 'left', 'right']
+  const { leftList, rightList } = columnStore
   let osbWidth = overflowY ? scrollbarWidth : 0
   let osbHeight = overflowX ? scrollbarHeight : 0
   const emptyPlaceholderElem = $xeTable.$refs.refEmptyPlaceholder as HTMLDivElement
+  const isHeaderRenderOptimize = $xeTable.computeIsHeaderRenderOptimize
+  const isBodyRenderOptimize = $xeTable.computeIsBodyRenderOptimize
+  const isFooterRenderOptimize = $xeTable.computeIsFooterRenderOptimize
   const scrollbarOpts = $xeTable.computeScrollbarOpts
   const mouseOpts = $xeTable.computeMouseOpts
-  const expandOpts = $xeTable.computeExpandOpts
   const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
   const bodyTableElem = getRefElem(elemStore['main-body-table'])
   if (emptyPlaceholderElem) {
@@ -1134,7 +1136,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
     let fixedColumn: VxeTableDefines.ColumnInfo[] = []
     let fixedWrapperElem: HTMLDivElement
     if (fixedType) {
-      fixedColumn = isFixedLeft ? columnStore.leftList : columnStore.rightList
+      fixedColumn = isFixedLeft ? leftList : rightList
       fixedWrapperElem = (isFixedLeft ? $xeTable.$refs.refLeftContainer : $xeTable.$refs.refRightContainer) as HTMLDivElement
     }
     layoutList.forEach(layout => {
@@ -1145,20 +1147,11 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
         // 表头体样式处理
         // 横向滚动渲染
         let renderColumnList = tableColumn
-        let isOptimizeMode = false
+        const isOptimizeMode = isHeaderRenderOptimize
 
         if (isGroup) {
           renderColumnList = visibleColumn
         } else {
-          // 如果是使用优化模式
-          if (scrollXLoad && allColumnHeaderOverflow) {
-            if (spanMethod || footerSpanMethod) {
-              // 如果不支持优化模式
-            } else {
-              isOptimizeMode = true
-            }
-          }
-
           if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
             renderColumnList = visibleColumn
           }
@@ -1215,16 +1208,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
         }
 
         let renderColumnList = tableColumn
-
-        let isOptimizeMode = false
-        // 如果是使用优化模式
-        if (scrollXLoad || scrollYLoad || isAllOverflow) {
-          if ((expandColumn && expandOpts.mode !== 'fixed') || spanMethod || footerSpanMethod) {
-            // 如果不支持优化模式
-          } else {
-            isOptimizeMode = true
-          }
-        }
+        const isOptimizeMode = isBodyRenderOptimize
 
         if (fixedType) {
           renderColumnList = visibleColumn
@@ -1258,15 +1242,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
         }
       } else if (layout === 'footer') {
         let renderColumnList = tableColumn
-        let isOptimizeMode = false
-        // 如果是使用优化模式
-        if (scrollXLoad && allColumnFooterOverflow) {
-          if (spanMethod || footerSpanMethod) {
-            // 如果不支持优化模式
-          } else {
-            isOptimizeMode = true
-          }
-        }
+        const isOptimizeMode = isFooterRenderOptimize
 
         if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
           renderColumnList = visibleColumn
@@ -11648,7 +11624,7 @@ const Methods = {
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { isAllOverflow, scrollYLoad, expandColumn } = reactData
+    const { isAllOverflow, overflowY, scrollYLoad, scrollYHeight, expandColumn } = reactData
     const { scrollYStore, elemStore, isResizeCellHeight, afterFullData, fullAllDataRowIdData, rowExpandedMaps } = internalData
     const $xeGanttView = internalData.xeGanttView
     const { startIndex } = scrollYStore
@@ -11663,13 +11639,13 @@ const Methods = {
     const rightbodyTableElem = getRefElem(elemStore['right-body-table'])
     const containerList = ['main', 'left', 'right']
     let ySpaceTop = 0
-    let scrollYHeight = 0
+    let sYHeight = scrollYHeight
     let isScrollYBig = false
     if (scrollYLoad) {
       const isCustomCellHeight = isResizeCellHeight || cellOpts.height || rowOpts.height
       if (!isCustomCellHeight && !expandColumn && isAllOverflow) {
-        scrollYHeight = afterFullData.length * defaultRowHeight
-        if (scrollYHeight > maxYHeight) {
+        sYHeight = afterFullData.length * defaultRowHeight
+        if (sYHeight > maxYHeight) {
           isScrollYBig = true
         }
         ySpaceTop = Math.max(0, startIndex * defaultRowHeight)
@@ -11682,18 +11658,21 @@ const Methods = {
         const lastRow = afterFullData[afterFullData.length - 1]
         rowid = getRowid($xeTable, lastRow)
         rowRest = fullAllDataRowIdData[rowid] || {}
-        scrollYHeight = (rowRest.oTop || 0) + (rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight)
-        // 是否展开行
-        if (expandColumn && rowExpandedMaps[rowid]) {
-          scrollYHeight += rowRest.expandHeight || expandOpts.height || 0
+        // 如果为空时还没计算完数据，保持原高度不变
+        if (rowRest.oTop) {
+          sYHeight = (rowRest.oTop || 0) + (rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight)
+          // 是否展开行
+          if (expandColumn && rowExpandedMaps[rowid]) {
+            sYHeight += rowRest.expandHeight || expandOpts.height || 0
+          }
         }
-        if (scrollYHeight > maxYHeight) {
+        if (sYHeight > maxYHeight) {
           isScrollYBig = true
         }
       }
     } else {
       if (bodyTableElem) {
-        scrollYHeight = bodyTableElem.clientHeight
+        sYHeight = bodyTableElem.clientHeight
       }
     }
     let clientHeight = 0
@@ -11701,7 +11680,7 @@ const Methods = {
       clientHeight = bodyScrollElem.clientHeight
     }
     // 虚拟渲染
-    let ySpaceHeight = scrollYHeight
+    let ySpaceHeight = sYHeight
     let scrollYTop = ySpaceTop
     if (isScrollYBig) {
       // 触底
@@ -11711,6 +11690,9 @@ const Methods = {
         scrollYTop = (maxYHeight - clientHeight) * (ySpaceTop / (scrollYHeight - clientHeight))
       }
       ySpaceHeight = maxYHeight
+    }
+    if (!(scrollYLoad && overflowY)) {
+      scrollYTop = 0
     }
 
     if (leftBodyTableElem) {
@@ -11742,7 +11724,7 @@ const Methods = {
       rowExpandYSpaceEl.style.height = ySpaceHeight ? `${ySpaceHeight}px` : ''
     }
     reactData.scrollYTop = scrollYTop
-    reactData.scrollYHeight = scrollYHeight
+    reactData.scrollYHeight = ySpaceHeight
     reactData.isScrollYBig = isScrollYBig
 
     calcScrollbar($xeTable)

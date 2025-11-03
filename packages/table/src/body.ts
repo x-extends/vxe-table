@@ -756,24 +756,16 @@ export default {
     const { xID } = $xeTable
     const { fixedColumn, fixedType, tableColumn } = props
 
-    const { spanMethod, footerSpanMethod, mouseConfig } = tableProps
-    const { isGroup, tableData, isColLoading, overflowX, scrollXLoad, scrollYLoad, isAllOverflow, expandColumn, dragRow, dragCol } = tableReactData
+    const { mouseConfig } = tableProps
+    const { isGroup, tableData, isColLoading, overflowX, scrollXLoad, scrollYLoad, dragRow, dragCol } = tableReactData
     const { visibleColumn, fullAllDataRowIdData, fullColumnIdData } = tableInternalData
     const emptyOpts = $xeTable.computeEmptyOpts
     const mouseOpts = $xeTable.computeMouseOpts
-    const expandOpts = $xeTable.computeExpandOpts
+    const isBodyRenderOptimize = $xeTable.computeIsBodyRenderOptimize
 
     let renderDataList = tableData
     let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
-    let isOptimizeMode = false
-    // 如果是使用优化模式
-    if (scrollXLoad || scrollYLoad || isAllOverflow) {
-      if ((expandColumn && expandOpts.mode !== 'fixed') || spanMethod || footerSpanMethod) {
-        // 如果不支持优化模式
-      } else {
-        isOptimizeMode = true
-      }
-    }
+    const isOptimizeMode = isBodyRenderOptimize
 
     if (!isColLoading && (fixedType || !overflowX)) {
       renderColumnList = visibleColumn
@@ -848,12 +840,6 @@ export default {
       }
     }
 
-    const ons: Record<string, any> = {
-      scroll (evnt: Event) {
-        $xeTable.triggerBodyScrollEvent(evnt, fixedType)
-      }
-    }
-
     return h('div', {
       ref: 'refElem',
       class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
@@ -864,7 +850,11 @@ export default {
       h('div', {
         ref: 'refBodyScroll',
         class: 'vxe-table--body-inner-wrapper',
-        on: ons
+        on: {
+          scroll (evnt: Event) {
+            $xeTable.triggerBodyScrollEvent(evnt, fixedType)
+          }
+        }
       }, [
         fixedType
           ? renderEmptyElement($xeTable)

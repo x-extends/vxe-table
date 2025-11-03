@@ -1299,6 +1299,89 @@ export default {
       }
       return leftWidth
     },
+    computeBodyMergeCoverFixed () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { columnStore, mergeBodyFlag } = reactData
+      const { mergeBodyList, visibleColumn } = internalData
+      const { leftList, rightList } = columnStore
+      const rscIndex = visibleColumn.length - rightList.length
+      if (mergeBodyFlag && (leftList.length || rightList.length)) {
+        const lecIndex = leftList.length
+        for (let i = 0; i < mergeBodyList.length; i++) {
+          const { col, colspan } = mergeBodyList[i]
+          if (col < lecIndex || (col + colspan) > rscIndex) {
+            return true
+          }
+        }
+      }
+      return false
+    },
+    computeIsHeaderRenderOptimize () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { spanMethod, footerSpanMethod, showHeaderOverflow: allColumnHeaderOverflow } = props
+      const { isGroup, scrollXLoad } = reactData
+      let isOptimizeMode = false
+      if (isGroup) {
+        // 分组表头
+      } else {
+        // 如果是使用优化模式
+        if (scrollXLoad && allColumnHeaderOverflow) {
+          if (spanMethod || footerSpanMethod) {
+            // 如果不支持优化模式
+          } else {
+            isOptimizeMode = true
+          }
+        }
+      }
+      return isOptimizeMode
+    },
+    computeIsBodyRenderOptimize () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { spanMethod, footerSpanMethod } = props
+      const { scrollXLoad, scrollYLoad, isAllOverflow, expandColumn } = reactData
+      const bodyMergeCoverFixed = $xeTable.computeBodyMergeCoverFixed
+      const expandOpts = $xeTable.computeExpandOpts
+      let isOptimizeMode = false
+      // 如果是使用优化模式
+      if (scrollXLoad || scrollYLoad || isAllOverflow) {
+        // 如果是展开行，内联模式，不支持优化
+        // 如果是方法合并，不支持优化
+        // 如果固定列且配置式合并，不支持优化
+        if ((expandColumn && expandOpts.mode !== 'fixed') || bodyMergeCoverFixed || spanMethod || footerSpanMethod) {
+          // 如果不支持优化模式
+        } else {
+          isOptimizeMode = true
+        }
+      }
+      return isOptimizeMode
+    },
+    computeIsFooterRenderOptimize () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { spanMethod, footerSpanMethod, showFooterOverflow: allColumnFooterOverflow } = props
+      const { scrollXLoad } = reactData
+      let isOptimizeMode = false
+      // 如果是使用优化模式
+      if (scrollXLoad && allColumnFooterOverflow) {
+        if (spanMethod || footerSpanMethod) {
+          // 如果不支持优化模式
+        } else {
+          isOptimizeMode = true
+        }
+      }
+      return isOptimizeMode
+    },
     exportOpts () {
       return this.computeExportOpts
     },
@@ -1709,12 +1792,12 @@ export default {
     if (props.resizable) {
       warnLog('vxe.error.delProp', ['resizable', 'column-config.resizable'])
     }
-    if (props.virtualXConfig && props.scrollX) {
-      warnLog('vxe.error.notSupportProp', ['virtual-x-config', 'scroll-x', 'scroll-x=null'])
-    }
-    if (props.virtualYConfig && props.scrollY) {
-      warnLog('vxe.error.notSupportProp', ['virtual-y-config', 'scroll-y', 'scroll-y=null'])
-    }
+    // if (props.virtualXConfig && props.scrollX) {
+    //   warnLog('vxe.error.notSupportProp', ['virtual-x-config', 'scroll-x', 'scroll-x=null'])
+    // }
+    // if (props.virtualYConfig && props.scrollY) {
+    //   warnLog('vxe.error.notSupportProp', ['virtual-y-config', 'scroll-y', 'scroll-y=null'])
+    // }
     if (props.aggregateConfig && props.rowGroupConfig) {
       warnLog('vxe.error.notSupportProp', ['aggregate-config', 'row-group-config', 'row-group-config=null'])
     }
