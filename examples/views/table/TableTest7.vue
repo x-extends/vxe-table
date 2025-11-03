@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import type { VxeTableInstance, VxeTablePropTypes, VxeToolbarInstance } from '../../../types'
 
 interface RowVO {

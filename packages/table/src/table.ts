@@ -677,6 +677,77 @@ export default defineVxeComponent({
       return leftWidth
     })
 
+    const computeBodyMergeCoverFixed = computed(() => {
+      const { columnStore, mergeBodyFlag } = reactData
+      const { mergeBodyList, visibleColumn } = internalData
+      const { leftList, rightList } = columnStore
+      const rscIndex = visibleColumn.length - rightList.length
+      if (mergeBodyFlag && (leftList.length || rightList.length)) {
+        const lecIndex = leftList.length
+        for (let i = 0; i < mergeBodyList.length; i++) {
+          const { col, colspan } = mergeBodyList[i]
+          if (col < lecIndex || (col + colspan) > rscIndex) {
+            return true
+          }
+        }
+      }
+      return false
+    })
+
+    const computeIsHeaderRenderOptimize = computed(() => {
+      const { spanMethod, footerSpanMethod, showHeaderOverflow: allColumnHeaderOverflow } = props
+      const { isGroup, scrollXLoad } = reactData
+      let isOptimizeMode = false
+      if (isGroup) {
+        // 分组表头
+      } else {
+        // 如果是使用优化模式
+        if (scrollXLoad && allColumnHeaderOverflow) {
+          if (spanMethod || footerSpanMethod) {
+            // 如果不支持优化模式
+          } else {
+            isOptimizeMode = true
+          }
+        }
+      }
+      return isOptimizeMode
+    })
+
+    const computeIsBodyRenderOptimize = computed(() => {
+      const { spanMethod, footerSpanMethod } = props
+      const { scrollXLoad, scrollYLoad, isAllOverflow, expandColumn } = reactData
+      const bodyMergeCoverFixed = computeBodyMergeCoverFixed.value
+      const expandOpts = computeExpandOpts.value
+      let isOptimizeMode = false
+      // 如果是使用优化模式
+      if (scrollXLoad || scrollYLoad || isAllOverflow) {
+        // 如果是展开行，内联模式，不支持优化
+        // 如果是方法合并，不支持优化
+        // 如果固定列且配置式合并，不支持优化
+        if ((expandColumn && expandOpts.mode !== 'fixed') || bodyMergeCoverFixed || spanMethod || footerSpanMethod) {
+          // 如果不支持优化模式
+        } else {
+          isOptimizeMode = true
+        }
+      }
+      return isOptimizeMode
+    })
+
+    const computeIsFooterRenderOptimize = computed(() => {
+      const { spanMethod, footerSpanMethod, showFooterOverflow: allColumnFooterOverflow } = props
+      const { scrollXLoad } = reactData
+      let isOptimizeMode = false
+      // 如果是使用优化模式
+      if (scrollXLoad && allColumnFooterOverflow) {
+        if (spanMethod || footerSpanMethod) {
+          // 如果不支持优化模式
+        } else {
+          isOptimizeMode = true
+        }
+      }
+      return isOptimizeMode
+    })
+
     const computeHeaderMenu = computed(() => {
       const menuOpts = computeMenuOpts.value
       const headerOpts = menuOpts.header
@@ -949,9 +1020,13 @@ export default defineVxeComponent({
       computeCustomOpts,
       computeLeftFixedWidth,
       computeRightFixedWidth,
+      computeBodyMergeCoverFixed,
       computeFixedColumnSize,
       computeIsMaxFixedColumn,
       computeIsAllCheckboxDisabled,
+      computeIsHeaderRenderOptimize,
+      computeIsBodyRenderOptimize,
+      computeIsFooterRenderOptimize,
       computeVirtualScrollBars,
       computeRowGroupFields,
       computeRowGroupColumns,
@@ -2474,8 +2549,8 @@ export default defineVxeComponent({
     }
 
     const updateStyle = () => {
-      const { showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
-      const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isAllOverflow, expandColumn, isColLoading } = reactData
+      const { mouseConfig } = props
+      const { isGroup, currentRow, tableColumn, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isColLoading } = reactData
       const { visibleColumn, tableHeight, elemStore, customHeight, customMinHeight, customMaxHeight, tHeaderHeight, tFooterHeight } = internalData
       const $xeGanttView = internalData.xeGanttView
       const el = refElem.value
@@ -2483,12 +2558,15 @@ export default defineVxeComponent({
         return
       }
       const containerList = ['main', 'left', 'right']
+      const { leftList, rightList } = columnStore
       let osbWidth = overflowY ? scrollbarWidth : 0
       let osbHeight = overflowX ? scrollbarHeight : 0
       const emptyPlaceholderElem = refEmptyPlaceholder.value
+      const isHeaderRenderOptimize = computeIsHeaderRenderOptimize.value
+      const isBodyRenderOptimize = computeIsBodyRenderOptimize.value
+      const isFooterRenderOptimize = computeIsFooterRenderOptimize.value
       const scrollbarOpts = computeScrollbarOpts.value
       const mouseOpts = computeMouseOpts.value
-      const expandOpts = computeExpandOpts.value
       const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
       const bodyTableElem = getRefElem(elemStore['main-body-table'])
       if (emptyPlaceholderElem) {
@@ -2610,7 +2688,7 @@ export default defineVxeComponent({
         let fixedColumn: VxeTableDefines.ColumnInfo[] = []
         let fixedWrapperElem: HTMLDivElement
         if (fixedType) {
-          fixedColumn = isFixedLeft ? columnStore.leftList : columnStore.rightList
+          fixedColumn = isFixedLeft ? leftList : rightList
           fixedWrapperElem = isFixedLeft ? refLeftContainer.value : refRightContainer.value
         }
         layoutList.forEach(layout => {
@@ -2621,20 +2699,11 @@ export default defineVxeComponent({
             // 表头体样式处理
             // 横向滚动渲染
             let renderColumnList = tableColumn
-            let isOptimizeMode = false
+            const isOptimizeMode = isHeaderRenderOptimize
 
             if (isGroup) {
               renderColumnList = visibleColumn
             } else {
-              // 如果是使用优化模式
-              if (scrollXLoad && allColumnHeaderOverflow) {
-                if (spanMethod || footerSpanMethod) {
-                  // 如果不支持优化模式
-                } else {
-                  isOptimizeMode = true
-                }
-              }
-
               if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
                 renderColumnList = visibleColumn
               }
@@ -2691,16 +2760,7 @@ export default defineVxeComponent({
             }
 
             let renderColumnList = tableColumn
-
-            let isOptimizeMode = false
-            // 如果是使用优化模式
-            if (scrollXLoad || scrollYLoad || isAllOverflow) {
-              if ((expandColumn && expandOpts.mode !== 'fixed') || spanMethod || footerSpanMethod) {
-                // 如果不支持优化模式
-              } else {
-                isOptimizeMode = true
-              }
-            }
+            const isOptimizeMode = isBodyRenderOptimize
 
             if (fixedType) {
               renderColumnList = visibleColumn
@@ -2734,15 +2794,7 @@ export default defineVxeComponent({
             }
           } else if (layout === 'footer') {
             let renderColumnList = tableColumn
-            let isOptimizeMode = false
-            // 如果是使用优化模式
-            if (scrollXLoad && allColumnFooterOverflow) {
-              if (spanMethod || footerSpanMethod) {
-                // 如果不支持优化模式
-              } else {
-                isOptimizeMode = true
-              }
-            }
+            const isOptimizeMode = isFooterRenderOptimize
 
             if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
               renderColumnList = visibleColumn
@@ -4190,6 +4242,7 @@ export default defineVxeComponent({
      * @returns
      */
     const handleVirtualTreeExpand = (rows: any[], expanded: boolean) => {
+      const { lastScrollLeft, lastScrollTop } = internalData
       return handleBaseTreeExpand(rows, expanded).then(() => {
         handleVirtualTreeToList()
         $xeTable.handleTableData()
@@ -4197,9 +4250,9 @@ export default defineVxeComponent({
         updateAfterDataIndex()
         return nextTick()
       }).then(() => {
-        updateTreeLineStyle()
-        return handleLazyRecalculate(true, true, true)
+        return handleRecalculateStyle(true, true, true)
       }).then(() => {
+        restoreScrollLocation($xeTable, lastScrollLeft, lastScrollTop)
         updateTreeLineStyle()
         setTimeout(() => {
           $xeTable.updateCellAreas()
@@ -11879,7 +11932,7 @@ export default defineVxeComponent({
       },
       // 更新纵向 Y 可视渲染上下剩余空间大小
       updateScrollYSpace () {
-        const { isAllOverflow, overflowY, scrollYLoad, expandColumn } = reactData
+        const { isAllOverflow, overflowY, scrollYLoad, scrollYHeight, expandColumn } = reactData
         const { scrollYStore, elemStore, isResizeCellHeight, afterFullData, fullAllDataRowIdData, rowExpandedMaps } = internalData
         const $xeGanttView = internalData.xeGanttView
         const { startIndex } = scrollYStore
@@ -11894,13 +11947,13 @@ export default defineVxeComponent({
         const rightbodyTableElem = getRefElem(elemStore['right-body-table'])
         const containerList = ['main', 'left', 'right']
         let ySpaceTop = 0
-        let scrollYHeight = 0
+        let sYHeight = scrollYHeight
         let isScrollYBig = false
         if (scrollYLoad) {
           const isCustomCellHeight = isResizeCellHeight || cellOpts.height || rowOpts.height
           if (!isCustomCellHeight && !expandColumn && isAllOverflow) {
-            scrollYHeight = afterFullData.length * defaultRowHeight
-            if (scrollYHeight > maxYHeight) {
+            sYHeight = afterFullData.length * defaultRowHeight
+            if (sYHeight > maxYHeight) {
               isScrollYBig = true
             }
             ySpaceTop = Math.max(0, startIndex * defaultRowHeight)
@@ -11913,18 +11966,21 @@ export default defineVxeComponent({
             const lastRow = afterFullData[afterFullData.length - 1]
             rowid = getRowid($xeTable, lastRow)
             rowRest = fullAllDataRowIdData[rowid] || {}
-            scrollYHeight = (rowRest.oTop || 0) + (rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight)
-            // 是否展开行
-            if (expandColumn && rowExpandedMaps[rowid]) {
-              scrollYHeight += rowRest.expandHeight || expandOpts.height || 0
+            // 如果为空时还没计算完数据，保持原高度不变
+            if (rowRest.oTop) {
+              sYHeight = (rowRest.oTop || 0) + (rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight)
+              // 是否展开行
+              if (expandColumn && rowExpandedMaps[rowid]) {
+                sYHeight += rowRest.expandHeight || expandOpts.height || 0
+              }
             }
-            if (scrollYHeight > maxYHeight) {
+            if (sYHeight > maxYHeight) {
               isScrollYBig = true
             }
           }
         } else {
           if (bodyTableElem) {
-            scrollYHeight = bodyTableElem.clientHeight
+            sYHeight = bodyTableElem.clientHeight
           }
         }
         let clientHeight = 0
@@ -11932,7 +11988,7 @@ export default defineVxeComponent({
           clientHeight = bodyScrollElem.clientHeight
         }
         // 虚拟渲染
-        let ySpaceHeight = scrollYHeight
+        let ySpaceHeight = sYHeight
         let scrollYTop = ySpaceTop
         if (isScrollYBig) {
           // 触底
@@ -11976,7 +12032,7 @@ export default defineVxeComponent({
           rowExpandYSpaceEl.style.height = ySpaceHeight ? `${ySpaceHeight}px` : ''
         }
         reactData.scrollYTop = scrollYTop
-        reactData.scrollYHeight = scrollYHeight
+        reactData.scrollYHeight = ySpaceHeight
         reactData.isScrollYBig = isScrollYBig
 
         calcScrollbar()
@@ -13175,12 +13231,12 @@ export default defineVxeComponent({
         if (props.resizable) {
           warnLog('vxe.error.delProp', ['resizable', 'column-config.resizable'])
         }
-        if (props.virtualXConfig && props.scrollX) {
-          warnLog('vxe.error.notSupportProp', ['virtual-x-config', 'scroll-x', 'scroll-x=null'])
-        }
-        if (props.virtualYConfig && props.scrollY) {
-          warnLog('vxe.error.notSupportProp', ['virtual-y-config', 'scroll-y', 'scroll-y=null'])
-        }
+        // if (props.virtualXConfig && props.scrollX) {
+        //   warnLog('vxe.error.notSupportProp', ['virtual-x-config', 'scroll-x', 'scroll-x=null'])
+        // }
+        // if (props.virtualYConfig && props.scrollY) {
+        //   warnLog('vxe.error.notSupportProp', ['virtual-y-config', 'scroll-y', 'scroll-y=null'])
+        // }
         if (props.aggregateConfig && props.rowGroupConfig) {
           warnLog('vxe.error.notSupportProp', ['aggregate-config', 'row-group-config', 'row-group-config=null'])
         }

@@ -36,7 +36,7 @@ export default defineVxeComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeFooterTooltipOpts, computeColumnOpts, computeCellOpts, computeFooterCellOpts, computeDefaultRowHeight, computeResizableOpts, computeVirtualXOpts } = $xeTable.getComputeMaps()
+    const { computeFooterTooltipOpts, computeColumnOpts, computeCellOpts, computeFooterCellOpts, computeDefaultRowHeight, computeResizableOpts, computeVirtualXOpts, computeIsFooterRenderOptimize } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refFooterScroll = ref() as Ref<HTMLDivElement>
@@ -243,20 +243,12 @@ export default defineVxeComponent({
 
     const renderVN = () => {
       const { fixedType, fixedColumn, tableColumn } = props
-      const { spanMethod, footerSpanMethod, showFooterOverflow: allColumnFooterOverflow } = tableProps
       const { visibleColumn, fullColumnIdData } = tableInternalData
       const { isGroup, isColLoading, overflowX, scrollXLoad, dragCol } = tableReactData
+      const isFooterRenderOptimize = computeIsFooterRenderOptimize.value
 
       let renderColumnList = tableColumn
-      let isOptimizeMode = false
-      // 如果是使用优化模式
-      if (scrollXLoad && allColumnFooterOverflow) {
-        if (spanMethod || footerSpanMethod) {
-          // 如果不支持优化模式
-        } else {
-          isOptimizeMode = true
-        }
-      }
+      const isOptimizeMode = isFooterRenderOptimize
 
       if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
         renderColumnList = visibleColumn

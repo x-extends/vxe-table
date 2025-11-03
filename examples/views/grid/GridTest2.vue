@@ -1,9 +1,14 @@
 <template>
   <div>
-    <div>
-      <vxe-button @click="validEvent">校验变动数据</vxe-button>
-      <vxe-button @click="fullValidEvent">校验全量数据</vxe-button>
-    </div>
+    <p>
+      <vxe-button @click="loadList(5)">5行</vxe-button>
+      <vxe-button @click="loadList(1000)">1k行</vxe-button>
+      <vxe-button @click="loadList(10000)">1w行</vxe-button>
+      <vxe-button @click="loadList(100000)">10w行</vxe-button>
+      <vxe-button @click="loadList(500000)">50w行</vxe-button>
+      <vxe-button @click="loadList(1000000)">100w行</vxe-button>
+      <vxe-button @click="loadList(2000000)">200w行</vxe-button>
+    </p>
     <vxe-grid ref="gridRef" v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
@@ -17,8 +22,7 @@ interface RowVO {
   id: number
   name: string
   role: string
-  sex: string
-  age: number
+  num: number
   address: string
 }
 
@@ -27,66 +31,56 @@ const gridRef = ref<VxeGridInstance<RowVO>>()
 const gridOptions = reactive<VxeGridProps<RowVO>>({
   border: true,
   showOverflow: true,
-  keepSource: true,
-  height: 300,
-  editConfig: {
-    trigger: 'click',
-    mode: 'row',
-    showStatus: true
+  showHeaderOverflow: true,
+  showFooterOverflow: true,
+  height: 800,
+  loading: false,
+  columnConfig: {
+    resizable: true
   },
-  validConfig: {
-  },
-  editRules: {
-    name: [
-      { required: true, message: '必须填写' }
-    ],
-    role: [
-      { required: true, message: '必须填写' }
-    ],
-    sex: [
-      { required: true, message: '必须填写' }
-    ]
+  virtualYConfig: {
+    enabled: true,
+    gt: 0
   },
   columns: [
     { type: 'checkbox', width: 60 },
-    { type: 'seq', width: 70 },
-    { field: 'name', title: 'Name', editRender: { name: 'VxeInput' } },
-    { field: 'role', title: 'Role', editRender: { name: 'VxeInput' } },
-    { field: 'sex', title: 'Sex', editRender: { name: 'VxeInput' } },
-    { field: 'age', title: 'Age', editRender: { name: 'VxeInput' } },
-    { field: 'date', title: 'Date', editRender: { name: 'VxeInput' } }
+    { type: 'seq', title: '序号', width: 100 },
+    { field: 'name', title: 'Name', minWidth: 180 },
+    { field: 'role', title: 'Role', width: 200 },
+    { field: 'num', title: 'Num', width: 200 },
+    { field: 'address', title: 'Address', width: 200 }
   ],
-  data: [
-    { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, address: 'test abc' },
-    { id: 10002, name: '', role: '', sex: '', age: 22, address: 'Guangzhou' },
-    { id: 10003, name: 'Test3', role: 'PM', sex: '', age: 32, address: 'Shanghai' },
-    { id: 10004, name: 'Test4', role: 'Designer', sex: '', age: 23, address: 'test abc' },
-    { id: 10005, name: '', role: '', sex: '1', age: 30, address: 'Shanghai' },
-    { id: 10006, name: 'Test6', role: 'Designer', sex: '1', age: 21, address: 'test abc' }
-  ]
+  data: []
 })
 
-const validEvent = async () => {
-  const $grid = gridRef.value
-  if ($grid) {
-    const errMap = await $grid.validate()
-    if (errMap) {
-      VxeUI.modal.message({ status: 'error', content: '校验不通过！' })
-    } else {
-      VxeUI.modal.message({ status: 'success', content: '校验成功！' })
+// 模拟行数据
+const loadList = (size = 200) => {
+  gridOptions.loading = true
+  setTimeout(() => {
+    const dataList: RowVO[] = []
+    for (let i = 0; i < size; i++) {
+      dataList.push({
+        id: i,
+        name: `名称${i} 名称名称 称`,
+        role: `role ${i}`,
+        num: 20,
+        address: 'shenzhen shen'
+      })
     }
-  }
+
+    const $grid = gridRef.value
+    if ($grid) {
+      const startTime = Date.now()
+      $grid.reloadData(dataList).then(() => {
+        VxeUI.modal.message({
+          content: `加载时间 ${Date.now() - startTime} 毫秒`,
+          status: 'success'
+        })
+        gridOptions.loading = false
+      })
+    }
+  }, 350)
 }
 
-const fullValidEvent = async () => {
-  const $grid = gridRef.value
-  if ($grid) {
-    const errMap = await $grid.fullValidate(true)
-    if (errMap) {
-      VxeUI.modal.message({ status: 'error', content: '校验不通过！' })
-    } else {
-      VxeUI.modal.message({ status: 'success', content: '校验成功！' })
-    }
-  }
-}
+loadList(500)
 </script>

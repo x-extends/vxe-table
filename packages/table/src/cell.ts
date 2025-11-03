@@ -186,7 +186,8 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams & { 
   const { computeHeaderTooltipOpts } = $table.getComputeMaps()
   const { showHeaderOverflow: allColumnHeaderOverflow } = tableProps
   const { isRowGroupStatus } = tableReactData
-  const { showHeaderOverflow } = column
+  const { showHeaderOverflow, slots } = column
+  const titleSlot = slots ? slots.title : null
   const headerTooltipOpts = computeHeaderTooltipOpts.value
   const showAllTip = headerTooltipOpts.showAll
   const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -222,9 +223,11 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams & { 
       ...ons
     }, isRowGroupStatus && column.aggFunc && $table.getPivotTableAggregateRenderColTitles
       ? $table.getPivotTableAggregateRenderColTitles(column, titleVN)
-      : [
-          titleVN
-        ])
+      : titleSlot
+        ? $table.callSlot(titleSlot, params)
+        : [
+            titleVN
+          ])
   ]
 }
 
@@ -1080,38 +1083,41 @@ export const Cell = {
     const { computeSortOpts } = $table.getComputeMaps()
     const sortOpts = computeSortOpts.value
     const { showIcon, allowBtn, ascTitle, descTitle, iconLayout, iconAsc, iconDesc, iconVisibleMethod } = sortOpts
-    const { order } = column
+    const { order, slots } = column
     if (showIcon && (!iconVisibleMethod || iconVisibleMethod(params))) {
-      return [
-        h('span', {
-          class: ['vxe-cell--sort', `vxe-cell--sort-${iconLayout}-layout`]
-        }, [
-          h('i', {
-            class: ['vxe-sort--asc-btn', iconAsc || getIcon().TABLE_SORT_ASC, {
-              'sort--active': order === 'asc'
-            }],
-            title: XEUtils.eqNull(ascTitle) ? getI18n('vxe.table.sortAsc') : `${ascTitle || ''}`,
-            onClick: allowBtn
-              ? (evnt: Event) => {
-                  evnt.stopPropagation()
-                  $table.triggerSortEvent(evnt, column, 'asc')
-                }
-              : undefined
-          }),
-          h('i', {
-            class: ['vxe-sort--desc-btn', iconDesc || getIcon().TABLE_SORT_DESC, {
-              'sort--active': order === 'desc'
-            }],
-            title: XEUtils.eqNull(descTitle) ? getI18n('vxe.table.sortDesc') : `${descTitle || ''}`,
-            onClick: allowBtn
-              ? (evnt: Event) => {
-                  evnt.stopPropagation()
-                  $table.triggerSortEvent(evnt, column, 'desc')
-                }
-              : undefined
-          })
-        ])
-      ]
+      const sortSlot = slots ? slots.sort : null
+      return sortSlot
+        ? getSlotVNs($table.callSlot(sortSlot, params)) as VNode[]
+        : [
+            h('span', {
+              class: ['vxe-cell--sort', `vxe-cell--sort-${iconLayout}-layout`]
+            }, [
+              h('i', {
+                class: ['vxe-sort--asc-btn', iconAsc || getIcon().TABLE_SORT_ASC, {
+                  'sort--active': order === 'asc'
+                }],
+                title: XEUtils.eqNull(ascTitle) ? getI18n('vxe.table.sortAsc') : `${ascTitle || ''}`,
+                onClick: allowBtn
+                  ? (evnt: Event) => {
+                      evnt.stopPropagation()
+                      $table.triggerSortEvent(evnt, column, 'asc')
+                    }
+                  : undefined
+              }),
+              h('i', {
+                class: ['vxe-sort--desc-btn', iconDesc || getIcon().TABLE_SORT_DESC, {
+                  'sort--active': order === 'desc'
+                }],
+                title: XEUtils.eqNull(descTitle) ? getI18n('vxe.table.sortDesc') : `${descTitle || ''}`,
+                onClick: allowBtn
+                  ? (evnt: Event) => {
+                      evnt.stopPropagation()
+                      $table.triggerSortEvent(evnt, column, 'desc')
+                    }
+                  : undefined
+              })
+            ])
+          ]
     }
     return []
   },

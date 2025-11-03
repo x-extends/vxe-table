@@ -45,7 +45,7 @@ export default defineVxeComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeMouseOpts, computeHeaderCellOpts, computeDefaultRowHeight, computeVirtualXOpts, computeFloatingFilterOpts } = $xeTable.getComputeMaps()
+    const { computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeMouseOpts, computeHeaderCellOpts, computeDefaultRowHeight, computeVirtualXOpts, computeFloatingFilterOpts, computeIsHeaderRenderOptimize } = $xeTable.getComputeMaps()
 
     const headerColumn = ref<VxeTableDefines.ColumnInfo[][]>([])
 
@@ -416,27 +416,19 @@ export default defineVxeComponent({
 
     const renderVN = () => {
       const { fixedType, fixedColumn, tableColumn } = props
-      const { mouseConfig, showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
+      const { mouseConfig } = tableProps
       const { isGroup, isColLoading, overflowX, scrollXLoad, dragCol } = tableReactData
       const { visibleColumn, fullColumnIdData } = tableInternalData
 
       const mouseOpts = computeMouseOpts.value
+      const isHeaderRenderOptimize = computeIsHeaderRenderOptimize.value
       let renderHeaderList = headerColumn.value || []
       let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
-      let isOptimizeMode = false
+      const isOptimizeMode = isHeaderRenderOptimize
 
       if (isGroup) {
         renderColumnList = visibleColumn
       } else {
-        // 如果是使用优化模式
-        if (scrollXLoad && allColumnHeaderOverflow) {
-          if (spanMethod || footerSpanMethod) {
-            // 如果不支持优化模式
-          } else {
-            isOptimizeMode = true
-          }
-        }
-
         if (!isOptimizeMode || (!isColLoading && (fixedType || !overflowX))) {
           renderColumnList = visibleColumn
         }

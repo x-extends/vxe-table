@@ -29,7 +29,7 @@ export default defineVxeComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeEditOpts, computeMouseOpts, computeCellOffsetWidth, computeAreaOpts, computeDefaultRowHeight, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeResizableOpts, computeVirtualXOpts, computeVirtualYOpts } = $xeTable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeCellOffsetWidth, computeAreaOpts, computeDefaultRowHeight, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeResizableOpts, computeVirtualXOpts, computeVirtualYOpts, computeIsBodyRenderOptimize } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refBodyScroll = ref() as Ref<HTMLDivElement>
@@ -729,24 +729,16 @@ export default defineVxeComponent({
       const $xeGantt = $xeTable.xeGantt
 
       const { fixedColumn, fixedType, tableColumn } = props
-      const { spanMethod, footerSpanMethod, mouseConfig } = tableProps
-      const { isGroup, tableData, isColLoading, overflowX, scrollXLoad, scrollYLoad, isAllOverflow, expandColumn, dragRow, dragCol } = tableReactData
+      const { mouseConfig } = tableProps
+      const { isGroup, tableData, isColLoading, overflowX, scrollXLoad, scrollYLoad, dragRow, dragCol } = tableReactData
       const { visibleColumn, fullAllDataRowIdData, fullColumnIdData } = tableInternalData
       const emptyOpts = computeEmptyOpts.value
       const mouseOpts = computeMouseOpts.value
-      const expandOpts = computeExpandOpts.value
+      const isBodyRenderOptimize = computeIsBodyRenderOptimize.value
 
       let renderDataList = tableData
       let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
-      let isOptimizeMode = false
-      // 如果是使用优化模式
-      if (scrollXLoad || scrollYLoad || isAllOverflow) {
-        if ((expandColumn && expandOpts.mode !== 'fixed') || spanMethod || footerSpanMethod) {
-          // 如果不支持优化模式
-        } else {
-          isOptimizeMode = true
-        }
-      }
+      const isOptimizeMode = isBodyRenderOptimize
 
       if (!isColLoading && (fixedType || !overflowX)) {
         renderColumnList = visibleColumn
@@ -821,12 +813,6 @@ export default defineVxeComponent({
         }
       }
 
-      const ons: Record<string, any> = {
-        onScroll (evnt: Event) {
-          $xeTable.triggerBodyScrollEvent(evnt, fixedType)
-        }
-      }
-
       return h('div', {
         ref: refElem,
         class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
@@ -835,7 +821,9 @@ export default defineVxeComponent({
         h('div', {
           ref: refBodyScroll,
           class: 'vxe-table--body-inner-wrapper',
-          ...ons
+          onScroll (evnt) {
+            $xeTable.triggerBodyScrollEvent(evnt, fixedType)
+          }
         }, [
           fixedType
             ? renderEmptyElement($xeTable)
