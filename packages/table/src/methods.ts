@@ -2489,20 +2489,31 @@ function autoCellWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
 /**
  * 计算自适应行高
  */
-const calcCellAutoHeight = (rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
-  const cellElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`)
+const calcCellAutoHeight = ($xeTable: VxeTableConstructor, rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
+  const reactData = $xeTable as unknown as TableReactData
+
+  const { scrollXLoad } = reactData
+  const wrapperElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`)
   let colHeight = rowRest.height
   let firstCellStyle: CSSStyleDeclaration | null = null
   let topBottomPadding = 0
-  for (let i = 0; i < cellElemList.length; i++) {
-    const wrapperElem = cellElemList[i] as HTMLElement
+  for (let i = 0; i < wrapperElemList.length; i++) {
+    const wrapperElem = wrapperElemList[i] as HTMLElement
     const cellElem = wrapperElem.parentElement as HTMLTableCellElement
     if (!firstCellStyle) {
+      const cellStyle = cellElem.style
+      const orHeight = cellStyle.height
+      if (!scrollXLoad) {
+        cellStyle.height = ''
+      }
       firstCellStyle = getComputedStyle(cellElem)
       topBottomPadding = firstCellStyle ? Math.ceil(XEUtils.toNumber(firstCellStyle.paddingTop) + XEUtils.toNumber(firstCellStyle.paddingBottom)) : 0
+      if (!scrollXLoad) {
+        cellStyle.height = orHeight
+      }
     }
     const cellHeight = wrapperElem ? wrapperElem.clientHeight : 0
-    colHeight = Math.max(colHeight, Math.ceil(cellHeight + topBottomPadding))
+    colHeight = scrollXLoad ? Math.max(colHeight, Math.ceil(cellHeight + topBottomPadding)) : Math.ceil(cellHeight + topBottomPadding)
   }
   return colHeight
 }
@@ -2523,13 +2534,15 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
   const el = $xeTable.$refs.refElem as HTMLDivElement
   if (!isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine)) && el) {
     const { handleGetRowId } = createHandleGetRowId($xeTable)
+    el.setAttribute('data-calc-row', 'Y')
     tableData.forEach(row => {
       const rowid = handleGetRowId(row)
       const rowRest = fullAllDataRowIdData[rowid]
       if (rowRest) {
-        const height = calcCellAutoHeight(rowRest, el)
+        const height = calcCellAutoHeight($xeTable, rowRest, el)
         rowRest.height = Math.max(defaultRowHeight, scrollXLoad ? Math.max(rowRest.height, height) : height)
       }
+      el.removeAttribute('data-calc-row')
     })
     reactData.calcCellHeightFlag++
   }
@@ -6347,7 +6360,9 @@ const Methods = {
         return
       }
       const handleRsHeight = () => {
-        const resizeHeight = calcCellAutoHeight(rowRest, el)
+        el.setAttribute('data-calc-row', 'Y')
+        const resizeHeight = calcCellAutoHeight($xeTable, rowRest, el)
+        el.removeAttribute('data-calc-row')
         const resizeParams = { ...params, resizeHeight, resizeRow: row }
         reactData.isDragResize = false
         internalData._lastResizeTime = Date.now()
@@ -6433,7 +6448,7 @@ const Methods = {
         const rowid = XEUtils.isString(row) || XEUtils.isNumber(row) ? row : handleGetRowId(row)
         const rowRest = fullAllDataRowIdData[rowid]
         if (rowRest) {
-          rowRest.resizeHeight = calcCellAutoHeight(rowRest, el)
+          rowRest.resizeHeight = calcCellAutoHeight($xeTable, rowRest, el)
         }
         el.removeAttribute('data-calc-row')
       })
