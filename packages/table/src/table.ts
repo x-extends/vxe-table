@@ -2155,19 +2155,28 @@ export default defineVxeComponent({
      * 计算自适应行高
      */
     const calcCellAutoHeight = (rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
-      const cellElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`)
+      const { scrollXLoad } = reactData
+      const wrapperElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`)
       let colHeight = rowRest.height
       let firstCellStyle: CSSStyleDeclaration | null = null
       let topBottomPadding = 0
-      for (let i = 0; i < cellElemList.length; i++) {
-        const wrapperElem = cellElemList[i] as HTMLElement
+      for (let i = 0; i < wrapperElemList.length; i++) {
+        const wrapperElem = wrapperElemList[i] as HTMLElement
         const cellElem = wrapperElem.parentElement as HTMLTableCellElement
         if (!firstCellStyle) {
+          const cellStyle = cellElem.style
+          const orHeight = cellStyle.height
+          if (!scrollXLoad) {
+            cellStyle.height = ''
+          }
           firstCellStyle = getComputedStyle(cellElem)
           topBottomPadding = firstCellStyle ? Math.ceil(XEUtils.toNumber(firstCellStyle.paddingTop) + XEUtils.toNumber(firstCellStyle.paddingBottom)) : 0
+          if (!scrollXLoad) {
+            cellStyle.height = orHeight
+          }
         }
         const cellHeight = wrapperElem ? wrapperElem.clientHeight : 0
-        colHeight = Math.max(colHeight, Math.ceil(cellHeight + topBottomPadding))
+        colHeight = scrollXLoad ? Math.max(colHeight, Math.ceil(cellHeight + topBottomPadding)) : Math.ceil(cellHeight + topBottomPadding)
       }
       return colHeight
     }
