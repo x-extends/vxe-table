@@ -1727,7 +1727,7 @@ export default {
 
     handleKeyField($xeTable)
 
-    const { data, exportConfig, importConfig, treeConfig, highlightCurrentRow, highlightCurrentColumn } = props
+    const { exportConfig, importConfig, treeConfig, highlightCurrentRow, highlightCurrentColumn } = props
     const { scrollXStore, scrollYStore } = internalData
     const columnOpts = $xeTable.computeColumnOpts
     const editOpts = $xeTable.computeEditOpts
@@ -1990,15 +1990,7 @@ export default {
 
     this.handleUpdateRowGroup(groupFields)
 
-    this.loadTableData(data, true).then(() => {
-      if (data && data.length) {
-        this.inited = true
-        this.initStatus = true
-        this.handleLoadDefaults()
-      }
-      this.handleInitDefaults()
-      this.updateStyle()
-    })
+    this.initData()
 
     globalEvents.on($xeTable, 'paste', this.handleGlobalPasteEvent)
     globalEvents.on($xeTable, 'copy', this.handleGlobalCopyEvent)

@@ -2494,26 +2494,29 @@ const calcCellAutoHeight = ($xeTable: VxeTableConstructor, rowRest: VxeTableDefi
 
   const { scrollXLoad } = reactData
   const wrapperElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`)
-  let colHeight = rowRest.height
+  let colHeight = 0
   let firstCellStyle: CSSStyleDeclaration | null = null
   let topBottomPadding = 0
   for (let i = 0; i < wrapperElemList.length; i++) {
     const wrapperElem = wrapperElemList[i] as HTMLElement
     const cellElem = wrapperElem.parentElement as HTMLTableCellElement
+    const cellStyle = cellElem.style
+    const orHeight = cellStyle.height
+    if (!scrollXLoad) {
+      cellStyle.height = ''
+    }
     if (!firstCellStyle) {
-      const cellStyle = cellElem.style
-      const orHeight = cellStyle.height
-      if (!scrollXLoad) {
-        cellStyle.height = ''
-      }
       firstCellStyle = getComputedStyle(cellElem)
       topBottomPadding = firstCellStyle ? Math.ceil(XEUtils.toNumber(firstCellStyle.paddingTop) + XEUtils.toNumber(firstCellStyle.paddingBottom)) : 0
-      if (!scrollXLoad) {
-        cellStyle.height = orHeight
-      }
+    }
+    if (!scrollXLoad) {
+      cellStyle.height = orHeight
     }
     const cellHeight = wrapperElem ? wrapperElem.clientHeight : 0
-    colHeight = scrollXLoad ? Math.max(colHeight, Math.ceil(cellHeight + topBottomPadding)) : Math.ceil(cellHeight + topBottomPadding)
+    colHeight = Math.max(colHeight, Math.ceil(cellHeight + topBottomPadding))
+  }
+  if (scrollXLoad) {
+    colHeight = Math.max(colHeight, rowRest.height)
   }
   return colHeight
 }
@@ -2532,7 +2535,7 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
   const treeOpts = $xeTable.computeTreeOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const el = $xeTable.$refs.refElem as HTMLDivElement
-  if (!isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine)) && el) {
+  if (el && !isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine))) {
     const { handleGetRowId } = createHandleGetRowId($xeTable)
     el.setAttribute('data-calc-row', 'Y')
     tableData.forEach(row => {
@@ -2540,7 +2543,7 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
       const rowRest = fullAllDataRowIdData[rowid]
       if (rowRest) {
         const height = calcCellAutoHeight($xeTable, rowRest, el)
-        rowRest.height = Math.max(defaultRowHeight, scrollXLoad ? Math.max(rowRest.height, height) : height)
+        rowRest.height = Math.max(defaultRowHeight, height)
       }
       el.removeAttribute('data-calc-row')
     })
@@ -3941,8 +3944,8 @@ function updateHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   internalData.customMinHeight = calcTableHeight($xeTable, 'minHeight')
   internalData.customMaxHeight = calcTableHeight($xeTable, 'maxHeight')
 
-  // 如果启用虚拟滚动，默认高度
-  if (reactData.scrollYLoad && !(internalData.customHeight || internalData.customMinHeight)) {
+  // 如果启用虚拟滚动，纠正高度
+  if (reactData.scrollYLoad && !(internalData.customHeight || internalData.customMinHeight || internalData.customMaxHeight)) {
     internalData.customHeight = 300
   }
 }
@@ -4402,6 +4405,27 @@ const Methods = {
       $xeGanttView.updateViewData()
     }
     return $xeTable.$nextTick()
+  },
+  initData () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { data } = props
+    loadTableData($xeTable, data || [], true).then(() => {
+      if (data && data.length) {
+        internalData.inited = true
+        internalData.initStatus = true
+        handleLoadDefaults($xeTable)
+      }
+      handleInitDefaults($xeTable)
+      updateStyle($xeTable)
+      if (!reactData.isAllOverflow) {
+        calcCellHeight($xeTable)
+        updateRowOffsetTop($xeTable)
+      }
+    })
   },
   /**
    * 加载表格数据
@@ -11582,14 +11606,27 @@ const Methods = {
         xSpaceLeft = 0
       }
 
-      if (headerTableElem) {
-        headerTableElem.style.transform = headerTableElem.getAttribute('xvm') ? `translate(${xSpaceLeft}px, 0px)` : ''
-      }
-      if (bodyTableElem) {
-        bodyTableElem.style.transform = `translate(${xSpaceLeft}px, ${reactData.scrollYTop || 0}px)`
-      }
-      if (footerTableElem) {
-        footerTableElem.style.transform = footerTableElem.getAttribute('xvm') ? `translate(${xSpaceLeft}px, 0px)` : ''
+      if (getConfig().scrollMarginStyle) {
+        // 已废弃方式
+        if (headerTableElem) {
+          headerTableElem.style.marginLeft = headerTableElem.getAttribute('xvm') ? `${xSpaceLeft}px` : ''
+        }
+        if (bodyTableElem) {
+          bodyTableElem.style.marginLeft = `${xSpaceLeft}px`
+        }
+        if (footerTableElem) {
+          footerTableElem.style.marginLeft = footerTableElem.getAttribute('xvm') ? `${xSpaceLeft}px` : ''
+        }
+      } else {
+        if (headerTableElem) {
+          headerTableElem.style.transform = headerTableElem.getAttribute('xvm') ? `translate(${xSpaceLeft}px, 0px)` : ''
+        }
+        if (bodyTableElem) {
+          bodyTableElem.style.transform = `translate(${xSpaceLeft}px, ${reactData.scrollYTop || 0}px)`
+        }
+        if (footerTableElem) {
+          footerTableElem.style.transform = footerTableElem.getAttribute('xvm') ? `translate(${xSpaceLeft}px, 0px)` : ''
+        }
       }
 
       const containerList = ['main']
@@ -11710,14 +11747,26 @@ const Methods = {
       scrollYTop = 0
     }
 
-    if (leftBodyTableElem) {
-      leftBodyTableElem.style.transform = `translate(0px, ${scrollYTop}px)`
-    }
-    if (bodyTableElem) {
-      bodyTableElem.style.transform = `translate(${reactData.scrollXLeft || 0}px, ${scrollYTop}px)`
-    }
-    if (rightbodyTableElem) {
-      rightbodyTableElem.style.transform = `translate(0px, ${scrollYTop}px)`
+    if (getConfig().scrollMarginStyle) {
+      if (leftBodyTableElem) {
+        leftBodyTableElem.style.marginTop = `${scrollYTop}px`
+      }
+      if (bodyTableElem) {
+        bodyTableElem.style.marginTop = `${scrollYTop}px`
+      }
+      if (rightbodyTableElem) {
+        rightbodyTableElem.style.marginTop = `${scrollYTop}px`
+      }
+    } else {
+      if (leftBodyTableElem) {
+        leftBodyTableElem.style.transform = `translate(0px, ${scrollYTop}px)`
+      }
+      if (bodyTableElem) {
+        bodyTableElem.style.transform = `translate(${reactData.scrollXLeft || 0}px, ${scrollYTop}px)`
+      }
+      if (rightbodyTableElem) {
+        rightbodyTableElem.style.transform = `translate(0px, ${scrollYTop}px)`
+      }
     }
 
     containerList.forEach(name => {

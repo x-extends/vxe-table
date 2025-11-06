@@ -130,7 +130,12 @@ export class ColumnInfo {
       titleHelp: _vm.titleHelp,
       titlePrefix: _vm.titlePrefix,
       titleSuffix: _vm.titleSuffix,
+
       aggFunc: _vm.aggFunc,
+      copyMethod: _vm.copyMethod,
+      cutMethod: _vm.cutMethod,
+      pasteMethod: _vm.pasteMethod,
+
       // 自定义参数
       params: _vm.params,
       // 渲染属性
