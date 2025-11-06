@@ -1,47 +1,95 @@
 <template>
   <div>
-    <vxe-grid v-bind="gridOptions"></vxe-grid>
+      <button @click="handleRefresh">刷新数据</button>
+    <vxe-grid v-bind="gridOptions">
+           <template #expand_content="{ row }">
+                <div class="expand-wrapper">
+                    <vxe-grid v-bind="childGridOptions" :data="row.childList"></vxe-grid>
+                </div>
+            </template>
+      </vxe-grid>
   </div>
 </template>
 
-<script setup>
-import { reactive } from 'vue'
-const gridOptions = reactive({
-  height: 300,
-  treeConfig: {
-    transform: true
+<script>
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  data () {
+    return {
+      gridOptions: {
+        border: true,
+        columns: [
+          { type: 'seq', width: 60 },
+          { type: 'expand', width: 60, slots: { content: 'expand_content' } },
+          { field: 'name', title: 'Name' },
+          { field: 'sex', title: 'Sex' },
+          { field: 'date', title: 'Date' },
+          { field: 'address', title: 'Address' }
+        ],
+        data: [],
+        expandConfig: {
+          padding: true,
+          reserve: true
+        },
+        rowConfig: {
+          keyField: 'id',
+          isHover: true
+        }
+      },
+      childGridOptions: {
+        border: true,
+        height: 200,
+        columns: [
+          { field: 'name', title: 'Name' },
+          { field: 'sex', title: 'Sex' },
+          { field: 'age', title: 'Age' }
+        ]
+      }
+    }
   },
-  virtualYConfig: {
-    enabled: true,
-    gt: 0
+  created () {
+    const list2 = []
+    for (let index = 0; index < 3; index++) {
+      list2.push({
+        id: index + 1,
+        name: 'test' + index,
+        role: 'developer',
+        sex: 'Man',
+        date: '2019-05-01',
+        time: 1556677810888 + index * 500,
+        region: 'ShenZhen',
+        address: 'address abc' + index,
+        childList: [
+          { id: 10011, name: 'Test112', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' }
+        ]
+      })
+    }
+    this.gridOptions.data = list2
   },
-  virtualXConfig: {
-    enabled: true
-  },
-  columns: [
-    { type: 'checkbox', width: 50 },
-    { type: 'seq', width: 70 },
-    { field: 'name', treeNode: true, title: 'Name' },
-    { field: 'sex', title: 'Sex' }
-  ],
-  data: [
-    { id: 1001, name: 'Test1', sex: '111' },
-    { id: 1002, name: 'Test1', sex: '111' },
-    { id: 1003, name: 'Test1', sex: '111' },
-    { id: 1004, name: 'Test1', sex: '111' },
-    { id: 1005, name: 'Test1', sex: '111' },
-    { id: 10001, name: 'Test1', sex: '111' },
-    { id: 10002, parentId: 10001, name: 'Test2', sex: '222' },
-    { id: 10006, parentId: 10001, name: 'Test6', sex: '222' },
-    { id: 10007, parentId: 10006, name: 'Test7', sex: '111' },
-    { id: 10008, parentId: 10006, name: 'Test8', sex: '111' },
-    { id: 10009, parentId: 10008, name: 'Test8', sex: '111' },
-    { id: 100010, parentId: 10008, name: 'Test8', sex: '111' },
-    { id: 100011, parentId: 10008, name: 'Test8', sex: '111' },
-    { id: 100012, parentId: 100011, name: 'Test8', sex: '111' },
-    { id: 100013, parentId: 100012, name: 'Test8', sex: '111' },
-    { id: 100014, parentId: 100013, name: 'Test8', sex: '111' }
-  ]
+  methods: {
+    // 刷新数据方法
+    handleRefresh () {
+      const list2 = []
+      for (let index = 0; index < 3; index++) {
+        list2.push({
+          id: index + 1,
+          name: '2test' + index,
+          role: 'developer',
+          sex: 'Man',
+          date: '2019-05-01',
+          time: 1556677810888 + index * 500,
+          region: 'ShenZhen',
+          address: 'address abc' + index,
+          childList: [
+            { id: 10011, name: '李四', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' }
+          ]
+        })
+      }
+      this.gridOptions.data = list2
+      console.log(this.gridOptions.data)
+    }
+  }
 })
 </script>
 
