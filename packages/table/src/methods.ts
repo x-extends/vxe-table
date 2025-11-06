@@ -4576,7 +4576,7 @@ const Methods = {
 
     const { treeConfig } = props
     const { isRowGroupStatus } = reactData
-    const { currKeyField, fullAllDataRowIdData, tableFullData, tableFullTreeData, tableFullGroupData, treeExpandedMaps } = internalData
+    const { currKeyField, fullAllDataRowIdData, tableFullData, tableFullTreeData, tableFullGroupData, treeExpandedMaps, rowExpandedMaps, selectCheckboxMaps } = internalData
     const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = isReset ? {} : { ...fullAllDataRowIdData } // 存在已删除数据
     const fullDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
 
@@ -4599,6 +4599,14 @@ const Methods = {
       rowRest.level = level
       rowRest.index = currIndex
       rowRest.treeIndex = index
+
+      // 更新缓存
+      if (selectCheckboxMaps[rowid]) {
+        selectCheckboxMaps[rowid] = row
+      }
+      if (rowExpandedMaps[rowid]) {
+        rowExpandedMaps[rowid] = row
+      }
 
       idMaps[rowid] = true
       fullDataRowIdMaps[rowid] = rowRest
@@ -11703,23 +11711,27 @@ const Methods = {
         ySpaceTop = Math.max(0, startIndex * defaultRowHeight)
       } else {
         const firstRow = afterFullData[startIndex]
-        let rowid = getRowid($xeTable, firstRow)
-        let rowRest = fullAllDataRowIdData[rowid] || {}
-        ySpaceTop = (rowRest.oTop || 0)
+        if (firstRow) {
+          let rowid = getRowid($xeTable, firstRow)
+          let rowRest = fullAllDataRowIdData[rowid] || {}
+          ySpaceTop = (rowRest.oTop || 0)
 
-        const lastRow = afterFullData[afterFullData.length - 1]
-        rowid = getRowid($xeTable, lastRow)
-        rowRest = fullAllDataRowIdData[rowid] || {}
-        // 如果为空时还没计算完数据，保持原高度不变
-        if (rowRest.oTop) {
-          sYHeight = (rowRest.oTop || 0) + (rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight)
-          // 是否展开行
-          if (expandColumn && rowExpandedMaps[rowid]) {
-            sYHeight += rowRest.expandHeight || expandOpts.height || 0
+          const lastRow = afterFullData[afterFullData.length - 1]
+          rowid = getRowid($xeTable, lastRow)
+          rowRest = fullAllDataRowIdData[rowid] || {}
+          // 如果为空时还没计算完数据，保持原高度不变
+          if (rowRest.oTop) {
+            sYHeight = (rowRest.oTop || 0) + (rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight)
+            // 是否展开行
+            if (expandColumn && rowExpandedMaps[rowid]) {
+              sYHeight += rowRest.expandHeight || expandOpts.height || 0
+            }
           }
-        }
-        if (sYHeight > maxYHeight) {
-          isScrollYBig = true
+          if (sYHeight > maxYHeight) {
+            isScrollYBig = true
+          }
+        } else {
+          sYHeight = bodyTableElem ? bodyTableElem.clientHeight : 0
         }
       }
     } else {
