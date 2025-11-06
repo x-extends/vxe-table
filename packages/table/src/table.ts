@@ -1977,8 +1977,8 @@ export default defineVxeComponent({
       internalData.customMinHeight = calcTableHeight('minHeight')
       internalData.customMaxHeight = calcTableHeight('maxHeight')
 
-      // 如果启用虚拟滚动，默认高度
-      if (reactData.scrollYLoad && !(internalData.customHeight || internalData.customMinHeight)) {
+      // 如果启用虚拟滚动，纠正高度
+      if (reactData.scrollYLoad && !(internalData.customHeight || internalData.customMinHeight || internalData.customMaxHeight)) {
         internalData.customHeight = 300
       }
     }
@@ -2157,26 +2157,29 @@ export default defineVxeComponent({
     const calcCellAutoHeight = (rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
       const { scrollXLoad } = reactData
       const wrapperElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`)
-      let colHeight = rowRest.height
+      let colHeight = 0
       let firstCellStyle: CSSStyleDeclaration | null = null
       let topBottomPadding = 0
       for (let i = 0; i < wrapperElemList.length; i++) {
         const wrapperElem = wrapperElemList[i] as HTMLElement
         const cellElem = wrapperElem.parentElement as HTMLTableCellElement
+        const cellStyle = cellElem.style
+        const orHeight = cellStyle.height
+        if (!scrollXLoad) {
+          cellStyle.height = ''
+        }
         if (!firstCellStyle) {
-          const cellStyle = cellElem.style
-          const orHeight = cellStyle.height
-          if (!scrollXLoad) {
-            cellStyle.height = ''
-          }
           firstCellStyle = getComputedStyle(cellElem)
           topBottomPadding = firstCellStyle ? Math.ceil(XEUtils.toNumber(firstCellStyle.paddingTop) + XEUtils.toNumber(firstCellStyle.paddingBottom)) : 0
-          if (!scrollXLoad) {
-            cellStyle.height = orHeight
-          }
+        }
+        if (!scrollXLoad) {
+          cellStyle.height = orHeight
         }
         const cellHeight = wrapperElem ? wrapperElem.clientHeight : 0
-        colHeight = scrollXLoad ? Math.max(colHeight, Math.ceil(cellHeight + topBottomPadding)) : Math.ceil(cellHeight + topBottomPadding)
+        colHeight = Math.max(colHeight, Math.ceil(cellHeight + topBottomPadding))
+      }
+      if (scrollXLoad) {
+        colHeight = Math.max(colHeight, rowRest.height)
       }
       return colHeight
     }
@@ -2191,7 +2194,7 @@ export default defineVxeComponent({
       const treeOpts = computeTreeOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
       const el = refElem.value
-      if (!isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine)) && el) {
+      if (el && !isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine))) {
         const { handleGetRowId } = createHandleGetRowId($xeTable)
         el.setAttribute('data-calc-row', 'Y')
         tableData.forEach(row => {
@@ -2199,7 +2202,7 @@ export default defineVxeComponent({
           const rowRest = fullAllDataRowIdData[rowid]
           if (rowRest) {
             const reHeight = calcCellAutoHeight(rowRest, el)
-            rowRest.height = Math.max(defaultRowHeight, scrollXLoad ? Math.max(rowRest.height, reHeight) : reHeight)
+            rowRest.height = Math.max(defaultRowHeight, reHeight)
           }
           el.removeAttribute('data-calc-row')
         })
@@ -3682,6 +3685,23 @@ export default defineVxeComponent({
         treeData,
         fullData
       }
+    }
+
+    const initData = () => {
+      const { data } = props
+      loadTableData(data || [], true).then(() => {
+        if (data && data.length) {
+          internalData.inited = true
+          internalData.initStatus = true
+          handleLoadDefaults()
+        }
+        handleInitDefaults()
+        updateStyle()
+        if (!reactData.isAllOverflow) {
+          calcCellHeight()
+          updateRowOffsetTop()
+        }
+      })
     }
 
     /**
@@ -11897,14 +11917,27 @@ export default defineVxeComponent({
             xSpaceLeft = 0
           }
 
-          if (headerTableElem) {
-            headerTableElem.style.transform = headerTableElem.getAttribute('xvm') ? `translate(${xSpaceLeft}px, 0px)` : ''
-          }
-          if (bodyTableElem) {
-            bodyTableElem.style.transform = `translate(${xSpaceLeft}px, ${reactData.scrollYTop || 0}px)`
-          }
-          if (footerTableElem) {
-            footerTableElem.style.transform = footerTableElem.getAttribute('xvm') ? `translate(${xSpaceLeft}px, 0px)` : ''
+          if (getConfig().scrollMarginStyle) {
+            // 已废弃方式
+            if (headerTableElem) {
+              headerTableElem.style.marginLeft = headerTableElem.getAttribute('xvm') ? `${xSpaceLeft}px` : ''
+            }
+            if (bodyTableElem) {
+              bodyTableElem.style.marginLeft = `${xSpaceLeft}px`
+            }
+            if (footerTableElem) {
+              footerTableElem.style.marginLeft = footerTableElem.getAttribute('xvm') ? `${xSpaceLeft}px` : ''
+            }
+          } else {
+            if (headerTableElem) {
+              headerTableElem.style.transform = headerTableElem.getAttribute('xvm') ? `translate(${xSpaceLeft}px, 0px)` : ''
+            }
+            if (bodyTableElem) {
+              bodyTableElem.style.transform = `translate(${xSpaceLeft}px, ${reactData.scrollYTop || 0}px)`
+            }
+            if (footerTableElem) {
+              footerTableElem.style.transform = footerTableElem.getAttribute('xvm') ? `translate(${xSpaceLeft}px, 0px)` : ''
+            }
           }
 
           const containerList = ['main']
@@ -12012,14 +12045,26 @@ export default defineVxeComponent({
           scrollYTop = 0
         }
 
-        if (leftBodyTableElem) {
-          leftBodyTableElem.style.transform = `translate(0px, ${scrollYTop}px)`
-        }
-        if (bodyTableElem) {
-          bodyTableElem.style.transform = `translate(${reactData.scrollXLeft || 0}px, ${scrollYTop}px)`
-        }
-        if (rightbodyTableElem) {
-          rightbodyTableElem.style.transform = `translate(0px, ${scrollYTop}px)`
+        if (getConfig().scrollMarginStyle) {
+          if (leftBodyTableElem) {
+            leftBodyTableElem.style.marginTop = `${scrollYTop}px`
+          }
+          if (bodyTableElem) {
+            bodyTableElem.style.marginTop = `${scrollYTop}px`
+          }
+          if (rightbodyTableElem) {
+            rightbodyTableElem.style.marginTop = `${scrollYTop}px`
+          }
+        } else {
+          if (leftBodyTableElem) {
+            leftBodyTableElem.style.transform = `translate(0px, ${scrollYTop}px)`
+          }
+          if (bodyTableElem) {
+            bodyTableElem.style.transform = `translate(${reactData.scrollXLeft || 0}px, ${scrollYTop}px)`
+          }
+          if (rightbodyTableElem) {
+            rightbodyTableElem.style.transform = `translate(0px, ${scrollYTop}px)`
+          }
         }
 
         containerList.forEach(name => {
@@ -13180,7 +13225,7 @@ export default defineVxeComponent({
       handleUpdateRowGroup(groupFields)
 
       nextTick(() => {
-        const { data, exportConfig, importConfig, treeConfig, highlightCurrentRow, highlightCurrentColumn } = props
+        const { exportConfig, importConfig, treeConfig, highlightCurrentRow, highlightCurrentColumn } = props
         const { scrollXStore, scrollYStore } = internalData
         const editOpts = computeEditOpts.value
         const treeOpts = computeTreeOpts.value
@@ -13405,15 +13450,7 @@ export default defineVxeComponent({
           visibleSize: 0
         })
 
-        loadTableData(data || [], true).then(() => {
-          if (data && data.length) {
-            internalData.inited = true
-            internalData.initStatus = true
-            handleLoadDefaults()
-          }
-          handleInitDefaults()
-          updateStyle()
-        })
+        initData()
 
         if (props.autoResize) {
           const el = refElem.value

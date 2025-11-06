@@ -6,7 +6,7 @@ import { isEnableConf } from '../../ui/src/utils'
 import { getCalcHeight, convertHeaderColumnToRows, convertHeaderToGridRows } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 
-import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines } from '../../../types'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeGlobalRendererHandles } from '../../../types'
 
 const { renderer, renderEmptyElement } = VxeUI
 
@@ -369,13 +369,7 @@ export default defineVxeComponent({
                 }, flSlot
                   ? $xeTable.callSlot(flSlot, cellParams)
                   : (rtFloatingFilter && firstFilterOption
-                      ? getSlotVNs(rtFloatingFilter(filterRender, {
-                        $table: $xeTable,
-                        option: firstFilterOption,
-                        column: column as any,
-                        columnIndex,
-                        $columnIndex
-                      }))
+                      ? getSlotVNs(rtFloatingFilter(filterRender, cellParams as unknown as VxeGlobalRendererHandles.RenderTableFloatingFilterParams))
                       : []))
               ])
         ])
