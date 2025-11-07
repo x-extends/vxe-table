@@ -845,7 +845,7 @@ function handleImport ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
         let loadRest
         if (opts.mode === 'insert' || opts.mode === 'insertBottom') {
           loadRest = $xeTable.insertAt(data, -1)
-        } if (opts.mode === 'insertTop') {
+        } else if (opts.mode === 'insertTop') {
           loadRest = $xeTable.insert(data)
         } else {
           loadRest = $xeTable.reloadData(data)

@@ -245,6 +245,7 @@ function getFooterContent (h: CreateElement, params: VxeTableDefines.CellRenderF
     itemValue = XEUtils.get(row, column.field)
   }
   const footParams = Object.assign(params, {
+    cellValue: itemValue,
     itemValue
   })
   if (footerFormatter) {
