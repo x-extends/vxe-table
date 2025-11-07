@@ -3843,9 +3843,9 @@ export default defineVxeComponent({
           // if (!props.showOverflow) {
           //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
           // }
-          if (props.spanMethod) {
-            errLog('vxe.error.scrollErrProp', ['table.span-method'])
-          }
+          // if (props.spanMethod) {
+          //   warnLog('vxe.error.scrollErrProp', ['span-method'])
+          // }
         }
 
         handleReserveStatus()
