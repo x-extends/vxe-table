@@ -248,15 +248,12 @@ function getFooterCellValue ($xeTable: any, opts: VxeTablePropTypes.ExportHandle
   if (!footLabelMethod) {
     footLabelMethod = columnOpts.footerExportMethod
   }
-  const _columnIndex = $xeTable.getVTColumnIndex(column)
   if (footLabelMethod) {
+    const _columnIndex = $xeTable.getVTColumnIndex(column)
     return footLabelMethod({ $table: $xeTable, items: row, itemIndex: _columnIndex, row, _columnIndex, column, options: opts })
   }
-  // 兼容老模式
-  if (XEUtils.isArray(row)) {
-    return XEUtils.toValueString(row[_columnIndex])
-  }
-  return XEUtils.get(row, column.field)
+  const cellValue = $xeTable.getFooterCellLabel(row, column)
+  return cellValue
 }
 
 function getFooterData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, footerTableData: any[]) {

@@ -8,7 +8,7 @@ import { getSlotVNs } from '../../ui/src/vn'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeComponentSlotType, TableReactData, TableInternalData } from '../../../types'
 
-const { getI18n, getIcon, renderer, formats, renderEmptyElement } = VxeUI
+const { getI18n, getIcon, renderer, renderEmptyElement } = VxeUI
 
 function renderTitlePrefixIcon (h: CreateElement, params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { $table, column } = params
@@ -231,39 +231,21 @@ function renderTitleContent (h: CreateElement, params: VxeTableDefines.CellRende
 }
 
 function getFooterContent (h: CreateElement, params: VxeTableDefines.CellRenderFooterParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-  const { $table, column, _columnIndex, row, items } = params
-  const { slots, editRender, cellRender, footerFormatter } = column
+  const { $table, column, row } = params
+  const { slots, editRender, cellRender } = column
   const renderOpts = editRender || cellRender
   if (slots && slots.footer) {
     return $table.callSlot(slots.footer, params, h)
   }
-  let itemValue = ''
-  // 兼容老模式
-  if (XEUtils.isArray(items)) {
-    itemValue = items[_columnIndex]
-  } else {
-    itemValue = XEUtils.get(row, column.field)
-  }
-  const footParams = Object.assign(params, {
-    cellValue: itemValue,
-    itemValue
-  })
-  if (footerFormatter) {
-    if (XEUtils.isFunction(footerFormatter)) {
-      return `${footerFormatter(footParams)}`
-    }
-    const isArr = XEUtils.isArray(footerFormatter)
-    const gFormatOpts = isArr ? formats.get(footerFormatter[0]) : formats.get(footerFormatter)
-    const footerFormatMethod = gFormatOpts ? gFormatOpts.tableFooterCellFormatMethod : null
-    if (footerFormatMethod) {
-      return `${isArr ? footerFormatMethod(footParams, ...footerFormatter.slice(1)) : footerFormatMethod(footParams)}`
-    }
-    return ''
-  }
+  const itemValue = $table.getFooterCellLabel(row, column)
   if (renderOpts) {
     const compConf = renderer.get(renderOpts.name)
     const rtFooter = compConf ? (compConf.renderTableFooter || compConf.renderFooter) : null
     if (rtFooter) {
+      const footParams = Object.assign(params, {
+        cellValue: itemValue,
+        itemValue
+      })
       return getSlotVNs(rtFooter.call($table, h, renderOpts, footParams))
     }
   }

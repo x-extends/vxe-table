@@ -1655,7 +1655,9 @@ export default {
     },
     footFlag () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const internalData = $xeTable as unknown as TableInternalData
 
+      internalData.footerFullDataRowData = {}
       $xeTable.updateFooter()
     },
 

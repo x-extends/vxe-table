@@ -80,6 +80,9 @@ export function createInternalData (): TableInternalData {
     fullDataRowIdData: {},
     // 数据集（仅可视）
     visibleDataRowIdData: {},
+
+    footerFullDataRowData: {},
+
     // 渲染中缓存数据
     sourceDataRowIdData: {},
     fullColumnIdData: {},

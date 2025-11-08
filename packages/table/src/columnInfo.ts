@@ -16,7 +16,7 @@ export class ColumnInfo {
     const $xeGantt = $xeTable.$xeGantt
     const $xeGGWrapper = $xeGrid || $xeGantt
 
-    const { field, editRender, filterRender } = _vm
+    const { field, editRender, filterRender, headerFormatter } = _vm
 
     const colId = _vm.colId || XEUtils.uniqueId('col_')
 
@@ -28,6 +28,10 @@ export class ColumnInfo {
     const ctFilterOptions = flCompConf ? flCompConf.createTableFilterOptions : null
 
     const filters = toFilters(_vm.filters, colId)
+
+    if (headerFormatter) {
+      errLog('vxe.error.notProp', ['header-formatter'])
+    }
 
     const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
     if (_vm.type && types.indexOf(_vm.type) === -1) {
