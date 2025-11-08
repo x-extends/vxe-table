@@ -5284,7 +5284,13 @@ export default defineVxeComponent({
               }
             }
           }
-          const formatParams = { cellValue, row, rowIndex: tableMethods.getRowIndex(row), column, columnIndex: tableMethods.getColumnIndex(column) }
+          const formatParams = {
+            cellValue,
+            row,
+            rowIndex: $xeTable.getRowIndex(row),
+            column,
+            columnIndex: $xeTable.getColumnIndex(column)
+          }
           if (XEUtils.isString(formatter)) {
             const gFormatOpts = formats.get(formatter)
             const tcFormatMethod = gFormatOpts ? (gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod) : null
@@ -5298,6 +5304,70 @@ export default defineVxeComponent({
           }
           if (formatData) {
             formatData[colid] = { value: cellValue, label: cellLabel }
+          }
+        }
+        return cellLabel
+      },
+      getFooterCellLabel (row, fieldOrColumn) {
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        if (!column) {
+          return null
+        }
+        const { footerFormatter } = column
+        const _columnIndex = $xeTable.getVTColumnIndex(column)
+        let itemValue = ''
+        // 兼容老模式
+        if (XEUtils.isArray(row)) {
+          itemValue = row[_columnIndex]
+        } else {
+          itemValue = XEUtils.get(row, column.field)
+        }
+        let cellLabel: any = itemValue
+        if (footerFormatter) {
+          let formatData
+          const { footerTableData } = reactData
+          const { footerFullDataRowData } = internalData
+          const colid = column.id
+          const $rowIndex = footerTableData.indexOf(row)
+          let rowRest: any = null
+          if ($rowIndex > -1) {
+            rowRest = footerFullDataRowData[$rowIndex]
+            if (!rowRest) {
+              rowRest = footerFullDataRowData[$rowIndex] = {}
+            }
+            formatData = rowRest.formatData
+            if (!formatData) {
+              formatData = footerFullDataRowData[$rowIndex].formatData = {}
+            }
+            if (rowRest && formatData[colid]) {
+              if (formatData[colid].value === itemValue) {
+                return formatData[colid].label
+              }
+            }
+          }
+          const footerFormatParams = {
+            cellValue: itemValue,
+            itemValue,
+            row,
+            items: row,
+            $rowIndex,
+            column,
+            _columnIndex,
+            columnIndex: $xeTable.getColumnIndex(column)
+          }
+          if (XEUtils.isString(footerFormatter)) {
+            const gFormatOpts = formats.get(footerFormatter)
+            const fcFormatMethod = gFormatOpts ? gFormatOpts.tableFooterCellFormatMethod : null
+            cellLabel = fcFormatMethod ? fcFormatMethod(footerFormatParams) : ''
+          } else if (XEUtils.isArray(footerFormatter)) {
+            const gFormatOpts = formats.get(footerFormatter[0])
+            const fcFormatMethod = gFormatOpts ? gFormatOpts.tableFooterCellFormatMethod : null
+            cellLabel = fcFormatMethod ? fcFormatMethod(footerFormatParams, ...footerFormatter.slice(1)) : ''
+          } else {
+            cellLabel = footerFormatter(footerFormatParams)
+          }
+          if (formatData) {
+            formatData[colid] = { value: itemValue, label: cellLabel }
           }
         }
         return cellLabel
@@ -13101,6 +13171,7 @@ export default defineVxeComponent({
       footFlag.value++
     })
     watch(footFlag, () => {
+      internalData.footerFullDataRowData = {}
       $xeTable.updateFooter()
     })
 
