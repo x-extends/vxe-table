@@ -89,7 +89,8 @@ export default {
       dragTip: 'Flytt: {0}',
       resizeColTip: 'Bredde: {0} piksler',
       resizeRowTip: 'Høyde: {0} piksler',
-      rowGroupContentTotal: '{0} ({1})'
+      rowGroupContentTotal: '{0} ({1})',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: 'Velg minst en post!',

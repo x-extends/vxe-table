@@ -89,7 +89,8 @@ export default {
       dragTip: 'نقل: {0}',
       resizeColTip: 'العرض: {0} بكسل',
       resizeRowTip: 'الارتفاع: {0} بكسل',
-      rowGroupContentTotal: '{0} ({1})'
+      rowGroupContentTotal: '{0} ({1})',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: 'الرجاء تحديد سجل واحد على الأقل!',

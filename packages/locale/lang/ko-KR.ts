@@ -89,7 +89,8 @@ export default {
       dragTip: '움직임 : {0}',
       resizeColTip: '너비 : {0} 픽셀',
       resizeRowTip: '높음 : {0} 픽셀',
-      rowGroupContentTotal: '{0}（{1}）'
+      rowGroupContentTotal: '{0}（{1}）',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: '하나 이상의 레코드를 선택하십시오!',

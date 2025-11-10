@@ -89,7 +89,8 @@ export default {
       dragTip: "Ko'chiring: {0}",
       resizeColTip: 'Kengligi: {0} piksel',
       resizeRowTip: 'Yuqori: {0} piksel',
-      rowGroupContentTotal: '{0}（{1}）'
+      rowGroupContentTotal: '{0}（{1}）',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: 'Iltimos, kamida bitta yozuvni tanlang!',

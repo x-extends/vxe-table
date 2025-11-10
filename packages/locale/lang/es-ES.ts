@@ -89,7 +89,8 @@ export default {
       dragTip: 'Mover: {0}',
       resizeColTip: 'Ancho: {0} píxeles',
       resizeRowTip: 'Alto: {0} píxeles',
-      rowGroupContentTotal: '{0}（{1}）'
+      rowGroupContentTotal: '{0}（{1}）',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: '¡Seleccione al menos un registro!',

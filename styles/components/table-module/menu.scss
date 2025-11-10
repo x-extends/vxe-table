@@ -61,6 +61,7 @@
         color: #2B2B2B;
       }
     }
+    &.link--loading,
     &.link--disabled {
       & > .vxe-context-menu--link {
         color: var(--vxe-ui-font-disabled-color);

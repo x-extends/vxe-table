@@ -89,7 +89,8 @@ export default {
       dragTip: 'ย้าย: {0}',
       resizeColTip: 'ความกว้าง: {0} พิกเซล',
       resizeRowTip: 'ความสูง: {0} พิกเซล',
-      rowGroupContentTotal: '{0} ({1})'
+      rowGroupContentTotal: '{0} ({1})',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: 'กรุณาเลือกอย่างน้อยหนึ่งบันทึก!',

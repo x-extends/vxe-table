@@ -89,7 +89,8 @@ export default {
       dragTip: '移動：{0}',
       resizeColTip: '幅：{0}ピクセル',
       resizeRowTip: '高：{0}ピクセル',
-      rowGroupContentTotal: '{0}（{1}）'
+      rowGroupContentTotal: '{0}（{1}）',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: '少なくとも1つのレコードを選択してください！',

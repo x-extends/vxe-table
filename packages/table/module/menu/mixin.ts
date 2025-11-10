@@ -4,7 +4,7 @@ import { getDomNode, getAbsolutePos, getEventTargetNode } from '../../../ui/src/
 import { isEnableConf, hasChildrenList } from '../../../ui/src/utils'
 import { warnLog } from '../../../ui/src/log'
 
-import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, TableReactData } from '../../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, TableReactData, VxeTableDefines } from '../../../../types'
 
 const { menus, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
 
@@ -247,11 +247,11 @@ export default {
       }
       $xeTable.closeFilter()
     },
-    ctxMenuMouseoverEvent (evnt: any, item: any, child: any) {
+    ctxMenuMouseoverEvent (evnt: Event, item: any, child: any) {
       const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
-      const menuElem = evnt.currentTarget
+      const menuElem = evnt.currentTarget as HTMLDivElement
       const { ctxMenuStore } = reactData
       evnt.preventDefault()
       evnt.stopPropagation()
@@ -261,7 +261,7 @@ export default {
         ctxMenuStore.showChild = hasChildrenList(item)
         if (ctxMenuStore.showChild) {
           $xeTable.$nextTick(() => {
-            const childWrapperElem = menuElem.nextElementSibling
+            const childWrapperElem = menuElem.nextElementSibling as HTMLDivElement
             if (childWrapperElem) {
               const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = getAbsolutePos(menuElem)
               const posTop = boundingTop + menuElem.offsetHeight
@@ -289,7 +289,7 @@ export default {
         }
       }
     },
-    ctxMenuMouseoutEvent (evnt: any, item: any) {
+    ctxMenuMouseoutEvent (evnt: Event, item: VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption) {
       const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -302,14 +302,14 @@ export default {
     /**
      * 快捷菜单点击事件
      */
-    ctxMenuLinkEvent (evnt: any, menu: any) {
+    ctxMenuLinkEvent (evnt: Event, menu: VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption) {
       const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
       const $xeGrid = $xeTable.$xeGrid
       const $xeGantt = $xeTable.$xeGantt
       const internalData = $xeTable as unknown as TableInternalData
 
       // 如果一级菜单有配置 code 则允许点击，否则不能点击
-      if (!menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
+      if (!menu.loading && !menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
         const gMenuOpts = menus.get(menu.code)
         const params = Object.assign({}, internalData._currMenuParams, { menu, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, $event: evnt })
         if (gMenuOpts && gMenuOpts.menuMethod) {

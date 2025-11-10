@@ -89,7 +89,8 @@ export default {
       dragTip: 'Bergerak: {0}',
       resizeColTip: 'Lebar: {0} piksel',
       resizeRowTip: 'Tinggi: {0} piksel',
-      rowGroupContentTotal: '{0}（{1}）'
+      rowGroupContentTotal: '{0}（{1}）',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: 'Sila pilih sekurang -kurangnya satu rekod!',

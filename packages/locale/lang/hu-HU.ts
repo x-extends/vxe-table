@@ -89,7 +89,8 @@ export default {
       dragTip: 'Mozgás: {0}',
       resizeColTip: 'Szélesség: {0} pixelek',
       resizeRowTip: 'Magasság: {0} pixelek',
-      rowGroupContentTotal: '{0} ({1})'
+      rowGroupContentTotal: '{0} ({1})',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: 'Kérjük, válasszon legalább egy rekordot!',
