@@ -89,7 +89,8 @@ export default {
       dragTip: 'يۆتكەش：{0}',
       resizeColTip: '宽：{0} 像素',
       resizeRowTip: '高：{0} 像素',
-      rowGroupContentTotal: '{0}（{1}）'
+      rowGroupContentTotal: '{0}（{1}）',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: 'كەم بولغاندا بىر تال ئۇچۇر تاللاڭ',

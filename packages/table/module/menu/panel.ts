@@ -7,7 +7,7 @@ import { getSlotVNs } from '../../../ui/src/vn'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
 
-const { getIcon, renderEmptyElement } = VxeUI
+const { getIcon, getI18n, renderEmptyElement } = VxeUI
 
 export default defineVxeComponent({
   name: 'VxeTableMenuPanel',
@@ -56,7 +56,8 @@ export default defineVxeComponent({
                 class: 'vxe-context-menu--option-wrapper',
                 key: gIndex
               }, options.map((item, index) => {
-                const hasChildMenus = item.children && item.children.some((child) => child.visible !== false)
+                const { children, loading } = item
+                const hasChildMenus = children && children.some((child) => child.visible !== false)
                 const prefixOpts = Object.assign({}, item.prefixConfig)
                 const prefixIcon = prefixOpts.icon || item.prefixIcon
                 const suffixOpts = Object.assign({}, item.suffixConfig)
@@ -66,6 +67,7 @@ export default defineVxeComponent({
                   ? renderEmptyElement($xeTable)
                   : h('li', {
                     class: [item.className, {
+                      'link--loading': loading,
                       'link--disabled': item.disabled,
                       'link--active': item === ctxMenuStore.selected
                     }],
@@ -86,17 +88,23 @@ export default defineVxeComponent({
                       h('div', {
                         class: ['vxe-context-menu--link-prefix', prefixOpts.className || '']
                       }, [
-                        prefixIcon && XEUtils.isFunction(prefixIcon)
-                          ? h('span', {}, getSlotVNs(prefixIcon({})))
-                          : h('i', {
-                            class: prefixIcon
-                          }),
+                        loading
+                          ? h('span', {
+                            class: getIcon('TABLE_MENU_OPTION_LOADING')
+                          })
+                          : (prefixIcon && XEUtils.isFunction(prefixIcon)
+                              ? h('span', {}, getSlotVNs(prefixIcon({})))
+                              : h('span', {}, [
+                                h('i', {
+                                  class: prefixIcon
+                                })
+                              ])),
                         prefixOpts.content ? h('span', {}, `${prefixOpts.content}`) : renderEmptyElement($xeTable)
                       ]),
                       h('div', {
                         class: 'vxe-context-menu--link-content',
                         title: menuContent
-                      }, menuContent),
+                      }, loading ? getI18n('vxe.table.menuLoading') : menuContent),
                       h('div', {
                         class: ['vxe-context-menu--link-suffix', suffixOpts.className || '']
                       }, [
@@ -114,6 +122,7 @@ export default defineVxeComponent({
                           'is--show': item === ctxMenuStore.selected && ctxMenuStore.showChild
                         }]
                       }, item.children.map((child, cIndex) => {
+                        const { loading: childLoading } = child
                         const childPrefixOpts = Object.assign({}, child.prefixConfig)
                         const childPrefixIcon = childPrefixOpts.icon || child.prefixIcon
                         const childSuffixOpts = Object.assign({}, child.suffixConfig)
@@ -123,6 +132,7 @@ export default defineVxeComponent({
                           ? null
                           : h('li', {
                             class: [child.className, {
+                              'link--loading': childLoading,
                               'link--disabled': child.disabled,
                               'link--active': child === ctxMenuStore.selectChild
                             }],
@@ -143,17 +153,23 @@ export default defineVxeComponent({
                               h('div', {
                                 class: ['vxe-context-menu--link-prefix', childPrefixOpts.className || '']
                               }, [
-                                childPrefixIcon && XEUtils.isFunction(childPrefixIcon)
-                                  ? h('span', {}, getSlotVNs(childPrefixIcon({})))
-                                  : h('i', {
-                                    class: childPrefixIcon
-                                  }),
+                                child.loading
+                                  ? h('span', {
+                                    class: getIcon('TABLE_MENU_OPTION_LOADING')
+                                  })
+                                  : (childPrefixIcon && XEUtils.isFunction(childPrefixIcon)
+                                      ? h('span', {}, getSlotVNs(childPrefixIcon({})))
+                                      : h('span', {}, [
+                                        h('i', {
+                                          class: childPrefixIcon
+                                        })
+                                      ])),
                                 childPrefixOpts.content ? h('span', `${childPrefixOpts.content}`) : renderEmptyElement($xeTable)
                               ]),
                               h('div', {
                                 class: 'vxe-context-menu--link-content',
                                 title: childMenuContent
-                              }, childMenuContent),
+                              }, childLoading ? getI18n('vxe.table.menuLoading') : childMenuContent),
                               h('div', {
                                 class: ['vxe-context-menu--link-suffix', childSuffixOpts.className || '']
                               }, [

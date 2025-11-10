@@ -341,6 +341,7 @@ VxeUI.setIcon({
   TABLE_RADIO_DISABLED_UNCHECKED: iconPrefix + 'radio-unchecked-fill',
   TABLE_CUSTOM_SORT: iconPrefix + 'drag-handle',
   TABLE_MENU_OPTIONS: iconPrefix + 'arrow-right',
+  TABLE_MENU_OPTION_LOADING: iconPrefix + 'repeat roll',
   TABLE_DRAG_ROW: iconPrefix + 'drag-handle',
   TABLE_DRAG_COLUMN: iconPrefix + 'drag-handle',
   TABLE_DRAG_STATUS_ROW: iconPrefix + 'sort',

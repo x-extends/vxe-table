@@ -89,7 +89,8 @@ export default {
       dragTip: 'Di chuyển: {0}',
       resizeColTip: 'Chiều rộng: {0} pixel',
       resizeRowTip: 'Cao: {0} pixel',
-      rowGroupContentTotal: '{0}（{1}）'
+      rowGroupContentTotal: '{0}（{1}）',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: 'Vui lòng chọn ít nhất một bản ghi!',

@@ -89,7 +89,8 @@ export default {
       dragTip: 'MOVE: {0}',
       resizeColTip: 'Ширина: {0} пиксели',
       resizeRowTip: 'Высокий: {0} пиксели',
-      rowGroupContentTotal: '{0}（{1}）'
+      rowGroupContentTotal: '{0}（{1}）',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: 'Пожалуйста, выберите хотя бы одну запись!',

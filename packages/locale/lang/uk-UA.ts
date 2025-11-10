@@ -89,7 +89,8 @@ export default {
       dragTip: 'Перемістити: {0}',
       resizeColTip: 'Ширина: {0} пікселів',
       resizeRowTip: 'Висота: {0} пікселів',
-      rowGroupContentTotal: '{0} ({1})'
+      rowGroupContentTotal: '{0} ({1})',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: 'Виберіть принаймні один запис!',

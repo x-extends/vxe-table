@@ -248,7 +248,7 @@ hooks.add('tableMenuModule', {
         menuMethods.closeMenu()
       },
       ctxMenuMouseoverEvent (evnt, item, child) {
-        const menuElem = evnt.currentTarget
+        const menuElem = evnt.currentTarget as HTMLDivElement
         const { ctxMenuStore } = reactData
         evnt.preventDefault()
         evnt.stopPropagation()
@@ -258,7 +258,7 @@ hooks.add('tableMenuModule', {
           ctxMenuStore.showChild = hasChildrenList(item)
           if (ctxMenuStore.showChild) {
             nextTick(() => {
-              const childWrapperElem = menuElem.nextElementSibling
+              const childWrapperElem = menuElem.nextElementSibling as HTMLDivElement
               if (childWrapperElem) {
                 const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = getAbsolutePos(menuElem)
                 const posTop = boundingTop + menuElem.offsetHeight
@@ -301,7 +301,7 @@ hooks.add('tableMenuModule', {
         const $xeGantt = $xeTable.xeGantt
 
         // 如果一级菜单有配置 code 则允许点击，否则不能点击
-        if (!menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
+        if (!menu.loading && !menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
           const gMenuOpts = menus.get(menu.code)
           const params = Object.assign({}, internalData._currMenuParams, { menu, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, $event: evnt })
           const tmMethod = gMenuOpts ? (gMenuOpts.tableMenuMethod || gMenuOpts.menuMethod) : null

@@ -89,7 +89,8 @@ export default {
       dragTip: '移动：{0}',
       resizeColTip: '宽：{0} 像素',
       resizeRowTip: '高：{0} 像素',
-      rowGroupContentTotal: '{0}（{1}）'
+      rowGroupContentTotal: '{0}（{1}）',
+      menuLoading: '加载中...'
     },
     grid: {
       selectOneRecord: '请至少选择一条记录！',
