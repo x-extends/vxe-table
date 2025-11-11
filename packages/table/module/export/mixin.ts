@@ -6,7 +6,7 @@ import { hasClass } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
-import type { VxeTablePropTypes, VxeTableDefines, TableReactData, VxeTablePrivateMethods, TableInternalData, GridReactData, VxeColumnPropTypes, VxeTableConstructor } from '../../../../types'
+import type { VxeTablePropTypes, VxeTableDefines, TableReactData, VxeTablePrivateMethods, TableInternalData, VxeColumnPropTypes, VxeTableConstructor } from '../../../../types'
 
 const { getI18n, renderer } = VxeUI
 
@@ -1379,7 +1379,7 @@ export default {
           }
 
           if ($xeGGWrapper && !handleOptions.remote) {
-            const gridReactData = $xeGGWrapper as unknown as GridReactData
+            const gridReactData = $xeGGWrapper.reactData
             const proxyOpts = $xeGGWrapper.computeProxyOpts
             const { sortData } = gridReactData
             const { beforeQueryAll, afterQueryAll, ajax = {} } = proxyOpts

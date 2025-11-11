@@ -349,14 +349,12 @@ function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMo
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
-  const tableInternalData = $xeTable as unknown as TableInternalData
 
-  const { fixedType, fixedColumn } = props
+  const { fixedType } = props
 
   const { headerRowClassName, headerRowStyle } = tableProps
-  const { visibleColumn } = tableInternalData
   const floatingFilterOpts = $xeTable.computeFloatingFilterOpts
-  const rowVNs = headerGroups.map((cols: any, $rowIndex: any) => {
+  const rowVNs = headerGroups.map((cols, $rowIndex) => {
     const params = { $table: $xeTable, $rowIndex, fixed: fixedType, type: renderType }
     return h('tr', {
       key: $rowIndex,
@@ -375,7 +373,7 @@ function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMo
         class: [
           'vxe-header--row'
         ]
-      }, renderFilterRows(h, _vm, isOptimizeMode, isOptimizeMode && fixedType ? fixedColumn as VxeTableDefines.ColumnInfo[] : visibleColumn))
+      }, renderFilterRows(h, _vm, isOptimizeMode, headerGroups[headerGroups.length - 1]))
     )
   }
 
