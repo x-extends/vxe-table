@@ -377,10 +377,9 @@ export default defineVxeComponent({
     }
 
     const renderHeads = (isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][]) => {
-      const { fixedType, fixedColumn } = props
+      const { fixedType } = props
 
       const { headerRowClassName, headerRowStyle } = tableProps
-      const { visibleColumn } = tableInternalData
       const floatingFilterOpts = computeFloatingFilterOpts.value
       const rowVNs = headerGroups.map((cols, $rowIndex) => {
         const params = { $table: $xeTable, $rowIndex, fixed: fixedType, type: renderType }
@@ -401,7 +400,7 @@ export default defineVxeComponent({
             class: [
               'vxe-header--row'
             ]
-          }, renderFilterRows(isOptimizeMode, isOptimizeMode && fixedType ? fixedColumn as VxeTableDefines.ColumnInfo[] : visibleColumn))
+          }, renderFilterRows(isOptimizeMode, headerGroups[headerGroups.length - 1]))
         )
       }
 
