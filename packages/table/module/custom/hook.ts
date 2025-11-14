@@ -104,7 +104,7 @@ VxeUI.hooks.add('tableCustomModule', {
           }
         }
         if (allowResizable) {
-          if (column.renderVisible && (!column.children || column.children.length)) {
+          if (column.renderVisible && (!column.children || !column.children.length)) {
             if (column.renderResizeWidth !== column.renderWidth) {
               column.resizeWidth = column.renderResizeWidth
               column.renderWidth = column.renderResizeWidth

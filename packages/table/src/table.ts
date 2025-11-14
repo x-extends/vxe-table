@@ -5552,7 +5552,6 @@ export default defineVxeComponent({
           }
         }
         const rest = $xeTable.handleRowDragSwapEvent(null, true, dragRow, prevDragRow, dragPos || defPos, dragToChild === true)
-        clearRowDragData()
         return rest
       },
       /**
@@ -8576,6 +8575,16 @@ export default defineVxeComponent({
       reactData.dragCol = null
     }
 
+    const clearColDragData = () => {
+      const el = refElem.value
+      hideDropTip()
+      clearColDropOrigin()
+      clearColAnimate(el, ['.vxe-table--column'])
+      internalData.prevDragToChild = false
+      reactData.dragRow = null
+      reactData.dragCol = null
+    }
+
     /**
      * 处理显示 tooltip
      * @param {Event} evnt 事件
@@ -10397,6 +10406,8 @@ export default defineVxeComponent({
           const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
           return Promise.resolve(dEndMethod ? dEndMethod(dragParams) : true).then((status) => {
             if (!status) {
+              clearRowDragData()
+              clearCrossTableDragStatus()
               return errRest
             }
 
@@ -10532,6 +10543,8 @@ export default defineVxeComponent({
               afterFullData.splice(nafIndex, 0, dragRow)
               tableFullData.splice(ntfIndex, 0, dragRow)
             }
+            clearRowDragData()
+            clearCrossTableDragStatus()
 
             $xeTable.handleTableData(treeConfig && transform)
             $xeTable.cacheRowMap(false)
@@ -10645,6 +10658,10 @@ export default defineVxeComponent({
           })
         }
         return Promise.resolve(errRest)
+      },
+      handleCrossTableRowDragCancelEvent () {
+        clearRowDragData()
+        clearCrossTableDragStatus()
       },
       /**
        * 处理跨表拖拽完成
@@ -10774,6 +10791,13 @@ export default defineVxeComponent({
             }
             Promise.resolve(dragEndMethod ? dragEndMethod(dragParams) : true).then((status) => {
               if (!status) {
+                if ($oldTable) {
+                  if ($oldTable.xID !== $xeTable.xID) {
+                    $oldTable.handleCrossTableRowDragCancelEvent(evnt)
+                  }
+                }
+                clearRowDragData()
+                clearCrossTableDragStatus()
                 return errRest
               }
               let insertRest: Promise<any> = Promise.resolve()
@@ -10899,8 +10923,6 @@ export default defineVxeComponent({
         } else {
           $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
         }
-        clearRowDragData()
-        clearCrossTableDragStatus()
       },
       handleRowDragDragoverEvent (evnt) {
         const { treeConfig } = props
@@ -11046,6 +11068,8 @@ export default defineVxeComponent({
           const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
           return Promise.resolve(dragEndMethod ? dragEndMethod(dragParams) : true).then((status) => {
             if (!status) {
+              clearColDragData()
+              clearCrossTableDragStatus()
               return errRest
             }
 
@@ -11195,6 +11219,9 @@ export default defineVxeComponent({
               }
             }
 
+            clearColDragData()
+            clearCrossTableDragStatus()
+
             if (evnt) {
               dispatchEvent('column-dragend', {
                 oldColumn: dragColumn,
@@ -11310,15 +11337,7 @@ export default defineVxeComponent({
       handleHeaderCellDragDragendEvent (evnt) {
         const { dragCol } = reactData
         const { prevDragCol, prevDragPos, prevDragToChild } = internalData
-        const el = refElem.value
         $xeTable.handleColDragSwapEvent(evnt, true, dragCol, prevDragCol, prevDragPos, prevDragToChild)
-        hideDropTip()
-        clearColDropOrigin()
-        clearColAnimate(el, ['.vxe-table--column'])
-        internalData.prevDragToChild = false
-        reactData.dragRow = null
-        reactData.dragCol = null
-        clearCrossTableDragStatus()
       },
       handleHeaderCellDragDragoverEvent (evnt) {
         const { dragCol } = reactData
