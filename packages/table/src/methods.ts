@@ -2822,6 +2822,19 @@ function clearRowDragData ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   reactData.dragCol = null
 }
 
+function clearColDragData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const el = $xeTable.$refs.refElem as HTMLDivElement
+  hideDropTip($xeTable)
+  clearColDropOrigin($xeTable)
+  clearColAnimate(el, ['.vxe-table--column'])
+  internalData.prevDragToChild = false
+  reactData.dragRow = null
+  reactData.dragCol = null
+}
+
 /**
  * 处理显示 tooltip
  * @param {Event} evnt 事件
@@ -5394,7 +5407,6 @@ const Methods = {
       }
     }
     const rest = $xeTable.handleRowDragSwapEvent(null, true, dragRow, prevDragRow, dragPos || defPos, dragToChild === true)
-    clearRowDragData($xeTable)
     return rest
   },
   /**
@@ -8885,6 +8897,8 @@ const Methods = {
       const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
       return Promise.resolve(dEndMethod ? dEndMethod(dragParams) : true).then((status) => {
         if (!status) {
+          clearRowDragData($xeTable)
+          clearCrossTableDragStatus($xeTable)
           return errRest
         }
 
@@ -9020,6 +9034,8 @@ const Methods = {
           afterFullData.splice(nafIndex, 0, dragRow)
           tableFullData.splice(ntfIndex, 0, dragRow)
         }
+        clearRowDragData($xeTable)
+        clearCrossTableDragStatus($xeTable)
 
         $xeTable.handleTableData(treeConfig && transform)
         $xeTable.cacheRowMap(false)
@@ -9131,6 +9147,12 @@ const Methods = {
       })
     }
     return Promise.resolve(errRest)
+  },
+  handleCrossTableRowDragCancelEvent () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    clearRowDragData($xeTable)
+    clearCrossTableDragStatus($xeTable)
   },
   /**
    * 处理跨表拖拽完成
@@ -9276,6 +9298,13 @@ const Methods = {
         }
         Promise.resolve(dragEndMethod ? dragEndMethod(dragParams) : true).then((status) => {
           if (!status) {
+            if ($oldTable) {
+              if ($oldTable.xID !== $xeTable.xID) {
+                $oldTable.handleCrossTableRowDragCancelEvent(evnt)
+              }
+            }
+            clearRowDragData($xeTable)
+            clearCrossTableDragStatus($xeTable)
             return errRest
           }
           let insertRest: Promise<any> = Promise.resolve()
@@ -9409,8 +9438,6 @@ const Methods = {
     } else {
       $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
     }
-    clearRowDragData($xeTable)
-    clearCrossTableDragStatus($xeTable)
   },
   handleRowDragDragoverEvent (evnt: DragEvent) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -9728,6 +9755,9 @@ const Methods = {
           }
         }
 
+        clearColDragData($xeTable)
+        clearCrossTableDragStatus($xeTable)
+
         if (evnt) {
           $xeTable.dispatchEvent('column-dragend', {
             oldColumn: dragColumn,
@@ -9847,15 +9877,7 @@ const Methods = {
 
     const { dragCol } = reactData
     const { prevDragCol, prevDragPos, prevDragToChild } = internalData
-    const el = $xeTable.$refs.refElem as HTMLDivElement
     $xeTable.handleColDragSwapEvent(evnt, true, dragCol, prevDragCol, prevDragPos, prevDragToChild)
-    hideDropTip($xeTable)
-    clearColDropOrigin($xeTable)
-    clearColAnimate(el, ['.vxe-table--column'])
-    internalData.prevDragToChild = false
-    reactData.dragRow = null
-    reactData.dragCol = null
-    clearCrossTableDragStatus($xeTable)
   },
   handleHeaderCellDragDragoverEvent (evnt: DragEvent) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
