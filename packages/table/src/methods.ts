@@ -3885,7 +3885,7 @@ function checkLastSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMet
       })
     }
     $xeTable.updateCellAreas()
-  }, 200)
+  }, 250)
 }
 
 const getWheelSpeed = (lastScrollTime: number) => {
@@ -4517,15 +4517,15 @@ const Methods = {
       if ($xeTable.isAggregateRecord(row)) {
         return $xeTable.$nextTick()
       }
-      const oRow = sourceDataRowIdData[getRowid($xeTable, row)]
+      const rowkey = getRowkey($xeTable)
+      const rowid = XEUtils.get(row, rowkey)
+      const oRow = sourceDataRowIdData[rowid]
       if (oRow && row) {
         if (field) {
           const newValue = XEUtils.clone(XEUtils.get(record || row, field), true)
           XEUtils.set(row, field, newValue)
           XEUtils.set(oRow, field, newValue)
         } else {
-          const rowkey = getRowkey($xeTable)
-          const rowid = getRowid($xeTable, row)
           const newRecord = XEUtils.clone(Object.assign({}, record), true)
           XEUtils.set(newRecord, rowkey, rowid)
           XEUtils.destructuring(oRow, Object.assign(row, newRecord))
