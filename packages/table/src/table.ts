@@ -4516,7 +4516,7 @@ export default defineVxeComponent({
         }
         updateRowExpandStyle()
         $xeTable.updateCellAreas()
-      }, 200)
+      }, 250)
     }
 
     const getWheelSpeed = (lastScrollTime: number) => {
@@ -4927,15 +4927,15 @@ export default defineVxeComponent({
           if ($xeTable.isAggregateRecord(row)) {
             return nextTick()
           }
-          const oRow = sourceDataRowIdData[getRowid($xeTable, row)]
+          const rowkey = getRowkey($xeTable)
+          const rowid = XEUtils.get(row, rowkey)
+          const oRow = sourceDataRowIdData[rowid]
           if (oRow && row) {
             if (field) {
               const newValue = XEUtils.clone(XEUtils.get(record || row, field), true)
               XEUtils.set(row, field, newValue)
               XEUtils.set(oRow, field, newValue)
             } else {
-              const rowkey = getRowkey($xeTable)
-              const rowid = getRowid($xeTable, row)
               const newRecord = XEUtils.clone(Object.assign({}, record), true)
               XEUtils.set(newRecord, rowkey, rowid)
               XEUtils.destructuring(oRow, Object.assign(row, newRecord))
@@ -13327,7 +13327,7 @@ export default defineVxeComponent({
       handleUpdateRowGroup(groupFields)
 
       nextTick(() => {
-        const { exportConfig, importConfig, treeConfig, highlightCurrentRow, highlightCurrentColumn } = props
+        const { exportConfig, importConfig, treeConfig } = props
         const { scrollXStore, scrollYStore } = internalData
         const editOpts = computeEditOpts.value
         const treeOpts = computeTreeOpts.value
@@ -13339,9 +13339,9 @@ export default defineVxeComponent({
         const mouseOpts = computeMouseOpts.value
         const exportOpts = computeExportOpts.value
         const importOpts = computeImportOpts.value
-        const currentRowOpts = computeCurrentRowOpts.value
-        const currentColumnOpts = computeCurrentColumnOpts.value
-        const keyboardOpts = computeKeyboardOpts.value
+        // const currentRowOpts = computeCurrentRowOpts.value
+        // const currentColumnOpts = computeCurrentColumnOpts.value
+        // const keyboardOpts = computeKeyboardOpts.value
         const aggregateOpts = computeAggregateOpts.value
         const rowDragOpts = computeRowDragOpts.value
 
@@ -13505,12 +13505,12 @@ export default defineVxeComponent({
         if (columnOpts.currentMethod) {
           warnLog('vxe.error.delProp', ['row-config.currentMethod', 'current-column-config.beforeSelectMethod'])
         }
-        if ((rowOpts.isCurrent || highlightCurrentRow) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
-          warnLog('vxe.error.notConflictProp', ['row-config.isCurrent', 'current-row-config.isFollowSelected'])
-        }
-        if ((columnOpts.isCurrent || highlightCurrentColumn) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
-          warnLog('vxe.error.notConflictProp', ['column-config.isCurrent', 'current-column-config.isFollowSelected'])
-        }
+        // if ((rowOpts.isCurrent || highlightCurrentRow) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
+        //   warnLog('vxe.error.notConflictProp', ['row-config.isCurrent & keyboard-config.isArrow', 'current-row-config.isFollowSelected'])
+        // }
+        // if ((columnOpts.isCurrent || highlightCurrentColumn) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
+        //   warnLog('vxe.error.notConflictProp', ['column-config.isCurrent & keyboard-config.isArrow', 'current-column-config.isFollowSelected'])
+        // }
 
         // 如果不支持虚拟滚动
         // if (props.spanMethod) {
