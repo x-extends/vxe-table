@@ -3447,7 +3447,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
                 handleRecalculateStyle($xeTable, false, true, true)
                 updateRowOffsetTop($xeTable)
                 updateTreeLineStyle($xeTable)
-                resolve()
+                $xeTable.$nextTick(() => resolve())
               })
           } else {
             setTimeout(() => {
@@ -3456,7 +3456,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
                   handleRecalculateStyle($xeTable, false, true, true)
                   updateRowOffsetTop($xeTable)
                   updateTreeLineStyle($xeTable)
-                  resolve()
+                  $xeTable.$nextTick(() => resolve())
                 })
             })
           }
@@ -3849,43 +3849,69 @@ function lazyScrollYData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   }, fpsTime)
 }
 
+function handleSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, isRollX: boolean, isRollY: boolean) {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { scrollXLoad, scrollYLoad, isAllOverflow } = reactData
+  internalData.lcsRunTime = Date.now()
+  internalData.lcsTimeout = undefined
+  internalData.intoRunScroll = false
+  internalData.inVirtualScroll = false
+  internalData.inWheelScroll = false
+  internalData.inHeaderScroll = false
+  internalData.inBodyScroll = false
+  internalData.inFooterScroll = false
+  reactData.lazScrollLoading = false
+  internalData.scrollRenderType = ''
+
+  let xRest = null
+  let yRest = null
+  if (!isAllOverflow) {
+    calcCellHeight($xeTable)
+    updateRowOffsetTop($xeTable)
+  }
+  if (isRollX && scrollXLoad) {
+    xRest = $xeTable.updateScrollXData()
+  }
+  if (isRollY && scrollYLoad) {
+    yRest = $xeTable.updateScrollYData().then(() => {
+      if (!isAllOverflow) {
+        calcCellHeight($xeTable)
+        updateRowOffsetTop($xeTable)
+      }
+      return $xeTable.updateScrollYSpace()
+    })
+  }
+  updateRowExpandStyle($xeTable)
+  return Promise.all([
+    xRest,
+    yRest,
+    $xeTable.updateCellAreas()
+  ])
+}
+
 function checkLastSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, isRollX: boolean, isRollY: boolean) {
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
   const { lcsTimeout } = internalData
+  reactData.lazScrollLoading = true
   if (lcsTimeout) {
     clearTimeout(lcsTimeout)
   }
   internalData.lcsTimeout = setTimeout(() => {
-    const { scrollXLoad, scrollYLoad, isAllOverflow } = reactData
-    internalData.lcsRunTime = Date.now()
-    internalData.lcsTimeout = undefined
-    internalData.intoRunScroll = false
-    internalData.inVirtualScroll = false
-    internalData.inWheelScroll = false
-    internalData.inHeaderScroll = false
-    internalData.inBodyScroll = false
-    internalData.inFooterScroll = false
-    internalData.scrollRenderType = ''
-    if (!isAllOverflow) {
-      calcCellHeight($xeTable)
-      updateRowOffsetTop($xeTable)
-    }
-    if (isRollX && scrollXLoad) {
-      $xeTable.updateScrollXData()
-    }
-    if (isRollY && scrollYLoad) {
-      $xeTable.updateScrollYData().then(() => {
-        if (!isAllOverflow) {
-          calcCellHeight($xeTable)
-          updateRowOffsetTop($xeTable)
-        }
-        $xeTable.updateScrollYSpace()
-      })
-    }
-    $xeTable.updateCellAreas()
-  }, 250)
+    handleSyncScroll($xeTable, isRollX, isRollY).then(() => {
+      if (reactData.scrollXLoad || reactData.scrollYLoad) {
+        $xeTable.$nextTick(() => {
+          updateRowExpandStyle($xeTable)
+          if (!internalData.lcsTimeout) {
+            handleSyncScroll($xeTable, isRollX, isRollY)
+          }
+        })
+      }
+    })
+  }, 200)
 }
 
 const getWheelSpeed = (lastScrollTime: number) => {
@@ -9146,6 +9172,8 @@ const Methods = {
         return errRest
       })
     }
+    clearRowDragData($xeTable)
+    clearCrossTableDragStatus($xeTable)
     return Promise.resolve(errRest)
   },
   handleCrossTableRowDragCancelEvent () {
@@ -9606,6 +9634,8 @@ const Methods = {
       const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
       return Promise.resolve(dragEndMethod ? dragEndMethod(dragParams) : true).then((status) => {
         if (!status) {
+          clearColDragData($xeTable)
+          clearCrossTableDragStatus($xeTable)
           return errRest
         }
 
@@ -9868,6 +9898,8 @@ const Methods = {
         return errRest
       })
     }
+    clearColDragData($xeTable)
+    clearCrossTableDragStatus($xeTable)
     return Promise.resolve(errRest)
   },
   handleHeaderCellDragDragendEvent (evnt: DragEvent) {
@@ -11901,7 +11933,7 @@ const Methods = {
       $xeGanttView.handleUpdateSYSpace()
     }
     return $xeTable.$nextTick().then(() => {
-      updateStyle($xeTable)
+      return updateStyle($xeTable)
     })
   },
   updateScrollYStatus () {
