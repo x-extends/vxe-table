@@ -665,7 +665,8 @@ export default {
           fixedRight: '冻结右侧',
           clearFilter: '清除筛选',
           textOption: '文本筛选',
-          numberOption: '数值筛选'
+          numberOption: '数值筛选',
+          dateOption: '日期筛选'
         },
         popup: {
           title: '自定义筛选的方式',
@@ -688,6 +689,28 @@ export default {
           include: '包含',
           exclude: '不包含',
           between: '介于',
+          isAfter: '在以下日期之后',
+          eqAfter: '在以下日期之后或与之相同',
+          isBefore: '在以下日期之前',
+          eqBefore: '在以下日期之前或与之相同',
+          top10: '前10项',
+          aboveAverage: '高于平均值',
+          belowAverage: '低于平均值',
+          before: '之前',
+          after: '之后',
+          tomorrow: '明天',
+          today: '今天',
+          yesterday: '昨天',
+          nextWeek: '下周',
+          thisWeek: '本周',
+          lastWeek: '上周',
+          nextMonth: '下月',
+          thisMonth: '本月',
+          lastMonth: '上月',
+          nextYear: '明年',
+          thisYear: '今年',
+          lastYear: '去年',
+          yearToDate: '本年度截止到现在',
           custom: '自定义筛选',
           insensitive: '不区分大小写',
           isSensitive: '区分大小写'
@@ -753,6 +776,9 @@ export default {
         include: '包含',
         exclude: '不包含',
         between: '介于',
+        top10: '前10项',
+        aboveAverage: '高于平均值',
+        belowAverage: '低于平均值',
         custom: '自定义筛选',
         insensitive: '不区分大小写',
         isSensitive: '区分大小写'
@@ -770,7 +796,8 @@ export default {
           fixedRight: '冻结到右侧',
           clearFilter: '清除筛选',
           textOption: '文本筛选',
-          numberOption: '数值筛选'
+          numberOption: '数值筛选',
+          dateOption: '日期筛选'
         },
         popup: {
           title: '自定义筛选的方式',

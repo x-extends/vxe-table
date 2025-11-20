@@ -143,7 +143,7 @@ export default {
               $xeTable.dispatchEvent(eventType, params, evnt)
             }
             return
-          } else if (getEventTargetNode(evnt, $xeTable.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('xid') === xID).flag) {
+          } else if (getEventTargetNode(evnt, el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('xid') === xID).flag || (layout === 'body' && getEventTargetNode(evnt, el, 'vxe-table--empty-place-wrapper', target => target.getAttribute('xid') === xID).flag)) {
             if (menuOpts.trigger === 'cell') {
               evnt.preventDefault()
             } else {

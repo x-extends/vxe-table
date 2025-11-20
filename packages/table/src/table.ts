@@ -2302,7 +2302,10 @@ export default {
       h('div', {
         key: 'tn',
         ref: 'refEmptyPlaceholder',
-        class: 'vxe-table--empty-place-wrapper'
+        class: 'vxe-table--empty-place-wrapper',
+        attrs: {
+          xid: xID
+        }
       }, [
         h('div', {
           class: 'vxe-table--empty-placeholder'

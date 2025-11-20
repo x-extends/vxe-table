@@ -665,7 +665,8 @@ export default {
           fixedRight: 'Congele à direita',
           clearFilter: 'Filtro transparente',
           textOption: 'Filtro de texto',
-          numberOption: 'Filtro numérico'
+          numberOption: 'Filtro numérico',
+          dateOption: '日期筛选'
         },
         popup: {
           title: 'Métodos de filtragem personalizados',
@@ -688,6 +689,28 @@ export default {
           include: 'Incluir',
           exclude: 'Não incluído',
           between: 'Entre',
+          isAfter: '在以下日期之后',
+          eqAfter: '在以下日期之后或与之相同',
+          isBefore: '在以下日期之前',
+          eqBefore: '在以下日期之前或与之相同',
+          top10: '前10项',
+          aboveAverage: '高于平均值',
+          belowAverage: '低于平均值',
+          before: '之前',
+          after: '之后',
+          tomorrow: '明天',
+          today: '今天',
+          yesterday: '昨天',
+          nextWeek: '下周',
+          thisWeek: '本周',
+          lastWeek: '上周',
+          nextMonth: '下月',
+          thisMonth: '本月',
+          lastMonth: '上月',
+          nextYear: '明年',
+          thisYear: '今年',
+          lastYear: '去年',
+          yearToDate: '本年度截止到现在',
           custom: 'Filtro personalizado',
           insensitive: 'Caso insensível',
           isSensitive: 'maiúsculas e minúsculas'
@@ -753,6 +776,9 @@ export default {
         include: 'Incluir',
         exclude: 'Não incluído',
         between: 'Entre',
+        top10: '前10项',
+        aboveAverage: '高于平均值',
+        belowAverage: '低于平均值',
         custom: 'Filtro personalizado',
         insensitive: 'Caso insensível',
         isSensitive: 'maiúsculas e minúsculas'
@@ -770,7 +796,8 @@ export default {
           fixedRight: 'Congele à direita',
           clearFilter: 'Filtro transparente',
           textOption: 'Filtragem de texto',
-          numberOption: 'Filtragem numérica'
+          numberOption: 'Filtragem numérica',
+          dateOption: '日期筛选'
         },
         popup: {
           title: 'Métodos de filtragem personalizados',

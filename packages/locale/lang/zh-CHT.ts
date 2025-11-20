@@ -665,11 +665,12 @@ export default {
           fixedRight: '凍結右側',
           clearFilter: '清除篩選',
           textOption: '文本篩選',
-          numberOption: '數值篩選'
+          numberOption: '數值篩選',
+          dateOption: '日期筛选'
         },
         popup: {
           title: '自定義篩選的方式',
-          currColumnTitle: '當前列：',
+          currColumnTitle: '显示行：',
           and: '與',
           or: '或',
           describeHtml: '可用 ? 代表單個字符<br/>用 * 代表任意多個字符'
@@ -688,6 +689,28 @@ export default {
           include: '包含',
           exclude: '不包含',
           between: '介於',
+          isAfter: '在以下日期之后',
+          eqAfter: '在以下日期之后或与之相同',
+          isBefore: '在以下日期之前',
+          eqBefore: '在以下日期之前或与之相同',
+          top10: '前10项',
+          aboveAverage: '高于平均值',
+          belowAverage: '低于平均值',
+          before: '之前',
+          after: '之后',
+          tomorrow: '明天',
+          today: '今天',
+          yesterday: '昨天',
+          nextWeek: '下周',
+          thisWeek: '本周',
+          lastWeek: '上周',
+          nextMonth: '下月',
+          thisMonth: '本月',
+          lastMonth: '上月',
+          nextYear: '明年',
+          thisYear: '今年',
+          lastYear: '去年',
+          yearToDate: '本年度截止到现在',
           custom: '自定義篩選',
           insensitive: '不區分大小寫',
           isSensitive: '區分大小寫'
@@ -753,6 +776,9 @@ export default {
         include: '包含',
         exclude: '不包含',
         between: '介於',
+        top10: '前10项',
+        aboveAverage: '高于平均值',
+        belowAverage: '低于平均值',
         custom: '自定義篩選',
         insensitive: '不區分大小寫',
         isSensitive: '區分大小寫'
@@ -770,11 +796,12 @@ export default {
           fixedRight: '凍結到右側',
           clearFilter: '清除篩選',
           textOption: '文本篩選',
-          numberOption: '數值篩選'
+          numberOption: '數值篩選',
+          dateOption: '日期筛选'
         },
         popup: {
           title: '自定義篩選的方式',
-          currColumnTitle: '當前列：',
+          currColumnTitle: '显示行：',
           and: '與',
           or: '或',
           describeHtml: '可用 ? 代表單個字符<br/>用 * 代表任意多個字符'
