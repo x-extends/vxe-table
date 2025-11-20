@@ -12868,7 +12868,8 @@ export default defineVxeComponent({
         h('div', {
           key: 'tn',
           ref: refEmptyPlaceholder,
-          class: 'vxe-table--empty-place-wrapper'
+          class: 'vxe-table--empty-place-wrapper',
+          xid: xID
         }, [
           h('div', {
             class: 'vxe-table--empty-placeholder'

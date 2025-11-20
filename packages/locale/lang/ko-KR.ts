@@ -665,7 +665,8 @@ export default {
           fixedRight: '오른쪽을 얼립니다',
           clearFilter: '클리어 필터',
           textOption: '텍스트 필터링',
-          numberOption: '수치 필터링'
+          numberOption: '수치 필터링',
+          dateOption: '日期筛选'
         },
         popup: {
           title: '사용자 정의 필터링 방법',
@@ -688,6 +689,28 @@ export default {
           include: '포함하다',
           exclude: '포함되지 않습니다',
           between: '사이',
+          isAfter: '在以下日期之后',
+          eqAfter: '在以下日期之后或与之相同',
+          isBefore: '在以下日期之前',
+          eqBefore: '在以下日期之前或与之相同',
+          top10: '前10项',
+          aboveAverage: '高于平均值',
+          belowAverage: '低于平均值',
+          before: '之前',
+          after: '之后',
+          tomorrow: '明天',
+          today: '今天',
+          yesterday: '昨天',
+          nextWeek: '下周',
+          thisWeek: '本周',
+          lastWeek: '上周',
+          nextMonth: '下月',
+          thisMonth: '本月',
+          lastMonth: '上月',
+          nextYear: '明年',
+          thisYear: '今年',
+          lastYear: '去年',
+          yearToDate: '本年度截止到现在',
           custom: '사용자 정의 필터링',
           insensitive: '케이스 둔감',
           isSensitive: '사례에 민감합니다'
@@ -753,6 +776,9 @@ export default {
         include: '포함하다',
         exclude: '포함되지 않습니다',
         between: '사이',
+        top10: '前10项',
+        aboveAverage: '高于平均值',
+        belowAverage: '低于平均值',
         custom: '사용자 정의 필터링',
         insensitive: '케이스 둔감',
         isSensitive: '사례에 민감합니다'
@@ -770,7 +796,8 @@ export default {
           fixedRight: '오른쪽으로 얼립니다',
           clearFilter: '클리어 필터',
           textOption: '텍스트 필터링',
-          numberOption: '수치 필터링'
+          numberOption: '수치 필터링',
+          dateOption: '日期筛选'
         },
         popup: {
           title: '사용자 정의 필터링 방법',

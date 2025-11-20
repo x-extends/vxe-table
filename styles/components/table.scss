@@ -2179,12 +2179,12 @@ $btnThemeList: (
     text-align: center;
     overflow: hidden;
     width: 100%;
-    pointer-events: none;
     outline: 0;
   }
   .vxe-table--empty-block {
     display: none;
     visibility: hidden;
+    pointer-events: none;
   }
   .vxe-table--empty-place-wrapper {
     display: none;
@@ -2193,6 +2193,7 @@ $btnThemeList: (
     top: 0;
     z-index: 5;
     overflow: hidden;
+    pointer-events: none;
   }
   .vxe-table--empty-placeholder {
     display: flex;

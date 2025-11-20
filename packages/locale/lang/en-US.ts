@@ -664,12 +664,13 @@ export default {
           fixedLeft: 'Freeze left',
           fixedRight: 'Freeze right',
           clearFilter: 'Clear Filter',
-          textOption: 'Text filter',
-          numberOption: 'Numerical filter'
+          textOption: 'Text filters',
+          numberOption: 'Number filters',
+          dateOption: 'Date filters'
         },
         popup: {
           title: 'Custom filtering methods',
-          currColumnTitle: 'Current column:',
+          currColumnTitle: 'Show rows where:',
           and: 'and',
           or: 'or',
           describeHtml: 'Available? Represents a single character<br/>Use * Represents any multiple characters'
@@ -688,6 +689,28 @@ export default {
           include: 'Include',
           exclude: 'Not included',
           between: 'Between',
+          isAfter: 'Is after',
+          eqAfter: 'Is after or equal to',
+          isBefore: 'Is before',
+          eqBefore: 'Is before or equal to',
+          top10: 'Top 10',
+          aboveAverage: 'Above average',
+          belowAverage: 'Below average',
+          before: 'Before',
+          after: 'After',
+          tomorrow: 'Tomorrow',
+          today: 'Today',
+          yesterday: 'Yesterday',
+          nextWeek: 'Next Week',
+          thisWeek: 'This Week',
+          lastWeek: 'Last Week',
+          nextMonth: 'Next Month',
+          thisMonth: 'This Month',
+          lastMonth: 'Last Month',
+          nextYear: 'Next Year',
+          thisYear: 'This Year',
+          lastYear: 'Last Year',
+          yearToDate: 'Year to Date',
           custom: 'Custom filter',
           insensitive: 'Case insensitive',
           isSensitive: 'case sensitive'
@@ -753,6 +776,9 @@ export default {
         include: 'Include',
         exclude: 'Not included',
         between: 'Between',
+        top10: 'Top 10',
+        aboveAverage: 'Above average',
+        belowAverage: 'Below average',
         custom: 'Custom filter',
         insensitive: 'Case insensitive',
         isSensitive: 'case sensitive'
@@ -769,12 +795,13 @@ export default {
           fixedLeft: 'Freeze left',
           fixedRight: 'Freeze right',
           clearFilter: 'Clear Filter',
-          textOption: 'Text filtering',
-          numberOption: 'Numerical filtering'
+          textOption: 'Text filters',
+          numberOption: 'Number filters',
+          dateOption: 'Date filters'
         },
         popup: {
           title: 'Custom filtering methods',
-          currColumnTitle: 'Current column:',
+          currColumnTitle: 'Show rows where:',
           and: 'and',
           or: 'or',
           describeHtml: 'Available? Represents a single character<br/>Use * Represents any multiple characters'
