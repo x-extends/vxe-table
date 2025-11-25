@@ -47,7 +47,7 @@ function getNodeOffset (elem: any, container: any, rest: any): any {
 }
 
 export function isPx (val: any) {
-  return val && /^\d+(\.\d+)?px?$/.test(val)
+  return val && /^\d+(\.\d+)?(px)?$/.test(val)
 }
 
 export function isScale (val: any) {
