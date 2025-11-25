@@ -13,22 +13,6 @@ const { renderer, renderEmptyElement } = VxeUI
 const sourceType = 'table'
 const renderType = 'header'
 
-function getColumnFirstChild (column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
-  const { children } = column
-  if (children && children.length) {
-    return getColumnFirstChild(children[0])
-  }
-  return column
-}
-
-function getColumnLastChild (column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
-  const { children } = column
-  if (children && children.length) {
-    return getColumnLastChild(children[children.length - 1])
-  }
-  return column
-}
-
 export default defineVxeComponent({
   name: 'VxeTableHeader',
   props: {
@@ -203,15 +187,13 @@ export default defineVxeComponent({
         if (showCustomHeader) {
           // custom
         } else if (isColGroup && !isLastRow) {
-          const firstCol = getColumnFirstChild(column)
-          const lastCol = getColumnLastChild(column)
-          if (firstCol && lastCol && firstCol.id !== lastCol.id) {
-            const firstColRest = fullColumnIdData[firstCol.id]
-            const lastColRest = fullColumnIdData[lastCol.id]
-            if (firstColRest && lastColRest) {
-              tcStyle.width = `${lastColRest.oLeft - firstColRest.oLeft + lastCol.renderWidth}px`
+          let childWidth = 0
+          XEUtils.eachTree(column.children, (childRow) => {
+            if (childRow.visible && (!childRow.children || !childRow.children.length)) {
+              childWidth += childRow.renderWidth
             }
-          }
+          })
+          tcStyle.width = `${childWidth}px`
         }
 
         return h('th', {
