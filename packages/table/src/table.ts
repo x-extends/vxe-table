@@ -41,6 +41,8 @@ const customStorageKey = 'VXE_CUSTOM_STORE'
 const maxYHeight = 5e6
 const maxXWidth = 5e6
 
+const sourceType = 'table'
+
 let crossTableDragRowObj: {
   $oldTable: VxeTableConstructor & VxeTablePrivateMethods
   $newTable: (VxeTableConstructor & VxeTablePrivateMethods) | null
@@ -5283,10 +5285,15 @@ export default defineVxeComponent({
         if (!column) {
           return null
         }
-        const { formatter } = column
+        const { editConfig } = props
+        const { formatter, editRender, cellRender } = column
+        // formatter > tableCellFormatter
+        const renderOpts = formatter ? null : (editConfig && isEnableConf(editRender) ? editRender : (isEnableConf(cellRender) ? cellRender : null))
+        const compConf = renderOpts ? renderer.get(renderOpts.name) : null
+        const tcFormatter = compConf ? compConf.tableCellFormatter : null
         const cellValue = getCellValue(row, column)
         let cellLabel = cellValue
-        if (formatter) {
+        if (formatter || tcFormatter) {
           let formatData
           const { fullAllDataRowIdData } = internalData
           const rowid = getRowid($xeTable, row)
@@ -5304,22 +5311,27 @@ export default defineVxeComponent({
             }
           }
           const formatParams = {
+            $table: $xeTable,
             cellValue,
             row,
             rowIndex: $xeTable.getRowIndex(row),
             column,
             columnIndex: $xeTable.getColumnIndex(column)
           }
-          if (XEUtils.isString(formatter)) {
-            const gFormatOpts = formats.get(formatter)
-            const tcFormatMethod = gFormatOpts ? (gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod) : null
-            cellLabel = tcFormatMethod ? tcFormatMethod(formatParams) : ''
-          } else if (XEUtils.isArray(formatter)) {
-            const gFormatOpts = formats.get(formatter[0])
-            const tcFormatMethod = gFormatOpts ? (gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod) : null
-            cellLabel = tcFormatMethod ? tcFormatMethod(formatParams, ...formatter.slice(1)) : ''
-          } else {
-            cellLabel = formatter(formatParams)
+          if (formatter) {
+            if (XEUtils.isString(formatter)) {
+              const gFormatOpts = formats.get(formatter)
+              const tcFormatMethod = gFormatOpts ? (gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod) : null
+              cellLabel = tcFormatMethod ? tcFormatMethod(formatParams) : ''
+            } else if (XEUtils.isArray(formatter)) {
+              const gFormatOpts = formats.get(formatter[0])
+              const tcFormatMethod = gFormatOpts ? (gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod) : null
+              cellLabel = tcFormatMethod ? tcFormatMethod(formatParams, ...formatter.slice(1)) : ''
+            } else {
+              cellLabel = `${formatter(formatParams)}`
+            }
+          } else if (renderOpts && tcFormatter) {
+            cellLabel = `${tcFormatter(renderOpts, formatParams)}`
           }
           if (formatData) {
             formatData[colid] = { value: cellValue, label: cellLabel }
@@ -5365,6 +5377,7 @@ export default defineVxeComponent({
             }
           }
           const footerFormatParams = {
+            $table: $xeTable,
             cellValue: itemValue,
             itemValue,
             row,
@@ -11523,6 +11536,7 @@ export default defineVxeComponent({
         }
         reactData.lastScrollTime = Date.now()
         const evntParams = {
+          source: sourceType,
           scrollTop,
           scrollLeft,
           bodyHeight,
