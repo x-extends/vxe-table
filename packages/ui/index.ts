@@ -287,9 +287,10 @@ VxeUI.setConfig({
       showResponseMsg: true,
       showActionMsg: true,
       response: {
-        list: null,
+        list: 'list',
         result: 'result',
         total: 'page.total',
+        footerData: 'footerData',
         message: 'message'
       }
       // beforeItem: null,

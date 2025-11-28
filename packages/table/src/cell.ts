@@ -480,7 +480,7 @@ export const Cell = {
     const { rowGroupExpandedFlag } = tableReactData
     const { rowGroupExpandedMaps } = tableInternalData
     const aggregateOpts = $table.computeAggregateOpts
-    const { mode, padding, indent } = aggregateOpts
+    const { mode, padding, indent, showIcon, iconOpen, iconClose } = aggregateOpts
     const rowid = getRowid($table, row)
     const isExpand = !!rowGroupExpandedFlag && !!rowGroupExpandedMaps[rowid]
     return h('div', {
@@ -493,7 +493,7 @@ export const Cell = {
           }
         : undefined
     }, [
-      row.isAggregate
+      showIcon && row.isAggregate
         ? h('span', {
           class: 'vxe-row-group--node-btn',
           on: {
@@ -503,7 +503,7 @@ export const Cell = {
           }
         }, [
           h('i', {
-            class: isExpand ? getIcon().TABLE_ROW_GROUP_OPEN : getIcon().TABLE_ROW_GROUP_CLOSE
+            class: isExpand ? (iconOpen || getIcon().TABLE_ROW_GROUP_OPEN) : (iconClose || getIcon().TABLE_ROW_GROUP_CLOSE)
           })
         ])
         : renderEmptyElement($table),

@@ -657,9 +657,8 @@ function oldSelectEditRender (h: CreateElement, renderOpts: VxeGlobalRendererHan
   ]
 }
 
-function getSelectCellValue (renderOpts: VxeGlobalRendererHandles.RenderTableCellOptions, { row, column }: any) {
+function handleSelectCellValue (cellValue: any, renderOpts: VxeGlobalRendererHandles.RenderTableCellOptions) {
   const { options, optionGroups, optionProps = {}, optionGroupProps = {}, props = {} } = renderOpts
-  const cellValue = XEUtils.get(row, column.field)
   let selectItem: any
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
@@ -696,14 +695,18 @@ function getSelectCellValue (renderOpts: VxeGlobalRendererHandles.RenderTableCel
   return ''
 }
 
+function getSelectCellValue (renderOpts: VxeGlobalRendererHandles.RenderTableCellOptions, { row, column }: any) {
+  const cellValue = XEUtils.get(row, column.field)
+  return handleSelectCellValue(cellValue, renderOpts)
+}
+
 function handleExportSelectMethod (params: any) {
   const { row, column, options } = params
   return options.original ? getCellValue(row, column) : getSelectCellValue(column.editRender || column.cellRender, params)
 }
 
-function getTreeSelectCellValue (renderOpts: VxeGlobalRendererHandles.RenderTableCellOptions, { row, column }: any) {
+function handleTreeSelectCellValue (cellValue: any, renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions) {
   const { options, optionProps = {} } = renderOpts
-  const cellValue = XEUtils.get(row, column.field)
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
   const childrenProp = optionProps.children || 'children'
@@ -719,6 +722,11 @@ function getTreeSelectCellValue (renderOpts: VxeGlobalRendererHandles.RenderTabl
     ).join(', ')
   }
   return ''
+}
+
+function getTreeSelectCellValue (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, { row, column }: any) {
+  const cellValue = XEUtils.get(row, column.field)
+  return handleTreeSelectCellValue(cellValue, renderOpts)
 }
 
 function handleExportTreeSelectMethod (params: any) {
@@ -782,6 +790,91 @@ function handleNumberCell (h: CreateElement, renderOpts: VxeGlobalRendererHandle
     : {})
 }
 
+function handleFormatSelect (renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, params: VxeGlobalRendererHandles.TableCellFormatterParams | VxeGlobalRendererHandles.TableCellCopyMethodParams) {
+  const { cellValue } = params
+  return handleSelectCellValue(cellValue, renderOpts)
+}
+
+function handleSetSelectValue (renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, params: VxeGlobalRendererHandles.TableCellFormatterParams | VxeGlobalRendererHandles.TableCellCopyMethodParams) {
+  const { row, column, cellValue } = params
+  const { field } = column
+  if (field) {
+    const { options, optionGroups, optionProps = {}, optionGroupProps = {}, props } = renderOpts
+    if (isEmptyValue(cellValue)) {
+      XEUtils.set(row, field, props && props.multiple ? [] : null)
+      return
+    }
+    const isMultiVal = XEUtils.indexOf(`${cellValue}`, ',') > -1
+    const labelProp = optionProps.label || 'label'
+    const valueProp = optionProps.value || 'value'
+    const labelMpas: Record<string, any> = {}
+    if (optionGroups && optionGroups.length) {
+      const groupOptions = optionGroupProps.options || 'options'
+      for (let i = 0; i < optionGroups.length; i++) {
+        const opts = optionGroups[i][groupOptions] || {}
+        for (let j = 0; j < opts.length; j++) {
+          const item = opts[j]
+          if (isMultiVal) {
+            labelMpas[item[labelProp]] = item
+            /* eslint-disable eqeqeq */
+          } else if (item[labelProp] == cellValue) {
+            XEUtils.set(row, field, item[valueProp])
+            return
+          }
+        }
+      }
+    } else {
+      if (options) {
+        for (let i = 0; i < options.length; i++) {
+          const item = options[i]
+          if (isMultiVal) {
+            labelMpas[item[labelProp]] = item
+            /* eslint-disable eqeqeq */
+          } else if (item[labelProp] == cellValue) {
+            XEUtils.set(row, field, item[valueProp])
+            return
+          }
+        }
+      }
+    }
+    if (isMultiVal) {
+      XEUtils.set(row, field, (isMultiVal
+        ? cellValue.split(',')
+        : [cellValue]).map((label: any) => {
+        const item = labelMpas[label]
+        return item ? item[valueProp] : label
+      }))
+    } else {
+      XEUtils.set(row, field, cellValue)
+    }
+  }
+}
+
+function handleFormatTreeSelect (renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, params: VxeGlobalRendererHandles.TableCellFormatterParams | VxeGlobalRendererHandles.TableCellCopyMethodParams) {
+  const { cellValue } = params
+  return handleTreeSelectCellValue(cellValue, renderOpts)
+}
+
+function handleSetTreeSelectValue (renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, params: VxeGlobalRendererHandles.TableCellFormatterParams | VxeGlobalRendererHandles.TableCellCopyMethodParams) {
+  const { row, column, cellValue } = params
+  const { field } = column
+  if (field) {
+    const { options, optionProps = {} } = renderOpts
+    const labelProp = optionProps.label || 'label'
+    const valueProp = optionProps.value || 'value'
+    const childrenProp = optionProps.children || 'children'
+    const matchRest = XEUtils.findTree(options || [], item => XEUtils.get(item, labelProp) === cellValue, { children: childrenProp })
+    if (matchRest) {
+      const selectItem = matchRest.item
+      if (selectItem) {
+        XEUtils.set(row, field, selectItem[valueProp])
+        return
+      }
+    }
+    XEUtils.set(row, field, cellValue)
+  }
+}
+
 /**
  * 表格 - 渲染器
  */
@@ -815,6 +908,9 @@ renderer.mixin({
         renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params, renderNativeOptions) : renderNativeOptions(h, renderOpts.options, renderOpts, params))
       })
     },
+    tableCellFormatter: handleFormatSelect,
+    tableCellCopyMethod: handleFormatSelect,
+    tableCellPasteMethod: handleSetSelectValue,
     tableFilterDefaultMethod: handleFilterMethod,
     tableExportMethod: handleExportSelectMethod
   },
@@ -1049,6 +1145,9 @@ renderer.mixin({
         on: getFloatingFilterOns(renderOpts, params, option)
       })
     },
+    tableCellFormatter: handleFormatSelect,
+    tableCellCopyMethod: handleFormatSelect,
+    tableCellPasteMethod: handleSetSelectValue,
     tableFilterDefaultMethod: handleFilterMethod,
     tableExportMethod: handleExportSelectMethod
   },
@@ -1099,6 +1198,9 @@ renderer.mixin({
     renderTableDefault (h, renderOpts, params) {
       return getCellLabelVNs(h, renderOpts, params, getSelectCellValue(renderOpts, params))
     },
+    tableCellFormatter: handleFormatSelect,
+    tableCellCopyMethod: handleFormatSelect,
+    tableCellPasteMethod: handleSetSelectValue,
     tableFilterDefaultMethod: handleFilterMethod,
     tableExportMethod: handleExportSelectMethod
   },
@@ -1108,6 +1210,9 @@ renderer.mixin({
     renderTableCell (h, renderOpts, params) {
       return getCellLabelVNs(h, renderOpts, params, getTreeSelectCellValue(renderOpts, params))
     },
+    tableCellFormatter: handleFormatTreeSelect,
+    tableCellCopyMethod: handleFormatTreeSelect,
+    tableCellPasteMethod: handleSetTreeSelectValue,
     tableExportMethod: handleExportTreeSelectMethod
   },
   VxeTableSelect: {
@@ -1116,6 +1221,9 @@ renderer.mixin({
     renderTableCell (h, renderOpts, params) {
       return getCellLabelVNs(h, renderOpts, params, getTreeSelectCellValue(renderOpts, params))
     },
+    tableCellFormatter: handleFormatTreeSelect,
+    tableCellCopyMethod: handleFormatTreeSelect,
+    tableCellPasteMethod: handleSetTreeSelectValue,
     tableExportMethod: handleExportTreeSelectMethod
   },
   /**
@@ -1131,6 +1239,9 @@ renderer.mixin({
     renderTableDefault (h, renderOpts, params) {
       return getCellLabelVNs(h, renderOpts, params, getTreeSelectCellValue(renderOpts, params))
     },
+    tableCellFormatter: handleFormatTreeSelect,
+    tableCellCopyMethod: handleFormatTreeSelect,
+    tableCellPasteMethod: handleSetTreeSelectValue,
     tableExportMethod: handleExportTreeSelectMethod
   },
   VxeColorPicker: {
