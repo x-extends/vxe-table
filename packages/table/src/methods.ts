@@ -2554,23 +2554,48 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
 }
 
 function getOrderField ($xeTable: VxeTableConstructor, column: VxeTableDefines.ColumnInfo) {
-  const { sortBy, sortType } = column
-  return (row: any) => {
-    let cellValue
-    if (sortBy) {
-      cellValue = XEUtils.isFunction(sortBy) ? sortBy({ row, column }) : XEUtils.get(row, sortBy)
-    } else {
-      cellValue = $xeTable.getCellLabel(row, column)
-    }
-    if (!sortType || sortType === 'auto') {
-      return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
-    } else if (sortType === 'number') {
-      return XEUtils.toNumber(cellValue)
-    } else if (sortType === 'string') {
-      return XEUtils.toValueString(cellValue)
-    }
-    return cellValue
-  }
+  const reactData = $xeTable as unknown as TableReactData
+
+  const { isRowGroupStatus } = reactData
+  const { sortBy, sortType, aggFunc } = column
+  return isRowGroupStatus && aggFunc
+    ? (row: any) => {
+        if (row.isAggregate) {
+          const aggData = row.aggData
+          const currAggData = aggData ? aggData[column.field] : null
+          return currAggData ? currAggData.value : null
+        }
+        let cellValue
+        if (sortBy) {
+          cellValue = XEUtils.isFunction(sortBy) ? sortBy({ row, column }) : XEUtils.get(row, sortBy)
+        } else {
+          cellValue = $xeTable.getCellLabel(row, column)
+        }
+        if (!sortType || sortType === 'auto') {
+          return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
+        } else if (sortType === 'number') {
+          return XEUtils.toNumber(cellValue)
+        } else if (sortType === 'string') {
+          return XEUtils.toValueString(cellValue)
+        }
+        return cellValue
+      }
+    : (row: any) => {
+        let cellValue
+        if (sortBy) {
+          cellValue = XEUtils.isFunction(sortBy) ? sortBy({ row, column }) : XEUtils.get(row, sortBy)
+        } else {
+          cellValue = $xeTable.getCellLabel(row, column)
+        }
+        if (!sortType || sortType === 'auto') {
+          return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
+        } else if (sortType === 'number') {
+          return XEUtils.toNumber(cellValue)
+        } else if (sortType === 'string') {
+          return XEUtils.toValueString(cellValue)
+        }
+        return cellValue
+      }
 }
 
 function handleTargetEnterEvent ($xeTable: VxeTableConstructor, isClear: boolean) {
@@ -3151,8 +3176,13 @@ function handleUpdateRowGroup ($xeTable: VxeTableConstructor & VxeTablePrivateMe
 }
 
 function handleeGroupSummary ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, aggList: VxeTableDefines.AggregateRowInfo[]) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { fullColumnFieldData } = internalData
   const aggregateOpts = $xeTable.computeAggregateOpts
+  const aggFuncColumns = $xeTable.computeAggFuncColumns
   const { mapChildrenField } = aggregateOpts
+  const aggCalcMethod = aggregateOpts.calcValuesMethod || aggregateOpts.countMethod || aggregateOpts.aggregateMethod
   if (mapChildrenField) {
     XEUtils.lastEach(aggList, aggRow => {
       let count = 0
@@ -3167,6 +3197,65 @@ function handleeGroupSummary ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     })
     if ($xeTable.handlePivotTableAggregateData) {
       $xeTable.handlePivotTableAggregateData(aggList)
+    } else {
+      XEUtils.lastEach(aggList, aggRow => {
+        const aggDtObj: Record<string, {
+          type: string
+          value: any
+          label: any
+        }> = {}
+        const aggData = aggRow.aggData
+        const groupField = aggRow.groupField
+        const groupContent = aggRow.groupContent
+        const childList = mapChildrenField ? (aggRow[mapChildrenField] || []) : []
+        const childCount = aggRow.childCount
+        const colRest = fullColumnFieldData[groupField] || {}
+        aggFuncColumns.forEach(column => {
+          const { field } = column
+          const currAggData = aggData ? aggData[field] : null
+          const ctParams = {
+            $table: $xeTable,
+            groupField,
+            groupColumn: (colRest ? colRest.column : null) as VxeTableDefines.ColumnInfo,
+            column,
+            groupValue: groupContent,
+            childList,
+            childCount,
+            aggValue: currAggData ? currAggData.value : 0,
+
+            /**
+             * 已废弃
+             * @deprecated
+             */
+            children: childList,
+            /**
+             * 已废弃
+             * @deprecated
+             */
+            totalValue: childCount
+          }
+          let aggVal = 0
+          // 如果下层同时也是分组
+          if (childList.length && childList[0].isAggregate) {
+            XEUtils.each(childList, (row: VxeTableDefines.AggregateRowInfo) => {
+              if (row.isAggregate) {
+                const currAggData = row.aggData[field]
+                if (currAggData) {
+                  aggVal += currAggData.value
+                }
+              }
+            })
+          } else {
+            aggVal = aggCalcMethod ? aggCalcMethod(ctParams) : aggRow.childCount
+          }
+          aggDtObj[field] = {
+            type: 'count',
+            value: aggVal,
+            label: aggVal
+          }
+        })
+        aggRow.aggData = aggDtObj
+      })
     }
   }
 }
@@ -4280,7 +4369,37 @@ function handleRowExpandScroll ($xeTable: VxeTableConstructor & VxeTablePrivateM
   }
 }
 
-const Methods = {
+function handleColumnVisible (this: any, visible: boolean) {
+  const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+  return function (fieldOrColumn: string | string[] | VxeTableDefines.ColumnInfo | VxeTableDefines.ColumnInfo[]) {
+    let status = false
+    const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
+    cols.forEach(item => {
+      const column = handleFieldOrColumn($xeTable, item)
+      if (column) {
+        if (column.children && column.children.length) {
+          XEUtils.eachTree([column], (item) => {
+            item.visible = visible
+            item.renderVisible = visible
+          })
+        } else {
+          column.visible = visible
+          column.renderVisible = visible
+        }
+        if (!status) {
+          status = true
+        }
+      }
+    })
+    if (status) {
+      return $xeTable.handleCustom()
+    }
+    return $xeTable.$nextTick()
+  }
+}
+
+const tableMethods = {
   callSlot (slotFunc: any, params: any, h: any, vNodes: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     // const slots = $xeTable.$scopedSlots
@@ -5767,47 +5886,11 @@ const Methods = {
   /**
    * 隐藏指定列
    */
-  hideColumn (fieldOrColumn: string | string[] | VxeTableDefines.ColumnInfo | VxeTableDefines.ColumnInfo[]) {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-
-    let status = false
-    const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
-    cols.forEach(item => {
-      const column = handleFieldOrColumn($xeTable, item)
-      if (column && column.visible) {
-        column.visible = false
-        if (!status) {
-          status = true
-        }
-      }
-    })
-    if (status) {
-      return $xeTable.handleCustom()
-    }
-    return $xeTable.$nextTick()
-  },
+  hideColumn: handleColumnVisible(false),
   /**
    * 显示指定列
    */
-  showColumn (fieldOrColumn: string | string[] | VxeTableDefines.ColumnInfo | VxeTableDefines.ColumnInfo[]) {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-
-    let status = false
-    const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
-    cols.forEach(item => {
-      const column = handleFieldOrColumn($xeTable, item)
-      if (column && !column.visible) {
-        column.visible = true
-        if (!status) {
-          status = true
-        }
-      }
-    })
-    if (status) {
-      return $xeTable.handleCustom()
-    }
-    return $xeTable.$nextTick()
-  },
+  showColumn: handleColumnVisible(true),
   setColumnWidth (fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | VxeColumnPropTypes.Field[] | VxeTableDefines.ColumnInfo[], width: number | string) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
@@ -12476,7 +12559,7 @@ const Methods = {
 const funcs = 'setFilter,openFilter,clearFilter,saveFilter,saveFilterByEvent,resetFilter,resetFilterByEvent,saveFilterPanel,saveFilterPanelByEvent,resetFilterPanel,resetFilterPanelByEvent,getCheckedFilters,updateFilterOptionStatus,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFNR,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,insertNextAt,insertChild,insertChildAt,insertChildNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getEditCell,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,fullValidateField,validateField,openExport,closeExport,openPrint,closePrint,getPrintHtml,exportData,openImport,closeImport,importData,saveFile,readFile,importByFile,print,getCustomVisible,openCustom,closeCustom,toggleCustom,saveCustom,cancelCustom,resetCustom,toggleCustomAllCheckbox,setCustomAllCheckbox'.split(',')
 
 funcs.forEach(name => {
-  Methods[name] = function (...args: any[]) {
+  tableMethods[name] = function (...args: any[]) {
     // if (!this[`_${name}`]) {
     //   if ('openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').includes(name)) {
     //     errLog('vxe.error.reqModule', ['Export'])
@@ -12494,4 +12577,4 @@ funcs.forEach(name => {
   }
 })
 
-export default Methods
+export default tableMethods

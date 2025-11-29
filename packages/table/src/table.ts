@@ -1554,6 +1554,16 @@ export default {
       })
       return rgColumns
     },
+    computeAggFuncColumns () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { rowGroupList, tableColumn } = reactData
+      if (rowGroupList.length) {
+        return tableColumn.filter(column => column.field && column.aggFunc)
+      }
+      return []
+    },
     tabsResizeFlag () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const $xeTabs = $xeTable.$xeTabs
@@ -2145,8 +2155,9 @@ export default {
     if (this.$resize) {
       this.$resize.disconnect()
     }
-    this.closeFilter()
-    this.closeMenu()
+    $xeTable.closeTooltip()
+    $xeTable.closeFilter()
+    $xeTable.closeMenu()
 
     globalEvents.off($xeTable, 'paste')
     globalEvents.off($xeTable, 'copy')
