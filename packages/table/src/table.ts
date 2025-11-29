@@ -932,6 +932,14 @@ export default defineVxeComponent({
       return rgColumns
     })
 
+    const computeAggFuncColumns = computed(() => {
+      const { rowGroupList, tableColumn } = reactData
+      if (rowGroupList.length) {
+        return tableColumn.filter(column => column.aggFunc)
+      }
+      return []
+    })
+
     const refMaps: VxeTablePrivateRef = {
       refElem,
       refTooltip,
@@ -1032,6 +1040,7 @@ export default defineVxeComponent({
       computeVirtualScrollBars,
       computeRowGroupFields,
       computeRowGroupColumns,
+      computeAggFuncColumns,
 
       computeFNROpts,
       computeSXOpts,
@@ -2213,23 +2222,46 @@ export default defineVxeComponent({
     }
 
     const getOrderField = (column: VxeTableDefines.ColumnInfo) => {
-      const { sortBy, sortType } = column
-      return (row: any) => {
-        let cellValue
-        if (sortBy) {
-          cellValue = XEUtils.isFunction(sortBy) ? sortBy({ row, column }) : XEUtils.get(row, sortBy)
-        } else {
-          cellValue = tableMethods.getCellLabel(row, column)
-        }
-        if (!sortType || sortType === 'auto') {
-          return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
-        } else if (sortType === 'number') {
-          return XEUtils.toNumber(cellValue)
-        } else if (sortType === 'string') {
-          return XEUtils.toValueString(cellValue)
-        }
-        return cellValue
-      }
+      const { isRowGroupStatus } = reactData
+      const { sortBy, sortType, aggFunc } = column
+      return isRowGroupStatus && aggFunc
+        ? (row: any) => {
+            if (row.isAggregate) {
+              const aggData = row.aggData
+              const currAggData = aggData ? aggData[column.field] : null
+              return currAggData ? currAggData.value : null
+            }
+            let cellValue
+            if (sortBy) {
+              cellValue = XEUtils.isFunction(sortBy) ? sortBy({ row, column }) : XEUtils.get(row, sortBy)
+            } else {
+              cellValue = tableMethods.getCellLabel(row, column)
+            }
+            if (!sortType || sortType === 'auto') {
+              return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
+            } else if (sortType === 'number') {
+              return XEUtils.toNumber(cellValue)
+            } else if (sortType === 'string') {
+              return XEUtils.toValueString(cellValue)
+            }
+            return cellValue
+          }
+        : (row: any) => {
+            let cellValue
+            if (sortBy) {
+              cellValue = XEUtils.isFunction(sortBy) ? sortBy({ row, column }) : XEUtils.get(row, sortBy)
+            } else {
+              cellValue = tableMethods.getCellLabel(row, column)
+            }
+            if (!sortType || sortType === 'auto') {
+              return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
+            } else if (sortType === 'number') {
+              return XEUtils.toNumber(cellValue)
+            } else if (sortType === 'string') {
+              return XEUtils.toValueString(cellValue)
+            }
+            return cellValue
+          }
     }
 
     const updateAfterListIndex = () => {
@@ -3585,8 +3617,11 @@ export default defineVxeComponent({
     }
 
     const handleeGroupSummary = (aggList: VxeTableDefines.AggregateRowInfo[]) => {
+      const { fullColumnFieldData } = internalData
       const aggregateOpts = computeAggregateOpts.value
+      const aggFuncColumns = computeAggFuncColumns.value
       const { mapChildrenField } = aggregateOpts
+      const aggCalcMethod = aggregateOpts.calcValuesMethod || aggregateOpts.countMethod || aggregateOpts.aggregateMethod
       if (mapChildrenField) {
         XEUtils.lastEach(aggList, aggRow => {
           let count = 0
@@ -3601,6 +3636,67 @@ export default defineVxeComponent({
         })
         if ($xeTable.handlePivotTableAggregateData) {
           $xeTable.handlePivotTableAggregateData(aggList)
+        } else {
+          if (aggFuncColumns.length) {
+            XEUtils.lastEach(aggList, aggRow => {
+              const aggDtObj: Record<string, {
+              type: string
+              value: any
+              label: any
+            }> = {}
+              const aggData = aggRow.aggData
+              const groupField = aggRow.groupField
+              const groupContent = aggRow.groupContent
+              const childList = mapChildrenField ? (aggRow[mapChildrenField] || []) : []
+              const childCount = aggRow.childCount
+              const colRest = fullColumnFieldData[groupField] || {}
+              aggFuncColumns.forEach(column => {
+                const { field } = column
+                const currAggData = aggData ? aggData[field] : null
+                const ctParams = {
+                  $table: $xeTable,
+                  groupField,
+                  groupColumn: (colRest ? colRest.column : null) as VxeTableDefines.ColumnInfo,
+                  column,
+                  groupValue: groupContent,
+                  childList,
+                  childCount,
+                  aggValue: currAggData ? currAggData.value : 0,
+
+                  /**
+                 * 已废弃
+                 * @deprecated
+                 */
+                  children: childList,
+                  /**
+                 * 已废弃
+                 * @deprecated
+                 */
+                  totalValue: childCount
+                }
+                let aggVal = 0
+                // 如果下层同时也是分组
+                if (childList.length && childList[0].isAggregate) {
+                  XEUtils.each(childList, (row: VxeTableDefines.AggregateRowInfo) => {
+                    if (row.isAggregate) {
+                      const currAggData = row.aggData[field]
+                      if (currAggData) {
+                        aggVal += currAggData.value
+                      }
+                    }
+                  })
+                } else {
+                  aggVal = aggCalcMethod ? aggCalcMethod(ctParams) : aggRow.childCount
+                }
+                aggDtObj[field] = {
+                  type: 'count',
+                  value: aggVal,
+                  label: aggVal
+                }
+              })
+              aggRow.aggData = aggDtObj
+            })
+          }
         }
       }
     }
@@ -4835,6 +4931,34 @@ export default defineVxeComponent({
       }
     }
 
+    const handleColumnVisible = (visible: boolean) => {
+      return function (fieldOrColumn: string | string[] | VxeTableDefines.ColumnInfo | VxeTableDefines.ColumnInfo[]) {
+        let status = false
+        const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
+        cols.forEach(item => {
+          const column = handleFieldOrColumn($xeTable, item)
+          if (column) {
+            if (column.children && column.children.length) {
+              XEUtils.eachTree([column], (item) => {
+                item.visible = visible
+                item.renderVisible = visible
+              })
+            } else {
+              column.visible = visible
+              column.renderVisible = visible
+            }
+            if (!status) {
+              status = true
+            }
+          }
+        })
+        if (status) {
+          return $xeTable.handleCustom()
+        }
+        return nextTick()
+      }
+    }
+
     tableMethods = {
       dispatchEvent,
       getEl () {
@@ -5832,43 +5956,11 @@ export default defineVxeComponent({
       /**
        * 隐藏指定列
        */
-      hideColumn (fieldOrColumn) {
-        let status = false
-        const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
-        cols.forEach(item => {
-          const column = handleFieldOrColumn($xeTable, item)
-          if (column && column.visible) {
-            column.visible = false
-            if (!status) {
-              status = true
-            }
-          }
-        })
-        if (status) {
-          return tablePrivateMethods.handleCustom()
-        }
-        return nextTick()
-      },
+      hideColumn: handleColumnVisible(false),
       /**
        * 显示指定列
        */
-      showColumn (fieldOrColumn) {
-        let status = false
-        const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
-        cols.forEach(item => {
-          const column = handleFieldOrColumn($xeTable, item)
-          if (column && !column.visible) {
-            column.visible = true
-            if (!status) {
-              status = true
-            }
-          }
-        })
-        if (status) {
-          return tablePrivateMethods.handleCustom()
-        }
-        return nextTick()
-      },
+      showColumn: handleColumnVisible(true),
       setColumnWidth (fieldOrColumn, width) {
         const { elemStore } = internalData
         let status = false
@@ -13639,6 +13731,7 @@ export default defineVxeComponent({
       if (resizeObserver) {
         resizeObserver.disconnect()
       }
+      $xeTable.closeTooltip()
       tableMethods.closeFilter()
       if ($xeTable.closeMenu) {
         $xeTable.closeMenu()

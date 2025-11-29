@@ -397,8 +397,9 @@ export const Cell = {
       const { fullColumnFieldData } = tableInternalData
       const { computeAggregateOpts } = $table.getComputeMaps()
       const aggregateOpts = computeAggregateOpts.value
-      const { mode, showTotal, totalMethod, countFields, contentMethod, mapChildrenField } = aggregateOpts
-      const aggCalcMethod = aggregateOpts.calcValuesMethod || aggregateOpts.countMethod || aggregateOpts.aggregateMethod
+      const { mode, showTotal, totalMethod, countFields, contentMethod, formatValuesMethod, mapChildrenField } = aggregateOpts
+      const aggData = aggRow.aggData
+      const currAggData = aggData ? aggData[field] : null
       const groupField = aggRow.groupField
       const groupContent = aggRow.groupContent
       const childList = mapChildrenField ? (aggRow[mapChildrenField] || []) : []
@@ -439,9 +440,10 @@ export const Cell = {
       } else if ($table.getPivotTableAggregateCellAggValue) {
         cellValue = $table.getPivotTableAggregateCellAggValue(params)
       } else if (aggFunc === true || (countFields && countFields.includes(field))) {
-        if (aggCalcMethod) {
-          ctParams.aggValue = childCount
-          cellValue = `${aggCalcMethod(ctParams)}`
+        cellValue = currAggData ? currAggData.value : childCount
+        ctParams.aggValue = cellValue
+        if (formatValuesMethod) {
+          cellValue = formatValuesMethod(ctParams)
         }
       }
     } else {
