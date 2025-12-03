@@ -65,8 +65,7 @@
     "sass-loader": "^14.2.0",
     "typescript": "~4.7.4",
     "vue": "3.4.27",
-    "vue-router": "~4.5.1",
-    "vxe-gantt": "~4.0.26"
+    "vue-router": "~4.5.1"
   },
   "vetur": {
     "tags": "helper/vetur/tags.json",
