@@ -4369,10 +4369,9 @@ function handleRowExpandScroll ($xeTable: VxeTableConstructor & VxeTablePrivateM
   }
 }
 
-function handleColumnVisible (this: any, visible: boolean) {
-  const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-
-  return function (fieldOrColumn: string | string[] | VxeTableDefines.ColumnInfo | VxeTableDefines.ColumnInfo[]) {
+function handleColumnVisible (visible: boolean) {
+  return function (this: any, fieldOrColumn: string | string[] | VxeTableDefines.ColumnInfo | VxeTableDefines.ColumnInfo[]) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     let status = false
     const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
     cols.forEach(item => {
@@ -4399,7 +4398,7 @@ function handleColumnVisible (this: any, visible: boolean) {
   }
 }
 
-const tableMethods = {
+const tableMethods: any = {
   callSlot (slotFunc: any, params: any, h: any, vNodes: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     // const slots = $xeTable.$scopedSlots
@@ -7458,7 +7457,7 @@ const tableMethods = {
   handleAggregateSummaryData () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    return updateGroupData($xeTable)
+    return $xeTable.refreshAggregateCalcValues()
   },
   handleTargetLeaveEvent () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -10833,6 +10832,12 @@ const tableMethods = {
     const { isRowGroupStatus } = reactData
     return isRowGroupStatus && row && row.isAggregate && childrenField && mapChildrenField ? (row[mapChildrenField] || []) : []
   },
+  refreshAggregateCalcValues () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    updateGroupData($xeTable)
+    return $xeTable.$nextTick()
+  },
   isAggregateExpandByRow (row: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
@@ -12553,13 +12558,19 @@ const tableMethods = {
   getSetupOptions () {
     return getConfig()
   }
-} as any
+}
+
+const tablePrivateMethods: any = {
+
+}
+
+const exportMethods: any = Object.assign({}, tableMethods, tablePrivateMethods)
 
 // Module methods
 const funcs = 'setFilter,openFilter,clearFilter,saveFilter,saveFilterByEvent,resetFilter,resetFilterByEvent,saveFilterPanel,saveFilterPanelByEvent,resetFilterPanel,resetFilterPanelByEvent,getCheckedFilters,updateFilterOptionStatus,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFNR,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,insertNextAt,insertChild,insertChildAt,insertChildNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getEditCell,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,fullValidateField,validateField,openExport,closeExport,openPrint,closePrint,getPrintHtml,exportData,openImport,closeImport,importData,saveFile,readFile,importByFile,print,getCustomVisible,openCustom,closeCustom,toggleCustom,saveCustom,cancelCustom,resetCustom,toggleCustomAllCheckbox,setCustomAllCheckbox'.split(',')
 
 funcs.forEach(name => {
-  tableMethods[name] = function (...args: any[]) {
+  exportMethods[name] = function (...args: any[]) {
     // if (!this[`_${name}`]) {
     //   if ('openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').includes(name)) {
     //     errLog('vxe.error.reqModule', ['Export'])
@@ -12577,4 +12588,4 @@ funcs.forEach(name => {
   }
 })
 
-export default tableMethods
+export default exportMethods
