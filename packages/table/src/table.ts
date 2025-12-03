@@ -7169,6 +7169,10 @@ export default defineVxeComponent({
         const { isRowGroupStatus } = reactData
         return isRowGroupStatus && row && row.isAggregate && childrenField && mapChildrenField ? (row[mapChildrenField] || []) : []
       },
+      refreshAggregateCalcValues () {
+        updateGroupData()
+        return nextTick()
+      },
       isAggregateExpandByRow (row) {
         const { rowGroupExpandedFlag } = reactData
         const { rowGroupExpandedMaps } = internalData
@@ -9841,7 +9845,7 @@ export default defineVxeComponent({
         reactData.mergeFootFlag++
       },
       handleAggregateSummaryData () {
-        return updateGroupData()
+        return $xeTable.refreshAggregateCalcValues()
       },
       triggerHeaderTitleEvent (evnt, iconParams, params) {
         const tipContent = iconParams.content || (iconParams as any).message
