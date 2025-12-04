@@ -68,10 +68,6 @@
     display: flex;
     align-items: center;
   }
-  .vxe-buttons--wrapper,
-  .vxe-tools--wrapper {
-    flex-wrap: wrap;
-  }
   .vxe-tools--operate {
     flex-shrink: 0;
   }
@@ -83,6 +79,17 @@
         border-radius: 50%;
       }
     }
+  }
+  .vxe-button--item-wrapper,
+  .vxe-tool--item-wrapper,
+  .vxe-button--prefix-wrapper,
+  .vxe-button--suffix-wrapper,
+  .vxe-tool--prefix-wrapper,
+  .vxe-tool--suffix-wrapper {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    flex-wrap: wrap;
   }
 }
 
