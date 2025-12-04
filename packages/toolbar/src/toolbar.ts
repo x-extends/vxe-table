@@ -401,68 +401,53 @@ export default defineVxeComponent({
       const buttonsSlot = slots.buttons
       const buttonPrefixSlot = slots.buttonPrefix || slots['button-prefix']
       const buttonSuffixSlot = slots.buttonSuffix || slots['button-suffix']
-      const lbVNs: VxeComponentSlotType[] = []
-      if (buttonPrefixSlot) {
-        lbVNs.push(
-          h('span', {
-            key: 'tbp',
-            class: 'vxe-button--prefix-wrapper'
-          }, getSlotVNs(buttonPrefixSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })))
-        )
-      }
-      if (buttons || buttonsSlot) {
-        const btnVNs: VxeComponentSlotType[] = []
-        if (buttons) {
-          buttons.forEach((item, index) => {
-            const { dropdowns, buttonRender } = item
-            if (item.visible !== false) {
-              const compConf = buttonRender ? renderer.get(buttonRender.name) : null
-              if (buttonRender && compConf && compConf.renderToolbarButton) {
-                const toolbarButtonClassName = compConf.toolbarButtonClassName
-                const params = { $grid: $xeGrid, $gantt: $xeGantt, $table: $table!, button: item }
+      const btnVNs: VxeComponentSlotType[] = []
+      if (buttons) {
+        buttons.forEach((item, index) => {
+          const { dropdowns, buttonRender } = item
+          if (item.visible !== false) {
+            const compConf = buttonRender ? renderer.get(buttonRender.name) : null
+            if (buttonRender && compConf && compConf.renderToolbarButton) {
+              const toolbarButtonClassName = compConf.toolbarButtonClassName
+              const params = { $grid: $xeGrid, $gantt: $xeGantt, $table: $table!, button: item }
+              btnVNs.push(
+                h('span', {
+                  key: `br${item.code || index}`,
+                  class: ['vxe-button--item', toolbarButtonClassName ? (XEUtils.isFunction(toolbarButtonClassName) ? toolbarButtonClassName(params) : toolbarButtonClassName) : '']
+                }, getSlotVNs(compConf.renderToolbarButton(buttonRender, params)))
+              )
+            } else {
+              if (VxeUIButtonComponent) {
                 btnVNs.push(
-                  h('span', {
-                    key: `br${item.code || index}`,
-                    class: ['vxe-button--item', toolbarButtonClassName ? (XEUtils.isFunction(toolbarButtonClassName) ? toolbarButtonClassName(params) : toolbarButtonClassName) : '']
-                  }, getSlotVNs(compConf.renderToolbarButton(buttonRender, params)))
+                  h(VxeUIButtonComponent, {
+                    key: `bd${item.code || index}`,
+                    ...Object.assign({}, item, {
+                      content: item.content || item.name,
+                      options: undefined
+                    }),
+                    onClick: (eventParams) => btnEvent(eventParams, item)
+                  }, dropdowns && dropdowns.length
+                    ? {
+                        dropdowns: () => renderDropdowns(item, true)
+                      }
+                    : {})
                 )
-              } else {
-                if (VxeUIButtonComponent) {
-                  btnVNs.push(
-                    h(VxeUIButtonComponent, {
-                      key: `bd${item.code || index}`,
-                      ...Object.assign({}, item, {
-                        content: item.content || item.name,
-                        options: undefined
-                      }),
-                      onClick: (eventParams) => btnEvent(eventParams, item)
-                    }, dropdowns && dropdowns.length
-                      ? {
-                          dropdowns: () => renderDropdowns(item, true)
-                        }
-                      : {})
-                  )
-                }
               }
             }
-          })
-        }
-        lbVNs.push(
-          h('span', {
-            key: 'tti',
-            class: 'vxe-button--item-wrapper'
-          }, buttonsSlot ? getSlotVNs(buttonsSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : btnVNs)
-        )
+          }
+        })
       }
-      if (buttonSuffixSlot) {
-        lbVNs.push(
-          h('span', {
-            key: 'tbs',
-            class: 'vxe-button--suffix-wrapper'
-          }, getSlotVNs(buttonSuffixSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })))
-        )
-      }
-      return lbVNs
+      return [
+        h('div', {
+          class: 'vxe-button--prefix-wrapper'
+        }, buttonPrefixSlot ? getSlotVNs(buttonPrefixSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : []),
+        h('div', {
+          class: 'vxe-button--item-wrapper'
+        }, buttonsSlot ? getSlotVNs(buttonsSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : btnVNs),
+        h('div', {
+          class: 'vxe-button--suffix-wrapper'
+        }, buttonSuffixSlot ? getSlotVNs(buttonSuffixSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : [])
+      ]
     }
 
     /**
@@ -475,69 +460,54 @@ export default defineVxeComponent({
       const toolsSlot = slots.tools
       const toolPrefixSlot = slots.toolPrefix || slots['tool-prefix']
       const toolSuffixSlot = slots.toolSuffix || slots['tool-suffix']
-      const rtVNs: VxeComponentSlotType[] = []
-      if (toolPrefixSlot) {
-        rtVNs.push(
-          h('span', {
-            key: 'ttp',
-            class: 'vxe-tool--prefix-wrapper'
-          }, getSlotVNs(toolPrefixSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })))
-        )
-      }
-      if (tools || toolsSlot) {
-        const btnVNs: VxeComponentSlotType[] = []
-        if (tools) {
-          tools.forEach((item, tIndex) => {
-            const { dropdowns, toolRender } = item
-            if (item.visible !== false) {
-              const rdName = toolRender ? toolRender.name : null
-              const compConf = toolRender ? renderer.get(rdName) : null
-              if (toolRender && compConf && compConf.renderToolbarTool) {
-                const toolbarToolClassName = compConf.toolbarToolClassName
-                const params = { $grid: $xeGrid, $gantt: $xeGantt, $table: $table!, tool: item }
+      const btnVNs: VxeComponentSlotType[] = []
+      if (tools) {
+        tools.forEach((item, tIndex) => {
+          const { dropdowns, toolRender } = item
+          if (item.visible !== false) {
+            const rdName = toolRender ? toolRender.name : null
+            const compConf = toolRender ? renderer.get(rdName) : null
+            if (toolRender && compConf && compConf.renderToolbarTool) {
+              const toolbarToolClassName = compConf.toolbarToolClassName
+              const params = { $grid: $xeGrid, $gantt: $xeGantt, $table: $table!, tool: item }
+              btnVNs.push(
+                h('span', {
+                  key: rdName as string,
+                  class: ['vxe-tool--item', toolbarToolClassName ? (XEUtils.isFunction(toolbarToolClassName) ? toolbarToolClassName(params) : toolbarToolClassName) : '']
+                }, getSlotVNs(compConf.renderToolbarTool(toolRender, params)))
+              )
+            } else {
+              if (VxeUIButtonComponent) {
                 btnVNs.push(
-                  h('span', {
-                    key: rdName as string,
-                    class: ['vxe-tool--item', toolbarToolClassName ? (XEUtils.isFunction(toolbarToolClassName) ? toolbarToolClassName(params) : toolbarToolClassName) : '']
-                  }, getSlotVNs(compConf.renderToolbarTool(toolRender, params)))
+                  h(VxeUIButtonComponent, {
+                    key: tIndex,
+                    ...Object.assign({}, item, {
+                      content: item.content || item.name,
+                      options: undefined
+                    }),
+                    onClick: (eventParams) => tolEvent(eventParams, item)
+                  }, dropdowns && dropdowns.length
+                    ? {
+                        dropdowns: () => renderDropdowns(item, false)
+                      }
+                    : {})
                 )
-              } else {
-                if (VxeUIButtonComponent) {
-                  btnVNs.push(
-                    h(VxeUIButtonComponent, {
-                      key: tIndex,
-                      ...Object.assign({}, item, {
-                        content: item.content || item.name,
-                        options: undefined
-                      }),
-                      onClick: (eventParams) => tolEvent(eventParams, item)
-                    }, dropdowns && dropdowns.length
-                      ? {
-                          dropdowns: () => renderDropdowns(item, false)
-                        }
-                      : {})
-                  )
-                }
               }
             }
-          })
-        }
-        rtVNs.push(
-          h('span', {
-            key: 'tti',
-            class: 'vxe-tool--item-wrapper'
-          }, toolsSlot ? getSlotVNs(toolsSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : btnVNs)
-        )
+          }
+        })
       }
-      if (toolSuffixSlot) {
-        rtVNs.push(
-          h('span', {
-            key: 'tts',
-            class: 'vxe-tool--suffix-wrapper'
-          }, getSlotVNs(toolSuffixSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })))
-        )
-      }
-      return rtVNs
+      return [
+        h('div', {
+          class: 'vxe-tool--prefix-wrapper'
+        }, toolPrefixSlot ? getSlotVNs(toolPrefixSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : []),
+        h('div', {
+          class: 'vxe-tool--item-wrapper'
+        }, toolsSlot ? getSlotVNs(toolsSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : btnVNs),
+        h('div', {
+          class: 'vxe-tool--suffix-wrapper'
+        }, toolSuffixSlot ? getSlotVNs(toolSuffixSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : [])
+      ]
     }
 
     const renderToolImport = () => {

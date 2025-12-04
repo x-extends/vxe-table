@@ -81,6 +81,16 @@
     }
   }
   .vxe-button--item-wrapper,
+  .vxe-tool--item-wrapper {
+    flex-grow: 1;
+  }
+  .vxe-button--prefix-wrapper,
+  .vxe-button--suffix-wrapper,
+  .vxe-tool--prefix-wrapper,
+  .vxe-tool--suffix-wrapper {
+    flex-shrink: 0;
+  }
+  .vxe-button--item-wrapper,
   .vxe-tool--item-wrapper,
   .vxe-button--prefix-wrapper,
   .vxe-button--suffix-wrapper,
@@ -88,7 +98,6 @@
   .vxe-tool--suffix-wrapper {
     display: flex;
     align-items: center;
-    flex-shrink: 0;
     flex-wrap: wrap;
   }
 }
