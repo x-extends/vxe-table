@@ -527,10 +527,10 @@ export default defineVxeComponent({
       const cellOpts = computeCellOpts.value
       let headCellHeight = XEUtils.toNumber(getCalcHeight(headerCellOpts.height || cellOpts.height))
       if ($xeGantt) {
-        const { computeTaskScaleConfs } = $xeGantt.getComputeMaps()
-        const taskScaleConfs = computeTaskScaleConfs.value
-        if (taskScaleConfs && taskScaleConfs.length > 2) {
-          const ganttMinHeadCellHeight = defaultRowHeight / 2 * taskScaleConfs.length
+        const { computeTaskViewScales } = $xeGantt.getComputeMaps()
+        const taskViewScales = computeTaskViewScales.value
+        if (taskViewScales && taskViewScales.length > 2) {
+          const ganttMinHeadCellHeight = defaultRowHeight / 2 * taskViewScales.length
           headCellHeight = Math.max(ganttMinHeadCellHeight, headCellHeight)
         }
       }
@@ -4719,20 +4719,28 @@ export default defineVxeComponent({
       $xeTable.analyColumnWidth()
       $xeTable.recalculate().then(() => {
         $xeTable.saveCustomStore('update:width')
-        $xeTable.updateCellAreas()
+        $xeTable.refreshScroll().then(() => {
+          $xeTable.updateCellAreas()
+        })
         $xeTable.dispatchEvent('column-resizable-change', params, evnt)
         // 已废弃 resizable-change
         $xeTable.dispatchEvent('resizable-change', params, evnt)
-        setTimeout(() => $xeTable.recalculate(true), 300)
+        setTimeout(() => {
+          $xeTable.recalculate(true)
+        }, 300)
       })
     }
 
     const handleUpdateRowResize = (evnt: MouseEvent, params: any) => {
       reactData.resizeHeightFlag++
       $xeTable.recalculate().then(() => {
-        $xeTable.updateCellAreas()
+        $xeTable.refreshScroll().then(() => {
+          $xeTable.updateCellAreas()
+        })
         $xeTable.dispatchEvent('row-resizable-change', params, evnt)
-        setTimeout(() => $xeTable.recalculate(true), 300)
+        setTimeout(() => {
+          $xeTable.recalculate(true)
+        }, 300)
       })
     }
 
