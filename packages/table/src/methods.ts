@@ -4141,7 +4141,9 @@ function handleUpdateColResize ($xeTable: VxeTableConstructor & VxeTablePrivateM
   $xeTable.analyColumnWidth()
   $xeTable.recalculate().then(() => {
     $xeTable.saveCustomStore('update:width')
-    $xeTable.updateCellAreas()
+    $xeTable.refreshScroll().then(() => {
+      $xeTable.updateCellAreas()
+    })
     $xeTable.dispatchEvent('column-resizable-change', params, evnt)
     // 已废弃 resizable-change
     $xeTable.dispatchEvent('resizable-change', params, evnt)
@@ -4154,7 +4156,9 @@ function handleUpdateRowResize ($xeTable: VxeTableConstructor & VxeTablePrivateM
 
   reactData.resizeHeightFlag++
   $xeTable.recalculate().then(() => {
-    $xeTable.updateCellAreas()
+    $xeTable.refreshScroll().then(() => {
+      $xeTable.updateCellAreas()
+    })
     $xeTable.dispatchEvent('row-resizable-change', params, evnt)
     setTimeout(() => $xeTable.recalculate(true), 300)
   })

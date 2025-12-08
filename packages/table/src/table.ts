@@ -1003,9 +1003,9 @@ export default {
       const cellOpts = $xeTable.computeCellOpts
       let headCellHeight = XEUtils.toNumber(getCalcHeight(headerCellOpts.height || cellOpts.height))
       if ($xeGantt) {
-        const taskScaleConfs = $xeGantt.computeTaskScaleConfs
-        if (taskScaleConfs && taskScaleConfs.length > 2) {
-          const ganttMinHeadCellHeight = defaultRowHeight / 2 * taskScaleConfs.length
+        const taskViewScales = $xeGantt.computeTaskViewScales
+        if (taskViewScales && taskViewScales.length > 2) {
+          const ganttMinHeadCellHeight = defaultRowHeight / 2 * taskViewScales.length
           headCellHeight = Math.max(ganttMinHeadCellHeight, headCellHeight)
         }
       }
