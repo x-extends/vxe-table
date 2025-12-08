@@ -5,6 +5,7 @@
     <vxe-table
       id="id"
       border
+      height="600"
       show-overflow
       ref="tableRef"
       :edit-config="editConfig"
@@ -54,7 +55,7 @@ const tableData = ref<RowVO[]>([
 
 const editConfig = ref<VxeTablePropTypes.EditConfig>({
   trigger: 'click',
-  mode: 'cell'
+  mode: 'row'
 })
 
 const insertEvent = async () => {
