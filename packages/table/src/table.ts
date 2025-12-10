@@ -7999,7 +7999,8 @@ export default defineVxeComponent({
                   // 如果固定了高度且点击了行之外的空白处，则清除激活状态
                   if (!isClear && props.height && !reactData.overflowY) {
                     const bodyWrapperElem = evnt.target as HTMLDivElement
-                    if (hasClass(bodyWrapperElem, 'vxe-table--body-wrapper')) {
+                    const isInWrapper = hasClass(bodyWrapperElem, 'vxe-table--body-wrapper') || hasClass(bodyWrapperElem, 'vxe-table--body-inner-wrapper')
+                    if (isInWrapper) {
                       isClear = evnt.offsetY < bodyWrapperElem.clientHeight
                     }
                   }
