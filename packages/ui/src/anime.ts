@@ -1,6 +1,6 @@
 
 import XEUtils from 'xe-utils'
-import { addClass, removeClass } from '../../ui/src/dom'
+import { addClass, removeClass } from './dom'
 
 const rowMoveCls = 'row--drag-move'
 const colMoveClass = 'col--drag-move'

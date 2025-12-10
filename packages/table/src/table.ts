@@ -6,7 +6,7 @@ import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, 
 import { VxeUI } from '../../ui'
 import { createInternalData, getRowUniqueId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
-import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from './anime'
+import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from '../../ui/src/anime'
 import { warnLog, errLog } from '../../ui/src/log'
 import { getCrossTableDragRowInfo } from './store'
 import Cell from './cell'
@@ -5463,7 +5463,7 @@ export default defineVxeComponent({
               cellLabel = `${formatter(formatParams)}`
             }
           } else if (renderOpts && tcFormatter) {
-            cellLabel = `${tcFormatter(renderOpts, formatParams)}`
+            cellLabel = tcFormatter(renderOpts, formatParams)
           }
           if (formatData) {
             formatData[colid] = { value: cellValue, label: cellLabel }
@@ -10542,8 +10542,6 @@ export default defineVxeComponent({
           const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
           return Promise.resolve(dEndMethod ? dEndMethod(dragParams) : true).then((status) => {
             if (!status) {
-              clearRowDragData()
-              clearCrossTableDragStatus()
               return errRest
             }
 
@@ -10711,6 +10709,7 @@ export default defineVxeComponent({
             return nextTick().then(() => {
               if (animation) {
                 const { tableData } = reactData
+                const { fullAllDataRowIdData } = internalData
                 const dragRowRest = fullAllDataRowIdData[dragRowid]
                 const _newRowIndex = dragRowRest._index
                 const firstRow = tableData[0]
@@ -10791,6 +10790,10 @@ export default defineVxeComponent({
             })
           }).catch(() => {
             return errRest
+          }).then((rest) => {
+            clearRowDragData()
+            clearCrossTableDragStatus()
+            return rest
           })
         }
         clearRowDragData()
@@ -11078,12 +11081,10 @@ export default defineVxeComponent({
         const isControlKey = hasControlKey(evnt)
         const trEl = evnt.currentTarget as HTMLElement
         const rowid = trEl.getAttribute('rowid') || ''
-        const rest = fullAllDataRowIdData[rowid]
-        if (rest) {
+        const rowRest = fullAllDataRowIdData[rowid]
+        if (rowRest) {
           evnt.preventDefault()
-          const row = rest.row
-          const rowid = getRowid($xeTable, row)
-          const rowRest = fullAllDataRowIdData[rowid]
+          const row = rowRest.row
           const offsetY = evnt.clientY - trEl.getBoundingClientRect().y
           const dragPos = offsetY < trEl.clientHeight / 2 ? 'top' : 'bottom'
           internalData.prevDragToChild = !!(treeConfig && transform && (isCrossDrag && isToChildDrag) && isControlKey)
@@ -11116,7 +11117,7 @@ export default defineVxeComponent({
           }
           if ($xeTable.eqRow(dragRow, row) ||
             (isControlKey && treeConfig && lazy && row[hasChildField] && rowRest && !rowRest.treeLoaded) ||
-            (!isCrossDrag && treeConfig && transform && (isPeerDrag ? dragRow[parentField] !== row[parentField] : rest.level))
+            (!isCrossDrag && treeConfig && transform && (isPeerDrag ? dragRow[parentField] !== row[parentField] : rowRest.level))
           ) {
             showDropTip(evnt, trEl, null, false, dragPos)
             return
@@ -11206,8 +11207,6 @@ export default defineVxeComponent({
           const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
           return Promise.resolve(dragEndMethod ? dragEndMethod(dragParams) : true).then((status) => {
             if (!status) {
-              clearColDragData()
-              clearCrossTableDragStatus()
               return errRest
             }
 
@@ -11357,9 +11356,6 @@ export default defineVxeComponent({
               }
             }
 
-            clearColDragData()
-            clearCrossTableDragStatus()
-
             if (evnt) {
               dispatchEvent('column-dragend', {
                 oldColumn: dragColumn,
@@ -11468,6 +11464,10 @@ export default defineVxeComponent({
             })
           }).catch(() => {
             return errRest
+          }).then((rest) => {
+            clearColDragData()
+            clearCrossTableDragStatus()
+            return rest
           })
         }
         clearColDragData()
@@ -12247,12 +12247,15 @@ export default defineVxeComponent({
               const lastRow = afterFullData[afterFullData.length - 1]
               rowid = getRowid($xeTable, lastRow)
               rowRest = fullAllDataRowIdData[rowid] || {}
-              // 如果为空时还没计算完数据，保持原高度不变
-              if (rowRest.oTop) {
-                sYHeight = (rowRest.oTop || 0) + (rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight)
-                // 是否展开行
-                if (expandColumn && rowExpandedMaps[rowid]) {
-                  sYHeight += rowRest.expandHeight || expandOpts.height || 0
+              if (rowRest) {
+                const rHeight = getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
+                // 如果为空时还没计算完数据，保持原高度不变
+                if (rHeight) {
+                  sYHeight = (rowRest.oTop || 0) + rHeight
+                  // 是否展开行
+                  if (expandColumn && rowExpandedMaps[rowid]) {
+                    sYHeight += rowRest.expandHeight || expandOpts.height || 0
+                  }
                 }
               }
               if (sYHeight > maxYHeight) {
