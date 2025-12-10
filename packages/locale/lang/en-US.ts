@@ -113,7 +113,8 @@ export default {
       searchEmpty: 'No matching data found!'
     },
     tree: {
-      searchEmpty: '未匹配到数据！'
+      searchEmpty: '未匹配到数据！',
+      dragTip: 'Move: {0}'
     },
     treeSelect: {
       clearChecked: 'Clear',
@@ -540,22 +541,26 @@ export default {
     },
     gantt: {
       tFullFormat: {
-        year: '{yy}',
-        quarter: 'Quarter {q} of year {yy}',
-        month: '{yy}-{M}',
-        week: 'Week {W} of year {yy}',
-        day: '{yy}-{M}-{d}',
-        hour: '{yy}-{M}-{d} {H}',
-        minute: '{yy}-{M}-{d} {H}:{m}'
+        year: '{yyyy}年',
+        quarter: '{yyyy}年第{q}季度',
+        month: '{yyyy}年{MM}月',
+        week: '{yyyy}年第{W}周',
+        day: '{yyyy}年{MM}月 {E}',
+        date: '{yyyy}年{MM}月{dd}日',
+        hour: '{yyyy}年{MM}月{dd}日{HH}时',
+        minute: '{yyyy}年{MM}月{dd}日{HH}时{mm}分',
+        second: '{yyyy}年{MM}月{dd}日{HH}时{mm}分{ss}秒'
       },
       tSimpleFormat: {
-        year: '{yy}',
-        quarter: 'Quarter {q}',
-        month: '{M}',
-        week: 'Week {W}',
+        year: '{yyyy}年',
+        quarter: '{q}季度',
+        month: '{M}月',
+        week: '{W}周',
         day: '{d}',
-        hour: '{H}',
-        minute: '{m}'
+        date: '{d}',
+        hour: '{HH}',
+        minute: '{mm}',
+        second: '{ss}'
       },
       dayss: {
         w0: 'Sun',

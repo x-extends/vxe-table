@@ -723,7 +723,7 @@ export const Cell = {
     const colTitle = column.getTitle()
     const ons: Record<string, any> = {}
     if (!isHidden) {
-      ons.click = (evnt: any) => {
+      ons.click = (evnt: MouseEvent) => {
         if (!isAllCheckboxDisabled) {
           $table.triggerCheckAllEvent(evnt, !isAllCheckboxSelected)
         }
@@ -801,7 +801,7 @@ export const Cell = {
       if (treeConfig || isRowGroupStatus) {
         indeterminate = !!treeIndeterminateRowMaps[rowid]
       }
-      ons.click = (evnt: any) => {
+      ons.click = (evnt: MouseEvent) => {
         if (!isDisabled && isVisible) {
           $table.triggerCheckRowEvent(evnt, params, !isChecked)
         }
@@ -877,7 +877,7 @@ export const Cell = {
       if (treeConfig || isRowGroupStatus) {
         indeterminate = !!treeIndeterminateRowMaps[rowid]
       }
-      ons.click = (evnt: any) => {
+      ons.click = (evnt: MouseEvent) => {
         if (!isDisabled && isVisible) {
           $table.triggerCheckRowEvent(evnt, params, !isChecked)
         }

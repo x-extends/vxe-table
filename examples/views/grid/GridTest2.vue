@@ -1,9 +1,13 @@
 <template>
   <div>
-    <vxe-button @click="changeFilters()">只修改 role 条件</vxe-button>
-    <vxe-button @click="handleFilters()">修改并触发 role 筛选</vxe-button>
-    <vxe-button @click="clearFilters()">清除筛选</vxe-button>
-    <vxe-grid ref="gridRef" v-bind="gridOptions" @filter-visible="filterVisible"></vxe-grid>
+      <vxe-table
+        border
+        :data="tableData">
+        <vxe-column  type="checkbox" width="60"></vxe-column>
+        <vxe-column type="seq" width="60"></vxe-column>
+        <vxe-column field="name" title="Name"></vxe-column>
+
+      </vxe-table>
   </div>
 </template>
 
@@ -42,6 +46,7 @@ export default {
       ]
     }
     return {
+      tableData: [],
       gridOptions
     }
   },

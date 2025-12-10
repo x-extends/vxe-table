@@ -1504,8 +1504,16 @@ export default {
     /**
      * 判断列全选的复选框是否禁用
      */
-    isAllCheckboxDisabled () {
-      const { tableFullData, tableData, treeConfig, checkboxOpts } = this
+    computeIsAllCheckboxDisabled () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { treeConfig } = props
+      const { tableData } = reactData
+      const { tableFullData } = internalData
+      const checkboxOpts = $xeTable.computeCheckboxOpts
       const { strict, checkMethod } = checkboxOpts
       if (strict) {
         if (tableData.length || tableFullData.length) {
@@ -1514,13 +1522,16 @@ export default {
               // 暂时不支持树形结构
             }
             // 如果所有行都被禁用
-            return tableFullData.every((row: any) => !checkMethod({ row }))
+            return tableFullData.every((row) => !checkMethod({ $table: $xeTable, row }))
           }
           return false
         }
         return true
       }
       return false
+    },
+    isAllCheckboxDisabled () {
+      return this.computeIsAllCheckboxDisabled
     },
     computeVirtualScrollBars () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
