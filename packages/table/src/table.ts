@@ -1601,7 +1601,7 @@ export default {
       if (value && value.length >= 20000) {
         warnLog('vxe.error.errLargeData', ['loadData(data), reloadData(data)'])
       }
-      this.loadTableData(value || [], true).then(() => {
+      this.loadTableData(value || [], true, true).then(() => {
         const { scrollXLoad, scrollYLoad, expandColumn } = reactData
         const expandOpts = $xeTable.computeExpandOpts
         this.inited = true
