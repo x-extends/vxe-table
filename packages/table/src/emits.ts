@@ -1,6 +1,10 @@
 import { VxeTableEmits } from '../../../types'
 
 export const tableEmits: VxeTableEmits = [
+  'ready',
+  'init-rendered',
+  'data-rendered',
+
   'update:data',
   'keydown-start',
   'keydown',

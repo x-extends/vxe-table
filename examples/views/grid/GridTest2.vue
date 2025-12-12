@@ -1,64 +1,51 @@
 <template>
   <div>
-      <vxe-table
-        border
-        :data="tableData">
-        <vxe-column  type="checkbox" width="60"></vxe-column>
-        <vxe-column type="seq" width="60"></vxe-column>
-        <vxe-column field="name" title="Name"></vxe-column>
-
-      </vxe-table>
+    <vxe-grid v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      tableData: [],
-      gridOptions: {
-        virtualYConfig: {
-          enabled: true,
-          gt: 0
-        },
-        virtualXConfig: {
-          enabled: true,
-          gt: 0
-        },
-        columns: [
-          { type: 'seq', width: 60, fixed: 'left' },
-          { field: 'name', title: 'Name', width: '100px' },
-          { field: 'sex', title: 'Sex', minWidth: '100px' },
-          { field: 'date', title: 'Date', minWidth: '100px' },
-          { field: 'address', title: 'Address', minWidth: '100px' },
-          { type: 'seq', width: 60, fixed: 'right' }
-        ],
-        data: [],
-        height: '114px'
-      }
-    }
+<script setup>
+import { reactive } from 'vue'
+const gridOptions = reactive({
+  border: true,
+  columnConfig: {
+    drag: true
   },
-  created () {
-    const list1 = []
-    const list2 = []
-    for (let index = 0; index < 3; index++) {
-      list2.push({
-        name: 'test' + index,
-        role: 'developer',
-        sex: 'Man',
-        date: '2019-05-01',
-        time: 1556677810888 + index * 500,
-        region: 'ShenZhen',
-        address: 'address abc' + index
-      })
-    }
-    this.gridOptions.data = list2
+  columnDragConfig: {
+    isCrossDrag: true,
+    isSelfToChildDrag: true
   },
-  methods: {
-    remove () {
-      const last = this.$refs.$ref.getTableData().fullData[0]
-      this.$refs.$ref.remove(last)
+  columns: [
+    { field: 'name', title: 'Name' },
+    { field: 'role', title: 'Role', dragSort: true },
+    {
+      title: '分组1',
+      field: 'group1',
+      children: [
+        { field: 'sex', title: 'Sex' }
+      ]
+    },
+    {
+      title: '分组6',
+      field: 'group6',
+      children: [
+        {
+          title: '分组9',
+          field: 'group9',
+          children: [
+            { field: 'age', title: 'Age' },
+            { field: 'address', title: 'Address' }
+          ]
+        }
+      ]
     }
-  }
-}
+  ],
+  data: [
+    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+    { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+    { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
+  ]
+})
+
 </script>
