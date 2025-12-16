@@ -31,7 +31,6 @@ import '../module/custom/hook'
 import '../render'
 
 import type { VxeTooltipInstance, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType } from 'vxe-pc-ui'
-import type { VxeGanttConstructor, VxeGanttPrivateMethods } from 'vxe-pc-ui/types/components/gantt'
 import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableEmits, VxeTableProps, VxeColumnPropTypes, VxeTableCustomPanelConstructor } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
@@ -66,7 +65,7 @@ export default defineVxeComponent({
     const $xeTabs = inject<(VxeTabsConstructor & VxeTabsPrivateMethods) | null>('$xeTabs', null)
     const $xeParentTable = inject<(VxeTableConstructor & VxeTablePrivateMethods) | null>('$xeTable', null)
     const $xeGrid = inject<(VxeGridConstructor & VxeGridPrivateMethods) | null>('$xeGrid', null)
-    const $xeGantt = inject<(VxeGanttConstructor & VxeGanttPrivateMethods) | null>('$xeGantt', null)
+    const $xeGantt = inject<VxeTableDefines.InjectGanttType | null>('$xeGantt', null)
     const $xeGGWrapper = $xeGrid || $xeGantt
 
     const { computeSize } = useFns.useSize(props)
@@ -12967,7 +12966,9 @@ export default defineVxeComponent({
           'checkbox--range': checkboxOpts.range,
           'col--drag-cell': columnOpts.drag && columnDragOpts.trigger === 'cell',
           'is--header': showHeader,
+          'not--header': !showHeader,
           'is--footer': showFooter,
+          'not--footer': !showFooter,
           'is--group': isGroup,
           'is-row-group': isRowGroupStatus,
           'is--tree-line': treeConfig && (treeOpts.showLine || treeOpts.line),
@@ -12979,7 +12980,9 @@ export default defineVxeComponent({
           'is--loading': currLoading,
           'is--empty': !currLoading && !tableData.length,
           'is--scroll-y': overflowY,
+          'not--scroll-y': !overflowY,
           'is--scroll-x': overflowX,
+          'not--scroll-x': !overflowX,
           'is--virtual-x': scrollXLoad,
           'is--virtual-y': scrollYLoad
         }],
