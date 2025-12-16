@@ -9,7 +9,6 @@ import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimat
 import { warnLog, errLog } from '../../ui/src/log'
 import { getCrossTableDragRowInfo } from './store'
 
-import type { VxeGanttConstructor, VxeGanttPrivateMethods } from 'vxe-gantt'
 import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, VxeToolbarConstructor, VxeToolbarInstance, TableInternalData, VxeGridConstructor, VxeTablePrivateMethods, VxeTooltipInstance, VxeTablePropTypes, VxeGridPrivateMethods } from '../../../types'
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent } = VxeUI
@@ -4477,7 +4476,7 @@ const tableMethods: any = {
   getParentHeight () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor & VxeGridPrivateMethods
-    const $xeGantt = $xeTable.$xeGantt as VxeGanttConstructor & VxeGanttPrivateMethods
+    const $xeGantt = $xeTable.$xeGantt
     const props = $xeTable
 
     const { height } = props

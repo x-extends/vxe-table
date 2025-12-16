@@ -103,6 +103,16 @@ const routes: Array<RouteConfig> = [
         path: 'test3',
         name: 'GridTest3',
         component: () => import('../views/grid/GridTest3.vue')
+      },
+      {
+        path: 'test4',
+        name: 'GridTest4',
+        component: () => import('../views/grid/GridTest4.vue')
+      },
+      {
+        path: 'test5',
+        name: 'GridTest5',
+        component: () => import('../views/grid/GridTest5.vue')
       }
     ]
   },
