@@ -6301,6 +6301,10 @@ const tableMethods: any = {
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
+    const isLeftBtn = evnt.button === 0
+    if (!isLeftBtn) {
+      return
+    }
     evnt.stopPropagation()
     evnt.preventDefault()
     const { column } = params
@@ -7109,6 +7113,11 @@ const tableMethods: any = {
         $xeTable.dispatchEvent('keydown-end', {}, evnt)
       })
     }
+  },
+  contextMenuEvent (evnt: MouseEvent) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    $xeTable.dispatchEvent('context-menu', {}, evnt)
   },
   /**
    * 全局键盘事件

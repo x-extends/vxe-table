@@ -2236,9 +2236,11 @@ export default {
     const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
     const { isCrossTableDrag } = rowDragOpts
     const tbOns: {
+      contextmenu: (...args: any[]) => void
         keydown: (...args: any[]) => void
         dragover?: (...args: any[]) => void
       } = {
+        contextmenu: this.contextMenuEvent,
         keydown: this.keydownEvent
       }
     if (isCrossTableDrag && !tableData.length) {
