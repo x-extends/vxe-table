@@ -3509,18 +3509,6 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
 
     handleReserveStatus($xeTable)
     $xeTable.checkSelectionStatus()
-    if (initStatus) {
-      $xeTable.dispatchEvent('data-rendered', {
-        isReload,
-        visibleColumn: internalData.visibleColumn,
-        visibleData: internalData.afterFullData
-      }, null)
-    } else {
-      $xeTable.dispatchEvent('init-rendered', {
-        visibleColumn: internalData.visibleColumn,
-        visibleData: internalData.afterFullData
-      }, null)
-    }
     $xeTable.dispatchEvent('data-change', {
       visibleColumn: internalData.visibleColumn,
       visibleData: internalData.afterFullData
@@ -3575,6 +3563,19 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
             })
           }
         })
+    }).then(() => {
+      if (initStatus) {
+        $xeTable.dispatchEvent('data-rendered', {
+          isReload,
+          visibleColumn: internalData.visibleColumn,
+          visibleData: internalData.afterFullData
+        }, null)
+      } else {
+        $xeTable.dispatchEvent('init-rendered', {
+          visibleColumn: internalData.visibleColumn,
+          visibleData: internalData.afterFullData
+        }, null)
+      }
     })
   })
 }
