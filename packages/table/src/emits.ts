@@ -12,6 +12,7 @@ export const tableEmits: VxeTableEmits = [
   'paste',
   'copy',
   'cut',
+  'context-menu',
 
   'columns-change',
   'data-change',

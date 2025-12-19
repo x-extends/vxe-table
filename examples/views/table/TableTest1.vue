@@ -9,7 +9,8 @@
       :floating-filter-config="floatingFilterConfig"
       :column-config="{resizable: true}"
       :virtual-x-config="{enabled: true, gt: 0}"
-      :data="tableData">
+      :data="tableData"
+      @context-menu="contextMenuEvent">
       <vxe-column field="col0" title="列0" width="160"></vxe-column>
       <vxe-column field="col1" title="列1" width="100"></vxe-column>
       <vxe-column field="col2" title="列2" width="160"></vxe-column>
@@ -143,4 +144,8 @@ const loadDataAndColumns = (rowSize: number) => {
 }
 
 loadDataAndColumns(20)
+
+const contextMenuEvent = () => {
+  console.log('11')
+}
 </script>

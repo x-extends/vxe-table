@@ -3948,18 +3948,6 @@ export default defineVxeComponent({
 
         handleReserveStatus()
         $xeTable.checkSelectionStatus()
-        if (initStatus) {
-          dispatchEvent('data-rendered', {
-            isReload,
-            visibleColumn: internalData.visibleColumn,
-            visibleData: internalData.afterFullData
-          }, null)
-        } else {
-          dispatchEvent('init-rendered', {
-            visibleColumn: internalData.visibleColumn,
-            visibleData: internalData.afterFullData
-          }, null)
-        }
         $xeTable.dispatchEvent('data-change', {
           visibleColumn: internalData.visibleColumn,
           visibleData: internalData.afterFullData
@@ -3986,6 +3974,7 @@ export default defineVxeComponent({
               reactData.isRowLoading = false
               handleRecalculateStyle(false, false, false)
               updateTreeLineStyle()
+
               // 如果是自动行高，特殊情况需调用 recalculate 手动刷新
               if (!props.showOverflow) {
                 setTimeout(() => {
@@ -4014,6 +4003,19 @@ export default defineVxeComponent({
                 })
               }
             })
+        }).then(() => {
+          if (initStatus) {
+            dispatchEvent('data-rendered', {
+              isReload,
+              visibleColumn: internalData.visibleColumn,
+              visibleData: internalData.afterFullData
+            }, null)
+          } else {
+            dispatchEvent('init-rendered', {
+              visibleColumn: internalData.visibleColumn,
+              visibleData: internalData.afterFullData
+            }, null)
+          }
         })
       })
     }
@@ -8130,6 +8132,10 @@ export default defineVxeComponent({
       }
     }
 
+    const contextMenuEvent = (evnt: MouseEvent) => {
+      dispatchEvent('context-menu', {}, evnt)
+    }
+
     /**
      * 全局键盘事件
      */
@@ -9074,6 +9080,10 @@ export default defineVxeComponent({
         Object.assign(reactData.columnStore, { resizeList, pxList, pxMinList, autoMinList, scaleList, scaleMinList, autoList, remainList })
       },
       handleColResizeMousedownEvent (evnt, fixedType, params) {
+        const isLeftBtn = evnt.button === 0
+        if (!isLeftBtn) {
+          return
+        }
         evnt.stopPropagation()
         evnt.preventDefault()
         const { column } = params
@@ -12941,10 +12951,12 @@ export default defineVxeComponent({
       const scrollbarYToLeft = computeScrollbarYToLeft.value
       const { isCrossTableDrag } = rowDragOpts
       const tbOns: {
+        onContextmenu: (...args: any[]) => void
         onKeydown: (...args: any[]) => void
         onDragover?: (...args: any[]) => void
       } = {
-        onKeydown: keydownEvent
+        onKeydown: keydownEvent,
+        onContextmenu: contextMenuEvent
       }
       if (isCrossTableDrag && !tableData.length) {
         tbOns.onDragover = $xeTable.handleCrossTableRowDragoverEmptyEvent

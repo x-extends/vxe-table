@@ -13,7 +13,8 @@
       :column-config="columnConfig"
       :menu-config="menuConfig"
       :data="demo1.tableData"
-      :footer-data="demo1.footerData">
+      :footer-data="demo1.footerData"
+      @context-menu="contextMenuEvent">
       <vxe-column type="seq" min-width="auto"></vxe-column>
       <vxe-column type="checkbox" title="ID"  min-width="auto"></vxe-column>
       <vxe-column
@@ -129,4 +130,8 @@ onMounted(() => {
     demo1.loading = false
   }, 100)
 })
+
+const contextMenuEvent = () => {
+  console.log('11')
+}
 </script>
