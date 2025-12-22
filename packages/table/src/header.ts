@@ -327,7 +327,7 @@ function renderFilterRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, 
   })
 }
 
-function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][]) {
+function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][], renderColumnList: VxeTableDefines.ColumnInfo[]) {
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
@@ -355,7 +355,7 @@ function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMo
         class: [
           'vxe-header--row'
         ]
-      }, renderFilterRows(h, _vm, isOptimizeMode, headerGroups[headerGroups.length - 1]))
+      }, renderFilterRows(h, _vm, isOptimizeMode, renderColumnList))
     )
   }
 
@@ -543,7 +543,7 @@ export default {
            */
           h('thead', {
             ref: 'refHeaderTHead'
-          }, renderHeads(h, _vm, isGroup, isOptimizeMode, renderHeaderList))
+          }, renderHeads(h, _vm, isGroup, isOptimizeMode, renderHeaderList, renderColumnList))
         ]),
         mouseConfig && mouseOpts.area
           ? h('div', {

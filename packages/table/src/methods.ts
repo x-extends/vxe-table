@@ -4607,7 +4607,6 @@ const tableMethods: any = {
     const internalData = $xeTable as unknown as TableInternalData
 
     const { data } = props
-    $xeTable.dispatchEvent('ready', {}, null)
     loadTableData($xeTable, data || [], true, true).then(() => {
       if (data && data.length) {
         internalData.inited = true
@@ -4620,6 +4619,9 @@ const tableMethods: any = {
         calcCellHeight($xeTable)
         updateRowOffsetTop($xeTable)
       }
+    })
+    $xeTable.$nextTick().then(() => {
+      $xeTable.dispatchEvent('ready', {}, null)
     })
   },
   /**
