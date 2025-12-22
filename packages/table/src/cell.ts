@@ -391,6 +391,7 @@ export const Cell = {
     const renderOpts = editConfig && isEnableConf(editRender) ? editRender : (isEnableConf(cellRender) ? cellRender : null)
     const defaultSlot = slots ? slots.default : null
     const gcSlot = slots ? (slots.groupContent || slots['group-content']) : null
+    const gvSlot = slots ? (slots.groupValues || slots['group-values']) : null
     let cellValue: string | number | null = ''
     if (isRowGroupStatus && field && row.isAggregate) {
       const aggRow: VxeTableDefines.AggregateRowInfo = row
@@ -426,9 +427,6 @@ export const Cell = {
          */
         totalValue: childCount
       }
-      if (gcSlot) {
-        return renderCellBaseVNs(params, $table.callSlot(gcSlot, Object.assign({ groupField, groupContent, childList, childCount }, params)))
-      }
       if (mode === 'column' ? field === aggRow.groupField : rowGroupNode) {
         cellValue = groupContent
         if (contentMethod) {
@@ -437,13 +435,23 @@ export const Cell = {
         if (showTotal) {
           cellValue = getI18n('vxe.table.rowGroupContentTotal', [cellValue, totalMethod ? totalMethod(ctParams) : childCount, childCount])
         }
+        if (gcSlot) {
+          return renderCellBaseVNs(params, $table.callSlot(gcSlot, Object.assign({ groupField, groupContent, childList, childCount }, params)))
+        }
       } else if ($table.getPivotTableAggregateCellAggValue) {
         cellValue = $table.getPivotTableAggregateCellAggValue(params)
+        ctParams.aggValue = cellValue
+        if (gvSlot) {
+          return renderCellBaseVNs(params, $table.callSlot(gvSlot, Object.assign({ groupField, groupContent, childList, childCount }, params, ctParams)))
+        }
       } else if (aggFunc === true || (countFields && countFields.includes(field))) {
         cellValue = currAggData ? currAggData.value : childCount
         ctParams.aggValue = cellValue
         if (formatValuesMethod) {
           cellValue = formatValuesMethod(ctParams)
+        }
+        if (gvSlot) {
+          return renderCellBaseVNs(params, $table.callSlot(gvSlot, Object.assign({ groupField, groupContent, childList, childCount }, params, ctParams)))
         }
       }
     } else {

@@ -358,7 +358,7 @@ export default defineVxeComponent({
       })
     }
 
-    const renderHeads = (isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][]) => {
+    const renderHeads = (isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][], renderColumnList: VxeTableDefines.ColumnInfo[]) => {
       const { fixedType } = props
 
       const { headerRowClassName, headerRowStyle } = tableProps
@@ -382,7 +382,7 @@ export default defineVxeComponent({
             class: [
               'vxe-header--row'
             ]
-          }, renderFilterRows(isOptimizeMode, headerGroups[headerGroups.length - 1]))
+          }, renderFilterRows(isOptimizeMode, renderColumnList))
         )
       }
 
@@ -490,7 +490,7 @@ export default defineVxeComponent({
              */
             h('thead', {
               ref: refHeaderTHead
-            }, renderHeads(isGroup, isOptimizeMode, renderHeaderList))
+            }, renderHeads(isGroup, isOptimizeMode, renderHeaderList, renderColumnList))
           ]),
           mouseConfig && mouseOpts.area
             ? h('div', {

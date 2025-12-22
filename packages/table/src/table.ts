@@ -3786,7 +3786,6 @@ export default defineVxeComponent({
 
     const initData = () => {
       const { data } = props
-      dispatchEvent('ready', {}, null)
       loadTableData(data || [], true, true).then(() => {
         if (data && data.length) {
           internalData.inited = true
@@ -3799,6 +3798,9 @@ export default defineVxeComponent({
           calcCellHeight()
           updateRowOffsetTop()
         }
+      })
+      nextTick(() => {
+        dispatchEvent('ready', {}, null)
       })
     }
 
