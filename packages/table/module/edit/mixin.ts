@@ -100,7 +100,7 @@ function insertTreeRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
 
 // }
 
-function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, records: any[], targetRow: any, isInsertNextRow?: any) {
+function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, records: any[], targetRowOrRowid: any, isInsertNextRow?: any) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -113,6 +113,13 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
   const childrenField = treeOpts.children || treeOpts.childrenField
   if (!XEUtils.isArray(records)) {
     records = [records]
+  }
+  let targetRow = targetRowOrRowid
+  if (XEUtils.isString(targetRowOrRowid) || XEUtils.isNumber(targetRowOrRowid)) {
+    const rowRest = fullAllDataRowIdData[targetRowOrRowid]
+    if (rowRest) {
+      targetRow = rowRest.row
+    }
   }
   const newRecords: any[] = $xeTable.defineField(records.map(record => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record)))
   let treeRecords: any[] = []
@@ -313,17 +320,26 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
   })
 }
 
-function handleInsertChildRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, records: any, parentRow: any, targetRow: any, isInsertNextRow?: boolean) {
+function handleInsertChildRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, records: any, parentRowOrParentId: any, targetRowOrRowid: any, isInsertNextRow?: boolean) {
   const props = $xeTable
+  const internalData = $xeTable as unknown as TableInternalData
 
   const { treeConfig } = props
+  const { fullAllDataRowIdData } = internalData
   const treeOpts = $xeTable.computeTreeOpts
   const { transform, rowField, parentField } = treeOpts
   if (treeConfig && transform) {
     if (!XEUtils.isArray(records)) {
       records = [records]
     }
-    return handleInsertRowAt($xeTable, records.map((item: any) => Object.assign({}, item, { [parentField]: parentRow[rowField] })), targetRow, isInsertNextRow)
+    let parentRow = parentRowOrParentId
+    if (XEUtils.isString(parentRowOrParentId) || XEUtils.isNumber(parentRowOrParentId)) {
+      const rowRest = fullAllDataRowIdData[parentRowOrParentId]
+      if (rowRest) {
+        parentRow = rowRest.row
+      }
+    }
+    return handleInsertRowAt($xeTable, records.map((item: any) => Object.assign({}, item, { [parentField]: parentRow[rowField] })), targetRowOrRowid, isInsertNextRow)
   } else {
     errLog('vxe.error.errProp', ['tree-config.transform=false', 'tree-config.transform=true'])
   }
@@ -516,24 +532,22 @@ export default {
      * 如果 row 为空则从插入到顶部
      * 如果 row 为 -1 则从插入到底部
      * 如果 row 为有效行则插入到该行的位置
-     * @param {Object/Array} records 新的数据
-     * @param {Row} targetRow 指定行
      * @returns
      */
-    _insertAt (records: any, targetRow: any) {
-      return handleInsertRowAt(this, records, targetRow)
+    _insertAt (records: any, targetRowOrRowid: any) {
+      return handleInsertRowAt(this, records, targetRowOrRowid)
     },
-    _insertNextAt (records: any, targetRow: any) {
-      return handleInsertRowAt(this, records, targetRow, true)
+    _insertNextAt (records: any, targetRowOrRowid: any) {
+      return handleInsertRowAt(this, records, targetRowOrRowid, true)
     },
-    _insertChild (records: any, parentRow: any) {
-      return handleInsertChildRowAt(this, records, parentRow, null)
+    _insertChild (records: any, parentRowOrParentId: any) {
+      return handleInsertChildRowAt(this, records, parentRowOrParentId, null)
     },
-    _insertChildAt (records: any, parentRow: any, targetRow: any) {
-      return handleInsertChildRowAt(this, records, parentRow, targetRow)
+    _insertChildAt (records: any, parentRowOrParentId: any, targetRowOrRowid: any) {
+      return handleInsertChildRowAt(this, records, parentRowOrParentId, targetRowOrRowid)
     },
-    _insertChildNextAt (records: any, parentRow: any, targetRow: any) {
-      return handleInsertChildRowAt(this, records, parentRow, targetRow, true)
+    _insertChildNextAt (records: any, parentRowOrParentId: any, targetRowOrRowid: any) {
+      return handleInsertChildRowAt(this, records, parentRowOrParentId, targetRowOrRowid, true)
     },
     /**
      * 删除指定行数据
