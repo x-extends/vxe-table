@@ -108,7 +108,7 @@ hooks.add('tableEditModule', {
 
     // }
 
-    const handleInsertRowAt = (records: any, targetRow: any, isInsertNextRow?: boolean) => {
+    const handleInsertRowAt = (records: any, targetRowOrRowid: any, isInsertNextRow?: boolean) => {
       const { treeConfig } = props
       const { isRowGroupStatus } = reactData
       const { tableFullTreeData, afterFullData, mergeBodyList, tableFullData, fullDataRowIdData, fullAllDataRowIdData, insertRowMaps, removeRowMaps } = internalData
@@ -117,6 +117,13 @@ hooks.add('tableEditModule', {
       const childrenField = treeOpts.children || treeOpts.childrenField
       if (!XEUtils.isArray(records)) {
         records = [records]
+      }
+      let targetRow = targetRowOrRowid
+      if (XEUtils.isString(targetRowOrRowid) || XEUtils.isNumber(targetRowOrRowid)) {
+        const rowRest = fullAllDataRowIdData[targetRowOrRowid]
+        if (rowRest) {
+          targetRow = rowRest.row
+        }
       }
       const newRecords: any[] = reactive($xeTable.defineField(records.map((record: any) => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record))))
       let treeRecords: any[] = []
@@ -317,13 +324,21 @@ hooks.add('tableEditModule', {
       })
     }
 
-    const handleInsertChildRowAt = (records: any, parentRow: any, targetRow: any, isInsertNextRow?: boolean) => {
+    const handleInsertChildRowAt = (records: any, parentRowOrParentId: any, targetRow: any, isInsertNextRow?: boolean) => {
       const { treeConfig } = props
+      const { fullAllDataRowIdData } = internalData
       const treeOpts = computeTreeOpts.value
       const { transform, rowField, parentField } = treeOpts
       if (treeConfig && transform) {
         if (!XEUtils.isArray(records)) {
           records = [records]
+        }
+        let parentRow = parentRowOrParentId
+        if (XEUtils.isString(parentRowOrParentId) || XEUtils.isNumber(parentRowOrParentId)) {
+          const rowRest = fullAllDataRowIdData[parentRowOrParentId]
+          if (rowRest) {
+            parentRow = rowRest.row
+          }
         }
         return handleInsertRowAt(records.map((item: any) => Object.assign({}, item, { [parentField]: parentRow[rowField] })), targetRow, isInsertNextRow)
       } else {
@@ -511,23 +526,22 @@ hooks.add('tableEditModule', {
        * 如果 row 为空则从插入到顶部，如果为树结构，则插入到目标节点顶部
        * 如果 row 为 -1 则从插入到底部，如果为树结构，则插入到目标节点底部
        * 如果 row 为有效行则插入到该行的位置，如果为树结构，则有插入到效的目标节点该行的位置
-       * @param {Object/Array} records 新的数据
-       * @param {Row} targetRow 指定行
        */
-      insertAt (records, targetRow) {
-        return handleInsertRowAt(records, targetRow)
+      insertAt (records, targetRowOrRowid) {
+        return handleInsertRowAt(records, targetRowOrRowid)
       },
-      insertNextAt (records, targetRow) {
-        return handleInsertRowAt(records, targetRow, true)
+      insertNextAt (records, targetRowOrRowid) {
+        return handleInsertRowAt(records, targetRowOrRowid, true)
       },
-      insertChild (records, parentRow) {
-        return handleInsertChildRowAt(records, parentRow, null)
+      insertChild (records, parentRowOrParentId) {
+        (window as any).aa = internalData
+        return handleInsertChildRowAt(records, parentRowOrParentId, null)
       },
-      insertChildAt (records, parentRow, targetRow) {
-        return handleInsertChildRowAt(records, parentRow, targetRow)
+      insertChildAt (records, parentRowOrParentId, targetRow) {
+        return handleInsertChildRowAt(records, parentRowOrParentId, targetRow)
       },
-      insertChildNextAt (records, parentRow, targetRow) {
-        return handleInsertChildRowAt(records, parentRow, targetRow, true)
+      insertChildNextAt (records, parentRowOrParentId, targetRow) {
+        return handleInsertChildRowAt(records, parentRowOrParentId, targetRow, true)
       },
       /**
        * 删除指定行数据
