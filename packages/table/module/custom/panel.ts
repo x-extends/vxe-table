@@ -693,10 +693,10 @@ export default defineVxeComponent({
                   }, [
                     h('span', {
                       class: ['vxe-table-custom--sort-btn', {
-                        'is--disabled': isDisabled || isHidden
+                        'is--disabled': isHidden
                       }],
                       title: getI18n('vxe.custom.setting.sortHelpTip'),
-                      ...(isDisabled || isHidden
+                      ...(isHidden
                         ? {}
                         : {
                             onMousedown: sortMousedownEvent,
@@ -729,7 +729,7 @@ export default defineVxeComponent({
                       mode: 'text',
                       icon: column.renderFixed === 'left' ? getIcon().TOOLBAR_TOOLS_FIXED_LEFT_ACTIVE : getIcon().TOOLBAR_TOOLS_FIXED_LEFT,
                       status: column.renderFixed === 'left' ? 'primary' : '',
-                      disabled: isDisabled || isHidden || (isMaxFixedColumn && !column.renderFixed),
+                      disabled: isHidden || (isMaxFixedColumn && !column.renderFixed),
                       title: getI18n(column.renderFixed === 'left' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedLeft'),
                       onClick: ({ $event }) => {
                         changeFixedOption(column, 'left', $event)
@@ -741,7 +741,7 @@ export default defineVxeComponent({
                       mode: 'text',
                       icon: column.renderFixed === 'right' ? getIcon().TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVE : getIcon().TOOLBAR_TOOLS_FIXED_RIGHT,
                       status: column.renderFixed === 'right' ? 'primary' : '',
-                      disabled: isDisabled || isHidden || (isMaxFixedColumn && !column.renderFixed),
+                      disabled: isHidden || (isMaxFixedColumn && !column.renderFixed),
                       title: getI18n(column.renderFixed === 'right' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedRight'),
                       onClick: ({ $event }) => {
                         changeFixedOption(column, 'right', $event)
@@ -1000,10 +1000,10 @@ export default defineVxeComponent({
                     ? ((isCrossDrag ? immediate : false) || column.level === 1
                         ? h('div', {
                           class: ['vxe-table-custom-popup--column-sort-btn', {
-                            'is--disabled': isDisabled || isHidden
+                            'is--disabled': isHidden
                           }],
                           title: getI18n('vxe.custom.setting.sortHelpTip'),
-                          ...(isDisabled || isHidden
+                          ...(isHidden
                             ? {}
                             : {
                                 onMousedown: sortMousedownEvent,
@@ -1045,7 +1045,7 @@ export default defineVxeComponent({
                           ? h(VxeUINumberInputComponent, {
                             type: 'integer',
                             immediate: false,
-                            disabled: isDisabled || isHidden,
+                            disabled: isHidden,
                             modelValue: column.renderResizeWidth,
                             min: customMinWidth || undefined,
                             max: customMaxWidth || undefined,
@@ -1073,11 +1073,11 @@ export default defineVxeComponent({
                             modelValue: column.renderFixed || '',
                             type: 'button',
                             size: 'mini',
-                            disabled: isDisabled || isHidden,
+                            disabled: isHidden,
                             options: [
-                              { label: getI18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isDisabled || isHidden || isMaxFixedColumn },
-                              { label: getI18n('vxe.custom.setting.fixedUnset'), value: '', disabled: isDisabled || isHidden },
-                              { label: getI18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isDisabled || isHidden || isMaxFixedColumn }
+                              { label: getI18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isHidden || isMaxFixedColumn },
+                              { label: getI18n('vxe.custom.setting.fixedUnset'), value: '', disabled: isHidden },
+                              { label: getI18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isHidden || isMaxFixedColumn }
                             ],
                             onChange ({ label, $event }) {
                               changeFixedOption(column, label, $event)

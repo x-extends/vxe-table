@@ -871,6 +871,7 @@ renderer.mixin({
     tableAutoFocus: 'input',
     renderTableEdit: nativeEditRender,
     renderTableDefault: nativeEditRender,
+    createTableFilterOptions: defaultFilterOptions,
     renderTableFilter: nativeFilterRender,
     tableFilterDefaultMethod: handleInputFilterMethod
   },
@@ -884,6 +885,7 @@ renderer.mixin({
     renderTableCell (renderOpts, params) {
       return getCellLabelVNs(renderOpts, params, getSelectCellValue(renderOpts, params))
     },
+    createTableFilterOptions: defaultFilterOptions,
     renderTableFilter (renderOpts, params) {
       const { column } = params
       return column.filters.map((option, oIndex) => {
