@@ -233,12 +233,17 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams & { 
 
 function getFooterContent (params: VxeTableDefines.CellRenderFooterParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { $table, column, row } = params
+  const tableProps = $table.props
+  const { editConfig } = tableProps
   const { slots, editRender, cellRender } = column
-  const renderOpts = editRender || cellRender
   const footerSlot = slots ? slots.footer : null
   if (footerSlot) {
     return $table.callSlot(footerSlot, params)
   }
+  const isEnableEdit = editConfig && isEnableConf(editConfig)
+  const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
+  const cellRenderOpts = isEnableConf(cellRender) ? cellRender : null
+  const renderOpts = editRenderOpts || cellRenderOpts
   const itemValue = $table.getFooterCellLabel(row, column)
   if (renderOpts) {
     const compConf = renderer.get(renderOpts.name)
@@ -292,7 +297,9 @@ function renderCellHandle (params: VxeTableDefines.CellRenderBodyParams & {
     case 'html':
       return isDeepCell ? Cell.renderDeepHTMLCell(params) : Cell.renderHTMLCell(params)
   }
-  if (editConfig && isEnableConf(editOpts) && editRender) {
+  const isEnableEdit = editConfig && isEnableConf(editConfig)
+  const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
+  if (editRenderOpts) {
     return editOpts.mode === 'cell' ? (isDeepCell ? Cell.renderDeepCellEdit(params) : Cell.renderCellEdit(params)) : (isDeepCell ? Cell.renderDeepRowEdit(params) : Cell.renderRowEdit(params))
   }
   return isDeepCell ? Cell.renderDeepCell(params) : Cell.renderDefaultCell(params)
@@ -303,9 +310,7 @@ function renderHeaderHandle (params: VxeTableDefines.CellRenderHeaderParams & {
 }) {
   const { column, $table } = params
   const tableProps = $table.props
-  const { computeEditOpts } = $table.getComputeMaps()
   const { editConfig } = tableProps
-  const editOpts = computeEditOpts.value
   const { type, filters, sortable, editRender } = column
   switch (type) {
     case 'seq':
@@ -324,7 +329,9 @@ function renderHeaderHandle (params: VxeTableDefines.CellRenderHeaderParams & {
       }
       break
   }
-  if (editConfig && isEnableConf(editOpts) && editRender) {
+  const isEnableEdit = editConfig && isEnableConf(editConfig)
+  const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
+  if (editRenderOpts) {
     return Cell.renderEditHeader(params)
   } else if (filters && sortable) {
     return Cell.renderSortAndFilterHeader(params)
@@ -360,12 +367,17 @@ export const Cell = {
    */
   renderHeaderTitle (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
+    const tableProps = $table.props
+    const { editConfig } = tableProps
     const { slots, editRender, cellRender } = column
-    const renderOpts = editRender || cellRender
     const headerSlot = slots ? slots.header : null
     if (headerSlot) {
       return renderTitleContent(params, $table.callSlot(headerSlot, params))
     }
+    const isEnableEdit = editConfig && isEnableConf(editConfig)
+    const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
+    const cellRenderOpts = isEnableConf(cellRender) ? cellRender : null
+    const renderOpts = editRenderOpts || cellRenderOpts
     if (renderOpts) {
       const compConf = renderer.get(renderOpts.name)
       if (compConf) {
@@ -388,7 +400,9 @@ export const Cell = {
     const { isRowGroupStatus } = tableReactData
     const { editConfig } = tableProps
     const { field, slots, editRender, cellRender, rowGroupNode, aggFunc, formatter } = column
-    const renderOpts = editConfig && isEnableConf(editRender) ? editRender : (isEnableConf(cellRender) ? cellRender : null)
+    const isEnableEdit = editConfig && isEnableConf(editConfig)
+    const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
+    const cellRenderOpts = isEnableConf(cellRender) ? cellRender : null
     const defaultSlot = slots ? slots.default : null
     const gcSlot = slots ? (slots.groupContent || slots['group-content']) : null
     const gvSlot = slots ? (slots.groupValues || slots['group-values']) : null
@@ -458,27 +472,26 @@ export const Cell = {
       if (defaultSlot) {
         return renderCellBaseVNs(params, $table.callSlot(defaultSlot, params))
       }
+      const renderOpts = editRenderOpts || cellRenderOpts
       // formatter > (renderTableCell | renderTableDefault)
       if (renderOpts && !formatter) {
         const compConf = renderer.get(renderOpts.name)
         if (compConf) {
-          const rtCell = compConf.renderTableCell || compConf.renderCell
-          const rtDefault = compConf.renderTableDefault || compConf.renderDefault
-          const renderFn = editRender ? rtCell : rtDefault
+          const renderFn = editRenderOpts ? (compConf.renderTableCell || compConf.renderCell) : (compConf.renderTableDefault || compConf.renderDefault)
           if (renderFn) {
-            return renderCellBaseVNs(params, getSlotVNs(renderFn(renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params))))
+            return renderCellBaseVNs(params, getSlotVNs(renderFn(renderOpts, Object.assign({ $type: editRenderOpts ? 'edit' : 'cell' }, params))))
           }
         }
       }
       cellValue = $table.getCellLabel(row, column)
     }
-    const cellPlaceholder = editRender ? editRender.placeholder : ''
+    const cellPlaceholder = editRenderOpts ? editRenderOpts.placeholder : ''
     return renderCellBaseVNs(params, [
       h('span', {
         class: 'vxe-cell--label'
       }, [
         // 如果设置占位符
-        editRender && eqEmptyValue(cellValue)
+        editRenderOpts && eqEmptyValue(cellValue)
           ? h('span', {
             class: 'vxe-cell--placeholder'
           }, formatText(getFuncText(cellPlaceholder), 1))
@@ -1148,6 +1161,8 @@ export const Cell = {
     const { editConfig, editRules } = tableProps
     const editOpts = computeEditOpts.value
     const { sortable, filters, editRender } = column
+    const isEnableEdit = editConfig && isEnableConf(editConfig)
+    const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
     let isRequired = false
     if (editRules) {
       const columnRules = XEUtils.get(editRules, column.field) as VxeTableDefines.ValidatorRule[]
@@ -1156,7 +1171,7 @@ export const Cell = {
       }
     }
     let editIconVNs: VNode[] = []
-    if (isEnableConf(editConfig)) {
+    if (isEnableEdit) {
       const { showAsterisk, showIcon, icon } = editOpts
       editIconVNs = [
         isRequired && showAsterisk
@@ -1166,7 +1181,7 @@ export const Cell = {
             h('i')
           ])
           : renderEmptyElement($table),
-        isEnableConf(editRender) && showIcon
+        editRenderOpts && showIcon
           ? h('span', {
             class: 'vxe-cell--edit-icon'
           }, XEUtils.isFunction(icon)
@@ -1188,11 +1203,15 @@ export const Cell = {
   // 行格编辑模式
   renderRowEdit (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
+    const tableProps = $table.props
+    const { editConfig } = tableProps
     const tableReactData = $table.reactData
     const { editStore } = tableReactData
     const { actived } = editStore
     const { editRender } = column
-    return Cell.runRenderer(params, isEnableConf(editRender) && actived && actived.row === params.row)
+    const isEnableEdit = editConfig && isEnableConf(editConfig)
+    const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
+    return Cell.runRenderer(params, !!(editRenderOpts && actived && actived.row === params.row))
   },
   renderDeepRowEdit (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return Cell.renderDeepNodeBtn(params, Cell.renderRowEdit(params) as VNode[])
@@ -1200,33 +1219,41 @@ export const Cell = {
   // 单元格编辑模式
   renderCellEdit (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
+    const tableProps = $table.props
+    const { editConfig } = tableProps
     const tableReactData = $table.reactData
     const { editStore } = tableReactData
     const { actived } = editStore
     const { editRender } = column
-    return Cell.runRenderer(params, isEnableConf(editRender) && actived && actived.row === params.row && actived.column === params.column)
+    const isEnableEdit = editConfig && isEnableConf(editConfig)
+    const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
+    return Cell.runRenderer(params, !!(editRenderOpts && actived && actived.row === params.row && actived.column === params.column))
   },
   renderDeepCellEdit (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return Cell.renderDeepNodeBtn(params, Cell.renderCellEdit(params) as VNode[])
   },
   runRenderer (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, isEdit: boolean) {
     const { $table, row, column } = params
+    const tableProps = $table.props
+    const { editConfig } = tableProps
     const tableReactData = $table.reactData
     const { isRowGroupStatus } = tableReactData
     const { slots, field, editRender, formatter } = column
+    const isEnableEdit = editConfig && isEnableConf(editConfig)
+    const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
     const defaultSlot = slots ? slots.default : null
     const gcSlot = slots ? (slots.groupContent || slots['group-content']) : null
     const editSlot = slots ? slots.edit : null
-    const compConf = renderer.get(editRender.name)
-    const rtEdit = compConf ? (compConf.renderTableEdit || compConf.renderEdit) : null
     const cellParams = Object.assign({ $type: '', isEdit }, params)
-    if (isEdit) {
+    if (isEdit && editRenderOpts) {
       cellParams.$type = 'edit'
       if (editSlot) {
         return $table.callSlot(editSlot, cellParams)
       }
+      const compConf = renderer.get(editRenderOpts.name)
+      const rtEdit = compConf ? (compConf.renderTableEdit || compConf.renderEdit) : null
       if (rtEdit) {
-        return getSlotVNs(rtEdit(editRender, cellParams))
+        return getSlotVNs(rtEdit(editRenderOpts, cellParams))
       }
       return []
     }

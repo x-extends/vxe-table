@@ -261,6 +261,9 @@ VxeUI.setConfig({
         // position: 'right',
         visible: true
       }
+    },
+    undoHistoryConfig: {
+      isEditRow: true
     }
   },
   grid: {

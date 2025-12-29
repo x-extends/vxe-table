@@ -643,6 +643,10 @@ export default defineVxeComponent({
       return Object.assign({}, getConfig().table.clipConfig, props.clipConfig)
     })
 
+    const computeUndoHistoryOpts = computed(() => {
+      return Object.assign({}, getConfig().table.undoHistoryConfig, props.undoHistoryConfig)
+    })
+
     const computeFNROpts = computed(() => {
       const fnrOpts = computeFnrOpts.value
       return fnrOpts
@@ -1040,6 +1044,7 @@ export default defineVxeComponent({
       computeRowGroupFields,
       computeRowGroupColumns,
       computeAggFuncColumns,
+      computeUndoHistoryOpts,
 
       computeFNROpts,
       computeSXOpts,
@@ -13482,11 +13487,25 @@ export default defineVxeComponent({
     })
 
     onMounted(() => {
+      const { exportConfig, importConfig, treeConfig } = props
+      const { scrollXStore, scrollYStore } = internalData
       const columnOpts = computeColumnOpts.value
-      const rowOpts = computeRowOpts.value
-      const customOpts = computeCustomOpts.value
       const aggregateOpts = computeAggregateOpts.value
       const virtualYOpts = computeVirtualYOpts.value
+      const editOpts = computeEditOpts.value
+      const treeOpts = computeTreeOpts.value
+      const radioOpts = computeRadioOpts.value
+      const checkboxOpts = computeCheckboxOpts.value
+      const expandOpts = computeExpandOpts.value
+      const rowOpts = computeRowOpts.value
+      const customOpts = computeCustomOpts.value
+      const mouseOpts = computeMouseOpts.value
+      const exportOpts = computeExportOpts.value
+      const importOpts = computeImportOpts.value
+      // const currentRowOpts = computeCurrentRowOpts.value
+      // const currentColumnOpts = computeCurrentColumnOpts.value
+      // const keyboardOpts = computeKeyboardOpts.value
+      const rowDragOpts = computeRowDragOpts.value
       const { groupFields } = aggregateOpts
 
       if ($xeGantt) {
@@ -13508,236 +13527,218 @@ export default defineVxeComponent({
         initTpImg()
       }
 
+      if (props.rowId) {
+        warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
+      }
+      if (props.rowKey) {
+        warnLog('vxe.error.delProp', ['row-key', 'row-config.useKey'])
+      }
+      if (props.columnKey) {
+        warnLog('vxe.error.delProp', ['column-id', 'column-config.useKey'])
+      }
+      if (!(props.rowId || rowOpts.keyField) && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
+        warnLog('vxe.error.reqProp', ['row-config.keyField'])
+      }
+      if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
+        warnLog('vxe.error.reqProp', ['keep-source'])
+      }
+      // if (treeConfig && (treeOpts.showLine || treeOpts.line) && !showOverflow) {
+      //   warnLog('vxe.error.reqProp', ['show-overflow'])
+      // }
+      if (treeConfig && !treeOpts.transform && props.stripe) {
+        warnLog('vxe.error.noTree', ['stripe'])
+      }
+      if (props.showFooter && !(props.footerMethod || props.footerData)) {
+        warnLog('vxe.error.reqProp', ['footer-data | footer-method'])
+      }
+      if (rowOpts.height) {
+        warnLog('vxe.error.delProp', ['row-config.height', 'cell-config.height'])
+      }
+      if (props.highlightCurrentRow) {
+        warnLog('vxe.error.delProp', ['highlight-current-row', 'row-config.isCurrent'])
+      }
+      if (props.highlightHoverRow) {
+        warnLog('vxe.error.delProp', ['highlight-hover-row', 'row-config.isHover'])
+      }
+      if (props.highlightCurrentColumn) {
+        warnLog('vxe.error.delProp', ['highlight-current-column', 'column-config.isCurrent'])
+      }
+      if (props.highlightHoverColumn) {
+        warnLog('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
+      }
+      if (props.resizable) {
+        warnLog('vxe.error.delProp', ['resizable', 'column-config.resizable'])
+      }
+      // if (props.virtualXConfig && props.scrollX) {
+      //   warnLog('vxe.error.notSupportProp', ['virtual-x-config', 'scroll-x', 'scroll-x=null'])
+      // }
+      // if (props.virtualYConfig && props.scrollY) {
+      //   warnLog('vxe.error.notSupportProp', ['virtual-y-config', 'scroll-y', 'scroll-y=null'])
+      // }
+      if (props.aggregateConfig && props.rowGroupConfig) {
+        warnLog('vxe.error.notSupportProp', ['aggregate-config', 'row-group-config', 'row-group-config=null'])
+      }
+
+      // if (props.scrollY) {
+      //   warnLog('vxe.error.delProp', ['scroll-y', 'virtual-y-config'])
+      // }
+      // if (props.scrollX) {
+      //   warnLog('vxe.error.delProp', ['scroll-x', 'virtual-x-config'])
+      // }
+      // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
+      if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), importOpts.types)) {
+        warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)).join(',') || XEUtils.keys(importOpts._typeMaps).join(',')])
+      }
+      if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(XEUtils.keys(exportOpts._typeMaps), exportOpts.types)) {
+        warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)).join(',') || XEUtils.keys(exportOpts._typeMaps).join(',')])
+      }
+
+      if (!props.id) {
+        if ((props.customConfig ? isEnableConf(customOpts) : customOpts.enabled) && customOpts.storage) {
+          errLog('vxe.error.reqProp', ['id'])
+        }
+      }
+      if (props.treeConfig && checkboxOpts.range) {
+        errLog('vxe.error.noTree', ['checkbox-config.range'])
+      }
+      if (rowOpts.height && !props.showOverflow) {
+        warnLog('vxe.error.notProp', ['table.show-overflow'])
+      }
+      if (!$xeTable.triggerCellAreaModnEvent) {
+        if (props.areaConfig) {
+          warnLog('vxe.error.notProp', ['area-config'])
+        }
+        if (props.clipConfig) {
+          warnLog('vxe.error.notProp', ['clip-config'])
+        }
+        if (props.fnrConfig) {
+          warnLog('vxe.error.notProp', ['fnr-config'])
+        }
+        if (mouseOpts.area) {
+          errLog('vxe.error.notProp', ['mouse-config.area'])
+          return
+        }
+      }
+      if (!$xeTable.handlePivotTableAggregateData) {
+        if (customOpts.allowGroup) {
+          errLog('vxe.error.notProp', ['custom-config.allowGroup'])
+          return
+        }
+        if (customOpts.allowValues) {
+          errLog('vxe.error.notProp', ['custom-config.allowValues'])
+          return
+        }
+      }
+      if (treeConfig && rowOpts.drag && !treeOpts.transform) {
+        errLog('vxe.error.notSupportProp', ['row-config.drag', 'tree-config.transform=false', 'tree-config.transform=true'])
+      }
+      if (treeConfig && rowDragOpts.isCrossTableDrag && !rowDragOpts.isCrossDrag) {
+        errLog('vxe.error.reqSupportProp', ['tree-config & row-drag-config.isCrossTableDrag', 'row-drag-config.isCrossDrag'])
+      }
+      if (props.dragConfig) {
+        warnLog('vxe.error.delProp', ['drag-config', 'row-drag-config'])
+      }
+      if (props.rowGroupConfig) {
+        warnLog('vxe.error.delProp', ['row-group-config', 'aggregate-config'])
+      }
+      if (aggregateOpts.countFields) {
+        warnLog('vxe.error.delProp', ['row-group-config.countFields', 'column.agg-func'])
+      }
+      if (aggregateOpts.aggregateMethod) {
+        warnLog('vxe.error.delProp', ['row-group-config.aggregateMethod', 'aggregate-config.calcValuesMethod'])
+      }
+      if (aggregateOpts.countMethod) {
+        warnLog('vxe.error.delProp', ['aggregate-config.countMethod', 'aggregate-config.calcValuesMethod'])
+      }
+      if (props.treeConfig && treeOpts.children) {
+        warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
+      }
+      if (props.treeConfig && treeOpts.line) {
+        warnLog('vxe.error.delProp', ['tree-config.line', 'tree-config.showLine'])
+      }
+      if (mouseOpts.area && mouseOpts.selected) {
+        warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+      }
+      if (mouseOpts.area && (props.treeConfig && !treeOpts.transform)) {
+        errLog('vxe.error.noTree', ['mouse-config.area'])
+      }
+      if (props.editConfig && editOpts.activeMethod) {
+        warnLog('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
+      }
+      if (props.treeConfig && checkboxOpts.isShiftKey) {
+        errLog('vxe.error.errConflicts', ['tree-config', 'checkbox-config.isShiftKey'])
+      }
+      if (checkboxOpts.halfField) {
+        warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
+      }
+
+      if (treeConfig) {
+        XEUtils.arrayEach(['rowField', 'parentField', 'childrenField', 'hasChildField', 'mapChildrenField'], key => {
+          const val = treeOpts[key as 'rowField']
+          if (val && val.indexOf('.') > -1) {
+            errLog('vxe.error.errProp', [`${key}=${val}`, `${key}=${val.split('.')[0]}`])
+          }
+        })
+      }
+
+      if (rowOpts.currentMethod) {
+        warnLog('vxe.error.delProp', ['row-config.currentMethod', 'current-row-config.beforeSelectMethod'])
+      }
+      if (columnOpts.currentMethod) {
+        warnLog('vxe.error.delProp', ['row-config.currentMethod', 'current-column-config.beforeSelectMethod'])
+      }
+      // if ((rowOpts.isCurrent || highlightCurrentRow) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
+      //   warnLog('vxe.error.notConflictProp', ['row-config.isCurrent & keyboard-config.isArrow', 'current-row-config.isFollowSelected'])
+      // }
+      // if ((columnOpts.isCurrent || highlightCurrentColumn) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
+      //   warnLog('vxe.error.notConflictProp', ['column-config.isCurrent & keyboard-config.isArrow', 'current-column-config.isFollowSelected'])
+      // }
+
+      // 如果不支持虚拟滚动
+      // if (props.spanMethod) {
+      //   if (virtualXOpts.enabled) {
+      //     warnLog('vxe.error.notConflictProp', ['span-method', 'virtual-x-config.enabled=false'])
+      //   }
+      //   if (virtualYOpts.enabled) {
+      //     warnLog('vxe.error.notConflictProp', ['span-method', 'virtual-y-config.enabled=false'])
+      //   }
+      // }
+      // if (props.footerSpanMethod) {
+      //   if (virtualXOpts.enabled) {
+      //     warnLog('vxe.error.notConflictProp', ['footer-span-method', 'virtual-x-config.enabled=false'])
+      //   }
+      // }
+
+      // 检查是否有安装需要的模块
+      // if (props.editConfig && !$xeTable.insert) {
+      //   errLog('vxe.error.reqModule', ['Edit'])
+      // }
+      // if (props.editRules && !$xeTable.validate) {
+      //   errLog('vxe.error.reqModule', ['Validator'])
+      // }
+      // if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xeTable.handleCellMousedownEvent) {
+      //   errLog('vxe.error.reqModule', ['Keyboard'])
+      // }
+      // if ((props.printConfig || props.importConfig || props.exportConfig) && !$xeTable.exportData) {
+      //   errLog('vxe.error.reqModule', ['Export'])
+      // }
+
+      Object.assign(scrollYStore, {
+        startIndex: 0,
+        endIndex: 0,
+        visibleSize: 0
+      })
+      Object.assign(scrollXStore, {
+        startIndex: 0,
+        endIndex: 0,
+        visibleSize: 0
+      })
+
       handleUpdateRowGroup(groupFields)
 
+      initData()
+
       nextTick(() => {
-        const { exportConfig, importConfig, treeConfig } = props
-        const { scrollXStore, scrollYStore } = internalData
-        const editOpts = computeEditOpts.value
-        const treeOpts = computeTreeOpts.value
-        const radioOpts = computeRadioOpts.value
-        const checkboxOpts = computeCheckboxOpts.value
-        const expandOpts = computeExpandOpts.value
-        const rowOpts = computeRowOpts.value
-        const customOpts = computeCustomOpts.value
-        const mouseOpts = computeMouseOpts.value
-        const exportOpts = computeExportOpts.value
-        const importOpts = computeImportOpts.value
-        // const currentRowOpts = computeCurrentRowOpts.value
-        // const currentColumnOpts = computeCurrentColumnOpts.value
-        // const keyboardOpts = computeKeyboardOpts.value
-        const aggregateOpts = computeAggregateOpts.value
-        const rowDragOpts = computeRowDragOpts.value
-
-        if (props.rowId) {
-          warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
-        }
-        if (props.rowKey) {
-          warnLog('vxe.error.delProp', ['row-key', 'row-config.useKey'])
-        }
-        if (props.columnKey) {
-          warnLog('vxe.error.delProp', ['column-id', 'column-config.useKey'])
-        }
-        if (!(props.rowId || rowOpts.keyField) && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
-          warnLog('vxe.error.reqProp', ['row-config.keyField'])
-        }
-        if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
-          warnLog('vxe.error.reqProp', ['keep-source'])
-        }
-        // if (treeConfig && (treeOpts.showLine || treeOpts.line) && !showOverflow) {
-        //   warnLog('vxe.error.reqProp', ['show-overflow'])
-        // }
-        if (treeConfig && !treeOpts.transform && props.stripe) {
-          warnLog('vxe.error.noTree', ['stripe'])
-        }
-        if (props.showFooter && !(props.footerMethod || props.footerData)) {
-          warnLog('vxe.error.reqProp', ['footer-data | footer-method'])
-        }
-        if (rowOpts.height) {
-          warnLog('vxe.error.delProp', ['row-config.height', 'cell-config.height'])
-        }
-        if (props.highlightCurrentRow) {
-          warnLog('vxe.error.delProp', ['highlight-current-row', 'row-config.isCurrent'])
-        }
-        if (props.highlightHoverRow) {
-          warnLog('vxe.error.delProp', ['highlight-hover-row', 'row-config.isHover'])
-        }
-        if (props.highlightCurrentColumn) {
-          warnLog('vxe.error.delProp', ['highlight-current-column', 'column-config.isCurrent'])
-        }
-        if (props.highlightHoverColumn) {
-          warnLog('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
-        }
-        if (props.resizable) {
-          warnLog('vxe.error.delProp', ['resizable', 'column-config.resizable'])
-        }
-        // if (props.virtualXConfig && props.scrollX) {
-        //   warnLog('vxe.error.notSupportProp', ['virtual-x-config', 'scroll-x', 'scroll-x=null'])
-        // }
-        // if (props.virtualYConfig && props.scrollY) {
-        //   warnLog('vxe.error.notSupportProp', ['virtual-y-config', 'scroll-y', 'scroll-y=null'])
-        // }
-        if (props.aggregateConfig && props.rowGroupConfig) {
-          warnLog('vxe.error.notSupportProp', ['aggregate-config', 'row-group-config', 'row-group-config=null'])
-        }
-
-        // if (props.scrollY) {
-        //   warnLog('vxe.error.delProp', ['scroll-y', 'virtual-y-config'])
-        // }
-        // if (props.scrollX) {
-        //   warnLog('vxe.error.delProp', ['scroll-x', 'virtual-x-config'])
-        // }
-        // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
-        if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), importOpts.types)) {
-          warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)).join(',') || XEUtils.keys(importOpts._typeMaps).join(',')])
-        }
-        if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(XEUtils.keys(exportOpts._typeMaps), exportOpts.types)) {
-          warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)).join(',') || XEUtils.keys(exportOpts._typeMaps).join(',')])
-        }
-
-        if (!props.id) {
-          if ((props.customConfig ? isEnableConf(customOpts) : customOpts.enabled) && customOpts.storage) {
-            errLog('vxe.error.reqProp', ['id'])
-          }
-        }
-        if (props.treeConfig && checkboxOpts.range) {
-          errLog('vxe.error.noTree', ['checkbox-config.range'])
-        }
-        if (rowOpts.height && !props.showOverflow) {
-          warnLog('vxe.error.notProp', ['table.show-overflow'])
-        }
-        if (!$xeTable.triggerCellAreaModnEvent) {
-          if (props.areaConfig) {
-            warnLog('vxe.error.notProp', ['area-config'])
-          }
-          if (props.clipConfig) {
-            warnLog('vxe.error.notProp', ['clip-config'])
-          }
-          if (props.fnrConfig) {
-            warnLog('vxe.error.notProp', ['fnr-config'])
-          }
-          if (mouseOpts.area) {
-            errLog('vxe.error.notProp', ['mouse-config.area'])
-            return
-          }
-        }
-        if (!$xeTable.handlePivotTableAggregateData) {
-          if (customOpts.allowGroup) {
-            errLog('vxe.error.notProp', ['custom-config.allowGroup'])
-            return
-          }
-          if (customOpts.allowValues) {
-            errLog('vxe.error.notProp', ['custom-config.allowValues'])
-            return
-          }
-        }
-        if (treeConfig && rowOpts.drag && !treeOpts.transform) {
-          errLog('vxe.error.notSupportProp', ['row-config.drag', 'tree-config.transform=false', 'tree-config.transform=true'])
-        }
-        if (treeConfig && rowDragOpts.isCrossTableDrag && !rowDragOpts.isCrossDrag) {
-          errLog('vxe.error.reqSupportProp', ['tree-config & row-drag-config.isCrossTableDrag', 'row-drag-config.isCrossDrag'])
-        }
-        if (props.dragConfig) {
-          warnLog('vxe.error.delProp', ['drag-config', 'row-drag-config'])
-        }
-        if (props.rowGroupConfig) {
-          warnLog('vxe.error.delProp', ['row-group-config', 'aggregate-config'])
-        }
-        if (aggregateOpts.countFields) {
-          warnLog('vxe.error.delProp', ['row-group-config.countFields', 'column.agg-func'])
-        }
-        if (aggregateOpts.aggregateMethod) {
-          warnLog('vxe.error.delProp', ['row-group-config.aggregateMethod', 'aggregate-config.calcValuesMethod'])
-        }
-        if (aggregateOpts.countMethod) {
-          warnLog('vxe.error.delProp', ['aggregate-config.countMethod', 'aggregate-config.calcValuesMethod'])
-        }
-        if (props.treeConfig && treeOpts.children) {
-          warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
-        }
-        if (props.treeConfig && treeOpts.line) {
-          warnLog('vxe.error.delProp', ['tree-config.line', 'tree-config.showLine'])
-        }
-        if (mouseOpts.area && mouseOpts.selected) {
-          warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
-        }
-        if (mouseOpts.area && (props.treeConfig && !treeOpts.transform)) {
-          errLog('vxe.error.noTree', ['mouse-config.area'])
-        }
-        if (props.editConfig && editOpts.activeMethod) {
-          warnLog('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
-        }
-        if (props.treeConfig && checkboxOpts.isShiftKey) {
-          errLog('vxe.error.errConflicts', ['tree-config', 'checkbox-config.isShiftKey'])
-        }
-        if (checkboxOpts.halfField) {
-          warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
-        }
-
-        if (treeConfig) {
-          XEUtils.arrayEach(['rowField', 'parentField', 'childrenField', 'hasChildField', 'mapChildrenField'], key => {
-            const val = treeOpts[key as 'rowField']
-            if (val && val.indexOf('.') > -1) {
-              errLog('vxe.error.errProp', [`${key}=${val}`, `${key}=${val.split('.')[0]}`])
-            }
-          })
-        }
-
-        if (rowOpts.currentMethod) {
-          warnLog('vxe.error.delProp', ['row-config.currentMethod', 'current-row-config.beforeSelectMethod'])
-        }
-        if (columnOpts.currentMethod) {
-          warnLog('vxe.error.delProp', ['row-config.currentMethod', 'current-column-config.beforeSelectMethod'])
-        }
-        // if ((rowOpts.isCurrent || highlightCurrentRow) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
-        //   warnLog('vxe.error.notConflictProp', ['row-config.isCurrent & keyboard-config.isArrow', 'current-row-config.isFollowSelected'])
-        // }
-        // if ((columnOpts.isCurrent || highlightCurrentColumn) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
-        //   warnLog('vxe.error.notConflictProp', ['column-config.isCurrent & keyboard-config.isArrow', 'current-column-config.isFollowSelected'])
-        // }
-
-        // 如果不支持虚拟滚动
-        // if (props.spanMethod) {
-        //   if (virtualXOpts.enabled) {
-        //     warnLog('vxe.error.notConflictProp', ['span-method', 'virtual-x-config.enabled=false'])
-        //   }
-        //   if (virtualYOpts.enabled) {
-        //     warnLog('vxe.error.notConflictProp', ['span-method', 'virtual-y-config.enabled=false'])
-        //   }
-        // }
-        // if (props.footerSpanMethod) {
-        //   if (virtualXOpts.enabled) {
-        //     warnLog('vxe.error.notConflictProp', ['footer-span-method', 'virtual-x-config.enabled=false'])
-        //   }
-        // }
-
-        // 检查是否有安装需要的模块
-        // if (props.editConfig && !$xeTable.insert) {
-        //   errLog('vxe.error.reqModule', ['Edit'])
-        // }
-        // if (props.editRules && !$xeTable.validate) {
-        //   errLog('vxe.error.reqModule', ['Validator'])
-        // }
-        // if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xeTable.handleCellMousedownEvent) {
-        //   errLog('vxe.error.reqModule', ['Keyboard'])
-        // }
-        // if ((props.printConfig || props.importConfig || props.exportConfig) && !$xeTable.exportData) {
-        //   errLog('vxe.error.reqModule', ['Export'])
-        // }
-
-        Object.assign(scrollYStore, {
-          startIndex: 0,
-          endIndex: 0,
-          visibleSize: 0
-        })
-        Object.assign(scrollXStore, {
-          startIndex: 0,
-          endIndex: 0,
-          visibleSize: 0
-        })
-
-        initData()
-
         if (props.autoResize) {
           const el = refElem.value
           const parentEl = tablePrivateMethods.getParentElem()
