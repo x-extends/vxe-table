@@ -296,6 +296,8 @@ export const tableProps = {
   virtualYConfig: Object as PropType<VxeTablePropTypes.VirtualYConfig>,
   // 滚动条配置项
   scrollbarConfig: Object as PropType<VxeTablePropTypes.ScrollbarConfig>,
+  // 可撤销配置项
+  undoHistoryConfig: Object as PropType<VxeTablePropTypes.UndoHistoryConfig>,
   // （即将废弃）优化相关
   animat: { type: Boolean, default: () => getConfig().table.animat },
   // （可能会被废弃的参数，不要使用）

@@ -1575,6 +1575,12 @@ export default {
       }
       return []
     },
+    computeUndoHistoryOpts () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.undoHistoryConfig, props.undoHistoryConfig)
+    },
     tabsResizeFlag () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const $xeTabs = $xeTable.$xeTabs
