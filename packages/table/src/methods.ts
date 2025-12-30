@@ -12179,6 +12179,26 @@ const tableMethods: any = {
     })
   },
   /**
+   * 如果有滚动条，则滚动到第一行
+   */
+  scrollToStartRow (fieldOrColumn?: string | VxeTableDefines.ColumnInfo) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { afterFullData } = internalData
+    return $xeTable.scrollToRow(afterFullData[0], fieldOrColumn)
+  },
+  /**
+   * 如果有滚动条，则滚动到最后一行
+   */
+  scrollToEndRow (fieldOrColumn?: string | VxeTableDefines.ColumnInfo) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { afterFullData } = internalData
+    return $xeTable.scrollToRow(afterFullData[afterFullData.length - 1], fieldOrColumn)
+  },
+  /**
    * 如果有滚动条，则滚动到对应的列
    * @param {ColumnInfo} column 列配置
    */
@@ -12186,6 +12206,26 @@ const tableMethods: any = {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     return handleScrollToRowColumn($xeTable, fieldOrColumn)
+  },
+  /**
+   * 如果有滚动条，则滚动到第一列
+   */
+  scrollToStartColumn () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { visibleColumn } = internalData
+    return $xeTable.scrollToColumn(visibleColumn[0])
+  },
+  /**
+   * 如果有滚动条，则滚动到最后一列
+   */
+  scrollToEndColumn () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { visibleColumn } = internalData
+    return $xeTable.scrollToColumn(visibleColumn[visibleColumn.length - 1])
   },
   /**
    * 对于树形结构中，可以直接滚动到指定深层节点中

@@ -1228,7 +1228,7 @@ export const Cell = {
   renderDeepCellEdit (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return Cell.renderDeepNodeBtn(h, params, Cell.renderCellEdit(h, params))
   },
-  runRenderer (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, _vm: any, isEdit: boolean) {
+  runRenderer (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }, isEdit: boolean) {
     const { $table, row, column } = params
     const tableProps = $table
     const tableReactData = $table as unknown as TableReactData
@@ -1276,7 +1276,7 @@ export const Cell = {
         }, [getDefaultCellLabel(cellParams)])
       ])
     }
-    return Cell.renderDefaultCell.call(_vm, h, cellParams)
+    return Cell.renderDefaultCell.call($table, h, cellParams)
   }
 } as any
 
