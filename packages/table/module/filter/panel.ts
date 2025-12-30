@@ -16,15 +16,8 @@ export default defineVxeComponent({
   name: 'VxeTableFilterPanel',
   props: {
     filterStore: {
-      type: Object as PropType<{
-        isAllSelected: boolean
-        isIndeterminate: boolean
-        style: any
-        column: VxeTableDefines.ColumnInfo | null | undefined
-        visible: boolean
-        maxHeight: number | string | null
-      }>,
-      default: () => ({})
+      type: Object as PropType<VxeTableDefines.FilterStoreObj>,
+      default: () => ({} as VxeTableDefines.FilterStoreObj)
     }
   },
   setup (props, context) {

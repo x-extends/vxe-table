@@ -27,7 +27,7 @@ export default defineVxeComponent({
   props: {
     customStore: {
       type: Object as PropType<VxeTableDefines.VxeTableCustomStoreObj>,
-      default: () => ({})
+      default: () => ({} as VxeTableDefines.VxeTableCustomStoreObj)
     }
   },
   setup (props, context) {

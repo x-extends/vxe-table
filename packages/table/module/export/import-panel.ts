@@ -1,19 +1,25 @@
-import { h, ref, Ref, computed, inject, reactive, nextTick } from 'vue'
+import { h, ref, Ref, computed, inject, reactive, nextTick, PropType } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { parseFile } from '../../../ui/src/utils'
 import { errLog } from '../../../ui/src/log'
 
-import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines } from '../../../../types'
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
 
 export default defineVxeComponent({
   name: 'VxeTableImportPanel',
   props: {
-    defaultOptions: Object as any,
-    storeData: Object as any
+    defaultOptions: {
+      type: Object as PropType<VxeTableDefines.ImportParamsObj>,
+      default: () => ({} as VxeTableDefines.ImportParamsObj)
+    },
+    storeData: {
+      type: Object as PropType<VxeTableDefines.ImportStoreObj>,
+      default: () => ({} as VxeTableDefines.ImportStoreObj)
+    }
   },
   setup (props) {
     const VxeUIModalComponent = VxeUI.getComponent('VxeModal')
@@ -44,9 +50,9 @@ export default defineVxeComponent({
       const { type, typeList } = storeData
       if (type) {
         const selectItem = XEUtils.find(typeList, item => type === item.value)
-        return selectItem ? selectItem.label : '*.*'
+        return `${selectItem ? selectItem.label : '*.*'}`
       }
-      return `*.${typeList.map((item: any) => item.value).join(', *.')}`
+      return `*.${typeList.map((item) => item.value).join(', *.')}`
     })
 
     const clearFileEvent = () => {
@@ -60,10 +66,10 @@ export default defineVxeComponent({
 
     const selectFileEvent = () => {
       const { storeData, defaultOptions } = props
-      $xeTable.readFile(defaultOptions).then((params: any) => {
+      $xeTable.readFile(defaultOptions).then((params) => {
         const { file } = params
         Object.assign(storeData, parseFile(file), { file })
-      }).catch((e: any) => e)
+      }).catch(() => {})
     }
 
     const showEvent = () => {

@@ -1,19 +1,25 @@
-import { h, ref, Ref, computed, reactive, inject, nextTick } from 'vue'
+import { h, ref, Ref, computed, reactive, inject, nextTick, VNode, PropType } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { formatText } from '../../../ui/src/utils'
 import { errLog } from '../../../ui/src/log'
 
-import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines } from '../../../../types'
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
 
 export default defineVxeComponent({
   name: 'VxeTableExportPanel',
   props: {
-    defaultOptions: Object as any,
-    storeData: Object as any
+    defaultOptions: {
+      type: Object as PropType<VxeTableDefines.ExportParamsObj>,
+      default: () => ({} as VxeTableDefines.ExportParamsObj)
+    },
+    storeData: {
+      type: Object as PropType<VxeTableDefines.ExportStoreObj>,
+      default: () => ({} as VxeTableDefines.ExportStoreObj)
+    }
   },
   setup (props) {
     const VxeUIModalComponent = VxeUI.getComponent('VxeModal')
@@ -37,7 +43,7 @@ export default defineVxeComponent({
 
     const computeCheckedAll = computed(() => {
       const { storeData } = props
-      return storeData.columns.every((column: any) => column.checked)
+      return storeData.columns.every((column) => column.checked)
     })
 
     const computeShowSheet = computed(() => {
@@ -169,7 +175,7 @@ export default defineVxeComponent({
       const { isAll: isAllChecked, isIndeterminate: isAllIndeterminate } = reactData
       const { hasTree, hasMerge, isPrint, hasColgroup, columns } = storeData
       const { isHeader } = defaultOptions
-      const cols: any[] = []
+      const colVNs: VNode[] = []
       const checkedAll = computeCheckedAll.value
       const showSheet = computeShowSheet.value
       const supportMerge = computeSupportMerge.value
@@ -181,13 +187,13 @@ export default defineVxeComponent({
       const defaultSlot = slots.default
       const footerSlot = slots.footer
       const parameterSlot = slots.parameter
-      XEUtils.eachTree(columns, (column: any) => {
+      XEUtils.eachTree(columns, (column) => {
         const colTitle = formatText(column.getTitle(), 1)
         const isColGroup = column.children && column.children.length
         const isChecked = column.checked
         const indeterminate = column.halfChecked
         const isHtml = column.type === 'html'
-        cols.push(
+        colVNs.push(
           h('li', {
             key: column.id,
             class: ['vxe-table-export--panel-column-option', `level--${column.level}`, {
@@ -374,7 +380,7 @@ export default defineVxeComponent({
                                 ]),
                                 h('ul', {
                                   class: 'vxe-table-export--panel-column-body'
-                                }, cols)
+                                }, colVNs)
                               ])
                             ])
                           ]),

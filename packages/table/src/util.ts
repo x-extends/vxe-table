@@ -4,7 +4,7 @@ import { ColumnInfo } from './columnInfo'
 import { isPx, isScale, queryElement } from '../../ui/src/dom'
 import { eqEmptyValue } from '../../ui/src/utils'
 
-import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeTablePropTypes, TableInternalData } from '../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeTablePropTypes, TableReactData, TableInternalData } from '../../../types'
 
 export function createInternalData (): TableInternalData {
   return {
@@ -139,6 +139,260 @@ export function createInternalData (): TableInternalData {
     tooltipTimeout: null,
     initStatus: false,
     isActivated: false
+  }
+}
+
+export function createReactData (): TableReactData {
+  return {
+    // 低性能的静态列
+    staticColumns: [],
+    // 渲染的列分组
+    tableGroupColumn: [],
+    // 可视区渲染的列
+    tableColumn: [],
+    // 渲染中的数据
+    tableData: [],
+    // 是否启用了横向 X 可视渲染方式加载
+    scrollXLoad: false,
+    // 是否启用了纵向 Y 可视渲染方式加载
+    scrollYLoad: false,
+    // 是否存在纵向滚动条
+    overflowY: true,
+    // 是否存在横向滚动条
+    overflowX: false,
+    // 纵向滚动条的宽度
+    scrollbarWidth: 0,
+    // 横向滚动条的高度
+    scrollbarHeight: 0,
+    // 最后滚动时间戳
+    lastScrollTime: 0,
+    // 行高
+    rowHeight: 0,
+    // 表格父容器的高度
+    parentHeight: 0,
+    // 是否使用分组表头
+    isGroup: false,
+    isAllOverflow: false,
+    // 复选框属性，是否全选
+    isAllSelected: false,
+    // 复选框属性，有选中且非全选状态
+    isIndeterminate: false,
+    // 当前行
+    currentRow: null,
+    // 单选框属性，选中列
+    currentColumn: null,
+    // 单选框属性，选中行
+    selectRadioRow: null,
+    // 表尾合计数据
+    footerTableData: [],
+    // 行分组列信息
+    rowGroupColumn: null,
+    // 展开列信息
+    expandColumn: null,
+    checkboxColumn: null,
+    radioColumn: null,
+    // 树节点列信息
+    treeNodeColumn: null,
+    hasFixedColumn: false,
+    // 刷新列标识，当列筛选被改变时，触发表格刷新数据
+    upDataFlag: 0,
+    // 刷新列标识，当列的特定属性被改变时，触发表格刷新列
+    reColumnFlag: 0,
+    // 初始化标识
+    initStore: {
+      filter: false,
+      import: false,
+      export: false,
+      custom: false
+    },
+    // 自定义列相关的信息
+    customStore: {
+      btnEl: null,
+      isAll: false,
+      isIndeterminate: false,
+      activeBtn: false,
+      activeWrapper: false,
+      visible: false,
+      maxHeight: 0,
+      oldSortMaps: {},
+      oldFixedMaps: {},
+      oldVisibleMaps: {}
+    },
+    customColumnList: [],
+    // 当前选中的筛选列
+    filterStore: {
+      isAllSelected: false,
+      isIndeterminate: false,
+      style: null,
+      column: null,
+      visible: false,
+      maxHeight: null
+    },
+    // 存放列相关的信息
+    columnStore: {
+      leftList: [],
+      centerList: [],
+      rightList: [],
+      resizeList: [],
+      pxList: [],
+      pxMinList: [],
+      autoMinList: [],
+      scaleList: [],
+      scaleMinList: [],
+      autoList: [],
+      remainList: []
+    },
+    // 存放快捷菜单的信息
+    ctxMenuStore: {
+      selected: null,
+      visible: false,
+      showChild: false,
+      selectChild: null,
+      list: [],
+      style: null
+    },
+    // 存放可编辑相关信息
+    editStore: {
+      indexs: {
+        columns: []
+      },
+      titles: {
+        columns: []
+      },
+      // 选中源
+      selected: {
+        row: null,
+        column: null
+      },
+      // 已复制源
+      copyed: {
+        cut: false,
+        rows: [],
+        columns: []
+      },
+      // 激活
+      actived: {
+        row: null,
+        column: null
+      },
+      // 当前被强制聚焦单元格，只会在鼠标点击后算聚焦
+      focused: {
+        row: null,
+        column: null
+      }
+    },
+    // 存放 tooltip 相关信息
+    tooltipStore: {
+      row: null,
+      column: null,
+      content: null,
+      visible: false,
+      type: null,
+      currOpts: {}
+    },
+    // 存放数据校验相关信息
+    validStore: {
+      visible: false
+    },
+    validErrorMaps: {},
+    // 导入相关信息
+    importStore: {
+      inited: false,
+      file: null,
+      type: '',
+      modeList: [],
+      typeList: [],
+      filename: '',
+      visible: false
+    },
+    importParams: {
+      mode: '',
+      types: null,
+      message: true
+    },
+    // 导出相关信息
+    exportStore: {
+      inited: false,
+      name: '',
+      modeList: [],
+      typeList: [],
+      columns: [],
+      isPrint: false,
+      hasFooter: false,
+      hasMerge: false,
+      hasTree: false,
+      hasColgroup: false,
+      visible: false
+    },
+    exportParams: {
+      filename: '',
+      sheetName: '',
+      mode: '',
+      type: '',
+      isColgroup: false,
+      isMerge: false,
+      isAllExpand: false,
+      useStyle: false,
+      original: false,
+      message: true,
+      isHeader: false,
+      isTitle: false,
+      isFooter: false
+    },
+
+    visiblwRowsFlag: 1,
+
+    isRowGroupStatus: false,
+    rowGroupList: [],
+    aggHandleFields: [],
+    aggHandleAggColumns: [],
+
+    rowGroupExpandedFlag: 1,
+    rowExpandedFlag: 1,
+    treeExpandedFlag: 1,
+    updateCheckboxFlag: 1,
+    pendingRowFlag: 1,
+    insertRowFlag: 1,
+    removeRowFlag: 1,
+
+    mergeHeadFlag: 1,
+    mergeBodyFlag: 1,
+    mergeFootFlag: 1,
+
+    rowHeightStore: {
+      large: 52,
+      default: 48,
+      medium: 44,
+      small: 40,
+      mini: 36
+    },
+
+    scrollVMLoading: false,
+    scrollYHeight: 0,
+    scrollYTop: 0,
+    isScrollYBig: false,
+    scrollXLeft: 0,
+    scrollXWidth: 0,
+    isScrollXBig: false,
+
+    lazScrollLoading: false,
+
+    rowExpandHeightFlag: 1,
+    calcCellHeightFlag: 1,
+    resizeHeightFlag: 1,
+    resizeWidthFlag: 1,
+
+    isCustomStatus: false,
+
+    isCrossDragRow: false,
+    dragRow: null,
+    isCrossDragCol: false,
+    dragCol: null,
+    dragTipText: '',
+
+    isDragResize: false,
+    isRowLoading: false,
+    isColLoading: false
   }
 }
 

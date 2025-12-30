@@ -154,8 +154,6 @@ hooks.add('tableValidatorModule', {
     let validatorMethods = {} as TableValidatorMethods
     let validatorPrivateMethods = {} as TableValidatorPrivateMethods
 
-    let validRuleErr: boolean
-
     /**
      * 聚焦到校验通过的单元格并弹出校验错误提示
      */
@@ -167,7 +165,7 @@ hooks.add('tableValidatorModule', {
           resolve()
         } else {
           $xeTable.handleEdit(params, { type: 'valid-error', trigger: 'call' }).then(() => {
-            resolve(validatorPrivateMethods.showValidTooltip(params))
+            resolve($xeTable.showValidTooltip(params))
           })
         }
       })
@@ -233,8 +231,8 @@ hooks.add('tableValidatorModule', {
       }
       const rowValidErrs: any = []
       internalData._lastCallTime = Date.now()
-      validRuleErr = false // 如果为快速校验，当存在某列校验不通过时将终止执行
-      validatorMethods.clearValidate()
+      internalData.validRuleErr = false // 如果为快速校验，当存在某列校验不通过时将终止执行
+      $xeTable.clearValidate()
       const validErrMaps: Record<string, {
         row: any;
         column: any;
@@ -256,11 +254,11 @@ hooks.add('tableValidatorModule', {
           if ($xeTable.isAggregateRecord(row)) {
             return
           }
-          if (isFull || !validRuleErr) {
+          if (isFull || !internalData.validRuleErr) {
             const colVailds: any[] = []
             columns.forEach((column) => {
               const field = XEUtils.isString(column) ? column : column.field
-              if ((isFull || !validRuleErr) && XEUtils.has(editRules, field)) {
+              if ((isFull || !internalData.validRuleErr) && XEUtils.has(editRules, field)) {
                 colVailds.push(
                   validatorPrivateMethods.validCellRules('all', row, column)
                     .catch(({ rule, rules }) => {
@@ -285,7 +283,7 @@ hooks.add('tableValidatorModule', {
                       }
                       validRest[field].push(rest)
                       if (!isFull) {
-                        validRuleErr = true
+                        internalData.validRuleErr = true
                         return Promise.reject(rest)
                       }
                     })
@@ -508,13 +506,13 @@ hooks.add('tableValidatorModule', {
                   }
                   if (customValid) {
                     if (XEUtils.isError(customValid)) {
-                      validRuleErr = true
+                      internalData.validRuleErr = true
                       errorRules.push(new Rule({ type: 'custom', trigger, content: customValid.message, rule: new Rule(rule) }))
                     } else if (customValid.catch) {
                       // 如果为异步校验（注：异步校验是并发无序的）
                       syncValidList.push(
                         customValid.catch((e: any) => {
-                          validRuleErr = true
+                          internalData.validRuleErr = true
                           errorRules.push(new Rule({ type: 'custom', trigger, content: e && e.message ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
                         })
                       )
@@ -522,7 +520,7 @@ hooks.add('tableValidatorModule', {
                   }
                 } else {
                   if (!checkRuleStatus(rule, cellValue)) {
-                    validRuleErr = true
+                    internalData.validRuleErr = true
                     errorRules.push(new Rule(rule))
                   }
                 }
@@ -563,8 +561,8 @@ hooks.add('tableValidatorModule', {
         // 校验单元格
         if (editConfig && editRules && actived.row) {
           const { row, column, cell } = actived.args
-          if (validatorPrivateMethods.hasCellRules(type, row, column)) {
-            return validatorPrivateMethods.validCellRules(type, row, column).then(() => {
+          if ($xeTable.hasCellRules(type, row, column)) {
+            return $xeTable.validCellRules(type, row, column).then(() => {
               if (editOpts.mode === 'row') {
                 validatorMethods.clearValidate(row, column)
               }
@@ -572,7 +570,7 @@ hooks.add('tableValidatorModule', {
               // 如果校验不通过与触发方式一致，则聚焦提示错误，否则跳过并不作任何处理
               if (!rule.trigger || type === rule.trigger) {
                 const rest = { rule, row, column, cell }
-                validatorPrivateMethods.showValidTooltip(rest)
+                $xeTable.showValidTooltip(rest)
                 return Promise.reject(rest)
               }
               return Promise.resolve()

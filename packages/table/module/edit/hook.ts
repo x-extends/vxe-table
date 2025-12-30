@@ -620,7 +620,7 @@ hooks.add('tableEditModule', {
               const afIndex = $xeTable.findRowIndexOf(afterFullData, row)
               if (afIndex > -1) {
                 // 刷新单元格合并
-                mergeBodyList.forEach((mergeItem: any) => {
+                mergeBodyList.forEach((mergeItem) => {
                   const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
                   if (mergeRowIndex > afIndex) {
                     mergeItem.row = mergeRowIndex - 1
