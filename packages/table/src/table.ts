@@ -7546,6 +7546,20 @@ export default defineVxeComponent({
         })
       },
       /**
+       * 如果有滚动条，则滚动到第一行
+       */
+      scrollToStartRow (fieldOrColumn) {
+        const { afterFullData } = internalData
+        return $xeTable.scrollToRow(afterFullData[0], fieldOrColumn)
+      },
+      /**
+       * 如果有滚动条，则滚动到最后一行
+       */
+      scrollToEndRow (fieldOrColumn) {
+        const { afterFullData } = internalData
+        return $xeTable.scrollToRow(afterFullData[afterFullData.length - 1], fieldOrColumn)
+      },
+      /**
        * 如果有滚动条，则滚动到对应的列
        */
       scrollToColumn (fieldOrColumn) {
@@ -7555,6 +7569,20 @@ export default defineVxeComponent({
           return colToVisible($xeTable, column)
         }
         return nextTick()
+      },
+      /**
+       * 如果有滚动条，则滚动到第一列
+       */
+      scrollToStartColumn () {
+        const { visibleColumn } = internalData
+        return $xeTable.scrollToColumn(visibleColumn[0])
+      },
+      /**
+       * 如果有滚动条，则滚动到最后一列
+       */
+      scrollToEndColumn () {
+        const { visibleColumn } = internalData
+        return $xeTable.scrollToColumn(visibleColumn[visibleColumn.length - 1])
       },
       /**
        * 手动清除滚动相关信息，还原到初始状态
