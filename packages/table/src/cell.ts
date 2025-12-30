@@ -467,9 +467,11 @@ export const Cell = {
       // formatter > (renderTableCell | renderTableDefault)
       if (renderOpts && !formatter) {
         const compConf = renderer.get(renderOpts.name)
-        const renderFn = editRenderOpts ? (compConf.renderTableCell || compConf.renderCell) : (compConf.renderTableDefault || compConf.renderDefault)
-        if (renderFn) {
-          return renderCellBaseVNs(h, params, getSlotVNs(renderFn.call($table, h, renderOpts, Object.assign({ $type: editRenderOpts ? 'edit' : 'cell' }, params))))
+        if (compConf) {
+          const renderFn = editRenderOpts ? (compConf.renderTableCell || compConf.renderCell) : (compConf.renderTableDefault || compConf.renderDefault)
+          if (renderFn) {
+            return renderCellBaseVNs(h, params, getSlotVNs(renderFn.call($table, h, renderOpts, Object.assign({ $type: editRenderOpts ? 'edit' : 'cell' }, params))))
+          }
         }
       }
       cellValue = $table.getCellLabel(row, column)
