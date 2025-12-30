@@ -9,7 +9,8 @@ import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimat
 import { warnLog, errLog } from '../../ui/src/log'
 import { getCrossTableDragRowInfo } from './store'
 
-import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, ValueOf, TableReactData, VxeTableConstructor, VxeToolbarConstructor, VxeToolbarInstance, TableInternalData, VxeGridConstructor, VxeTablePrivateMethods, VxeTooltipInstance, VxeTablePropTypes, VxeGridPrivateMethods } from '../../../types'
+import type { VxeTooltipInstance, ValueOf } from 'vxe-pc-ui'
+import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, TableReactData, VxeTableConstructor, VxeToolbarConstructor, VxeToolbarInstance, TableInternalData, VxeGridConstructor, VxeTablePrivateMethods, VxeTablePropTypes, VxeGridPrivateMethods } from '../../../types'
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent } = VxeUI
 
@@ -4596,7 +4597,7 @@ const tableMethods: any = {
     reactData.tableData = tableData
     internalData.visibleDataRowIdData = visibleDataRowIdMaps
     if ($xeGanttView && $xeGanttView.updateViewData) {
-      $xeGanttView.updateViewData()
+      $xeGanttView.updateViewData(force)
     }
     return $xeTable.$nextTick()
   },
@@ -7416,8 +7417,8 @@ const tableMethods: any = {
     const { actived } = editStore
     if (isActivated && !filterStore.visible) {
       if (!(actived.row || actived.column)) {
-        if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && this.handlePasteCellAreaEvent) {
-          this.handlePasteCellAreaEvent(evnt)
+        if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xeTable.handlePeClAreaEvent) {
+          $xeTable.handlePeClAreaEvent(evnt)
         }
       }
       $xeTable.dispatchEvent('paste', {}, evnt)
@@ -7430,8 +7431,8 @@ const tableMethods: any = {
     const { actived } = editStore
     if (isActivated && !filterStore.visible) {
       if (!(actived.row || actived.column)) {
-        if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && this.handleCopyCellAreaEvent) {
-          this.handleCopyCellAreaEvent(evnt)
+        if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xeTable.handleCyClAreaEvent) {
+          $xeTable.handleCyClAreaEvent(evnt)
         }
       }
       $xeTable.dispatchEvent('copy', {}, evnt)
@@ -7444,8 +7445,8 @@ const tableMethods: any = {
     const { actived } = editStore
     if (isActivated && !filterStore.visible) {
       if (!(actived.row || actived.column)) {
-        if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && this.handleCutCellAreaEvent) {
-          this.handleCutCellAreaEvent(evnt)
+        if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xeTable.handleCutCellAreaEvent) {
+          $xeTable.handleCutCellAreaEvent(evnt)
         }
       }
       $xeTable.dispatchEvent('cut', {}, evnt)
@@ -7635,12 +7636,13 @@ const tableMethods: any = {
     }
   },
   openTooltip (target: HTMLElement, content: string | number) {
-    const { $refs } = this
-    const commTip = $refs.refCommTooltip
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    const commTip = $xeTable.$refs.refCommTooltip as VxeTooltipInstance
     if (commTip) {
       return commTip.open(target, content)
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   /**
    * 关闭 tooltip
@@ -7668,23 +7670,31 @@ const tableMethods: any = {
     if (commTip) {
       commTip.close()
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   /**
    * 判断列头复选框是否被选中
    */
   isAllCheckboxChecked () {
-    return this.isAllSelected
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+
+    return reactData.isAllSelected
   },
   /**
    * 判断列头复选框是否被半选
    */
   isAllCheckboxIndeterminate () {
-    return !this.isAllSelected && this.isIndeterminate
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+
+    return !reactData.isAllSelected && reactData.isIndeterminate
   },
   isCheckboxIndeterminate () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     warnLog('vxe.error.delFunc', ['isCheckboxIndeterminate', 'isAllCheckboxIndeterminate'])
-    return this.isAllCheckboxIndeterminate()
+    return $xeTable.isAllCheckboxIndeterminate()
   },
   /**
    * 获取复选框半选状态的行数据
@@ -8254,8 +8264,11 @@ const tableMethods: any = {
     return null
   },
   clearRadioReserve () {
-    this.radioReserveRow = null
-    return this.$nextTick()
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    internalData.radioReserveRow = null
+    return $xeTable.$nextTick()
   },
   /**
    * 获取复选框保留选中的行
@@ -8300,13 +8313,20 @@ const tableMethods: any = {
     return reserveSelection
   },
   clearCheckboxReserve () {
-    this.checkboxReserveRowMap = {}
-    return this.$nextTick()
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    internalData.checkboxReserveRowMap = {}
+    return $xeTable.$nextTick()
   },
   handleCheckboxReserveRow (row: any, checked: any) {
-    const { checkboxReserveRowMap, checkboxOpts } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { checkboxReserveRowMap } = internalData
+    const checkboxOpts = $xeTable.computeCheckboxOpts
     if (checkboxOpts.reserve) {
-      const rowid = getRowid(this, row)
+      const rowid = getRowid($xeTable, row)
       if (checked) {
         checkboxReserveRowMap[rowid] = row
       } else if (checkboxReserveRowMap[rowid]) {
@@ -8315,7 +8335,7 @@ const tableMethods: any = {
     }
   },
   handleCheckAllEvent (evnt: any, value: any) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     handleCheckedAllCheckboxRow($xeTable, value)
     if (evnt) {

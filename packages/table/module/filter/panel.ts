@@ -34,22 +34,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
   ],
   props: {
     filterStore: {
-      type: Object as PropType<{
-        isAllSelected: boolean
-        isIndeterminate: boolean
-        style: any
-        column: VxeTableDefines.ColumnInfo | null | undefined
-        visible: boolean
-        maxHeight: number | string | null
-      }>,
-      default: () => ({} as {
-        isAllSelected: boolean
-        isIndeterminate: boolean
-        style: any
-        column: VxeTableDefines.ColumnInfo | null | undefined
-        visible: boolean
-        maxHeight: number | string | null
-      })
+      type: Object as PropType<VxeTableDefines.FilterStoreObj>,
+      default: () => ({} as VxeTableDefines.FilterStoreObj)
     }
   },
   inject: {
@@ -337,7 +323,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }, filterStore.visible && (destroyOnClose ? visible : true) && column ? ($xeFilterPanel as any).renderOptions(h, filterRender, compConf).concat(($xeFilterPanel as any).renderFooter(h)) : [])
     }
   },
-  render (this: any, h: CreateElement) {
-    return this.renderVN(h)
+  render (h: CreateElement) {
+    return (this as any).renderVN(h)
   }
 }) /* define-vxe-component end */

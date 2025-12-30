@@ -467,9 +467,11 @@ export const Cell = {
       // formatter > (renderTableCell | renderTableDefault)
       if (renderOpts && !formatter) {
         const compConf = renderer.get(renderOpts.name)
-        const renderFn = editRenderOpts ? (compConf.renderTableCell || compConf.renderCell) : (compConf.renderTableDefault || compConf.renderDefault)
-        if (renderFn) {
-          return renderCellBaseVNs(h, params, getSlotVNs(renderFn.call($table, h, renderOpts, Object.assign({ $type: editRenderOpts ? 'edit' : 'cell' }, params))))
+        if (compConf) {
+          const renderFn = editRenderOpts ? (compConf.renderTableCell || compConf.renderCell) : (compConf.renderTableDefault || compConf.renderDefault)
+          if (renderFn) {
+            return renderCellBaseVNs(h, params, getSlotVNs(renderFn.call($table, h, renderOpts, Object.assign({ $type: editRenderOpts ? 'edit' : 'cell' }, params))))
+          }
         }
       }
       cellValue = $table.getCellLabel(row, column)
@@ -489,7 +491,7 @@ export const Cell = {
     ])
   },
   renderDeepCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
-    return Cell.renderDeepNodeBtn(h, params, Cell.renderDefaultCell.call(this, h, params))
+    return Cell.renderDeepNodeBtn(h, params, Cell.renderDefaultCell(h, params))
   },
   renderDefaultFooter (h: CreateElement, params: VxeTableDefines.CellRenderFooterParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return getFooterContent(h, params)
@@ -1276,7 +1278,7 @@ export const Cell = {
         }, [getDefaultCellLabel(cellParams)])
       ])
     }
-    return Cell.renderDefaultCell.call($table, h, cellParams)
+    return Cell.renderDefaultCell(h, cellParams)
   }
 } as any
 

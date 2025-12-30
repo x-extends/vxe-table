@@ -596,24 +596,24 @@ export default {
       // 从数据源中移除
       if (tableFullData === rows) {
         rows = delList = tableFullData.slice(0)
-        this.tableFullData = []
-        this.afterFullData = []
-        this.clearMergeCells()
+        internalData.tableFullData = []
+        internalData.afterFullData = []
+        $xeTable.clearMergeCells()
       } else {
         // 如果为虚拟树
         if (treeConfig && transform) {
           rows.forEach((row) => {
-            const rowid = getRowid(this, row)
-            const matchMapObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid(this, item), { children: mapChildrenField })
+            const rowid = getRowid($xeTable, row)
+            const matchMapObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid($xeTable, item), { children: mapChildrenField })
             if (matchMapObj) {
               const rItems = matchMapObj.items.splice(matchMapObj.index, 1)
               delList.push(rItems[0])
             }
-            const matchObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid(this, item), { children: childrenField })
+            const matchObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid($xeTable, item), { children: childrenField })
             if (matchObj) {
               matchObj.items.splice(matchObj.index, 1)
             }
-            const afIndex = this.findRowIndexOf(afterFullData, row)
+            const afIndex = $xeTable.findRowIndexOf(afterFullData, row)
             if (afIndex > -1) {
               afterFullData.splice(afIndex, 1)
             }
@@ -622,16 +622,16 @@ export default {
           // 如果分组
           warnLog(getI18n('vxe.error.noGroup', ['remove']))
         } else {
-          rows.forEach((row: any) => {
-            const tfIndex = this.findRowIndexOf(tableFullData, row)
+          rows.forEach((row) => {
+            const tfIndex = $xeTable.findRowIndexOf(tableFullData, row)
             if (tfIndex > -1) {
               const rItems = tableFullData.splice(tfIndex, 1)
               delList.push(rItems[0])
             }
-            const afIndex = this.findRowIndexOf(afterFullData, row)
+            const afIndex = $xeTable.findRowIndexOf(afterFullData, row)
             if (afIndex > -1) {
               // 刷新单元格合并
-              mergeBodyList.forEach((mergeItem: any) => {
+              mergeBodyList.forEach((mergeItem) => {
                 const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
                 if (mergeRowIndex > afIndex) {
                   mergeItem.row = mergeRowIndex - 1
@@ -672,9 +672,9 @@ export default {
       if (reactData.scrollYLoad) {
         $xeTable.updateScrollYSpace()
       }
-      return this.$nextTick().then(() => {
-        this.updateCellAreas()
-        return this.recalculate(true)
+      return $xeTable.$nextTick().then(() => {
+        $xeTable.updateCellAreas()
+        return $xeTable.recalculate(true)
       }).then(() => {
         return { row: delList.length ? delList[delList.length - 1] : null, rows: delList }
       })
@@ -683,8 +683,10 @@ export default {
      * 删除复选框选中的数据
      */
     _removeCheckboxRow () {
-      return this.remove(this.getCheckboxRecords()).then((params: any) => {
-        this.clearCheckboxRow()
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      return $xeTable.remove($xeTable.getCheckboxRecords()).then((params: any) => {
+        $xeTable.clearCheckboxRow()
         return params
       })
     },
@@ -692,9 +694,11 @@ export default {
      * 删除单选框选中的数据
      */
     _removeRadioRow () {
-      const radioRecord = this.getRadioRecord()
-      return this.remove(radioRecord || []).then((params: any) => {
-        this.clearRadioRow()
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      const radioRecord = $xeTable.getRadioRecord()
+      return $xeTable.remove(radioRecord || []).then((params: any) => {
+        $xeTable.clearRadioRow()
         return params
       })
     },
@@ -702,9 +706,11 @@ export default {
      * 删除当前行选中的数据
      */
     _removeCurrentRow () {
-      const currentRecord = this.getCurrentRecord()
-      return this.remove(currentRecord || []).then((params: any) => {
-        this.clearCurrentRow()
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      const currentRecord = $xeTable.getCurrentRecord()
+      return $xeTable.remove(currentRecord || []).then((params: any) => {
+        $xeTable.clearCurrentRow()
         return params
       })
     },
@@ -712,15 +718,17 @@ export default {
      * 获取表格数据集，包含新增、删除、修改
      */
     _getRecordset () {
-      const removeRecords = this.getRemoveRecords()
-      const pendingRecords = this.getPendingRecords()
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      const removeRecords = $xeTable.getRemoveRecords()
+      const pendingRecords = $xeTable.getPendingRecords()
       const delRecords = removeRecords.concat(pendingRecords)
       // 如果已经被删除，则无需放到更新数组
-      const updateRecords = this.getUpdateRecords().filter((row: any) => {
-        return !delRecords.some((item: any) => this.eqRow(item, row))
+      const updateRecords = $xeTable.getUpdateRecords().filter((row: any) => {
+        return !delRecords.some((item) => $xeTable.eqRow(item, row))
       })
       return {
-        insertRecords: this.getInsertRecords(),
+        insertRecords: $xeTable.getInsertRecords(),
         removeRecords,
         updateRecords,
         pendingRecords
@@ -790,7 +798,9 @@ export default {
      * @deprecated
      */
     handleActived (params: any, evnt: any) {
-      return this.handleEdit(params, evnt)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      return $xeTable.handleEdit(params, evnt)
     },
     _getColumnModel (row: any, column: VxeTableDefines.ColumnInfo) {
       getEditColumnModel(row, column)
@@ -799,14 +809,16 @@ export default {
       setEditColumnModel(row, column)
     },
     _syncActivedCell () {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       syncActivedCell($xeTable)
     },
     _clearActived (row: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
       // 即将废弃
-      return this.clearEdit(row)
+      return $xeTable.clearEdit(row)
     },
     /**
      * 清除激活的编辑
@@ -820,7 +832,7 @@ export default {
      * 取消编辑
      */
     handleClearEdit (evnt: Event | null, targetRow?: any) {
-      const $xeTable = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       return handleClearEdit($xeTable, evnt, targetRow)
     },
@@ -957,8 +969,10 @@ export default {
      */
     _setEditRow (row: any, fieldOrColumn: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const internalData = $xeTable as unknown as TableInternalData
 
-      let column = XEUtils.find(this.visibleColumn, column => isEnableConf(column.editRender))
+      const { visibleColumn } = internalData
+      let column: any = XEUtils.find(visibleColumn, column => isEnableConf(column.editRender))
       let isPos = false
       if (fieldOrColumn) {
         isPos = true
@@ -969,9 +983,11 @@ export default {
       return handleEditCell($xeTable, row, column, isPos)
     },
     _setActiveCell (row: any, fieldOrColumn: any) {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
       warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
       // 即将废弃
-      return this.setEditCell(row, fieldOrColumn)
+      return $xeTable.setEditCell(row, fieldOrColumn)
     },
     /**
      * 激活单元格编辑
@@ -1035,7 +1051,7 @@ export default {
             selected.row = row
             selected.column = column
             if (isMouseSelected) {
-              this.addCellSelectedClass()
+              $xeTable.addCellSelectedClass()
             }
             $xeTable.focus()
             if (evnt) {
@@ -1079,7 +1095,11 @@ export default {
       return $xeTable.$nextTick()
     },
     reColTitleSdCls () {
-      const headerElem = this.elemStore['main-header-list']
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { elemStore } = internalData
+      const headerElem = elemStore['main-header-list']
       if (headerElem) {
         XEUtils.arrayEach(headerElem.querySelectorAll('.col--title-selected'), elem => removeClass(elem, 'col--title-selected'))
       }

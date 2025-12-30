@@ -221,9 +221,12 @@ export default {
       })
     },
     _toggleCustomAllCheckbox () {
-      const { customStore } = this
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { customStore } = reactData
       const isAll = !customStore.isAll
-      return this.setCustomAllCheckbox(isAll)
+      return $xeTable.setCustomAllCheckbox(isAll)
     },
     _setCustomAllCheckbox (checked: boolean) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -288,11 +291,11 @@ export default {
 
       const { customStore } = reactData
       if (customStore.visible) {
-        this.closeCustom()
+        $xeTable.closeCustom()
         emitCustomEvent($xeTable, 'close', evnt)
       } else {
         customStore.btnEl = evnt.target
-        this.openCustom()
+        $xeTable.openCustom()
         emitCustomEvent($xeTable, 'open', evnt)
       }
     },
