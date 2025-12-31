@@ -15,6 +15,10 @@
 
 一個基於 [Vxe UI](https://github.com/x-extends/vxe-pc-ui) 的 PC 端表格元件，支持增刪改查的可編輯表格，支持 Excel 複製粘貼、數據透視錶、虛擬清單高性能的企業級表格解決方案
 
+## 在 Cloud IDE 中預覽
+
+[https://idegithub.com/x-extends/vxe-table](https://idegithub.com/x-extends/vxe-table)
+
 ## 瀏覽器支持
 
 ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
