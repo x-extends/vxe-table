@@ -76,7 +76,7 @@ VxeUI.setConfig({
       enterable: true
     },
     validConfig: {
-      showMessage: true,
+      showErrorMessage: true,
       autoClear: true,
       autoPos: true,
       message: 'inline',

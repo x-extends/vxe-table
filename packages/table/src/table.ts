@@ -596,7 +596,12 @@ export default {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
-      return Object.assign({}, getConfig().table.validConfig, props.validConfig)
+      const opts = Object.assign({}, getConfig().table.validConfig, props.validConfig)
+      // 兼容老版本
+      if (XEUtils.isBoolean(opts.showMessage)) {
+        opts.showErrorMessage = opts.showMessage
+      }
+      return opts
     },
     sXOpts () {
       return this.computeVirtualXOpts
@@ -2304,7 +2309,7 @@ export default {
         /**
          * 校验提示
          */
-        VxeUITooltipComponent && this.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
+        VxeUITooltipComponent && this.editRules && validOpts.showErrorMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
           ? h(VxeUITooltipComponent, {
             key: 'vtp',
             ref: 'refValidTooltip',

@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement } from '../../ui/src/dom'
+import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, scrollTopTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
@@ -4060,28 +4060,6 @@ const wheelScrollLeftTo = (scrollLeft: number, cb: (offsetLeft: number) => void)
   requestAnimationFrame(() => {
     cb(scrollLeft)
   })
-}
-
-const wheelScrollTopTo = (diffNum: number, cb: (progress: number) => void) => {
-  const duration = Math.abs(diffNum)
-  const startTime = performance.now()
-  let countTop = 0
-  const step = (timestamp: number) => {
-    let progress = (timestamp - startTime) / duration
-    if (progress < 0) {
-      progress = 0
-    } else if (progress > 1) {
-      progress = 1
-    }
-    const easedProgress = Math.pow(progress, 2)
-    const offsetTop = Math.floor((diffNum * easedProgress)) - countTop
-    countTop += offsetTop
-    cb(offsetTop)
-    if (progress < 1) {
-      requestAnimationFrame(step)
-    }
-  }
-  requestAnimationFrame(step)
 }
 
 const syncGanttScrollTop = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, scrollTop: number) => {
@@ -11742,7 +11720,7 @@ const tableMethods: any = {
           fixed: ''
         })
       } else {
-        wheelScrollTopTo(scrollTop - currScrollTop, (offsetTop: number) => {
+        scrollTopTo(scrollTop - currScrollTop, (offsetTop: number) => {
           const currTopNum = bodyScrollElem.scrollTop + offsetTop
           internalData.inWheelScroll = true
           setScrollTop(yHandleEl, currTopNum)

@@ -155,7 +155,7 @@ function renderTdColumn (
   const cellAlign = align || (compConf ? compConf.tableCellAlign : '') || allAlign
   const cellVerticalAlign = XEUtils.eqNull(verticalAlign) ? allVerticalAlign : verticalAlign
   const errorValidItem = validErrorMaps[`${rowid}:${colid}`]
-  const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
+  const showValidTip = editRules && validOpts.showErrorMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   const tdAttrs: any = { colid }
   const cellParams: VxeTableDefines.CellRenderBodyParams & {
     $table: VxeTableConstructor<any> & VxeTablePrivateMethods
@@ -460,6 +460,7 @@ function renderTdColumn (
         'col--dirty': isDirty,
         'col--active': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
         'col--valid-error': !!errorValidItem,
+        'show--valid-bg': errorValidItem && validOpts.showErrorBackground,
         'col--current': currentColumn === column
       },
       getClass(compCellClassName, cellParams),
