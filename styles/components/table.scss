@@ -2454,13 +2454,16 @@ $btnThemeList: (
     }
     .vxe-cell--valid-error-theme-normal {
       color: var(--vxe-ui-table-validate-error-color);
-      background-color: var(--vxe-ui-table-validate-error-background-color);
+      background-color: var(--vxe-ui-table-validate-error-theme-normal-background-color);
     }
     &.col--active,
     &.col--selected {
       position: relative;
     }
     &.col--valid-error {
+      &.show--valid-bg {
+        background-color: var(--vxe-ui-table-validate-error-cell-background-color);
+      }
       .vxe-default-input,
       .vxe-default-textarea,
       .vxe-default-select {
@@ -2651,7 +2654,7 @@ div.vxe-table--tooltip-wrapper {
   &.vxe-table--valid-error {
     padding: 0;
     color: var(--vxe-ui-table-validate-error-color);
-    background-color: var(--vxe-ui-table-validate-error-background-color);
+    background-color: var(--vxe-ui-table-validate-error-theme-normal-background-color);
     &.old-cell-valid {
       padding: 8px 12px;
       background-color: #f56c6c;

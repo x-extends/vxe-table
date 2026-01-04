@@ -1,12 +1,22 @@
 <template>
   <div>
-    <vxe-grid v-bind="gridOptions"></vxe-grid>
+    <div>
+      <vxe-radio-group v-model="gridOptions.validConfig.theme">
+        <vxe-radio-button checked-value="normal" content="简化"></vxe-radio-button>
+        <vxe-radio-button checked-value="beautify" content="高亮"></vxe-radio-button>
+      </vxe-radio-group>
+
+      <vxe-button @click="validEvent">校验变动数据</vxe-button>
+      <vxe-button @click="fullValidEvent">校验全量数据</vxe-button>
+    </div>
+    <vxe-grid ref="gridRef" v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue'
-import type { VxeGridProps } from '../../../types'
+import { ref, reactive } from 'vue'
+import { VxeUI } from '../../../packages'
+import { VxeGridProps, VxeTablePropTypes, VxeGridInstance } from '../../../types'
 
 interface RowVO {
   id: number
@@ -17,27 +27,71 @@ interface RowVO {
   address: string
 }
 
-const gridOptions = reactive<VxeGridProps<RowVO>>({
-  customConfig: {
-    mode: 'modal',
-    checkMethod ({ column }) {
-      return !['seq', 'name'].includes(column.field)
-    }
+const gridRef = ref<VxeGridInstance<RowVO>>()
+
+const gridOptions = reactive<VxeGridProps<RowVO> & { validConfig: VxeTablePropTypes.ValidConfig }>({
+  border: true,
+  showOverflow: true,
+  keepSource: true,
+  height: 300,
+  editConfig: {
+    trigger: 'click',
+    mode: 'row',
+    showStatus: true
   },
-  toolbarConfig: {
-    custom: true
+  validConfig: {
+    msgMode: 'full',
+    theme: 'beautify',
+    showErrorBackground: true
+  },
+  editRules: {
+    name: [
+      { required: true, message: '必须填写' }
+    ],
+    role: [
+      { required: true, message: '必须填写' }
+    ]
   },
   columns: [
-    { field: 'seq', type: 'seq', width: 70 },
-    { field: 'name', title: 'Name' },
-    { field: 'sex', title: 'Sex' },
-    { field: 'age', title: 'Age' }
+    { type: 'checkbox', width: 60 },
+    { type: 'seq', width: 70 },
+    { field: 'name', title: 'Name', editRender: { name: 'VxeInput' } },
+    { field: 'role', title: 'Role', editRender: { name: 'VxeInput' } },
+    { field: 'sex', title: 'Sex', editRender: { name: 'VxeInput' } },
+    { field: 'age', title: 'Age', editRender: { name: 'VxeInput' } },
+    { field: 'date', title: 'Date', editRender: { name: 'VxeInput' } }
   ],
   data: [
-    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
-    { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-    { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
+    { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, address: 'test abc' },
+    { id: 10002, name: '', role: 'Test', sex: '1', age: 22, address: 'Guangzhou' },
+    { id: 10003, name: 'Test3', role: 'PM', sex: '', age: 32, address: 'Shanghai' },
+    { id: 10004, name: 'Test4', role: 'Designer', sex: '', age: 23, address: 'test abc' },
+    { id: 10005, name: '', role: '', sex: '1', age: 30, address: 'Shanghai' },
+    { id: 10006, name: 'Test6', role: 'Designer', sex: '1', age: 21, address: 'test abc' }
   ]
 })
+
+const validEvent = async () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    const errMap = await $grid.fullValidate()
+    if (errMap) {
+      VxeUI.modal.message({ status: 'error', content: '校验不通过！' })
+    } else {
+      VxeUI.modal.message({ status: 'success', content: '校验成功！' })
+    }
+  }
+}
+
+const fullValidEvent = async () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    const errMap = await $grid.fullValidate(true)
+    if (errMap) {
+      VxeUI.modal.message({ status: 'error', content: '校验不通过！' })
+    } else {
+      VxeUI.modal.message({ status: 'success', content: '校验成功！' })
+    }
+  }
+}
 </script>

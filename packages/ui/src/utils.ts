@@ -50,3 +50,7 @@ export function formatText (value: any, placeholder?: any) {
 export function eqEmptyValue (cellValue: any) {
   return cellValue === '' || XEUtils.eqNull(cellValue)
 }
+
+export function getDefaultConfig (val1: any, def1: any) {
+  return XEUtils.eqNull(val1) ? def1 : val1
+}
