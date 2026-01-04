@@ -8421,7 +8421,7 @@ export default defineVxeComponent({
         reactData.tableData = tableData
         internalData.visibleDataRowIdData = visibleDataRowIdMaps
         if ($xeGanttView && $xeGanttView.updateViewData) {
-          $xeGanttView.updateViewData()
+          $xeGanttView.updateViewData(force)
         }
         return nextTick()
       },
