@@ -1690,14 +1690,17 @@ export default defineVxeComponent({
 
     const calcTableHeight = (key: 'height' | 'minHeight' | 'maxHeight') => {
       const { editConfig, editRules } = props
-      const { parentHeight } = reactData
+      const { parentHeight, tableColumn } = reactData
       let val = props[key]
       if (key === 'minHeight') {
         const defMinHeight = getConfig().table.minHeight
         if (XEUtils.eqNull(val)) {
           if (eqEmptyValue(defMinHeight)) {
-            // 编辑模式默认最小高度
-            if (editRules && isEnableConf(editConfig)) {
+            if (!tableColumn.length) {
+              // 如果全部列被隐藏
+              val = 40
+            } else if (editRules && isEnableConf(editConfig)) {
+              // 编辑模式默认最小高度
               val = 144
             }
           } else {
