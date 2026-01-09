@@ -135,7 +135,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
       if (treeConfig) {
         throw new Error(getI18n('vxe.error.noTree', ['insert']))
       }
-      warnLog(getI18n('vxe.error.noGroup', ['remove']))
+      errLog(getI18n('vxe.error.noGroup', ['insert']))
       // insertGroupRow($xeTable, newRecords, false)
     } else {
       newRecords.forEach(item => {
@@ -164,7 +164,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
         if (treeConfig) {
           throw new Error(getI18n('vxe.error.noTree', ['insert']))
         }
-        warnLog(getI18n('vxe.error.noGroup', ['remove']))
+        errLog(getI18n('vxe.error.noGroup', ['insert']))
         // insertGroupRow($xeTable, newRecords, true)
       } else {
         newRecords.forEach(item => {
@@ -235,7 +235,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
         if (treeConfig) {
           throw new Error(getI18n('vxe.error.noTree', ['insert']))
         }
-        warnLog(getI18n('vxe.error.noGroup', ['remove']))
+        errLog(getI18n('vxe.error.noGroup', ['insert']))
       } else {
         if (treeConfig) {
           throw new Error(getI18n('vxe.error.noTree', ['insert']))

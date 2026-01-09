@@ -666,7 +666,7 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
           return $xeTable.scrollTo(null, ($xeTable.findRowIndexOf(afterFullData, row) - 1) * defaultRowHeight)
         }
         let scrollTop = 0
-        const rowRest = fullAllDataRowIdData[rowid]
+        const rowRest = fullAllDataRowIdData[rowid] || {}
         const rHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
         for (let i = 0; i < afterFullData.length; i++) {
           const currRow = afterFullData[i]
@@ -674,7 +674,7 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
           if (currRow === row || currRowid === rowid) {
             break
           }
-          const currRowRest = fullAllDataRowIdData[currRowid]
+          const currRowRest = fullAllDataRowIdData[currRowid] || {}
           scrollTop += currRowRest.resizeHeight || cellOpts.height || rowOpts.height || currRowRest.height || defaultRowHeight
         }
         if (scrollTop < bodyScrollTop) {

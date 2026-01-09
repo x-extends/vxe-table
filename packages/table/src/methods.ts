@@ -3500,7 +3500,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
       // }
 
       if (!(props.height || props.maxHeight)) {
-        errLog('vxe.error.reqProp', ['height | max-height | virtual-y-config={enabled: false}'])
+        errLog('vxe.error.reqSupportProp', ['virtual-y-config.enabled = true', 'height | max-height'])
       }
       // if (!props.showOverflow) {
       //   warnLog('vxe.error.reqProp', ['table.show-overflow'])

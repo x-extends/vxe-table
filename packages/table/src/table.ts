@@ -1759,6 +1759,7 @@ export default {
     const { exportConfig, importConfig, treeConfig } = props
     const { scrollXStore, scrollYStore } = internalData
     const columnOpts = $xeTable.computeColumnOpts
+    const columnDragOpts = $xeTable.computeColumnDragOpts
     const editOpts = $xeTable.computeEditOpts
     const treeOpts = $xeTable.computeTreeOpts
     const radioOpts = $xeTable.computeRadioOpts
@@ -1774,6 +1775,7 @@ export default {
     // const keyboardOpts = $xeTable.computeKeyboardOpts
     const aggregateOpts = $xeTable.computeAggregateOpts
     const rowDragOpts = $xeTable.computeRowDragOpts
+    const areaOpts = $xeTable.computeAreaOpts
     const { groupFields } = aggregateOpts
 
     if (props.rowId) {
@@ -1868,6 +1870,9 @@ export default {
       if (mouseOpts.area) {
         errLog('vxe.error.notProp', ['mouse-config.area'])
         return
+      }
+      if (areaOpts.selectCellByHeader && columnOpts.drag && columnDragOpts.trigger === 'cell') {
+        errLog('vxe.error.notSupportProp', ['area-config.selectCellByHeader & column-config.drag', 'column-drag-config.trigger=cell', 'column-drag-config.trigger=default'])
       }
     }
     if (!$xeTable.handlePivotTableAggregateData) {
