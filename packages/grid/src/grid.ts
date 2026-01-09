@@ -1477,6 +1477,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         return [
           VxeUIFormComponent
             ? h(VxeUIFormComponent, {
+              ref: 'refForm',
               props: Object.assign({}, formOpts, {
                 data: proxyConfig && proxyOpts.form ? formData : formOpts.data
               }),
