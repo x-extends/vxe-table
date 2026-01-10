@@ -3946,7 +3946,7 @@ export default defineVxeComponent({
           // }
 
           if (!(props.height || props.maxHeight)) {
-            errLog('vxe.error.reqProp', ['height | max-height | virtual-y-config={enabled: false}'])
+            errLog('vxe.error.reqSupportProp', ['virtual-y-config.enabled = true', 'height | max-height'])
           }
           // if (!props.showOverflow) {
           //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
@@ -13521,6 +13521,7 @@ export default defineVxeComponent({
       const { exportConfig, importConfig, treeConfig } = props
       const { scrollXStore, scrollYStore } = internalData
       const columnOpts = computeColumnOpts.value
+      const columnDragOpts = computeColumnDragOpts.value
       const aggregateOpts = computeAggregateOpts.value
       const virtualYOpts = computeVirtualYOpts.value
       const editOpts = computeEditOpts.value
@@ -13537,6 +13538,7 @@ export default defineVxeComponent({
       // const currentColumnOpts = computeCurrentColumnOpts.value
       // const keyboardOpts = computeKeyboardOpts.value
       const rowDragOpts = computeRowDragOpts.value
+      const areaOpts = computeAreaOpts.value
       const { groupFields } = aggregateOpts
 
       if ($xeGantt) {
@@ -13648,6 +13650,9 @@ export default defineVxeComponent({
         if (mouseOpts.area) {
           errLog('vxe.error.notProp', ['mouse-config.area'])
           return
+        }
+        if (areaOpts.selectCellByHeader && columnOpts.drag && columnDragOpts.trigger === 'cell') {
+          errLog('vxe.error.notSupportProp', ['area-config.selectCellByHeader & column-config.drag', 'column-drag-config.trigger=cell', 'column-drag-config.trigger=default'])
         }
       }
       if (!$xeTable.handlePivotTableAggregateData) {
