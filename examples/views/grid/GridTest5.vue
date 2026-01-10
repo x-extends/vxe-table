@@ -1,76 +1,61 @@
 <template>
   <div>
-    <vxe-grid v-bind="gridOptions" @menu-click="menuClickEvent"></vxe-grid>
+      <vxe-button status="primary" @click="handleClear">手动清除校验</vxe-button>
+      <vxe-button status="primary" @click="handleReset">手动重置</vxe-button>
+      <vxe-grid ref="gridRef" v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
 <script>
-import { VxeUI } from 'vxe-pc-ui'
 export default {
   data () {
     const gridOptions = {
+      showOverflow: true,
       border: true,
-      showFooter: true,
-      rowConfig: {
-        isCurrent: true
-      },
-      columnConfig: {
-        resizable: true
-      },
-      columns: [
-        { field: 'checkbox', type: 'checkbox', width: 50 },
-        { type: 'seq', width: 70 },
-        { field: 'name', title: 'Name' },
-        { field: 'nickname', title: 'Nickname' },
-        { field: 'age', title: 'Age' },
-        { field: 'role', title: 'Role' },
-        { field: 'address', title: 'Address', showOverflow: true }
-      ],
-      data: [
-        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
-        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'Shenzhen' },
-        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
-      ],
-      menuConfig: {
-        header: {
-          options: [
-            [
-              { code: 'custom1', name: '自定义前缀图标', suffixConfig: { icon: 'vxe-icon-download' } },
-              { code: 'custom2', name: '自定义前缀内容', suffixConfig: { content: 'Ctrl+S' } }
-            ]
-          ]
+      height: 500,
+      formConfig: {
+        data: {
+          name: '',
+          role: '',
+          sex: '',
+          num: '',
+          address: ''
         },
-        body: {
-          options: [
-            [
-              { code: 'custom3', name: '自定义前缀图标', suffixConfig: { icon: 'vxe-icon-download' } },
-              { code: 'custom4', name: '自定义前缀内容', suffixConfig: { content: 'Ctrl+S' } }
-            ],
-            [
-              {
-                code: 'custom5',
-                name: '二级菜单',
-                children: [
-                  { code: 'custom6', name: '自定义前缀图标', suffixConfig: { icon: 'vxe-icon-download' } },
-                  { code: 'custom7', name: '自定义前缀内容', suffixConfig: { content: 'Ctrl+S' } }
-                ]
-              }
-            ]
-          ]
-        },
-        footer: {
-          options: [
-            [
-              { code: 'custom8', name: '前缀图标', suffixConfig: { icon: 'vxe-icon-download' } },
-              { code: 'custom9', name: '前缀内容', suffixConfig: { content: 'Ctrl+S' } }
-            ]
-          ]
+        items: [
+          { field: 'name', title: 'Name', span: 12, itemRender: { name: 'VxeInput' } },
+          { field: 'role', title: 'Role', span: 12, itemRender: { name: 'VxeInput' } },
+          { field: 'age', title: 'Age', span: 12, itemRender: { name: 'VxeInput' } },
+          {
+            span: 6,
+            itemRender: {
+              name: 'VxeButtonGroup',
+              options: [
+                { type: 'submit', content: '搜索', status: 'primary' },
+                { type: 'reset', content: '重置' }
+              ]
+            }
+          }
+        ],
+        rules: {
+          name: [{ required: true, message: 'name不能为空' }]
         }
       },
-      footerData: [
-        { checkbox: '合计', age: 135 }
+      columns: [
+        { field: 'seq', type: 'seq', width: 70 },
+        { field: 'name', title: 'Name' },
+        { field: 'sex', title: 'Sex' },
+        { field: 'num', title: 'Num' },
+        { field: 'address', title: 'Address' }
+      ],
+      data: [
+        { id: '10001', name: 'Test1', role: 'Develop', sex: 'Man', num: '28', address: 'test abc' },
+        { id: '10002', name: 'Test2', role: 'Test', sex: 'Women', num: '22', address: 'Guangzhou' },
+        { id: '10003', name: 'Test3', role: 'PM', sex: 'Man', num: '32', address: 'Shanghai' },
+        { id: '10004', name: 'Test4', role: 'Designer', sex: 'Women', num: '24', address: 'Shanghai' },
+        { id: '10005', name: 'Test5', role: 'Develop', sex: 'Man', num: '42', address: 'Guangzhou' },
+        { id: '10006', name: 'Test6', role: 'Test', sex: 'Women', num: '39', address: 'Shanghai' },
+        { id: '10007', name: 'Test7', role: 'Develop', sex: 'Man', num: '46', address: 'Shanghai' },
+        { id: '10008', name: 'Test8', role: 'PM', sex: 'Women', num: '49', address: 'Guangzhou' }
       ]
     }
     return {
@@ -78,8 +63,13 @@ export default {
     }
   },
   methods: {
-    menuClickEvent ({ menu }) {
-      VxeUI.modal.alert(`点击了 ${menu.name} 选项`)
+    handleClear () {
+      this.$refs.gridRef.clearFormValidate()
+      console.log('111')
+    },
+    handleReset () {
+      this.$refs.gridRef.resetForm()
+      console.log('222')
     }
   }
 }

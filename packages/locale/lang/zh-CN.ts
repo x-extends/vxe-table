@@ -106,7 +106,7 @@ export default {
       allChecked: '全选',
       total: '{0} / {1}',
       search: '搜索',
-      loadingText: '加载中',
+      loadingText: '加载中...',
       emptyText: '暂无数据',
       maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
@@ -538,6 +538,9 @@ export default {
         mm: '分',
         ss: '秒'
       }
+    },
+    contextMenu: {
+      loadingText: '加载中...'
     },
     gantt: {
       tFullFormat: {

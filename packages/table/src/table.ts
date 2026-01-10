@@ -523,8 +523,9 @@ export default {
   ],
   props: tableProps,
   provide () {
+    const $xeTable = this
     return {
-      $xeTable: this,
+      $xeTable,
       xecolgroup: null
     }
   },
@@ -1188,6 +1189,29 @@ export default {
     computeCustomOpts () {
       return Object.assign({}, getConfig().table.customConfig, this.customConfig)
     },
+    computeCustomSimpleMode () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      const { minHeight, height } = props
+      const customOpts = $xeTable.computeCustomOpts
+      const { mode, popupOptions, placement } = customOpts
+      if (!placement || placement === 'top-left' || placement === 'top-right') {
+        if (!(mode === 'modal' || mode === 'drawer')) {
+          const { mode } = popupOptions || {}
+          if (!mode || mode === 'auto') {
+            if (height || minHeight) {
+              return 'inside'
+            }
+            return 'outside'
+          }
+          if (mode) {
+            return mode
+          }
+        }
+      }
+      return ''
+    },
     computeTableRowExpandedList () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
@@ -1514,6 +1538,7 @@ export default {
     const { exportConfig, importConfig, treeConfig } = props
     const { scrollXStore, scrollYStore } = internalData
     const columnOpts = $xeTable.computeColumnOpts
+    const columnDragOpts = $xeTable.computeColumnDragOpts
     const editOpts = $xeTable.computeEditOpts
     const treeOpts = $xeTable.computeTreeOpts
     const radioOpts = $xeTable.computeRadioOpts
@@ -1529,6 +1554,7 @@ export default {
     // const keyboardOpts = $xeTable.computeKeyboardOpts
     const aggregateOpts = $xeTable.computeAggregateOpts
     const rowDragOpts = $xeTable.computeRowDragOpts
+    const areaOpts = $xeTable.computeAreaOpts
     const { groupFields } = aggregateOpts
 
     if (props.rowId) {
@@ -1623,6 +1649,9 @@ export default {
       if (mouseOpts.area) {
         errLog('vxe.error.notProp', ['mouse-config.area'])
         return
+      }
+      if (areaOpts.selectCellByHeader && columnOpts.drag && columnDragOpts.trigger === 'cell') {
+        errLog('vxe.error.notSupportProp', ['area-config.selectCellByHeader & column-config.drag', 'column-drag-config.trigger=cell', 'column-drag-config.trigger=default'])
       }
     }
     if (!$xeTable.handlePivotTableAggregateData) {
@@ -1998,6 +2027,8 @@ export default {
     const columnDragOpts = $xeTable.computeColumnDragOpts
     const scrollbarXToTop = $xeTable.computeScrollbarXToTop
     const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
+    const customSimpleMode = $xeTable.computeCustomSimpleMode
+    const showCustomSimpleOutside = customSimpleMode === 'outside'
     const { isCrossTableDrag } = rowDragOpts
     const tbOns: {
       contextmenu: (...args: any[]) => void
@@ -2152,7 +2183,7 @@ export default {
           /**
            * 自定义列
            */
-          initStore.custom
+          !showCustomSimpleOutside && initStore.custom
             ? h(TableCustomPanelComponent, {
               key: 'cs',
               ref: 'refTableCustom',
@@ -2198,6 +2229,18 @@ export default {
         h('div', {
           ref: 'refPopupWrapperElem'
         }, [
+          /**
+           * 自定义列
+           */
+          showCustomSimpleOutside && initStore.custom
+            ? h(TableCustomPanelComponent, {
+              key: 'cs',
+              ref: 'refTableCustom',
+              props: {
+                customStore
+              }
+            })
+            : renderEmptyElement($xeTable),
           /**
            * 筛选
            */

@@ -2,12 +2,12 @@ import { CreateElement, VNode, PropType } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
-import { getTpImg, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
+import { getTpImg, addClass, removeClass, hasControlKey, toCssUnit } from '../../../ui/src/dom'
 import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, TableReactData, TableInternalData, VxeColumnPropTypes, VxeTableCustomPanelConstructor, TableCustomPanelReactData, TableCustomPanelInternalData } from '../../../../types'
-import type { VxeButtonDefines, VxeRadioGroupDefines } from 'vxe-pc-ui'
+import type { VxeButtonDefines, VxeRadioGroupDefines, VxeComponentStyleType } from 'vxe-pc-ui'
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
 
@@ -701,7 +701,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const customOpts = $xeTable.computeCustomOpts
       const { immediate } = customOpts
       const columnDragOpts = $xeTable.computeColumnDragOpts
-      const { maxHeight } = customStore
+      const { maxHeight, popupTop } = customStore
       const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement } = customOpts
       const isMaxFixedColumn = $xeTable.computeIsMaxFixedColumn
       const { isCrossDrag } = columnDragOpts
@@ -858,17 +858,18 @@ export default /* define-vxe-component start */ defineVxeComponent({
           )
         }
       })
+      const popupStys: VxeComponentStyleType = {}
+      if (maxHeight && !['left', 'right'].includes(placement || '')) {
+        popupStys.top = toCssUnit(popupTop)
+        popupStys.maxHeight = toCssUnit(maxHeight)
+      }
       return h('div', {
         ref: 'refElem',
         key: 'simple',
         class: ['vxe-table-custom-wrapper', `placement--${placement}`, {
           'is--active': customStore.visible
         }],
-        style: maxHeight && !['left', 'right'].includes(placement || '')
-          ? {
-              maxHeight: `${maxHeight}px`
-            }
-          : {}
+        style: popupStys
       }, customStore.visible
         ? [
             h('div', {
@@ -1242,6 +1243,13 @@ export default /* define-vxe-component start */ defineVxeComponent({
           }, defaultSlot
             ? $xeTable.callSlot(defaultSlot, params, h)
             : [
+                !treeConfig && (aggregateConfig || rowGroupConfig) && $xeTable.getPivotTableAggregatePopupPanel
+                  ? h($xeTable.getPivotTableAggregatePopupPanel(), {
+                    props: {
+                      customStore
+                    }
+                  })
+                  : renderEmptyElement($xeTable),
                 h('div', {
                   ref: 'refCustomBodyElem',
                   class: 'vxe-table-custom-popup--handle-wrapper'
@@ -1325,14 +1333,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
                     }, $xeTable.callSlot(bottomSlot, params, h))
                     : renderEmptyElement($xeTable),
                   $xeTableCustomPanel.renderDragTip(h)
-                ]),
-                !treeConfig && (aggregateConfig || rowGroupConfig) && $xeTable.getPivotTableAggregatePopupPanel
-                  ? h($xeTable.getPivotTableAggregatePopupPanel(), {
-                    props: {
-                      customStore
-                    }
-                  })
-                  : renderEmptyElement($xeTable)
+                ])
               ])
         },
         footer: () => {

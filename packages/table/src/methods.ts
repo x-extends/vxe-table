@@ -2339,14 +2339,17 @@ function calcTableHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   const reactData = $xeTable as unknown as TableReactData
 
   const { editConfig, editRules } = props
-  const { parentHeight } = reactData
+  const { parentHeight, tableColumn } = reactData
   let val = props[key]
   if (key === 'minHeight') {
     const defMinHeight = getConfig().table.minHeight
     if (XEUtils.eqNull(val)) {
       if (eqEmptyValue(defMinHeight)) {
-        // 编辑模式默认最小高度
-        if (editRules && isEnableConf(editConfig)) {
+        if (!tableColumn.length) {
+          // 如果全部列被隐藏
+          val = 40
+        } else if (editRules && isEnableConf(editConfig)) {
+          // 编辑模式默认最小高度
           val = 144
         }
       } else {
@@ -3498,7 +3501,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
       // }
 
       if (!(props.height || props.maxHeight)) {
-        errLog('vxe.error.reqProp', ['height | max-height | virtual-y-config={enabled: false}'])
+        errLog('vxe.error.reqSupportProp', ['virtual-y-config.enabled = true', 'height | max-height'])
       }
       // if (!props.showOverflow) {
       //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
@@ -8650,6 +8653,7 @@ const tableMethods: any = {
   },
   triggerHeaderCellClickEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGantt = $xeTable.$xeGantt
     const props = $xeTable
     const internalData = $xeTable as unknown as TableInternalData
 
@@ -8664,6 +8668,10 @@ const tableMethods: any = {
     const triggerFilter = getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
     if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
       $xeTable.triggerSortEvent(evnt, column, getNextSortOrder($xeTable, column))
+    }
+    if ($xeGantt) {
+      const ganttReactData = $xeGantt.reactData
+      ganttReactData.activeBarRowid = null
     }
     $xeTable.dispatchEvent('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell }, params), evnt)
     if ((columnOpts.isCurrent || props.highlightCurrentColumn) && (!currentColumnOpts.trigger || ['header', 'default'].includes(currentColumnOpts.trigger))) {
@@ -8717,6 +8725,7 @@ const tableMethods: any = {
    */
   triggerCellClickEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGantt = $xeTable.$xeGantt
     const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
 
@@ -8822,6 +8831,10 @@ const tableMethods: any = {
         }
       }
     }
+    if ($xeGantt) {
+      const ganttReactData = $xeGantt.reactData
+      ganttReactData.activeBarRowid = null
+    }
     $xeTable.dispatchEvent('cell-click', params, evnt)
   },
   /**
@@ -8860,6 +8873,25 @@ const tableMethods: any = {
       }
     }
     $xeTable.dispatchEvent('cell-dblclick', params, evnt)
+  },
+  triggerFooterCellClickEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderFooterParams) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const $xeGantt = $xeTable.$xeGantt
+
+    const cell = evnt.currentTarget as HTMLDivElement
+    params = Object.assign({ cell }, params)
+    if ($xeGantt) {
+      const ganttReactData = $xeGantt.reactData
+      ganttReactData.activeBarRowid = null
+    }
+    $xeTable.dispatchEvent('footer-cell-click', params, evnt)
+  },
+  triggerFooterCellDblclickEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderFooterParams) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    const cell = evnt.currentTarget as HTMLDivElement
+    params = Object.assign({ cell }, params)
+    $xeTable.dispatchEvent('footer-cell-dblclick', params, evnt)
   },
   handleColumnSortEvent (evnt: any, column: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -12130,18 +12162,13 @@ const tableMethods: any = {
       setScrollTop(rightScrollElem, scrollTop)
       loadScrollYData($xeTable)
     }
-    if (reactData.scrollXLoad || reactData.scrollYLoad) {
-      return new Promise<void>(resolve => {
-        setTimeout(() => {
-          $xeTable.$nextTick(() => {
-            internalData.intoRunScroll = false
-            resolve()
-          })
-        }, 30)
-      })
-    }
-    return $xeTable.$nextTick().then(() => {
-      internalData.intoRunScroll = false
+    return new Promise<void>(resolve => {
+      setTimeout(() => {
+        $xeTable.$nextTick(() => {
+          internalData.intoRunScroll = false
+          resolve()
+        })
+      }, (reactData.scrollXLoad || reactData.scrollYLoad) ? 30 : 0)
     })
   },
   /**

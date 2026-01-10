@@ -3,24 +3,39 @@ import { getColumnList } from '../../src/util'
 
 import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, TableReactData, TableInternalData } from '../../../../types'
 
-function calcMaxHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const $xeGantt = $xeTable.$xeGantt
   const reactData = $xeTable as unknown as TableReactData
 
   const { customStore } = reactData
+  const customOpts = $xeTable.computeCustomOpts
+  const customSimpleMode = $xeTable.computeCustomSimpleMode
+  const showCustomSimpleOutside = customSimpleMode === 'outside'
+  const { popupOptions } = customOpts
+  const { maxHeight } = popupOptions || {}
   let wrapperEl = $xeTable.$refs.refElem as HTMLDivElement
-  // 判断面板不能大于表格高度
-  let tableHeight = 0
+  let popupTop = 0
+  let popupMaxHeight: string | number = 0
   if ($xeGantt) {
     const ganttContainerElem = $xeGantt.$refs.refGanttContainerElem as HTMLDivElement
     if (ganttContainerElem) {
       wrapperEl = ganttContainerElem
     }
   }
-  if (wrapperEl) {
-    tableHeight = wrapperEl.clientHeight - 28
+  if (showCustomSimpleOutside) {
+    if (wrapperEl) {
+      popupTop = wrapperEl.offsetTop
+    }
+    popupMaxHeight = XEUtils.eqNull(maxHeight) ? 360 : maxHeight
+  } else {
+    // 判断面板不能大于表格高度
+    if (wrapperEl) {
+      popupMaxHeight = wrapperEl.clientHeight - 22
+    }
+    popupMaxHeight = Math.max(88, popupMaxHeight)
   }
-  customStore.maxHeight = Math.max(88, tableHeight)
+  customStore.popupTop = popupTop
+  customStore.maxHeight = XEUtils.eqNull(maxHeight) ? popupMaxHeight : maxHeight
 }
 
 function emitCustomEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, type: VxeTableDefines.CustomType, evnt: Event) {
@@ -49,8 +64,8 @@ export default {
       initStore.custom = true
       $xeTable.handleUpdateCustomColumn()
       $xeTable.checkCustomStatus()
-      calcMaxHeight($xeTable)
-      return $xeTable.$nextTick().then(() => calcMaxHeight($xeTable))
+      updatePopupStyle($xeTable)
+      return $xeTable.$nextTick().then(() => updatePopupStyle($xeTable))
     },
     _closeCustom () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods

@@ -94,10 +94,10 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
       }
     }
     tfOns.click = (evnt: MouseEvent) => {
-      $xeTable.dispatchEvent('footer-cell-click', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
+      $xeTable.triggerFooterCellClickEvent(evnt, cellParams)
     }
     tfOns.dblclick = (evnt: MouseEvent) => {
-      $xeTable.dispatchEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
+      $xeTable.triggerFooterCellDblclickEvent(evnt, cellParams)
     }
     let isMergeCell = false
     // 合并行或列

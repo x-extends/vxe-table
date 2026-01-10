@@ -2565,7 +2565,8 @@ $btnThemeList: (
   /*单元格标记删除状态*/
   .vxe-body--row {
     &.row--pending {
-      color: var(--vxe-ui-table-validate-error-color);
+      color: var(--vxe-ui-font-disabled-color);
+      opacity: 0.5;
       text-decoration: line-through;
       cursor: no-drop;
       .vxe-body--column {
