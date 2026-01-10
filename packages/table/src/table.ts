@@ -586,6 +586,27 @@ export default defineVxeComponent({
       return Object.assign({}, getConfig().table.customConfig, props.customConfig)
     })
 
+    const computeCustomSimpleMode = computed(() => {
+      const { minHeight, height } = props
+      const customOpts = computeCustomOpts.value
+      const { mode, popupOptions, placement } = customOpts
+      if (!placement || placement === 'top-left' || placement === 'top-right') {
+        if (!(mode === 'modal' || mode === 'drawer')) {
+          const { mode } = popupOptions || {}
+          if (!mode || mode === 'auto') {
+            if (height || minHeight) {
+              return 'inside'
+            }
+            return 'outside'
+          }
+          if (mode) {
+            return mode
+          }
+        }
+      }
+      return ''
+    })
+
     const computeTableRowExpandedList = computed(() => {
       const { tableData, rowExpandedFlag, expandColumn, rowGroupExpandedFlag, treeExpandedFlag } = reactData
       const { visibleDataRowIdData, rowExpandedMaps } = internalData
@@ -786,6 +807,7 @@ export default defineVxeComponent({
       computeLoadingOpts,
       computeCellOffsetWidth,
       computeCustomOpts,
+      computeCustomSimpleMode,
       computeLeftFixedWidth,
       computeRightFixedWidth,
       computeBodyMergeCoverFixed,
@@ -1445,14 +1467,17 @@ export default defineVxeComponent({
 
     const calcTableHeight = (key: 'height' | 'minHeight' | 'maxHeight') => {
       const { editConfig, editRules } = props
-      const { parentHeight } = reactData
+      const { parentHeight, tableColumn } = reactData
       let val = props[key]
       if (key === 'minHeight') {
         const defMinHeight = getConfig().table.minHeight
         if (XEUtils.eqNull(val)) {
           if (eqEmptyValue(defMinHeight)) {
-            // 编辑模式默认最小高度
-            if (editRules && isEnableConf(editConfig)) {
+            if (!tableColumn.length) {
+              // 如果全部列被隐藏
+              val = 40
+            } else if (editRules && isEnableConf(editConfig)) {
+              // 编辑模式默认最小高度
               val = 144
             }
           } else {
@@ -3698,7 +3723,7 @@ export default defineVxeComponent({
           // }
 
           if (!(props.height || props.maxHeight)) {
-            errLog('vxe.error.reqProp', ['height | max-height | virtual-y-config={enabled: false}'])
+            errLog('vxe.error.reqSupportProp', ['virtual-y-config.enabled = true', 'height | max-height'])
           }
           // if (!props.showOverflow) {
           //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
@@ -7236,18 +7261,13 @@ export default defineVxeComponent({
           setScrollTop(rightScrollElem, scrollTop)
           loadScrollYData()
         }
-        if (reactData.scrollXLoad || reactData.scrollYLoad) {
-          return new Promise<void>(resolve => {
-            setTimeout(() => {
-              nextTick(() => {
-                internalData.intoRunScroll = false
-                resolve()
-              })
-            }, 30)
-          })
-        }
-        return nextTick().then(() => {
-          internalData.intoRunScroll = false
+        return new Promise<void>(resolve => {
+          setTimeout(() => {
+            nextTick(() => {
+              internalData.intoRunScroll = false
+              resolve()
+            })
+          }, (reactData.scrollXLoad || reactData.scrollYLoad) ? 30 : 0)
         })
       },
       /**
@@ -9780,6 +9800,10 @@ export default defineVxeComponent({
         if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
           $xeTable.triggerSortEvent(evnt, column, getNextSortOrder(column))
         }
+        if ($xeGantt) {
+          const ganttReactData = $xeGantt.reactData
+          ganttReactData.activeBarRowid = null
+        }
         dispatchEvent('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell }, params), evnt)
         if ((columnOpts.isCurrent || props.highlightCurrentColumn) && (!currentColumnOpts.trigger || ['header', 'default'].includes(currentColumnOpts.trigger))) {
           $xeTable.triggerCurrentColumnEvent(evnt, params)
@@ -9896,6 +9920,10 @@ export default defineVxeComponent({
             }
           }
         }
+        if ($xeGantt) {
+          const ganttReactData = $xeGantt.reactData
+          ganttReactData.activeBarRowid = null
+        }
         dispatchEvent('cell-click', params, evnt)
       },
       /**
@@ -9930,6 +9958,20 @@ export default defineVxeComponent({
           }
         }
         dispatchEvent('cell-dblclick', params, evnt)
+      },
+      triggerFooterCellClickEvent (evnt, params) {
+        const cell = evnt.currentTarget as HTMLDivElement
+        params = Object.assign({ cell }, params)
+        if ($xeGantt) {
+          const ganttReactData = $xeGantt.reactData
+          ganttReactData.activeBarRowid = null
+        }
+        $xeTable.dispatchEvent('footer-cell-click', params, evnt)
+      },
+      triggerFooterCellDblclickEvent (evnt, params) {
+        const cell = evnt.currentTarget as HTMLDivElement
+        params = Object.assign({ cell }, params)
+        $xeTable.dispatchEvent('footer-cell-dblclick', params, evnt)
       },
       handleToggleCheckRowEvent (evnt, params) {
         const { selectCheckboxMaps } = internalData
@@ -12701,6 +12743,8 @@ export default defineVxeComponent({
       const columnDragOpts = computeColumnDragOpts.value
       const scrollbarXToTop = computeScrollbarXToTop.value
       const scrollbarYToLeft = computeScrollbarYToLeft.value
+      const customSimpleMode = computeCustomSimpleMode.value
+      const showCustomSimpleOutside = customSimpleMode === 'outside'
       const { isCrossTableDrag } = rowDragOpts
       const tbOns: {
         onContextmenu: (...args: any[]) => void
@@ -12853,7 +12897,7 @@ export default defineVxeComponent({
               /**
                * 自定义列
                */
-              initStore.custom
+              !showCustomSimpleOutside && initStore.custom
                 ? h(TableCustomPanelComponent, {
                   key: 'cs',
                   ref: refTableCustom,
@@ -12899,6 +12943,16 @@ export default defineVxeComponent({
             h('div', {
               ref: refPopupWrapperElem
             }, [
+              /**
+               * 自定义列
+               */
+              showCustomSimpleOutside && initStore.custom
+                ? h(TableCustomPanelComponent, {
+                  key: 'cs',
+                  ref: refTableCustom,
+                  customStore
+                })
+                : renderEmptyElement($xeTable),
               /**
                * 筛选
                */
@@ -13251,6 +13305,7 @@ export default defineVxeComponent({
       const { exportConfig, importConfig, treeConfig } = props
       const { scrollXStore, scrollYStore } = internalData
       const columnOpts = computeColumnOpts.value
+      const columnDragOpts = computeColumnDragOpts.value
       const aggregateOpts = computeAggregateOpts.value
       const virtualYOpts = computeVirtualYOpts.value
       const editOpts = computeEditOpts.value
@@ -13267,6 +13322,7 @@ export default defineVxeComponent({
       // const currentColumnOpts = computeCurrentColumnOpts.value
       // const keyboardOpts = computeKeyboardOpts.value
       const rowDragOpts = computeRowDragOpts.value
+      const areaOpts = computeAreaOpts.value
       const { groupFields } = aggregateOpts
 
       if ($xeGantt) {
@@ -13378,6 +13434,9 @@ export default defineVxeComponent({
         if (mouseOpts.area) {
           errLog('vxe.error.notProp', ['mouse-config.area'])
           return
+        }
+        if (areaOpts.selectCellByHeader && columnOpts.drag && columnDragOpts.trigger === 'cell') {
+          errLog('vxe.error.notSupportProp', ['area-config.selectCellByHeader & column-config.drag', 'column-drag-config.trigger=cell', 'column-drag-config.trigger=default'])
         }
       }
       if (!$xeTable.handlePivotTableAggregateData) {

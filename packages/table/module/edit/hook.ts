@@ -139,7 +139,7 @@ hooks.add('tableEditModule', {
           if (treeConfig) {
             throw new Error(getI18n('vxe.error.noTree', ['insert']))
           }
-          warnLog(getI18n('vxe.error.noGroup', ['remove']))
+          errLog(getI18n('vxe.error.noGroup', ['insert']))
           // insertGroupRow(newRecords, false)
         } else {
           newRecords.forEach(item => {
@@ -168,7 +168,7 @@ hooks.add('tableEditModule', {
             if (treeConfig) {
               throw new Error(getI18n('vxe.error.noTree', ['insert']))
             }
-            warnLog(getI18n('vxe.error.noGroup', ['remove']))
+            errLog(getI18n('vxe.error.noGroup', ['insert']))
             // insertGroupRow(newRecords, true)
           } else {
             newRecords.forEach(item => {
@@ -239,7 +239,7 @@ hooks.add('tableEditModule', {
             if (treeConfig) {
               throw new Error(getI18n('vxe.error.noTree', ['insert']))
             }
-            warnLog(getI18n('vxe.error.noGroup', ['remove']))
+            errLog(getI18n('vxe.error.noGroup', ['insert']))
           } else {
             if (treeConfig) {
               throw new Error(getI18n('vxe.error.noTree', ['insert']))

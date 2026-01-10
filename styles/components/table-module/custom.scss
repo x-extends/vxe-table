@@ -239,6 +239,7 @@
     word-break: break-all;
     border-spacing: 0;
     border-collapse: separate;
+    box-sizing: border-box;
     th {
       position: sticky;
       top: 0;
@@ -254,6 +255,7 @@
       border-left: 1px solid var(--vxe-ui-table-border-color);
     }
     tr {
+      box-sizing: border-box;
       &:first-child {
         td {
           border-top: 0;
@@ -267,6 +269,7 @@
     td {
       height: 44px;
       padding: 0 0.6em;
+      box-sizing: border-box;
       &:last-child {
         border-right: 1px solid var(--vxe-ui-table-border-color);
       }

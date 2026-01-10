@@ -122,10 +122,10 @@ export default defineVxeComponent({
           }
         }
         tfOns.onClick = (evnt: MouseEvent) => {
-          $xeTable.dispatchEvent('footer-cell-click', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
+          $xeTable.triggerFooterCellClickEvent(evnt, cellParams)
         }
         tfOns.onDblclick = (evnt: MouseEvent) => {
-          $xeTable.dispatchEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
+          $xeTable.triggerFooterCellDblclickEvent(evnt, cellParams)
         }
         let isMergeCell = false
         // 合并行或列

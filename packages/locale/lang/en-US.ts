@@ -539,6 +539,9 @@ export default {
         ss: 'Second'
       }
     },
+    contextMenu: {
+      loadingText: 'Loading'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',

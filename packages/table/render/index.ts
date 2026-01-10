@@ -764,6 +764,9 @@ function handleNumberCell (renderOpts: VxeGlobalRendererHandles.RenderTableDefau
         cellValue = `${props.currencySymbol || numberInputConfig.currencySymbol || getI18n('vxe.numberInput.currencySymbol') || ''}${cellValue}`
       }
     } else {
+      if (type === 'integer') {
+        cellValue = XEUtils.toInteger(cellValue)
+      }
       if (showNegativeStatus) {
         if (XEUtils.toNumber(cellValue) < 0) {
           isNegative = true

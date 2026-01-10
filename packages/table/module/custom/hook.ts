@@ -10,16 +10,21 @@ const tableCustomMethodKeys: (keyof TableCustomMethods)[] = ['openCustom', 'clos
 VxeUI.hooks.add('tableCustomModule', {
   setupTable ($xeTable) {
     const { reactData, internalData } = $xeTable
-    const { computeCustomOpts, computeRowGroupFields } = $xeTable.getComputeMaps()
+    const { computeCustomOpts, computeRowGroupFields, computeCustomSimpleMode } = $xeTable.getComputeMaps()
     const { refElem } = $xeTable.getRefMaps()
 
     const $xeGantt = $xeTable.xeGantt
 
-    const calcMaxHeight = () => {
+    const updatePopupStyle = () => {
       const { customStore } = reactData
+      const customOpts = computeCustomOpts.value
+      const customSimpleMode = computeCustomSimpleMode.value
+      const showCustomSimpleOutside = customSimpleMode === 'outside'
+      const { popupOptions } = customOpts
+      const { maxHeight } = popupOptions || {}
       let wrapperEl = refElem.value
-      // 判断面板不能大于表格高度
-      let tableHeight = 0
+      let popupTop = 0
+      let popupMaxHeight: string | number = 0
       if ($xeGantt) {
         const { refGanttContainerElem } = $xeGantt.getRefMaps()
         const ganttContainerElem = refGanttContainerElem.value
@@ -27,10 +32,20 @@ VxeUI.hooks.add('tableCustomModule', {
           wrapperEl = ganttContainerElem
         }
       }
-      if (wrapperEl) {
-        tableHeight = wrapperEl.clientHeight - 28
+      if (showCustomSimpleOutside) {
+        if (wrapperEl) {
+          popupTop = wrapperEl.offsetTop
+        }
+        popupMaxHeight = XEUtils.eqNull(maxHeight) ? 360 : maxHeight
+      } else {
+        // 判断面板不能大于表格高度
+        if (wrapperEl) {
+          popupMaxHeight = wrapperEl.clientHeight - 22
+        }
+        popupMaxHeight = Math.max(88, popupMaxHeight)
       }
-      customStore.maxHeight = Math.max(88, tableHeight)
+      customStore.popupTop = popupTop
+      customStore.maxHeight = XEUtils.eqNull(maxHeight) ? popupMaxHeight : maxHeight
     }
 
     const openCustom = () => {
@@ -39,8 +54,8 @@ VxeUI.hooks.add('tableCustomModule', {
       initStore.custom = true
       handleUpdateCustomColumn()
       checkCustomStatus()
-      calcMaxHeight()
-      return nextTick().then(() => calcMaxHeight())
+      updatePopupStyle()
+      return nextTick().then(() => updatePopupStyle())
     }
 
     const handleUpdateCustomColumn = () => {

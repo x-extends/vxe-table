@@ -11,6 +11,8 @@ const { renderer, hooks } = VxeUI
 
 const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['openFilter', 'setFilter', 'clearFilter', 'saveFilter', 'saveFilterByEvent', 'saveFilterPanel', 'saveFilterPanelByEvent', 'resetFilter', 'resetFilterByEvent', 'resetFilterPanel', 'resetFilterPanelByEvent', 'getCheckedFilters', 'updateFilterOptionStatus']
 
+const sourceType = 'table'
+
 hooks.add('tableFilterModule', {
   setupTable ($xeTable) {
     const $xeGrid = $xeTable.xeGrid
@@ -31,16 +33,7 @@ hooks.add('tableFilterModule', {
           filterStore.isIndeterminate = !filterStore.isAllSelected && filterOptions.some((item) => item._checked)
         }
       },
-      /**
-       * 点击筛选事件
-       * 当筛选图标被点击时触发
-       * 更新选项是否全部状态
-       * 打开筛选面板
-       * @param {Event} evnt 事件
-       * @param {ColumnInfo} column 列配置
-       * @param {Object} params 参数
-       */
-      triggerFilterEvent (evnt: MouseEvent, column: VxeTableDefines.ColumnInfo, params) {
+      handleOpenFilterColumn (evnt: MouseEvent, btnEl: HTMLDivElement | null, colEl: HTMLDivElement, column: VxeTableDefines.ColumnInfo, params: any) {
         const { initStore, filterStore } = reactData
         const { elemStore } = internalData
         if (filterStore.column === column && filterStore.visible) {
@@ -50,8 +43,8 @@ hooks.add('tableFilterModule', {
           const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
           const filterOpts = computeFilterOpts.value
           const { transfer } = filterOpts
+          const currEl = btnEl || colEl
           const tableRect = tableEl.getBoundingClientRect()
-          const btnElem = evnt.currentTarget as HTMLDivElement
           const filterRender = column ? column.filterRender : null
           const compConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
           $xeTable.handleFilterOptions(column)
@@ -69,17 +62,21 @@ hooks.add('tableFilterModule', {
             if (!filterWrapperElem) {
               return
             }
-            const btnRect = btnElem.getBoundingClientRect()
+            const btnRect = currEl.getBoundingClientRect()
             const filterHeadElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-header')
             const filterFootElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-footer')
             const filterWidth = filterWrapperElem.offsetWidth
-            const centerWidth = filterWidth / 2
+            const centerWidth = btnEl ? filterWidth / 2 : ((filterWidth - column.renderWidth) / 2)
             let left = 0
             let top = 0
             let maxHeight: number = 0
+            /**
+             * 是否显示筛选按钮图标
+             * 如果不存在图标，则相对单元格居中显示
+             */
             if (transfer) {
               left = btnRect.left - centerWidth + scrollLeft
-              top = btnRect.top + btnElem.clientHeight + scrollTop
+              top = btnRect.top + currEl.clientHeight + scrollTop
               maxHeight = Math.min(Math.max(tableRect.height, Math.floor(visibleHeight / 2)), Math.max(80, visibleHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 28))
               if (left < 16) {
                 left = 16
@@ -88,7 +85,7 @@ hooks.add('tableFilterModule', {
               }
             } else {
               left = btnRect.left - tableRect.left - centerWidth
-              top = btnRect.top - tableRect.top + btnElem.clientHeight
+              top = btnRect.top - tableRect.top + currEl.clientHeight
               maxHeight = Math.max(40, tableEl.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
               if (left < 1) {
                 left = 1
@@ -116,6 +113,23 @@ hooks.add('tableFilterModule', {
           })
         }
         $xeTable.dispatchEvent('filter-visible', { column, field: column.field, property: column.field, filterList: $xeTable.getCheckedFilters(), visible: filterStore.visible }, evnt)
+      },
+      /**
+       * 点击筛选事件
+       * 当筛选图标被点击时触发
+       * 更新选项是否全部状态
+       * 打开筛选面板
+       * @param {Event} evnt 事件
+       * @param {ColumnInfo} column 列配置
+       * @param {Object} params 参数
+       */
+      triggerFilterEvent (evnt: MouseEvent, column: VxeTableDefines.ColumnInfo, params) {
+        const { elemStore } = internalData
+        const { fixed } = column
+        const headerWrapperElem = getRefElem(elemStore[`${fixed || 'main'}-header-wrapper`] || elemStore['main-header-wrapper'])
+        const btnElem = evnt.currentTarget as HTMLDivElement
+        const colEl = headerWrapperElem ? headerWrapperElem.querySelector<HTMLElement>(`.vxe-header--column.${column.id}`) : null
+        $xeTable.handleOpenFilterColumn(evnt, btnElem, colEl || btnElem, column, params)
       },
       handleClearFilter (column) {
         if (column) {
@@ -266,12 +280,39 @@ hooks.add('tableFilterModule', {
         const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column && column.filters) {
           const { elemStore } = internalData
-          const { fixed } = column
+          const { fixed, filters } = column
           return $xeTable.scrollToColumn(column).then(() => {
             const headerWrapperElem = getRefElem(elemStore[`${fixed || 'main'}-header-wrapper`] || elemStore['main-header-wrapper'])
             if (headerWrapperElem) {
-              const filterBtnElem = headerWrapperElem.querySelector(`.vxe-header--column.${column.id} .vxe-cell--filter`) as HTMLElement
-              triggerEvent(filterBtnElem, 'click')
+              const filterBtnElem = headerWrapperElem.querySelector<HTMLElement>(`.vxe-header--column.${column.id} .vxe-cell--filter`)
+              if (filterBtnElem) {
+                triggerEvent(filterBtnElem, 'click')
+              } else {
+                const colEl = headerWrapperElem.querySelector<HTMLElement>(`.vxe-header--column.${column.id}`)
+                if (colEl) {
+                  let firstFilterOption: VxeTableDefines.FilterOption | null = null
+                  if (filters) {
+                    firstFilterOption = filters[0] as VxeTableDefines.FilterOption
+                  }
+                  const params = {
+                    $table: $xeTable,
+                    $grid: $xeGrid,
+                    $gantt: $xeGantt,
+                    $rowIndex: -1,
+                    column,
+                    columnIndex: $xeTable.getColumnIndex(column),
+                    $columnIndex: $xeTable.getVMColumnIndex(column),
+                    _columnIndex: $xeTable.getVTColumnIndex(column),
+                    firstFilterOption: firstFilterOption as VxeTableDefines.FilterOption,
+                    fixed,
+                    source: sourceType,
+                    type: 'header'
+                    // isHidden
+                    // hasFilter
+                  }
+                  $xeTable.handleOpenFilterColumn(new Event('click'), null, colEl, column, params)
+                }
+              }
             }
           })
         }

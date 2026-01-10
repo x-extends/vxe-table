@@ -213,7 +213,8 @@ export function createReactData (): TableReactData {
       activeBtn: false,
       activeWrapper: false,
       visible: false,
-      maxHeight: 0,
+      maxHeight: null,
+      popupTop: 0,
       oldSortMaps: {},
       oldFixedMaps: {},
       oldVisibleMaps: {}
