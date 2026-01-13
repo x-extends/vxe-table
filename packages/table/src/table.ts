@@ -13651,8 +13651,8 @@ export default defineVxeComponent({
           errLog('vxe.error.notProp', ['mouse-config.area'])
           return
         }
-        if (areaOpts.selectCellByHeader && columnOpts.drag && columnDragOpts.trigger === 'cell') {
-          errLog('vxe.error.notSupportProp', ['area-config.selectCellByHeader & column-config.drag', 'column-drag-config.trigger=cell', 'column-drag-config.trigger=default'])
+        if (mouseOpts.area && areaOpts.selectCellByHeader && columnOpts.drag && columnDragOpts.trigger === 'cell') {
+          errLog('vxe.error.notSupportProp', ['area-config.selectCellByHeader & column-config.drag', 'column-drag-config.trigger=cell', 'column-drag-config.trigger=default | area-config.selectCellByHeader=false'])
         }
       }
       if (!$xeTable.handlePivotTableAggregateData) {
