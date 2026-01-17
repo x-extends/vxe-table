@@ -230,9 +230,16 @@ export default defineVxeComponent({
       const filterOpts = computeFilterOpts.value
       const hasCheckOption = computeHasCheckOption.value
       const { filterRender, filterMultiple } = column
+      const { confirmButtonText, resetButtonText, showFooter } = filterOpts
       const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
-      return (compConf ? !(compConf.showTableFilterFooter === false || compConf.showFilterFooter === false || compConf.isFooter === false) : filterMultiple)
+      let showFlFoot = !!filterMultiple
+      if (XEUtils.isBoolean(showFooter)) {
+        showFlFoot = showFooter
+      } else if (compConf) {
+        showFlFoot = !(compConf.showTableFilterFooter === false || compConf.showFilterFooter === false || compConf.isFooter === false)
+      }
+      return showFlFoot
         ? [
             h('div', {
               class: 'vxe-table--filter-footer'
@@ -243,10 +250,10 @@ export default defineVxeComponent({
                 },
                 disabled: isDisabled,
                 onClick: confirmFilter
-              }, filterOpts.confirmButtonText || getI18n('vxe.table.confirmFilter')),
+              }, confirmButtonText || getI18n('vxe.table.confirmFilter')),
               h('button', {
                 onClick: resetFilter
-              }, filterOpts.resetButtonText || getI18n('vxe.table.resetFilter'))
+              }, resetButtonText || getI18n('vxe.table.resetFilter'))
             ])
           ]
         : []

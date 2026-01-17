@@ -13518,7 +13518,7 @@ export default defineVxeComponent({
     })
 
     onMounted(() => {
-      const { exportConfig, importConfig, treeConfig } = props
+      const { exportConfig, importConfig, treeConfig, minHeight } = props
       const { scrollXStore, scrollYStore } = internalData
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
@@ -13706,6 +13706,9 @@ export default defineVxeComponent({
       }
       if (checkboxOpts.halfField) {
         warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
+      }
+      if (props.editConfig && isEnableConf(editOpts) && props.editRules && (minHeight === 0 || minHeight === '0')) {
+        warnLog('vxe.error.reqSupportProp', ['edit-config & edit-rules', 'min-height'])
       }
 
       if (treeConfig) {
