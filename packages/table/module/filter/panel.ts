@@ -5,6 +5,7 @@ import { formatText, isEnableConf } from '../../../ui/src/utils'
 import { getPropClass, toCssUnit } from '../../../ui/src/dom'
 import { getSlotVNs } from '../../../ui/src/vn'
 import { warnLog } from '../../../ui/src/log'
+import XEUtils from 'xe-utils'
 
 import type { VxeGlobalRendererOptions, VxeComponentSizeType } from 'vxe-pc-ui'
 import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, VxeTableDefines, VxeColumnPropTypes } from '../../../../types'
@@ -272,9 +273,16 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const filterOpts = $xeTable.computeFilterOpts
       const hasCheckOption = $xeFilterPanel.computeHasCheckOption
       const { filterRender, filterMultiple } = column
+      const { confirmButtonText, resetButtonText, showFooter } = filterOpts
       const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
-      return filterMultiple && (compConf ? !(compConf.showTableFilterFooter === false || compConf.showFilterFooter === false || compConf.isFooter === false) : true)
+      let showFlFoot = !!filterMultiple
+      if (XEUtils.isBoolean(showFooter)) {
+        showFlFoot = showFooter
+      } else if (compConf) {
+        showFlFoot = !(compConf.showTableFilterFooter === false || compConf.showFilterFooter === false || compConf.isFooter === false)
+      }
+      return showFlFoot
         ? [
             h('div', {
               class: 'vxe-table--filter-footer'
@@ -289,12 +297,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 on: {
                   click: ($xeFilterPanel as any).confirmFilter
                 }
-              }, filterOpts.confirmButtonText || getI18n('vxe.table.confirmFilter')),
+              }, confirmButtonText || getI18n('vxe.table.confirmFilter')),
               h('button', {
                 on: {
                   click: ($xeFilterPanel as any).resetFilter
                 }
-              }, filterOpts.resetButtonText || getI18n('vxe.table.resetFilter'))
+              }, resetButtonText || getI18n('vxe.table.resetFilter'))
             ])
           ]
         : []
