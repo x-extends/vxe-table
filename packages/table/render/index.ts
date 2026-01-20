@@ -793,6 +793,17 @@ function handleNumberCell (h: CreateElement, renderOpts: VxeGlobalRendererHandle
     : {})
 }
 
+function handleFormatDatePicker (renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, params: VxeGlobalRendererHandles.TableCellFormatterParams) {
+  const { props = {} } = renderOpts
+  const { cellValue } = params
+  if (cellValue) {
+    if (props.type !== 'time') {
+      return getLabelFormatDate(cellValue, props)
+    }
+  }
+  return cellValue
+}
+
 function handleFormatSelect (renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, params: VxeGlobalRendererHandles.TableCellFormatterParams | VxeGlobalRendererHandles.TableCellCopyMethodParams) {
   const { cellValue } = params
   return handleSelectCellValue(cellValue, renderOpts)
@@ -1022,6 +1033,7 @@ renderer.mixin({
       }
       return getCellLabelVNs(h, renderOpts, params, cellValue)
     },
+    tableCellFormatter: handleFormatDatePicker,
     renderTableDefault: defaultEditRender,
     createTableFilterOptions: defaultFilterOptions,
     renderTableFilter: defaultFilterRender,
