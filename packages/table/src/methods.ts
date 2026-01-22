@@ -11029,8 +11029,8 @@ const tableMethods: any = {
       XEUtils.each(fullAllDataRowIdData, (rowRest) => {
         rowRest.treeLoaded = false
       })
+      internalData.treeExpandedMaps = {}
     }
-    internalData.treeExpandedMaps = {}
     if (transform) {
       handleVirtualTreeToList($xeTable)
       $xeTable.handleTableData()
