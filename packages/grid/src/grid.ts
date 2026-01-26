@@ -1,4 +1,4 @@
-import { h, ref, computed, provide, reactive, onUnmounted, watch, nextTick, VNode, onMounted } from 'vue'
+import { h, ref, computed, provide, reactive, onBeforeUnmount, watch, nextTick, VNode, onMounted } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
@@ -20,6 +20,25 @@ const { getConfig, getI18n, commands, hooks, useFns, createEvent, globalEvents, 
 
 const tableComponentPropKeys = Object.keys(tableProps) as (keyof VxeTableProps)[]
 const tableComponentMethodKeys: (keyof VxeTableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'setRow', 'createData', 'createRow', 'revertData', 'clearData', 'isRemoveByRow', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getFullColumns', 'getData', 'getCheckboxRecords', 'getParentRow', 'getTreeRowChildren', 'getTreeRowLevel', 'getTreeParentRow', 'getRowSeq', 'getRowById', 'getRowid', 'getTableData', 'getFullData', 'setColumnFixed', 'clearColumnFixed', 'setColumnWidth', 'getColumnWidth', 'recalcRowHeight', 'setRowHeightConf', 'getRowHeightConf', 'setRowHeight', 'getRowHeight', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'closeTooltip', 'isAllCheckboxChecked', 'isAllCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'setCheckboxRowKey', 'isCheckedByCheckboxRow', 'isCheckedByCheckboxRowKey', 'isIndeterminateByCheckboxRow', 'isIndeterminateByCheckboxRowKey', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'isCheckedByRadioRowKey', 'setRadioRow', 'setRadioRowKey', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'setPendingRow', 'togglePendingRow', 'hasPendingByRow', 'isPendingByRow', 'getPendingRecords', 'clearPendingRow', 'setFilterByEvent', 'sort', 'setSort', 'setSortByEvent', 'clearSort', 'clearSortByEvent', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'clearFilterByEvent', 'isActiveFilterByColumn', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadRowExpand', 'reloadRowExpand', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'isRowExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeExpand', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'getScrollData', 'scrollTo', 'scrollToStartRow', 'scrollToEndRow', 'scrollToRow', 'scrollToStartColumn', 'scrollToEndColumn', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeInsertRow', 'removeMergeCells', 'getMergeCells', 'setMergeHeaderCells', 'removeMergeHeaderCells', 'getMergeHeaderCells', 'clearMergeHeaderCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'getCustomStoreData', 'setRowGroupExpand', 'setRowGroupExpandByField', 'setAllRowGroupExpand', 'clearRowGroupExpand', 'isRowGroupExpandByRow', 'isRowGroupRecord', 'isAggregateRecord', 'isAggregateExpandByRow', 'getAggregateContentByRow', 'getAggregateRowChildren', 'setRowGroups', 'clearRowGroups', 'openTooltip', 'moveColumnTo', 'moveRowTo', 'getCellLabel', 'getCellElement', 'focus', 'blur', 'connect', 'connectToolbar']
+
+function createReactData (): GridReactData {
+  return {
+    tableLoading: false,
+    proxyInited: false,
+    isZMax: false,
+    tableData: [],
+    filterData: [],
+    formData: {},
+    sortData: [],
+    footerData: [],
+    tZindex: 0,
+    tablePage: {
+      total: 0,
+      pageSize: getConfig().pager?.pageSize || 10,
+      currentPage: 1
+    }
+  }
+}
 
 function createInternalData (): GridInternalData {
   return {
@@ -44,22 +63,7 @@ export default defineVxeComponent({
 
     const { computeSize } = useFns.useSize(props)
 
-    const reactData = reactive<GridReactData>({
-      tableLoading: false,
-      proxyInited: false,
-      isZMax: false,
-      tableData: [],
-      filterData: [],
-      formData: {},
-      sortData: [],
-      footerData: [],
-      tZindex: 0,
-      tablePage: {
-        total: 0,
-        pageSize: getConfig().pager?.pageSize || 10,
-        currentPage: 1
-      }
-    })
+    const reactData = reactive(createReactData())
 
     const internalData = createInternalData()
 
@@ -1745,8 +1749,9 @@ export default defineVxeComponent({
       globalEvents.on($xeGrid, 'keydown', handleGlobalKeydownEvent)
     })
 
-    onUnmounted(() => {
+    onBeforeUnmount(() => {
       globalEvents.off($xeGrid, 'keydown')
+      XEUtils.assign(reactData, createReactData())
       XEUtils.assign(internalData, createInternalData())
     })
 

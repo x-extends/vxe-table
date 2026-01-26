@@ -22,9 +22,9 @@
 
 * 版本说明
   * **V4**
-    * [x] v3.17 优化触摸板操作；重构筛选渲染，配置更简单功能更强大
-    * [x] v3.16 适配 Gantt 甘特图
-    * [x] v3.15 优化虚拟渲染，降低内存的占用率
+    * [x] v4.17 优化触摸板操作；重构筛选渲染，配置更简单功能更强大
+    * [x] v4.16 适配 Gantt 甘特图
+    * [x] v4.15 优化虚拟渲染，降低内存的占用率
     * [x] v4.14 重构虚拟渲染，提高渲染与拖拽效果流畅度
     * [x] v4.13 优化虚拟渲染，提升 Chrome、Safari、Firefox 流畅度极兼容性
     * [x] v4.12 重构虚拟渲染，支持百万级数据渲染、渲染性能及流畅度大幅提升
@@ -113,13 +113,13 @@
 * [x] 虚拟滚动
 * [x] 虚拟合并
 * [x] CSS 变量主题
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 数据汇总
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 聚合函数
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格区域选取
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格复制/粘贴
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格查找和替换
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 全键盘操作
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 集成图表
+* [x] ([企业版](https://store.vxeui.com)) 数据汇总
+* [x] ([企业版](https://store.vxeui.com)) 聚合函数
+* [x] ([企业版](https://store.vxeui.com)) 单元格区域选取
+* [x] ([企业版](https://store.vxeui.com)) 单元格复制/粘贴
+* [x] ([企业版](https://store.vxeui.com)) 单元格查找和替换
+* [x] ([企业版](https://store.vxeui.com)) 全键盘操作
+* [x] ([企业版](https://store.vxeui.com)) 集成图表
 
 ## 安装
 

@@ -122,7 +122,7 @@ export default defineVxeComponent({
 
       const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, treeConfig, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
       const { tableData, tableColumn, dragRow, overflowX, overflowY, currentColumn, scrollXLoad, scrollYLoad, mergeBodyFlag, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, editStore, isAllOverflow, validErrorMaps } = tableReactData
-      const { fullAllDataRowIdData, fullColumnIdData, mergeBodyCellMaps, visibleColumn, afterFullData, mergeBodyList, scrollXStore, scrollYStore } = tableInternalData
+      const { fullAllDataRowIdData, fullColumnIdData, mergeBodyCellMaps, visibleColumn, afterFullData, mergeBodyList, scrollXStore, scrollYStore, keepUpdateFieldMaps } = tableInternalData
       const cellOpts = computeCellOpts.value
       const validOpts = computeValidOpts.value
       const checkboxOpts = computeCheckboxOpts.value
@@ -142,7 +142,7 @@ export default defineVxeComponent({
       const areaOpts = computeAreaOpts.value
       const cellOffsetWidth = computeCellOffsetWidth.value
       const { selectCellToRow } = areaOpts
-      const { type, cellRender, editRender, align, showOverflow, className, treeNode, rowResize, padding, verticalAlign, slots } = column
+      const { field, type, cellRender, editRender, align, showOverflow, className, treeNode, rowResize, padding, verticalAlign, slots } = column
       const { verticalAlign: allVerticalAlign } = cellOpts
       const { actived } = editStore
       const rowRest = fullAllDataRowIdData[rowid] || {}
@@ -297,8 +297,8 @@ export default defineVxeComponent({
         }
       }
       // 如果编辑列开启显示状态
-      if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && (editOpts.showStatus || editOpts.showUpdateStatus)) {
-        isDirty = $xeTable.isUpdateByRow(row, column.field)
+      if (!fixedHiddenColumn && editConfig && (editOpts.showStatus || editOpts.showUpdateStatus) && keepUpdateFieldMaps[field]) {
+        isDirty = $xeTable.isUpdateByRow(row, field)
       }
 
       const isVNAutoHeight = !hasEllipsis && (scrollYLoad || scrollXLoad)

@@ -39,7 +39,7 @@
   border: 1px solid var(--vxe-ui-base-popup-border-color);
   color: var(--vxe-ui-font-color);
   box-shadow: var(--vxe-ui-base-popup-box-shadow);
-  z-index: 10;
+  z-index: 15;
   &:not(.is--multiple) {
     .vxe-table--filter-header,
     .vxe-table--filter-body {

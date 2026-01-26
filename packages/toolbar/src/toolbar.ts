@@ -1,4 +1,4 @@
-import { h, ref, computed, inject, createCommentVNode, VNode, reactive, nextTick, PropType, onUnmounted } from 'vue'
+import { h, ref, computed, inject, createCommentVNode, VNode, reactive, nextTick, PropType, onBeforeUnmount } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
@@ -9,6 +9,14 @@ import type { ValueOf, VxeButtonEvents, VxeComponentSlotType, VxeButtonDefines }
 import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, ToolbarInternalData, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, ToolbarPrivateRef, ToolbarReactData, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, useFns } = VxeUI
+
+function createReactData (): ToolbarReactData {
+  return {
+    isRefresh: false,
+    connectFlag: 0,
+    columns: []
+  }
+}
 
 function createInternalData (): ToolbarInternalData {
   return {
@@ -68,11 +76,7 @@ export default defineVxeComponent({
 
     const { computeSize } = useFns.useSize(props)
 
-    const reactData = reactive<ToolbarReactData>({
-      isRefresh: false,
-      connectFlag: 0,
-      columns: []
-    })
+    const reactData = reactive(createReactData())
 
     const internalData = createInternalData()
 
@@ -684,7 +688,8 @@ export default defineVxeComponent({
       }
     })
 
-    onUnmounted(() => {
+    onBeforeUnmount(() => {
+      XEUtils.assign(reactData, createReactData())
       XEUtils.assign(internalData, createInternalData())
     })
 

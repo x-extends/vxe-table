@@ -370,6 +370,10 @@ export default defineVxeComponent({
       return Object.assign({}, getConfig().table.editConfig, props.editConfig) as VxeTablePropTypes.EditOpts
     })
 
+    const computeEditDirtyOpts = computed(() => {
+      return Object.assign({}, getConfig().table.editDirtyConfig, props.editDirtyConfig)
+    })
+
     const computeSortOpts = computed(() => {
       return Object.assign({ orders: ['asc', 'desc', null] }, getConfig().table.sortConfig, props.sortConfig) as VxeTablePropTypes.SortOpts
     })
@@ -652,6 +656,33 @@ export default defineVxeComponent({
       return false
     })
 
+    const computeKeepFields = computed(() => {
+      const { tableFullColumn } = internalData
+      const { updateColFlag } = reactData
+      const editDirtyOpts = computeEditDirtyOpts.value
+      const { includeFields, excludeFields } = editDirtyOpts
+      const kpFields: string[] = []
+      if (updateColFlag) {
+        if (includeFields && includeFields.length) {
+          return includeFields
+        }
+        const exfMaps: Record<string, number> = {}
+        if (excludeFields && excludeFields.length) {
+          excludeFields.forEach(field => {
+            exfMaps[field] = 1
+          })
+        }
+        for (let i = 0; i < tableFullColumn.length; i++) {
+          const column = tableFullColumn[i]
+          const { field, type, editRender, cellRender } = column
+          if (field && !type && (editRender || cellRender) && !exfMaps[field]) {
+            kpFields.push(field)
+          }
+        }
+      }
+      return kpFields
+    })
+
     const computeTableBorder = computed(() => {
       const { border } = props
       if (border === true) {
@@ -783,6 +814,7 @@ export default defineVxeComponent({
       computeHeaderTooltipOpts,
       computeFooterTooltipOpts,
       computeEditOpts,
+      computeEditDirtyOpts,
       computeSortOpts,
       computeFilterOpts,
       computeFloatingFilterOpts,
@@ -813,6 +845,7 @@ export default defineVxeComponent({
       computeBodyMergeCoverFixed,
       computeFixedColumnSize,
       computeIsMaxFixedColumn,
+      computeKeepFields,
       computeIsAllCheckboxDisabled,
       computeIsHeaderRenderOptimize,
       computeIsBodyRenderOptimize,
@@ -1589,6 +1622,7 @@ export default defineVxeComponent({
           const newCollectCols = XEUtils.toArrayTree(XEUtils.orderBy(allCols, 'renderSortNumber'), { key: 'id', parentKey: 'parentId', children: 'children' })
           internalData.collectColumn = newCollectCols
           internalData.tableFullColumn = getColumnList(newCollectCols)
+          reactData.updateColFlag++
         }
         reactData.isCustomStatus = true
       } else {
@@ -3850,8 +3884,9 @@ export default defineVxeComponent({
     const handleUpdateColumn = () => {
       const columnList = XEUtils.orderBy(internalData.collectColumn, 'renderSortNumber')
       internalData.collectColumn = columnList
-      const tableFullColumn = getColumnList(columnList)
-      internalData.tableFullColumn = tableFullColumn
+      const tFullColumn = getColumnList(columnList)
+      internalData.tableFullColumn = tFullColumn
+      reactData.updateColFlag++
       cacheColumnMap()
     }
 
@@ -4030,8 +4065,9 @@ export default defineVxeComponent({
     const handleInitColumn = (collectColumn: VxeTableDefines.ColumnInfo[]) => {
       const expandOpts = computeExpandOpts.value
       internalData.collectColumn = collectColumn
-      const tableFullColumn = getColumnList(collectColumn)
-      internalData.tableFullColumn = tableFullColumn
+      const tFullColumn = getColumnList(collectColumn)
+      internalData.tableFullColumn = tFullColumn
+      reactData.updateColFlag++
       reactData.isColLoading = true
       initColumnHierarchy()
       return Promise.resolve(
@@ -5340,7 +5376,8 @@ export default defineVxeComponent({
        */
       isUpdateByRow (rowidOrRow, field) {
         const { keepSource } = props
-        const { tableFullColumn, fullDataRowIdData, sourceDataRowIdData } = internalData
+        const { fullDataRowIdData, sourceDataRowIdData } = internalData
+        const keepFields = computeKeepFields.value
         if (keepSource) {
           const rowid = XEUtils.isString(rowidOrRow) || XEUtils.isNumber(rowidOrRow) ? rowidOrRow : getRowid($xeTable, rowidOrRow)
           const rowRest = fullDataRowIdData[rowid]
@@ -5354,9 +5391,8 @@ export default defineVxeComponent({
             if (arguments.length > 1) {
               return !eqCellValue(oRow, row, field as string)
             }
-            for (let index = 0, len = tableFullColumn.length; index < len; index++) {
-              const property = tableFullColumn[index].field
-              if (property && !eqCellValue(oRow, row, property)) {
+            for (let i = 0; i < keepFields.length; i++) {
+              if (!eqCellValue(oRow, row, keepFields[i])) {
                 return true
               }
             }
@@ -7053,8 +7089,8 @@ export default defineVxeComponent({
           XEUtils.each(fullAllDataRowIdData, (rowRest) => {
             rowRest.treeLoaded = false
           })
+          internalData.treeExpandedMaps = {}
         }
-        internalData.treeExpandedMaps = {}
         if (transform) {
           handleVirtualTreeToList()
           $xeTable.handleTableData()
@@ -7917,7 +7953,7 @@ export default defineVxeComponent({
         $xeTable.preventEvent(evnt, 'event.keydown', null, () => {
           const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow, highlightCurrentColumn } = props
           const { ctxMenuStore, editStore, currentRow } = reactData
-          const { afterFullData } = internalData
+          const { afterFullData, visibleColumn } = internalData
           const isContentMenu = computeIsContentMenu.value
           const bodyMenu = computeBodyMenu.value
           const keyboardOpts = computeKeyboardOpts.value
@@ -7927,6 +7963,7 @@ export default defineVxeComponent({
           const menuList = computeMenuList.value
           const rowOpts = computeRowOpts.value
           const columnOpts = computeColumnOpts.value
+          const { isLastEnterAppendRow, beforeEnterMethod, enterMethod, isLastTabAppendRow, beforeTabMethod, tabMethod } = keyboardOpts
           const { selected, actived } = editStore
           const childrenField = treeOpts.children || treeOpts.childrenField
           const keyCode = evnt.keyCode
@@ -8000,7 +8037,6 @@ export default defineVxeComponent({
               internalData._keyCtx = false
             }, 1000)
           } else if (isEnter && !isAltKey && keyboardConfig && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
-            const { isLastEnterAppendRow, beforeEnterMethod, enterMethod } = keyboardOpts
             // 退出选中
             if (isControlKey) {
               // 如果是激活编辑状态，则取消编辑
@@ -8017,6 +8053,8 @@ export default defineVxeComponent({
             } else {
               // 如果是激活状态，退则出到上一行/下一行
               if (selected.row || actived.row) {
+                const activeRow = selected.row || actived.row
+                const activeColumn = selected.column || actived.column
                 const activeParams = selected.row ? selected.args : actived.args
                 if (hasShiftKey) {
                   if (keyboardOpts.enterToTab) {
@@ -8025,12 +8063,44 @@ export default defineVxeComponent({
                     $xeTable.moveEnterSelected(activeParams, isLeftArrow, true, isRightArrow, false, evnt)
                   }
                 } else {
+                  const _rowIndex = $xeTable.getVTRowIndex(activeRow)
+                  const _columnIndex = $xeTable.getVTColumnIndex(activeColumn)
                   if (keyboardOpts.enterToTab) {
-                    $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
+                    const ttrParams = {
+                      row: activeRow,
+                      rowIndex: $xeTable.getRowIndex(activeRow),
+                      $rowIndex: $xeTable.getVMRowIndex(activeRow),
+                      _rowIndex,
+                      column: activeColumn,
+                      columnIndex: $xeTable.getColumnIndex(activeColumn),
+                      $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
+                      _columnIndex,
+                      $table: $xeTable
+                    }
+                    if (!beforeTabMethod || beforeTabMethod(ttrParams) !== false) {
+                      evnt.preventDefault()
+                      // 最后一行按下Tab键，自动追加一行
+                      if (isLastTabAppendRow) {
+                        const newColumn = visibleColumn[0]
+                        if (_rowIndex >= afterFullData.length - 1 && _columnIndex >= visibleColumn.length - 1) {
+                          if (actived.row) {
+                            $xeTable.handleClearEdit(evnt)
+                          }
+                          $xeTable.insertAt({}, -1).then(({ row: newRow }) => {
+                            $xeTable.scrollToRow(newRow, newColumn)
+                            $xeTable.handleSelected({ ...activeParams, row: newRow, column: newColumn }, evnt)
+                          })
+                          $xeTable.dispatchEvent('tab-append-row', ttrParams, evnt)
+                          return
+                        }
+                      }
+                      if (tabMethod) {
+                        tabMethod(ttrParams)
+                      } else {
+                        $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
+                      }
+                    }
                   } else {
-                    const activeRow = selected.row || actived.row
-                    const activeColumn = selected.column || actived.column
-                    const _rowIndex = $xeTable.getVTRowIndex(activeRow)
                     const etrParams = {
                       row: activeRow,
                       rowIndex: $xeTable.getRowIndex(activeRow),
@@ -8039,10 +8109,11 @@ export default defineVxeComponent({
                       column: activeColumn,
                       columnIndex: $xeTable.getColumnIndex(activeColumn),
                       $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
-                      _columnIndex: $xeTable.getVTColumnIndex(activeColumn),
+                      _columnIndex,
                       $table: $xeTable
                     }
                     if (!beforeEnterMethod || beforeEnterMethod(etrParams) !== false) {
+                      evnt.preventDefault()
                       // 最后一行按下回车键，自动追加一行
                       if (isLastEnterAppendRow) {
                         if (_rowIndex >= afterFullData.length - 1) {
@@ -8054,9 +8125,13 @@ export default defineVxeComponent({
                           return
                         }
                       }
-                      $xeTable.moveEnterSelected(activeParams, isLeftArrow, false, isRightArrow, true, evnt)
                       if (enterMethod) {
                         enterMethod(etrParams)
+                      } else {
+                        if (actived.row) {
+                          $xeTable.handleClearEdit(evnt)
+                        }
+                        $xeTable.moveEnterSelected(activeParams, isLeftArrow, false, isRightArrow, true, evnt)
                       }
                     }
                   }
@@ -8097,10 +8172,49 @@ export default defineVxeComponent({
             }
           } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
             // 如果按下了 Tab 键切换
-            if (selected.row || selected.column) {
-              $xeTable.moveTabSelected(selected.args, hasShiftKey, evnt)
-            } else if (actived.row || actived.column) {
-              $xeTable.moveTabSelected(actived.args, hasShiftKey, evnt)
+            if (selected.row || actived.row) {
+              const activeRow = selected.row || actived.row
+              const activeColumn = selected.column || actived.column
+              const activeParams = selected.row ? selected.args : actived.args
+              const _rowIndex = $xeTable.getVTRowIndex(activeRow)
+              const _columnIndex = $xeTable.getVTColumnIndex(activeColumn)
+              const ttrParams = {
+                row: activeRow,
+                rowIndex: $xeTable.getRowIndex(activeRow),
+                $rowIndex: $xeTable.getVMRowIndex(activeRow),
+                _rowIndex,
+                column: activeColumn,
+                columnIndex: $xeTable.getColumnIndex(activeColumn),
+                $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
+                _columnIndex,
+                $table: $xeTable
+              }
+              if (!beforeTabMethod || beforeTabMethod(ttrParams) !== false) {
+                evnt.preventDefault()
+                // 最后一行按下Tab键，自动追加一行
+                if (isLastTabAppendRow) {
+                  const newColumn = visibleColumn[0]
+                  if (_rowIndex >= afterFullData.length - 1 && _columnIndex >= visibleColumn.length - 1) {
+                    if (actived.row) {
+                      $xeTable.handleClearEdit(evnt)
+                    }
+                    $xeTable.insertAt({}, -1).then(({ row: newRow }) => {
+                      $xeTable.scrollToRow(newRow, newColumn)
+                      $xeTable.handleSelected({ ...activeParams, row: newRow, column: newColumn }, evnt)
+                    })
+                    $xeTable.dispatchEvent('tab-append-row', ttrParams, evnt)
+                    return
+                  }
+                }
+                if (tabMethod) {
+                  tabMethod(ttrParams)
+                } else {
+                  if (actived.row) {
+                    $xeTable.handleClearEdit(evnt)
+                  }
+                  $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
+                }
+              }
             }
           } else if (keyboardConfig && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selected.row || selected.column)) {
             // 如果是删除键
@@ -13264,6 +13378,22 @@ export default defineVxeComponent({
       }
     })
 
+    const kfFlag = ref(0)
+    watch(() => reactData.updateColFlag, () => {
+      kfFlag.value++
+    })
+    watch(computeKeepFields, () => {
+      kfFlag.value++
+    })
+    watch(kfFlag, () => {
+      const keepFields = computeKeepFields.value
+      const kpfMaps: Record<string, number> = {}
+      keepFields.forEach(field => {
+        kpfMaps[field] = 1
+      })
+      internalData.keepUpdateFieldMaps = kpfMaps
+    })
+
     if ($xeTabs) {
       watch(() => $xeTabs ? $xeTabs.reactData.resizeFlag : null, () => {
         handleGlobalResizeEvent()
@@ -13302,7 +13432,7 @@ export default defineVxeComponent({
     })
 
     onMounted(() => {
-      const { exportConfig, importConfig, treeConfig } = props
+      const { exportConfig, importConfig, treeConfig, minHeight } = props
       const { scrollXStore, scrollYStore } = internalData
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
@@ -13435,8 +13565,8 @@ export default defineVxeComponent({
           errLog('vxe.error.notProp', ['mouse-config.area'])
           return
         }
-        if (areaOpts.selectCellByHeader && columnOpts.drag && columnDragOpts.trigger === 'cell') {
-          errLog('vxe.error.notSupportProp', ['area-config.selectCellByHeader & column-config.drag', 'column-drag-config.trigger=cell', 'column-drag-config.trigger=default'])
+        if (mouseOpts.area && areaOpts.selectCellByHeader && columnOpts.drag && columnDragOpts.trigger === 'cell') {
+          errLog('vxe.error.notSupportProp', ['area-config.selectCellByHeader & column-config.drag', 'column-drag-config.trigger=cell', 'column-drag-config.trigger=default | area-config.selectCellByHeader=false'])
         }
       }
       if (!$xeTable.handlePivotTableAggregateData) {
@@ -13490,6 +13620,9 @@ export default defineVxeComponent({
       }
       if (checkboxOpts.halfField) {
         warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
+      }
+      if (props.editConfig && isEnableConf(editOpts) && props.editRules && (minHeight === 0 || minHeight === '0')) {
+        warnLog('vxe.error.reqSupportProp', ['edit-config & edit-rules', 'min-height'])
       }
 
       if (treeConfig) {
@@ -13624,11 +13757,11 @@ export default defineVxeComponent({
 
       $xeTable.preventEvent(null, 'beforeUnmount', { $table: $xeTable })
       XEUtils.assign(reactData, createReactData())
+      XEUtils.assign(internalData, createInternalData())
     })
 
     onUnmounted(() => {
       $xeTable.preventEvent(null, 'unmounted', { $table: $xeTable })
-      XEUtils.assign(internalData, createInternalData())
     })
 
     nextTick(() => {

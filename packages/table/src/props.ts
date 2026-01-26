@@ -270,13 +270,15 @@ export const tableProps = {
   // 区域配置项
   areaConfig: Object as PropType<VxeTablePropTypes.AreaConfig>,
   // 按键配置项
-  keyboardConfig: Object as PropType<VxeTablePropTypes.KeyboardConfig<any>>,
+  keyboardConfig: Object as PropType<VxeTablePropTypes.KeyboardConfig>,
   // 复制粘/贴配置项
-  clipConfig: Object as PropType<VxeTablePropTypes.ClipConfig<any>>,
+  clipConfig: Object as PropType<VxeTablePropTypes.ClipConfig>,
   // 查找/替换配置项
   fnrConfig: Object as PropType<VxeTablePropTypes.FNRConfig>,
   // 编辑配置项
-  editConfig: Object as PropType<VxeTablePropTypes.EditConfig<any>>,
+  editConfig: Object as PropType<VxeTablePropTypes.EditConfig>,
+  // 数据状态监听配置项
+  editDirtyConfig: Object as PropType<VxeTablePropTypes.EditDirtyConfig>,
   // 校验配置项
   validConfig: Object as PropType<VxeTablePropTypes.ValidConfig>,
   // 校验规则配置项

@@ -333,6 +333,10 @@ export default {
         }
       }
     },
+    calendar: {
+      yearLabel: '{0}',
+      monthLabel: '{0}'
+    },
     numberInput: {
       currencySymbol: '$'
     },

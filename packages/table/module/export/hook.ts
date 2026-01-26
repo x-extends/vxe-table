@@ -1382,7 +1382,19 @@ hooks.add('tableExportModule', {
                 return Promise.resolve((beforeQueryAll || ajaxMethods)(params))
                   .then(rest => {
                     const listProp = resConfigs.list
-                    handleOptions.data = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }) : XEUtils.get(rest, listProp)) : rest) || []
+                    let tdData: any[] = []
+                    if (listProp) {
+                      if (XEUtils.isFunction(listProp)) {
+                        tdData = listProp({ data: rest, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
+                      } else {
+                        tdData = XEUtils.isArray(rest) ? rest : XEUtils.get(rest, listProp)
+                      }
+                    } else {
+                      if (XEUtils.isArray(rest)) {
+                        tdData = rest
+                      }
+                    }
+                    handleOptions.data = tdData
                     if (afterQueryAll) {
                       afterQueryAll(params)
                     }

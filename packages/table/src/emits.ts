@@ -74,6 +74,7 @@ export const tableEmits: VxeTableEmits = [
   'column-dragend',
 
   'enter-append-row',
+  'tab-append-row',
 
   'edit-actived', // 废弃
 
