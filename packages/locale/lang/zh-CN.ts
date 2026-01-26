@@ -333,6 +333,10 @@ export default {
         }
       }
     },
+    calendar: {
+      yearLabel: '{0} 年',
+      monthLabel: '{0} 月'
+    },
     numberInput: {
       currencySymbol: '¥'
     },

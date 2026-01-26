@@ -557,6 +557,7 @@ export default {
       reScrollFlag: 0,
       reLayoutFlag: 0,
       footFlag: 0,
+      kfFlag: 0,
       mergeFooteCellFlag: 0,
       crossTableDragRowInfo: crossTableDragRowGlobal
     }
@@ -905,7 +906,16 @@ export default {
       return this.computeEditOpts
     },
     computeEditOpts () {
-      return Object.assign({}, getConfig().table.editConfig, this.editConfig)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.editConfig, props.editConfig)
+    },
+    computeEditDirtyOpts () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.editDirtyConfig, props.editDirtyConfig)
     },
     sortOpts () {
       return this.computeSortOpts
@@ -1267,6 +1277,36 @@ export default {
       }
       return false
     },
+    computeKeepFields () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const { tableFullColumn } = internalData
+      const { updateColFlag } = reactData
+      const editDirtyOpts = $xeTable.computeEditDirtyOpts
+      const { includeFields, excludeFields } = editDirtyOpts
+      const kpFields: string[] = []
+      if (updateColFlag) {
+        if (includeFields && includeFields.length) {
+          return includeFields
+        }
+        const exfMaps: Record<string, number> = {}
+        if (excludeFields && excludeFields.length) {
+          excludeFields.forEach(field => {
+            exfMaps[field] = 1
+          })
+        }
+        for (let i = 0; i < tableFullColumn.length; i++) {
+          const column = tableFullColumn[i]
+          const { field, type, editRender, cellRender } = column
+          if (field && !type && (editRender || cellRender) && !exfMaps[field]) {
+            kpFields.push(field)
+          }
+        }
+      }
+      return kpFields
+    },
     computeTableBorder () {
       const $xeTable = this
       const props = $xeTable
@@ -1467,6 +1507,24 @@ export default {
       $xeTable.updateFooter()
     },
 
+    updateColFlag () {
+      this.kfFlag++
+    },
+    computeKeepFields () {
+      this.kfFlag++
+    },
+    kfFlag () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const internalData = $xeTable as unknown as TableInternalData
+
+      const keepFields = $xeTable.computeKeepFields
+      const kpfMaps: Record<string, number> = {}
+      keepFields.forEach(field => {
+        kpfMaps[field] = 1
+      })
+      internalData.keepUpdateFieldMaps = kpfMaps
+    },
+
     syncResize (value: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
@@ -1535,7 +1593,7 @@ export default {
 
     handleKeyField($xeTable)
 
-    const { exportConfig, importConfig, treeConfig } = props
+    const { exportConfig, importConfig, treeConfig, minHeight } = props
     const { scrollXStore, scrollYStore } = internalData
     const columnOpts = $xeTable.computeColumnOpts
     const columnDragOpts = $xeTable.computeColumnDragOpts
@@ -1650,8 +1708,8 @@ export default {
         errLog('vxe.error.notProp', ['mouse-config.area'])
         return
       }
-      if (areaOpts.selectCellByHeader && columnOpts.drag && columnDragOpts.trigger === 'cell') {
-        errLog('vxe.error.notSupportProp', ['area-config.selectCellByHeader & column-config.drag', 'column-drag-config.trigger=cell', 'column-drag-config.trigger=default'])
+      if (mouseOpts.area && areaOpts.selectCellByHeader && columnOpts.drag && columnDragOpts.trigger === 'cell') {
+        errLog('vxe.error.notSupportProp', ['area-config.selectCellByHeader & column-config.drag', 'column-drag-config.trigger=cell', 'column-drag-config.trigger=default | area-config.selectCellByHeader=false'])
       }
     }
     if (!$xeTable.handlePivotTableAggregateData) {
@@ -1705,6 +1763,9 @@ export default {
     }
     if (checkboxOpts.halfField) {
       warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
+    }
+    if (props.editConfig && isEnableConf(editOpts) && props.editRules && (minHeight === 0 || minHeight === '0')) {
+      warnLog('vxe.error.reqSupportProp', ['edit-config & edit-rules', 'min-height'])
     }
 
     if (treeConfig) {
@@ -1941,6 +2002,7 @@ export default {
   beforeDestroy () {
     const $xeTable = this
     const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
     const teleportWrapperEl = $xeTable.$refs.refTeleportWrapper as HTMLDivElement
     if (teleportWrapperEl && teleportWrapperEl.parentElement) {
@@ -1971,17 +2033,15 @@ export default {
     globalEvents.off($xeTable, 'resize')
     globalEvents.off($xeTable, 'contextmenu')
 
-    this.preventEvent(null, 'beforeDestroy')
+    $xeTable.preventEvent(null, 'beforeDestroy')
 
     XEUtils.assign(reactData, createReactData())
+    XEUtils.assign(internalData, createInternalData())
   },
   destroyed () {
-    const $xeTable = this
-    const internalData = $xeTable as unknown as TableInternalData
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    this.preventEvent(null, 'destroyed')
-
-    XEUtils.assign(internalData, createInternalData())
+    $xeTable.preventEvent(null, 'destroyed')
   },
   render (h: CreateElement) {
     // 使用已安装的组件，如果未安装则不渲染

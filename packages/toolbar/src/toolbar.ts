@@ -10,6 +10,14 @@ import type { VxeGridConstructor, GridPrivateMethods, ToolbarInternalData, VxeTa
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, globalMixins, renderEmptyElement } = VxeUI
 
+function createReactData (): ToolbarReactData {
+  return {
+    isRefresh: false,
+    connectFlag: 0,
+    columns: []
+  }
+}
+
 function createInternalData (): ToolbarInternalData {
   return {
     connectTable: null
@@ -63,11 +71,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
   },
   data () {
     const xID = XEUtils.uniqueId()
-    const reactData: ToolbarReactData = {
-      isRefresh: false,
-      connectFlag: 0,
-      columns: []
-    }
+    const reactData = createReactData()
     const internalData = createInternalData()
     return {
       xID,
@@ -840,8 +844,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
   },
   destroyed () {
     const $xeToolbar = this
+    const reactData = $xeToolbar.reactData
     const internalData = $xeToolbar.internalData
 
+    XEUtils.assign(reactData, createReactData())
     XEUtils.assign(internalData, createInternalData())
   },
   render (this: any, h) {

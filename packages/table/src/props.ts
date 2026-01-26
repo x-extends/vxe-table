@@ -270,6 +270,8 @@ export const tableProps = {
   fnrConfig: Object,
   // 编辑配置项
   editConfig: [Boolean, Object] as PropType<VxeTablePropTypes.EditConfig>,
+  // 数据状态监听配置项
+  editDirtyConfig: Object as PropType<VxeTablePropTypes.EditDirtyConfig>,
   // 校验配置项
   validConfig: Object as PropType<VxeTablePropTypes.ValidConfig>,
   // 校验规则配置项

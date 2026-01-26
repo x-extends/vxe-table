@@ -230,6 +230,7 @@ function handleCustomRestore ($xeTable: VxeTableConstructor & VxeTablePrivateMet
       const newCollectCols = XEUtils.toArrayTree(XEUtils.orderBy(allCols, 'renderSortNumber'), { key: 'id', parentKey: 'parentId', children: 'children' })
       internalData.collectColumn = newCollectCols
       internalData.tableFullColumn = getColumnList(newCollectCols)
+      reactData.updateColFlag++
     }
     reactData.isCustomStatus = true
   } else {
@@ -3633,12 +3634,14 @@ function handleTableColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
 }
 
 function handleUpdateColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
   const columnList = XEUtils.orderBy(internalData.collectColumn, 'renderSortNumber')
   internalData.collectColumn = columnList
-  const tableFullColumn = getColumnList(columnList)
-  internalData.tableFullColumn = tableFullColumn
+  const tFullColumn = getColumnList(columnList)
+  internalData.tableFullColumn = tFullColumn
+  reactData.updateColFlag++
   cacheColumnMap($xeTable)
 }
 
@@ -3830,8 +3833,9 @@ function handleInitColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
 
   const expandOpts = $xeTable.computeExpandOpts
   internalData.collectColumn = collectColumn
-  const tableFullColumn = getColumnList(collectColumn)
-  internalData.tableFullColumn = tableFullColumn
+  const tFullColumn = getColumnList(collectColumn)
+  internalData.tableFullColumn = tFullColumn
+  reactData.updateColFlag++
   reactData.isColLoading = true
   initColumnHierarchy($xeTable)
   return Promise.resolve(
@@ -5407,9 +5411,10 @@ const tableMethods: any = {
     const props = $xeTable
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { keepSource } = props
-    const { tableFullColumn, fullDataRowIdData, sourceDataRowIdData } = internalData
-    if (keepSource) {
+    const { keepSource, editConfig } = props
+    const { fullDataRowIdData, sourceDataRowIdData } = internalData
+    const keepFields = $xeTable.computeKeepFields
+    if (keepSource && editConfig) {
       const rowid = XEUtils.isString(rowOrId) || XEUtils.isNumber(rowOrId) ? rowOrId : getRowid($xeTable, rowOrId)
       const rowRest = fullDataRowIdData[rowid]
       // 新增的数据不需要检测
@@ -5422,9 +5427,8 @@ const tableMethods: any = {
         if (arguments.length > 1) {
           return !eqCellValue(oRow, row, field as string)
         }
-        for (let index = 0, len = tableFullColumn.length; index < len; index++) {
-          const property = tableFullColumn[index].field
-          if (property && !eqCellValue(oRow, row, property)) {
+        for (let i = 0; i < keepFields.length; i++) {
+          if (!eqCellValue(oRow, row, keepFields[i])) {
             return true
           }
         }
@@ -7104,7 +7108,7 @@ const tableMethods: any = {
       $xeTable.preventEvent(evnt, 'event.keydown', null, () => {
         const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow, highlightCurrentColumn } = props
         const { ctxMenuStore, editStore, currentRow } = reactData
-        const { afterFullData } = internalData
+        const { afterFullData, visibleColumn } = internalData
         const isContentMenu = $xeTable.computeIsContentMenu
         const bodyMenu = $xeTable.computeBodyMenu
         const keyboardOpts = $xeTable.computeKeyboardOpts
@@ -7114,6 +7118,7 @@ const tableMethods: any = {
         const menuList = $xeTable.computeMenuList
         const rowOpts = $xeTable.computeRowOpts
         const columnOpts = $xeTable.computeColumnOpts
+        const { isLastEnterAppendRow, beforeEnterMethod, enterMethod, isLastTabAppendRow, beforeTabMethod, tabMethod } = keyboardOpts
         const { selected, actived } = editStore
         const { keyCode } = evnt
         const hasBackspaceKey = keyCode === 8
@@ -7188,7 +7193,6 @@ const tableMethods: any = {
             internalData._keyCtx = false
           }, 1000)
         } else if (isEnter && !hasAltKey && keyboardConfig && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
-          const { isLastEnterAppendRow, beforeEnterMethod, enterMethod } = keyboardOpts
           // 退出选中
           if (isControlKey) {
             // 如果是激活编辑状态，则取消编辑
@@ -7203,6 +7207,8 @@ const tableMethods: any = {
           } else {
             // 如果是激活状态，退则出到上一行/下一行
             if (selected.row || actived.row) {
+              const activeRow = selected.row || actived.row
+              const activeColumn = selected.column || actived.column
               const activeParams = selected.row ? selected.args : actived.args
               if (hasShiftKey) {
                 if (keyboardOpts.enterToTab) {
@@ -7211,12 +7217,44 @@ const tableMethods: any = {
                   $xeTable.moveEnterSelected(activeParams, isLeftArrow, true, isRightArrow, false, evnt)
                 }
               } else {
+                const _rowIndex = $xeTable.getVTRowIndex(activeRow)
+                const _columnIndex = $xeTable.getVTColumnIndex(activeColumn)
                 if (keyboardOpts.enterToTab) {
-                  $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
+                  const ttrParams = {
+                    row: activeRow,
+                    rowIndex: $xeTable.getRowIndex(activeRow),
+                    $rowIndex: $xeTable.getVMRowIndex(activeRow),
+                    _rowIndex,
+                    column: activeColumn,
+                    columnIndex: $xeTable.getColumnIndex(activeColumn),
+                    $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
+                    _columnIndex,
+                    $table: $xeTable
+                  }
+                  if (!beforeTabMethod || beforeTabMethod(ttrParams) !== false) {
+                    evnt.preventDefault()
+                    // 最后一行按下Tab键，自动追加一行
+                    if (isLastTabAppendRow) {
+                      const newColumn = visibleColumn[0]
+                      if (_rowIndex >= afterFullData.length - 1 && _columnIndex >= visibleColumn.length - 1) {
+                        if (actived.row) {
+                          $xeTable.handleClearEdit(evnt)
+                        }
+                        $xeTable.insertAt({}, -1).then(({ row: newRow }) => {
+                          $xeTable.scrollToRow(newRow, newColumn)
+                          $xeTable.handleSelected({ ...activeParams, row: newRow, column: newColumn }, evnt)
+                        })
+                        $xeTable.dispatchEvent('tab-append-row', ttrParams, evnt)
+                        return
+                      }
+                    }
+                    if (tabMethod) {
+                      tabMethod(ttrParams)
+                    } else {
+                      $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
+                    }
+                  }
                 } else {
-                  const activeRow = selected.row || actived.row
-                  const activeColumn = selected.column || actived.column
-                  const _rowIndex = $xeTable.getVTRowIndex(activeRow)
                   const etrParams = {
                     row: activeRow,
                     rowIndex: $xeTable.getRowIndex(activeRow),
@@ -7225,10 +7263,11 @@ const tableMethods: any = {
                     column: activeColumn,
                     columnIndex: $xeTable.getColumnIndex(activeColumn),
                     $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
-                    _columnIndex: $xeTable.getVTColumnIndex(activeColumn),
+                    _columnIndex,
                     $table: $xeTable
                   }
                   if (!beforeEnterMethod || beforeEnterMethod(etrParams) !== false) {
+                    evnt.preventDefault()
                     // 最后一行按下回车键，自动追加一行
                     if (isLastEnterAppendRow) {
                       if (_rowIndex >= afterFullData.length - 1) {
@@ -7240,9 +7279,13 @@ const tableMethods: any = {
                         return
                       }
                     }
-                    $xeTable.moveEnterSelected(activeParams, isLeftArrow, false, isRightArrow, true, evnt)
                     if (enterMethod) {
                       enterMethod(etrParams)
+                    } else {
+                      if (actived.row) {
+                        $xeTable.handleClearEdit(evnt)
+                      }
+                      $xeTable.moveEnterSelected(activeParams, isLeftArrow, false, isRightArrow, true, evnt)
                     }
                   }
                 }
@@ -7283,10 +7326,49 @@ const tableMethods: any = {
           }
         } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
           // 如果按下了 Tab 键切换
-          if (selected.row || selected.column) {
-            $xeTable.moveTabSelected(selected.args, hasShiftKey, evnt)
-          } else if (actived.row || actived.column) {
-            $xeTable.moveTabSelected(actived.args, hasShiftKey, evnt)
+          if (selected.row || actived.row) {
+            const activeRow = selected.row || actived.row
+            const activeColumn = selected.column || actived.column
+            const activeParams = selected.row ? selected.args : actived.args
+            const _rowIndex = $xeTable.getVTRowIndex(activeRow)
+            const _columnIndex = $xeTable.getVTColumnIndex(activeColumn)
+            const ttrParams = {
+              row: activeRow,
+              rowIndex: $xeTable.getRowIndex(activeRow),
+              $rowIndex: $xeTable.getVMRowIndex(activeRow),
+              _rowIndex,
+              column: activeColumn,
+              columnIndex: $xeTable.getColumnIndex(activeColumn),
+              $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
+              _columnIndex,
+              $table: $xeTable
+            }
+            if (!beforeTabMethod || beforeTabMethod(ttrParams) !== false) {
+              evnt.preventDefault()
+              // 最后一行按下Tab键，自动追加一行
+              if (isLastTabAppendRow) {
+                const newColumn = visibleColumn[0]
+                if (_rowIndex >= afterFullData.length - 1 && _columnIndex >= visibleColumn.length - 1) {
+                  if (actived.row) {
+                    $xeTable.handleClearEdit(evnt)
+                  }
+                  $xeTable.insertAt({}, -1).then(({ row: newRow }) => {
+                    $xeTable.scrollToRow(newRow, newColumn)
+                    $xeTable.handleSelected({ ...activeParams, row: newRow, column: newColumn }, evnt)
+                  })
+                  $xeTable.dispatchEvent('tab-append-row', ttrParams, evnt)
+                  return
+                }
+              }
+              if (tabMethod) {
+                tabMethod(ttrParams)
+              } else {
+                if (actived.row) {
+                  $xeTable.handleClearEdit(evnt)
+                }
+                $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
+              }
+            }
           }
         } else if (keyboardConfig && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selected.row || selected.column)) {
           // 如果是删除键
@@ -11056,8 +11138,8 @@ const tableMethods: any = {
       XEUtils.each(fullAllDataRowIdData, (rowRest) => {
         rowRest.treeLoaded = false
       })
+      internalData.treeExpandedMaps = {}
     }
-    internalData.treeExpandedMaps = {}
     if (transform) {
       handleVirtualTreeToList($xeTable)
       $xeTable.handleTableData()

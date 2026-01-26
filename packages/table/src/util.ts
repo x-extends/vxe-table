@@ -81,6 +81,8 @@ export function createInternalData (): TableInternalData {
     // 数据集（仅可视）
     visibleDataRowIdData: {},
 
+    keepUpdateFieldMaps: {},
+
     footerFullDataRowData: {},
 
     // 渲染中缓存数据
@@ -144,6 +146,7 @@ export function createInternalData (): TableInternalData {
 
 export function createReactData (): TableReactData {
   return {
+    updateColFlag: 0,
     // 低性能的静态列
     staticColumns: [],
     // 渲染的列分组

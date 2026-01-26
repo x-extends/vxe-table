@@ -50,6 +50,25 @@ XEUtils.each(VxeTableComponent.methods, (fn, name) => {
   }
 })
 
+function createReactData (): GridReactData {
+  return {
+    tableLoading: false,
+    proxyInited: false,
+    isZMax: false,
+    tableData: [],
+    filterData: [],
+    formData: {},
+    sortData: [],
+    footerData: [],
+    tZindex: 0,
+    tablePage: {
+      total: 0,
+      pageSize: getConfig().pager?.pageSize || 10,
+      currentPage: 1
+    }
+  }
+}
+
 function createInternalData (): GridInternalData {
   return {
     uFoot: false
@@ -105,23 +124,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
   data () {
     const xID = XEUtils.uniqueId()
 
-    const reactData: GridReactData = {
-      tableLoading: false,
-      proxyInited: false,
-      isZMax: false,
-      tableData: [],
-      filterData: [],
-      formData: {},
-      sortData: [],
-      footerData: [],
-      tZindex: 0,
-      tablePage: {
-        total: 0,
-        pageSize: getConfig().pager?.pageSize || 10,
-        currentPage: 1
-      }
-    }
-
+    const reactData = createReactData()
     const internalData = createInternalData()
 
     return {
@@ -1916,12 +1919,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
     $xeGrid.initToolbar()
     $xeGrid.initProxy()
   },
-  destroyed () {
+  beforeDestroy () {
     const $xeGrid = this
+    const reactData = $xeGrid.reactData
     const internalData = $xeGrid.internalData
 
     globalEvents.off($xeGrid, 'keydown')
 
+    XEUtils.assign(reactData, createReactData())
     XEUtils.assign(internalData, createInternalData())
   },
   render (this: any, h) {

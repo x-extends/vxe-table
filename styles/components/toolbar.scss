@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0.6em 0;
+  padding: 0.5em 0;
   color: var(--vxe-ui-font-color);
   font-family: var(--vxe-ui-font-family);
   background-color: var(--vxe-ui-layout-background-color);
@@ -104,13 +104,17 @@
 
 .vxe-toolbar {
   font-size: var(--vxe-ui-font-size-default);
+  min-height: var(--vxe-ui-toolbar-height-default);
   &.size--medium {
     font-size: var(--vxe-ui-font-size-medium);
+    min-height: var(--vxe-ui-toolbar-height-medium);
   }
   &.size--small {
     font-size: var(--vxe-ui-font-size-small);
+    min-height: var(--vxe-ui-toolbar-height-small);
   }
   &.size--mini {
     font-size: var(--vxe-ui-font-size-mini);
+    min-height: var(--vxe-ui-toolbar-height-mini);
   }
 }
