@@ -372,6 +372,8 @@ export default {
       uploadErr: 'アップロードに失敗しました',
       uploadSuccess: '正常にアップロードします',
       moreBtnText: 'その他（{0}）',
+      moreImgBtnText: '图片（{0}）',
+      moreFileBtnText: '文件（{0}）',
       viewItemTitle: 'クリックして表示します',
       morePopup: {
         readTitle: 'リストを表示します',

@@ -372,6 +372,8 @@ export default {
       uploadErr: 'Yuklash muvaffaqiyatsiz tugadi',
       uploadSuccess: 'Muvaffaqiyatli yuklang',
       moreBtnText: "Ko'proq ({0})",
+      moreImgBtnText: '图片（{0}）',
+      moreFileBtnText: '文件（{0}）',
       viewItemTitle: "Ko'rish uchun bosing",
       morePopup: {
         readTitle: "Ro'yxatni ko'rish",

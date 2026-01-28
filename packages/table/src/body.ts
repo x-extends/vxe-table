@@ -598,6 +598,13 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
       const expandOpts = $xeTable.computeExpandOpts
       const { height: expandHeight, padding, mode: expandMode } = expandOpts
       if (expandMode === 'fixed') {
+        const currExpHeight = rowRest.expandHeight
+        let expHeight = 0
+        if (rowExpandHeightFlag) {
+          if (currExpHeight || expandHeight) {
+            expHeight = (currExpHeight || expandHeight || 0) + 1
+          }
+        }
         rows.push(
           h('tr', {
             class: 'vxe-body--row-expanded-place',
@@ -612,7 +619,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
                 colspan: tableColumn.length
               },
               style: {
-                height: `${rowExpandHeightFlag ? (rowRest.expandHeight || expandHeight) : 0}px`
+                height: `${expHeight}px`
               }
             })
           ])

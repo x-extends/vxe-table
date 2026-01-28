@@ -372,6 +372,8 @@ export default {
       uploadErr: 'Muat naik gagal',
       uploadSuccess: 'Muat naik dengan jayanya',
       moreBtnText: 'Lebih ({0})',
+      moreImgBtnText: '图片（{0}）',
+      moreFileBtnText: '文件（{0}）',
       viewItemTitle: 'Klik untuk Lihat',
       morePopup: {
         readTitle: 'Lihat senarai',

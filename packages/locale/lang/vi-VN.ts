@@ -372,6 +372,8 @@ export default {
       uploadErr: 'Tải lên không thành công',
       uploadSuccess: 'Tải lên thành công',
       moreBtnText: 'Thêm ({0})',
+      moreImgBtnText: '图片（{0}）',
+      moreFileBtnText: '文件（{0}）',
       viewItemTitle: 'Bấm để xem',
       morePopup: {
         readTitle: 'Xem danh sách',

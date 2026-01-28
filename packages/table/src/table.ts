@@ -342,7 +342,11 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
             rowid
           },
           style: cellStyle
-        }, expandColumn.renderData(h, expandParams))
+        }, [
+          h('div', {
+            class: 'vxe-body--row-expanded-content'
+          }, expandColumn.renderData(h, expandParams))
+        ])
       )
     })
   }

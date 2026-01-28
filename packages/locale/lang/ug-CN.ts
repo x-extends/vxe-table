@@ -372,6 +372,8 @@ export default {
       uploadErr: 'چىقىرىش مەغلۇپ بولدى',
       uploadSuccess: 'چىقىرىش ئوڭۇشلۇق بولدى',
       moreBtnText: 'تىخىمۇ كۆپ（{0}）',
+      moreImgBtnText: '图片（{0}）',
+      moreFileBtnText: '文件（{0}）',
       viewItemTitle: 'بىسىپ كۆرۈڭ',
       morePopup: {
         readTitle: 'توپلامنى كۆرۈش',

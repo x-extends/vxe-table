@@ -372,6 +372,8 @@ export default {
       uploadErr: 'Opplasting mislyktes',
       uploadSuccess: 'Last opp vellykket',
       moreBtnText: 'Mer ({0})',
+      moreImgBtnText: '图片（{0}）',
+      moreFileBtnText: '文件（{0}）',
       viewItemTitle: 'Klikk for å se',
       morePopup: {
         readTitle: 'Vis liste',
