@@ -372,6 +372,8 @@ export default {
       uploadErr: 'Carga falló',
       uploadSuccess: 'Subir con éxito',
       moreBtnText: 'Más ({0})',
+      moreImgBtnText: '图片（{0}）',
+      moreFileBtnText: '文件（{0}）',
       viewItemTitle: 'Haga clic para ver',
       morePopup: {
         readTitle: 'Ver la lista',

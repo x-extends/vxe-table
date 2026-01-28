@@ -372,6 +372,8 @@ export default {
       uploadErr: 'Falha no upload',
       uploadSuccess: 'Carregar com sucesso',
       moreBtnText: 'Mais ({0})',
+      moreImgBtnText: '图片（{0}）',
+      moreFileBtnText: '文件（{0}）',
       viewItemTitle: 'Clique para visualizar',
       morePopup: {
         readTitle: 'Lista de visualização',

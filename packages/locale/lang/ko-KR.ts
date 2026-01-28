@@ -372,6 +372,8 @@ export default {
       uploadErr: '업로드 실패',
       uploadSuccess: '성공적으로 업로드하십시오',
       moreBtnText: 'more ({0})',
+      moreImgBtnText: '图片（{0}）',
+      moreFileBtnText: '文件（{0}）',
       viewItemTitle: '보려면 클릭하십시오',
       morePopup: {
         readTitle: '목록을보십시오',

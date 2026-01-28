@@ -372,6 +372,8 @@ export default {
       uploadErr: '上傳失敗',
       uploadSuccess: '上傳成功',
       moreBtnText: '更多（{0}）',
+      moreImgBtnText: '图片（{0}）',
+      moreFileBtnText: '文件（{0}）',
       viewItemTitle: '點擊查看',
       morePopup: {
         readTitle: '查看列表',

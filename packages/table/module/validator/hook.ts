@@ -123,19 +123,20 @@ function validRuleValue (rule: VxeTableDefines.ValidatorRule, val: any, required
   return true
 }
 
-function checkRuleStatus (rule: VxeTableDefines.ValidatorRule, val: any) {
-  const { required } = rule
-  const isEmptyVal = XEUtils.isArray(val) ? !val.length : eqEmptyValue(val)
+function checkRuleStatus (rule: VxeTableDefines.ValidatorRule, row: any, val: any) {
+  const { required, field } = rule
+  const currVal = field ? XEUtils.get(row, field) : val
+  const isEmptyVal = XEUtils.isArray(currVal) ? !currVal.length : eqEmptyValue(currVal)
   if (required) {
     if (isEmptyVal) {
       return false
     }
-    if (!validRuleValue(rule, val, required)) {
+    if (!validRuleValue(rule, currVal, required)) {
       return false
     }
   } else {
     if (!isEmptyVal) {
-      if (!validRuleValue(rule, val, required)) {
+      if (!validRuleValue(rule, currVal, required)) {
         return false
       }
     }
@@ -519,7 +520,7 @@ hooks.add('tableValidatorModule', {
                     }
                   }
                 } else {
-                  if (!checkRuleStatus(rule, cellValue)) {
+                  if (!checkRuleStatus(rule, row, cellValue)) {
                     internalData.validRuleErr = true
                     errorRules.push(new Rule(rule))
                   }

@@ -600,6 +600,13 @@ export default defineVxeComponent({
           const expandOpts = computeExpandOpts.value
           const { height: expandHeight, padding, mode: expandMode } = expandOpts
           if (expandMode === 'fixed') {
+            const currExpHeight = rowRest.expandHeight
+            let expHeight = 0
+            if (rowExpandHeightFlag) {
+              if (currExpHeight || expandHeight) {
+                expHeight = (currExpHeight || expandHeight || 0) + 1
+              }
+            }
             rows.push(
               h('tr', {
                 class: 'vxe-body--row-expanded-place',
@@ -610,7 +617,7 @@ export default defineVxeComponent({
                   class: 'vxe-body--row-expanded-place-column',
                   colspan: tableColumn.length,
                   style: {
-                    height: `${rowExpandHeightFlag ? (rowRest.expandHeight || expandHeight) : 0}px`
+                    height: `${expHeight}px`
                   }
                 })
               ])

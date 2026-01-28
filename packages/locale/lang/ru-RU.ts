@@ -372,6 +372,8 @@ export default {
       uploadErr: 'Загрузка не удалась',
       uploadSuccess: 'Загрузить успешно',
       moreBtnText: 'Больше ({0})',
+      moreImgBtnText: '图片（{0}）',
+      moreFileBtnText: '文件（{0}）',
       viewItemTitle: 'Нажмите, чтобы просмотреть',
       morePopup: {
         readTitle: 'Просмотреть список',

@@ -2220,11 +2220,17 @@ $btnThemeList: (
     left: 0;
     width: 100%;
     overflow: auto;
-    background-color: var(--vxe-ui-layout-background-color);
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
     pointer-events: all;
     &.is--padding {
-      padding: var(--vxe-ui-table-expand-padding-default);
+      .vxe-body--row-expanded-content {
+        padding: var(--vxe-ui-table-expand-padding-default);
+      }
     }
+  }
+  .vxe-body--row-expanded-content {
+    background-color: var(--vxe-ui-layout-background-color);
   }
   .vxe-body--row-expanded-place-column {
     border-bottom: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);

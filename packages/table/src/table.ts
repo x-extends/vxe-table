@@ -1773,14 +1773,19 @@ export default defineVxeComponent({
         tableFullColumn.forEach(handleFunc)
       }
 
-      if (expandColumn && expandOpts.mode !== 'fixed' && virtualYOpts.enabled) {
-        warnLog('vxe.error.notConflictProp', ['column.type="expand', 'virtual-y-config.enabled=false'])
-      }
-      if ((expandColumn && expandOpts.mode !== 'fixed') && mouseOpts.area) {
-        errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
-      }
-      if (expandColumn && expandOpts.mode !== 'inside' && (treeConfig && !treeOpts.transform)) {
-        errLog('vxe.error.notConflictProp', ['tree-config.transform=false', 'expand-config.mode=fixed'])
+      if (expandColumn) {
+        if (expandOpts.mode !== 'fixed' && virtualYOpts.enabled) {
+          warnLog('vxe.error.notConflictProp', ['column.type="expand', 'virtual-y-config.enabled=false'])
+        }
+        if ((expandOpts.mode !== 'fixed') && mouseOpts.area) {
+          errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
+        }
+        if (expandOpts.mode !== 'inside' && (treeConfig && !treeOpts.transform)) {
+          errLog('vxe.error.notConflictProp', ['tree-config.transform=false', 'expand-config.mode=fixed'])
+        }
+        if (props.spanMethod) {
+          warnLog('vxe.error.notSupportProp', ['column.type=expand', 'span-method', 'span-method=null'])
+        }
       }
 
       if (htmlColumn) {
@@ -4618,7 +4623,7 @@ export default defineVxeComponent({
             const rowid = expandEl.getAttribute('rowid') || ''
             const rowRest = fullAllDataRowIdData[rowid]
             if (rowRest) {
-              const expandHeight = expandEl.offsetHeight + 1
+              const expandHeight = expandEl.offsetHeight
               const trEl = bodyScrollElem.querySelector(`.vxe-body--row[rowid="${rowid}"]`) as HTMLTableCellElement
               let offsetTop = 0
               if (scrollYLoad) {
@@ -12668,7 +12673,11 @@ export default defineVxeComponent({
               }],
               rowid,
               style: cellStyle
-            }, expandColumn.renderData(expandParams))
+            }, [
+              h('div', {
+                class: 'vxe-body--row-expanded-content'
+              }, expandColumn.renderData(expandParams))
+            ])
           )
         })
       }
