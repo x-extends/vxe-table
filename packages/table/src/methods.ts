@@ -385,14 +385,19 @@ function cacheColumnMap ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
     tableFullColumn.forEach(handleFunc)
   }
 
-  if (expandColumn && expandOpts.mode !== 'fixed' && virtualYOpts.enabled) {
-    warnLog('vxe.error.notConflictProp', ['column.type="expand', 'virtual-y-config.enabled=false'])
-  }
-  if ((expandColumn && expandOpts.mode !== 'fixed') && mouseOpts.area) {
-    errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
-  }
-  if (expandColumn && expandOpts.mode !== 'inside' && (treeConfig && !treeOpts.transform)) {
-    errLog('vxe.error.notConflictProp', ['tree-config.transform=false', 'expand-config.mode=fixed'])
+  if (expandColumn) {
+    if (expandOpts.mode !== 'fixed' && virtualYOpts.enabled) {
+      warnLog('vxe.error.notConflictProp', ['column.type="expand', 'virtual-y-config.enabled=false'])
+    }
+    if ((expandOpts.mode !== 'fixed') && mouseOpts.area) {
+      errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
+    }
+    if (expandOpts.mode !== 'inside' && (treeConfig && !treeOpts.transform)) {
+      errLog('vxe.error.notConflictProp', ['tree-config.transform=false', 'expand-config.mode=fixed'])
+    }
+    if (props.spanMethod) {
+      warnLog('vxe.error.notSupportProp', ['column.type=expand', 'span-method', 'span-method=null'])
+    }
   }
 
   if (htmlColumn) {
@@ -9099,11 +9104,13 @@ const tableMethods: any = {
               if (isPeerDrag && !isCrossDrag) {
                 if (oldRest.row[parentField] !== newRest.row[parentField]) {
                   // 非同级
-                  return errRest
+                  handleRowDragEndClearStatus($xeTable)
+                  return Promise.resolve(errRest)
                 }
               } else {
                 if (!isCrossDrag) {
-                  return errRest
+                  handleRowDragEndClearStatus($xeTable)
+                  return Promise.resolve(errRest)
                 }
                 if (oldAllMaps[newRowid]) {
                   isSelfToChildStatus = true
@@ -9114,7 +9121,8 @@ const tableMethods: any = {
                         content: getI18n('vxe.error.treeDragChild')
                       })
                     }
-                    return errRest
+                    handleRowDragEndClearStatus($xeTable)
+                    return Promise.resolve(errRest)
                   }
                 }
               }
@@ -9122,13 +9130,15 @@ const tableMethods: any = {
               // 子到根
 
               if (!isCrossDrag) {
-                return errRest
+                handleRowDragEndClearStatus($xeTable)
+                return Promise.resolve(errRest)
               }
             } else if (newLevel) {
               // 根到子
 
               if (!isCrossDrag) {
-                return errRest
+                handleRowDragEndClearStatus($xeTable)
+                return Promise.resolve(errRest)
               }
               if (oldAllMaps[newRowid]) {
                 isSelfToChildStatus = true
@@ -9139,7 +9149,8 @@ const tableMethods: any = {
                       content: getI18n('vxe.error.treeDragChild')
                     })
                   }
-                  return errRest
+                  handleRowDragEndClearStatus($xeTable)
+                  return Promise.resolve(errRest)
                 }
               }
             } else {
