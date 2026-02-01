@@ -1,102 +1,71 @@
 <template>
   <div>
-    <p>
-      <vxe-button @click="toggleSelectRow(gridOptions.data[1])">切换第二行选中</vxe-button>
-      <vxe-button @click="setSelectRow([gridOptions.data[2], gridOptions.data[3]], true)">设置第三、四行选中</vxe-button>
-      <vxe-button @click="selectAllEvent">设置所有行选中</vxe-button>
-      <vxe-button @click="clearSelectEvent">清除所有行选中</vxe-button>
-      <vxe-button @click="getSelectEvent">获取选中</vxe-button>
-    </p>
-
-    <vxe-grid
-      ref="gridRef"
-      v-bind="gridOptions"
-      @checkbox-all="selectAllChangeEvent"
-      @checkbox-change="selectChangeEvent">
-    </vxe-grid>
+    <vxe-table
+      border
+      ref="tableRef"
+      :row-config="rowConfig"
+      :row-drag-config="rowDragConfig"
+      :column-config="columnConfig"
+      :tree-config="treeConfig"
+      :data="tableData">
+      <vxe-column type="seq" width="70"></vxe-column>
+      <vxe-column field="name" title="Name" min-width="300" tree-node drag-sort></vxe-column>
+      <vxe-column field="size" title="Size"></vxe-column>
+      <vxe-column field="type" title="Type"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
+    </vxe-table>
   </div>
 </template>
 
 <script>
-import { VxeUI } from '../../../packages'
-
 export default {
   data () {
-    const gridOptions = {
-      border: true,
-      height: 300,
-      rowConfig: {
-        isCurrent: true,
-        isHover: true,
-        keyField: 'id'
-      },
-      radioConfig: {
-        labelField: 'name',
-        trigger: 'row'
-      },
-      columns: [
-        { type: 'checkbox', width: 60 },
-        { field: 'name', title: 'Name' },
-        { field: 'sex', title: 'Sex' },
-        { field: 'age', title: 'Age' },
-        { field: 'address', title: 'Address', showOverflow: true }
-      ],
-      data: [
-        { id: '10001', name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
-        { id: '10002', name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-        { id: '10 0值03', name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: '10+00$-4', name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc' },
-        { id: '100-#0值5', name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
-      ]
+    const tableData = [
+      { id: 10000, parentId: null, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+      { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: 0, date: '2021-04-01' },
+      { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+      { id: 20045, parentId: 24300, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+      { id: 10053, parentId: 24300, name: 'Test5', type: 'avi', size: 0, date: '2021-04-01' },
+      { id: 24330, parentId: 10053, name: 'Test6', type: 'txt', size: 25, date: '2021-10-01' },
+      { id: 21011, parentId: 10053, name: 'Test7', type: 'pdf', size: 512, date: '2020-01-01' },
+      { id: 22200, parentId: 10053, name: 'Test8', type: 'js', size: 1024, date: '2021-06-01' },
+      { id: 23666, parentId: null, name: 'Test9', type: 'xlsx', size: 2048, date: '2020-11-01' },
+      { id: 23677, parentId: 23666, name: 'Test10', type: 'js', size: 1024, date: '2021-06-01' },
+      { id: 23671, parentId: 23677, name: 'Test11', type: 'js', size: 1024, date: '2021-06-01' },
+      { id: 23672, parentId: 23677, name: 'Test12', type: 'js', size: 1024, date: '2021-06-01' },
+      { id: 23688, parentId: 23666, name: 'Test13', type: 'js', size: 1024, date: '2021-06-01' },
+      { id: 23681, parentId: 23688, name: 'Test14', type: 'js', size: 1024, date: '2021-06-01' },
+      { id: 23682, parentId: 23688, name: 'Test15', type: 'js', size: 1024, date: '2021-06-01' },
+      { id: 24555, parentId: null, name: 'Test16', type: 'avi', size: 224, date: '2020-10-01' },
+      { id: 24566, parentId: 24555, name: 'Test17', type: 'js', size: 1024, date: '2021-06-01' },
+      { id: 24577, parentId: 24555, name: 'Test18', type: 'js', size: 1024, date: '2021-06-01' }
+    ]
+    const rowConfig = {
+      drag: true
+    }
+    const rowDragConfig = {
+      isCrossDrag: true
+    }
+    const columnConfig = {}
+    const treeConfig = {
+      transform: true,
+      rowField: 'id',
+      parentField: 'parentId'
     }
     return {
-      gridOptions
+      tableData,
+      rowConfig,
+      rowDragConfig,
+      columnConfig,
+      treeConfig
     }
   },
   methods: {
-    selectAllChangeEvent ({ checked }) {
-      const $grid = this.$refs.gridRef
-      if ($grid) {
-        const records = $grid.getCheckboxRecords()
-        console.log(checked ? '所有勾选事件' : '所有取消事件', records)
-      }
-    },
-    selectChangeEvent ({ checked }) {
-      const $grid = this.$refs.gridRef
-      if ($grid) {
-        const records = $grid.getCheckboxRecords()
-        console.log(checked ? '勾选事件' : '取消事件', records)
-      }
-    },
-    toggleSelectRow (row) {
-      const $grid = this.$refs.gridRef
-      if ($grid) {
-        $grid.toggleCheckboxRow(row)
-      }
-    },
-    setSelectRow (rows, checked) {
-      const $grid = this.$refs.gridRef
-      if ($grid) {
-        $grid.setCheckboxRow(rows, checked)
-      }
-    },
-    selectAllEvent () {
-      const $grid = this.$refs.gridRef
-      if ($grid) {
-        $grid.setAllCheckboxRow(true)
-      }
-    },
-    clearSelectEvent () {
-      const $grid = this.$refs.gridRef
-      if ($grid) {
-        $grid.clearCheckboxRow()
-      }
-    },
-    getSelectEvent () {
-      const $grid = this.$refs.gridRef
-      if ($grid) {
-        const selectRecords = $grid.getCheckboxRecords()
-        VxeUI.modal.alert(`${selectRecords.length}条数据`)
+    resultEvent () {
+      const $table = this.$refs.tableRef
+      if ($table) {
+        const tableData = $table.getFullData()
+        console.log(tableData)
       }
     }
   }

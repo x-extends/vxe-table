@@ -9213,11 +9213,13 @@ const tableMethods: any = {
               if (isPeerDrag && !isCrossDrag) {
                 if (oldRest.row[parentField] !== newRest.row[parentField]) {
                   // 非同级
-                  return errRest
+                  handleRowDragEndClearStatus($xeTable)
+                  return Promise.resolve(errRest)
                 }
               } else {
                 if (!isCrossDrag) {
-                  return errRest
+                  handleRowDragEndClearStatus($xeTable)
+                  return Promise.resolve(errRest)
                 }
                 if (oldAllMaps[newRowid]) {
                   isSelfToChildStatus = true
@@ -9228,7 +9230,8 @@ const tableMethods: any = {
                         content: getI18n('vxe.error.treeDragChild')
                       })
                     }
-                    return errRest
+                    handleRowDragEndClearStatus($xeTable)
+                    return Promise.resolve(errRest)
                   }
                 }
               }
@@ -9236,13 +9239,15 @@ const tableMethods: any = {
               // 子到根
 
               if (!isCrossDrag) {
-                return errRest
+                handleRowDragEndClearStatus($xeTable)
+                return Promise.resolve(errRest)
               }
             } else if (newLevel) {
               // 根到子
 
               if (!isCrossDrag) {
-                return errRest
+                handleRowDragEndClearStatus($xeTable)
+                return Promise.resolve(errRest)
               }
               if (oldAllMaps[newRowid]) {
                 isSelfToChildStatus = true
@@ -9253,7 +9258,8 @@ const tableMethods: any = {
                       content: getI18n('vxe.error.treeDragChild')
                     })
                   }
-                  return errRest
+                  handleRowDragEndClearStatus($xeTable)
+                  return Promise.resolve(errRest)
                 }
               }
             } else {
