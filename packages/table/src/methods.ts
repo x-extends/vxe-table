@@ -3,7 +3,7 @@ import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, scrollTopTo, 
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
-import { getRowUniqueId, clearTableAllStatus, getColumnList, toFilters, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem, getCellRestHeight, getLastChildColumn } from './util'
+import { getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem, getCellRestHeight, getLastChildColumn } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from '../../ui/src/anime'
 import { warnLog, errLog } from '../../ui/src/log'
@@ -3308,6 +3308,7 @@ function handleGroupData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   if (rowGroups) {
     const aggregateOpts = $xeTable.computeAggregateOpts
     const { rowField, parentField, childrenField, mapChildrenField } = aggregateOpts
+    const rowOpts = $xeTable.computeRowOpts
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const { checkField } = checkboxOpts
     const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
@@ -3343,10 +3344,10 @@ function handleGroupData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
           childCount: 0,
           [rowField]: getRowUniqueId(),
           [parentField]: null,
-          [rowkey]: getRowUniqueId(),
           [childrenField]: childTreeData,
           [mapChildrenField]: childTreeData
         }
+        aggRow[rowkey] = createRowId(rowOpts, aggRow, rowkey)
         if (checkField) {
           aggRow[checkField] = false
         }
@@ -5037,6 +5038,7 @@ const tableMethods: any = {
     const expandOpts = $xeTable.computeExpandOpts
     const treeOpts = $xeTable.computeTreeOpts
     const radioOpts = $xeTable.computeRadioOpts
+    const rowOpts = $xeTable.computeRowOpts
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const rowkey = getRowkey($xeTable)
@@ -5070,7 +5072,7 @@ const tableMethods: any = {
       }
       // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
       if (eqEmptyValue(XEUtils.get(record, rowkey))) {
-        XEUtils.set(record, rowkey, getRowUniqueId())
+        XEUtils.set(record, rowkey, createRowId(rowOpts, record, rowkey))
       }
       return record
     })
@@ -9281,6 +9283,7 @@ const tableMethods: any = {
             // 移出源位置
             if (oldRest && newRest) {
               const fullList = XEUtils.toTreeArray(internalData.afterTreeFullData, {
+                updated: false,
                 key: rowField,
                 parentKey: parentField,
                 children: mapChildrenField
