@@ -9172,6 +9172,7 @@ const tableMethods: any = {
             // 移出源位置
             if (oldRest && newRest) {
               const fullList = XEUtils.toTreeArray(internalData.afterTreeFullData, {
+                updated: false,
                 key: rowField,
                 parentKey: parentField,
                 children: mapChildrenField
