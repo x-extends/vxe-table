@@ -547,11 +547,19 @@ export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft
   return $xeTable.clearScroll()
 }
 
+export function getRowUniqueId () {
+  return XEUtils.uniqueId('row_')
+}
+
 /**
  * 生成行的唯一主键
  */
-export function getRowUniqueId () {
-  return XEUtils.uniqueId('row_')
+export function createRowId (rowOpts: VxeTablePropTypes.RowConfig, row: any, keyField: string) {
+  const { createKeyMethod } = rowOpts
+  if (createKeyMethod) {
+    return createKeyMethod({ row, keyField })
+  }
+  return getRowUniqueId()
 }
 
 export function hasDeepKey (rowKey: string) {
@@ -574,11 +582,13 @@ export function getRowid ($xeTable: VxeTableConstructor, row: any) {
 export function createHandleUpdateRowId ($xeTable: VxeTableConstructor) {
   const internalData = $xeTable.internalData
   const { isCurrDeepKey, currKeyField } = internalData
+  const { computeRowOpts } = $xeTable.getComputeMaps()
+  const rowOpts = computeRowOpts.value
   const updateRId = isCurrDeepKey ? updateDeepRowKey : updateFastRowKey
   return {
     rowKey: currKeyField,
     handleUpdateRowId (row: any) {
-      return row ? updateRId(row, currKeyField) : ''
+      return row ? updateRId(rowOpts, row, currKeyField) : ''
     }
   }
 }
@@ -604,10 +614,11 @@ function getDeepRowIdByKey (row: any, rowKey: string) {
   return XEUtils.get(row, rowKey)
 }
 
-export function updateDeepRowKey (row: any, rowKey: string) {
+function updateDeepRowKey (rowOpts: VxeTablePropTypes.RowConfig, row: any, rowKey: string) {
   let rowid = encodeRowid(getDeepRowIdByKey(row, rowKey))
   if (eqEmptyValue(rowid)) {
-    rowid = getRowUniqueId()
+    const newRowid = createRowId(rowOpts, row, rowKey)
+    rowid = '' + newRowid
     XEUtils.set(row, rowKey, rowid)
   }
   return rowid
@@ -617,11 +628,12 @@ function getFastRowIdByKey (row: any, rowKey: string) {
   return row[rowKey]
 }
 
-export function updateFastRowKey (row: any, rowKey: string) {
+function updateFastRowKey (rowOpts: VxeTablePropTypes.RowConfig, row: any, rowKey: string) {
   let rowid = encodeRowid(getFastRowIdByKey(row, rowKey))
   if (eqEmptyValue(rowid)) {
-    rowid = getRowUniqueId()
-    row[rowKey] = rowid
+    const newRowid = createRowId(rowOpts, row, rowKey)
+    rowid = '' + newRowid
+    row[rowKey] = newRowid
   }
   return rowid
 }

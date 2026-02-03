@@ -4,7 +4,7 @@ import XEUtils from 'xe-utils'
 import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, scrollTopTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
-import { createReactData, createInternalData, getRowUniqueId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn } from './util'
+import { createReactData, createInternalData, getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from '../../ui/src/anime'
 import { warnLog, errLog } from '../../ui/src/log'
@@ -3547,6 +3547,7 @@ export default defineVxeComponent({
       if (rowGroups) {
         const aggregateOpts = computeAggregateOpts.value
         const { rowField, parentField, childrenField, mapChildrenField } = aggregateOpts
+        const rowOpts = computeRowOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField } = checkboxOpts
         const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
@@ -3582,10 +3583,10 @@ export default defineVxeComponent({
               childCount: 0,
               [rowField]: getRowUniqueId(),
               [parentField]: null,
-              [rowkey]: getRowUniqueId(),
               [childrenField]: childTreeData,
               [mapChildrenField]: childTreeData
             }
+            aggRow[rowkey] = createRowId(rowOpts, aggRow, rowkey)
             if (checkField) {
               aggRow[checkField] = false
             }
@@ -8758,6 +8759,7 @@ export default defineVxeComponent({
         const expandOpts = computeExpandOpts.value
         const treeOpts = computeTreeOpts.value
         const radioOpts = computeRadioOpts.value
+        const rowOpts = computeRowOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const childrenField = treeOpts.children || treeOpts.childrenField
         const rowkey = getRowkey($xeTable)
@@ -8791,7 +8793,7 @@ export default defineVxeComponent({
           }
           // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
           if (eqEmptyValue(XEUtils.get(record, rowkey))) {
-            XEUtils.set(record, rowkey, getRowUniqueId())
+            XEUtils.set(record, rowkey, createRowId(rowOpts, record, rowkey))
           }
           return record
         })
@@ -10595,6 +10597,7 @@ export default defineVxeComponent({
                 // 移出源位置
                 if (oldRest && newRest) {
                   const fullList = XEUtils.toTreeArray(internalData.afterTreeFullData, {
+                    updated: false,
                     key: rowField,
                     parentKey: parentField,
                     children: mapChildrenField
