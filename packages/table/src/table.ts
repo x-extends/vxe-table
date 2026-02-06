@@ -4522,11 +4522,11 @@ export default defineVxeComponent({
       emit(type, createEvent(evnt, { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }, params))
     }
 
-    const handleScrollToRowColumn = (fieldOrColumn: string | VxeTableDefines.ColumnInfo | null, row?: any) => {
+    const handleScrollToRowColumn = (fieldOrColumn: string | VxeTableDefines.ColumnInfo | null, row: any, options?: VxeTableDefines.ScrollToRowConfig) => {
       const { fullColumnIdData } = internalData
       const column = handleFieldOrColumn($xeTable, fieldOrColumn)
       if (column && fullColumnIdData[column.id]) {
-        return colToVisible($xeTable, column, row)
+        return colToVisible($xeTable, options ? options.colAlign !== false : true, column, row)
       }
       return nextTick()
     }
@@ -7314,10 +7314,8 @@ export default defineVxeComponent({
       },
       /**
        * 如果有滚动条，则滚动到对应的行
-       * @param {Row} row 行对象
-       * @param {ColumnInfo} fieldOrColumn 列配置
        */
-      scrollToRow (row, fieldOrColumn) {
+      scrollToRow (row, fieldOrColumn, options) {
         const { isAllOverflow, scrollYLoad, scrollXLoad } = reactData
         const rest = []
         if (row) {
@@ -7328,7 +7326,7 @@ export default defineVxeComponent({
           }
         }
         if (fieldOrColumn) {
-          rest.push(handleScrollToRowColumn(fieldOrColumn, row))
+          rest.push(handleScrollToRowColumn(fieldOrColumn, row, options))
         }
         return Promise.all(rest).then(() => {
           if (row) {
@@ -7343,41 +7341,36 @@ export default defineVxeComponent({
       /**
        * 如果有滚动条，则滚动到第一行
        */
-      scrollToStartRow (fieldOrColumn) {
+      scrollToStartRow (fieldOrColumn, options) {
         const { afterFullData } = internalData
-        return $xeTable.scrollToRow(afterFullData[0], fieldOrColumn)
+        return $xeTable.scrollToRow(afterFullData[0], fieldOrColumn, options)
       },
       /**
        * 如果有滚动条，则滚动到最后一行
        */
-      scrollToEndRow (fieldOrColumn) {
+      scrollToEndRow (fieldOrColumn, options) {
         const { afterFullData } = internalData
-        return $xeTable.scrollToRow(afterFullData[afterFullData.length - 1], fieldOrColumn)
+        return $xeTable.scrollToRow(afterFullData[afterFullData.length - 1], fieldOrColumn, options)
       },
       /**
        * 如果有滚动条，则滚动到对应的列
        */
-      scrollToColumn (fieldOrColumn) {
-        const { fullColumnIdData } = internalData
-        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
-        if (column && fullColumnIdData[column.id]) {
-          return colToVisible($xeTable, column)
-        }
-        return nextTick()
+      scrollToColumn (fieldOrColumn, options) {
+        return handleScrollToRowColumn(fieldOrColumn, null, options)
       },
       /**
        * 如果有滚动条，则滚动到第一列
        */
-      scrollToStartColumn () {
+      scrollToStartColumn (options) {
         const { visibleColumn } = internalData
-        return $xeTable.scrollToColumn(visibleColumn[0])
+        return $xeTable.scrollToColumn(visibleColumn[0], options)
       },
       /**
        * 如果有滚动条，则滚动到最后一列
        */
-      scrollToEndColumn () {
+      scrollToEndColumn (options) {
         const { visibleColumn } = internalData
-        return $xeTable.scrollToColumn(visibleColumn[visibleColumn.length - 1])
+        return $xeTable.scrollToColumn(visibleColumn[visibleColumn.length - 1], options)
       },
       /**
        * 手动清除滚动相关信息，还原到初始状态

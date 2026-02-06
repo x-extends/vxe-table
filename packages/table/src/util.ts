@@ -998,7 +998,7 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   return Promise.resolve()
 }
 
-export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: VxeTableDefines.ColumnInfo, row?: any) {
+export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, isForce: boolean, column: VxeTableDefines.ColumnInfo, row?: any) {
   const reactData = $xeTable.reactData
   const internalData = $xeTable.internalData
 
@@ -1026,27 +1026,37 @@ export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
       const tdOffsetLeft = tdElem.offsetLeft + (scrollXLoad ? scrollXLeft : 0)
       const cellWidth = tdElem.clientWidth
       // 检测是否在可视区中
-      if (tdOffsetLeft < (bodyScrollLeft + leftFixedWidth)) {
-        return $xeTable.scrollTo(tdOffsetLeft - leftFixedWidth - 1)
-      } else if ((tdOffsetLeft + cellWidth - bodyScrollLeft) > (bodyWidth - rightFixedWidth)) {
-        return $xeTable.scrollTo((tdOffsetLeft + cellWidth) - (bodyWidth - rightFixedWidth - 1))
+      if (isForce || (
+        !(tdOffsetLeft <= (bodyScrollLeft + leftFixedWidth) && (tdOffsetLeft + cellWidth) > (bodyScrollLeft + leftFixedWidth)) &&
+        !(tdOffsetLeft >= (bodyScrollLeft + leftFixedWidth) && tdOffsetLeft < (bodyScrollLeft + bodyWidth - rightFixedWidth))
+      )) {
+        if (tdOffsetLeft < (bodyScrollLeft + leftFixedWidth)) {
+          return $xeTable.scrollTo(tdOffsetLeft - leftFixedWidth - 1)
+        } else if ((tdOffsetLeft + cellWidth - bodyScrollLeft) > (bodyWidth - rightFixedWidth)) {
+          return $xeTable.scrollTo((tdOffsetLeft + cellWidth) - (bodyWidth - rightFixedWidth - 1))
+        }
       }
     } else {
-      // 检测是否在虚拟渲染可视区中
       if (scrollXLoad) {
-        let scrollLeft = 0
+        let tdOffsetLeft = 0
         const cellWidth = column.renderWidth
         for (let i = 0; i < visibleColumn.length; i++) {
           const currCol = visibleColumn[i]
           if (currCol === column || currCol.id === column.id) {
             break
           }
-          scrollLeft += currCol.renderWidth
+          tdOffsetLeft += currCol.renderWidth
         }
-        if (scrollLeft < bodyScrollLeft) {
-          return $xeTable.scrollTo(scrollLeft - leftFixedWidth - 1)
+        // 检测是否在可视区中
+        if (isForce || (
+          !(tdOffsetLeft <= (bodyScrollLeft + leftFixedWidth) && (tdOffsetLeft + cellWidth) > (bodyScrollLeft + leftFixedWidth)) &&
+          !(tdOffsetLeft >= (bodyScrollLeft + leftFixedWidth) && tdOffsetLeft < (bodyScrollLeft + bodyWidth - rightFixedWidth))
+        )) {
+          if (tdOffsetLeft < bodyScrollLeft) {
+            return $xeTable.scrollTo(tdOffsetLeft - leftFixedWidth - 1)
+          }
+          return $xeTable.scrollTo((tdOffsetLeft + cellWidth) - (bodyWidth - rightFixedWidth - 1))
         }
-        return $xeTable.scrollTo((scrollLeft + cellWidth) - (bodyWidth - rightFixedWidth - 1))
       }
     }
   }

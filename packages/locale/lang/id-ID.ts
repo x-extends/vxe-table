@@ -593,6 +593,8 @@ export default {
         },
         fnr: {
           title: 'Temukan dan ganti',
+          titleFd: '查找',
+          titleRe: '替换',
           findLabel: 'Menemukan',
           replaceLabel: 'mengganti',
           findTitle: 'Temukan apa:',
@@ -742,6 +744,8 @@ export default {
       },
       fnr: {
         title: 'Temukan dan ganti',
+        titleFd: '查找',
+        titleRe: '替换',
         findLabel: 'Menemukan',
         replaceLabel: 'mengganti',
         findTitle: 'Temukan konten:',

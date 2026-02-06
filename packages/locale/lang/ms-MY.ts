@@ -593,6 +593,8 @@ export default {
         },
         fnr: {
           title: 'Cari dan ganti',
+          titleFd: '查找',
+          titleRe: '替换',
           findLabel: 'Cari',
           replaceLabel: 'menggantikan',
           findTitle: 'Cari Kandungan:',
@@ -742,6 +744,8 @@ export default {
       },
       fnr: {
         title: 'Cari dan ganti',
+        titleFd: '查找',
+        titleRe: '替换',
         findLabel: 'Cari',
         replaceLabel: 'menggantikan',
         findTitle: 'Cari Kandungan:',

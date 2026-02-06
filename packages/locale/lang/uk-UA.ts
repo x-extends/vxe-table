@@ -593,6 +593,8 @@ export default {
         },
         fnr: {
           title: 'Знайти та замінити',
+          titleFd: '查找',
+          titleRe: '替换',
           findLabel: 'Знаходити',
           replaceLabel: 'замінити',
           findTitle: 'Знайти що:',
@@ -742,6 +744,8 @@ export default {
       },
       fnr: {
         title: 'Знайти та замінити',
+        titleFd: '查找',
+        titleRe: '替换',
         findLabel: 'Знаходити',
         replaceLabel: 'замінити',
         findTitle: 'Знайдіть вміст:',

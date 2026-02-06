@@ -593,6 +593,8 @@ export default {
         },
         fnr: {
           title: 'Trova e sostituisci',
+          titleFd: '查找',
+          titleRe: '替换',
           findLabel: 'Trovare',
           replaceLabel: 'sostituire',
           findTitle: 'Trova cosa:',
@@ -742,6 +744,8 @@ export default {
       },
       fnr: {
         title: 'Trova e sostituisci',
+        titleFd: '查找',
+        titleRe: '替换',
         findLabel: 'Trovare',
         replaceLabel: 'sostituire',
         findTitle: 'Trova il contenuto:',

@@ -593,6 +593,8 @@ export default {
         },
         fnr: {
           title: 'Toping va almashtiring',
+          titleFd: '查找',
+          titleRe: '替换',
           findLabel: 'Topmoq',
           replaceLabel: 'almashtirmoq',
           findTitle: 'Tarkibni toping:',
@@ -742,6 +744,8 @@ export default {
       },
       fnr: {
         title: 'Toping va almashtiring',
+        titleFd: '查找',
+        titleRe: '替换',
         findLabel: 'Topmoq',
         replaceLabel: 'almashtirmoq',
         findTitle: 'Tarkibni toping:',

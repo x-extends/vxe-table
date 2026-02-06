@@ -10,7 +10,7 @@ const { hooks } = VxeUI
 hooks.add('tableKeyboardModule', {
   setupTable ($xeTable) {
     const { props, reactData, internalData } = $xeTable
-    const { refElem } = $xeTable.getRefMaps()
+    const { refElem, refTableBody } = $xeTable.getRefMaps()
     const { computeEditOpts, computeCheckboxOpts, computeMouseOpts, computeTreeOpts, computeRowOpts, computeColumnOpts, computeCellOpts, computeDefaultRowHeight, computeCurrentRowOpts, computeCurrentColumnOpts } = $xeTable.getComputeMaps()
 
     function getCheckboxRangeRows (evnt: MouseEvent, params: any, targetTrElem: HTMLElement, trRect: DOMRect, offsetClientTop: number, moveRange: number) {
@@ -261,9 +261,18 @@ hooks.add('tableKeyboardModule', {
     const handleMoveSelected = (evnt: any, args: any, isLeftArrow: boolean, isUpArrow: boolean, isRightArrow: boolean, isDwArrow: boolean) => {
       const { afterFullData, visibleColumn } = internalData
       const params = Object.assign({}, args)
-      const _rowIndex = $xeTable.getVTRowIndex(params.row)
-      const _columnIndex = $xeTable.getVTColumnIndex(params.column)
-      evnt.preventDefault()
+      const { row, column } = params
+      const _rowIndex = $xeTable.getVTRowIndex(row)
+      const _columnIndex = $xeTable.getVTColumnIndex(column)
+      const tableBody = refTableBody.value
+      const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+      const tableWidth = tableBodyElem ? tableBodyElem.clientWidth : 0
+      let colAlign = isLeftArrow || isRightArrow || (column.renderWidth < tableWidth)
+      if ((isLeftArrow && _columnIndex >= 0) || (isRightArrow && _columnIndex <= visibleColumn.length - 1)) {
+        colAlign = false
+      } else {
+        evnt.preventDefault()
+      }
       if (isUpArrow && _rowIndex > 0) {
         // 移动到上一行
         params.rowIndex = _rowIndex - 1
@@ -281,7 +290,9 @@ hooks.add('tableKeyboardModule', {
         params.columnIndex = _columnIndex + 1
         params.column = visibleColumn[params.columnIndex]
       }
-      $xeTable.scrollToRow(params.row, params.column).then(() => {
+      $xeTable.scrollToRow(params.row, params.column, {
+        colAlign
+      }).then(() => {
         params.cell = $xeTable.getCellElement(params.row, params.column)
         $xeTable.handleSelected(params, evnt)
       })
@@ -351,17 +362,15 @@ hooks.add('tableKeyboardModule', {
               if (editOpts.mode === 'row') {
                 $xeTable.handleEdit(params, evnt)
               } else {
-                $xeTable.scrollToRow(params.row, params.column)
-                  .then(() => {
-                    $xeTable.handleSelected(params, evnt)
-                  })
+                $xeTable.scrollToRow(params.row, params.column).then(() => {
+                  $xeTable.handleSelected(params, evnt)
+                })
               }
             }
           } else {
-            $xeTable.scrollToRow(params.row, params.column)
-              .then(() => {
-                $xeTable.handleSelected(params, evnt)
-              })
+            $xeTable.scrollToRow(params.row, params.column).then(() => {
+              $xeTable.handleSelected(params, evnt)
+            })
           }
         }
       },

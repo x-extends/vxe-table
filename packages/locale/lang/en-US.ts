@@ -593,6 +593,8 @@ export default {
         },
         fnr: {
           title: 'Find and replace',
+          titleFd: 'Find',
+          titleRe: 'Replace',
           findLabel: 'Find',
           replaceLabel: 'replace',
           findTitle: 'Find what:',
@@ -742,6 +744,8 @@ export default {
       },
       fnr: {
         title: 'Find and replace',
+        titleFd: 'Find',
+        titleRe: 'Replace',
         findLabel: 'Find',
         replaceLabel: 'replace',
         findTitle: 'Find content:',

@@ -593,6 +593,8 @@ export default {
         },
         fnr: {
           title: 'Keresse meg és cserélje ki',
+          titleFd: '查找',
+          titleRe: '替换',
           findLabel: 'Lelet',
           replaceLabel: 'cserél',
           findTitle: 'Találd meg, mit:',
@@ -742,6 +744,8 @@ export default {
       },
       fnr: {
         title: 'Keresse meg és cserélje ki',
+        titleFd: '查找',
+        titleRe: '替换',
         findLabel: 'Lelet',
         replaceLabel: 'cserél',
         findTitle: 'Keressen tartalmat:',
