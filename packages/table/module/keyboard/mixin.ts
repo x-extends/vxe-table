@@ -79,9 +79,18 @@ function handleMoveSelected ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
 
   const { afterFullData, visibleColumn } = internalData
   const params = Object.assign({}, args)
-  const _rowIndex = $xeTable.getVTRowIndex(params.row)
-  const _columnIndex = $xeTable.getVTColumnIndex(params.column)
-  evnt.preventDefault()
+  const { row, column } = params
+  const _rowIndex = $xeTable.getVTRowIndex(row)
+  const _columnIndex = $xeTable.getVTColumnIndex(column)
+  const refTableBody = $xeTable.$refs.refTableBody
+  const tableBodyElem = refTableBody ? (refTableBody as any).$el as HTMLDivElement : null
+  const tableWidth = tableBodyElem ? tableBodyElem.clientWidth : 0
+  let colAlign = isLeftArrow || isRightArrow || (column.renderWidth < tableWidth)
+  if ((isLeftArrow && _columnIndex >= 0) || (isRightArrow && _columnIndex <= visibleColumn.length - 1)) {
+    colAlign = false
+  } else {
+    evnt.preventDefault()
+  }
   if (isUpArrow && _rowIndex > 0) {
     // 移动到上一行
     params.rowIndex = _rowIndex - 1
@@ -99,7 +108,9 @@ function handleMoveSelected ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
     params.columnIndex = _columnIndex + 1
     params.column = visibleColumn[params.columnIndex]
   }
-  $xeTable.scrollToRow(params.row, params.column).then(() => {
+  $xeTable.scrollToRow(params.row, params.column, {
+    colAlign
+  }).then(() => {
     params.cell = $xeTable.getCellElement(params.row, params.column)
     $xeTable.handleSelected(params, evnt)
   })
@@ -335,17 +346,15 @@ export default {
             if (editOpts.mode === 'row') {
               $xeTable.handleEdit(params, evnt)
             } else {
-              $xeTable.scrollToRow(params.row, params.column)
-                .then(() => {
-                  $xeTable.handleSelected(params, evnt)
-                })
+              $xeTable.scrollToRow(params.row, params.column).then(() => {
+                $xeTable.handleSelected(params, evnt)
+              })
             }
           }
         } else {
-          $xeTable.scrollToRow(params.row, params.column)
-            .then(() => {
-              $xeTable.handleSelected(params, evnt)
-            })
+          $xeTable.scrollToRow(params.row, params.column).then(() => {
+            $xeTable.handleSelected(params, evnt)
+          })
         }
       }
     },

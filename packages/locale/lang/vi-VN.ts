@@ -593,6 +593,8 @@ export default {
         },
         fnr: {
           title: 'Tìm và thay thế',
+          titleFd: '查找',
+          titleRe: '替换',
           findLabel: 'Tìm thấy',
           replaceLabel: 'thay thế',
           findTitle: 'Tìm nội dung:',
@@ -742,6 +744,8 @@ export default {
       },
       fnr: {
         title: 'Tìm và thay thế',
+        titleFd: '查找',
+        titleRe: '替换',
         findLabel: 'Tìm thấy',
         replaceLabel: 'thay thế',
         findTitle: 'Tìm nội dung:',

@@ -593,6 +593,8 @@ export default {
         },
         fnr: {
           title: 'البحث واستبدل',
+          titleFd: '查找',
+          titleRe: '替换',
           findLabel: 'يجد',
           replaceLabel: 'يستبدل',
           findTitle: 'تجد ماذا:',
@@ -742,6 +744,8 @@ export default {
       },
       fnr: {
         title: 'البحث واستبدل',
+        titleFd: '查找',
+        titleRe: '替换',
         findLabel: 'يجد',
         replaceLabel: 'يستبدل',
         findTitle: 'العثور على المحتوى:',

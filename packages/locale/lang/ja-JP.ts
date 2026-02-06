@@ -593,6 +593,8 @@ export default {
         },
         fnr: {
           title: '見つけて交換します',
+          titleFd: '查找',
+          titleRe: '替换',
           findLabel: '探す',
           replaceLabel: '交換する',
           findTitle: 'コンテンツを見つける：',
@@ -742,6 +744,8 @@ export default {
       },
       fnr: {
         title: '見つけて交換します',
+        titleFd: '查找',
+        titleRe: '替换',
         findLabel: '探す',
         replaceLabel: '交換する',
         findTitle: 'コンテンツを見つける：',

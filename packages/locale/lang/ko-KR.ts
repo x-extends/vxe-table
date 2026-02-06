@@ -593,6 +593,8 @@ export default {
         },
         fnr: {
           title: '찾아 교체하십시오',
+          titleFd: '查找',
+          titleRe: '替换',
           findLabel: '찾다',
           replaceLabel: '바꾸다',
           findTitle: '내용 찾기 :',
@@ -742,6 +744,8 @@ export default {
       },
       fnr: {
         title: '찾아 교체하십시오',
+        titleFd: '查找',
+        titleRe: '替换',
         findLabel: '찾다',
         replaceLabel: '바꾸다',
         findTitle: '내용 찾기 :',

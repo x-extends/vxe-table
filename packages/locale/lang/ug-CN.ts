@@ -593,6 +593,8 @@ export default {
         },
         fnr: {
           title: 'ئىزدەش ۋە ئالماشتۇرۇش',
+          titleFd: '查找',
+          titleRe: '替换',
           findLabel: 'ئىزدەش',
           replaceLabel: 'ئالماشتۇرۇش',
           findTitle: 'مەزمۇن ئىزدەش',
@@ -742,6 +744,8 @@ export default {
       },
       fnr: {
         title: 'ئىزدەش ۋە ئالماشتۇرۇش',
+        titleFd: '查找',
+        titleRe: '替换',
         findLabel: 'ئىزدەش',
         replaceLabel: 'ئالماشتۇرۇش',
         findTitle: 'مەزمۇن ئىزدەش:',

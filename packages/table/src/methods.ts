@@ -2923,13 +2923,13 @@ function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   return $xeTable.$nextTick()
 }
 
-function handleScrollToRowColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null, row?: any) {
+function handleScrollToRowColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null, row: any, options?: VxeTableDefines.ScrollToRowConfig) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { fullColumnIdData } = internalData
   const column = handleFieldOrColumn($xeTable, fieldOrColumn)
   if (column && fullColumnIdData[column.id]) {
-    return colToVisible($xeTable, column, row)
+    return colToVisible($xeTable, options ? options.colAlign !== false : true, column, row)
   }
   return $xeTable.$nextTick()
 }
@@ -12272,7 +12272,7 @@ const tableMethods: any = {
    * @param {Row} row 行对象
    * @param {ColumnInfo} column 列配置
    */
-  scrollToRow (row: any, fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo) {
+  scrollToRow (row: any, fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo, options?: VxeTableDefines.ScrollToRowConfig) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
@@ -12287,7 +12287,7 @@ const tableMethods: any = {
       }
     }
     if (fieldOrColumn) {
-      rest.push(handleScrollToRowColumn($xeTable, fieldOrColumn, row))
+      rest.push(handleScrollToRowColumn($xeTable, fieldOrColumn, row, options))
     }
     return Promise.all(rest).then(() => {
       if (row) {
@@ -12302,51 +12302,51 @@ const tableMethods: any = {
   /**
    * 如果有滚动条，则滚动到第一行
    */
-  scrollToStartRow (fieldOrColumn?: string | VxeTableDefines.ColumnInfo) {
+  scrollToStartRow (fieldOrColumn?: string | VxeTableDefines.ColumnInfo, options?: VxeTableDefines.ScrollToRowConfig) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
 
     const { afterFullData } = internalData
-    return $xeTable.scrollToRow(afterFullData[0], fieldOrColumn)
+    return $xeTable.scrollToRow(afterFullData[0], fieldOrColumn, options)
   },
   /**
    * 如果有滚动条，则滚动到最后一行
    */
-  scrollToEndRow (fieldOrColumn?: string | VxeTableDefines.ColumnInfo) {
+  scrollToEndRow (fieldOrColumn?: string | VxeTableDefines.ColumnInfo, options?: VxeTableDefines.ScrollToRowConfig) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
 
     const { afterFullData } = internalData
-    return $xeTable.scrollToRow(afterFullData[afterFullData.length - 1], fieldOrColumn)
+    return $xeTable.scrollToRow(afterFullData[afterFullData.length - 1], fieldOrColumn, options)
   },
   /**
    * 如果有滚动条，则滚动到对应的列
    * @param {ColumnInfo} column 列配置
    */
-  scrollToColumn (fieldOrColumn: any) {
+  scrollToColumn (fieldOrColumn: any, options?: VxeTableDefines.ScrollToColumnConfig) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    return handleScrollToRowColumn($xeTable, fieldOrColumn)
+    return handleScrollToRowColumn($xeTable, null, fieldOrColumn, options)
   },
   /**
    * 如果有滚动条，则滚动到第一列
    */
-  scrollToStartColumn () {
+  scrollToStartColumn (options?: VxeTableDefines.ScrollToColumnConfig) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
 
     const { visibleColumn } = internalData
-    return $xeTable.scrollToColumn(visibleColumn[0])
+    return $xeTable.scrollToColumn(visibleColumn[0], options)
   },
   /**
    * 如果有滚动条，则滚动到最后一列
    */
-  scrollToEndColumn () {
+  scrollToEndColumn (options?: VxeTableDefines.ScrollToColumnConfig) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
 
     const { visibleColumn } = internalData
-    return $xeTable.scrollToColumn(visibleColumn[visibleColumn.length - 1])
+    return $xeTable.scrollToColumn(visibleColumn[visibleColumn.length - 1], options)
   },
   /**
    * 对于树形结构中，可以直接滚动到指定深层节点中
