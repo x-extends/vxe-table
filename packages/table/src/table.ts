@@ -4883,7 +4883,11 @@ export default defineVxeComponent({
             const rowid = getRowid($xeTable, row)
             const newRecord = XEUtils.clone(Object.assign({}, record), true)
             XEUtils.set(newRecord, rowkey, rowid)
-            Object.assign(row, newRecord)
+            if (rowid !== '') {
+              // 如果row不是响应性对象，或者row不是从表格数据获取的响应性对象，都要导致更新失败
+              row = tableMethods.getRowById(rowid)
+              Object.assign(row, newRecord)
+            }
           })
         }
         return nextTick()
