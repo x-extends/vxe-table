@@ -5491,7 +5491,7 @@ export default defineVxeComponent({
               const tcFormatMethod = gFormatOpts ? (gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod) : null
               cellLabel = tcFormatMethod ? tcFormatMethod(formatParams, ...formatter.slice(1)) : ''
             } else {
-              cellLabel = `${formatter(formatParams)}`
+              cellLabel = formatter(formatParams)
             }
           } else if (renderOpts && tcFormatter) {
             cellLabel = tcFormatter(renderOpts, formatParams)
