@@ -16,7 +16,7 @@
   user-select: none;
   color: var(--vxe-ui-font-color);
   font-family: var(--vxe-ui-font-family);
-  background-color: var(--vxe-ui-table-menu-background-color);
+  background-color: var(--vxe-ui-layout-background-color);
 }
 .vxe-context-menu--link {
   display: flex;
@@ -46,7 +46,7 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
-  border-bottom: 1px solid #E8EAED;
+  border-bottom: 1px solid var(--vxe-ui-base-popup-border-color);
   li {
     position: relative;
     margin: 1px 0;
@@ -55,11 +55,8 @@
       border: 0;
     }
     &.link--active {
-      background-color: #C5C5C5;
-      border-color:#C5C5C5;
-      & > .vxe-context-menu--link {
-        color: #2B2B2B;
-      }
+      background-color: var(--vxe-ui-base-hover-background-color);
+      border-color: var(--vxe-ui-base-hover-background-color);
     }
     &.link--loading,
     &.link--disabled {
@@ -68,8 +65,6 @@
         cursor: no-drop;
       }
       &.link--active {
-        border-color:#C0C1C2;
-        background-color: #EEEEEE;
         &:hover {
           background-color: inherit;
         }

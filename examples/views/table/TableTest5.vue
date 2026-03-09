@@ -70,7 +70,7 @@ const menuConfig = reactive<VxeTablePropTypes.MenuConfig>({
   body: {
     options: [
       [
-        { code: 'copy', name: '复制1（Ctrl+C）', suffixConfig: { content: 'xx' } },
+        { code: 'copy', name: '复制1（Ctrl+C）', disabled: true, suffixConfig: { content: 'xx' } },
         { code: 'copy', name: '复制2（Ctrl+C）', suffixConfig: { icon: 'vxe-icon-delete-fill' } }
       ],
       [

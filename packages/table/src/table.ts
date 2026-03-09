@@ -311,6 +311,10 @@ export default defineVxeComponent({
       return computeAggregateOpts.value
     })
 
+    const computeAggregateAccuracyOpts = computed(() => {
+      return Object.assign({}, getConfig().table.aggregateAccuracyConfig, props.aggregateAccuracyConfig)
+    })
+
     const computeCurrentRowOpts = computed(() => {
       return Object.assign({}, getConfig().table.currentRowConfig, props.currentRowConfig)
     })
@@ -801,6 +805,7 @@ export default defineVxeComponent({
       computeFooterCellOpts,
       computeRowOpts,
       computeAggregateOpts,
+      computeAggregateAccuracyOpts,
       computeRowGroupOpts,
       computeCurrentRowOpts,
       computeRowDragOpts,
@@ -7440,7 +7445,8 @@ export default defineVxeComponent({
       updateStatus (slotParams, cellValue) {
         return nextTick().then(() => {
           const { editRules } = props
-          if (slotParams && editRules) {
+          const { isActivated } = internalData
+          if (isActivated && slotParams && editRules) {
             return $xeTable.handleCellRuleUpdateStatus('change', slotParams, cellValue)
           }
         })
@@ -7870,13 +7876,15 @@ export default defineVxeComponent({
           $xeTable.closeMenu()
         }
       }
-      const isActivated = getEventTargetNode(evnt, $xeGGWrapper ? $xeGGWrapper.getRefMaps().refElem.value : el).flag
-      // 如果存在校验，点击了表格之外则清除
-      if (!isActivated && editRules && validOpts.autoClear) {
-        reactData.validErrorMaps = {}
+      if (!(actived.row && getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag)) {
+        const isActivated = getEventTargetNode(evnt, $xeGGWrapper ? $xeGGWrapper.getRefMaps().refElem.value : el).flag
+        // 如果存在校验，点击了表格之外则清除
+        if (!isActivated && editRules && validOpts.autoClear) {
+          reactData.validErrorMaps = {}
+        }
+        // 最后激活的表格
+        internalData.isActivated = isActivated
       }
-      // 最后激活的表格
-      internalData.isActivated = isActivated
     }
 
     /**
@@ -10168,7 +10176,7 @@ export default defineVxeComponent({
         const { selectRadioRow: oldValue } = reactData
         const { row } = params
         const radioOpts = computeRadioOpts.value
-        const { trigger, checkMethod } = radioOpts
+        const { trigger, strict, checkMethod } = radioOpts
         if (trigger === 'manual') {
           return
         }
@@ -10178,7 +10186,7 @@ export default defineVxeComponent({
           let isChange = oldValue !== newValue
           if (isChange) {
             handleCheckedRadioRow(newValue)
-          } else if (!radioOpts.strict) {
+          } else if (!strict) {
             isChange = oldValue === newValue
             if (isChange) {
               newValue = null
@@ -10196,13 +10204,23 @@ export default defineVxeComponent({
         const currentColumnOpts = computeCurrentColumnOpts.value
         const beforeRowMethod = currentColumnOpts.beforeSelectMethod || columnOpts.currentMethod as any
         const { column: newValue } = params
-        const { trigger } = currentColumnOpts
+        const { trigger, strict } = currentColumnOpts
         if (trigger === 'manual') {
           return
         }
-        const isChange = oldValue !== newValue
-        if (!beforeRowMethod || beforeRowMethod({ column: newValue, $table: $xeTable })) {
-          $xeTable.setCurrentColumn(newValue)
+        let isChange = oldValue !== newValue
+        const selected = !isChange
+        if (!beforeRowMethod || beforeRowMethod({ column: newValue, selected, $table: $xeTable })) {
+          if (strict) {
+            $xeTable.setCurrentColumn(newValue)
+          } else {
+            isChange = true
+            if (selected) {
+              $xeTable.clearCurrentColumn()
+            } else {
+              $xeTable.setCurrentColumn(newValue)
+            }
+          }
           if (isChange) {
             dispatchEvent('current-column-change', { oldValue, newValue, ...params }, evnt)
           }
@@ -10216,13 +10234,23 @@ export default defineVxeComponent({
         const currentRowOpts = computeCurrentRowOpts.value
         const beforeRowMethod = currentRowOpts.beforeSelectMethod || rowOpts.currentMethod as any
         const { row: newValue } = params
-        const { trigger } = currentRowOpts
+        const { trigger, strict } = currentRowOpts
         if (trigger === 'manual') {
           return
         }
-        const isChange = oldValue !== newValue
-        if (!beforeRowMethod || beforeRowMethod({ row: newValue, $table: $xeTable })) {
-          $xeTable.setCurrentRow(newValue)
+        let isChange = oldValue !== newValue
+        const selected = !isChange
+        if (!beforeRowMethod || beforeRowMethod({ row: newValue, selected, $table: $xeTable })) {
+          if (strict) {
+            $xeTable.setCurrentRow(newValue)
+          } else {
+            isChange = true
+            if (selected) {
+              $xeTable.clearCurrentRow()
+            } else {
+              $xeTable.setCurrentRow(newValue)
+            }
+          }
           if (isChange) {
             dispatchEvent('current-row-change', { oldValue, newValue, ...params }, evnt)
             // 已废弃
