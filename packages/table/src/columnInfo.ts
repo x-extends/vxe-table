@@ -174,6 +174,8 @@ export class ColumnInfo {
       renderSortNumber: 0, // 用于记录自定义列顺序
 
       renderAggFn: '',
+      renderAggDigits: null,
+      renderAggFormat: null,
 
       renderFixed: '',
       renderVisible: false,

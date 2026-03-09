@@ -7031,13 +7031,15 @@ const tableMethods: any = {
     if (ctxMenuStore.visible && tableMenu && !getEventTargetNode(evnt, tableMenu.$el).flag) {
       $xeTable.closeMenu()
     }
-    const isActivated = getEventTargetNode(evnt, ($xeGGWrapper || $xeTable).$el).flag
-    // 如果存在校验，点击了表格之外则清除
-    if (!isActivated && editRules && validOpts.autoClear) {
-      reactData.validErrorMaps = {}
+    if (!(actived.row && getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag)) {
+      const isActivated = getEventTargetNode(evnt, ($xeGGWrapper || $xeTable).$el).flag
+      // 如果存在校验，点击了表格之外则清除
+      if (!isActivated && editRules && validOpts.autoClear) {
+        reactData.validErrorMaps = {}
+      }
+      // 最后激活的表格
+      internalData.isActivated = isActivated
     }
-    // 最后激活的表格
-    internalData.isActivated = isActivated
   },
   /**
    * 窗口失焦事件处理
@@ -8493,7 +8495,7 @@ const tableMethods: any = {
     const { selectRadioRow: oldValue } = reactData
     const { row } = params
     const radioOpts = $xeTable.computeRadioOpts
-    const { trigger, checkMethod } = radioOpts
+    const { trigger, strict, checkMethod } = radioOpts
     if (trigger === 'manual') {
       return
     }
@@ -8503,7 +8505,7 @@ const tableMethods: any = {
       let isChange = oldValue !== newValue
       if (isChange) {
         handleCheckedRadioRow($xeTable, newValue)
-      } else if (!radioOpts.strict) {
+      } else if (!strict) {
         isChange = oldValue === newValue
         if (isChange) {
           newValue = null
@@ -8526,13 +8528,23 @@ const tableMethods: any = {
     const currentColumnOpts = $xeTable.computeCurrentColumnOpts
     const beforeRowMethod = currentColumnOpts.beforeSelectMethod || columnOpts.currentMethod as any
     const { column: newValue } = params
-    const { trigger } = currentColumnOpts
+    const { trigger, strict } = currentColumnOpts
     if (trigger === 'manual') {
       return
     }
-    const isChange = oldValue !== newValue
-    if (!beforeRowMethod || beforeRowMethod({ column: newValue, $table: $xeTable })) {
-      $xeTable.setCurrentColumn(newValue)
+    let isChange = oldValue !== newValue
+    const selected = !isChange
+    if (!beforeRowMethod || beforeRowMethod({ column: newValue, selected, $table: $xeTable })) {
+      if (strict) {
+        $xeTable.setCurrentColumn(newValue)
+      } else {
+        isChange = true
+        if (selected) {
+          $xeTable.clearCurrentColumn()
+        } else {
+          $xeTable.setCurrentColumn(newValue)
+        }
+      }
       if (isChange) {
         $xeTable.dispatchEvent('current-column-change', { oldValue, newValue, ...params }, evnt)
       }
@@ -8549,13 +8561,23 @@ const tableMethods: any = {
     const currentRowOpts = $xeTable.computeCurrentRowOpts
     const beforeRowMethod = currentRowOpts.beforeSelectMethod || rowOpts.currentMethod as any
     const { row: newValue } = params
-    const { trigger } = currentRowOpts
+    const { trigger, strict } = currentRowOpts
     if (trigger === 'manual') {
       return
     }
-    const isChange = oldValue !== newValue
-    if (!beforeRowMethod || beforeRowMethod({ row: newValue, $table: $xeTable })) {
-      $xeTable.setCurrentRow(newValue)
+    let isChange = oldValue !== newValue
+    const selected = !isChange
+    if (!beforeRowMethod || beforeRowMethod({ row: newValue, selected, $table: $xeTable })) {
+      if (strict) {
+        $xeTable.setCurrentRow(newValue)
+      } else {
+        isChange = true
+        if (selected) {
+          $xeTable.clearCurrentRow()
+        } else {
+          $xeTable.setCurrentRow(newValue)
+        }
+      }
       if (isChange) {
         $xeTable.dispatchEvent('current-row-change', { oldValue, newValue, ...params }, evnt)
         // 已废弃
@@ -12457,10 +12479,12 @@ const tableMethods: any = {
   updateStatus (slotParams: any, cellValue: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
 
     return this.$nextTick().then(() => {
       const { editRules } = props
-      if (slotParams && editRules) {
+      const { isActivated } = internalData
+      if (isActivated && slotParams && editRules) {
         return $xeTable.handleCellRuleUpdateStatus('change', slotParams, cellValue)
       }
     })

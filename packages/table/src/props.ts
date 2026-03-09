@@ -205,6 +205,8 @@ export const tableProps = {
   rowConfig: Object as PropType<VxeTablePropTypes.RowConfig>,
   // 数据聚合配置项
   aggregateConfig: Object as PropType<VxeTablePropTypes.AggregateConfig>,
+  // 聚合函数计算精度配置项
+  aggregateAccuracyConfig: Object as PropType<VxeTablePropTypes.AggregateAccuracyConfig>,
   /**
    * 已废弃，被 aggregateConfig 替换
    * @deprecated

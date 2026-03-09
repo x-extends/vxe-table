@@ -46,6 +46,12 @@ VxeUI.setConfig({
       isSyncAutoWidth: true,
       minHeight: 18
     },
+    currentRowConfig: {
+      strict: true
+    },
+    currentColumnConfig: {
+      strict: true
+    },
     radioConfig: {
       // trigger: 'default'
       strict: true

@@ -797,6 +797,12 @@ export default {
 
       return Object.assign({}, getConfig().table.aggregateConfig || getConfig().table.rowGroupConfig, props.aggregateConfig || props.rowGroupConfig)
     },
+    computeAggregateAccuracyOpts () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.aggregateAccuracyConfig, props.aggregateAccuracyConfig)
+    },
     computeRowGroupOpts () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
