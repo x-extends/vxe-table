@@ -8503,6 +8503,7 @@ const tableMethods: any = {
     if (!checkMethod || checkMethod({ $table: $xeTable, row })) {
       let newValue = row
       let isChange = oldValue !== newValue
+      const selected = !isChange
       if (isChange) {
         handleCheckedRadioRow($xeTable, newValue)
       } else if (!strict) {
@@ -8513,7 +8514,7 @@ const tableMethods: any = {
         }
       }
       if (isChange) {
-        $xeTable.dispatchEvent('radio-change', { oldValue, newValue, ...params }, evnt)
+        $xeTable.dispatchEvent('radio-change', { oldValue, newValue, selected, ...params }, evnt)
       }
     }
   },
@@ -8527,7 +8528,7 @@ const tableMethods: any = {
     const columnOpts = $xeTable.computeColumnOpts
     const currentColumnOpts = $xeTable.computeCurrentColumnOpts
     const beforeRowMethod = currentColumnOpts.beforeSelectMethod || columnOpts.currentMethod as any
-    const { column: newValue } = params
+    let { column: newValue } = params
     const { trigger, strict } = currentColumnOpts
     if (trigger === 'manual') {
       return
@@ -8538,15 +8539,16 @@ const tableMethods: any = {
       if (strict) {
         $xeTable.setCurrentColumn(newValue)
       } else {
-        isChange = true
-        if (selected) {
+        isChange = oldValue === newValue
+        if (isChange) {
+          newValue = null as any
           $xeTable.clearCurrentColumn()
         } else {
           $xeTable.setCurrentColumn(newValue)
         }
       }
       if (isChange) {
-        $xeTable.dispatchEvent('current-column-change', { oldValue, newValue, ...params }, evnt)
+        $xeTable.dispatchEvent('current-column-change', { oldValue, newValue, selected, ...params }, evnt)
       }
     } else {
       $xeTable.dispatchEvent('current-column-disabled', params, evnt)
@@ -8560,7 +8562,7 @@ const tableMethods: any = {
     const rowOpts = $xeTable.computeRowOpts
     const currentRowOpts = $xeTable.computeCurrentRowOpts
     const beforeRowMethod = currentRowOpts.beforeSelectMethod || rowOpts.currentMethod as any
-    const { row: newValue } = params
+    let { row: newValue } = params
     const { trigger, strict } = currentRowOpts
     if (trigger === 'manual') {
       return
@@ -8571,17 +8573,18 @@ const tableMethods: any = {
       if (strict) {
         $xeTable.setCurrentRow(newValue)
       } else {
-        isChange = true
-        if (selected) {
+        isChange = oldValue === newValue
+        if (isChange) {
+          newValue = null
           $xeTable.clearCurrentRow()
         } else {
           $xeTable.setCurrentRow(newValue)
         }
       }
       if (isChange) {
-        $xeTable.dispatchEvent('current-row-change', { oldValue, newValue, ...params }, evnt)
+        $xeTable.dispatchEvent('current-row-change', { oldValue, newValue, selected, ...params }, evnt)
         // 已废弃
-        $xeTable.dispatchEvent('current-change', { oldValue, newValue, ...params }, evnt)
+        $xeTable.dispatchEvent('current-change', { oldValue, newValue, selected, ...params }, evnt)
       }
     } else {
       $xeTable.dispatchEvent('current-row-disabled', params, evnt)

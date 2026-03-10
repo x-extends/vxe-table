@@ -138,7 +138,7 @@ export const columnProps = {
   contentRender: Object,
 
   // 聚合函数
-  aggFunc: [String, Boolean] as PropType<VxeColumnPropTypes.AggFunc>,
+  aggFunc: [Boolean, String] as PropType<VxeColumnPropTypes.AggFunc>,
   // 将单元格复制到剪贴板
   copyMethod: Function as PropType<VxeColumnPropTypes.CopyMethod>,
   // 将剪贴单元格的值清除
