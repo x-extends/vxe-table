@@ -42,9 +42,10 @@ export default defineVxeComponent({
     })
 
     const renderVN = () => {
+      const defaultSlot = slots.default
       return h('div', {
         ref: refElem
-      }, slots.default ? slots.default() : [])
+      }, defaultSlot ? defaultSlot() : [])
     }
 
     const $xeColgroup = { columnConfig } as XEColumnInstance
