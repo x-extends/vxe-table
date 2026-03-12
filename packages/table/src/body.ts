@@ -43,8 +43,9 @@ export default defineVxeComponent({
     // 滚动、拖动过程中不需要触发
     const isVMScrollProcess = () => {
       const { delayHover } = tableProps
-      const { lastScrollTime, isDragResize } = tableReactData
-      return !!(isDragResize || (lastScrollTime && Date.now() < lastScrollTime + (delayHover as number)))
+      const { isDragResize } = tableReactData
+      const { lastSTime } = tableInternalData
+      return !!(isDragResize || (lastSTime && Date.now() < lastSTime + (delayHover as number)))
     }
 
     const renderLine = (rowid: string, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number): VxeComponentSlotType[] => {

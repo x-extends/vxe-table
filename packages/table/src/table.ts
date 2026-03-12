@@ -30,7 +30,7 @@ import '../module/validator/hook'
 import '../module/custom/hook'
 import '../render'
 
-import type { VxeTooltipInstance, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType } from 'vxe-pc-ui'
+import type { VxeTooltipInstance, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType, VxeComponentStyleType } from 'vxe-pc-ui'
 import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableEmits, VxeTableProps, VxeColumnPropTypes, VxeTableCustomPanelConstructor } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
@@ -613,6 +613,19 @@ export default defineVxeComponent({
         }
       }
       return ''
+    })
+
+    const computeTableStyle = computed(() => {
+      const scrollbarOpts = computeScrollbarOpts.value
+      const { width, height } = scrollbarOpts
+      const tStys: VxeComponentStyleType = {}
+      if (width) {
+        tStys['--vxe-ui-table-view-scrollbar-width'] = toCssUnit(width)
+      }
+      if (height) {
+        tStys['--vxe-ui-table-view-scrollbar-height'] = toCssUnit(height)
+      }
+      return tStys
     })
 
     const computeTableRowExpandedList = computed(() => {
@@ -3755,7 +3768,7 @@ export default defineVxeComponent({
           if (reactData.expandColumn && expandOpts.mode !== 'fixed') {
             errLog('vxe.error.notConflictProp', ['column.type="expand', 'expand-config.mode="fixed"'])
           }
-          if (virtualYOpts.mode === 'scroll' && expandOpts.mode === 'fixed') {
+          if (virtualYOpts.mode === 'scroll' && reactData.expandColumn && expandOpts.mode === 'fixed') {
             warnLog('vxe.error.notConflictProp', ['virtual-y-config.mode=scroll', 'expand-config.mode=inside'])
           }
           // if (showOverflow) {
@@ -4462,7 +4475,7 @@ export default defineVxeComponent({
       return Promise.all([
         xRest,
         yRest,
-        $xeTable.updateCellAreas()
+        scrollXLoad || scrollYLoad ? $xeTable.updateCellAreas() : null
       ])
     }
 
@@ -7299,14 +7312,18 @@ export default defineVxeComponent({
           setScrollLeft(bodyScrollElem, scrollLeft)
           setScrollLeft(headerScrollElem, scrollLeft)
           setScrollLeft(footerScrollElem, scrollLeft)
-          loadScrollXData()
+          if (reactData.scrollXLoad) {
+            loadScrollXData()
+          }
         }
         if (XEUtils.isNumber(scrollTop)) {
           setScrollTop(yHandleEl, scrollTop)
           setScrollTop(bodyScrollElem, scrollTop)
           setScrollTop(leftScrollElem, scrollTop)
           setScrollTop(rightScrollElem, scrollTop)
-          loadScrollYData()
+          if (reactData.scrollYLoad) {
+            loadScrollYData()
+          }
         }
         return new Promise<void>(resolve => {
           setTimeout(() => {
@@ -11625,7 +11642,7 @@ export default defineVxeComponent({
           }
           internalData.lastScrollTop = scrollTop
         }
-        reactData.lastScrollTime = Date.now()
+        internalData.lastSTime = Date.now()
         const evntParams = {
           source: sourceType,
           scrollTop,
@@ -11870,7 +11887,7 @@ export default defineVxeComponent({
           return
         }
 
-        const wheelSpeed = getWheelSpeed(reactData.lastScrollTime)
+        const wheelSpeed = getWheelSpeed(internalData.lastSTime)
         const deltaTop = shiftKey ? 0 : (deltaY * wheelSpeed)
         const deltaLeft = (shiftKey ? (deltaX || deltaY) : deltaX) * wheelSpeed
 
@@ -12873,6 +12890,7 @@ export default defineVxeComponent({
         footer: slots.footerTooltip || slots['footer-tooltip']
       }
       const currTooltipSlot = tooltipStore.visible && tooltipStore.type ? tipSlots[tooltipStore.type] : null
+      const tableStyle = computeTableStyle.value
       const rowDragOpts = computeRowDragOpts.value
       const tableTipConfig = computeTableTipConfig.value
       const validTipConfig = computeValidTipConfig.value
@@ -12944,6 +12962,7 @@ export default defineVxeComponent({
           'is--virtual-x': scrollXLoad,
           'is--virtual-y': scrollYLoad
         }],
+        style: tableStyle,
         spellcheck: false,
         ...tbOns
       }, [
