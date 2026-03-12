@@ -912,7 +912,7 @@ $btnThemeList: (
   .vxe-table--scroll-x-handle {
     overflow-y: hidden;
     overflow-x: scroll;
-    height: 18px;
+    height: var(--vxe-ui-table-view-scrollbar-height);
   }
   .vxe-table--scroll-y-handle,
   .vxe-table--scroll-y-wrapper {
@@ -924,7 +924,7 @@ $btnThemeList: (
   .vxe-table--scroll-y-handle {
     overflow-y: scroll;
     overflow-x: hidden;
-    width: 18px;
+    width: var(--vxe-ui-table-view-scrollbar-width);
     height: 100%;
   }
   .vxe-table--scroll-x-space {

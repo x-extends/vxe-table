@@ -137,6 +137,8 @@ export function createInternalData (): TableInternalData {
     teleportToWrapperElem: null,
     popupToWrapperElem: null,
 
+    lastSTime: 0,
+
     inited: false,
     tooltipTimeout: null,
     initStatus: false,
@@ -167,8 +169,6 @@ export function createReactData (): TableReactData {
     scrollbarWidth: 0,
     // 横向滚动条的高度
     scrollbarHeight: 0,
-    // 最后滚动时间戳
-    lastScrollTime: 0,
     // 行高
     rowHeight: 0,
     // 表格父容器的高度

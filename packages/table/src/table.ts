@@ -1,7 +1,7 @@
 import { CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { getFuncText, isEnableConf } from '../../ui/src/utils'
-import { initTpImg } from '../../ui/src/dom'
+import { initTpImg, toCssUnit } from '../../ui/src/dom'
 import { createReactData, createInternalData, createHandleGetRowId, getCalcHeight, hasDeepKey } from './util'
 import { VxeUI } from '../../ui'
 import methods from './methods'
@@ -26,7 +26,7 @@ import keyboardMixin from '../module/keyboard/mixin'
 import validatorMixin from '../module/validator/mixin'
 import customMixin from '../module/custom/mixin'
 
-import type { VxeTabsConstructor, VxeTabsPrivateMethods } from 'vxe-pc-ui'
+import type { VxeTabsConstructor, VxeTabsPrivateMethods, VxeComponentStyleType } from 'vxe-pc-ui'
 import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes, TableInternalData, TableReactData, VxeTableDefines } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
@@ -1232,6 +1232,20 @@ export default {
       }
       return ''
     },
+    computeTableStyle () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      const scrollbarOpts = $xeTable.computeScrollbarOpts
+      const { width, height } = scrollbarOpts
+      const tStys: VxeComponentStyleType = {}
+      if (width) {
+        tStys['--vxe-ui-table-view-scrollbar-width'] = toCssUnit(width)
+      }
+      if (height) {
+        tStys['--vxe-ui-table-view-scrollbar-height'] = toCssUnit(height)
+      }
+      return tStys
+    },
     computeTableRowExpandedList () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
@@ -2077,6 +2091,7 @@ export default {
       footer: slots.footerTooltip || slots['footer-tooltip']
     }
     const currTooltipSlot = tooltipStore.visible && tooltipStore.type ? tipSlots[tooltipStore.type] : null
+    const tableStyle = ($xeTable as any).computeTableStyle as VxeComponentStyleType
     const rowDragOpts = $xeTable.computeRowDragOpts
     const tableTipConfig = $xeTable.computeTableTipConfig
     const validTipConfig = $xeTable.computeValidTipConfig
@@ -2148,6 +2163,7 @@ export default {
         'is--virtual-x': scrollXLoad,
         'is--virtual-y': scrollYLoad
       }],
+      style: tableStyle,
       attrs: {
         spellcheck: false
       },

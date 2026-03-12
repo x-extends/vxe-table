@@ -3495,7 +3495,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
       if (reactData.expandColumn && expandOpts.mode !== 'fixed') {
         errLog('vxe.error.notConflictProp', ['column.type="expand', 'expand-config.mode="fixed"'])
       }
-      if (virtualYOpts.mode === 'scroll' && expandOpts.mode === 'fixed') {
+      if (virtualYOpts.mode === 'scroll' && reactData.expandColumn && expandOpts.mode === 'fixed') {
         warnLog('vxe.error.notConflictProp', ['virtual-y-config.mode=scroll', 'expand-config.mode=inside'])
       }
       // if (showOverflow) {
@@ -4023,7 +4023,7 @@ function handleSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   return Promise.all([
     xRest,
     yRest,
-    $xeTable.updateCellAreas()
+    scrollXLoad || scrollYLoad ? $xeTable.updateCellAreas() : null
   ])
 }
 
@@ -11435,7 +11435,6 @@ const tableMethods: any = {
   handleScrollEvent (evnt: Event, isRollY: boolean, isRollX: boolean, scrollTop: number, scrollLeft: number, params: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
-    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
     const { highlightHoverRow } = props
@@ -11500,7 +11499,7 @@ const tableMethods: any = {
       }
       internalData.lastScrollTop = scrollTop
     }
-    reactData.lastScrollTime = Date.now()
+    internalData.lastSTime = Date.now()
     const evntParams = {
       source: sourceType,
       scrollTop,
@@ -11766,7 +11765,7 @@ const tableMethods: any = {
       return
     }
 
-    const wheelSpeed = getWheelSpeed(reactData.lastScrollTime)
+    const wheelSpeed = getWheelSpeed(internalData.lastSTime)
     const deltaTop = shiftKey ? 0 : (deltaY * wheelSpeed)
     const deltaLeft = (shiftKey ? (deltaX || deltaY) : deltaX) * wheelSpeed
 
@@ -12274,14 +12273,18 @@ const tableMethods: any = {
       setScrollLeft(bodyScrollElem, scrollLeft)
       setScrollLeft(headerScrollElem, scrollLeft)
       setScrollLeft(footerScrollElem, scrollLeft)
-      loadScrollXData($xeTable)
+      if (reactData.scrollXLoad) {
+        loadScrollXData($xeTable)
+      }
     }
     if (XEUtils.isNumber(scrollTop)) {
       setScrollTop(yHandleEl, scrollTop)
       setScrollTop(bodyScrollElem, scrollTop)
       setScrollTop(leftScrollElem, scrollTop)
       setScrollTop(rightScrollElem, scrollTop)
-      loadScrollYData($xeTable)
+      if (reactData.scrollYLoad) {
+        loadScrollYData($xeTable)
+      }
     }
     return new Promise<void>(resolve => {
       setTimeout(() => {

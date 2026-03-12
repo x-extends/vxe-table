@@ -17,10 +17,12 @@ const renderType = 'body'
 const isVMScrollProcess = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) => {
   const tableProps = $xeTable
   const tableReactData = $xeTable as unknown as TableReactData
+  const tableInternalData = $xeTable as unknown as TableInternalData
 
   const { delayHover } = tableProps
-  const { lastScrollTime, isDragResize } = tableReactData
-  return !!(isDragResize || (lastScrollTime && Date.now() < lastScrollTime + (delayHover as number)))
+  const { isDragResize } = tableReactData
+  const { lastSTime } = tableInternalData
+  return !!(isDragResize || (lastSTime && Date.now() < lastSTime + (delayHover as number)))
 }
 
 function renderLine (h: CreateElement, $xeTable : VxeTableConstructor & VxeTablePrivateMethods, rowid: string, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number): VxeComponentSlotType[] {
