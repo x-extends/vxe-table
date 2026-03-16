@@ -4,7 +4,9 @@ import { getColumnList } from '../../src/util'
 import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, TableReactData, TableInternalData } from '../../../../types'
 
 function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const $xeGrid = $xeTable.$xeGrid
   const $xeGantt = $xeTable.$xeGantt
+  const $xeGGWrapper = $xeGrid || $xeGantt
   const reactData = $xeTable as unknown as TableReactData
 
   const { customStore } = reactData
@@ -23,7 +25,7 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
     }
   }
   if (showCustomSimpleOutside) {
-    if (wrapperEl) {
+    if ($xeGGWrapper && wrapperEl) {
       popupTop = wrapperEl.offsetTop
     }
     popupMaxHeight = XEUtils.eqNull(maxHeight) ? 360 : maxHeight
