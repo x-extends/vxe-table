@@ -31,7 +31,7 @@ hooks.add('tableMenuModule', {
       const isContentMenu = computeIsContentMenu.value
       const menuOpts = computeMenuOpts.value
       const config = menuOpts[type]
-      const { transfer, visibleMethod } = menuOpts
+      const { zIndex, transfer, visibleMethod } = menuOpts
       if (config) {
         const { options, disabled } = config
         if (disabled) {
@@ -65,7 +65,7 @@ hooks.add('tableMenuModule', {
                   selectChild: null,
                   showChild: false,
                   style: {
-                    zIndex: internalData.tZindex,
+                    zIndex: zIndex || internalData.tZindex,
                     top: `${top}px`,
                     left: `${left}px`
                   }
