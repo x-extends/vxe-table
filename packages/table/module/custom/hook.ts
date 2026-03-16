@@ -13,7 +13,9 @@ VxeUI.hooks.add('tableCustomModule', {
     const { computeCustomOpts, computeRowGroupFields, computeCustomSimpleMode } = $xeTable.getComputeMaps()
     const { refElem } = $xeTable.getRefMaps()
 
+    const $xeGrid = $xeTable.xeGrid
     const $xeGantt = $xeTable.xeGantt
+    const $xeGGWrapper = $xeGrid || $xeGantt
 
     const updatePopupStyle = () => {
       const { customStore } = reactData
@@ -33,7 +35,7 @@ VxeUI.hooks.add('tableCustomModule', {
         }
       }
       if (showCustomSimpleOutside) {
-        if (wrapperEl) {
+        if ($xeGGWrapper && wrapperEl) {
           popupTop = wrapperEl.offsetTop
         }
         popupMaxHeight = XEUtils.eqNull(maxHeight) ? 360 : maxHeight

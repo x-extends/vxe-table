@@ -756,7 +756,9 @@ export default defineVxeComponent({
       })
       const popupStys: VxeComponentStyleType = {}
       if (maxHeight && !['left', 'right'].includes(placement || '')) {
-        popupStys.top = toCssUnit(popupTop)
+        if (popupTop) {
+          popupStys.top = toCssUnit(popupTop)
+        }
         popupStys.maxHeight = toCssUnit(maxHeight)
       }
       return h('div', {
