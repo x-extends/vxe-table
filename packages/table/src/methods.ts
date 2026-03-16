@@ -5267,7 +5267,7 @@ const tableMethods: any = {
     const cellValue = getCellValue(row, column)
     let cellLabel = cellValue
     if (formatter || tcFormatter) {
-      let formatData
+      let formatData: Record<string, VxeTableDefines.RowCacheFormatObj> | undefined
       const { fullAllDataRowIdData } = internalData
       const rowid = getRowid($xeTable, row)
       const colid = column.id
@@ -5312,6 +5312,50 @@ const tableMethods: any = {
     }
     return cellLabel
   },
+  updateCellLabel (row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+    if (!column) {
+      return null
+    }
+    const { fullAllDataRowIdData } = internalData
+    const rowid = getRowid($xeTable, row)
+    if (rowid) {
+      const colid = column.id
+      const rowid = getRowid($xeTable, row)
+      const rowRest = fullAllDataRowIdData[rowid]
+      if (rowRest) {
+        const formatData = rowRest.formatData
+        if (formatData) {
+          delete formatData[colid]
+        }
+      }
+    }
+    return $xeTable.getFooterCellLabel(row, column)
+  },
+  clearFormatterCache (isUpdate?: boolean) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { tableData, tableColumn } = reactData
+    const { fullAllDataRowIdData } = internalData
+    XEUtils.each(fullAllDataRowIdData, (rowRest: VxeTableDefines.FooterRowCacheItem) => {
+      if (rowRest.formatData) {
+        rowRest.formatData = undefined
+      }
+    })
+    if (isUpdate) {
+      tableData.forEach(row => {
+        tableColumn.forEach(column => {
+          $xeTable.getCellLabel(row, column)
+        })
+      })
+    }
+    return $xeTable.$nextTick()
+  },
   getFooterCellLabel (row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
@@ -5332,7 +5376,7 @@ const tableMethods: any = {
     }
     let cellLabel: any = itemValue
     if (footerFormatter) {
-      let formatData
+      let formatData: Record<string, VxeTableDefines.RowCacheFormatObj> | undefined
       const { footerTableData } = reactData
       const { footerFullDataRowData } = internalData
       const colid = column.id
@@ -5380,6 +5424,49 @@ const tableMethods: any = {
       }
     }
     return cellLabel
+  },
+  updateFooterCellLabel (row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+    if (!column) {
+      return null
+    }
+    const { footerTableData } = reactData
+    const { footerFullDataRowData } = internalData
+    const colid = column.id
+    const $rowIndex = footerTableData.indexOf(row)
+    const rowRest = footerFullDataRowData[$rowIndex]
+    if (rowRest) {
+      const formatData = rowRest.formatData
+      if (formatData) {
+        delete formatData[colid]
+      }
+    }
+    return $xeTable.getFooterCellLabel(row, column)
+  },
+  clearFooterFormatterCache (isUpdate?: boolean) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { tableData, tableColumn } = reactData
+    const { footerFullDataRowData } = internalData
+    XEUtils.each(footerFullDataRowData, (rowRest: VxeTableDefines.FooterRowCacheItem) => {
+      if (rowRest.formatData) {
+        rowRest.formatData = undefined
+      }
+    })
+    if (isUpdate) {
+      tableData.forEach(row => {
+        tableColumn.forEach(column => {
+          $xeTable.getFooterCellLabel(row, column)
+        })
+      })
+    }
+    return $xeTable.$nextTick()
   },
   /**
    * 检查是否为临时行数据

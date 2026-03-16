@@ -113,7 +113,7 @@ export default {
         const tableEl = $xeTable.$refs.refElem as HTMLDivElement
         const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
         const filterOpts = $xeTable.computeFilterOpts
-        const { transfer } = filterOpts
+        const { maxHeight: customMaxHeight, transfer, zIndex } = filterOpts
         const currEl = btnEl || colEl
         const tableRect = tableEl.getBoundingClientRect()
         const filterRender = column ? column.filterRender : null
@@ -167,13 +167,21 @@ export default {
               }
             }
           }
-          filterStore.style = {
+          const fStys: Record<string, any> = {
             top: toCssUnit(top),
             left: toCssUnit(left)
           }
+          if (zIndex) {
+            fStys.zIndex = zIndex
+          }
+          filterStore.style = fStys
           // 筛选面板是自适应表格高度
           if (compConf ? !compConf.tableFilterAutoHeight : false) {
             maxHeight = 0
+          } else {
+            if (customMaxHeight) {
+              maxHeight = customMaxHeight > maxHeight ? maxHeight : customMaxHeight
+            }
           }
           // 判断面板不能大于表格高度
           filterStore.maxHeight = maxHeight

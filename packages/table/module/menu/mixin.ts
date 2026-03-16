@@ -173,7 +173,7 @@ export default {
       const isContentMenu = $xeTable.computeIsContentMenu
       const menuOpts = $xeTable.computeMenuOpts
       const config = menuOpts[type]
-      const { transfer, visibleMethod } = menuOpts
+      const { zIndex, transfer, visibleMethod } = menuOpts
       if (config) {
         const { options, disabled } = config
         if (disabled) {
@@ -204,7 +204,7 @@ export default {
                   selectChild: null,
                   showChild: false,
                   style: {
-                    zIndex: internalData.tZindex,
+                    zIndex: zIndex || internalData.tZindex,
                     top: `${top}px`,
                     left: `${left}px`
                   }
