@@ -37,6 +37,8 @@
   .vxe-grid--table-container {
     display: flex;
     flex-direction: row;
+    flex-grow: 1;
+    overflow: hidden;
   }
   .vxe-grid--left-wrapper,
   .vxe-grid--right-wrapper {
@@ -57,6 +59,8 @@
   flex-grow: 1;
 }
 .vxe-grid--layout-body-content-wrapper {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   overflow: auto;
 }

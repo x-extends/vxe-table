@@ -10273,18 +10273,22 @@ export default defineVxeComponent({
         if (!checkMethod || checkMethod({ $table: $xeTable, row })) {
           let newValue = row
           let isChange = oldValue !== newValue
-          const selected = !isChange
-          if (isChange) {
+          if (strict) {
             handleCheckedRadioRow(newValue)
-          } else if (!strict) {
-            isChange = oldValue === newValue
-            if (isChange) {
+          } else {
+            if (oldValue === newValue) {
+              newValue = null
+            }
+            isChange = oldValue !== newValue
+            if (isChange && newValue) {
+              handleCheckedRadioRow(newValue)
+            } else {
               newValue = null
               $xeTable.clearRadioRow()
             }
           }
           if (isChange) {
-            dispatchEvent('radio-change', { oldValue, newValue, selected, ...params }, evnt)
+            dispatchEvent('radio-change', { oldValue, newValue, selected: !!newValue, ...params }, evnt)
           }
         }
       },
@@ -10293,27 +10297,29 @@ export default defineVxeComponent({
         const columnOpts = computeColumnOpts.value
         const currentColumnOpts = computeCurrentColumnOpts.value
         const beforeRowMethod = currentColumnOpts.beforeSelectMethod || columnOpts.currentMethod as any
-        let { column: newValue } = params
+        let newValue: VxeTableDefines.ColumnInfo | null = params.column
         const { trigger, strict } = currentColumnOpts
         if (trigger === 'manual') {
           return
         }
         let isChange = oldValue !== newValue
-        const selected = !isChange
-        if (!beforeRowMethod || beforeRowMethod({ column: newValue, selected, $table: $xeTable })) {
+        if (!beforeRowMethod || beforeRowMethod({ column: newValue, $table: $xeTable })) {
           if (strict) {
             $xeTable.setCurrentColumn(newValue)
           } else {
-            isChange = oldValue === newValue
-            if (isChange) {
-              newValue = null as any
-              $xeTable.clearCurrentColumn()
-            } else {
+            if (oldValue === newValue) {
+              newValue = null
+            }
+            isChange = oldValue !== newValue
+            if (isChange && newValue) {
               $xeTable.setCurrentColumn(newValue)
+            } else {
+              newValue = null
+              $xeTable.clearCurrentColumn()
             }
           }
           if (isChange) {
-            dispatchEvent('current-column-change', { oldValue, newValue, selected, ...params }, evnt)
+            dispatchEvent('current-column-change', { oldValue, newValue, selected: !!newValue, ...params }, evnt)
           }
         } else {
           dispatchEvent('current-column-disabled', params, evnt)
@@ -10330,23 +10336,25 @@ export default defineVxeComponent({
           return
         }
         let isChange = oldValue !== newValue
-        const selected = !isChange
-        if (!beforeRowMethod || beforeRowMethod({ row: newValue, selected, $table: $xeTable })) {
+        if (!beforeRowMethod || beforeRowMethod({ row: newValue, $table: $xeTable })) {
           if (strict) {
             $xeTable.setCurrentRow(newValue)
           } else {
-            isChange = oldValue === newValue
-            if (isChange) {
+            if (oldValue === newValue) {
+              newValue = null
+            }
+            isChange = oldValue !== newValue
+            if (isChange && newValue) {
+              $xeTable.setCurrentRow(newValue)
+            } else {
               newValue = null
               $xeTable.clearCurrentRow()
-            } else {
-              $xeTable.setCurrentRow(newValue)
             }
           }
           if (isChange) {
-            dispatchEvent('current-row-change', { oldValue, newValue, selected, ...params }, evnt)
+            dispatchEvent('current-row-change', { oldValue, newValue, selected: !!newValue, ...params }, evnt)
             // 已废弃
-            dispatchEvent('current-change', { oldValue, newValue, selected, ...params }, evnt)
+            dispatchEvent('current-change', { oldValue, newValue, ...params }, evnt)
           }
         } else {
           dispatchEvent('current-row-disabled', params, evnt)
