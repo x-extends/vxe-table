@@ -66,6 +66,28 @@ function handleKeyField ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
   internalData.isCurrDeepKey = hasDeepKey(keyField)
 }
 
+function updateColumnAllOverflow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { showOverflow } = props
+  const { isGroup } = reactData
+  const { tableFullColumn, collectColumn } = internalData
+  let isAllOverflow = !!showOverflow
+  const handleFunc = (column: VxeTableDefines.ColumnInfo) => {
+    if (isAllOverflow && column.showOverflow === false) {
+      isAllOverflow = false
+    }
+  }
+  if (isGroup) {
+    XEUtils.eachTree(collectColumn, handleFunc)
+  } else {
+    tableFullColumn.forEach(handleFunc)
+  }
+  reactData.isAllOverflow = isAllOverflow
+}
+
 /**
  * 渲染浮固定列
  * 分别渲染左边固定列和右边固定列
@@ -1490,6 +1512,18 @@ export default {
     showFooter () {
       this.reLayoutFlag++
     },
+    showHeaderOverflow () {
+      this.reLayoutFlag++
+    },
+    showOverflow () {
+      const $xeTable = this
+
+      updateColumnAllOverflow($xeTable)
+      this.reLayoutFlag++
+    },
+    showFooterOverflow () {
+      this.reLayoutFlag++
+    },
     overflowX () {
       this.reLayoutFlag++
     },
@@ -2028,6 +2062,11 @@ export default {
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
+    const { _sToTime } = internalData
+    if (_sToTime) {
+      clearTimeout(_sToTime)
+    }
+
     const teleportWrapperEl = $xeTable.$refs.refTeleportWrapper as HTMLDivElement
     if (teleportWrapperEl && teleportWrapperEl.parentElement) {
       teleportWrapperEl.parentElement.removeChild(teleportWrapperEl)
@@ -2036,13 +2075,16 @@ export default {
     if (popupWrapperEl && popupWrapperEl.parentElement) {
       popupWrapperEl.parentElement.removeChild(popupWrapperEl)
     }
+
     const tableViewportEl = $xeTable.$refs.refTableViewportElem as HTMLDivElement
     if (tableViewportEl) {
       tableViewportEl.removeEventListener('wheel', $xeTable.triggerBodyWheelEvent)
     }
+
     if (this.$resize) {
       this.$resize.disconnect()
     }
+
     $xeTable.closeTooltip()
     $xeTable.closeFilter()
     $xeTable.closeMenu()

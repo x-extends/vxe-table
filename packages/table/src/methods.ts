@@ -12399,8 +12399,10 @@ const tableMethods: any = {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
     const { isAllOverflow, scrollYLoad, scrollXLoad } = reactData
+    const { _sToTime } = internalData
     const rest = []
     if (row) {
       if (props.treeConfig) {
@@ -12412,11 +12414,28 @@ const tableMethods: any = {
     if (fieldOrColumn) {
       rest.push(handleScrollToRowColumn($xeTable, fieldOrColumn, row, options))
     }
+    if (_sToTime) {
+      clearTimeout(_sToTime)
+    }
     return Promise.all(rest).then(() => {
       if (row) {
         if (!isAllOverflow && (scrollYLoad || scrollXLoad)) {
           calcCellHeight($xeTable)
           calcCellWidth($xeTable)
+          // 可视区被渲染后位置被偏移
+          internalData._sToTime = setTimeout(() => {
+            internalData._sToTime = undefined
+            if (scrollYLoad) {
+              if (props.treeConfig) {
+                $xeTable.scrollToTreeRow(row)
+              } else {
+                rowToVisible($xeTable, row)
+              }
+            }
+            if (scrollXLoad && fieldOrColumn) {
+              handleScrollToRowColumn($xeTable, fieldOrColumn, row, options)
+            }
+          }, 350)
         }
         return $xeTable.$nextTick()
       }

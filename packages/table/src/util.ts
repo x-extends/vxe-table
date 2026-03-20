@@ -143,6 +143,8 @@ export function createInternalData (): TableInternalData {
     tooltipTimeout: null,
     initStatus: false,
     isActivated: false
+
+    // _sToTime: null
   }
 }
 
@@ -900,12 +902,10 @@ export function createColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMet
 }
 
 export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any) {
-  const tableProps = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { showOverflow } = tableProps
-  const { scrollYLoad, scrollYTop } = reactData
+  const { scrollYLoad, scrollYTop, isAllOverflow } = reactData
   const { elemStore, afterFullData, fullAllDataRowIdData, isResizeCellHeight } = internalData
   const rowOpts = $xeTable.computeRowOpts
   const cellOpts = $xeTable.computeCellOpts
@@ -931,7 +931,7 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
       // 如果是虚拟渲染滚动
       if (scrollYLoad) {
         const isCustomCellHeight = isResizeCellHeight || cellOpts.height || rowOpts.height
-        if (!isCustomCellHeight && showOverflow) {
+        if (!isCustomCellHeight && isAllOverflow) {
           return $xeTable.scrollTo(null, ($xeTable.findRowIndexOf(afterFullData, row) - 1) * defaultRowHeight)
         }
         const rowRest = fullAllDataRowIdData[rowid] || {}
