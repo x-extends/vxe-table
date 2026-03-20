@@ -1685,6 +1685,24 @@ export default defineVxeComponent({
       }
     }
 
+    const updateColumnAllOverflow = () => {
+      const { showOverflow } = props
+      const { isGroup } = reactData
+      const { tableFullColumn, collectColumn } = internalData
+      let isAllOverflow = !!showOverflow
+      const handleFunc = (column: VxeTableDefines.ColumnInfo) => {
+        if (isAllOverflow && column.showOverflow === false) {
+          isAllOverflow = false
+        }
+      }
+      if (isGroup) {
+        XEUtils.eachTree(collectColumn, handleFunc)
+      } else {
+        tableFullColumn.forEach(handleFunc)
+      }
+      reactData.isAllOverflow = isAllOverflow
+    }
+
     /**
      * 更新数据列的 Map
      * 牺牲数据组装的耗时，用来换取使用过程中的流畅
@@ -7411,6 +7429,7 @@ export default defineVxeComponent({
        */
       scrollToRow (row, fieldOrColumn, options) {
         const { isAllOverflow, scrollYLoad, scrollXLoad } = reactData
+        const { _sToTime } = internalData
         const rest = []
         if (row) {
           if (props.treeConfig) {
@@ -7422,11 +7441,28 @@ export default defineVxeComponent({
         if (fieldOrColumn) {
           rest.push(handleScrollToRowColumn(fieldOrColumn, row, options))
         }
+        if (_sToTime) {
+          clearTimeout(_sToTime)
+        }
         return Promise.all(rest).then(() => {
           if (row) {
             if (!isAllOverflow && (scrollYLoad || scrollXLoad)) {
               calcCellHeight()
               calcCellWidth()
+              // 可视区被渲染后位置被偏移
+              internalData._sToTime = setTimeout(() => {
+                internalData._sToTime = undefined
+                if (scrollYLoad) {
+                  if (props.treeConfig) {
+                    $xeTable.scrollToTreeRow(row)
+                  } else {
+                    rowToVisible($xeTable, row)
+                  }
+                }
+                if (scrollXLoad && fieldOrColumn) {
+                  handleScrollToRowColumn(fieldOrColumn, row, options)
+                }
+              }, 350)
             }
             return nextTick()
           }
@@ -13398,6 +13434,16 @@ export default defineVxeComponent({
     watch(() => props.showFooter, () => {
       reLayoutFlag.value++
     })
+    watch(() => props.showHeaderOverflow, () => {
+      reLayoutFlag.value++
+    })
+    watch(() => props.showOverflow, () => {
+      updateColumnAllOverflow()
+      reLayoutFlag.value++
+    })
+    watch(() => props.showFooterOverflow, () => {
+      reLayoutFlag.value++
+    })
     watch(() => reactData.overflowX, () => {
       reLayoutFlag.value++
     })
@@ -13864,16 +13910,24 @@ export default defineVxeComponent({
     })
 
     onBeforeUnmount(() => {
+      const { _sToTime } = internalData
+      if (_sToTime) {
+        clearTimeout(_sToTime)
+      }
+
       const tableViewportEl = refTableViewportElem.value
       if (tableViewportEl) {
         tableViewportEl.removeEventListener('wheel', $xeTable.triggerBodyWheelEvent)
       }
+
       internalData.cvCacheMaps = {}
       internalData.prevDragRow = null
       internalData.prevDragCol = null
+
       if (resizeObserver) {
         resizeObserver.disconnect()
       }
+
       $xeTable.closeTooltip()
       $xeTable.closeFilter()
       if ($xeTable.closeMenu) {
