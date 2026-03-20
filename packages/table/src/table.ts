@@ -73,7 +73,7 @@ function updateColumnAllOverflow ($xeTable: VxeTableConstructor & VxeTablePrivat
 
   const { showOverflow } = props
   const { isGroup } = reactData
-  const { tableFullColumn, collectColumn } = internalData
+  const { fullAllDataRowIdData, tableFullColumn, collectColumn } = internalData
   let isAllOverflow = !!showOverflow
   const handleFunc = (column: VxeTableDefines.ColumnInfo) => {
     if (isAllOverflow && column.showOverflow === false) {
@@ -85,6 +85,9 @@ function updateColumnAllOverflow ($xeTable: VxeTableConstructor & VxeTablePrivat
   } else {
     tableFullColumn.forEach(handleFunc)
   }
+  XEUtils.each(fullAllDataRowIdData, (rowRest: VxeTableDefines.RowCacheItem) => {
+    rowRest.height = 0
+  })
   reactData.isAllOverflow = isAllOverflow
 }
 
