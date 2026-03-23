@@ -95,16 +95,22 @@ export function createInternalData (): TableInternalData {
     mergeHeaderMaps: {},
     // 已合并单元格数据集合
     mergeHeaderCellMaps: {},
+    mergeHeaderRowMaps: {},
+    mergeHeaderColMaps: {},
     // 合并单元格的数据
     mergeBodyList: [],
     mergeBodyMaps: {},
     // 已合并单元格数据集合
     mergeBodyCellMaps: {},
+    mergeBodyRowMaps: {},
+    mergeBodyColMaps: {},
     // 合并表尾的数据
     mergeFooterList: [],
     mergeFooterMaps: {},
     // 已合并表尾数据集合
     mergeFooterCellMaps: {},
+    mergeFooterRowMaps: {},
+    mergeFooterColMaps: {},
 
     // 已展开的行集合
     rowExpandedMaps: {},

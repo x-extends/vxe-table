@@ -234,3 +234,26 @@ export function scrollTopTo (diffNum: number, cb: (progress: number) => void) {
   }
   requestAnimationFrame(step)
 }
+
+let wtlFrame: any
+export function wheelScrollLeftTo (scrollLeft: number, cb: (offsetLeft: number) => void) {
+  if (wtlFrame) {
+    cancelAnimationFrame(wtlFrame)
+  }
+  wtlFrame = requestAnimationFrame(() => {
+    cb(scrollLeft)
+    wtlFrame = null
+  })
+}
+
+let wtaFrame: any
+export function wheelScrollTopTo (diffNum: number, cb: (progress: number) => void) {
+  if (wtaFrame) {
+    cancelAnimationFrame(wtaFrame)
+  }
+  wtaFrame = requestAnimationFrame(() => {
+    const offsetTop = diffNum
+    cb(offsetTop)
+    wtaFrame = null
+  })
+}
