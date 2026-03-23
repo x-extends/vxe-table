@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, scrollTopTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement } from '../../ui/src/dom'
+import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollLeftTo, wheelScrollTopTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
@@ -1919,33 +1919,46 @@ function handleVirtualYVisible ($xeTable: VxeTableConstructor) {
   return { toVisibleIndex: 0, visibleSize: 6 }
 }
 
-function calculateMergerOffsetIndex (list: any, offsetItem: any, type: any) {
-  for (let mcIndex = 0, len = list.length; mcIndex < len; mcIndex++) {
-    const mergeItem = list[mcIndex]
-    const { startIndex, endIndex } = offsetItem
-    const mergeStartIndex = mergeItem[type]
-    const mergeSpanNumber = mergeItem[type + 'span']
-    const mergeEndIndex = mergeStartIndex + mergeSpanNumber
-    if (mergeStartIndex < startIndex && startIndex < mergeEndIndex) {
-      offsetItem.startIndex = mergeStartIndex
+function calculateMergerOffsetIndex (list: any[], mergeMaps: Record<string, VxeTableDefines.MergeCacheRow | VxeTableDefines.MergeCacheCol>, offsetItem: VxeTableDefines.MergeCacheRow | VxeTableDefines.MergeCacheCol, type: 'row' | 'col') {
+  const mKey = `${offsetItem.startIndex}:${offsetItem.endIndex}`
+  const mObj = mergeMaps[mKey]
+  // 缓存
+  if (mObj) {
+    offsetItem.startIndex = mObj.startIndex
+    offsetItem.endIndex = mObj.endIndex
+  } else {
+    for (let mcIndex = 0, len = list.length; mcIndex < len; mcIndex++) {
+      const mergeItem = list[mcIndex]
+      const { startIndex, endIndex } = offsetItem
+      const mergeStartIndex = mergeItem[type]
+      const mergeSpanNumber = mergeItem[type + 'span']
+      const mergeEndIndex = mergeStartIndex + mergeSpanNumber
+      if (mergeStartIndex < startIndex && startIndex < mergeEndIndex) {
+        offsetItem.startIndex = mergeStartIndex
+      }
+      if (mergeStartIndex < endIndex && endIndex < mergeEndIndex) {
+        offsetItem.endIndex = mergeEndIndex
+      }
+      if (offsetItem.startIndex !== startIndex || offsetItem.endIndex !== endIndex) {
+        mcIndex = -1
+      }
     }
-    if (mergeStartIndex < endIndex && endIndex < mergeEndIndex) {
-      offsetItem.endIndex = mergeEndIndex
-    }
-    if (offsetItem.startIndex !== startIndex || offsetItem.endIndex !== endIndex) {
-      mcIndex = -1
-    }
+    mergeMaps[mKey] = offsetItem
   }
 }
 
 function buildMergeData (mergeConfigs: VxeTableDefines.MergeItem[]) {
   const mergeMaps: Record<string, VxeTableDefines.MergeCacheItem> = {}
+  const mergeRowMaps: Record<string, VxeTableDefines.MergeCacheRow> = {}
+  const mergeColMaps: Record<string, VxeTableDefines.MergeCacheCol> = {}
   if (mergeConfigs && mergeConfigs.length) {
     for (let mIndex = 0; mIndex < mergeConfigs.length; mIndex++) {
       const { row: _rowIndex, col: _columnIndex, rowspan: mergeRowspan, colspan: mergeColspan } = mergeConfigs[mIndex]
       for (let i = 0; i < mergeRowspan; i++) {
+        const currRIndex = _rowIndex + i
         for (let j = 0; j < mergeColspan; j++) {
-          mergeMaps[`${_rowIndex + i}:${_columnIndex + j}`] = !i && !j
+          const currCIndex = _columnIndex + j
+          mergeMaps[`${currRIndex}:${currCIndex}`] = !i && !j
             ? {
                 rowspan: mergeRowspan,
                 colspan: mergeColspan
@@ -1958,7 +1971,7 @@ function buildMergeData (mergeConfigs: VxeTableDefines.MergeItem[]) {
       }
     }
   }
-  return mergeMaps
+  return { mergeMaps, mergeRowMaps, mergeColMaps }
 }
 
 function handleBodyMerge ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
@@ -3656,7 +3669,7 @@ function loadScrollXData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   const internalData = $xeTable as unknown as TableInternalData
 
   const { isScrollXBig } = reactData
-  const { mergeBodyList, mergeFooterList, scrollXStore } = internalData
+  const { mergeBodyList, mergeFooterList, mergeBodyColMaps, scrollXStore } = internalData
   const { preloadSize, startIndex, endIndex, offsetSize } = scrollXStore
   const { toVisibleIndex, visibleSize } = handleVirtualXVisible($xeTable)
   const offsetItem = {
@@ -3665,7 +3678,7 @@ function loadScrollXData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   }
   scrollXStore.visibleStartIndex = toVisibleIndex - 1
   scrollXStore.visibleEndIndex = toVisibleIndex + visibleSize + 1
-  calculateMergerOffsetIndex(mergeBodyList.concat(mergeFooterList), offsetItem, 'col')
+  calculateMergerOffsetIndex(mergeBodyList.concat(mergeFooterList), mergeBodyColMaps, offsetItem, 'col')
   const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
   if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
     if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
@@ -3891,7 +3904,7 @@ function loadScrollYData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   const internalData = $xeTable as unknown as TableInternalData
 
   const { isAllOverflow, isScrollYBig } = reactData
-  const { mergeBodyList, scrollYStore } = internalData
+  const { mergeBodyList, mergeBodyRowMaps, scrollYStore } = internalData
   const { preloadSize, startIndex, endIndex, offsetSize } = scrollYStore
   const autoOffsetYSize = isAllOverflow ? offsetSize : offsetSize + 1
   const { toVisibleIndex, visibleSize } = handleVirtualYVisible($xeTable)
@@ -3901,7 +3914,7 @@ function loadScrollYData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   }
   scrollYStore.visibleStartIndex = toVisibleIndex - 1
   scrollYStore.visibleEndIndex = toVisibleIndex + visibleSize + 1
-  calculateMergerOffsetIndex(mergeBodyList, offsetItem, 'row')
+  calculateMergerOffsetIndex(mergeBodyList, mergeBodyRowMaps, offsetItem, 'row')
   const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
   if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
     if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
@@ -4067,12 +4080,6 @@ const getWheelSpeed = (lastScrollTime: number) => {
     multiple = 1.03
   }
   return multiple
-}
-
-const wheelScrollLeftTo = (scrollLeft: number, cb: (offsetLeft: number) => void) => {
-  requestAnimationFrame(() => {
-    cb(scrollLeft)
-  })
 }
 
 const syncGanttScrollTop = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, scrollTop: number) => {
@@ -4574,6 +4581,13 @@ const tableMethods: any = {
       updateAfterFullData($xeTable)
       // 如果为虚拟树，将树结构拍平
       fullList = handleVirtualTreeToList($xeTable)
+      // 更新数据后清除合并缓存，涉及分组、筛选、排序等
+      internalData.mergeHeaderRowMaps = {}
+      internalData.mergeHeaderColMaps = {}
+      internalData.mergeBodyRowMaps = {}
+      internalData.mergeBodyColMaps = {}
+      internalData.mergeFooterRowMaps = {}
+      internalData.mergeFooterColMaps = {}
     }
     const tableData = scrollYLoad ? fullList.slice(scrollYStore.startIndex, scrollYStore.endIndex) : fullList.slice(0)
     const visibleDataRowIdMaps: Record<string, any> = {}
@@ -7619,6 +7633,18 @@ const tableMethods: any = {
     handleResizeEvent($xeTable)
     $xeTable.updateCellAreas()
   },
+  handleUpdateHeaderMerge () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { mergeHeaderList } = internalData
+    const { mergeMaps, mergeRowMaps, mergeColMaps } = buildMergeData(mergeHeaderList)
+    internalData.mergeHeaderCellMaps = mergeMaps
+    internalData.mergeHeaderRowMaps = mergeRowMaps
+    internalData.mergeHeaderColMaps = mergeColMaps
+    reactData.mergeHeadFlag++
+  },
   /**
    * 处理合并
    */
@@ -7628,17 +7654,11 @@ const tableMethods: any = {
     const internalData = $xeTable as unknown as TableInternalData
 
     const { mergeBodyList } = internalData
-    internalData.mergeBodyCellMaps = buildMergeData(mergeBodyList)
+    const { mergeMaps, mergeRowMaps, mergeColMaps } = buildMergeData(mergeBodyList)
+    internalData.mergeBodyCellMaps = mergeMaps
+    internalData.mergeBodyRowMaps = mergeRowMaps
+    internalData.mergeBodyColMaps = mergeColMaps
     reactData.mergeBodyFlag++
-  },
-  handleUpdateHeaderMerge () {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const reactData = $xeTable as unknown as TableReactData
-    const internalData = $xeTable as unknown as TableInternalData
-
-    const { mergeHeaderList } = internalData
-    internalData.mergeHeaderCellMaps = buildMergeData(mergeHeaderList)
-    reactData.mergeHeadFlag++
   },
   handleUpdateFooterMerge () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -7646,7 +7666,10 @@ const tableMethods: any = {
     const internalData = $xeTable as unknown as TableInternalData
 
     const { mergeFooterList } = internalData
-    internalData.mergeFooterCellMaps = buildMergeData(mergeFooterList)
+    const { mergeMaps, mergeRowMaps, mergeColMaps } = buildMergeData(mergeFooterList)
+    internalData.mergeFooterCellMaps = mergeMaps
+    internalData.mergeFooterRowMaps = mergeRowMaps
+    internalData.mergeFooterColMaps = mergeColMaps
     reactData.mergeFootFlag++
   },
   handleAggregateSummaryData () {
@@ -11919,8 +11942,8 @@ const tableMethods: any = {
     if (isRollX) {
       evnt.preventDefault()
       internalData.inWheelScroll = true
-      if (browseObj.firefox || browseObj.safari) {
-        const currLeftNum = scrollLeft
+      wheelScrollLeftTo(scrollLeft, (offsetLeft: number) => {
+        const currLeftNum = offsetLeft
         setScrollLeft(xHandleEl, currLeftNum)
         setScrollLeft(bodyScrollElem, currLeftNum)
         setScrollLeft(headerScrollElem, currLeftNum)
@@ -11932,27 +11955,13 @@ const tableMethods: any = {
           type: 'table',
           fixed: ''
         })
-      } else {
-        wheelScrollLeftTo(scrollLeft, (offsetLeft: number) => {
-          const currLeftNum = offsetLeft
-          setScrollLeft(xHandleEl, currLeftNum)
-          setScrollLeft(bodyScrollElem, currLeftNum)
-          setScrollLeft(headerScrollElem, currLeftNum)
-          setScrollLeft(footerScrollElem, currLeftNum)
-          if (scrollXLoad) {
-            $xeTable.triggerScrollXEvent(evnt)
-          }
-          $xeTable.handleScrollEvent(evnt, isRollY, isRollX, bodyScrollElem.scrollTop, currLeftNum, {
-            type: 'table',
-            fixed: ''
-          })
-        })
-      }
+      })
     }
     if (isRollY) {
       evnt.preventDefault()
-      if (browseObj.firefox || browseObj.safari) {
-        const currTopNum = scrollTop
+      wheelScrollTopTo(scrollTop, (offsetTop: number) => {
+        const currTopNum = offsetTop
+        internalData.inWheelScroll = true
         setScrollTop(yHandleEl, currTopNum)
         setScrollTop(bodyScrollElem, currTopNum)
         setScrollTop(leftScrollElem, currTopNum)
@@ -11966,25 +11975,7 @@ const tableMethods: any = {
           type: 'table',
           fixed: ''
         })
-      } else {
-        scrollTopTo(scrollTop - currScrollTop, (offsetTop: number) => {
-          const currTopNum = bodyScrollElem.scrollTop + offsetTop
-          internalData.inWheelScroll = true
-          setScrollTop(yHandleEl, currTopNum)
-          setScrollTop(bodyScrollElem, currTopNum)
-          setScrollTop(leftScrollElem, currTopNum)
-          setScrollTop(rightScrollElem, currTopNum)
-          setScrollTop(rowExpandEl, currTopNum)
-          syncGanttScrollTop($xeTable, currTopNum)
-          if (scrollYLoad) {
-            $xeTable.triggerScrollYEvent(evnt)
-          }
-          $xeTable.handleScrollEvent(evnt, isRollY, isRollX, currTopNum, bodyScrollElem.scrollLeft, {
-            type: 'table',
-            fixed: ''
-          })
-        })
-      }
+      })
     }
   },
   triggerVirtualScrollXEvent (evnt: Event) {
@@ -12671,6 +12662,8 @@ const tableMethods: any = {
     internalData.mergeBodyList = []
     internalData.mergeBodyMaps = {}
     internalData.mergeBodyCellMaps = {}
+    internalData.mergeBodyRowMaps = {}
+    internalData.mergeBodyColMaps = {}
     reactData.mergeBodyFlag++
     return $xeTable.$nextTick().then(() => {
       return updateStyle($xeTable)
@@ -12718,6 +12711,8 @@ const tableMethods: any = {
     internalData.mergeHeaderList = []
     internalData.mergeHeaderMaps = {}
     internalData.mergeHeaderCellMaps = {}
+    internalData.mergeHeaderRowMaps = {}
+    internalData.mergeBodyColMaps = {}
     reactData.mergeHeadFlag++
     return $xeTable.$nextTick().then(() => {
       return updateStyle($xeTable)
@@ -12788,6 +12783,8 @@ const tableMethods: any = {
     internalData.mergeFooterList = []
     internalData.mergeFooterMaps = {}
     internalData.mergeFooterCellMaps = {}
+    internalData.mergeFooterRowMaps = {}
+    internalData.mergeFooterColMaps = {}
     reactData.mergeFootFlag++
     return $xeTable.$nextTick().then(() => {
       return updateStyle($xeTable)

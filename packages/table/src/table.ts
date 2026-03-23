@@ -37,6 +37,8 @@ function handleUpdateMergeBodyCells ($xeTable: VxeTableConstructor & VxeTablePri
   internalData.mergeBodyList = []
   internalData.mergeBodyMaps = {}
   internalData.mergeBodyCellMaps = {}
+  internalData.mergeBodyRowMaps = {}
+  internalData.mergeBodyColMaps = {}
   $xeTable.setMergeCells(merges)
 }
 
@@ -46,6 +48,8 @@ function handleUpdateMergeHeaderCells ($xeTable: VxeTableConstructor & VxeTableP
   internalData.mergeHeaderList = []
   internalData.mergeHeaderMaps = {}
   internalData.mergeHeaderCellMaps = {}
+  internalData.mergeHeaderRowMaps = {}
+  internalData.mergeBodyColMaps = {}
   $xeTable.setMergeHeaderCells(merges)
 }
 
@@ -55,6 +59,8 @@ function handleUpdateMergeFooterCells ($xeTable: VxeTableConstructor & VxeTableP
   internalData.mergeFooterList = []
   internalData.mergeFooterMaps = {}
   internalData.mergeFooterCellMaps = {}
+  internalData.mergeFooterRowMaps = {}
+  internalData.mergeFooterColMaps = {}
   $xeTable.setMergeFooterCells(merges)
 }
 
@@ -1113,7 +1119,9 @@ export default {
         const lecIndex = leftList.length
         for (let i = 0; i < mergeBodyList.length; i++) {
           const { col, colspan } = mergeBodyList[i]
-          if (col < lecIndex || (col + colspan) > rscIndex) {
+          if (col < lecIndex && col + colspan > lecIndex) {
+            return true
+          } else if (col < rscIndex && col + colspan > rscIndex) {
             return true
           }
         }

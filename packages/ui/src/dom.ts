@@ -213,24 +213,25 @@ export function isNodeElement (elem: any): elem is HTMLElement {
   return elem && elem.nodeType === 1
 }
 
-export function scrollTopTo (diffNum: number, cb: (progress: number) => void) {
-  const duration = Math.abs(diffNum)
-  const startTime = performance.now()
-  let countTop = 0
-  const step = (timestamp: number) => {
-    let progress = (timestamp - startTime) / duration
-    if (progress < 0) {
-      progress = 0
-    } else if (progress > 1) {
-      progress = 1
-    }
-    const easedProgress = Math.pow(progress, 2)
-    const offsetTop = Math.floor((diffNum * easedProgress)) - countTop
-    countTop += offsetTop
-    cb(offsetTop)
-    if (progress < 1) {
-      requestAnimationFrame(step)
-    }
+let wtlFrame: any
+export function wheelScrollLeftTo (scrollLeft: number, cb: (offsetLeft: number) => void) {
+  if (wtlFrame) {
+    cancelAnimationFrame(wtlFrame)
   }
-  requestAnimationFrame(step)
+  wtlFrame = requestAnimationFrame(() => {
+    cb(scrollLeft)
+    wtlFrame = null
+  })
+}
+
+let wtaFrame: any
+export function wheelScrollTopTo (diffNum: number, cb: (progress: number) => void) {
+  if (wtaFrame) {
+    cancelAnimationFrame(wtaFrame)
+  }
+  wtaFrame = requestAnimationFrame(() => {
+    const offsetTop = diffNum
+    cb(offsetTop)
+    wtaFrame = null
+  })
 }
