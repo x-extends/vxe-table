@@ -2288,8 +2288,8 @@ export default defineVxeComponent({
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const { transform, rowField, parentField, mapChildrenField } = treeOpts
-      const { isEvery, remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
-      const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple, chronological } = sortOpts
+      const { isEvery, remote: allRemoteFilter, filterMethod: allFilterMethod, isDeep: isFilterDeep } = filterOpts
+      const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple, chronological, isDeep: isSortDeep } = sortOpts
       let tableData: any[] = []
       let tableTree: any[] = []
       // 处理数据
@@ -2354,7 +2354,7 @@ export default defineVxeComponent({
               mapChildren: aggregateOpts.childrenField
             })
             tableData = tableTree
-          } else if (treeConfig && transform) {
+          } else if (treeConfig && transform && isFilterDeep !== false) {
             // 筛选虚拟树
             tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, {
               original: true,
@@ -2377,7 +2377,7 @@ export default defineVxeComponent({
               mapChildren: aggregateOpts.childrenField
             })
             tableData = tableTree
-          } else if (treeConfig && transform) {
+          } else if (treeConfig && transform && isFilterDeep !== false) {
             // 还原虚拟树
             tableTree = XEUtils.searchTree(tableFullTreeData, () => true, {
               original: true,
@@ -2417,7 +2417,7 @@ export default defineVxeComponent({
               )
             }
             tableData = tableTree
-          } else if (treeConfig && transform) {
+          } else if (treeConfig && transform && isSortDeep !== false) {
             // 虚拟树的排序
             if (allSortMethod) {
               const sortRests = allSortMethod({ data: tableTree, sortList: orderColumns, $table: $xeTable })
@@ -2458,7 +2458,7 @@ export default defineVxeComponent({
             mapChildren: aggregateOpts.childrenField
           })
           tableData = tableTree
-        } else if (treeConfig && transform) {
+        } else if (treeConfig && transform && isSortDeep !== false) {
           // 还原虚拟树
           tableTree = XEUtils.searchTree(tableFullTreeData, () => true, {
             original: true,
@@ -13643,6 +13643,8 @@ export default defineVxeComponent({
       // const keyboardOpts = computeKeyboardOpts.value
       const rowDragOpts = computeRowDragOpts.value
       const areaOpts = computeAreaOpts.value
+      const sortOpts = computeSortOpts.value
+      const filterOpts = computeFilterOpts.value
       const { groupFields } = aggregateOpts
 
       if ($xeGantt) {
@@ -13684,6 +13686,14 @@ export default defineVxeComponent({
       // }
       if (treeConfig && !treeOpts.transform && props.stripe) {
         warnLog('vxe.error.noTree', ['stripe'])
+      }
+      if (treeConfig && !treeOpts.transform) {
+        if (sortOpts.isDeep) {
+          warnLog('vxe.error.reqSupportProp', ['transform=false', 'sort-config.isDeep=false'])
+        }
+        if (filterOpts.isDeep) {
+          warnLog('vxe.error.reqSupportProp', ['transform=false', 'filter-config.isDeep=false'])
+        }
       }
       if (props.showFooter && !(props.footerMethod || props.footerData)) {
         warnLog('vxe.error.reqProp', ['footer-data | footer-method'])
