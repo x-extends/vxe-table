@@ -1682,6 +1682,8 @@ export default {
     const aggregateOpts = $xeTable.computeAggregateOpts
     const rowDragOpts = $xeTable.computeRowDragOpts
     const areaOpts = $xeTable.computeAreaOpts
+    const sortOpts = $xeTable.computeSortOpts
+    const filterOpts = $xeTable.computeFilterOpts
     const { groupFields } = aggregateOpts
 
     if (props.rowId) {
@@ -1704,6 +1706,14 @@ export default {
     // }
     if (treeConfig && !treeOpts.transform && props.stripe) {
       warnLog('vxe.error.noTree', ['stripe'])
+    }
+    if (treeConfig && !treeOpts.transform) {
+      if (sortOpts.isDeep) {
+        warnLog('vxe.error.reqSupportProp', ['transform=false', 'sort-config.isDeep=false'])
+      }
+      if (filterOpts.isDeep) {
+        warnLog('vxe.error.reqSupportProp', ['transform=false', 'filter-config.isDeep=false'])
+      }
     }
     if (props.showFooter && !(props.footerMethod || props.footerData)) {
       warnLog('vxe.error.reqProp', ['footer-data | footer-method'])

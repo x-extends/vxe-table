@@ -797,8 +797,8 @@ function updateAfterFullData ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const treeOpts = $xeTable.computeTreeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
   const { transform, rowField, parentField, mapChildrenField } = treeOpts
-  const { isEvery, remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
-  const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple, chronological } = sortOpts
+  const { isEvery, remote: allRemoteFilter, filterMethod: allFilterMethod, isDeep: isFilterDeep } = filterOpts
+  const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple, chronological, isDeep: isSortDeep } = sortOpts
   let tableData: any[] = []
   let tableTree: any[] = []
 
@@ -864,7 +864,7 @@ function updateAfterFullData ($xeTable: VxeTableConstructor & VxeTablePrivateMet
           mapChildren: aggregateOpts.childrenField
         })
         tableData = tableTree
-      } else if (treeConfig && transform) {
+      } else if (treeConfig && transform && isFilterDeep !== false) {
         // 筛选虚拟树
         tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, {
           original: true,
@@ -887,7 +887,7 @@ function updateAfterFullData ($xeTable: VxeTableConstructor & VxeTablePrivateMet
           mapChildren: aggregateOpts.childrenField
         })
         tableData = tableTree
-      } else if (treeConfig && transform) {
+      } else if (treeConfig && transform && isFilterDeep !== false) {
         // 还原虚拟树
         tableTree = XEUtils.searchTree(tableFullTreeData, () => true, {
           original: true,
@@ -927,7 +927,7 @@ function updateAfterFullData ($xeTable: VxeTableConstructor & VxeTablePrivateMet
           )
         }
         tableData = tableTree
-      } else if (treeConfig && transform) {
+      } else if (treeConfig && transform && isSortDeep !== false) {
         // 虚拟树的排序
         if (allSortMethod) {
           const sortRests = allSortMethod({ data: tableTree, sortList: orderColumns, $table: $xeTable })
@@ -980,7 +980,7 @@ function updateAfterFullData ($xeTable: VxeTableConstructor & VxeTablePrivateMet
         mapChildren: aggregateOpts.childrenField
       })
       tableData = tableTree
-    } else if (treeConfig && transform) {
+    } else if (treeConfig && transform && isSortDeep !== false) {
       // 还原虚拟树
       tableTree = XEUtils.searchTree(tableFullTreeData, () => true, {
         original: true,
