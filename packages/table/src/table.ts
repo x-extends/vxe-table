@@ -2469,7 +2469,10 @@ export default {
               minWidth: tableTipConfig.minWidth,
               minHeight: tableTipConfig.minHeight,
               maxWidth: tableTipConfig.maxWidth,
-              maxHeight: tableTipConfig.maxHeight
+              maxHeight: tableTipConfig.maxHeight,
+              placement: tableTipConfig.placement,
+              defaultPlacement: tableTipConfig.defaultPlacement,
+              popupClassName: tableTipConfig.popupClassName
             },
             scopedSlots: currTooltipSlot
               ? {

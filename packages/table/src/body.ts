@@ -350,6 +350,18 @@ function renderTdColumn (
     if (treeConfig) {
       tdVNs.push(...renderLine(h, $xeTable, rowid, cellParams, cellHeight))
     }
+    const clVNs: VxeComponentSlotType[] = []
+    if (!isVNPreEmptyStatus) {
+      clVNs.push(
+        h('div', {
+          attrs: {
+            colid,
+            rowid
+          },
+          class: 'vxe-cell--wrapper vxe-body-cell--wrapper'
+        }, column.renderCell(h, cellParams))
+      )
+    }
     tdVNs.push(
       h('div', {
         key: 'tc',
@@ -362,17 +374,7 @@ function renderTdColumn (
         attrs: {
           title: showTitle ? $xeTable.getCellLabel(row, column) : null
         }
-      }, isVNPreEmptyStatus
-        ? []
-        : [
-            h('div', {
-              attrs: {
-                colid,
-                rowid
-              },
-              class: 'vxe-cell--wrapper vxe-body-cell--wrapper'
-            }, column.renderCell(h, cellParams))
-          ])
+      }, clVNs)
     )
     if (showValidTip && errorValidItem) {
       const errRule = errorValidItem.rule
@@ -485,7 +487,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
   const $xeGantt = $xeTable.$xeGantt
 
   const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
-  const { hasFixedColumn, treeExpandedFlag, scrollXLoad, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, rowExpandHeightFlag, isRowGroupStatus } = tableReactData
+  const { hasFixedColumn, treeExpandedFlag, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, rowExpandHeightFlag, isRowGroupStatus } = tableReactData
   const { fullAllDataRowIdData, fullColumnIdData, treeExpandedMaps, pendingRowMaps, rowExpandedMaps } = tableInternalData
   const checkboxOpts = $xeTable.computeCheckboxOpts
   const radioOpts = $xeTable.computeRadioOpts
@@ -591,7 +593,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
           rowid
         },
         style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) as VxeComponentStyleType : undefined,
-        key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || isRowGroupStatus || treeConfig ? rowid : $rowIndex,
+        key: rowKey || rowOpts.useKey || rowOpts.drag || columnOpts.drag || isRowGroupStatus || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tdVNs)
     )
