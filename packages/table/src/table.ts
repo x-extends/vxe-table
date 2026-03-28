@@ -7446,10 +7446,20 @@ export default defineVxeComponent({
       /**
        * 如果有滚动条，则滚动到对应的行
        */
-      scrollToRow (row, fieldOrColumn, options) {
+      scrollToRow (rowOrRowid, fieldOrColumn, options) {
         const { isAllOverflow, scrollYLoad, scrollXLoad } = reactData
-        const { _sToTime } = internalData
+        const { fullAllDataRowIdData, _sToTime } = internalData
         const rest = []
+        let row: any
+        if (XEUtils.isString(rowOrRowid) || XEUtils.isNumber(rowOrRowid)) {
+          const rowid = rowOrRowid
+          const rowRest = rowid ? fullAllDataRowIdData[rowid] : null
+          if (rowRest) {
+            row = rowRest.row
+          }
+        } else {
+          row = rowOrRowid
+        }
         if (row) {
           if (props.treeConfig) {
             rest.push($xeTable.scrollToTreeRow(row))
@@ -13319,7 +13329,10 @@ export default defineVxeComponent({
               minWidth: tableTipConfig.minWidth,
               minHeight: tableTipConfig.minHeight,
               maxWidth: tableTipConfig.maxWidth,
-              maxHeight: tableTipConfig.maxHeight
+              maxHeight: tableTipConfig.maxHeight,
+              placement: tableTipConfig.placement,
+              defaultPlacement: tableTipConfig.defaultPlacement,
+              popupClassName: tableTipConfig.popupClassName
             }, currTooltipSlot
               ? {
                   content: () => {
