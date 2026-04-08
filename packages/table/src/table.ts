@@ -1953,6 +1953,7 @@ export default {
     globalEvents.on($xeTable, 'mousewheel', this.handleGlobalMousewheelEvent)
     globalEvents.on($xeTable, 'keydown', this.handleGlobalKeydownEvent)
     globalEvents.on($xeTable, 'resize', this.handleGlobalResizeEvent)
+    globalEvents.on($xeTable, 'scroll', this.handleGlobalScrollEvent)
     globalEvents.on($xeTable, 'contextmenu', this.handleGlobalContextmenuEvent)
     $xeTable.preventEvent(null, 'created')
   },
@@ -2096,6 +2097,10 @@ export default {
     if (popupWrapperEl && popupWrapperEl.parentElement) {
       popupWrapperEl.parentElement.removeChild(popupWrapperEl)
     }
+    const customPopupToElem = $xeTable.$refs.refCustomPopupToElem as HTMLDivElement
+    if (customPopupToElem && customPopupToElem.parentElement) {
+      customPopupToElem.parentElement.removeChild(customPopupToElem)
+    }
 
     const tableViewportEl = $xeTable.$refs.refTableViewportElem as HTMLDivElement
     if (tableViewportEl) {
@@ -2118,6 +2123,7 @@ export default {
     globalEvents.off($xeTable, 'mousewheel')
     globalEvents.off($xeTable, 'keydown')
     globalEvents.off($xeTable, 'resize')
+    globalEvents.off($xeTable, 'scroll')
     globalEvents.off($xeTable, 'contextmenu')
 
     $xeTable.preventEvent(null, 'beforeDestroy')
@@ -2175,8 +2181,6 @@ export default {
     const columnDragOpts = $xeTable.computeColumnDragOpts
     const scrollbarXToTop = $xeTable.computeScrollbarXToTop
     const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
-    const customSimpleMode = $xeTable.computeCustomSimpleMode
-    const showCustomSimpleOutside = customSimpleMode === 'outside'
     const { isCrossTableDrag } = rowDragOpts
     const tbOns: {
       contextmenu: (...args: any[]) => void
@@ -2330,18 +2334,6 @@ export default {
               ]
             : []),
           /**
-           * 自定义列
-           */
-          !showCustomSimpleOutside && initStore.custom
-            ? h(TableCustomPanelComponent, {
-              key: 'cs',
-              ref: 'refTableCustom',
-              props: {
-                customStore
-              }
-            })
-            : renderEmptyElement($xeTable),
-          /**
            * 加载中
            */
           VxeUILoadingComponent
@@ -2373,15 +2365,16 @@ export default {
         ])
       ]),
       h('div', {
-        key: 'tpw'
+        key: 'fpw',
+        ref: 'refCustomContainerElem'
       }, [
         h('div', {
-          ref: 'refPopupWrapperElem'
+          ref: 'refCustomPopupToElem'
         }, [
           /**
            * 自定义列
            */
-          showCustomSimpleOutside && initStore.custom
+          initStore.custom
             ? h(TableCustomPanelComponent, {
               key: 'cs',
               ref: 'refTableCustom',
@@ -2389,7 +2382,15 @@ export default {
                 customStore
               }
             })
-            : renderEmptyElement($xeTable),
+            : renderEmptyElement($xeTable)
+        ])
+      ]),
+      h('div', {
+        key: 'tpw'
+      }, [
+        h('div', {
+          ref: 'refPopupWrapperElem'
+        }, [
           /**
            * 筛选
            */

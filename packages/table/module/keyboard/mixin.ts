@@ -362,12 +362,10 @@ export default {
     moveCurrentRow (isUpArrow: boolean, isDwArrow: boolean, evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
-      const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
 
       const { treeConfig } = props
-      const { currentRow } = reactData
-      const { afterFullData } = internalData
+      const { afterFullData, currentRow } = internalData
       const treeOpts = $xeTable.computeTreeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       let targetRow

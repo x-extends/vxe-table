@@ -2,12 +2,12 @@ import { CreateElement, VNode, PropType } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
-import { getTpImg, addClass, removeClass, hasControlKey, toCssUnit } from '../../../ui/src/dom'
+import { getTpImg, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
 import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, TableReactData, TableInternalData, VxeColumnPropTypes, VxeTableCustomPanelConstructor, TableCustomPanelReactData, TableCustomPanelInternalData } from '../../../../types'
-import type { VxeButtonDefines, VxeRadioGroupDefines, VxeComponentStyleType } from 'vxe-pc-ui'
+import type { VxeButtonDefines, VxeRadioGroupDefines } from 'vxe-pc-ui'
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
 
@@ -389,11 +389,18 @@ export default /* define-vxe-component start */ defineVxeComponent({
     },
     sortDragstartEvent (evnt: any) {
       const $xeTableCustomPanel = this
+      const $xeTable = $xeTableCustomPanel.$xeTable
+      const tableReactData = $xeTable as unknown as TableReactData
       const customPanelInternalData = $xeTableCustomPanel.internalData
 
+      const { customDragTime } = customPanelInternalData
       if (evnt.dataTransfer) {
         evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
       }
+      if (customDragTime) {
+        clearTimeout(customDragTime)
+      }
+      tableReactData.isCustomDragStatus = true
       customPanelInternalData.prevDragGroupField = null
       customPanelInternalData.prevDragAggFnColid = null
     },
@@ -582,6 +589,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
               tableReactData.customColumnList = collectColumn.slice(0)
               $xeTable.handleColDragSwapColumn()
             }
+            customPanelInternalData.customDragTime = setTimeout(() => {
+              tableReactData.isCustomDragStatus = false
+              customPanelInternalData.customDragTime = undefined
+            }, 350)
           }).catch(() => {
           })
         }
@@ -697,13 +708,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       const { customStore } = props
       const { treeConfig, rowGroupConfig, aggregateConfig } = tableProps
-      const { isCustomStatus, customColumnList } = tableReactData
+      const { isCustomStatus, customColumnList, isCustomDragStatus } = tableReactData
       const customOpts = $xeTable.computeCustomOpts
       const { immediate } = customOpts
       const columnDragOpts = $xeTable.computeColumnDragOpts
-      const { maxHeight, popupTop } = customStore
+      const { popupStyle } = customStore
       const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement } = customOpts
       const isMaxFixedColumn = $xeTable.computeIsMaxFixedColumn
+      const vSize = $xeTable.computeSize
       const { isCrossDrag } = columnDragOpts
       const slots = customOpts.slots || {}
       const headerSlot = slots.header
@@ -858,20 +870,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
           )
         }
       })
-      const popupStys: VxeComponentStyleType = {}
-      if (maxHeight && !['left', 'right'].includes(placement || '')) {
-        if (popupTop) {
-          popupStys.top = toCssUnit(popupTop)
-        }
-        popupStys.maxHeight = toCssUnit(maxHeight)
-      }
       return h('div', {
         ref: 'refElem',
         key: 'simple',
         class: ['vxe-table-custom-wrapper', `placement--${placement}`, {
+          [`size--${vSize}`]: vSize,
           'is--active': customStore.visible
         }],
-        style: popupStys
+        style: popupStyle
       }, customStore.visible
         ? [
             h('div', {
@@ -941,7 +947,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
                     : h('transition-group', {
                       class: 'vxe-table-custom--panel-list',
                       props: {
-                        name: 'vxe-table-custom--list',
+                        name: isCustomDragStatus ? 'vxe-table-custom--list' : '',
                         tag: 'ul'
                       },
                       on: customWrapperOns

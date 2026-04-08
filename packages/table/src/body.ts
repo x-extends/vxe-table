@@ -488,7 +488,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
 
   const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
   const { hasFixedColumn, treeExpandedFlag, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, rowExpandHeightFlag, isRowGroupStatus } = tableReactData
-  const { fullAllDataRowIdData, fullColumnIdData, treeExpandedMaps, pendingRowMaps, rowExpandedMaps } = tableInternalData
+  const { fullAllDataRowIdData, fullColumnIdData, treeExpandedMaps, pendingRowMaps, rowExpandedMaps, currentRow } = tableInternalData
   const checkboxOpts = $xeTable.computeCheckboxOpts
   const radioOpts = $xeTable.computeRadioOpts
   const treeOpts = $xeTable.computeTreeOpts
@@ -579,7 +579,8 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
         'row--radio': radioOpts.highlight && selectRadioRow === row,
         'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
         'row--pending': !!pendingRowFlag && !!pendingRowMaps[rowid],
-        'row--group': hasRowGroupAggregate
+        'row--group': hasRowGroupAggregate,
+        'row--current': currentRow && rowid === getRowid($xeTable, currentRow)
       },
       rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''
     ]

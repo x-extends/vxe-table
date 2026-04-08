@@ -90,6 +90,9 @@ export function createInternalData (): TableInternalData {
     fullColumnIdData: {},
     fullColumnFieldData: {},
 
+    // 当前行
+    currentRow: null,
+
     // 合并表头单元格的数据
     mergeHeaderList: [],
     mergeHeaderMaps: {},
@@ -142,6 +145,7 @@ export function createInternalData (): TableInternalData {
 
     teleportToWrapperElem: null,
     popupToWrapperElem: null,
+    customPopupToElem: null,
 
     lastSTime: 0,
 
@@ -188,8 +192,6 @@ export function createReactData (): TableReactData {
     isAllSelected: false,
     // 复选框属性，有选中且非全选状态
     isIndeterminate: false,
-    // 当前行
-    currentRow: null,
     // 单选框属性，选中列
     currentColumn: null,
     // 单选框属性，选中行
@@ -225,7 +227,7 @@ export function createReactData (): TableReactData {
       activeWrapper: false,
       visible: false,
       maxHeight: null,
-      popupTop: 0,
+      popupStyle: {},
       oldSortMaps: {},
       oldFixedMaps: {},
       oldVisibleMaps: {}
@@ -395,6 +397,8 @@ export function createReactData (): TableReactData {
     resizeWidthFlag: 1,
 
     isCustomStatus: false,
+    isCustomDragStatus: true,
+    ctPopupFlag: 1,
 
     isCrossDragRow: false,
     dragRow: null,

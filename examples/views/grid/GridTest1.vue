@@ -1,10 +1,10 @@
 <template>
   <div>
-    <vxe-grid v-bind="gridOptions">
-      <template #rateAddress>
-        <span>标题显示原生 title ___________________________</span>
-      </template>
-    </vxe-grid>
+    <vxe-radio-group v-model="gridOptions.height">
+      <vxe-radio-button checked-value="200" content="高度200"></vxe-radio-button>
+      <vxe-radio-button checked-value="" content="不设置高度"></vxe-radio-button>
+    </vxe-radio-group>
+    <vxe-grid v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
@@ -12,42 +12,34 @@
 export default {
   data () {
     const gridOptions = {
-      showFooter: true,
+      border: true,
+      height: '',
       rowConfig: {
-        isHover: true
+        keyField: 'id'
+      },
+      columnConfig: {
+        resizable: true
+      },
+      toolbarConfig: {
+        custom: true
       },
       columns: [
         { type: 'seq', width: 70 },
-        { field: 'name', title: '名称', showOverflow: 'ellipsis' },
-        { field: 'role', title: '角色', showOverflow: true },
-        { field: 'date', title: '标题溢出，显示为 tooltip xxxxxxxxxx', showHeaderOverflow: true, showOverflow: 'title', showFooterOverflow: true },
-        { field: 'rate', title: 'Rate', showHeaderOverflow: 'title', slots: { header: 'rateAddress' } },
-        { field: 'address', title: '不换行不换行不换行不换行不换行不换行不换行不换行不换行', width: 160 }
+        { field: 'name', title: 'Name' },
+        { field: 'role', title: 'Role' },
+        { field: 'sex', title: 'Sex' },
+        { field: 'age', title: 'Age' },
+        { field: 'attr1', title: 'Attr1' },
+        { field: 'attr2', title: 'Attr2' },
+        { field: 'attr3', title: 'Attr3' },
+        { field: 'attr4', title: 'Attr4' },
+        { field: 'address', title: 'Address' }
       ],
       data: [
-        { name: 'Test1', role: '前端', date: '内容显示原生 title', rate: 5, address: 'address1' },
-        { name: '内容超出隐藏，不显示提示信息xxxxxxxxxxxxxxxxxxx', role: '后端', date: '2020-02-22', rate: 2, address: 'address2\ntooltip文本换行\n换行xx' },
-        { name: 'Test3', role: '内容超出一行显示为 tooltip xxxxxxxxxxxxxx', date: '2020-01-01', rate: 0, address: 'address3\ntooltip文本换行\n换行xx' },
-        { name: 'Test4', role: '设计师', date: '2020-02-23', rate: 1, address: 'address4' },
-        { name: 'Test5', role: '前端', date: '2020-01-20', rate: 3, address: 'address5\ntooltip文本换行\n换行xx' }
-      ],
-      footerMethod ({ columns }) {
-        const footerData = [
-          columns.map((column, columnIndex) => {
-            if (columnIndex === 0) {
-              return '合计'
-            }
-            if (['date'].includes(column.field)) {
-              return '说明 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx长文本内容长文本内容xxxxxxxxxxxxx'
-            }
-            if (['rate'].includes(column.field)) {
-              return '不想换行不想换行不想换行不想换行不想换行不想换行不想换行不想换行'
-            }
-            return null
-          })
-        ]
-        return footerData
-      }
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' }
+      ]
     }
     return {
       gridOptions

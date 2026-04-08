@@ -1,7 +1,8 @@
 import XEUtils from 'xe-utils'
 import { getColumnList } from '../../src/util'
+import { toCssUnit } from '../../../ui/src/dom'
 
-import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, TableReactData, TableInternalData } from '../../../../types'
+import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, TableReactData, TableInternalData, VxeComponentStyleType } from '../../../../types'
 
 function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const $xeGrid = $xeTable.$xeGrid
@@ -11,20 +12,28 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
 
   const { customStore } = reactData
   const customOpts = $xeTable.computeCustomOpts
+  const { mode, placement, popupOptions } = customOpts
+  const showSimple = !(mode === 'modal' || mode === 'drawer')
+  const { transfer, maxHeight } = popupOptions || {}
   const customSimpleMode = $xeTable.computeCustomSimpleMode
   const showCustomSimpleOutside = customSimpleMode === 'outside'
-  const { popupOptions } = customOpts
-  const { maxHeight } = popupOptions || {}
+  const bodyEl = document.documentElement
   let wrapperEl = $xeTable.$refs.refElem as HTMLDivElement
   let popupTop = 0
   let popupMaxHeight: string | number = 0
+  const popupStys: VxeComponentStyleType = {}
   if ($xeGantt) {
     const ganttContainerElem = $xeGantt.$refs.refGanttContainerElem as HTMLDivElement
     if (ganttContainerElem) {
       wrapperEl = ganttContainerElem
     }
   }
-  if (showCustomSimpleOutside) {
+  const tableRect = wrapperEl.getBoundingClientRect()
+  // 多种模式，指定元素插入
+  if (showSimple && transfer) {
+    popupTop = tableRect.top + bodyEl.scrollTop
+    popupMaxHeight = XEUtils.eqNull(maxHeight) ? 360 : maxHeight
+  } else if (showCustomSimpleOutside) {
     if ($xeGGWrapper && wrapperEl) {
       popupTop = wrapperEl.offsetTop
     }
@@ -36,8 +45,33 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
     }
     popupMaxHeight = Math.max(88, popupMaxHeight)
   }
-  customStore.popupTop = popupTop
-  customStore.maxHeight = XEUtils.eqNull(maxHeight) ? popupMaxHeight : maxHeight
+  let popupMxHeight: string | number = 0
+  if (!(placement === 'left' || placement === 'right')) {
+    popupMxHeight = XEUtils.eqNull(maxHeight) ? popupMaxHeight : maxHeight
+  }
+  if (!placement || !(['left', 'right', 'bottom-left', 'bottom-right'].includes(placement))) {
+    if (popupTop) {
+      popupStys.top = toCssUnit(popupTop)
+    }
+  }
+
+  if (showSimple && transfer) {
+    if (placement === 'bottom-left' || placement === 'bottom-right') {
+      popupStys.bottom = toCssUnit(bodyEl.scrollHeight - tableRect.top - tableRect.height + 1)
+    }
+    if (placement === 'top-left' || placement === 'bottom-left') {
+      popupStys.left = toCssUnit(tableRect.left)
+    } else if (!placement || placement === 'top-right' || placement === 'bottom-right') {
+      popupStys.right = toCssUnit(bodyEl.scrollWidth - tableRect.left - tableRect.width + 1)
+    }
+  }
+
+  if (popupMxHeight) {
+    popupStys.maxHeight = toCssUnit(popupMxHeight)
+  }
+  customStore.popupStyle = popupStys
+  customStore.maxHeight = popupMxHeight
+  return $xeTable.$nextTick()
 }
 
 function emitCustomEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, type: VxeTableDefines.CustomType, evnt: Event) {
@@ -60,8 +94,40 @@ export default {
     _openCustom () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+      const $xeGrid = $xeTable.$xeGrid
+      const $xeGantt = $xeTable.$xeGantt
+      const $xeGGWrapper = $xeGrid || $xeGantt
 
       const { initStore, customStore } = reactData
+      const customOpts = $xeTable.computeCustomOpts
+      const { mode, popupOptions } = customOpts
+      const showSimple = !(mode === 'modal' || mode === 'drawer')
+      const { transfer } = popupOptions || {}
+      const customSimpleMode = $xeTable.computeCustomSimpleMode
+      const showCustomSimpleOutside = customSimpleMode === 'outside'
+      let cpToElem = $xeTable.$refs.refCustomContainerElem as HTMLElement
+      // 多种模式，指定元素插入
+      if (showSimple && transfer) {
+        cpToElem = document.body
+      } else {
+        if (showCustomSimpleOutside && $xeGGWrapper) {
+          const popupContainerElem = $xeGGWrapper.$refs.refPopupContainerElem as HTMLDivElement
+          if (popupContainerElem) {
+            cpToElem = popupContainerElem
+          }
+        }
+      }
+      if (cpToElem) {
+        const customPopupToElem = $xeTable.$refs.refCustomPopupToElem as HTMLDivElement
+        if (customPopupToElem && customPopupToElem.parentElement !== cpToElem) {
+          cpToElem.appendChild(customPopupToElem)
+        }
+      }
+      if (internalData.customPopupToElem !== cpToElem) {
+        reactData.ctPopupFlag++
+      }
+      internalData.customPopupToElem = cpToElem
       customStore.visible = true
       initStore.custom = true
       $xeTable.handleUpdateCustomColumn()
@@ -364,6 +430,11 @@ export default {
         customStore.oldVisibleMaps = visibleMaps
         reactData.customColumnList = collectColumn.slice(0)
       }
+    },
+    handleCustomStyle () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      return updatePopupStyle($xeTable)
     }
   } as any
 }

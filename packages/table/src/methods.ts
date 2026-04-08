@@ -1006,8 +1006,8 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { mouseConfig } = props
-  const { isGroup, currentRow, tableColumn, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isColLoading } = reactData
-  const { visibleColumn, tableHeight, elemStore, customHeight, customMinHeight, customMaxHeight, tHeaderHeight, tFooterHeight } = internalData
+  const { isGroup, tableColumn, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isColLoading } = reactData
+  const { visibleColumn, tableHeight, elemStore, currentRow, customHeight, customMinHeight, customMaxHeight, tHeaderHeight, tFooterHeight } = internalData
   const $xeGanttView = internalData.xeGanttView
   const el = $xeTable.$refs.refElem as HTMLDivElement
   if (!el || (internalData.tBodyHeight && !el.clientHeight)) {
@@ -1636,8 +1636,8 @@ function handleReserveStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const internalData = $xeTable as unknown as TableInternalData
 
   const { treeConfig } = props
-  const { expandColumn, currentRow, selectRadioRow } = reactData
-  const { fullDataRowIdData, fullAllDataRowIdData, radioReserveRow, selectCheckboxMaps, treeExpandedMaps, rowExpandedMaps } = internalData
+  const { expandColumn, selectRadioRow } = reactData
+  const { fullDataRowIdData, fullAllDataRowIdData, radioReserveRow, selectCheckboxMaps, treeExpandedMaps, rowExpandedMaps, currentRow } = internalData
   const expandOpts = $xeTable.computeExpandOpts
   const treeOpts = $xeTable.computeTreeOpts
   const radioOpts = $xeTable.computeRadioOpts
@@ -1661,7 +1661,7 @@ function handleReserveStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     handleCheckedCheckboxRow($xeTable, handleReserveRow($xeTable, internalData.checkboxReserveRowMap), true, true)
   }
   if (currentRow && !fullAllDataRowIdData[getRowid($xeTable, currentRow)]) {
-    reactData.currentRow = null // 刷新当前行状态
+    internalData.currentRow = null // 刷新当前行状态
   }
   // 行展开
   internalData.rowExpandedMaps = expandColumn ? getRecoverRowMaps($xeTable, rowExpandedMaps) : {} // 刷新行展开状态
@@ -3135,9 +3135,11 @@ function handleRecalculateStyle ($xeTable: VxeTableConstructor & VxeTablePrivate
 }
 
 function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, reFull: boolean, reWidth: boolean, reHeight: boolean) {
+  const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
   return new Promise<void>(resolve => {
+    const { customStore } = reactData
     const { rceTimeout, rceRunTime } = internalData
     const $xeGanttView = internalData.xeGanttView
     const resizeOpts = $xeTable.computeResizeOpts
@@ -3146,6 +3148,9 @@ function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateM
     if (el && el.clientWidth) {
       autoCellWidth($xeTable)
       updateRowExpandStyle($xeTable)
+    }
+    if (customStore.visible && $xeTable.handleCustomStyle) {
+      $xeTable.handleCustomStyle()
     }
     if (rceTimeout) {
       clearTimeout(rceTimeout)
@@ -4429,6 +4434,23 @@ function handleColumnVisible (visible: boolean) {
       return $xeTable.handleCustom()
     }
     return $xeTable.$nextTick()
+  }
+}
+
+function reUpdateCustomStyleEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: MouseEvent) {
+  const reactData = $xeTable as unknown as TableReactData
+
+  const { customStore } = reactData
+  const customOpts = $xeTable.computeCustomOpts
+  const { popupOptions } = customOpts
+  const { transfer } = popupOptions || {}
+  if (transfer && customStore.visible) {
+    const tableCustom = $xeTable.$refs.refTableCustom as Vue
+    if (tableCustom && $xeTable.handleCustomStyle && !checkTargetElement(evnt.target, [tableCustom.$el as HTMLDivElement], evnt.currentTarget)) {
+      $xeTable.handleCustomStyle().then(() => {
+        $xeTable.handleCustomStyle()
+      })
+    }
   }
 }
 
@@ -7151,6 +7173,11 @@ const tableMethods: any = {
     $xeTable.closeFilter()
     $xeTable.closeMenu()
   },
+  handleGlobalScrollEvent (evnt: MouseEvent) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    reUpdateCustomStyleEvent($xeTable, evnt)
+  },
   /**
    * 全局滚动事件
    */
@@ -7158,7 +7185,9 @@ const tableMethods: any = {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     $xeTable.closeTooltip()
-    $xeTable.closeMenu()
+    if ($xeTable.closeMenu) {
+      $xeTable.closeMenu()
+    }
   },
   /**
    * 表格键盘事件
@@ -7217,8 +7246,8 @@ const tableMethods: any = {
     if (internalData.isActivated) {
       $xeTable.preventEvent(evnt, 'event.keydown', null, () => {
         const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow, highlightCurrentColumn } = props
-        const { ctxMenuStore, editStore, currentRow } = reactData
-        const { afterFullData, visibleColumn } = internalData
+        const { ctxMenuStore, editStore } = reactData
+        const { afterFullData, visibleColumn, currentRow } = internalData
         const isContentMenu = $xeTable.computeIsContentMenu
         const bodyMenu = $xeTable.computeBodyMenu
         const keyboardOpts = $xeTable.computeKeyboardOpts
@@ -8672,9 +8701,9 @@ const tableMethods: any = {
   },
   triggerCurrentRowEvent (evnt: Event, params: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
-    const { currentRow: oldValue } = reactData
+    const { currentRow: oldValue } = internalData
     const rowOpts = $xeTable.computeRowOpts
     const currentRowOpts = $xeTable.computeCurrentRowOpts
     const beforeRowMethod = currentRowOpts.beforeSelectMethod || rowOpts.currentMethod as any
@@ -8781,12 +8810,11 @@ const tableMethods: any = {
    */
   clearCurrentRow () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
     const $xeGanttView = internalData.xeGanttView
     const el = $xeTable.$refs.refElem as HTMLDivElement
-    reactData.currentRow = null
+    internalData.currentRow = null
     internalData.hoverRow = null
     if (el) {
       XEUtils.arrayEach(el.querySelectorAll('.row--current'), elem => removeClass(elem, 'row--current'))
@@ -8809,11 +8837,9 @@ const tableMethods: any = {
   getCurrentRecord (isFull?: boolean) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
-    const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { currentRow } = reactData
-    const { fullDataRowIdData, afterFullRowMaps } = internalData
+    const { fullDataRowIdData, afterFullRowMaps, currentRow } = internalData
     const rowOpts = $xeTable.computeRowOpts
     if (rowOpts.isCurrent || props.highlightCurrentRow) {
       const rowid = getRowid($xeTable, currentRow)
@@ -12310,7 +12336,7 @@ const tableMethods: any = {
       rowExpandYSpaceEl.style.height = ySpaceHeight ? `${ySpaceHeight}px` : ''
     }
     reactData.scrollYTop = scrollYTop
-    reactData.scrollYHeight = ySpaceHeight
+    reactData.scrollYHeight = isScrollYBig ? sYHeight : ySpaceHeight
     reactData.isScrollYBig = isScrollYBig
 
     calcScrollbar($xeTable)
