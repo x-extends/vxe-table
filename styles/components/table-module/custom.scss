@@ -64,6 +64,7 @@
   text-align: left;
   background-color: var(--vxe-ui-layout-background-color);
   z-index: 19;
+  color: var(--vxe-ui-font-color);
   border: 1px solid var(--vxe-ui-table-border-color);
   border-radius: var(--vxe-ui-border-radius);
   box-shadow: var(--vxe-ui-base-popup-box-shadow);
@@ -525,4 +526,17 @@
 }
 .vxe-table-custom-popup--table-col-fixed {
   width: 200px;
+}
+
+.vxe-table-custom-wrapper {
+  font-size: var(--vxe-ui-font-size-default);
+  &.size--medium {
+    font-size: var(--vxe-ui-font-size-medium);
+  }
+  &.size--small {
+    font-size: var(--vxe-ui-font-size-small);
+  }
+  &.size--mini {
+    font-size: var(--vxe-ui-font-size-mini);
+  }
 }

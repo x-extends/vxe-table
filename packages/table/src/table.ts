@@ -101,6 +101,7 @@ export default defineVxeComponent({
 
     const refTeleportWrapper = ref<HTMLDivElement>()
     const refPopupWrapperElem = ref<HTMLDivElement>()
+    const refCustomContainerElem = ref<HTMLDivElement>()
 
     const refLeftContainer = ref() as Ref<HTMLDivElement>
     const refRightContainer = ref() as Ref<HTMLDivElement>
@@ -790,6 +791,7 @@ export default defineVxeComponent({
       refRightContainer,
       refColResizeBar,
       refRowResizeBar,
+      refCustomContainerElem,
       refScrollXVirtualElem,
       refScrollYVirtualElem,
       refScrollXHandleElem,
@@ -2480,8 +2482,8 @@ export default defineVxeComponent({
 
     const updateStyle = () => {
       const { mouseConfig } = props
-      const { isGroup, currentRow, tableColumn, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isColLoading } = reactData
-      const { visibleColumn, tableHeight, elemStore, customHeight, customMinHeight, customMaxHeight, tHeaderHeight, tFooterHeight } = internalData
+      const { isGroup, tableColumn, overflowX, scrollbarWidth, overflowY, scrollbarHeight, scrollXWidth, columnStore, editStore, isColLoading } = reactData
+      const { visibleColumn, tableHeight, elemStore, currentRow, customHeight, customMinHeight, customMaxHeight, tHeaderHeight, tFooterHeight } = internalData
       const $xeGanttView = internalData.xeGanttView
       const el = refElem.value
       if (!el || (internalData.tBodyHeight && !el.clientHeight)) {
@@ -3085,8 +3087,8 @@ export default defineVxeComponent({
     // 还原展开、选中等相关状态
     const handleReserveStatus = () => {
       const { treeConfig } = props
-      const { expandColumn, currentRow, selectRadioRow } = reactData
-      const { fullDataRowIdData, fullAllDataRowIdData, radioReserveRow, selectCheckboxMaps, treeExpandedMaps, rowExpandedMaps } = internalData
+      const { expandColumn, selectRadioRow } = reactData
+      const { fullDataRowIdData, fullAllDataRowIdData, radioReserveRow, selectCheckboxMaps, treeExpandedMaps, rowExpandedMaps, currentRow } = internalData
       const expandOpts = computeExpandOpts.value
       const treeOpts = computeTreeOpts.value
       const radioOpts = computeRadioOpts.value
@@ -3110,7 +3112,7 @@ export default defineVxeComponent({
         handleCheckedCheckboxRow(handleReserveRow(internalData.checkboxReserveRowMap), true, true)
       }
       if (currentRow && !fullAllDataRowIdData[getRowid($xeTable, currentRow)]) {
-        reactData.currentRow = null // 刷新当前行状态
+        internalData.currentRow = null // 刷新当前行状态
       }
       // 行展开
       internalData.rowExpandedMaps = expandColumn ? getRecoverRowMaps(rowExpandedMaps) : {} // 刷新行展开状态
@@ -3435,6 +3437,7 @@ export default defineVxeComponent({
     const handleLazyRecalculate = (reFull: boolean, reWidth: boolean, reHeight: boolean) => {
       return new Promise<void>(resolve => {
         const $xeGanttView = internalData.xeGanttView
+        const { customStore } = reactData
         const { rceTimeout, rceRunTime } = internalData
         const resizeOpts = computeResizeOpts.value
         const refreshDelay = resizeOpts.refreshDelay || 20
@@ -3442,6 +3445,9 @@ export default defineVxeComponent({
         if (el && el.clientWidth) {
           autoCellWidth()
           updateRowExpandStyle()
+        }
+        if (customStore.visible && $xeTable.handleCustomStyle) {
+          $xeTable.handleCustomStyle()
         }
         if (rceTimeout) {
           clearTimeout(rceTimeout)
@@ -6393,7 +6399,7 @@ export default defineVxeComponent({
         const el = refElem.value
         $xeTable.clearCurrentRow()
         // $xeTable.clearCurrentColumn()
-        reactData.currentRow = row
+        internalData.currentRow = row
         if (rowOpts.isCurrent || props.highlightCurrentRow) {
           if (el) {
             XEUtils.arrayEach(el.querySelectorAll(`[rowid="${getRowid($xeTable, row)}"]`), elem => addClass(elem, 'row--current'))
@@ -6443,7 +6449,7 @@ export default defineVxeComponent({
       clearCurrentRow () {
         const $xeGanttView = internalData.xeGanttView
         const el = refElem.value
-        reactData.currentRow = null
+        internalData.currentRow = null
         internalData.hoverRow = null
         if (el) {
           XEUtils.arrayEach(el.querySelectorAll('.row--current'), elem => removeClass(elem, 'row--current'))
@@ -6464,8 +6470,7 @@ export default defineVxeComponent({
        * 用于当前行，获取当前行的数据
        */
       getCurrentRecord (isFull) {
-        const { currentRow } = reactData
-        const { fullDataRowIdData, afterFullRowMaps } = internalData
+        const { fullDataRowIdData, afterFullRowMaps, currentRow } = internalData
         const rowOpts = computeRowOpts.value
         if (rowOpts.isCurrent || props.highlightCurrentRow) {
           const rowid = getRowid($xeTable, currentRow)
@@ -8057,6 +8062,25 @@ export default defineVxeComponent({
       }
     }
 
+    const reUpdateCustomStyleEvent = (evnt: MouseEvent) => {
+      const { customStore } = reactData
+      const customOpts = computeCustomOpts.value
+      const { popupOptions } = customOpts
+      const { transfer } = popupOptions || {}
+      if (transfer && customStore.visible) {
+        const tableCustom = refTableCustom.value
+        if (tableCustom && $xeTable.handleCustomStyle && !checkTargetElement(evnt.target, [tableCustom.getRefMaps().refElem.value as HTMLDivElement], evnt.currentTarget)) {
+          $xeTable.handleCustomStyle().then(() => {
+            $xeTable.handleCustomStyle()
+          })
+        }
+      }
+    }
+
+    const handleGlobalScrollEvent = (evnt: MouseEvent) => {
+      reUpdateCustomStyleEvent(evnt)
+    }
+
     /**
      * 全局滚动事件
      */
@@ -8119,8 +8143,8 @@ export default defineVxeComponent({
       if (internalData.isActivated) {
         $xeTable.preventEvent(evnt, 'event.keydown', null, () => {
           const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow, highlightCurrentColumn } = props
-          const { ctxMenuStore, editStore, currentRow } = reactData
-          const { afterFullData, visibleColumn } = internalData
+          const { ctxMenuStore, editStore } = reactData
+          const { afterFullData, visibleColumn, currentRow } = internalData
           const isContentMenu = computeIsContentMenu.value
           const bodyMenu = computeBodyMenu.value
           const keyboardOpts = computeKeyboardOpts.value
@@ -10413,7 +10437,7 @@ export default defineVxeComponent({
         }
       },
       triggerCurrentRowEvent (evnt, params) {
-        const { currentRow: oldValue } = reactData
+        const { currentRow: oldValue } = internalData
         const rowOpts = computeRowOpts.value
         const currentRowOpts = computeCurrentRowOpts.value
         const beforeRowMethod = currentRowOpts.beforeSelectMethod || rowOpts.currentMethod as any
@@ -12470,7 +12494,7 @@ export default defineVxeComponent({
           rowExpandYSpaceEl.style.height = ySpaceHeight ? `${ySpaceHeight}px` : ''
         }
         reactData.scrollYTop = scrollYTop
-        reactData.scrollYHeight = ySpaceHeight
+        reactData.scrollYHeight = isScrollYBig ? sYHeight : ySpaceHeight
         reactData.isScrollYBig = isScrollYBig
 
         calcScrollbar()
@@ -13016,7 +13040,7 @@ export default defineVxeComponent({
     const renderVN = () => {
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
       const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, isRowGroupStatus, columnStore, filterStore, customStore, tooltipStore } = reactData
-      const { teleportToWrapperElem, popupToWrapperElem } = internalData
+      const { teleportToWrapperElem, popupToWrapperElem, customPopupToElem } = internalData
       const { leftList, rightList } = columnStore
       const loadingSlot = slots.loading
       const tipSlots = {
@@ -13046,8 +13070,6 @@ export default defineVxeComponent({
       const columnDragOpts = computeColumnDragOpts.value
       const scrollbarXToTop = computeScrollbarXToTop.value
       const scrollbarYToLeft = computeScrollbarYToLeft.value
-      const customSimpleMode = computeCustomSimpleMode.value
-      const showCustomSimpleOutside = customSimpleMode === 'outside'
       const { isCrossTableDrag } = rowDragOpts
       const tbOns: {
         onContextmenu: (...args: any[]) => void
@@ -13199,16 +13221,6 @@ export default defineVxeComponent({
                   ]
                 : []),
               /**
-               * 自定义列
-               */
-              !showCustomSimpleOutside && initStore.custom
-                ? h(TableCustomPanelComponent, {
-                  key: 'cs',
-                  ref: refTableCustom,
-                  customStore
-                })
-                : renderEmptyElement($xeTable),
-              /**
                * 加载中
                */
               VxeUILoadingComponent
@@ -13238,6 +13250,26 @@ export default defineVxeComponent({
           ])
         ]),
         h('div', {
+          key: 'fpw',
+          ref: refCustomContainerElem
+        }, [
+          h(Teleport, {
+            to: customPopupToElem,
+            disabled: !!reactData.ctPopupFlag && !customPopupToElem
+          }, [
+            /**
+             * 自定义列
+             */
+            initStore.custom
+              ? h(TableCustomPanelComponent, {
+                key: 'cs',
+                ref: refTableCustom,
+                customStore
+              })
+              : renderEmptyElement($xeTable)
+          ])
+        ]),
+        h('div', {
           key: 'tpw'
         }, [
           h(Teleport, {
@@ -13247,16 +13279,6 @@ export default defineVxeComponent({
             h('div', {
               ref: refPopupWrapperElem
             }, [
-              /**
-               * 自定义列
-               */
-              showCustomSimpleOutside && initStore.custom
-                ? h(TableCustomPanelComponent, {
-                  key: 'cs',
-                  ref: refTableCustom,
-                  customStore
-                })
-                : renderEmptyElement($xeTable),
               /**
                * 筛选
                */
@@ -13937,6 +13959,7 @@ export default defineVxeComponent({
       globalEvents.on($xeTable, 'mousewheel', handleGlobalMousewheelEvent)
       globalEvents.on($xeTable, 'keydown', handleGlobalKeydownEvent)
       globalEvents.on($xeTable, 'resize', handleGlobalResizeEvent)
+      globalEvents.on($xeTable, 'scroll', handleGlobalScrollEvent)
       globalEvents.on($xeTable, 'contextmenu', $xeTable.handleGlobalContextmenuEvent)
       $xeTable.preventEvent(null, 'mounted', { $table: $xeTable })
     })
@@ -13974,6 +13997,7 @@ export default defineVxeComponent({
       globalEvents.off($xeTable, 'mousewheel')
       globalEvents.off($xeTable, 'keydown')
       globalEvents.off($xeTable, 'resize')
+      globalEvents.off($xeTable, 'scroll')
       globalEvents.off($xeTable, 'contextmenu')
 
       $xeTable.preventEvent(null, 'beforeUnmount', { $table: $xeTable })

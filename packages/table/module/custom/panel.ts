@@ -2,11 +2,11 @@ import { h, inject, ref, Ref, provide, VNode, PropType, nextTick, TransitionGrou
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
-import { getTpImg, addClass, removeClass, hasControlKey, toCssUnit } from '../../../ui/src/dom'
+import { getTpImg, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
 import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
-import type { VxeButtonEvents, VxeComponentStyleType } from 'vxe-pc-ui'
+import type { VxeButtonEvents } from 'vxe-pc-ui'
 import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableCustomPanelConstructor, TableCustomPanelReactData, TableCustomPanelInternalData, TableCustomPanelPrivateRef, TableCustomPanelPrivateComputed } from '../../../../types'
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
@@ -18,7 +18,8 @@ export function createInternalData (): TableCustomPanelInternalData {
     // prevDragGroupField: undefined,
     // prevDragAggFnColid: undefined,
     // prevDragToChild: false,
-    // prevDragPos: null
+    // prevDragPos: null,
+    // customDragTime: null
   }
 }
 
@@ -42,7 +43,7 @@ export default defineVxeComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeCustomOpts, computeColumnDragOpts, computeColumnOpts, computeIsMaxFixedColumn, computeResizableOpts } = $xeTable.getComputeMaps()
+    const { computeSize, computeCustomOpts, computeColumnDragOpts, computeColumnOpts, computeIsMaxFixedColumn, computeResizableOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refBodyWrapperElem = ref() as Ref<HTMLDivElement>
@@ -327,9 +328,14 @@ export default defineVxeComponent({
     }
 
     const sortDragstartEvent = (evnt: DragEvent) => {
+      const { customDragTime } = customPanelInternalData
       if (evnt.dataTransfer) {
         evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
       }
+      if (customDragTime) {
+        clearTimeout(customDragTime)
+      }
+      tableReactData.isCustomDragStatus = true
       customPanelInternalData.prevDragGroupField = null
       customPanelInternalData.prevDragAggFnColid = null
     }
@@ -511,6 +517,10 @@ export default defineVxeComponent({
               tableReactData.customColumnList = collectColumn.slice(0)
               $xeTable.handleColDragSwapColumn()
             }
+            customPanelInternalData.customDragTime = setTimeout(() => {
+              tableReactData.isCustomDragStatus = false
+              customPanelInternalData.customDragTime = undefined
+            }, 350)
           }).catch(() => {
           })
         }
@@ -612,13 +622,14 @@ export default defineVxeComponent({
 
       const { customStore } = props
       const { treeConfig, rowGroupConfig, aggregateConfig } = tableProps
-      const { isCustomStatus, customColumnList } = tableReactData
+      const { isCustomStatus, customColumnList, isCustomDragStatus } = tableReactData
       const customOpts = computeCustomOpts.value
       const { immediate } = customOpts
       const columnDragOpts = computeColumnDragOpts.value
-      const { maxHeight, popupTop } = customStore
+      const { popupStyle } = customStore
       const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement } = customOpts
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
+      const vSize = computeSize.value
       const { isCrossDrag } = columnDragOpts
       const slots = customOpts.slots || {}
       const headerSlot = slots.header
@@ -754,20 +765,14 @@ export default defineVxeComponent({
           )
         }
       })
-      const popupStys: VxeComponentStyleType = {}
-      if (maxHeight && !['left', 'right'].includes(placement || '')) {
-        if (popupTop) {
-          popupStys.top = toCssUnit(popupTop)
-        }
-        popupStys.maxHeight = toCssUnit(maxHeight)
-      }
       return h('div', {
         ref: refElem,
         key: 'simple',
         class: ['vxe-table-custom-wrapper', `placement--${placement}`, {
+          [`size--${vSize}`]: vSize,
           'is--active': customStore.visible
         }],
-        style: popupStys
+        style: popupStyle
       }, customStore.visible
         ? [
             h('div', {
@@ -830,7 +835,7 @@ export default defineVxeComponent({
                     }, $xeTable.callSlot(defaultSlot, params))
                     : h(TransitionGroup, {
                       class: 'vxe-table-custom--panel-list',
-                      name: 'vxe-table-custom--list',
+                      name: isCustomDragStatus ? 'vxe-table-custom--list' : '',
                       tag: 'ul',
                       ...customWrapperOns
                     }, {

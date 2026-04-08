@@ -2,8 +2,9 @@ import { nextTick } from 'vue'
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { getColumnList } from '../../src/util'
+import { toCssUnit } from '../../../ui/src/dom'
 
-import type { TableCustomMethods, TableCustomPrivateMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../../types'
+import type { TableCustomMethods, TableCustomPrivateMethods, VxeColumnPropTypes, VxeTableDefines, VxeComponentStyleType } from '../../../../types'
 
 const tableCustomMethodKeys: (keyof TableCustomMethods)[] = ['openCustom', 'closeCustom', 'getCustomVisible', 'toggleCustom', 'saveCustom', 'cancelCustom', 'resetCustom', 'toggleCustomAllCheckbox', 'setCustomAllCheckbox']
 
@@ -20,13 +21,16 @@ VxeUI.hooks.add('tableCustomModule', {
     const updatePopupStyle = () => {
       const { customStore } = reactData
       const customOpts = computeCustomOpts.value
+      const { mode, placement, popupOptions } = customOpts
+      const showSimple = !(mode === 'modal' || mode === 'drawer')
+      const { transfer, maxHeight } = popupOptions || {}
       const customSimpleMode = computeCustomSimpleMode.value
       const showCustomSimpleOutside = customSimpleMode === 'outside'
-      const { popupOptions } = customOpts
-      const { maxHeight } = popupOptions || {}
+      const bodyEl = document.documentElement
       let wrapperEl = refElem.value
       let popupTop = 0
       let popupMaxHeight: string | number = 0
+      const popupStys: VxeComponentStyleType = {}
       if ($xeGantt) {
         const { refGanttContainerElem } = $xeGantt.getRefMaps()
         const ganttContainerElem = refGanttContainerElem.value
@@ -34,7 +38,12 @@ VxeUI.hooks.add('tableCustomModule', {
           wrapperEl = ganttContainerElem
         }
       }
-      if (showCustomSimpleOutside) {
+      const tableRect = wrapperEl.getBoundingClientRect()
+      // 多种模式，指定元素插入
+      if (showSimple && transfer) {
+        popupTop = tableRect.top + bodyEl.scrollTop
+        popupMaxHeight = XEUtils.eqNull(maxHeight) ? 360 : maxHeight
+      } else if (showCustomSimpleOutside) {
         if ($xeGGWrapper && wrapperEl) {
           popupTop = wrapperEl.offsetTop
         }
@@ -46,12 +55,60 @@ VxeUI.hooks.add('tableCustomModule', {
         }
         popupMaxHeight = Math.max(88, popupMaxHeight)
       }
-      customStore.popupTop = popupTop
-      customStore.maxHeight = XEUtils.eqNull(maxHeight) ? popupMaxHeight : maxHeight
+      let popupMxHeight: string | number = 0
+      if (!(placement === 'left' || placement === 'right')) {
+        popupMxHeight = XEUtils.eqNull(maxHeight) ? popupMaxHeight : maxHeight
+      }
+      if (!placement || !(['left', 'right', 'bottom-left', 'bottom-right'].includes(placement))) {
+        if (popupTop) {
+          popupStys.top = toCssUnit(popupTop)
+        }
+      }
+
+      if (showSimple && transfer) {
+        if (placement === 'bottom-left' || placement === 'bottom-right') {
+          popupStys.bottom = toCssUnit(bodyEl.scrollHeight - tableRect.top - tableRect.height + 1)
+        }
+        if (placement === 'top-left' || placement === 'bottom-left') {
+          popupStys.left = toCssUnit(tableRect.left)
+        } else if (!placement || placement === 'top-right' || placement === 'bottom-right') {
+          popupStys.right = toCssUnit(bodyEl.scrollWidth - tableRect.left - tableRect.width + 1)
+        }
+      }
+
+      if (popupMxHeight) {
+        popupStys.maxHeight = toCssUnit(popupMxHeight)
+      }
+      customStore.popupStyle = popupStys
+      customStore.maxHeight = popupMxHeight
+      return nextTick()
     }
 
     const openCustom = () => {
       const { initStore, customStore } = reactData
+      const customOpts = computeCustomOpts.value
+      const { mode, popupOptions } = customOpts
+      const showSimple = !(mode === 'modal' || mode === 'drawer')
+      const { transfer } = popupOptions || {}
+      const customSimpleMode = computeCustomSimpleMode.value
+      const showCustomSimpleOutside = customSimpleMode === 'outside'
+      let cpToElem = null
+      // 多种模式，指定元素插入
+      if (showSimple && transfer) {
+        cpToElem = document.body
+      } else {
+        if (showCustomSimpleOutside && $xeGGWrapper) {
+          const { refPopupContainerElem } = $xeGGWrapper.getRefMaps()
+          const popupContainerElem = refPopupContainerElem.value
+          if (popupContainerElem) {
+            cpToElem = popupContainerElem
+          }
+        }
+      }
+      if (internalData.customPopupToElem !== cpToElem) {
+        reactData.ctPopupFlag++
+      }
+      internalData.customPopupToElem = cpToElem
       customStore.visible = true
       initStore.custom = true
       handleUpdateCustomColumn()
@@ -345,7 +402,13 @@ VxeUI.hooks.add('tableCustomModule', {
           $xeTable.emitCustomEvent('close', evnt)
         }
       },
-      handleUpdateCustomColumn
+      handleUpdateCustomColumn,
+      handleCustomStyle () {
+        const reactData = $xeTable.reactData
+
+        reactData.isCustomDragStatus = false
+        return updatePopupStyle()
+      }
     }
 
     return { ...customMethods, ...customPrivateMethods }

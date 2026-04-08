@@ -492,7 +492,7 @@ export default defineVxeComponent({
 
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, editConfig, treeConfig } = tableProps
       const { hasFixedColumn, treeExpandedFlag, scrollYLoad, isAllOverflow, rowExpandedFlag, expandColumn, selectRadioRow, pendingRowFlag, rowExpandHeightFlag, isRowGroupStatus } = tableReactData
-      const { fullAllDataRowIdData, fullColumnIdData, treeExpandedMaps, pendingRowMaps, rowExpandedMaps } = tableInternalData
+      const { fullAllDataRowIdData, fullColumnIdData, treeExpandedMaps, pendingRowMaps, rowExpandedMaps, currentRow } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
       const treeOpts = computeTreeOpts.value
@@ -582,7 +582,8 @@ export default defineVxeComponent({
             'row--radio': radioOpts.highlight && $xeTable.eqRow(selectRadioRow, row),
             'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
             'row--pending': !!pendingRowFlag && !!pendingRowMaps[rowid],
-            'row--group': hasRowGroupAggregate
+            'row--group': hasRowGroupAggregate,
+            'row--current': currentRow && rowid === getRowid($xeTable, currentRow)
           },
           getPropClass(rowClassName, params)
         ]

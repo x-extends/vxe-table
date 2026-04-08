@@ -1,106 +1,89 @@
 <template>
-  <div>
-    <vxe-grid v-bind="gridOptions"></vxe-grid>
+  <div style="height: 2000px">
+    <vxe-button status="success" @click="getDataEvent">获取筛选后数据</vxe-button>
+
+    <vxe-grid ref="gridRef" v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue'
-import type { VxeGridProps } from '../../../types'
+import { ref, reactive } from 'vue'
+import { VxeGridInstance, VxeGridProps } from '../../../types'
 
 interface RowVO {
   id: number
   name: string
-  type: string
-  size: number
-  date: string
-  children?: RowVO[]
+  role: string
+  sex: string
+  age: number
+  address: string
 }
+
+const gridRef = ref<VxeGridInstance<RowVO>>()
 
 const gridOptions = reactive<VxeGridProps<RowVO>>({
   border: true,
-  treeConfig: {
-    rowField: 'id',
-    childrenField: 'children',
-    showLine: true
+  height: 400,
+  filterConfig: {
+    transfer: true
   },
   columns: [
-    { type: 'seq', width: 70 },
-    { field: 'name', title: 'Name', minWidth: 300, treeNode: true },
-    { field: 'size', title: 'Size' },
-    { field: 'type', title: 'Type' },
-    { field: 'date', title: 'Date' }
-  ],
-  data: [
-    { id: 10000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+    { field: 'id', title: 'ID' },
     {
-      id: 10050,
-      name: 'Test2',
-      type: 'mp4',
-      size: 0,
-      date: '2021-04-01',
-      children: [
-        {
-          id: 24300,
-          name: 'Test3',
-          type: 'avi',
-          size: 1024,
-          date: '2020-03-01',
-          children: [
-            { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
-            {
-              id: 10053,
-              name: 'Test5',
-              type: 'avi',
-              size: 0,
-              date: '2021-04-01',
-              children: [
-                { id: 24330, name: 'Test6', type: 'txt', size: 25, date: '2021-10-01' },
-                { id: 21011, name: 'Test7', type: 'pdf', size: 512, date: '2020-01-01' },
-                { id: 22200, name: 'Test8', type: 'js', size: 1024, date: '2021-06-01' }]
-            }
-          ]
-        }]
-    },
-    {
-      id: 23666,
-      name: 'Test9',
-      type: 'xlsx',
-      size: 2048,
-      date: '2020-11-01',
-      children: [
-        {
-          id: 23677,
-          name: 'Test10',
-          type: 'js',
-          size: 1024,
-          date: '2021-06-01',
-          children: [
-            { id: 23671, name: 'Test11', type: 'js', size: 1024, date: '2021-06-01' },
-            { id: 23672, name: 'Test12', type: 'js', size: 1024, date: '2021-06-01' }]
-        },
-        {
-          id: 23688,
-          name: 'Test13',
-          type: 'js',
-          size: 1024,
-          date: '2021-06-01',
-          children: [
-            { id: 23681, name: 'Test14', type: 'js', size: 1024, date: '2021-06-01' },
-            { id: 23682, name: 'Test15', type: 'js', size: 1024, date: '2021-06-01' }]
-        }
+      field: 'name',
+      title: 'Name',
+      filters: [
+        { label: 'Test1', value: 'Test1' },
+        { label: 'Test2', value: 'Test2' },
+        { label: 'Test3', value: 'Test3' },
+        { label: 'Test4', value: 'Test4' },
+        { label: 'Test5', value: 'Test5' },
+        { label: 'Test6', value: 'Test6' },
+        { label: 'Test7', value: 'Test7' },
+        { label: 'Test8', value: 'Test8' },
+        { label: 'Test9', value: 'Test9' },
+        { label: 'Test10', value: 'Test10' }
       ]
     },
     {
-      id: 24555,
-      name: 'Test16',
-      type: 'avi',
-      size: 224,
-      date: '2020-10-01',
-      children: [
-        { id: 24566, name: 'Test17', type: 'js', size: 1024, date: '2021-06-01' },
-        { id: 24577, name: 'Test18', type: 'js', size: 1024, date: '2021-06-01' }]
-    }
+      field: 'sex',
+      title: 'Sex',
+      filterMultiple: false,
+      filters: [
+        { label: 'Man', value: 'Man' },
+        { label: 'Woman', value: 'Woman' }
+      ]
+    },
+    {
+      field: 'age',
+      title: 'Age',
+      filters: [
+        { label: '28', value: 28 },
+        { label: '22', value: 22 },
+        { label: '38', value: 38 }
+      ]
+    },
+    { field: 'address', title: 'Address' }
+  ],
+  data: [
+    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Woman', age: 28, address: 'test abc' },
+    { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', age: 22, address: 'Guangzhou' },
+    { id: 10003, name: 'Test3', role: 'PM', sex: 'Woman', age: 32, address: 'Shanghai' },
+    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Man', age: 54, address: 'Shanghai' },
+    { id: 10005, name: 'Test5', role: 'Develop', sex: 'Man', age: 44, address: 'Guangzhou' },
+    { id: 10006, name: 'Test6', role: 'Develop', sex: 'Woman', age: 24, address: 'Shanghai' },
+    { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 52, address: 'test abc' },
+    { id: 10008, name: 'Test8', role: 'PM', sex: 'Woman', age: 34, address: 'Guangzhou' },
+    { id: 10009, name: 'Test9', role: 'PM', sex: 'Man', age: 24, address: 'test abc' },
+    { id: 100010, name: 'Test10', role: 'Develop', sex: 'Woman', age: 24, address: 'Shanghai' }
   ]
 })
+
+const getDataEvent = () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    const { visibleData } = $grid.getTableData()
+    console.log(visibleData)
+  }
+}
 </script>

@@ -377,8 +377,7 @@ hooks.add('tableKeyboardModule', {
       // 处理当前行方向键移动
       moveCurrentRow (isUpArrow, isDwArrow, evnt) {
         const { treeConfig } = props
-        const { currentRow } = reactData
-        const { afterFullData } = internalData
+        const { afterFullData, currentRow } = internalData
         const treeOpts = computeTreeOpts.value
         const childrenField = treeOpts.children || treeOpts.childrenField
         let targetRow
