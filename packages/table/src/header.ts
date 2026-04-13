@@ -1,6 +1,7 @@
 import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
+import { defineVxeComponent } from '../../ui/src/comp'
 import { isEnableConf, getClass } from '../../ui/src/utils'
 import { getCalcHeight, convertHeaderColumnToRows, convertHeaderToGridRows } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
@@ -362,7 +363,7 @@ function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMo
   return rowVNs
 }
 
-export default {
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeTableHeader',
   props: {
     tableData: Array as PropType<any[]>,
@@ -375,8 +376,10 @@ export default {
     }
   },
   data () {
+    const headerColumn: VxeTableDefines.ColumnInfo[][] = []
+
     return {
-      headerColumn: []
+      headerColumn
     }
   },
   watch: {
@@ -391,7 +394,7 @@ export default {
     _vm.uploadColumn()
   },
   mounted () {
-    const _vm = this as any
+    const _vm = this
     const props = _vm
     const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
@@ -408,7 +411,7 @@ export default {
     elemStore[`${prefix}repair`] = _vm.$refs.refHeaderBorderRepair
   },
   destroyed () {
-    const _vm = this as any
+    const _vm = this
     const props = _vm
     const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
@@ -425,7 +428,7 @@ export default {
     elemStore[`${prefix}repair`] = null
   },
   render (h: CreateElement) {
-    const _vm = this as any
+    const _vm = this
     const props = _vm
     const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const tableProps = $xeTable
@@ -434,7 +437,7 @@ export default {
 
     const { xID } = $xeTable
     const { fixedType, fixedColumn, tableColumn } = props
-    const { headerColumn } = _vm
+    const { headerColumn } = _vm as any
 
     const { mouseConfig } = tableProps
     const { isGroup, isColLoading, overflowX, scrollXLoad, dragCol } = tableReactData
@@ -577,7 +580,7 @@ export default {
   },
   methods: {
     uploadColumn () {
-      const _vm = this as any
+      const _vm = this
       const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
       const tableProps = $xeTable
       const tableReactData = $xeTable as unknown as TableReactData
@@ -595,8 +598,10 @@ export default {
         visibleColgroups = convertHeaderToGridRows(spanColumns)
         spanColumns = visibleColgroups
       }
-      _vm.headerColumn = spanColumns
-      $xeTable.dispatchEvent('columns-change', { visibleColgroups, collectColumn, visibleColumn }, null)
+      (_vm as any).headerColumn = spanColumns
+      $xeTable.$nextTick(() => {
+        $xeTable.dispatchEvent('columns-change', { visibleColgroups, collectColumn, visibleColumn }, null)
+      })
     }
   }
-}
+}) /* define-vxe-component end */

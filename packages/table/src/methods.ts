@@ -1394,7 +1394,7 @@ function handleDefaultRadioChecked ($xeTable: VxeTableConstructor & VxeTablePriv
     const { checkRowKey: rowid, reserve } = radioOpts
     if (rowid) {
       if (fullDataRowIdData[rowid]) {
-        handleCheckedRadioRow(fullDataRowIdData[rowid].row, true)
+        handleCheckedRadioRow($xeTable, fullDataRowIdData[rowid].row, true)
       }
       if (reserve) {
         const rowkey = getRowkey($xeTable)
@@ -1454,7 +1454,7 @@ function handleCheckboxReserveRow ($xeTable: VxeTableConstructor & VxeTablePriva
   }
 }
 
-function handleCheckedRadioRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any, isForce?: boolean) {
+function handleCheckedRadioRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any, isForce: boolean) {
   const reactData = $xeTable as unknown as TableReactData
 
   const radioOpts = $xeTable.computeRadioOpts
@@ -2556,10 +2556,13 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
   const { treeConfig } = props
   const { tableData, isAllOverflow, scrollYLoad, scrollXLoad } = reactData
   const { fullAllDataRowIdData } = internalData
+  const el = $xeTable.$refs.refElem as HTMLDivElement
+  if (!el || !el.clientWidth) {
+    return
+  }
   const treeOpts = $xeTable.computeTreeOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
-  const el = $xeTable.$refs.refElem as HTMLDivElement
-  if (el && !isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine))) {
+  if (!isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine))) {
     const { handleGetRowId } = createHandleGetRowId($xeTable)
     el.setAttribute('data-calc-row', 'Y')
     tableData.forEach(row => {
@@ -3047,6 +3050,10 @@ function calcScrollbar ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
   const { scrollXWidth, scrollYHeight } = reactData
   const { elemStore } = internalData
   const scrollbarOpts = $xeTable.computeScrollbarOpts
+  const el = $xeTable.$refs.refElem as HTMLDivElement
+  if (!el || !el.clientWidth) {
+    return
+  }
   const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
   const headerTableElem = getRefElem(elemStore['main-header-table'])
   const footerTableElem = getRefElem(elemStore['main-footer-table'])
@@ -4203,6 +4210,10 @@ function updateColumnOffsetLeft ($xeTable: VxeTableConstructor & VxeTablePrivate
   const internalData = $xeTable as unknown as TableInternalData
 
   const { visibleColumn, fullColumnIdData } = internalData
+  const el = $xeTable.$refs.refElem as HTMLDivElement
+  if (!el || !el.clientWidth) {
+    return
+  }
   let offsetLeft = 0
   for (let cIndex = 0, rLen = visibleColumn.length; cIndex < rLen; cIndex++) {
     const column = visibleColumn[cIndex]
@@ -4221,6 +4232,10 @@ function updateRowOffsetTop ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
 
   const { expandColumn } = reactData
   const { afterFullData, fullAllDataRowIdData, rowExpandedMaps } = internalData
+  const el = $xeTable.$refs.refElem as HTMLDivElement
+  if (!el || !el.clientWidth) {
+    return
+  }
   const expandOpts = $xeTable.computeExpandOpts
   const rowOpts = $xeTable.computeRowOpts
   const cellOpts = $xeTable.computeCellOpts
@@ -4248,6 +4263,10 @@ function updateRowExpandStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   const internalData = $xeTable as unknown as TableInternalData
 
   const { expandColumn, scrollYLoad, scrollYTop, isScrollYBig } = reactData
+  const el = $xeTable.$refs.refElem as HTMLDivElement
+  if (!el || !el.clientWidth) {
+    return
+  }
   const expandOpts = $xeTable.computeExpandOpts
   const rowOpts = $xeTable.computeRowOpts
   const cellOpts = $xeTable.computeCellOpts
@@ -4315,6 +4334,10 @@ function updateTreeLineStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   }
   const { tableData } = reactData
   const { fullAllDataRowIdData, treeExpandedMaps } = internalData
+  const el = $xeTable.$refs.refElem as HTMLDivElement
+  if (!el || !el.clientWidth) {
+    return
+  }
   const cellOpts = $xeTable.computeCellOpts
   const rowOpts = $xeTable.computeRowOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
@@ -8643,14 +8666,14 @@ const tableMethods: any = {
       let newValue = row
       let isChange = oldValue !== newValue
       if (strict) {
-        handleCheckedRadioRow($xeTable, newValue)
+        handleCheckedRadioRow($xeTable, newValue, false)
       } else {
         if (oldValue === newValue) {
           newValue = null
         }
         isChange = oldValue !== newValue
         if (isChange && newValue) {
-          handleCheckedRadioRow($xeTable, newValue)
+          handleCheckedRadioRow($xeTable, newValue, false)
         } else {
           newValue = null
           $xeTable.clearRadioRow()

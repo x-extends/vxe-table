@@ -1,6 +1,7 @@
 import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
+import { defineVxeComponent } from '../../ui/src/comp'
 import { isEnableConf, getClass } from '../../ui/src/utils'
 import { getRowid, createHandleGetRowId, getCellRestHeight } from './util'
 import { updateCellTitle } from '../../ui/src/dom'
@@ -710,7 +711,7 @@ function renderRows (h: CreateElement, _vm: any, fixedType: 'left' | 'right' | '
   return rows
 }
 
-export default {
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeTableBody',
   props: {
     tableData: Array as PropType<any[]>,
@@ -718,10 +719,10 @@ export default {
     fixedColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
     fixedType: {
       type: String as PropType<'right' | 'left' | ''>,
-      default: ''
+      default: '' as 'right' | 'left' | ''
     }
   },
-  mounted (this: any) {
+  mounted () {
     const _vm = this
     const props = _vm
     const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
@@ -739,7 +740,7 @@ export default {
     elemStore[`${prefix}ySpace`] = _vm.$refs.refBodyYSpace
     elemStore[`${prefix}emptyBlock`] = _vm.$refs.refBodyEmptyBlock
   },
-  destroyed (this: any) {
+  destroyed () {
     const props = this
     const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const tableInternalData = $xeTable as unknown as TableInternalData
@@ -756,7 +757,7 @@ export default {
     elemStore[`${prefix}ySpace`] = null
     elemStore[`${prefix}emptyBlock`] = null
   },
-  render (this: any, h: CreateElement) {
+  render (h: CreateElement) {
     const props = this
     const $xeTable = this.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const tableProps = $xeTable
@@ -969,4 +970,4 @@ export default {
       ])
     ])
   }
-}
+}) /* define-vxe-component end */

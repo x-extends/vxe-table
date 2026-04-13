@@ -1,6 +1,7 @@
 import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
+import { defineVxeComponent } from '../../ui/src/comp'
 import { getClass } from '../../ui/src/utils'
 import { updateCellTitle } from '../../ui/src/dom'
 import { getCalcHeight } from './util'
@@ -222,7 +223,7 @@ function renderHeads (h: CreateElement, _vm: any, isOptimizeMode: boolean, rende
   })
 }
 
-export default {
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeTableFooter',
   props: {
     footerTableData: {
@@ -243,7 +244,7 @@ export default {
     }
   },
   mounted () {
-    const _vm = this as any
+    const _vm = this
     const props = _vm
     const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const tableInternalData = $xeTable as unknown as TableInternalData
@@ -259,7 +260,7 @@ export default {
     elemStore[`${prefix}xSpace`] = _vm.$refs.refFooterXSpace
   },
   destroyed () {
-    const _vm = this as any
+    const _vm = this
     const props = _vm
     const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
     const tableInternalData = $xeTable as unknown as TableInternalData
@@ -385,4 +386,4 @@ export default {
       ])
     ])
   }
-}
+}) /* define-vxe-component end */
