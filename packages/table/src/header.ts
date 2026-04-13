@@ -53,7 +53,9 @@ export default defineVxeComponent({
         spanColumns = visibleColgroups
       }
       headerColumn.value = spanColumns
-      $xeTable.dispatchEvent('columns-change', { visibleColgroups, collectColumn, visibleColumn }, null)
+      nextTick(() => {
+        $xeTable.dispatchEvent('columns-change', { visibleColgroups, collectColumn, visibleColumn }, null)
+      })
     }
 
     const renderRows = (isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][], $rowIndex: number, cols: VxeTableDefines.ColumnInfo[]) => {

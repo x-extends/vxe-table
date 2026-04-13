@@ -2088,10 +2088,13 @@ export default defineVxeComponent({
       const { treeConfig } = props
       const { tableData, isAllOverflow, scrollYLoad, scrollXLoad } = reactData
       const { fullAllDataRowIdData } = internalData
+      const el = refElem.value
+      if (!el || !el.clientWidth) {
+        return
+      }
       const treeOpts = computeTreeOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
-      const el = refElem.value
-      if (el && !isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine))) {
+      if (!isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine))) {
         const { handleGetRowId } = createHandleGetRowId($xeTable)
         el.setAttribute('data-calc-row', 'Y')
         tableData.forEach(row => {
@@ -2915,7 +2918,7 @@ export default defineVxeComponent({
       }
     }
 
-    const handleCheckedRadioRow = (row: any, isForce?: boolean) => {
+    const handleCheckedRadioRow = (row: any, isForce: boolean) => {
       const radioOpts = computeRadioOpts.value
       const { checkMethod } = radioOpts
       if (row && (isForce || (!checkMethod || checkMethod({ $table: $xeTable, row })))) {
@@ -3350,6 +3353,10 @@ export default defineVxeComponent({
       const { scrollXWidth, scrollYHeight } = reactData
       const { elemStore } = internalData
       const scrollbarOpts = computeScrollbarOpts.value
+      const el = refElem.value
+      if (!el || !el.clientWidth) {
+        return
+      }
       const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
       const headerTableElem = getRefElem(elemStore['main-header-table'])
       const footerTableElem = getRefElem(elemStore['main-footer-table'])
@@ -4630,6 +4637,10 @@ export default defineVxeComponent({
 
     const updateColumnOffsetLeft = () => {
       const { visibleColumn, fullColumnIdData } = internalData
+      const el = refElem.value
+      if (!el || !el.clientWidth) {
+        return
+      }
       let offsetLeft = 0
       for (let cIndex = 0, rLen = visibleColumn.length; cIndex < rLen; cIndex++) {
         const column = visibleColumn[cIndex]
@@ -4645,6 +4656,10 @@ export default defineVxeComponent({
     const updateRowOffsetTop = () => {
       const { expandColumn } = reactData
       const { afterFullData, fullAllDataRowIdData, rowExpandedMaps } = internalData
+      const el = refElem.value
+      if (!el || !el.clientWidth) {
+        return
+      }
       const expandOpts = computeExpandOpts.value
       const rowOpts = computeRowOpts.value
       const cellOpts = computeCellOpts.value
@@ -4669,6 +4684,10 @@ export default defineVxeComponent({
      */
     const updateRowExpandStyle = () => {
       const { expandColumn, scrollYLoad, scrollYTop, isScrollYBig } = reactData
+      const el = refElem.value
+      if (!el || !el.clientWidth) {
+        return
+      }
       const expandOpts = computeExpandOpts.value
       const rowOpts = computeRowOpts.value
       const cellOpts = computeCellOpts.value
@@ -4732,6 +4751,10 @@ export default defineVxeComponent({
       }
       const { tableData } = reactData
       const { fullAllDataRowIdData, treeExpandedMaps } = internalData
+      const el = refElem.value
+      if (!el || !el.clientWidth) {
+        return
+      }
       const cellOpts = computeCellOpts.value
       const rowOpts = computeRowOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
@@ -10385,14 +10408,14 @@ export default defineVxeComponent({
           let newValue = row
           let isChange = oldValue !== newValue
           if (strict) {
-            handleCheckedRadioRow(newValue)
+            handleCheckedRadioRow(newValue, false)
           } else {
             if (oldValue === newValue) {
               newValue = null
             }
             isChange = oldValue !== newValue
             if (isChange && newValue) {
-              handleCheckedRadioRow(newValue)
+              handleCheckedRadioRow(newValue, false)
             } else {
               newValue = null
               $xeTable.clearRadioRow()
