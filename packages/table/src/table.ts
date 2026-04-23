@@ -7300,12 +7300,12 @@ export default defineVxeComponent({
        * @param {Boolean} expanded 是否展开
        */
       setAllTreeExpand (expanded: boolean) {
-        const { tableFullData } = internalData
+        const { tableFullTreeData } = internalData
         const treeOpts = computeTreeOpts.value
         const { transform, lazy } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
         const expandeds: any[] = []
-        XEUtils.eachTree(tableFullData, (row) => {
+        XEUtils.eachTree(tableFullTreeData, (row) => {
           const rowChildren = row[childrenField]
           if (lazy || (rowChildren && rowChildren.length)) {
             expandeds.push(row)
