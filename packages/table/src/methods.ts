@@ -11460,12 +11460,12 @@ const tableMethods: any = {
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { tableFullData } = internalData
+    const { tableFullTreeData } = internalData
     const treeOpts = $xeTable.computeTreeOpts
     const { transform, lazy } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const expandeds: any[] = []
-    XEUtils.eachTree(tableFullData, (row) => {
+    XEUtils.eachTree(tableFullTreeData, (row) => {
       const rowChildren = row[childrenField]
       if (lazy || (rowChildren && rowChildren.length)) {
         expandeds.push(row)
