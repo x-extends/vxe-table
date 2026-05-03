@@ -55,7 +55,7 @@ hooks.add('tableEditModule', {
       const editOpts = computeEditOpts.value
       const { actived } = editStore
       const { row, column } = actived
-      if (row || column) {
+      if (row && column) {
         if (editOpts.mode === 'row') {
           tableColumn.forEach((column) => setEditColumnModel(row, column))
         } else {
@@ -102,6 +102,7 @@ hooks.add('tableEditModule', {
           fullAllDataRowIdData[rowid] = rest
         }
       })
+      $xeTable.handleClearStack()
     }
 
     // const insertGroupRow = (newRecords: any[], isAppend: boolean) => {
@@ -157,6 +158,7 @@ hooks.add('tableEditModule', {
               mergeItem.row = mergeRowIndex + newRecords.length
             }
           })
+          $xeTable.handleClearStack()
         }
       } else {
         if (targetRow === -1) {
@@ -179,6 +181,7 @@ hooks.add('tableEditModule', {
               afterFullData.push(item)
               tableFullData.push(item)
             })
+            $xeTable.handleClearStack()
           }
         } else {
           // 如果为虚拟树
@@ -230,6 +233,7 @@ hooks.add('tableEditModule', {
                   parentChilds.splice(targetIndex, 0, ...treeRecords)
                 }
               }
+              $xeTable.handleClearStack()
             } else {
               warnLog('vxe.error.unableInsert')
               insertTreeRow(newRecords, true)
@@ -276,6 +280,7 @@ hooks.add('tableEditModule', {
                 mergeItem.rowspan = mergeRowspan + newRecords.length
               }
             })
+            $xeTable.handleClearStack()
           }
         }
       }
@@ -357,10 +362,10 @@ hooks.add('tableEditModule', {
           return nextTick()
         }
         syncActivedCell()
+        $xeTable.updateFooter()
         actived.args = null
         actived.row = null
         actived.column = null
-        $xeTable.updateFooter()
         $xeTable.dispatchEvent('edit-closed', {
           row,
           rowIndex: $xeTable.getRowIndex(row),
@@ -382,7 +387,11 @@ hooks.add('tableEditModule', {
       return nextTick().then(() => $xeTable.updateCellAreas())
     }
 
-    const handleEditActive = (params: any, evnt: Event | null, isFocus: boolean, isPos: boolean) => {
+    const handleEditActive = (params: any, evnt: Event | null, options: {
+      isClear?: boolean
+      isFocus?: boolean
+      isPos?: boolean
+    }) => {
       const $xeGrid = $xeTable.xeGrid
       const $xeGantt = $xeTable.xeGantt
 
@@ -393,6 +402,7 @@ hooks.add('tableEditModule', {
       const { actived, focused } = editStore
       const { row, column } = params
       const { editRender } = column
+      const { isFocus, isPos, isClear } = options
       const cell = (params.cell || $xeTable.getCellElement(row, column))
       const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
       params.cell = cell
@@ -419,6 +429,10 @@ hooks.add('tableEditModule', {
               actived.args = params
               actived.row = row
               actived.column = column
+              $xeTable.handlePushStack()
+              if (isClear) {
+                setCellValue(row, column, null)
+              }
               if (mode === 'row') {
                 tableColumn.forEach((column: any) => getEditColumnModel(row, column))
               } else {
@@ -463,7 +477,7 @@ hooks.add('tableEditModule', {
                 $xeTable.clearCopyCellArea()
               }
             }
-            if (oldColumn !== column) {
+            if (oldColumn && oldColumn !== column) {
               const { model: oldModel } = oldColumn
               if (oldModel.update) {
                 setCellValue(row, oldColumn, oldModel.value)
@@ -489,8 +503,13 @@ hooks.add('tableEditModule', {
       return nextTick()
     }
 
-    const handleEditCell = (row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo, isPos: boolean) => {
+    const handleEditCell = (row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null, options: {
+      isClear?: boolean | undefined;
+      isFocus?: boolean | undefined;
+      isPos?: boolean | undefined;
+    }) => {
       const { editConfig } = props
+      const { isPos } = options
       const column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
       if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender) && !$xeTable.isAggregateRecord(row)) {
         return Promise.resolve(isPos ? $xeTable.scrollToRow(row, column) : null).then(() => {
@@ -503,7 +522,10 @@ hooks.add('tableEditModule', {
               columnIndex: $xeTable.getColumnIndex(column),
               cell,
               $table: $xeTable
-            }, null, isPos, isPos)
+            }, null, {
+              isFocus: isPos,
+              isPos
+            })
             internalData._lastCallTime = Date.now()
           }
           return nextTick()
@@ -650,6 +672,7 @@ hooks.add('tableEditModule', {
         reactData.removeRowFlag++
         reactData.insertRowFlag++
         reactData.pendingRowFlag++
+        $xeTable.handleClearStack()
         $xeTable.cacheRowMap(false)
         $xeTable.handleTableData(treeConfig && transform)
         $xeTable.updateFooter()
@@ -847,7 +870,7 @@ hooks.add('tableEditModule', {
       /**
        * 激活行编辑
        */
-      setEditRow (row, fieldOrColumn) {
+      setEditRow (row, fieldOrColumn, options) {
         const { visibleColumn } = internalData
         let column: any = XEUtils.find(visibleColumn, column => isEnableConf(column.editRender))
         let isPos = false
@@ -857,7 +880,10 @@ hooks.add('tableEditModule', {
             column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
           }
         }
-        return handleEditCell(row, column, isPos)
+        return handleEditCell(row, column, Object.assign({
+          isPos,
+          isFocus: isPos
+        }, options))
       },
       setActiveCell (row, fieldOrColumn) {
         warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
@@ -867,8 +893,11 @@ hooks.add('tableEditModule', {
       /**
        * 激活单元格编辑
        */
-      setEditCell (row, fieldOrColumn) {
-        return handleEditCell(row, fieldOrColumn, true)
+      setEditCell (row, fieldOrColumn, options) {
+        return handleEditCell(row, fieldOrColumn, Object.assign({
+          isFocus: true,
+          isPos: true
+        }, options))
       },
       /**
        * 只对 trigger=dblclick 有效，选中单元格
@@ -899,8 +928,11 @@ hooks.add('tableEditModule', {
       /**
        * 处理激活编辑
        */
-      handleEdit (params, evnt) {
-        return handleEditActive(params, evnt, true, true)
+      handleEdit (params, evnt, options) {
+        return handleEditActive(params, evnt, Object.assign({
+          isFocus: true,
+          isPos: true
+        }, options))
       },
       /**
        * @deprecated

@@ -270,8 +270,8 @@ VxeUI.setConfig({
         visible: true
       }
     },
-    undoHistoryConfig: {
-      isEditRow: true
+    undoRedoHistoryConfig: {
+      stackSize: 20
     }
   },
   grid: {

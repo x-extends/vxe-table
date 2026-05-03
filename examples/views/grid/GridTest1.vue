@@ -1,109 +1,71 @@
 <template>
   <div>
-    <vxe-switch v-model="gridOptions.showOverflow"></vxe-switch>
-    <vxe-select v-model="rowSize" :options="dataOptions" @change="loadList()"></vxe-select>
     <vxe-grid v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, nextTick } from 'vue'
-import { VxeGridProps, VxeColumnPropTypes } from '../../../types'
-import { VxeUI } from '../../../packages'
+import { reactive } from 'vue'
+import type { VxeGridProps } from '../../../types'
 
 interface RowVO {
   id: number
-  [key: string]: string | number | boolean | any[]
+  name: string
+  role: string
+  sex: string
+  age: number
+  address: string
 }
-
-const rowSize = ref(500)
-const dataOptions = ref([
-  { label: '加载 3 行', value: 3 },
-  { label: '加载 20 行', value: 20 },
-  { label: '加载 100 行', value: 100 },
-  { label: '加载 500 行', value: 500 },
-  { label: '加载 1000 行', value: 1000 },
-  { label: '加载 5000 行', value: 5000 },
-  { label: '加载 10000 行', value: 10000 },
-  { label: '加载 30000 行', value: 30000 }
-])
-
-const imgUrlCellRender = reactive<VxeColumnPropTypes.CellRender>({
-  name: 'VxeImage',
-  props: {
-    width: 36,
-    height: 36
-  }
-})
 
 const gridOptions = reactive<VxeGridProps<RowVO>>({
   border: true,
-  loading: false,
   showOverflow: true,
-  height: 800,
-  columnConfig: {
-    resizable: true
+  height: 500,
+  keepSource: true,
+  mouseConfig: {
+    selected: true
   },
-  virtualYConfig: {
-    enabled: true,
-    gt: 0
+  keyboardConfig: {
+    isEdit: true,
+    isArrow: true,
+    isEnter: true,
+    isTab: true,
+    isDel: true,
+    isBack: true,
+    isEsc: true,
+    isUndoRedo: true
+  },
+  editConfig: {
+    trigger: 'dblclick',
+    mode: 'cell'
   },
   columns: [
-    { type: 'checkbox', width: 60 },
-    { title: '列0', field: 'col0', width: 100 },
-    { title: '列1', field: 'imgUrl', width: 80, cellRender: imgUrlCellRender },
-    { title: '列2', field: 'col2', width: 90 },
-    { title: '列3', field: 'col3', width: 200 },
-    { title: '列4', field: 'col4', width: 140 },
-    { title: '列5', field: 'col5', width: 300 },
-    { title: '列6', field: 'col6', minWidth: 160 },
-    { title: '列7', field: 'col7', minWidth: 120 },
-    { title: '列8', field: 'col8', minWidth: 120 }
+    { type: 'seq', width: 70 },
+    { field: 'name', title: 'Name', editRender: { name: 'VxeInput' } },
+    { field: 'sex', title: 'Sex', editRender: { name: 'VxeInput' } },
+    { field: 'age', title: 'Age', editRender: { name: 'VxeInput' } }
   ],
-  data: []
+  data: [
+    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+    { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+    { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc' },
+    { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+    { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 21, address: 'test abc' },
+    { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'test abc' },
+    { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' },
+    { id: 10009, name: 'Test9', role: 'Test', sex: 'Man', age: 26, address: 'test abc' },
+    { id: 10010, name: 'Test10', role: 'Develop', sex: 'Man', age: 38, address: 'test abc' },
+    { id: 10011, name: 'Test11', role: 'Test', sex: 'Women', age: 29, address: 'test abc' },
+    { id: 10012, name: 'Test12', role: 'Develop', sex: 'Man', age: 27, address: 'test abc' },
+    { id: 10013, name: 'Test13', role: 'Test', sex: 'Women', age: 24, address: 'test abc' },
+    { id: 10014, name: 'Test14', role: 'Develop', sex: 'Man', age: 34, address: 'test abc' },
+    { id: 10015, name: 'Test15', role: 'Test', sex: 'Man', age: 21, address: 'test abc' },
+    { id: 10016, name: 'Test16', role: 'Develop', sex: 'Women', age: 20, address: 'test abc' },
+    { id: 10017, name: 'Test17', role: 'Test', sex: 'Man', age: 31, address: 'test abc' },
+    { id: 10018, name: 'Test18', role: 'Develop', sex: 'Women', age: 32, address: 'test abc' },
+    { id: 10019, name: 'Test19', role: 'Test', sex: 'Man', age: 37, address: 'test abc' },
+    { id: 10020, name: 'Test20', role: 'Develop', sex: 'Man', age: 41, address: 'test abc' }
+  ]
 })
-
-// 模拟行数据
-const loadList = () => {
-  gridOptions.loading = true
-  setTimeout(() => {
-    const dataList: RowVO[] = []
-    for (let i = 0; i < rowSize.value; i++) {
-      const item: RowVO = {
-        id: 10000 + i,
-        imgUrl: i % 3 === 0 ? 'https://vxeui.com/resource/img/546.gif' : 'https://vxeui.com/resource/img/673.gif'
-      }
-      for (let j = 0; j < 10; j++) {
-        if (i % 9 === 0) {
-          item[`col${j}`] = `值_${i}_${j} 内容9内容9 内容9内容9内容9 内容9内容9内容9内容9 内容9内容9内容9内容9 内容9内容9内容9 内容9内容9`
-        } else if (i % 8 === 0) {
-          item[`col${j}`] = `值_${i}_${j} 内容8内容8内容8内容8`
-        } else if (i % 7 === 0) {
-          item[`col${j}`] = `值_${i}_${j} 内容7内容7`
-        } else if (i % 6 === 0) {
-          item[`col${j}`] = `值_${i}_${j} 内容6内容6内容6内容6内容6内容6内容6内容6`
-        } else if (i % 5 === 0) {
-          item[`col${j}`] = `值_${i}_${j} 内容5内容5内容5内容5内容5`
-        } else if (i % 4 === 0) {
-          item[`col${j}`] = `值_${i}_${j} 内容4内容4内容4内容4内容4内容4内容4内容4内容4内容4内容4内容4`
-        } else {
-          item[`col${j}`] = `值_${i}_${j}`
-        }
-      }
-      dataList.push(item)
-    }
-
-    const startTime = Date.now()
-    gridOptions.data = dataList
-    gridOptions.loading = false
-    nextTick(() => {
-      VxeUI.modal.message({
-        content: `加载时间 ${Date.now() - startTime} 毫秒`,
-        status: 'success'
-      })
-    })
-  }, 350)
-}
-
-loadList()
 </script>

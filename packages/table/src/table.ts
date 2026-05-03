@@ -1,7 +1,7 @@
 import { h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, Teleport, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, onMounted } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
-import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollTopTo, wheelScrollLeftTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement } from '../../ui/src/dom'
+import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollTopTo, wheelScrollLeftTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement, hasEventInputTarget } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import { createReactData, createInternalData, getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn } from './util'
@@ -407,8 +407,8 @@ export default defineVxeComponent({
       return Object.assign({}, getConfig().table.clipConfig, props.clipConfig)
     })
 
-    const computeUndoHistoryOpts = computed(() => {
-      return Object.assign({}, getConfig().table.undoHistoryConfig, props.undoHistoryConfig)
+    const computeUndoRedoHistoryOpts = computed(() => {
+      return Object.assign({}, getConfig().table.undoRedoHistoryConfig, props.undoRedoHistoryConfig)
     })
 
     const computeFNROpts = computed(() => {
@@ -877,7 +877,7 @@ export default defineVxeComponent({
       computeRowGroupFields,
       computeRowGroupColumns,
       computeAggFuncColumns,
-      computeUndoHistoryOpts,
+      computeUndoRedoHistoryOpts,
 
       computeFNROpts,
       computeSXOpts,
@@ -1844,7 +1844,7 @@ export default defineVxeComponent({
           errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
         }
         if (expandOpts.mode !== 'inside' && (treeConfig && !treeOpts.transform)) {
-          errLog('vxe.error.notConflictProp', ['tree-config.transform=false', 'expand-config.mode=fixed'])
+          errLog('vxe.error.notConflictProp', ['tree-config.transform=false', 'expand-config.mode=inside'])
         }
         if (props.spanMethod) {
           warnLog('vxe.error.notSupportProp', ['column.type=expand', 'span-method', 'span-method=null'])
@@ -3805,6 +3805,7 @@ export default defineVxeComponent({
       }
       $xeTable.clearMergeCells()
       $xeTable.clearMergeFooterItems()
+      $xeTable.handleClearStack()
       $xeTable.handleTableData(true)
       $xeTable.updateFooter()
       $xeTable.handleUpdateBodyMerge()
@@ -7790,6 +7791,12 @@ export default defineVxeComponent({
         }
         return nextTick()
       },
+      undo () {
+        return $xeTable.handleUndoStackEvent(null)
+      },
+      redo () {
+        return $xeTable.handleRedoStackEvent(null)
+      },
       getCustomStoreData () {
         const { id } = props
         const customOpts = computeCustomOpts.value
@@ -8191,6 +8198,8 @@ export default defineVxeComponent({
           const isRightArrow = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ARROW_RIGHT)
           const isDwArrow = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ARROW_DOWN)
           const hasDeleteKey = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.DELETE)
+          const isY = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.Y)
+          const isZ = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.Z)
           const isF2 = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.F2)
           const isContextMenu = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.CONTEXT_MENU)
           const isControlKey = hasControlKey(evnt)
@@ -8200,6 +8209,7 @@ export default defineVxeComponent({
           const operCtxMenu = isContentMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
           const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
           const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
+          const selectColumn = selected.column
           if (operCtxMenu) {
             // 如果配置了右键菜单; 支持方向键操作、回车
             evnt.preventDefault()
@@ -8227,10 +8237,10 @@ export default defineVxeComponent({
                 }
               }
             }
-          } else if (isSpacebar && keyboardConfig && keyboardOpts.isChecked && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'radio')) {
+          } else if (isSpacebar && keyboardConfig && keyboardOpts.isChecked && selected.row && selectColumn && (selectColumn.type === 'checkbox' || selectColumn.type === 'radio')) {
             // 空格键支持选中复选框
             evnt.preventDefault()
-            if (selected.column.type === 'checkbox') {
+            if (selectColumn.type === 'checkbox') {
               $xeTable.handleToggleCheckRowEvent(evnt, selected.args)
             } else {
               $xeTable.triggerRadioRowEvent(evnt, selected.args)
@@ -8238,14 +8248,14 @@ export default defineVxeComponent({
           } else if (isF2 && isEnableConf(editConfig)) {
             if (!isEditStatus) {
               // 如果按下了 F2 键
-              if (selected.row && selected.column) {
+              if (selected.row && selectColumn) {
                 evnt.preventDefault()
                 $xeTable.handleEdit(selected.args, evnt)
               }
             }
           } else if (isContextMenu) {
             // 如果按下上下文键
-            internalData._keyCtx = selected.row && selected.column && bodyMenu.length
+            internalData._keyCtx = selected.row && selectColumn && bodyMenu.length
             clearTimeout(internalData.keyCtxTimeout)
             internalData.keyCtxTimeout = setTimeout(() => {
               internalData._keyCtx = false
@@ -8268,84 +8278,86 @@ export default defineVxeComponent({
               // 如果是激活状态，退则出到上一行/下一行
               if (selected.row || actived.row) {
                 const activeRow = selected.row || actived.row
-                const activeColumn = selected.column || actived.column
-                const activeParams = selected.row ? selected.args : actived.args
-                if (hasShiftKey) {
-                  if (keyboardOpts.enterToTab) {
-                    $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
-                  } else {
-                    $xeTable.moveEnterSelected(activeParams, isLeftArrow, true, isRightArrow, false, evnt)
-                  }
-                } else {
-                  const _rowIndex = $xeTable.getVTRowIndex(activeRow)
-                  const _columnIndex = $xeTable.getVTColumnIndex(activeColumn)
-                  if (keyboardOpts.enterToTab) {
-                    const ttrParams = {
-                      row: activeRow,
-                      rowIndex: $xeTable.getRowIndex(activeRow),
-                      $rowIndex: $xeTable.getVMRowIndex(activeRow),
-                      _rowIndex,
-                      column: activeColumn,
-                      columnIndex: $xeTable.getColumnIndex(activeColumn),
-                      $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
-                      _columnIndex,
-                      $table: $xeTable
+                const activeColumn = selectColumn || actived.column
+                if (activeColumn) {
+                  const activeParams = selected.row ? selected.args : actived.args
+                  if (hasShiftKey) {
+                    if (keyboardOpts.enterToTab) {
+                      $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
+                    } else {
+                      $xeTable.moveEnterSelected(activeParams, isLeftArrow, true, isRightArrow, false, evnt)
                     }
-                    if (!beforeTabMethod || beforeTabMethod(ttrParams) !== false) {
-                      evnt.preventDefault()
-                      // 最后一行按下Tab键，自动追加一行
-                      if (isLastTabAppendRow) {
-                        const newColumn = visibleColumn[0]
-                        if (_rowIndex >= afterFullData.length - 1 && _columnIndex >= visibleColumn.length - 1) {
+                  } else {
+                    const _rowIndex = $xeTable.getVTRowIndex(activeRow)
+                    const _columnIndex = $xeTable.getVTColumnIndex(activeColumn)
+                    if (keyboardOpts.enterToTab) {
+                      const ttrParams = {
+                        row: activeRow,
+                        rowIndex: $xeTable.getRowIndex(activeRow),
+                        $rowIndex: $xeTable.getVMRowIndex(activeRow),
+                        _rowIndex,
+                        column: activeColumn,
+                        columnIndex: $xeTable.getColumnIndex(activeColumn),
+                        $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
+                        _columnIndex,
+                        $table: $xeTable
+                      }
+                      if (!beforeTabMethod || beforeTabMethod(ttrParams) !== false) {
+                        evnt.preventDefault()
+                        // 最后一行按下Tab键，自动追加一行
+                        if (isLastTabAppendRow) {
+                          const newColumn = visibleColumn[0]
+                          if (_rowIndex >= afterFullData.length - 1 && _columnIndex >= visibleColumn.length - 1) {
+                            if (actived.row) {
+                              $xeTable.handleClearEdit(evnt)
+                            }
+                            $xeTable.insertAt({}, -1).then(({ row: newRow }) => {
+                              $xeTable.scrollToRow(newRow, newColumn)
+                              $xeTable.handleSelected({ ...activeParams, row: newRow, column: newColumn }, evnt)
+                            })
+                            $xeTable.dispatchEvent('tab-append-row', ttrParams, evnt)
+                            return
+                          }
+                        }
+                        if (tabMethod) {
+                          tabMethod(ttrParams)
+                        } else {
+                          $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
+                        }
+                      }
+                    } else {
+                      const etrParams = {
+                        row: activeRow,
+                        rowIndex: $xeTable.getRowIndex(activeRow),
+                        $rowIndex: $xeTable.getVMRowIndex(activeRow),
+                        _rowIndex,
+                        column: activeColumn,
+                        columnIndex: $xeTable.getColumnIndex(activeColumn),
+                        $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
+                        _columnIndex,
+                        $table: $xeTable
+                      }
+                      if (!beforeEnterMethod || beforeEnterMethod(etrParams) !== false) {
+                        evnt.preventDefault()
+                        // 最后一行按下回车键，自动追加一行
+                        if (isLastEnterAppendRow) {
+                          if (_rowIndex >= afterFullData.length - 1) {
+                            $xeTable.insertAt({}, -1).then(({ row: newRow }) => {
+                              $xeTable.scrollToRow(newRow, activeColumn)
+                              $xeTable.handleSelected({ ...activeParams, row: newRow }, evnt)
+                            })
+                            $xeTable.dispatchEvent('enter-append-row', etrParams, evnt)
+                            return
+                          }
+                        }
+                        if (enterMethod) {
+                          enterMethod(etrParams)
+                        } else {
                           if (actived.row) {
                             $xeTable.handleClearEdit(evnt)
                           }
-                          $xeTable.insertAt({}, -1).then(({ row: newRow }) => {
-                            $xeTable.scrollToRow(newRow, newColumn)
-                            $xeTable.handleSelected({ ...activeParams, row: newRow, column: newColumn }, evnt)
-                          })
-                          $xeTable.dispatchEvent('tab-append-row', ttrParams, evnt)
-                          return
+                          $xeTable.moveEnterSelected(activeParams, isLeftArrow, false, isRightArrow, true, evnt)
                         }
-                      }
-                      if (tabMethod) {
-                        tabMethod(ttrParams)
-                      } else {
-                        $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
-                      }
-                    }
-                  } else {
-                    const etrParams = {
-                      row: activeRow,
-                      rowIndex: $xeTable.getRowIndex(activeRow),
-                      $rowIndex: $xeTable.getVMRowIndex(activeRow),
-                      _rowIndex,
-                      column: activeColumn,
-                      columnIndex: $xeTable.getColumnIndex(activeColumn),
-                      $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
-                      _columnIndex,
-                      $table: $xeTable
-                    }
-                    if (!beforeEnterMethod || beforeEnterMethod(etrParams) !== false) {
-                      evnt.preventDefault()
-                      // 最后一行按下回车键，自动追加一行
-                      if (isLastEnterAppendRow) {
-                        if (_rowIndex >= afterFullData.length - 1) {
-                          $xeTable.insertAt({}, -1).then(({ row: newRow }) => {
-                            $xeTable.scrollToRow(newRow, activeColumn)
-                            $xeTable.handleSelected({ ...activeParams, row: newRow }, evnt)
-                          })
-                          $xeTable.dispatchEvent('enter-append-row', etrParams, evnt)
-                          return
-                        }
-                      }
-                      if (enterMethod) {
-                        enterMethod(etrParams)
-                      } else {
-                        if (actived.row) {
-                          $xeTable.handleClearEdit(evnt)
-                        }
-                        $xeTable.moveEnterSelected(activeParams, isLeftArrow, false, isRightArrow, true, evnt)
                       }
                     }
                   }
@@ -8371,7 +8383,7 @@ export default defineVxeComponent({
           } else if (operArrow && keyboardConfig && keyboardOpts.isArrow) {
             if (!isEditStatus) {
               // 如果按下了方向键
-              if (mouseOpts.selected && selected.row && selected.column) {
+              if (mouseOpts.selected && selected.row && selectColumn) {
                 $xeTable.moveArrowSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
               } else {
                 // 当前行按键上下移动
@@ -8388,57 +8400,59 @@ export default defineVxeComponent({
             // 如果按下了 Tab 键切换
             if (selected.row || actived.row) {
               const activeRow = selected.row || actived.row
-              const activeColumn = selected.column || actived.column
-              const activeParams = selected.row ? selected.args : actived.args
-              const _rowIndex = $xeTable.getVTRowIndex(activeRow)
-              const _columnIndex = $xeTable.getVTColumnIndex(activeColumn)
-              const ttrParams = {
-                row: activeRow,
-                rowIndex: $xeTable.getRowIndex(activeRow),
-                $rowIndex: $xeTable.getVMRowIndex(activeRow),
-                _rowIndex,
-                column: activeColumn,
-                columnIndex: $xeTable.getColumnIndex(activeColumn),
-                $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
-                _columnIndex,
-                $table: $xeTable
-              }
-              if (!beforeTabMethod || beforeTabMethod(ttrParams) !== false) {
-                evnt.preventDefault()
-                // 最后一行按下Tab键，自动追加一行
-                if (isLastTabAppendRow) {
-                  const newColumn = visibleColumn[0]
-                  if (_rowIndex >= afterFullData.length - 1 && _columnIndex >= visibleColumn.length - 1) {
+              const activeColumn = selectColumn || actived.column
+              if (activeColumn) {
+                const activeParams = selected.row ? selected.args : actived.args
+                const _rowIndex = $xeTable.getVTRowIndex(activeRow)
+                const _columnIndex = $xeTable.getVTColumnIndex(activeColumn)
+                const ttrParams = {
+                  row: activeRow,
+                  rowIndex: $xeTable.getRowIndex(activeRow),
+                  $rowIndex: $xeTable.getVMRowIndex(activeRow),
+                  _rowIndex,
+                  column: activeColumn as VxeTableDefines.ColumnInfo,
+                  columnIndex: $xeTable.getColumnIndex(activeColumn),
+                  $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
+                  _columnIndex,
+                  $table: $xeTable
+                }
+                if (!beforeTabMethod || beforeTabMethod(ttrParams) !== false) {
+                  evnt.preventDefault()
+                  // 最后一行按下Tab键，自动追加一行
+                  if (isLastTabAppendRow) {
+                    const newColumn = visibleColumn[0]
+                    if (_rowIndex >= afterFullData.length - 1 && _columnIndex >= visibleColumn.length - 1) {
+                      if (actived.row) {
+                        $xeTable.handleClearEdit(evnt)
+                      }
+                      $xeTable.insertAt({}, -1).then(({ row: newRow }) => {
+                        $xeTable.scrollToRow(newRow, newColumn)
+                        $xeTable.handleSelected({ ...activeParams, row: newRow, column: newColumn }, evnt)
+                      })
+                      $xeTable.dispatchEvent('tab-append-row', ttrParams, evnt)
+                      return
+                    }
+                  }
+                  if (tabMethod) {
+                    tabMethod(ttrParams)
+                  } else {
                     if (actived.row) {
                       $xeTable.handleClearEdit(evnt)
                     }
-                    $xeTable.insertAt({}, -1).then(({ row: newRow }) => {
-                      $xeTable.scrollToRow(newRow, newColumn)
-                      $xeTable.handleSelected({ ...activeParams, row: newRow, column: newColumn }, evnt)
-                    })
-                    $xeTable.dispatchEvent('tab-append-row', ttrParams, evnt)
-                    return
+                    $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
                   }
-                }
-                if (tabMethod) {
-                  tabMethod(ttrParams)
-                } else {
-                  if (actived.row) {
-                    $xeTable.handleClearEdit(evnt)
-                  }
-                  $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
                 }
               }
             }
-          } else if (keyboardConfig && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selected.row || selected.column)) {
+          } else if (keyboardConfig && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selected.row || selectColumn)) {
             // 如果是删除键
             if (!isEditStatus) {
               const { delMethod } = keyboardOpts
               const params = {
                 row: selected.row,
                 rowIndex: $xeTable.getRowIndex(selected.row),
-                column: selected.column,
-                columnIndex: $xeTable.getColumnIndex(selected.column),
+                column: selectColumn as VxeTableDefines.ColumnInfo,
+                columnIndex: $xeTable.getColumnIndex(selectColumn),
                 $table: $xeTable,
                 $grid: $xeGrid,
                 $gantt: $xeGantt
@@ -8448,23 +8462,27 @@ export default defineVxeComponent({
                 if (delMethod) {
                   delMethod(params)
                 } else {
-                  setCellValue(selected.row, selected.column, null)
+                  const selectCellValue = getCellValue(selected.row, selectColumn)
+                  if (selectCellValue !== null) {
+                    $xeTable.handlePushStack()
+                    setCellValue(selected.row, selectColumn, null)
+                  }
                 }
                 // 如果按下 del 键，更新表尾数据
                 $xeTable.updateFooter()
                 dispatchEvent('cell-delete-value', params, evnt)
               }
             }
-          } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selected.row || selected.column)) {
+          } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selected.row || selectColumn)) {
             if (!isEditStatus) {
               const { backMethod } = keyboardOpts
               // 如果是删除键
-              if (keyboardOpts.isDel && isEnableConf(editConfig) && (selected.row || selected.column)) {
+              if (keyboardOpts.isDel && isEnableConf(editConfig) && (selected.row || selectColumn)) {
                 const params = {
                   row: selected.row,
                   rowIndex: $xeTable.getRowIndex(selected.row),
-                  column: selected.column,
-                  columnIndex: $xeTable.getColumnIndex(selected.column),
+                  column: selectColumn as VxeTableDefines.ColumnInfo,
+                  columnIndex: $xeTable.getColumnIndex(selectColumn),
                   $table: $xeTable,
                   $grid: $xeGrid,
                   $gantt: $xeGantt
@@ -8474,8 +8492,9 @@ export default defineVxeComponent({
                   if (backMethod) {
                     backMethod(params)
                   } else {
-                    setCellValue(selected.row, selected.column, null)
-                    $xeTable.handleEdit(selected.args, evnt)
+                    $xeTable.handleEdit(params, evnt, {
+                      isClear: true
+                    })
                   }
                   dispatchEvent('cell-backspace-value', params, evnt)
                 }
@@ -8498,6 +8517,18 @@ export default defineVxeComponent({
                 .then(() => $xeTable.scrollToRow(parentRow))
                 .then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
             }
+          } else if (keyboardConfig && keyboardOpts.isUndoRedo && isControlKey && (isZ || isY) && !hasEventInputTarget(evnt.target)) {
+            if (evnt.target) {
+              if (isY || (hasShiftKey && isZ)) {
+              // 恢复被撤销的操作：Ctrl + Y 或 Ctrl + Shift + Z
+                evnt.preventDefault()
+                $xeTable.handleRedoStackEvent(evnt)
+              } else if (isZ) {
+              // ‌撤销上一步操作‌：Ctrl + Z
+                evnt.preventDefault()
+                $xeTable.handleUndoStackEvent(evnt)
+              }
+            }
           } else if (keyboardConfig && isEnableConf(editConfig) && keyboardOpts.isEdit && !isControlKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
             const { editMode, editMethod } = keyboardOpts
             // 启用编辑后，空格键功能将失效
@@ -8505,26 +8536,29 @@ export default defineVxeComponent({
             //   evnt.preventDefault()
             // }
             // 如果是按下非功能键之外允许直接编辑
-            if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
+            if (selectColumn && selected.row && isEnableConf(selectColumn.editRender)) {
               const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
               const params = {
                 row: selected.row,
                 rowIndex: $xeTable.getRowIndex(selected.row),
-                column: selected.column,
-                columnIndex: $xeTable.getColumnIndex(selected.column),
+                column: selectColumn,
+                columnIndex: $xeTable.getColumnIndex(selectColumn),
                 $table: $xeTable,
                 $grid: $xeGrid,
                 $gantt: $xeGantt
               }
-              if (!beforeEditMethod || beforeEditMethod({ ...selected.args, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })) {
+              if (!beforeEditMethod || beforeEditMethod(params)) {
                 if (editMethod) {
                   editMethod(params)
                 } else {
+                  let isClearValue = false
                   // 追加方式与覆盖式
                   if (editMode !== 'insert') {
-                    setCellValue(selected.row, selected.column, null)
+                    isClearValue = true
                   }
-                  $xeTable.handleEdit(selected.args, evnt)
+                  $xeTable.handleEdit(params, evnt, {
+                    isClear: isClearValue
+                  })
                 }
               }
             }
@@ -8889,6 +8923,99 @@ export default defineVxeComponent({
         })
       }
       return nextTick()
+    }
+
+    const truncateStackHistory = () => {
+      const { stackHistoryStore } = internalData
+      const { undoStacks } = stackHistoryStore
+      const undoRedoHistoryOpts = computeUndoRedoHistoryOpts.value
+      const { stackSize } = undoRedoHistoryOpts
+      if (undoStacks.length > XEUtils.toNumber(stackSize)) {
+        undoStacks.shift()
+      }
+    }
+
+    /**
+     * 生成快照数据
+     */
+    const getSnapshotStackData = () => {
+      const { editStore } = reactData
+      const { afterFullData } = internalData
+      const { selected, actived } = editStore
+      const { row: selectRow, column: selectColumn } = selected
+      const { row: editRow, column: editColumn } = actived
+      const stackObj: VxeTableDefines.HistoryStackObj = {
+        selectActiveInfo: selectRow && selectColumn
+          ? {
+              rowid: getRowid($xeTable, selectRow),
+              colid: selectColumn.id
+            }
+          : undefined,
+        editActiveInfo: editRow && editColumn
+          ? {
+              rowid: getRowid($xeTable, editRow),
+              colid: editColumn.id
+            }
+          : undefined,
+        visibleData: XEUtils.clone(afterFullData, true),
+        visibleColumn: []
+      }
+      return $xeTable.getCellAreaPushStackObj ? $xeTable.getCellAreaPushStackObj(stackObj) : stackObj
+    }
+
+    /**
+     * 刷新栈视图
+     */
+    const handleUpdateSnapshotStackData = (stackObj: VxeTableDefines.HistoryStackObj | null | undefined) => {
+      const { editStore } = reactData
+      const { fullAllDataRowIdData, fullColumnIdData } = internalData
+      if (!stackObj) {
+        return
+      }
+      const { visibleData, editActiveInfo, selectActiveInfo } = stackObj
+      const afterFullList = visibleData.map(item => {
+        const rowid = getRowid($xeTable, item)
+        const rest = fullAllDataRowIdData[rowid]
+        let row = item
+        if (rest) {
+          row = rest.row
+          Object.assign(row, item)
+        }
+        return row
+      })
+
+      internalData.afterFullData = afterFullList
+      if ($xeTable.handleCellAreaSnapshotStackData) {
+        $xeTable.handleCellAreaSnapshotStackData(stackObj)
+      } else {
+        const { selected } = editStore
+        const mouseOpts = computeMouseOpts.value
+        let selectRowid = ''
+        let selectColid = ''
+        if (editActiveInfo) {
+          selectRowid = editActiveInfo.rowid
+          selectColid = editActiveInfo.colid
+        } else if (selectActiveInfo) {
+          selectRowid = selectActiveInfo.rowid
+          selectColid = selectActiveInfo.colid
+        }
+        if (selectRowid && selectColid && mouseOpts.selected) {
+          const editRow = fullAllDataRowIdData[selectRowid] ? fullAllDataRowIdData[selectRowid].row : null
+          const editColumn = fullColumnIdData[selectColid] ? fullColumnIdData[selectColid].column : null
+          if (editRow && editColumn) {
+            const params = {
+              row: editRow,
+              column: editColumn
+            }
+            selected.row = editRow
+            selected.column = editColumn
+            selected.args = params
+            nextTick(() => {
+              $xeTable.addCellSelectedClass()
+            })
+          }
+        }
+      }
     }
 
     const callSlot = <T>(slotFunc: ((params: T) => VxeComponentSlotType | VxeComponentSlotType[]) | string | null, params: T): VxeComponentSlotType[] => {
@@ -10898,6 +11025,7 @@ export default defineVxeComponent({
               tableFullData.splice(ntfIndex, 0, dragRow)
             }
 
+            $xeTable.handleClearStack()
             $xeTable.handleTableData(treeConfig && transform)
             $xeTable.cacheRowMap(false)
             updateScrollYStatus()
@@ -11566,6 +11694,7 @@ export default defineVxeComponent({
               }
             })
 
+            $xeTable.handleClearStack()
             if (mouseConfig) {
               if ($xeTable.clearSelected) {
                 $xeTable.clearSelected()
@@ -12580,6 +12709,54 @@ export default defineVxeComponent({
       },
       handleUpdateAggData () {
         return loadTableData(internalData.tableSynchData, false, true)
+      },
+      handlePushStack () {
+        const keyboardOpts = computeKeyboardOpts.value
+        if (!keyboardOpts.isUndoRedo) {
+          return
+        }
+        const { stackHistoryStore } = internalData
+        const stackObj = getSnapshotStackData()
+        stackHistoryStore.undoStacks.push(stackObj)
+        stackHistoryStore.redoStacks = []
+        truncateStackHistory()
+      },
+      handleUndoStackEvent (evnt) {
+        const { stackHistoryStore } = internalData
+        const { undoStacks, redoStacks } = stackHistoryStore
+        if (undoStacks.length) {
+          const stackObj = getSnapshotStackData()
+          redoStacks.push(stackObj)
+          handleUpdateSnapshotStackData(undoStacks.pop())
+          if (evnt) {
+            dispatchEvent('undo', {}, evnt)
+          }
+          return nextTick(() => {
+            return { status: true }
+          })
+        }
+        return Promise.resolve({ status: false })
+      },
+      handleRedoStackEvent (evnt) {
+        const { stackHistoryStore } = internalData
+        const { undoStacks, redoStacks } = stackHistoryStore
+        if (redoStacks.length) {
+          const stackObj = getSnapshotStackData()
+          undoStacks.push(stackObj)
+          handleUpdateSnapshotStackData(redoStacks.pop())
+          if (evnt) {
+            dispatchEvent('redo', {}, evnt)
+          }
+          return nextTick(() => {
+            return { status: true }
+          })
+        }
+        return Promise.resolve({ status: false })
+      },
+      handleClearStack () {
+        const { stackHistoryStore } = internalData
+        stackHistoryStore.undoStacks = []
+        stackHistoryStore.redoStacks = []
       },
       updateZindex () {
         if (props.zIndex) {
@@ -13680,7 +13857,7 @@ export default defineVxeComponent({
     })
 
     onMounted(() => {
-      const { exportConfig, importConfig, treeConfig, minHeight } = props
+      const { editConfig, exportConfig, importConfig, treeConfig, minHeight, keepSource } = props
       const { scrollXStore, scrollYStore } = internalData
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
@@ -13736,8 +13913,15 @@ export default defineVxeComponent({
       if (!(props.rowId || rowOpts.keyField) && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
         warnLog('vxe.error.reqProp', ['row-config.keyField'])
       }
-      if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
-        warnLog('vxe.error.reqProp', ['keep-source'])
+      if (editConfig) {
+        if (!keepSource) {
+          if (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) {
+            warnLog('vxe.error.reqSupportProp', ['edit-config.showStatus | showUpdateStatus | showInsertStatus', 'keep-source'])
+          }
+          // if (keyboardOpts.isUndoRedo) {
+          //   warnLog('vxe.error.reqSupportProp', ['keyboard-config.isUndoRedo', 'keep-source'])
+          // }
+        }
       }
       // if (treeConfig && (treeOpts.showLine || treeOpts.line) && !showOverflow) {
       //   warnLog('vxe.error.reqProp', ['show-overflow'])
@@ -13809,7 +13993,7 @@ export default defineVxeComponent({
       if (rowOpts.height && !props.showOverflow) {
         warnLog('vxe.error.notProp', ['table.show-overflow'])
       }
-      if (!$xeTable.triggerClAreaModnEvent) {
+      if (!$xeTable.triggerCelllAreaMnEvent) {
         if (props.areaConfig) {
           warnLog('vxe.error.notProp', ['area-config'])
         }

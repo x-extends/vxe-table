@@ -307,8 +307,8 @@ export const tableProps = {
   virtualYConfig: Object as PropType<VxeTablePropTypes.VirtualYConfig>,
   // 滚动条配置项
   scrollbarConfig: Object as PropType<VxeTablePropTypes.ScrollbarConfig>,
-  // 可撤销配置项
-  undoHistoryConfig: Object as PropType<VxeTablePropTypes.UndoHistoryConfig>,
+  // 撤销/恢复历史配置项
+  undoRedoHistoryConfig: Object as PropType<VxeTablePropTypes.UndoRedoHistoryConfig>,
   // （即将废弃）优化相关
   animat: {
     type: Boolean as PropType<VxeTablePropTypes.Animat>,
