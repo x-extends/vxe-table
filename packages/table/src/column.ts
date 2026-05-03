@@ -1,7 +1,7 @@
-import { PropType } from 'vue'
-import Cell from './cell'
+import { PropType, CreateElement } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import { assembleColumn, destroyColumn } from './util'
+import Cell from './cell'
 
 import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
@@ -171,8 +171,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeColumn',
   props: columnProps,
   provide () {
+    const $xeColumn = this
     return {
-      $xeColumn: this,
+      $xeColumn,
       $xeGrid: null,
       $xeGantt: null
     }
@@ -186,10 +187,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
     }
   },
   watch: columnWatch,
-  created (this: any) {
+  created (this) {
+    const $xeColumn = this
+    const props = $xeColumn
     const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
 
-    this.columnConfig = this.createColumn($xeTable, this)
+    this.columnConfig = Cell.createColumn($xeTable, props)
   },
   mounted () {
     this.columnConfig.slots = this.$scopedSlots
@@ -198,8 +201,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
   destroyed () {
     destroyColumn(this)
   },
-  render (this: any, h: any) {
+  render (h: CreateElement) {
     return h('div', this.$slots.default)
   },
-  methods: Cell
+  methods: Cell as any
 }) /* define-vxe-component end */

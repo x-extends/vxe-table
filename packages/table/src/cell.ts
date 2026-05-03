@@ -344,8 +344,8 @@ function renderFooterHandle (h: CreateElement, params: VxeTableDefines.CellRende
 }
 
 export const Cell = {
-  createColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any) {
-    const { type } = _vm
+  createColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, columnOpts: VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo) {
+    const { type } = columnOpts
     const renConfs: any = {
       renderHeader: renderHeaderHandle,
       renderCell: renderCellHandle,
@@ -354,7 +354,7 @@ export const Cell = {
     if (type === 'expand') {
       renConfs.renderData = Cell.renderExpandData
     }
-    return createColumn($xeTable, _vm, renConfs)
+    return createColumn($xeTable, columnOpts, renConfs)
   },
   /**
    * 列头标题
@@ -376,7 +376,7 @@ export const Cell = {
       const compConf = renderer.get(renderOpts.name)
       const rtHeader = compConf ? (compConf.renderTableHeader || compConf.renderHeader) : null
       if (rtHeader) {
-        return getSlotVNs(renderTitleContent(h, params, rtHeader.call($table, h, renderOpts, params)))
+        return getSlotVNs(renderTitleContent(h, params, rtHeader.call($table, h, renderOpts, params))) as VNode[]
       }
     }
     return renderTitleContent(h, params, formatText(column.getTitle(), 1))
@@ -1280,6 +1280,6 @@ export const Cell = {
     }
     return Cell.renderDefaultCell(h, cellParams)
   }
-} as any
+}
 
 export default Cell

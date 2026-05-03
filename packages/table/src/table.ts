@@ -1451,11 +1451,11 @@ export default {
       }
       return []
     },
-    computeUndoHistoryOpts () {
+    computeUndoRedoHistoryOpts () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
-      return Object.assign({}, getConfig().table.undoHistoryConfig, props.undoHistoryConfig)
+      return Object.assign({}, getConfig().table.undoRedoHistoryConfig, props.undoRedoHistoryConfig)
     },
     tabsResizeFlag () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -1662,7 +1662,7 @@ export default {
 
     handleKeyField($xeTable)
 
-    const { exportConfig, importConfig, treeConfig, minHeight } = props
+    const { editConfig, exportConfig, importConfig, treeConfig, minHeight, keepSource } = props
     const { scrollXStore, scrollYStore } = internalData
     const columnOpts = $xeTable.computeColumnOpts
     const columnDragOpts = $xeTable.computeColumnDragOpts
@@ -1698,8 +1698,15 @@ export default {
     if (!(props.rowId || rowOpts.keyField) && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
       warnLog('vxe.error.reqProp', ['row-config.keyField'])
     }
-    if (props.editConfig && editOpts.showStatus && !props.keepSource) {
-      warnLog('vxe.error.reqProp', ['keep-source'])
+    if (editConfig) {
+      if (!keepSource) {
+        if (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) {
+          warnLog('vxe.error.reqSupportProp', ['edit-config.showStatus | showUpdateStatus | showInsertStatus', 'keep-source'])
+        }
+        // if (keyboardOpts.isUndoRedo) {
+        //   warnLog('vxe.error.reqSupportProp', ['keyboard-config.isUndoRedo', 'keep-source'])
+        // }
+      }
     }
     // if (treeConfig && (treeOpts.showLine || treeOpts.line) && !showOverflow) {
     //   warnLog('vxe.error.reqProp', ['show-overflow'])
@@ -1773,7 +1780,7 @@ export default {
     if (rowOpts.height && !this.showOverflow) {
       warnLog('vxe.error.notProp', ['table.show-overflow'])
     }
-    if (!$xeTable.triggerClAreaModnEvent) {
+    if (!$xeTable.triggerCelllAreaMnEvent) {
       if (props.areaConfig) {
         warnLog('vxe.error.notProp', ['area-config'])
       }

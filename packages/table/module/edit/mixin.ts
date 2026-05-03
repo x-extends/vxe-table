@@ -45,7 +45,7 @@ function syncActivedCell ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   const editOpts = $xeTable.computeEditOpts
   const { actived } = editStore
   const { row, column } = actived
-  if (row || column) {
+  if (row && column) {
     if (editOpts.mode === 'row') {
       tableColumn.forEach((column) => setEditColumnModel(row, column))
     } else {
@@ -94,6 +94,7 @@ function insertTreeRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
       fullAllDataRowIdData[rowid] = rest
     }
   })
+  $xeTable.handleClearStack()
 }
 
 // function insertGroupRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, newRecords: any[], isAppend: boolean) {
@@ -153,6 +154,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
           mergeItem.row = mergeRowIndex + newRecords.length
         }
       })
+      $xeTable.handleClearStack()
     }
   } else {
     if (targetRow === -1) {
@@ -175,6 +177,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
           afterFullData.push(item)
           tableFullData.push(item)
         })
+        $xeTable.handleClearStack()
       }
     } else {
       // 如果为虚拟树
@@ -226,6 +229,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
               parentChilds.splice(targetIndex, 0, ...treeRecords)
             }
           }
+          $xeTable.handleClearStack()
         } else {
           warnLog('vxe.error.unableInsert')
           insertTreeRow($xeTable, newRecords, true)
@@ -272,6 +276,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
             mergeItem.rowspan = mergeRowspan + newRecords.length
           }
         })
+        $xeTable.handleClearStack()
       }
     }
   }
@@ -358,10 +363,10 @@ function handleClearEdit ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
       return $xeTable.$nextTick()
     }
     syncActivedCell($xeTable)
+    $xeTable.updateFooter()
     actived.args = null
     actived.row = null
     actived.column = null
-    $xeTable.updateFooter()
     $xeTable.dispatchEvent('edit-closed', {
       row,
       rowIndex: $xeTable.getRowIndex(row),
@@ -383,7 +388,11 @@ function handleClearEdit ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   return $xeTable.$nextTick().then(() => $xeTable.updateCellAreas())
 }
 
-function handleEditActive ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, params: any, evnt: Event | null, isFocus: boolean, isPos: boolean) {
+function handleEditActive ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, params: any, evnt: Event | null, options: {
+  isClear?: boolean
+  isFocus?: boolean
+  isPos?: boolean
+}) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const $xeGrid = $xeTable.$xeGrid
@@ -395,6 +404,7 @@ function handleEditActive ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   const { actived, focused } = editStore
   const { row, column } = params
   const { editRender } = column
+  const { isFocus, isPos, isClear } = options
   const cell = (params.cell || $xeTable.getCellElement(row, column))
   const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
   params.cell = cell
@@ -421,6 +431,10 @@ function handleEditActive ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
           actived.args = params
           actived.row = row
           actived.column = column
+          $xeTable.handlePushStack()
+          if (isClear) {
+            setCellValue(row, column, null)
+          }
           if (mode === 'row') {
             tableColumn.forEach((column: any) => getEditColumnModel(row, column))
           } else {
@@ -465,7 +479,7 @@ function handleEditActive ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
             $xeTable.clearCopyCellArea()
           }
         }
-        if (oldColumn !== column) {
+        if (oldColumn && oldColumn !== column) {
           const { model: oldModel } = oldColumn
           if (oldModel.update) {
             setCellValue(row, oldColumn, oldModel.value)
@@ -491,11 +505,16 @@ function handleEditActive ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   return $xeTable.$nextTick()
 }
 
-function handleEditCell ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo, isPos: boolean) {
+function handleEditCell ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null, options: {
+  isClear?: boolean | undefined;
+  isFocus?: boolean | undefined;
+  isPos?: boolean | undefined;
+}) {
   const props = $xeTable
   const internalData = $xeTable as unknown as TableInternalData
 
   const { editConfig } = props
+  const { isPos } = options
   const column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
   if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender) && !$xeTable.isAggregateRecord(row)) {
     return Promise.resolve(isPos ? $xeTable.scrollToRow(row, column) : null).then(() => {
@@ -508,7 +527,7 @@ function handleEditCell ($xeTable: VxeTableConstructor & VxeTablePrivateMethods,
           columnIndex: $xeTable.getColumnIndex(column),
           cell,
           $table: $xeTable
-        }, null, isPos, isPos)
+        }, null, options)
         internalData._lastCallTime = Date.now()
       }
       return $xeTable.$nextTick()
@@ -661,6 +680,7 @@ export default {
       reactData.removeRowFlag++
       reactData.insertRowFlag++
       reactData.pendingRowFlag++
+      $xeTable.handleClearStack()
       $xeTable.cacheRowMap(false)
       $xeTable.handleTableData(treeConfig && transform)
       $xeTable.updateFooter()
@@ -789,10 +809,15 @@ export default {
     /**
      * 处理激活编辑
      */
-    handleEdit (params: any, evnt: any) {
+    handleEdit (params: any, evnt: any, options?: {
+      isClear?: boolean
+    }) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      return handleEditActive($xeTable, params, evnt, true, true)
+      return handleEditActive($xeTable, params, evnt, Object.assign({
+        isFocus: true,
+        isPos: true
+      }, options))
     },
     /**
      * @deprecated
@@ -967,7 +992,9 @@ export default {
     /**
      * 激活行编辑
      */
-    _setEditRow (row: any, fieldOrColumn: any) {
+    _setEditRow (row: any, fieldOrColumn?: boolean | string | VxeTableDefines.ColumnInfo<any> | null, options?: {
+      isClear?: boolean
+    }) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const internalData = $xeTable as unknown as TableInternalData
 
@@ -980,7 +1007,10 @@ export default {
           column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
         }
       }
-      return handleEditCell($xeTable, row, column, isPos)
+      return handleEditCell($xeTable, row, column, Object.assign({
+        isPos,
+        isFocus: isPos
+      }, options))
     },
     _setActiveCell (row: any, fieldOrColumn: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -992,10 +1022,15 @@ export default {
     /**
      * 激活单元格编辑
      */
-    _setEditCell (row: any, fieldOrColumn: any) {
+    _setEditCell (row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo<any> | null, options?: {
+      isClear?: boolean
+    }) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      return handleEditCell($xeTable, row, fieldOrColumn, true)
+      return handleEditCell($xeTable, row, fieldOrColumn, Object.assign({
+        isFocus: true,
+        isPos: true
+      }, options))
     },
     /**
      * 只对 trigger=dblclick 有效，选中单元格

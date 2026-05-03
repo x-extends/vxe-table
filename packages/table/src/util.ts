@@ -143,6 +143,11 @@ export function createInternalData (): TableInternalData {
     // 表尾高度
     tFooterHeight: 0,
 
+    stackHistoryStore: {
+      undoStacks: [],
+      redoStacks: []
+    },
+
     teleportToWrapperElem: null,
     popupToWrapperElem: null,
     customPopupToElem: null,
@@ -299,7 +304,7 @@ export function createReactData (): TableReactData {
     tooltipStore: {
       row: null,
       column: null,
-      content: null,
+      content: '',
       visible: false,
       type: null,
       currOpts: {}
@@ -833,12 +838,17 @@ export function getLastChildColumn (column: VxeTableDefines.ColumnInfo): VxeTabl
   return column
 }
 
-export function getCellValue (row: any, column: any) {
-  return XEUtils.get(row, column.field)
+export function getCellValue (row: any, column: VxeTableDefines.ColumnInfo | null) {
+  if (column) {
+    return XEUtils.get(row, column.field)
+  }
+  return null
 }
 
-export function setCellValue (row: any, column:any, value: any) {
-  return XEUtils.set(row, column.field, value)
+export function setCellValue (row: any, column: VxeTableDefines.ColumnInfo | null, value: any) {
+  if (column) {
+    XEUtils.set(row, column.field, value)
+  }
 }
 
 export function getRefElem (refEl: any) {
@@ -907,7 +917,7 @@ export function getColumnList (columns: VxeTableDefines.ColumnInfo[]) {
   return result
 }
 
-export function createColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, options: any, renderOptions: any): any {
+export function createColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, options: VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo, renderOptions: any): any {
   return isColumnInfo(options) ? options : new ColumnInfo($xeTable, options, renderOptions)
 }
 

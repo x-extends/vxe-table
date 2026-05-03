@@ -494,8 +494,8 @@ export default {
       const checkboxOpts = $xeTable.computeCheckboxOpts
       const mouseOpts = $xeTable.computeMouseOpts
       const editOpts = $xeTable.computeEditOpts
-      if (mouseConfig && mouseOpts.area && $xeTable.triggerClAreaModnEvent) {
-        return $xeTable.triggerClAreaModnEvent(evnt, params)
+      if (mouseConfig && mouseOpts.area && $xeTable.triggerCelllAreaMnEvent) {
+        return $xeTable.triggerCelllAreaMnEvent(evnt, params)
       } else {
         if (checkboxConfig && checkboxOpts.range) {
           handleCheckboxRangeEvent($xeTable, evnt, params)

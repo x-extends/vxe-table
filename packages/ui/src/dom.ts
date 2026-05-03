@@ -190,6 +190,11 @@ export function getAbsolutePos (elem: any) {
   return { boundingTop, top: scrollTop + boundingTop, boundingLeft, left: scrollLeft + boundingLeft, visibleHeight, visibleWidth }
 }
 
+export function hasEventInputTarget (target: EventTarget | Element | null) {
+  const tagName = target ? (target as Element).tagName : ''
+  return tagName && ['input', 'textarea'].includes((tagName.toLowerCase()))
+}
+
 const scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
 const scrollIntoView = 'scrollIntoView'
 
