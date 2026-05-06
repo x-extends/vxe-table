@@ -26,7 +26,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     }
   },
   watch: columnWatch,
-  created (this) {
+  created () {
     const $xeColgroup = this
     const props = $xeColgroup
     const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
@@ -34,6 +34,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
     this.columnConfig = Cell.createColumn($xeTable, props)
   },
   mounted () {
+    const $xeColgroup = this
+
     const { $scopedSlots } = this
     const columnSlots: {
       header?: any
@@ -43,10 +45,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
       columnSlots.header = $scopedSlots.header
     }
     this.columnConfig.slots = columnSlots
-    assembleColumn(this)
+    assembleColumn($xeColgroup)
   },
   destroyed () {
-    destroyColumn(this)
+    const $xeColgroup = this
+
+    destroyColumn($xeColgroup)
   },
   render (h: CreateElement) {
     return h('div', this.$slots.default)

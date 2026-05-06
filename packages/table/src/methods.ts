@@ -4498,10 +4498,11 @@ function getSnapshotStackData ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   const internalData = $xeTable as unknown as TableInternalData
 
   const { editStore } = reactData
-  const { afterFullData } = internalData
+  const { afterFullData, elemStore } = internalData
   const { selected, actived } = editStore
   const { row: selectRow, column: selectColumn } = selected
   const { row: editRow, column: editColumn } = actived
+  const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
   const stackObj: VxeTableDefines.HistoryStackObj = {
     selectActiveInfo: selectRow && selectColumn
       ? {
@@ -4515,6 +4516,10 @@ function getSnapshotStackData ($xeTable: VxeTableConstructor & VxeTablePrivateMe
           colid: editColumn.id
         }
       : undefined,
+    scrollInfo: {
+      top: bodyScrollElem ? bodyScrollElem.scrollTop : 0,
+      left: bodyScrollElem ? bodyScrollElem.scrollLeft : 0
+    },
     visibleData: XEUtils.clone(afterFullData, true),
     visibleColumn: []
   }
@@ -4533,7 +4538,7 @@ function handleUpdateSnapshotStackData ($xeTable: VxeTableConstructor & VxeTable
   if (!stackObj) {
     return
   }
-  const { visibleData, editActiveInfo, selectActiveInfo } = stackObj
+  const { visibleData, editActiveInfo, selectActiveInfo, scrollInfo } = stackObj
   const afterFullList = visibleData.map(item => {
     const rowid = getRowid($xeTable, item)
     const rest = fullAllDataRowIdData[rowid]
@@ -4573,6 +4578,7 @@ function handleUpdateSnapshotStackData ($xeTable: VxeTableConstructor & VxeTable
         selected.args = params
         $xeTable.$nextTick(() => {
           $xeTable.addCellSelectedClass()
+          $xeTable.scrollTo(scrollInfo)
         })
       }
     }
@@ -4662,7 +4668,9 @@ const tableMethods: any = {
    * 重置表格的一切数据状态
    */
   clearAll () {
-    return clearTableAllStatus(this)
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    return clearTableAllStatus($xeTable)
   },
   handleUpdateRowGroup (groupFields: any[]) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -8590,7 +8598,7 @@ const tableMethods: any = {
     reactData.isIndeterminate = halfSelect
   },
   checkSelectionStatus () {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     $xeTable.updateCheckboxStatus()
     $xeTable.updateAllCheckboxStatus()
@@ -8599,23 +8607,30 @@ const tableMethods: any = {
    * 获取单选框保留选中的行
    */
   getRadioReserveRecord (isFull: any) {
-    const { fullDataRowIdData, radioReserveRow, radioOpts, afterFullData, treeConfig, treeOpts } = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { treeConfig } = props
+    const { fullDataRowIdData, radioReserveRow, afterFullData } = internalData
+    const radioOpts = $xeTable.computeRadioOpts
+    const treeOpts = $xeTable.computeTreeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     if (radioOpts.reserve && radioReserveRow) {
-      const rowid = getRowid(this, radioReserveRow)
+      const rowid = getRowid($xeTable, radioReserveRow)
       if (isFull) {
         if (!fullDataRowIdData[rowid]) {
           return radioReserveRow
         }
       } else {
-        const rowkey = getRowkey(this)
+        const rowkey = getRowkey($xeTable)
         if (treeConfig) {
           const matchObj = XEUtils.findTree(afterFullData, row => rowid === XEUtils.get(row, rowkey), { children: childrenField })
           if (matchObj) {
             return radioReserveRow
           }
         } else {
-          if (!afterFullData.some((row: any) => rowid === XEUtils.get(row, rowkey))) {
+          if (!afterFullData.some((row) => rowid === XEUtils.get(row, rowkey))) {
             return radioReserveRow
           }
         }

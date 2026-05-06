@@ -187,7 +187,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     }
   },
   watch: columnWatch,
-  created (this) {
+  created () {
     const $xeColumn = this
     const props = $xeColumn
     const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
@@ -195,11 +195,15 @@ export default /* define-vxe-component start */ defineVxeComponent({
     this.columnConfig = Cell.createColumn($xeTable, props)
   },
   mounted () {
+    const $xeColumn = this
+
     this.columnConfig.slots = this.$scopedSlots
-    assembleColumn(this)
+    assembleColumn($xeColumn)
   },
   destroyed () {
-    destroyColumn(this)
+    const $xeColumn = this
+
+    destroyColumn($xeColumn)
   },
   render (h: CreateElement) {
     return h('div', this.$slots.default)

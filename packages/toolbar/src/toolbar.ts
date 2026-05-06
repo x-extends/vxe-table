@@ -151,8 +151,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
       $xeToolbar.$emit(type, createEvent(evnt, { $toolbar: $xeToolbar }, params))
     },
     fintTable () {
+      const $xeToolbar = this
+
       const { $children } = this.$parent
-      const selfIndex = $children.indexOf(this)
+      const selfIndex = $children.indexOf($xeToolbar)
       return XEUtils.find($children, (comp: any, index) => comp && comp.loadData && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
     },
     syncUpdate (params: {
@@ -816,7 +818,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }
 
       if ($xeTable) {
-        $xeTable.connect(this)
+        $xeTable.connect($xeToolbar)
       }
       const customOpts = $xeToolbar.computeCustomOpts
       if (customOpts.isFooter) {
