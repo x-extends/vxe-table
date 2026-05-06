@@ -8940,10 +8940,11 @@ export default defineVxeComponent({
      */
     const getSnapshotStackData = () => {
       const { editStore } = reactData
-      const { afterFullData } = internalData
+      const { afterFullData, elemStore } = internalData
       const { selected, actived } = editStore
       const { row: selectRow, column: selectColumn } = selected
       const { row: editRow, column: editColumn } = actived
+      const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
       const stackObj: VxeTableDefines.HistoryStackObj = {
         selectActiveInfo: selectRow && selectColumn
           ? {
@@ -8957,6 +8958,10 @@ export default defineVxeComponent({
               colid: editColumn.id
             }
           : undefined,
+        scrollInfo: {
+          top: bodyScrollElem ? bodyScrollElem.scrollTop : 0,
+          left: bodyScrollElem ? bodyScrollElem.scrollLeft : 0
+        },
         visibleData: XEUtils.clone(afterFullData, true),
         visibleColumn: []
       }
@@ -8972,7 +8977,7 @@ export default defineVxeComponent({
       if (!stackObj) {
         return
       }
-      const { visibleData, editActiveInfo, selectActiveInfo } = stackObj
+      const { visibleData, editActiveInfo, selectActiveInfo, scrollInfo } = stackObj
       const afterFullList = visibleData.map(item => {
         const rowid = getRowid($xeTable, item)
         const rest = fullAllDataRowIdData[rowid]
@@ -9012,6 +9017,7 @@ export default defineVxeComponent({
             selected.args = params
             nextTick(() => {
               $xeTable.addCellSelectedClass()
+              $xeTable.scrollTo(scrollInfo)
             })
           }
         }
