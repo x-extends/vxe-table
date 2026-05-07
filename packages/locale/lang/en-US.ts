@@ -172,7 +172,15 @@ export default {
         colFixedMax: 'Freeze columns (up to {0} columns)',
         fixedLeft: 'Left side',
         fixedUnset: 'Not set',
-        fixedRight: 'Right side'
+        fixedRight: 'Right side',
+        moveUp: 'Up',
+        moveDn: 'Down',
+        putTop: 'Top',
+        putBottom: 'Bottom',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {

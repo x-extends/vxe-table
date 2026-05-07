@@ -117,6 +117,7 @@ VxeUI.setConfig({
       allowResizable: true,
       allowFixed: true,
       allowSort: true,
+      showSortDragButton: true,
       showFooter: true,
       placement: 'top-right',
       //  storage: false,

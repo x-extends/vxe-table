@@ -172,7 +172,15 @@ export default {
         colFixedMax: '凍結列（最多 {0} 列）',
         fixedLeft: '左側',
         fixedUnset: '不設置',
-        fixedRight: '右側'
+        fixedRight: '右側',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {

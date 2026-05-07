@@ -6,7 +6,7 @@ import { getTpImg, addClass, removeClass, hasControlKey } from '../../../ui/src/
 import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
-import type { VxeButtonEvents } from 'vxe-pc-ui'
+import type { VxeButtonEvents, VxeButtonDefines } from 'vxe-pc-ui'
 import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableCustomPanelConstructor, TableCustomPanelReactData, TableCustomPanelInternalData, TableCustomPanelPrivateRef, TableCustomPanelPrivateComputed } from '../../../../types'
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
@@ -134,11 +134,11 @@ export default defineVxeComponent({
       const { customColumnList } = tableReactData
       const matchObj = XEUtils.findTree(customColumnList, item => item === column)
       if (matchObj && matchObj.parent) {
-        const { parent } = matchObj
-        if (parent.children && parent.children.length) {
-          parent.renderVisible = parent.children.every((column) => column.renderVisible)
-          parent.halfVisible = !parent.renderVisible && parent.children.some((column) => column.renderVisible || column.halfVisible)
-          handleOptionCheck(parent)
+        const { parent: parentItem } = matchObj
+        if (parentItem.children && parentItem.children.length) {
+          parentItem.renderVisible = parentItem.children.every((column) => column.renderVisible)
+          parentItem.halfVisible = !parentItem.renderVisible && parentItem.children.some((column) => column.renderVisible || column.halfVisible)
+          handleOptionCheck(parentItem)
         }
       }
     }
@@ -475,8 +475,8 @@ export default defineVxeComponent({
                 }
               }
 
-              XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
-                if (!parent) {
+              XEUtils.eachTree(collectColumn, (column, index, items, path, parentItem) => {
+                if (!parentItem) {
                   const sortIndex = index + 1
                   column.renderSortNumber = sortIndex
                 }
@@ -517,10 +517,7 @@ export default defineVxeComponent({
               tableReactData.customColumnList = collectColumn.slice(0)
               $xeTable.handleColDragSwapColumn()
             }
-            customPanelInternalData.customDragTime = setTimeout(() => {
-              tableReactData.isCustomDragStatus = false
-              customPanelInternalData.customDragTime = undefined
-            }, 350)
+            clearDragAnimateStatus()
           }).catch(() => {
           })
         }
@@ -568,6 +565,79 @@ export default defineVxeComponent({
         customPanelInternalData.prevDragCol = column
         customPanelInternalData.prevDragPos = dragPos
         showDropTip(evnt, optEl, true, dragPos)
+      }
+    }
+
+    const clearDragAnimateStatus = () => {
+      customPanelInternalData.customDragTime = setTimeout(() => {
+        tableReactData.isCustomDragStatus = false
+        customPanelInternalData.customDragTime = undefined
+      }, 350)
+    }
+
+    const sortMoveUpEvent = (evntParame: VxeButtonDefines.ClickEventParams, column: VxeTableDefines.ColumnInfo) => {
+      const { customColumnList } = tableReactData
+      const matchObj = XEUtils.findTree(customColumnList, item => item === column)
+      if (matchObj) {
+        const { item, items, index } = matchObj
+        if (index > 0) {
+          tableReactData.isCustomDragStatus = true
+          nextTick(() => {
+            items.splice(index, 1)
+            items.splice(index - 1, 0, item)
+            clearDragAnimateStatus()
+          })
+        }
+      }
+    }
+
+    const sortMoveDnEvent = (evntParame: VxeButtonDefines.ClickEventParams, column: VxeTableDefines.ColumnInfo) => {
+      const { customColumnList } = tableReactData
+      const matchObj = XEUtils.findTree(customColumnList, item => item === column)
+      if (matchObj) {
+        const { item, items, index } = matchObj
+        if (index < items.length - 1) {
+          tableReactData.isCustomDragStatus = true
+          nextTick(() => {
+            items.splice(index, 1)
+            items.splice(index + 1, 0, item)
+            clearDragAnimateStatus()
+          })
+        }
+      }
+    }
+
+    const sortMoveTopEvent = (evntParame: VxeButtonDefines.ClickEventParams, column: VxeTableDefines.ColumnInfo) => {
+      const { customColumnList } = tableReactData
+      const matchObj = XEUtils.findTree(customColumnList, item => item === column)
+      if (matchObj) {
+        const { item, items, index, parent: parentItem } = matchObj
+        if (parentItem || index > 0) {
+          tableReactData.isCustomDragStatus = true
+          nextTick(() => {
+            item.parentId = null
+            items.splice(index, 1)
+            customColumnList.unshift(item)
+            clearDragAnimateStatus()
+          })
+        }
+      }
+    }
+
+    const sortMoveBottomEvent = (evntParame: VxeButtonDefines.ClickEventParams, column: VxeTableDefines.ColumnInfo) => {
+      const { customColumnList } = tableReactData
+      const matchObj = XEUtils.findTree(customColumnList, item => item === column)
+      if (matchObj) {
+        const { item, items, index, parent: parentItem } = matchObj
+        if (parentItem || index < items.length - 1) {
+          tableReactData.isCustomDragStatus = true
+          nextTick(() => {
+            item.parentId = null
+            items.splice(index, 1)
+            customColumnList.push(item)
+            clearDragAnimateStatus()
+          })
+        }
       }
     }
 
@@ -627,7 +697,7 @@ export default defineVxeComponent({
       const { immediate } = customOpts
       const columnDragOpts = computeColumnDragOpts.value
       const { popupStyle } = customStore
-      const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement } = customOpts
+      const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement, showSortDragButton, showSortMoveButton, showSortPutButton } = customOpts
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
       const vSize = computeSize.value
       const { isCrossDrag } = columnDragOpts
@@ -655,7 +725,7 @@ export default defineVxeComponent({
         isAllIndeterminate,
         isCustomStatus
       }
-      XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
+      XEUtils.eachTree(customColumnList, (column, index, items, path, parentItem) => {
         const isVisible = visibleMethod ? visibleMethod({ $table: $xeTable, column }) : true
         if (isVisible) {
           const isChecked = column.renderVisible
@@ -664,6 +734,7 @@ export default defineVxeComponent({
           const colTitle = formatText(column.getTitle(), 1)
           const isDisabled = checkMethod ? !checkMethod({ $table: $xeTable, column }) : false
           const isHidden = !isChecked
+          const showSortBtn = ((isCrossDrag ? immediate : false) || column.level === 1)
           colVNs.push(
             h('li', {
               key: column.id,
@@ -698,7 +769,7 @@ export default defineVxeComponent({
               h('div', {
                 class: 'vxe-table-custom--name-option'
               }, [
-                allowSort && ((isCrossDrag ? immediate : false) || column.level === 1)
+                allowSort && showSortDragButton && showSortBtn
                   ? h('div', {
                     class: 'vxe-table-custom--sort-option'
                   }, [
@@ -731,7 +802,59 @@ export default defineVxeComponent({
                     class: 'vxe-table-custom--checkbox-label'
                   }, colTitle)
               ]),
-              !parent && allowFixed
+              showSortBtn && (showSortMoveButton || showSortPutButton)
+                ? h('div', {
+                  class: 'vxe-table-custom--move-btn-option'
+                }, VxeUIButtonComponent
+                  ? [
+                      showSortMoveButton
+                        ? h(VxeUIButtonComponent, {
+                          mode: 'text',
+                          icon: 'vxe-icon-arrows-up',
+                          title: getI18n('vxe.custom.setting.moveUpTitle'),
+                          disabled: index <= 0,
+                          onClick (evntParame) {
+                            sortMoveUpEvent(evntParame, column)
+                          }
+                        })
+                        : renderEmptyElement($xeTable),
+                      showSortMoveButton
+                        ? h(VxeUIButtonComponent, {
+                          mode: 'text',
+                          icon: 'vxe-icon-arrows-down',
+                          title: getI18n('vxe.custom.setting.moveDnTitle'),
+                          disabled: index >= items.length - 1,
+                          onClick (evntParame) {
+                            sortMoveDnEvent(evntParame, column)
+                          }
+                        })
+                        : renderEmptyElement($xeTable),
+                      showSortPutButton && !parentItem
+                        ? h(VxeUIButtonComponent, {
+                          mode: 'text',
+                          icon: 'vxe-icon-top',
+                          title: getI18n('vxe.custom.setting.putTopTitle'),
+                          disabled: index <= 0,
+                          onClick (evntParame) {
+                            sortMoveTopEvent(evntParame, column)
+                          }
+                        })
+                        : renderEmptyElement($xeTable),
+                      showSortPutButton && !parentItem
+                        ? h(VxeUIButtonComponent, {
+                          mode: 'text',
+                          icon: 'vxe-icon-bottom',
+                          title: getI18n('vxe.custom.setting.putBottomTitle'),
+                          disabled: index >= items.length - 1,
+                          onClick (evntParame) {
+                            sortMoveBottomEvent(evntParame, column)
+                          }
+                        })
+                        : renderEmptyElement($xeTable)
+                    ]
+                  : [])
+                : renderEmptyElement($xeTable),
+              !parentItem && allowFixed
                 ? h('div', {
                   class: 'vxe-table-custom--fixed-option'
                 }, [
@@ -907,7 +1030,7 @@ export default defineVxeComponent({
       const { treeConfig, rowGroupConfig, aggregateConfig, resizable: allResizable } = tableProps
       const { isCustomStatus, customColumnList } = tableReactData
       const customOpts = computeCustomOpts.value
-      const { immediate } = customOpts
+      const { immediate, showSortDragButton, showSortMoveButton, showSortPutButton } = customOpts
       const columnDragOpts = computeColumnDragOpts.value
       const { mode, modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
       const columnOpts = computeColumnOpts.value
@@ -936,7 +1059,7 @@ export default defineVxeComponent({
         isAllIndeterminate,
         isCustomStatus
       }
-      XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
+      XEUtils.eachTree(customColumnList, (column, index, items, path, parentItem) => {
         const isVisible = visibleMethod ? visibleMethod({ $table: $xeTable, column }) : true
         if (isVisible) {
           // 默认继承调整宽度
@@ -964,6 +1087,7 @@ export default defineVxeComponent({
           const isColGroup = column.children && column.children.length
           const isDisabled = checkMethod ? !checkMethod({ $table: $xeTable, column }) : false
           const isHidden = !isChecked
+          const showSortBtn = ((isCrossDrag ? immediate : false) || column.level === 1)
           trVNs.push(
             h('tr', {
               key: column.id,
@@ -1005,26 +1129,26 @@ export default defineVxeComponent({
                   class: 'vxe-table-custom-popup--name'
                 }, [
                   allowSort
-                    ? ((isCrossDrag ? immediate : false) || column.level === 1
-                        ? h('div', {
-                          class: ['vxe-table-custom-popup--column-sort-btn', {
-                            'is--disabled': isHidden
-                          }],
-                          title: getI18n('vxe.custom.setting.sortHelpTip'),
-                          ...(isHidden
-                            ? {}
-                            : {
-                                onMousedown: sortMousedownEvent,
-                                onMouseup: sortMouseupEvent
-                              })
-                        }, [
-                          h('i', {
-                            class: getIcon().TABLE_CUSTOM_SORT
-                          })
-                        ])
-                        : h('div', {
-                          class: 'vxe-table-custom-popup--column-sort-placeholder'
-                        }))
+                    ? showSortDragButton && (showSortBtn
+                      ? h('div', {
+                        class: ['vxe-table-custom-popup--column-sort-btn', {
+                          'is--disabled': isHidden
+                        }],
+                        title: getI18n('vxe.custom.setting.sortHelpTip'),
+                        ...(isHidden
+                          ? {}
+                          : {
+                              onMousedown: sortMousedownEvent,
+                              onMouseup: sortMouseupEvent
+                            })
+                      }, [
+                        h('i', {
+                          class: getIcon().TABLE_CUSTOM_SORT
+                        })
+                      ])
+                      : h('div', {
+                        class: 'vxe-table-custom-popup--column-sort-placeholder'
+                      }))
                     : renderEmptyElement($xeTable),
                   column.type === 'html'
                     ? h('div', {
@@ -1036,7 +1160,59 @@ export default defineVxeComponent({
                       key: '0',
                       class: 'vxe-table-custom-popup--title',
                       title: colTitle
-                    }, colTitle)
+                    }, colTitle),
+                  showSortBtn && (showSortMoveButton || showSortPutButton)
+                    ? h('div', {
+                      class: 'vxe-table-custom-popup--move-btn'
+                    }, VxeUIButtonComponent
+                      ? [
+                          showSortMoveButton
+                            ? h(VxeUIButtonComponent, {
+                              mode: 'text',
+                              content: getI18n('vxe.custom.setting.moveUp'),
+                              title: getI18n('vxe.custom.setting.moveUpTitle'),
+                              disabled: index <= 0,
+                              onClick (evntParame) {
+                                sortMoveUpEvent(evntParame, column)
+                              }
+                            })
+                            : renderEmptyElement($xeTable),
+                          showSortMoveButton
+                            ? h(VxeUIButtonComponent, {
+                              mode: 'text',
+                              content: getI18n('vxe.custom.setting.moveDn'),
+                              title: getI18n('vxe.custom.setting.moveDnTitle'),
+                              disabled: index >= items.length - 1,
+                              onClick (evntParame) {
+                                sortMoveDnEvent(evntParame, column)
+                              }
+                            })
+                            : renderEmptyElement($xeTable),
+                          showSortPutButton && !parentItem
+                            ? h(VxeUIButtonComponent, {
+                              mode: 'text',
+                              content: getI18n('vxe.custom.setting.putTop'),
+                              title: getI18n('vxe.custom.setting.putTopTitle'),
+                              disabled: index <= 0,
+                              onClick (evntParame) {
+                                sortMoveTopEvent(evntParame, column)
+                              }
+                            })
+                            : renderEmptyElement($xeTable),
+                          showSortPutButton && !parentItem
+                            ? h(VxeUIButtonComponent, {
+                              mode: 'text',
+                              content: getI18n('vxe.custom.setting.putBottom'),
+                              title: getI18n('vxe.custom.setting.putBottomTitle'),
+                              disabled: index >= items.length - 1,
+                              onClick (evntParame) {
+                                sortMoveBottomEvent(evntParame, column)
+                              }
+                            })
+                            : renderEmptyElement($xeTable)
+                        ]
+                      : [])
+                    : renderEmptyElement($xeTable)
                 ])
               ]),
               allowResizable
@@ -1073,7 +1249,7 @@ export default defineVxeComponent({
                 ? h('td', {
                   class: 'vxe-table-custom-popup--column-item col--fixed'
                 }, [
-                  parent
+                  parentItem
                     ? h('span', '-')
                     : (
                         VxeUIRadioGroupComponent

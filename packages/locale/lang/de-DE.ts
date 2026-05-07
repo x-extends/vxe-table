@@ -172,7 +172,15 @@ export default {
         colFixedMax: 'Spalten einfrieren (bis zu {0} Spalten)',
         fixedLeft: 'Linke Seite',
         fixedUnset: 'Nicht gesetzt',
-        fixedRight: 'Rechte Seite'
+        fixedRight: 'Rechte Seite',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {

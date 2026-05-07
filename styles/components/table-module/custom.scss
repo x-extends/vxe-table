@@ -121,7 +121,7 @@
   margin: 0;
   padding: 0;
   & > li {
-    max-width: 26em;
+    max-width: 28em;
     min-width: 18em;
     padding: 0.2em 1em 0.2em 1em;
     @for $i from 2 through 8 {
@@ -215,6 +215,11 @@
   flex-direction: row;
   align-items: center;
   user-select: none;
+}
+
+.vxe-table-custom--move-btn-option {
+  padding-left: 0.5em;
+  flex-shrink: 0;
 }
 
 .vxe-table-custom-popup--body-wrapper {
@@ -386,6 +391,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.vxe-table-custom-popup--move-btn {
+  flex-shrink: 0;
+  padding-left: 0.5em;
 }
 
 @for $index from 2 to 10 {

@@ -172,7 +172,15 @@ export default {
         colFixedMax: 'Столбцы замораживания (до {0} столбцы)',
         fixedLeft: 'Левая сторона',
         fixedUnset: 'Не установлен',
-        fixedRight: 'Правая сторона'
+        fixedRight: 'Правая сторона',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
