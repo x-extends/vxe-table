@@ -3501,7 +3501,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   }
   $xeTable.clearMergeCells()
   $xeTable.clearMergeFooterItems()
-  $xeTable.handleClearStack()
+  $xeTable.clearHistory()
   $xeTable.handleTableData(true)
   $xeTable.updateFooter()
   $xeTable.handleUpdateBodyMerge()
@@ -13061,6 +13061,7 @@ const tableMethods: any = {
     const { stackHistoryStore } = internalData
     stackHistoryStore.undoStacks = []
     stackHistoryStore.redoStacks = []
+    return $xeTable.$nextTick()
   },
   updateZindex () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -13093,6 +13094,11 @@ const tableMethods: any = {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     return $xeTable.handleRedoStackEvent(null)
+  },
+  clearHistory () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    return $xeTable.handleClearStack()
   },
   dispatchEvent (type: ValueOf<VxeTableEmits>, params: Record<string, any>, evnt: Event | null) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
