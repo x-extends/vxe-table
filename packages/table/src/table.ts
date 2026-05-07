@@ -3805,7 +3805,7 @@ export default defineVxeComponent({
       }
       $xeTable.clearMergeCells()
       $xeTable.clearMergeFooterItems()
-      $xeTable.handleClearStack()
+      $xeTable.clearHistory()
       $xeTable.handleTableData(true)
       $xeTable.updateFooter()
       $xeTable.handleUpdateBodyMerge()
@@ -7796,6 +7796,9 @@ export default defineVxeComponent({
       },
       redo () {
         return $xeTable.handleRedoStackEvent(null)
+      },
+      clearHistory () {
+        return $xeTable.handleClearStack()
       },
       getCustomStoreData () {
         const { id } = props
@@ -12763,6 +12766,7 @@ export default defineVxeComponent({
         const { stackHistoryStore } = internalData
         stackHistoryStore.undoStacks = []
         stackHistoryStore.redoStacks = []
+        return nextTick()
       },
       updateZindex () {
         if (props.zIndex) {
