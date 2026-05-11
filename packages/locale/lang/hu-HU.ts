@@ -556,6 +556,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
