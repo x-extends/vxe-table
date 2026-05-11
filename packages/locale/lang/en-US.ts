@@ -556,6 +556,10 @@ export default {
     contextMenu: {
       loadingText: 'Loading'
     },
+    switch: {
+      onText: 'On',
+      offText: 'Off'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
