@@ -94,7 +94,6 @@ function insertTreeRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
       fullAllDataRowIdData[rowid] = rest
     }
   })
-  $xeTable.handleClearStack()
 }
 
 // function insertGroupRow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, newRecords: any[], isAppend: boolean) {
@@ -122,6 +121,10 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
       targetRow = rowRest.row
     }
   }
+  if (!records.length) {
+    return Promise.resolve({ row: null, rows: [] })
+  }
+  $xeTable.handlePushStack()
   const newRecords: any[] = $xeTable.defineField(records.map(record => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record)))
   let treeRecords: any[] = []
   if (treeConfig && transform) {
@@ -154,7 +157,6 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
           mergeItem.row = mergeRowIndex + newRecords.length
         }
       })
-      $xeTable.handleClearStack()
     }
   } else {
     if (targetRow === -1) {
@@ -177,7 +179,6 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
           afterFullData.push(item)
           tableFullData.push(item)
         })
-        $xeTable.handleClearStack()
       }
     } else {
       // 如果为虚拟树
@@ -229,7 +230,6 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
               parentChilds.splice(targetIndex, 0, ...treeRecords)
             }
           }
-          $xeTable.handleClearStack()
         } else {
           warnLog('vxe.error.unableInsert')
           insertTreeRow($xeTable, newRecords, true)
@@ -276,7 +276,6 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
             mergeItem.rowspan = mergeRowspan + newRecords.length
           }
         })
-        $xeTable.handleClearStack()
       }
     }
   }
@@ -595,6 +594,10 @@ export default {
       } else if (!XEUtils.isArray(rows)) {
         rows = [rows]
       }
+      if (!rows.length) {
+        return Promise.resolve({ row: null, rows: [] })
+      }
+      $xeTable.handlePushStack()
       // 如果是新增，则保存记录
       rows.forEach(row => {
         if (!$xeTable.isInsertByRow(row)) {
@@ -680,7 +683,6 @@ export default {
       reactData.removeRowFlag++
       reactData.insertRowFlag++
       reactData.pendingRowFlag++
-      $xeTable.handleClearStack()
       $xeTable.cacheRowMap(false)
       $xeTable.handleTableData(treeConfig && transform)
       $xeTable.updateFooter()

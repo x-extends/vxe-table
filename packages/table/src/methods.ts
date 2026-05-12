@@ -4498,7 +4498,7 @@ function getSnapshotStackData ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   const internalData = $xeTable as unknown as TableInternalData
 
   const { editStore } = reactData
-  const { afterFullData, elemStore } = internalData
+  const { afterFullData, elemStore, insertRowMaps, removeRowMaps } = internalData
   const { selected, actived } = editStore
   const { row: selectRow, column: selectColumn } = selected
   const { row: editRow, column: editColumn } = actived
@@ -4520,7 +4520,10 @@ function getSnapshotStackData ($xeTable: VxeTableConstructor & VxeTablePrivateMe
       top: bodyScrollElem ? bodyScrollElem.scrollTop : 0,
       left: bodyScrollElem ? bodyScrollElem.scrollLeft : 0
     },
+    insertData: XEUtils.clone(XEUtils.values(insertRowMaps), true),
+    removeData: XEUtils.clone(XEUtils.values(removeRowMaps), true),
     visibleData: XEUtils.clone(afterFullData, true),
+    visibleTreeData: [],
     visibleColumn: []
   }
   return $xeTable.getCellAreaPushStackObj ? $xeTable.getCellAreaPushStackObj(stackObj) : stackObj
@@ -4530,15 +4533,44 @@ function getSnapshotStackData ($xeTable: VxeTableConstructor & VxeTablePrivateMe
  * 刷新栈视图
  */
 function handleUpdateSnapshotStackData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, stackObj: VxeTableDefines.HistoryStackObj | null | undefined) {
+  const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
+  const { treeConfig } = props
   const { editStore } = reactData
   const { fullAllDataRowIdData, fullColumnIdData } = internalData
   if (!stackObj) {
     return
   }
-  const { visibleData, editActiveInfo, selectActiveInfo, scrollInfo } = stackObj
+  const treeOpts = $xeTable.computeTreeOpts
+  const { transform } = treeOpts
+  const { visibleData, editActiveInfo, selectActiveInfo, scrollInfo, insertData, removeData } = stackObj
+
+  const iRowMaps: Record<string, any> = {}
+  insertData.forEach(item => {
+    const rowid = getRowid($xeTable, item)
+    const rest = fullAllDataRowIdData[rowid]
+    let row = item
+    if (rest) {
+      row = rest.row
+      Object.assign(row, item)
+    }
+    iRowMaps[rowid] = row
+  })
+
+  const rRowMaps: Record<string, any> = {}
+  removeData.forEach(item => {
+    const rowid = getRowid($xeTable, item)
+    const rest = fullAllDataRowIdData[rowid]
+    let row = item
+    if (rest) {
+      row = rest.row
+      Object.assign(row, item)
+    }
+    rRowMaps[rowid] = row
+  })
+
   const afterFullList = visibleData.map(item => {
     const rowid = getRowid($xeTable, item)
     const rest = fullAllDataRowIdData[rowid]
@@ -4550,7 +4582,22 @@ function handleUpdateSnapshotStackData ($xeTable: VxeTableConstructor & VxeTable
     return row
   })
 
+  internalData.insertRowMaps = iRowMaps
+  internalData.removeRowMaps = rRowMaps
   internalData.afterFullData = afterFullList
+
+  $xeTable.cacheRowMap(false)
+  $xeTable.handleTableData(treeConfig && transform)
+  $xeTable.updateFooter()
+  $xeTable.handleUpdateBodyMerge()
+  if (!(treeConfig && transform)) {
+    $xeTable.updateAfterDataIndex()
+  }
+  $xeTable.checkSelectionStatus()
+  if (reactData.scrollYLoad) {
+    $xeTable.updateScrollYSpace()
+  }
+
   if ($xeTable.handleCellAreaSnapshotStackData) {
     $xeTable.handleCellAreaSnapshotStackData(stackObj)
   } else {
