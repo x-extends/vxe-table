@@ -102,7 +102,6 @@ hooks.add('tableEditModule', {
           fullAllDataRowIdData[rowid] = rest
         }
       })
-      $xeTable.handleClearStack()
     }
 
     // const insertGroupRow = (newRecords: any[], isAppend: boolean) => {
@@ -126,6 +125,10 @@ hooks.add('tableEditModule', {
           targetRow = rowRest.row
         }
       }
+      if (!records.length) {
+        return Promise.resolve({ row: null, rows: [] })
+      }
+      $xeTable.handlePushStack()
       const newRecords: any[] = reactive($xeTable.defineField(records.map((record: any) => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record))))
       let treeRecords: any[] = []
       if (treeConfig && transform) {
@@ -158,7 +161,6 @@ hooks.add('tableEditModule', {
               mergeItem.row = mergeRowIndex + newRecords.length
             }
           })
-          $xeTable.handleClearStack()
         }
       } else {
         if (targetRow === -1) {
@@ -181,7 +183,6 @@ hooks.add('tableEditModule', {
               afterFullData.push(item)
               tableFullData.push(item)
             })
-            $xeTable.handleClearStack()
           }
         } else {
           // 如果为虚拟树
@@ -233,7 +234,6 @@ hooks.add('tableEditModule', {
                   parentChilds.splice(targetIndex, 0, ...treeRecords)
                 }
               }
-              $xeTable.handleClearStack()
             } else {
               warnLog('vxe.error.unableInsert')
               insertTreeRow(newRecords, true)
@@ -280,7 +280,6 @@ hooks.add('tableEditModule', {
                 mergeItem.rowspan = mergeRowspan + newRecords.length
               }
             })
-            $xeTable.handleClearStack()
           }
         }
       }
@@ -587,6 +586,10 @@ hooks.add('tableEditModule', {
         } else if (!XEUtils.isArray(rows)) {
           rows = [rows]
         }
+        if (!rows.length) {
+          return Promise.resolve({ row: null, rows: [] })
+        }
+        $xeTable.handlePushStack()
         // 如果是新增，则保存记录
         rows.forEach((row: any) => {
           if (!$xeTable.isInsertByRow(row)) {
@@ -672,7 +675,6 @@ hooks.add('tableEditModule', {
         reactData.removeRowFlag++
         reactData.insertRowFlag++
         reactData.pendingRowFlag++
-        $xeTable.handleClearStack()
         $xeTable.cacheRowMap(false)
         $xeTable.handleTableData(treeConfig && transform)
         $xeTable.updateFooter()
