@@ -273,7 +273,7 @@ VxeUI.setConfig({
       }
     },
     undoRedoHistoryConfig: {
-      stackSize: 20
+      stackSize: 50
     }
   },
   grid: {
