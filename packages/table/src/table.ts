@@ -13601,7 +13601,9 @@ export default defineVxeComponent({
               enterable: tableTipConfig.enterable,
               enterDelay: tableTipConfig.enterDelay,
               leaveDelay: tableTipConfig.leaveDelay,
-              useHTML: tableTipConfig.useHTML,
+              useHtml: XEUtils.isBoolean(tableTipConfig.useHtml) ? tableTipConfig.useHtml : undefined,
+              // 已废弃
+              useHTML: XEUtils.isBoolean(tableTipConfig.useHTML) ? tableTipConfig.useHTML : undefined,
               width: tableTipConfig.width,
               height: tableTipConfig.height,
               minWidth: tableTipConfig.minWidth,
