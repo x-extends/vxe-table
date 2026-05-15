@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'ツリーテーブルはインポートをサポートしていません',
       treeCrossDrag: '最初のレベルのみをドラッグします',
       treeDragChild: '親は自分の子供にドラッグすることはできません',
-      reqPlugin: '「{1}」はhttps://vxeui.com/other {0 }/#/ {1 }/installにインストールされていません',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'サポートされている最大データボリューム{0}行を超えると、これによりエラーが発生する可能性があります',
       useNew: '{0}はお勧めしません。{1}を使用してください',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'

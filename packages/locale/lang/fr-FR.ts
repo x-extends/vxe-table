@@ -56,7 +56,7 @@ export default {
       treeNotImp: "Les tables d'arbres ne prennent pas en charge l'importation",
       treeCrossDrag: 'Faites seulement glisser le premier niveau',
       treeDragChild: 'Les parents ne peuvent pas traîner à leurs propres enfants',
-      reqPlugin: "\"{1}\" n'est pas installé sur https://vxeui.com/other {0,/#/{1 }/install",
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Dépassant les lignes maximales du volume de données prises en charge {0}, cela peut entraîner une erreur',
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'

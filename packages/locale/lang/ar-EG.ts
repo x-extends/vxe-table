@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'لا تدعم جداول الأشجار الاستيراد',
       treeCrossDrag: 'فقط اسحب المستوى الأول',
       treeDragChild: 'لا يمكن للآباء السحب إلى أطفالهم',
-      reqPlugin: '"{1}" لم يتم تثبيته على https://vxeui.com/other',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'تجاوز الحد الأقصى لصفوف البيانات المدعومة {0} ، قد يتسبب ذلك في حدوث خطأ',
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'

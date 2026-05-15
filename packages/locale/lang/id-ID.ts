@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'Tabel pohon tidak mendukung impor',
       treeCrossDrag: 'Hanya menyeret level pertama',
       treeDragChild: 'Orang tua tidak bisa menyeret ke anak -anak mereka sendiri',
-      reqPlugin: '"{1}" tidak diinstal di https://vxeUi.com/other{ 0',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Melebihi volume data yang didukung maksimum {0}, ini dapat menyebabkan kesalahan',
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'

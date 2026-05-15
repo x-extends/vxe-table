@@ -1353,7 +1353,7 @@ export default {
       if (!handleOptions.exportMethod && !XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)) {
         errLog('vxe.error.notType', [type])
         if (['xlsx', 'pdf'].includes(type)) {
-          warnLog('vxe.error.reqPlugin', [4, 'plugin-export-xlsx'])
+          warnLog('vxe.error.reqPlugin', [3, 'plugin-export-xlsx'])
         }
         const params = { status: false }
         return Promise.reject(params)

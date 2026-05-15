@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'Treetabeller støtter ikke import',
       treeCrossDrag: 'Bare dra det første nivået',
       treeDragChild: 'Foreldre kan ikke dra til sine egne barn',
-      reqPlugin: '"{1}" er ikke installert på http',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Overskridende det maksimale støttede datavolumet {0} Rader, dette kan føre til en feil',
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'

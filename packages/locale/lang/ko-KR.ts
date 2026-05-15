@@ -56,7 +56,7 @@ export default {
       treeNotImp: '트리 테이블은 가져 오기를 지원하지 않습니다',
       treeCrossDrag: '첫 번째 레벨 만 드래그하십시오',
       treeDragChild: '부모는 자신의 자녀에게 끌 수 없습니다',
-      reqPlugin: '"{1}"은 https://vxeui.com/other {0 }/#/1 }/install에 설치되지 않았습니다',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: '최대 지원되는 데이터 볼륨 {0} 행을 초과하면 오류가 발생할 수 있습니다.',
       useNew: '{0} 권장되지 않습니다. {1}을 사용하십시오.',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
