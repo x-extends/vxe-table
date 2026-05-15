@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'Baumtische unterstützen den Import nicht',
       treeCrossDrag: 'Ziehen Sie nur die erste Ebene',
       treeDragChild: 'Eltern können nicht zu ihren eigenen Kindern ziehen',
-      reqPlugin: '"{1}" ist nicht unter https://vxeui.com/Otheriationation installiert',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Wenn das maximal unterstützte Datenvolumen {0} Zeilen überschreitet, kann dies einen Fehler verursachen',
       useNew: '{0} wird nicht empfohlen, bitte verwenden Sie {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'

@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'ตารางต้นไม้ไม่รองรับการนำเข้า',
       treeCrossDrag: 'ลากระดับแรกเท่านั้น',
       treeDragChild: 'พ่อแม่ไม่สามารถลากลูกของตัวเองได้',
-      reqPlugin: '"{1}" ไม่ได้ติดตั้งที่ https://vxeui.com/other {0}/#/{1}/install',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'เกินปริมาณข้อมูลที่รองรับสูงสุด {0} แถวซึ่งอาจทำให้เกิดข้อผิดพลาด',
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'

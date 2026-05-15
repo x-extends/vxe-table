@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'Bảng cây không hỗ trợ nhập khẩu',
       treeCrossDrag: 'Chỉ kéo cấp độ đầu tiên',
       treeDragChild: 'Cha mẹ không thể kéo đến con cái của họ',
-      reqPlugin: '"{1}" không được cài đặt tại https://vxeui.com/other/khác',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Vượt quá khối lượng dữ liệu được hỗ trợ tối đa {0}, điều này có thể gây ra lỗi',
       useNew: '{0} không được khuyến nghị, vui lòng sử dụng {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'

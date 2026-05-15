@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'A faasztalok nem támogatják az importot',
       treeCrossDrag: 'Csak húzza az első szintet',
       treeDragChild: 'A szülők nem tudnak elhúzni a saját gyermekeiket',
-      reqPlugin: 'A "{1}" nincs telepítve a https://vxeui.com/other oldalon {0 }/#/ (1 }/install',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'A maximális támogatott adatmennyiség {0} sorok túllépése, ez hibát okozhat',
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'

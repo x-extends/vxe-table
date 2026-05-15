@@ -56,7 +56,7 @@ export default {
       treeNotImp: '樹表格不支持導入',
       treeCrossDrag: '只能拖拽第一層級',
       treeDragChild: '父級不能拖拽到自己的子級中',
-      reqPlugin: '擴展插件未安裝 "{1}" https://vxeui.com/other{0}/#/{1}/install',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: '超過支持的最大數據量 {0} 行，這可能會導致出現錯誤',
       useNew: '不建議使用 {0}，請使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'

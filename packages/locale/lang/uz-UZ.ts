@@ -56,7 +56,7 @@ export default {
       treeNotImp: "Daraxt stollari importni qo'llab-quvvatlamaydi",
       treeCrossDrag: 'Faqat birinchi darajani torting',
       treeDragChild: "Ota-onalar o'z farzandlariga sudrab ketolmaydilar",
-      reqPlugin: "\"{1}\" https://vxeui.com/oter{/#/#/#/install-da o'rnatilmagan",
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: "Maksimal qo'llab-quvvatlanadigan ma'lumotlar hajmi {0} qatorlar hajmidan oshib ketishi mumkin, bu xatoga olib kelishi mumkin",
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
