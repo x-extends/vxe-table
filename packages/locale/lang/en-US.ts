@@ -25,7 +25,7 @@ export default {
       useErr: 'An error occurred while installing the "{0}" module. The order may be incorrect. The dependent module needs to be installed before Table',
       barUnableLink: 'The toolbar cannot associate tables',
       expandContent: 'The slot for the expanded line should be "content", please check if it is correct',
-      reqComp: 'The "{0}" component is missing, please check if it is installed correctly. https://vxeui.com/#/start/useGlobal',
+      reqComp: 'The component "{0}" is missing. Please check if it is installed correctly. https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Missing "{0}" module',
       reqProp: 'The necessary "{0}" parameter is missing, which may cause an error',
       emptyProp: 'Parameter "{0}" is not allowed to be empty',

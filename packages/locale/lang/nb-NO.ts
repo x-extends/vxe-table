@@ -25,7 +25,7 @@ export default {
       useErr: 'En feil oppstod mens du installerte "{0}" -modulen. Bestillingen kan være feil. Den avhengige modulen må installeres før tabellen',
       barUnableLink: 'Verktøylinjen kan ikke knytte bord',
       expandContent: 'Sporet for den utvidede linjen skal være "innhold", sjekk om det er riktig',
-      reqComp: '"{0}" -komponenten mangler, vennligst sjekk om den er installert riktig. https://vxeui.com/#/start/usglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Mangler "{0}" -modul',
       reqProp: 'Den nødvendige "{0}" -parameteren mangler, noe som kan forårsake en feil',
       emptyProp: 'Parameter "{0}" har ikke lov til å være tom',

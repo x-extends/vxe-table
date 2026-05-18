@@ -25,7 +25,7 @@ export default {
       useErr: "Une erreur s'est produite lors de l'installation du module \"{0}\". L'ordonnance peut être incorrecte. Le module dépendant doit être installé avant le tableau",
       barUnableLink: "La barre d'outils ne peut pas associer des tables",
       expandContent: "La fente de la ligne élargie doit être \"Contenu\", veuillez vérifier s'il est correct",
-      reqComp: "Le composant \"{0}\" est manquant, veuillez vérifier s'il est installé correctement. https://vxeui.com/#/start/useglobal",
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Module "{0}" manquant',
       reqProp: 'Le paramètre "{0}" nécessaire est manquant, ce qui peut provoquer une erreur',
       emptyProp: "Le paramètre \"{0}\" n'est pas autorisé à être vide",

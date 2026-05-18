@@ -25,7 +25,7 @@ export default {
       useErr: "\"{0}\" modulini o'rnatishda xatolik yuz berdi. Buyurtma noto'g'ri bo'lishi mumkin. Qaram modul jadvaldan oldin o'rnatilishi kerak",
       barUnableLink: 'Asboblar paneli stollarni sotolmaydi',
       expandContent: "Kengaytirilgan chiziqning uyasi \"tarkib\" bo'lishi kerak, iltimos, u to'g'ri ekanligini tekshiring",
-      reqComp: "\"{0}\" komponenti yo'q bo'lib, u to'g'ri o'rnatilganligini tekshiring. https://vxeui.com/#/start/usaglobal",
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: "Yo'qolgan \"{0}\" moduli",
       reqProp: "Kerakli \"{0} parametrlari\" parametr yo'q, bu xatoga olib kelishi mumkin",
       emptyProp: "\"{0}\" parametr bo'sh bo'lishi mumkin emas",

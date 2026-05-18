@@ -25,7 +25,7 @@ export default {
       useErr: 'Se produjo un error al instalar el módulo "{0}". El pedido puede ser incorrecto. El módulo dependiente debe instalarse antes de la tabla',
       barUnableLink: 'La barra de herramientas no puede asociar tablas',
       expandContent: 'La ranura para la línea expandida debe ser "contenido", verifique si es correcto',
-      reqComp: 'Falta el componente "{0}", verifique si está instalado correctamente. https://vxeui.com/#/start/useglobal',
+      reqComp: 'The component "{0}" is missing. Please check if it is installed correctly. https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Falta módulo "{0}"',
       reqProp: 'Falta el parámetro "{0}" necesario, lo que puede causar un error',
       emptyProp: 'El parámetro "{0}" no puede estar vacío',

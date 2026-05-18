@@ -25,7 +25,7 @@ export default {
       useErr: 'Ralat berlaku semasa memasang modul "{0}". Perintah itu mungkin tidak betul. Modul bergantung perlu dipasang sebelum jadual',
       barUnableLink: 'Bar alat tidak dapat mengaitkan jadual',
       expandContent: 'Slot untuk garis yang diperluas mestilah "kandungan", sila periksa sama ada betul',
-      reqComp: 'Komponen "{0}" hilang, sila periksa sama ada ia dipasang dengan betul. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Hilang "{0}" modul',
       reqProp: 'Parameter yang diperlukan "{0}" hilang, yang boleh menyebabkan kesilapan',
       emptyProp: 'Parameter "{0}" tidak dibenarkan kosong',

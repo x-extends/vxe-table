@@ -25,7 +25,7 @@ export default {
       useErr: "Si è verificato un errore durante l'installazione del modulo \"{0}\". L'ordine può essere errato. Il modulo dipendente deve essere installato prima della tabella",
       barUnableLink: 'La barra degli strumenti non può associare le tabelle',
       expandContent: 'Lo slot per la linea espansa dovrebbe essere "contenuto", controlla se è corretto',
-      reqComp: 'Manca il componente "{0}", controlla se è installato correttamente. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Manca il modulo "{0}"',
       reqProp: 'Manca il parametro "{0}" necessario, che può causare un errore',
       emptyProp: 'Il parametro "{0}" non può essere vuoto',

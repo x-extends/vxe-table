@@ -25,7 +25,7 @@ export default {
       useErr: 'Terjadi kesalahan saat menginstal modul "{0}". Pesanan mungkin salah. Modul dependen perlu diinstal sebelum tabel',
       barUnableLink: 'Toolbar tidak dapat mengaitkan tabel',
       expandContent: 'Slot untuk garis yang diperluas harus "konten", silakan periksa apakah itu benar',
-      reqComp: 'Komponen "{0}" hilang, silakan periksa apakah diinstal dengan benar. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Modul "{0}" yang hilang',
       reqProp: 'Parameter "{0}" yang diperlukan tidak ada, yang dapat menyebabkan kesalahan',
       emptyProp: 'Parameter "{0}" tidak diperbolehkan kosong',

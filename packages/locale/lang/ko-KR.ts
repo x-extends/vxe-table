@@ -25,7 +25,7 @@ export default {
       useErr: '"{0}"모듈을 설치하는 동안 오류가 발생했습니다. 주문이 잘못 될 수 있습니다. 종속 모듈은 테이블 전에 설치해야합니다',
       barUnableLink: '툴바는 테이블을 연결할 수 없습니다',
       expandContent: '확장 라인의 슬롯은 "콘텐츠"여야합니다. 올바른지 확인하십시오.',
-      reqComp: '"{0}"구성 요소가 누락되었습니다. 올바르게 설치되었는지 확인하십시오. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: '"{0}"모듈 누락',
       reqProp: '필요한 "{0}"매개 변수가 누락되어 오류가 발생할 수 있습니다.',
       emptyProp: '매개 변수 "{0}"은 비어 있지 않습니다',
