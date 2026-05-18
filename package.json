@@ -25,8 +25,7 @@
   "module": "es/index.esm.js",
   "unpkg": "lib/index.umd.js",
   "jsdelivr": "lib/index.umd.js",
-  "style": "lib/style.css",
-  "typings": "types/index.d.ts",
+  "style": "lib/style.css",p
   "dependencies": {
     "vxe-pc-ui": "^4.14.0"
   },
