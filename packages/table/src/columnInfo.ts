@@ -69,7 +69,7 @@ export class ColumnInfo {
       }
     }
     if (_vm.aggFunc) {
-      if (!$xeTable.handlePivotTableAggregateData && _vm.aggFunc !== true) {
+      if (!$xeTable.handlePivotTableAggData && _vm.aggFunc !== true) {
         errLog('vxe.error.errProp', [`column.agg-func=${_vm.aggFunc}`, 'column.agg-func=true'])
       }
     }

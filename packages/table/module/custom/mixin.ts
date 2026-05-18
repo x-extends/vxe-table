@@ -196,7 +196,7 @@ export default {
         }
       })
       reactData.isCustomStatus = true
-      if (allowGroup && allowValues && !!$xeTable.handlePivotTableAggregateData) {
+      if (allowGroup && allowValues && !!$xeTable.handlePivotTableAggData) {
         if (rowGroupList.length !== aggHandleFields.length || rowGroupList.some((conf, i) => conf.field !== aggHandleFields[i])) {
           // 更新数据分组
           if (aggHandleFields.length) {
@@ -288,7 +288,7 @@ export default {
       }
       reactData.isCustomStatus = false
       return $xeTable.handleCustom().then(() => {
-        if (opts.aggFunc && ($xeTable as any).handlePivotTableAggregateData) {
+        if (opts.aggFunc && !!$xeTable.handlePivotTableAggData) {
           const rowGroupFields = $xeTable.computeRowGroupFields
           if (rowGroupFields ? rowGroupFields.length : rowGroupList.length) {
             if (rowGroupFields && rowGroupFields.length) {

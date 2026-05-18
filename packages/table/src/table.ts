@@ -1798,7 +1798,7 @@ export default {
         errLog('vxe.error.notSupportProp', ['area-config.selectCellByHeader & column-config.drag', 'column-drag-config.trigger=cell', 'column-drag-config.trigger=default | area-config.selectCellByHeader=false'])
       }
     }
-    if (!$xeTable.handlePivotTableAggregateData) {
+    if (!$xeTable.handlePivotTableAggData) {
       if (customOpts.allowGroup) {
         errLog('vxe.error.notProp', ['custom-config.allowGroup'])
         return

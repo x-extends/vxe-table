@@ -3241,8 +3241,8 @@ function handleeGroupSummary ($xeTable: VxeTableConstructor & VxeTablePrivateMet
       })
       aggRow.childCount = count
     })
-    if ($xeTable.handlePivotTableAggregateData) {
-      $xeTable.handlePivotTableAggregateData(aggList)
+    if ($xeTable.handlePivotTableAggData) {
+      $xeTable.handlePivotTableAggData(aggList)
     } else {
       XEUtils.lastEach(aggList, aggRow => {
         const aggDtObj: Record<string, {
