@@ -3531,8 +3531,8 @@ export default defineVxeComponent({
           })
           aggRow.childCount = count
         })
-        if ($xeTable.handlePivotTableAggregateData) {
-          $xeTable.handlePivotTableAggregateData(aggList)
+        if ($xeTable.handlePivotTableAggData) {
+          $xeTable.handlePivotTableAggData(aggList)
         } else {
           if (aggFuncColumns.length) {
             XEUtils.lastEach(aggList, aggRow => {
@@ -14069,7 +14069,7 @@ export default defineVxeComponent({
           errLog('vxe.error.notSupportProp', ['area-config.selectCellByHeader & column-config.drag', 'column-drag-config.trigger=cell', 'column-drag-config.trigger=default | area-config.selectCellByHeader=false'])
         }
       }
-      if (!$xeTable.handlePivotTableAggregateData) {
+      if (!$xeTable.handlePivotTableAggData) {
         if (customOpts.allowGroup) {
           errLog('vxe.error.notProp', ['custom-config.allowGroup'])
           return
