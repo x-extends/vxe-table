@@ -25,7 +25,7 @@ export default {
       useErr: 'Hiba történt a "{0}" modul telepítése során. A sorrend helytelen lehet. A függő modult a táblázat előtt kell telepíteni',
       barUnableLink: 'Az eszköztár nem társíthatja a táblákat',
       expandContent: 'A kibővített vonal résidőnek "tartalomnak" kell lennie, kérjük, ellenőrizze, hogy helyes -e',
-      reqComp: 'Hiányzik a "{0}" összetevő, kérjük, ellenőrizze, hogy helyesen van -e telepítve. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Hiányzik a "{0}" modul',
       reqProp: 'Hiányzik a szükséges "{0}" paraméter, amely hibát okozhat',
       emptyProp: 'A "{0}" paraméter nem szabad üres lenni',

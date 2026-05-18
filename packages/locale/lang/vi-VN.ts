@@ -25,7 +25,7 @@ export default {
       useErr: 'Đã xảy ra lỗi trong khi cài đặt mô -đun "{0}". Thứ tự có thể không chính xác. Mô -đun phụ thuộc cần được cài đặt trước bảng',
       barUnableLink: 'Thanh công cụ không thể liên kết các bảng',
       expandContent: 'Khe cắm cho dòng mở rộng phải là "nội dung", vui lòng kiểm tra xem nó có đúng không',
-      reqComp: 'Thành phần "{0}" bị thiếu, vui lòng kiểm tra xem nó có được cài đặt chính xác không. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Thiếu mô -đun "{0}"',
       reqProp: 'Tham số "{0}" cần thiết, có thể gây ra lỗi',
       emptyProp: 'Tham số "{0}" không được phép trống',

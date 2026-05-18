@@ -25,7 +25,7 @@ export default {
       useErr: 'Bei der Installation des Moduls "{0}" trat ein Fehler auf. Die Bestellung kann falsch sein. Das abhängige Modul muss vor der Tabelle installiert werden',
       barUnableLink: 'Die Symbolleiste kann Tabellen nicht assoziieren',
       expandContent: 'Der Steckplatz für die erweiterte Linie sollte "Inhalt" sein. Bitte prüfen Sie, ob sie korrekt ist',
-      reqComp: 'Die "{0}" -Komponente fehlt, bitte prüfen Sie, ob sie korrekt installiert ist. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Fehlendes "{0}" Modul',
       reqProp: 'Der erforderliche Parameter "{0}" fehlt, der einen Fehler verursachen kann',
       emptyProp: 'Parameter "{0}" darf nicht leer sein',
