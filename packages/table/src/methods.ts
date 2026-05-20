@@ -4127,6 +4127,9 @@ function updateHeight ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
  * 计算自适应列宽
  */
 function calcColumnAutoWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: VxeTableDefines.ColumnInfo, wrapperEl: HTMLDivElement) {
+  const reactData = $xeTable as unknown as TableReactData
+
+  const { scrollYLoad } = reactData
   const columnOpts = $xeTable.computeColumnOpts
   const { autoOptions } = columnOpts
   const { isCalcHeader, isCalcBody, isCalcFooter } = autoOptions || {}
@@ -4147,7 +4150,7 @@ function calcColumnAutoWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     const cellStyle = getComputedStyle(firstCellEl.parentElement)
     leftRightPadding = Math.ceil(XEUtils.toNumber(cellStyle.paddingLeft) + XEUtils.toNumber(cellStyle.paddingRight))
   }
-  let colWidth = column.renderAutoWidth - leftRightPadding
+  let colWidth = (scrollYLoad ? column.renderAutoWidth : 0) - leftRightPadding
   for (let i = 0; i < cellElemList.length; i++) {
     const celEl = cellElemList[i] as HTMLDivElement
     colWidth = Math.max(colWidth, celEl ? Math.ceil(celEl.scrollWidth) + 4 : 0)
