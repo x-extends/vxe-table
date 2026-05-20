@@ -1884,6 +1884,7 @@ export default defineVxeComponent({
      * 计算自适应列宽
      */
     const calcColumnAutoWidth = (column: VxeTableDefines.ColumnInfo, wrapperEl: HTMLDivElement) => {
+      const { scrollYLoad } = reactData
       const columnOpts = computeColumnOpts.value
       const { autoOptions } = columnOpts
       const { isCalcHeader, isCalcBody, isCalcFooter } = autoOptions || {}
@@ -1904,7 +1905,7 @@ export default defineVxeComponent({
         const cellStyle = getComputedStyle(firstCellEl.parentElement)
         leftRightPadding = Math.ceil(XEUtils.toNumber(cellStyle.paddingLeft) + XEUtils.toNumber(cellStyle.paddingRight))
       }
-      let colWidth = column.renderAutoWidth - leftRightPadding
+      let colWidth = (scrollYLoad ? column.renderAutoWidth : 0) - leftRightPadding
       for (let i = 0; i < cellElemList.length; i++) {
         const celEl = cellElemList[i] as HTMLDivElement
         colWidth = Math.max(colWidth, celEl ? Math.ceil(celEl.scrollWidth) + 4 : 0)
