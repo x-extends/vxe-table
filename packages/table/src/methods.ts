@@ -4073,7 +4073,7 @@ function checkLastSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMet
         })
       }
     })
-  }, 200)
+  }, 240)
 }
 
 const getWheelSpeed = (lastScrollTime: number) => {
@@ -12105,7 +12105,7 @@ const tableMethods: any = {
     }
 
     const { highlightHoverRow } = tableProps
-    const { scrollXLoad, scrollYLoad, expandColumn } = reactData
+    const { scrollXLoad, scrollYLoad, overflowX, overflowY, expandColumn } = reactData
     const leftFixedWidth = $xeTable.computeLeftFixedWidth
     const rightFixedWidth = $xeTable.computeRightFixedWidth
 
@@ -12132,10 +12132,10 @@ const tableMethods: any = {
     const currScrollTop = bodyScrollElem.scrollTop
     const currScrollLeft = bodyScrollElem.scrollLeft
 
-    const scrollTop = currScrollTop + deltaTop
-    const scrollLeft = currScrollLeft + deltaLeft
-    const isRollX = scrollLeft !== lastScrollLeft
-    const isRollY = scrollTop !== lastScrollTop
+    const scrollTop = Math.max(0, currScrollTop + deltaTop)
+    const scrollLeft = Math.max(0, currScrollLeft + deltaLeft)
+    const isRollX = overflowX && scrollLeft !== lastScrollLeft
+    const isRollY = overflowY && scrollTop !== lastScrollTop
 
     if (isRollX) {
       // 如果禁用滚动
@@ -12173,7 +12173,7 @@ const tableMethods: any = {
       }
     }
 
-    if (!(leftFixedWidth || rightFixedWidth || expandColumn)) {
+    if (!(isRollX || leftFixedWidth || rightFixedWidth || expandColumn)) {
       return
     }
 
