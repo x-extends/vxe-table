@@ -4554,7 +4554,7 @@ export default defineVxeComponent({
             })
           }
         })
-      }, 200)
+      }, 240)
     }
 
     const getWheelSpeed = (lastScrollTime: number) => {
@@ -12266,7 +12266,7 @@ export default defineVxeComponent({
         }
 
         const { highlightHoverRow } = tableProps
-        const { scrollXLoad, scrollYLoad, expandColumn } = reactData
+        const { scrollXLoad, scrollYLoad, overflowX, overflowY, expandColumn } = reactData
         const leftFixedWidth = computeLeftFixedWidth.value
         const rightFixedWidth = computeRightFixedWidth.value
 
@@ -12293,10 +12293,10 @@ export default defineVxeComponent({
         const currScrollTop = bodyScrollElem.scrollTop
         const currScrollLeft = bodyScrollElem.scrollLeft
 
-        const scrollTop = currScrollTop + deltaTop
-        const scrollLeft = currScrollLeft + deltaLeft
-        const isRollX = scrollLeft !== lastScrollLeft
-        const isRollY = scrollTop !== lastScrollTop
+        const scrollTop = Math.max(0, currScrollTop + deltaTop)
+        const scrollLeft = Math.max(0, currScrollLeft + deltaLeft)
+        const isRollX = overflowX && scrollLeft !== lastScrollLeft
+        const isRollY = overflowY && scrollTop !== lastScrollTop
 
         if (isRollX) {
           // 如果禁用滚动
@@ -12334,7 +12334,7 @@ export default defineVxeComponent({
           }
         }
 
-        if (!(leftFixedWidth || rightFixedWidth || expandColumn)) {
+        if (!(isRollX || leftFixedWidth || rightFixedWidth || expandColumn)) {
           return
         }
 
