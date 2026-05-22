@@ -43,7 +43,7 @@ export default defineVxeComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeSize, computeCustomOpts, computeColumnDragOpts, computeColumnOpts, computeIsMaxFixedColumn, computeResizableOpts } = $xeTable.getComputeMaps()
+    const { computeSize, computeCustomOpts, computeColumnDragOpts, computeColumnOpts, computeIsMaxFixedColumn, computeResizableOpts, computeAggregateOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refBodyWrapperElem = ref() as Ref<HTMLDivElement>
@@ -537,7 +537,7 @@ export default defineVxeComponent({
 
     const sortDragoverEvent = (evnt: DragEvent) => {
       const customOpts = computeCustomOpts.value
-      const { immediate } = customOpts
+      const { showSortDragButton, allowSort, immediate } = customOpts
       const columnDragOpts = computeColumnDragOpts.value
       const { isCrossDrag, isToChildDrag } = columnDragOpts
       const optEl = evnt.currentTarget as HTMLElement
@@ -554,9 +554,12 @@ export default defineVxeComponent({
         const dragPos = offsetY < optEl.clientHeight / 2 ? 'top' : 'bottom'
         if (
           !dragCol ||
+          !(showSortDragButton && allowSort) ||
           (dragCol && dragCol.id === column.id) ||
           (!isCrossDrag && column.level > 1) ||
-          (!immediate && column.level > 1)
+          (!immediate && column.level > 1) ||
+          (!isCrossDrag && dragCol.level > 1) ||
+          (!immediate && dragCol.level > 1)
         ) {
           showDropTip(evnt, optEl, false, dragPos)
           return
@@ -697,7 +700,7 @@ export default defineVxeComponent({
       const { immediate } = customOpts
       const columnDragOpts = computeColumnDragOpts.value
       const { popupStyle } = customStore
-      const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement, showSortDragButton, showSortMoveButton, showSortPutButton } = customOpts
+      const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, allowGroup, allowValues, trigger, placement, showSortDragButton, showSortMoveButton, showSortPutButton } = customOpts
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
       const vSize = computeSize.value
       const { isCrossDrag } = columnDragOpts
@@ -769,27 +772,31 @@ export default defineVxeComponent({
               h('div', {
                 class: 'vxe-table-custom--name-option'
               }, [
-                allowSort && showSortDragButton && showSortBtn
-                  ? h('div', {
-                    class: 'vxe-table-custom--sort-option'
-                  }, [
-                    h('span', {
-                      class: ['vxe-table-custom--sort-btn', {
-                        'is--disabled': isHidden
-                      }],
-                      title: getI18n('vxe.custom.setting.sortHelpTip'),
-                      ...(isHidden
-                        ? {}
-                        : {
-                            onMousedown: sortMousedownEvent,
-                            onMouseup: sortMouseupEvent
-                          })
-                    }, [
-                      h('i', {
-                        class: getIcon().TABLE_CUSTOM_SORT
-                      })
-                    ])
-                  ])
+                (allowSort && showSortDragButton) || (allowGroup || allowValues)
+                  ? (
+                      showSortBtn || ((allowGroup || allowValues) && !isColGroup)
+                        ? h('div', {
+                          class: 'vxe-table-custom--sort-option'
+                        }, [
+                          h('span', {
+                            class: ['vxe-table-custom--sort-btn', {
+                              'is--disabled': isHidden
+                            }],
+                            title: getI18n('vxe.custom.setting.sortHelpTip'),
+                            ...(isHidden
+                              ? {}
+                              : {
+                                  onMousedown: sortMousedownEvent,
+                                  onMouseup: sortMouseupEvent
+                                })
+                          }, [
+                            h('i', {
+                              class: getIcon().TABLE_CUSTOM_SORT
+                            })
+                          ])
+                        ])
+                        : renderEmptyElement($xeTable)
+                    )
                   : renderEmptyElement($xeTable),
                 column.type === 'html'
                   ? h('div', {
@@ -1030,9 +1037,10 @@ export default defineVxeComponent({
       const { treeConfig, rowGroupConfig, aggregateConfig, resizable: allResizable } = tableProps
       const { isCustomStatus, customColumnList } = tableReactData
       const customOpts = computeCustomOpts.value
-      const { immediate, showSortDragButton, showSortMoveButton, showSortPutButton } = customOpts
       const columnDragOpts = computeColumnDragOpts.value
-      const { mode, modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
+      const aggregateOpts = computeAggregateOpts.value
+      const { placement: aggPlacement } = aggregateOpts
+      const { mode, immediate, showSortDragButton, showSortMoveButton, showSortPutButton, modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, allowGroup, allowValues, checkMethod, visibleMethod } = customOpts
       const columnOpts = computeColumnOpts.value
       const { maxFixedSize } = columnOpts
       const resizableOpts = computeResizableOpts.value
@@ -1050,6 +1058,7 @@ export default defineVxeComponent({
       const trVNs: VNode[] = []
       const isAllChecked = customStore.isAll
       const isAllIndeterminate = customStore.isIndeterminate
+      const isAggRtBmLayout = aggPlacement === 'right' || aggPlacement === 'bottom'
       const params = {
         $table: $xeTable,
         $grid: $xeGrid,
@@ -1128,27 +1137,29 @@ export default defineVxeComponent({
                 h('div', {
                   class: 'vxe-table-custom-popup--name'
                 }, [
-                  allowSort
-                    ? showSortDragButton && (showSortBtn
-                      ? h('div', {
-                        class: ['vxe-table-custom-popup--column-sort-btn', {
-                          'is--disabled': isHidden
-                        }],
-                        title: getI18n('vxe.custom.setting.sortHelpTip'),
-                        ...(isHidden
-                          ? {}
-                          : {
-                              onMousedown: sortMousedownEvent,
-                              onMouseup: sortMouseupEvent
+                  (allowSort && showSortDragButton) || (allowGroup || allowValues)
+                    ? (
+                        showSortBtn || ((allowGroup || allowValues) && !isColGroup)
+                          ? h('div', {
+                            class: ['vxe-table-custom-popup--column-sort-btn', {
+                              'is--disabled': isHidden
+                            }],
+                            title: getI18n('vxe.custom.setting.sortHelpTip'),
+                            ...(isHidden
+                              ? {}
+                              : {
+                                  onMousedown: sortMousedownEvent,
+                                  onMouseup: sortMouseupEvent
+                                })
+                          }, [
+                            h('i', {
+                              class: getIcon().TABLE_CUSTOM_SORT
                             })
-                      }, [
-                        h('i', {
-                          class: getIcon().TABLE_CUSTOM_SORT
-                        })
-                      ])
-                      : h('div', {
-                        class: 'vxe-table-custom-popup--column-sort-placeholder'
-                      }))
+                          ])
+                          : h('div', {
+                            class: 'vxe-table-custom-popup--column-sort-placeholder'
+                          })
+                      )
                     : renderEmptyElement($xeTable),
                   column.type === 'html'
                     ? h('div', {
@@ -1279,11 +1290,11 @@ export default defineVxeComponent({
         default: () => {
           return h('div', {
             ref: refBodyWrapperElem,
-            class: 'vxe-table-custom-popup--body-wrapper'
+            class: ['vxe-table-custom-popup--body-wrapper', `agg-layout--${aggPlacement}`]
           }, defaultSlot
             ? $xeTable.callSlot(defaultSlot, params)
             : [
-                !treeConfig && (aggregateConfig || rowGroupConfig) && $xeTable.getPivotTableAggregatePopupPanel
+                !isAggRtBmLayout && !treeConfig && (aggregateConfig || rowGroupConfig) && $xeTable.getPivotTableAggregatePopupPanel
                   ? h($xeTable.getPivotTableAggregatePopupPanel(), {
                     customStore
                   })
@@ -1366,7 +1377,12 @@ export default defineVxeComponent({
                     }, $xeTable.callSlot(bottomSlot, params))
                     : renderEmptyElement($xeTable),
                   renderDragTip()
-                ])
+                ]),
+                isAggRtBmLayout && !treeConfig && (aggregateConfig || rowGroupConfig) && $xeTable.getPivotTableAggregatePopupPanel
+                  ? h($xeTable.getPivotTableAggregatePopupPanel(), {
+                    customStore
+                  })
+                  : renderEmptyElement($xeTable)
               ])
         },
         footer: () => {

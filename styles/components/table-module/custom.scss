@@ -225,10 +225,14 @@
 .vxe-table-custom-popup--body-wrapper {
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   overflow: hidden;
   height: 100%;
   outline: 0;
+  &.agg-layout--top,
+  &.agg-layout--bottom {
+    flex-direction: column;
+  }
 }
 .vxe-table-custom-popup--handle-wrapper {
   flex-grow: 1;

@@ -104,7 +104,8 @@ export default {
     select: {
       clear: 'クリア',
       allChecked: 'すべてを選択します',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '検索',
       loadingText: '読み込み',
       emptyText: 'まだデータはありません',
@@ -121,7 +122,8 @@ export default {
       allChecked: 'すべてを選択します',
       allExpand: 'すべて拡張します',
       clearExpand: 'すべてを閉じます',
-      total: '選択{0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '検索',
       emptyText: 'まだデータはありません'
     },

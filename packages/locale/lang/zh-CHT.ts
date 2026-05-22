@@ -104,7 +104,8 @@ export default {
     select: {
       clear: '清除',
       allChecked: '全選',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '搜尋',
       loadingText: '載入中',
       emptyText: '暫無數據',
@@ -121,7 +122,8 @@ export default {
       allChecked: '全選',
       allExpand: '全部展開',
       clearExpand: '全部收起',
-      total: '已選 {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '搜尋',
       emptyText: '暫無數據'
     },

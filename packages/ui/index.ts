@@ -170,6 +170,7 @@ VxeUI.setConfig({
     },
     aggregateConfig: {
       padding: true,
+      placement: 'left',
       rowField: 'id',
       parentField: '_X_ROW_PARENT_KEY',
       childrenField: '_X_ROW_CHILDREN',

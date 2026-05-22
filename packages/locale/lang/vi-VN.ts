@@ -104,7 +104,8 @@ export default {
     select: {
       clear: 'Thông thoáng',
       allChecked: 'Chọn tất cả',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'tìm kiếm',
       loadingText: 'đang tải',
       emptyText: 'Chưa có dữ liệu',
@@ -121,7 +122,8 @@ export default {
       allChecked: 'Chọn tất cả',
       allExpand: 'Mở rộng tất cả',
       clearExpand: 'Đóng tất cả',
-      total: 'Đã chọn {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'tìm kiếm',
       emptyText: 'Chưa có dữ liệu'
     },
