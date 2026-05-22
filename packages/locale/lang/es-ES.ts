@@ -104,7 +104,8 @@ export default {
     select: {
       clear: 'Claro',
       allChecked: 'Seleccionar todo',
-      total: '{0} / {1}',
+      total: '{0} items selected',
+      close: 'Close',
       search: 'buscar',
       loadingText: 'cargando',
       emptyText: 'Aún no hay datos',
@@ -121,7 +122,8 @@ export default {
       allChecked: 'Seleccionar todo',
       allExpand: 'Expandir todo',
       clearExpand: 'Cerrar todo',
-      total: 'Seleccionado {0}',
+      total: '{0} items selected',
+      close: 'Close',
       search: 'buscar',
       emptyText: 'Aún no hay datos'
     },

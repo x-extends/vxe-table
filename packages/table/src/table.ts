@@ -1839,7 +1839,7 @@ export default {
       warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
     }
     if (mouseOpts.area && (props.treeConfig && !treeOpts.transform)) {
-      errLog('vxe.error.noTree', ['mouse-config.area'])
+      errLog('vxe.error.notSupportProp', ['mouse-config.area', 'tree-config.transform=false', 'tree-config.transform=true'])
     }
     if (props.editConfig && editOpts.activeMethod) {
       warnLog('vxe.error.delProp', ['table.edit-config.activeMethod', 'table.edit-config.beforeEditMethod'])

@@ -104,7 +104,8 @@ export default {
     select: {
       clear: 'Clear',
       allChecked: 'All',
-      total: '{0} / {1}',
+      total: '{0} items selected',
+      close: 'Close',
       search: 'Search',
       loadingText: 'Loading',
       emptyText: 'No data yet',
@@ -121,7 +122,8 @@ export default {
       allChecked: 'Check all',
       allExpand: 'Expand all',
       clearExpand: 'Collapse all',
-      total: 'Selected {0}',
+      total: '{0} items selected',
+      close: 'Close',
       search: 'Search',
       emptyText: 'No data yet'
     },

@@ -104,7 +104,8 @@ export default {
     select: {
       clear: 'Прозрачный',
       allChecked: 'Выберите все',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'поиск',
       loadingText: 'загрузка',
       emptyText: 'Нет данных пока',
@@ -121,7 +122,8 @@ export default {
       allChecked: 'Выберите все',
       allExpand: 'Расширить все',
       clearExpand: 'Закрыть все',
-      total: 'Выбрано {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'поиск',
       emptyText: 'Нет данных пока'
     },

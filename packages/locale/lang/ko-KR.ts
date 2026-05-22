@@ -104,7 +104,8 @@ export default {
     select: {
       clear: '분명한',
       allChecked: '모두를 선택하십시오',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '찾다',
       loadingText: '로딩',
       emptyText: '아직 데이터가 없습니다',
@@ -121,7 +122,8 @@ export default {
       allChecked: '모두를 선택하십시오',
       allExpand: '모든 것을 확장하십시오',
       clearExpand: '모두 닫으십시오',
-      total: '선택된 {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '찾다',
       emptyText: '아직 데이터가 없습니다'
     },

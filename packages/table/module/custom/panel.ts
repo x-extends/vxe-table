@@ -614,7 +614,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       const { dragCol } = customPanelReactData
       const customOpts = $xeTable.computeCustomOpts
-      const { immediate } = customOpts
+      const { showSortDragButton, allowSort, immediate } = customOpts
       const columnDragOpts = $xeTable.computeColumnDragOpts
       const { isCrossDrag, isToChildDrag } = columnDragOpts
       const optEl = evnt.currentTarget as HTMLElement
@@ -630,9 +630,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
         const dragPos = offsetY < optEl.clientHeight / 2 ? 'top' : 'bottom'
         if (
           !dragCol ||
+          !(showSortDragButton && allowSort) ||
           (dragCol && dragCol.id === column.id) ||
           (!isCrossDrag && column.level > 1) ||
-          (!immediate && column.level > 1)
+          (!immediate && column.level > 1) ||
+          (!isCrossDrag && dragCol.level > 1) ||
+          (!immediate && dragCol.level > 1)
         ) {
           showDropTip($xeTableCustomPanel, evnt, optEl, false, dragPos)
           return
@@ -799,7 +802,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const { immediate } = customOpts
       const columnDragOpts = $xeTable.computeColumnDragOpts
       const { popupStyle } = customStore
-      const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement, showSortDragButton, showSortMoveButton, showSortPutButton } = customOpts
+      const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, allowGroup, allowValues, trigger, placement, showSortDragButton, showSortMoveButton, showSortPutButton } = customOpts
       const isMaxFixedColumn = $xeTable.computeIsMaxFixedColumn
       const vSize = $xeTable.computeSize
       const { isCrossDrag } = columnDragOpts
@@ -879,29 +882,33 @@ export default /* define-vxe-component start */ defineVxeComponent({
               h('div', {
                 class: 'vxe-table-custom--name-option'
               }, [
-                allowSort && showSortDragButton && showSortBtn
-                  ? h('div', {
-                    class: 'vxe-table-custom--sort-option'
-                  }, [
-                    h('span', {
-                      class: ['vxe-table-custom--sort-btn', {
-                        'is--disabled': isHidden
-                      }],
-                      attrs: {
-                        title: getI18n('vxe.custom.setting.sortHelpTip')
-                      },
-                      on: isHidden
-                        ? {}
-                        : {
-                            mousedown: $xeTableCustomPanel.sortMousedownEvent,
-                            mouseup: $xeTableCustomPanel.sortMouseupEvent
-                          }
-                    }, [
-                      h('i', {
-                        class: getIcon().TABLE_CUSTOM_SORT
-                      })
-                    ])
-                  ])
+                (allowSort && showSortDragButton) || (allowGroup || allowValues)
+                  ? (
+                      showSortBtn || ((allowGroup || allowValues) && !isColGroup)
+                        ? h('div', {
+                          class: 'vxe-table-custom--sort-option'
+                        }, [
+                          h('span', {
+                            class: ['vxe-table-custom--sort-btn', {
+                              'is--disabled': isHidden
+                            }],
+                            attrs: {
+                              title: getI18n('vxe.custom.setting.sortHelpTip')
+                            },
+                            on: isHidden
+                              ? {}
+                              : {
+                                  mousedown: $xeTableCustomPanel.sortMousedownEvent,
+                                  mouseup: $xeTableCustomPanel.sortMouseupEvent
+                                }
+                          }, [
+                            h('i', {
+                              class: getIcon().TABLE_CUSTOM_SORT
+                            })
+                          ])
+                        ])
+                        : renderEmptyElement($xeTable)
+                    )
                   : renderEmptyElement($xeTable),
                 column.type === 'html'
                   ? h('div', {
@@ -1190,9 +1197,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const { treeConfig, rowGroupConfig, aggregateConfig, resizable: allResizable } = tableProps
       const { isCustomStatus, customColumnList } = tableReactData
       const customOpts = $xeTable.computeCustomOpts
-      const { immediate, showSortDragButton, showSortMoveButton, showSortPutButton } = customOpts
       const columnDragOpts = $xeTable.computeColumnDragOpts
-      const { mode, modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
+      const aggregateOpts = $xeTable.computeAggregateOpts
+      const { placement: aggPlacement } = aggregateOpts
+      const { mode, immediate, showSortDragButton, showSortMoveButton, showSortPutButton, modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, allowGroup, allowValues, checkMethod, visibleMethod } = customOpts
       const columnOpts = $xeTable.computeColumnOpts
       const { maxFixedSize } = columnOpts
       const resizableOpts = $xeTable.computeResizableOpts
@@ -1210,6 +1218,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const trVNs: VNode[] = []
       const isAllChecked = customStore.isAll
       const isAllIndeterminate = customStore.isIndeterminate
+      const isAggRtBmLayout = aggPlacement === 'right' || aggPlacement === 'bottom'
       const params = {
         $table: $xeTable,
         $grid: $xeGrid,
@@ -1296,29 +1305,31 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 h('div', {
                   class: 'vxe-table-custom-popup--name'
                 }, [
-                  allowSort
-                    ? showSortDragButton && (showSortBtn
-                      ? h('div', {
-                        class: ['vxe-table-custom-popup--column-sort-btn', {
-                          'is--disabled': isHidden
-                        }],
-                        attrs: {
-                          title: getI18n('vxe.custom.setting.sortHelpTip')
-                        },
-                        on: (isHidden
-                          ? {}
-                          : {
-                              mousedown: $xeTableCustomPanel.sortMousedownEvent,
-                              mouseup: $xeTableCustomPanel.sortMouseupEvent
+                  (allowSort && showSortDragButton) || (allowGroup || allowValues)
+                    ? (
+                        showSortBtn || ((allowGroup || allowValues) && !isColGroup)
+                          ? h('div', {
+                            class: ['vxe-table-custom-popup--column-sort-btn', {
+                              'is--disabled': isHidden
+                            }],
+                            attrs: {
+                              title: getI18n('vxe.custom.setting.sortHelpTip')
+                            },
+                            on: (isHidden
+                              ? {}
+                              : {
+                                  mousedown: $xeTableCustomPanel.sortMousedownEvent,
+                                  mouseup: $xeTableCustomPanel.sortMouseupEvent
+                                })
+                          }, [
+                            h('i', {
+                              class: getIcon().TABLE_CUSTOM_SORT
                             })
-                      }, [
-                        h('i', {
-                          class: getIcon().TABLE_CUSTOM_SORT
-                        })
-                      ])
-                      : h('div', {
-                        class: 'vxe-table-custom-popup--column-sort-placeholder'
-                      }))
+                          ])
+                          : h('div', {
+                            class: 'vxe-table-custom-popup--column-sort-placeholder'
+                          })
+                      )
                     : renderEmptyElement($xeTable),
                   column.type === 'html'
                     ? h('div', {
@@ -1471,11 +1482,11 @@ export default /* define-vxe-component start */ defineVxeComponent({
         default: () => {
           return h('div', {
             ref: 'refBodyWrapperElem',
-            class: 'vxe-table-custom-popup--body-wrapper'
+            class: ['vxe-table-custom-popup--body-wrapper', `agg-layout--${aggPlacement}`]
           }, defaultSlot
             ? $xeTable.callSlot(defaultSlot, params, h)
             : [
-                !treeConfig && (aggregateConfig || rowGroupConfig) && $xeTable.getPivotTableAggregatePopupPanel
+                !isAggRtBmLayout && !treeConfig && (aggregateConfig || rowGroupConfig) && $xeTable.getPivotTableAggregatePopupPanel
                   ? h($xeTable.getPivotTableAggregatePopupPanel(), {
                     props: {
                       customStore
@@ -1565,7 +1576,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
                     }, $xeTable.callSlot(bottomSlot, params, h))
                     : renderEmptyElement($xeTable),
                   $xeTableCustomPanel.renderDragTip(h)
-                ])
+                ]),
+                isAggRtBmLayout && !treeConfig && (aggregateConfig || rowGroupConfig) && $xeTable.getPivotTableAggregatePopupPanel
+                  ? h($xeTable.getPivotTableAggregatePopupPanel(), {
+                    props: {
+                      customStore
+                    }
+                  })
+                  : renderEmptyElement($xeTable)
               ])
         },
         footer: () => {

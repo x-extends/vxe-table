@@ -104,7 +104,8 @@ export default {
     select: {
       clear: 'Klar',
       allChecked: 'Wählen Sie alle aus',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'suchen',
       loadingText: 'Laden',
       emptyText: 'Noch keine Daten',
@@ -121,7 +122,8 @@ export default {
       allChecked: 'Wählen Sie alle aus',
       allExpand: 'Alle erweitern',
       clearExpand: 'Alle schließen',
-      total: 'Ausgewählt {0}',
+      close: '关闭',
+      total: '已选 {0} 项',
       search: 'suchen',
       emptyText: 'Noch keine Daten'
     },
