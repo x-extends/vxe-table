@@ -242,7 +242,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       const { defaultOptions, storeData } = props
       const { isAll: isAllChecked, isIndeterminate: isAllIndeterminate } = reactData
-      const { hasTree, hasMerge, isPrint, hasColgroup, columns } = storeData
+      const { hasTree, hasRowGroup, hasMerge, isPrint, hasColgroup, columns } = storeData
       const { isHeader } = defaultOptions
       const colVNs: VNode[] = []
       const checkedAll = $xeExportPanel.computeCheckedAll
@@ -496,6 +496,19 @@ export default /* define-vxe-component start */ defineVxeComponent({
                                   }),
                                   h('vxe-checkbox', {
                                     props: {
+                                      value: defaultOptions.isFooter,
+                                      disabled: !storeData.hasFooter,
+                                      title: getI18n('vxe.export.expFooterTitle'),
+                                      content: getI18n('vxe.export.expOptFooter')
+                                    },
+                                    on: {
+                                      input (value: any) {
+                                        defaultOptions.isFooter = value
+                                      }
+                                    }
+                                  }),
+                                  h('vxe-checkbox', {
+                                    props: {
                                       value: isHeader ? defaultOptions.isTitle : false,
                                       disabled: !isHeader,
                                       title: getI18n('vxe.export.expTitleTitle'),
@@ -564,35 +577,34 @@ export default /* define-vxe-component start */ defineVxeComponent({
                                           defaultOptions.useStyle = value
                                         }
                                       }
-                                    }),
-                                  h('vxe-checkbox', {
-                                    props: {
-                                      value: hasTree ? defaultOptions.isAllExpand : false,
-                                      disabled: hasEmptyData || !hasTree,
-                                      title: getI18n('vxe.export.expAllExpandTitle'),
-                                      content: getI18n('vxe.export.expOptAllExpand')
-                                    },
-                                    on: {
-                                      input (value: any) {
-                                        defaultOptions.isAllExpand = value
-                                      }
-                                    }
-                                  })
+                                    })
                                 ]),
-
                                 h('div', {
                                   class: 'vxe-table-export--panel-option-row'
                                 }, [
                                   h('vxe-checkbox', {
                                     props: {
-                                      value: defaultOptions.isFooter,
-                                      disabled: !storeData.hasFooter,
-                                      title: getI18n('vxe.export.expFooterTitle'),
-                                      content: getI18n('vxe.export.expOptFooter')
+                                      value: hasTree ? defaultOptions.isTreeAllExpanded : false,
+                                      disabled: hasEmptyData || !hasTree,
+                                      title: getI18n('vxe.export.expTreeAllExpandTitle'),
+                                      content: getI18n('vxe.export.expOptTreeAllExpand')
                                     },
                                     on: {
                                       input (value: any) {
-                                        defaultOptions.isFooter = value
+                                        defaultOptions.isTreeAllExpanded = value
+                                      }
+                                    }
+                                  }),
+                                  h('vxe-checkbox', {
+                                    props: {
+                                      value: hasRowGroup ? defaultOptions.isRowGroupAllExpanded : false,
+                                      disabled: hasEmptyData || !hasRowGroup,
+                                      title: getI18n('vxe.export.expRowGroupAllExpandTitle'),
+                                      content: getI18n('vxe.export.expOptRowGroupAllExpand')
+                                    },
+                                    on: {
+                                      input (value: any) {
+                                        defaultOptions.isRowGroupAllExpanded = value
                                       }
                                     }
                                   })

@@ -420,7 +420,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const { immediate } = customOpts
       const trEl = evnt.currentTarget as HTMLElement
       const columnDragOpts = $xeTable.computeColumnDragOpts
-      const { isCrossDrag, isSelfToChildDrag, isToChildDrag, dragEndMethod } = columnDragOpts
+      const { isCrossDrag, isPeerDrag, isSelfToChildDrag, isToChildDrag, dragEndMethod } = columnDragOpts
       const { dragCol } = customPanelReactData
       const { prevDragCol, prevDragGroupField, prevDragAggFnColid, prevDragPos, prevDragToChild } = customPanelInternalData
       const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
@@ -465,19 +465,27 @@ export default /* define-vxe-component start */ defineVxeComponent({
               if (dragColumn.parentId && newColumn.parentId) {
               // 子到子
 
-                if (!isCrossDrag) {
-                  return
-                }
-                if (oldAllMaps[newColumn.id]) {
-                  isSelfToChildStatus = true
-                  if (!(isCrossDrag && isSelfToChildDrag)) {
-                    if (VxeUI.modal) {
-                      VxeUI.modal.message({
-                        status: 'error',
-                        content: getI18n('vxe.error.treeDragChild')
-                      })
-                    }
+                if (isPeerDrag && !isCrossDrag) {
+                  if (dragColumn.parentId !== newColumn.parentId) {
+                    // 非同级
                     return
+                  }
+                } else {
+                  if (!isCrossDrag) {
+                    return
+                  }
+
+                  if (oldAllMaps[newColumn.id]) {
+                    isSelfToChildStatus = true
+                    if (!(isCrossDrag && isSelfToChildDrag)) {
+                      if (VxeUI.modal) {
+                        VxeUI.modal.message({
+                          status: 'error',
+                          content: getI18n('vxe.error.treeDragChild')
+                        })
+                      }
+                      return
+                    }
                   }
                 }
               } else if (dragColumn.parentId) {
@@ -616,7 +624,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const customOpts = $xeTable.computeCustomOpts
       const { showSortDragButton, allowSort, immediate } = customOpts
       const columnDragOpts = $xeTable.computeColumnDragOpts
-      const { isCrossDrag, isToChildDrag } = columnDragOpts
+      const { isCrossDrag, isPeerDrag, isToChildDrag } = columnDragOpts
       const optEl = evnt.currentTarget as HTMLElement
       const isControlKey = hasControlKey(evnt)
       const colid = optEl.getAttribute('colid')
@@ -624,7 +632,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       customPanelInternalData.prevDragGroupField = null
       customPanelInternalData.prevDragAggFnColid = null
       // 是否移入有效列
-      if (column && (isCrossDrag || column.level === 1)) {
+      if (column && (isCrossDrag || isPeerDrag || column.level === 1)) {
         evnt.preventDefault()
         const offsetY = evnt.clientY - optEl.getBoundingClientRect().y
         const dragPos = offsetY < optEl.clientHeight / 2 ? 'top' : 'bottom'
@@ -632,9 +640,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
           !dragCol ||
           !(showSortDragButton && allowSort) ||
           (dragCol && dragCol.id === column.id) ||
-          (!isCrossDrag && column.level > 1) ||
+          (!isCrossDrag && (isPeerDrag ? dragCol.parentId !== column.parentId : column.level > 1)) ||
           (!immediate && column.level > 1) ||
-          (!isCrossDrag && dragCol.level > 1) ||
+          (!isCrossDrag && (isPeerDrag ? dragCol.parentId !== column.parentId : dragCol.level > 1)) ||
           (!immediate && dragCol.level > 1)
         ) {
           showDropTip($xeTableCustomPanel, evnt, optEl, false, dragPos)
@@ -804,7 +812,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const { immediate, checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, allowGroup, allowValues, trigger, placement, showSortDragButton, showSortMoveButton, showSortPutButton } = customOpts
       const isMaxFixedColumn = $xeTable.computeIsMaxFixedColumn
       const vSize = $xeTable.computeSize
-      const { isCrossDrag } = columnDragOpts
+      const { isCrossDrag, isPeerDrag } = columnDragOpts
       const slots = customOpts.slots || {}
       const headerSlot = slots.header
       const topSlot = slots.top
@@ -838,7 +846,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           const colTitle = formatText(column.getTitle(), 1)
           const isDisabled = checkMethod ? !checkMethod({ $table: $xeTable, column }) : false
           const isHidden = !isChecked
-          const showSortBtn = ((isCrossDrag ? immediate : false) || column.level === 1)
+          const showSortBtn = (isCrossDrag || isPeerDrag ? immediate : false) || column.level === 1
           colVNs.push(
             h('li', {
               key: column.id,
@@ -1207,7 +1215,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const modalOpts = Object.assign({}, modalOptions)
       const drawerOpts = Object.assign({}, drawerOptions)
       const isMaxFixedColumn = $xeTable.computeIsMaxFixedColumn
-      const { isCrossDrag } = columnDragOpts
+      const { isCrossDrag, isPeerDrag } = columnDragOpts
       const slots = customOpts.slots || {}
       const headerSlot = slots.header
       const topSlot = slots.top
@@ -1255,7 +1263,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           const isColGroup = column.children && column.children.length
           const isDisabled = checkMethod ? !checkMethod({ $table: $xeTable, column }) : false
           const isHidden = !isChecked
-          const showSortBtn = ((isCrossDrag ? immediate : false) || column.level === 1)
+          const showSortBtn = (isCrossDrag || isPeerDrag ? immediate : false) || column.level === 1
           trVNs.push(
             h('tr', {
               key: column.id,

@@ -1768,6 +1768,9 @@ export default {
     if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(XEUtils.keys(exportOpts._typeMaps), exportOpts.types)) {
       warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)).join(',') || XEUtils.keys(exportOpts._typeMaps).join(',')])
     }
+    if (exportConfig && XEUtils.isBoolean((exportOpts as any).isAllExpand)) {
+      warnLog('vxe.error.delProp', ['isAllExpand', 'isTreeAllExpanded'])
+    }
 
     if (!props.id) {
       if ((props.customConfig ? isEnableConf(customOpts) : customOpts.enabled) && customOpts.storage) {

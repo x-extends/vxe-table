@@ -15,12 +15,6 @@ let htmlCellElem: any
 const csvBOM = '\ufeff'
 const enterSymbol = '\r\n'
 
-function hasTreeChildren ($xeTable: VxeTableConstructor, row: any) {
-  const treeOpts = $xeTable.computeTreeOpts
-  const childrenField = treeOpts.children || treeOpts.childrenField
-  return row[childrenField] && row[childrenField].length
-}
-
 function getSeq ($xeTable: VxeTableConstructor, cellValue: any, row: any, $rowIndex: number, column: VxeTableDefines.ColumnInfo, $columnIndex: number) {
   const seqOpts = $xeTable.computeSeqOpts
   const seqMd = seqOpts.seqMethod || (column as any).seqMethod
@@ -64,33 +58,119 @@ const toStringValue = (cellValue: any) => {
 
 function getBodyLabelData ($xeTable: VxeTableConstructor, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
   const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
 
-  const { isAllExpand, mode } = opts
+  const { isTreeAllExpanded, isRowGroupAllExpanded, mode } = opts
   const { treeConfig } = props
+  const { isRowGroupStatus } = reactData
   const radioOpts = $xeTable.computeRadioOpts
   const checkboxOpts = $xeTable.computeCheckboxOpts
   const treeOpts = $xeTable.computeTreeOpts
   const columnOpts = $xeTable.computeColumnOpts
+  const aggregateOpts = $xeTable.computeAggregateOpts
   if (!htmlCellElem) {
     htmlCellElem = document.createElement('div')
   }
-  if (treeConfig) {
-    const childrenField = treeOpts.children || treeOpts.childrenField
-    // 如果是树表格只允许导出数据源
+  const { handleGetRowId } = createHandleGetRowId($xeTable)
+  if (isRowGroupStatus) {
+    // 如果是数据分组
+    // 如果是数据分组
+    const { mapChildrenField } = aggregateOpts
     const rest: any[] = []
     const expandMaps: Record<string, boolean> = {}
     const useMaps: Record<string, boolean> = {}
-    const { handleGetRowId } = createHandleGetRowId($xeTable)
-    XEUtils.eachTree(datas, (item, $rowIndex, items, path, parent, nodes) => {
+    XEUtils.eachTree(datas, (item, $rowIndex, items, path, parentItem, nodes) => {
       const row = item._row || item
       const rowid = handleGetRowId(row)
       if (useMaps[rowid]) {
         return
       }
-      const parentRow = parent && parent._row ? parent._row : parent
+      const parentRow = parentItem && parentItem._row ? parentItem._row : parentItem
       const pRowid = parentRow ? handleGetRowId(parentRow) : ''
-      if ((isAllExpand || !parentRow || (expandMaps[pRowid] && $xeTable.isTreeExpandByRow(parentRow)))) {
-        const hasRowChild = hasTreeChildren($xeTable, row)
+      if ((isRowGroupAllExpanded || !parentRow || (expandMaps[pRowid] && $xeTable.isRowExpandByRow(parentRow)))) {
+        const hasRowChild = mapChildrenField && row[mapChildrenField] && row[mapChildrenField].length
+        const item: any = {
+          _row: row,
+          _level: nodes.length - 1,
+          _hasChild: hasRowChild,
+          _expand: hasRowChild && $xeTable.isRowExpandByRow(row)
+        }
+        columns.forEach((column, $columnIndex) => {
+          let cellValue: string | number | boolean | null = ''
+          const renderOpts = column.editRender || column.cellRender
+          let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
+          if (!bodyExportMethod && renderOpts && renderOpts.name) {
+            const compConf = renderer.get(renderOpts.name)
+            if (compConf) {
+              bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
+            }
+          }
+          if (!bodyExportMethod) {
+            bodyExportMethod = columnOpts.exportMethod
+          }
+          if (bodyExportMethod) {
+            cellValue = bodyExportMethod({ $table: $xeTable, row, column, options: opts })
+          } else {
+            switch (column.type) {
+              case 'seq': {
+                const seqVal = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+                cellValue = mode === 'all' ? seqVal : getSeq($xeTable, seqVal, row, $rowIndex, column, $columnIndex)
+                break
+              }
+              case 'checkbox':
+                cellValue = toBooleanValue($xeTable.isCheckedByCheckboxRow(row))
+                item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
+                item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ $table: $xeTable, row })
+                break
+              case 'radio':
+                cellValue = toBooleanValue($xeTable.isCheckedByRadioRow(row))
+                item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
+                item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ $table: $xeTable, row })
+                break
+              default:
+                if (opts.original) {
+                  cellValue = getCellValue(row, column)
+                } else {
+                  cellValue = $xeTable.getCellLabel(row, column)
+                  if (column.type === 'html') {
+                    htmlCellElem.innerHTML = cellValue
+                    cellValue = htmlCellElem.innerText.trim()
+                  } else {
+                    const cell = $xeTable.getCellElement(row, column)
+                    if (cell && !hasClass(cell, 'is--progress')) {
+                      cellValue = cell.innerText.trim()
+                    }
+                  }
+                }
+            }
+          }
+          item[column.id] = toStringValue(cellValue)
+        })
+        useMaps[rowid] = true
+        if (pRowid) {
+          expandMaps[pRowid] = true
+        }
+        rest.push(Object.assign(item, row))
+      }
+    }, { children: mapChildrenField })
+    return rest
+  }
+  if (treeConfig) {
+    const childrenField = treeOpts.children || treeOpts.childrenField
+    // 如果是树结构
+    const rest: any[] = []
+    const expandMaps: Record<string, boolean> = {}
+    const useMaps: Record<string, boolean> = {}
+    XEUtils.eachTree(datas, (item, $rowIndex, items, path, parentItem, nodes) => {
+      const row = item._row || item
+      const rowid = handleGetRowId(row)
+      if (useMaps[rowid]) {
+        return
+      }
+      const parentRow = parentItem && parentItem._row ? parentItem._row : parentItem
+      const pRowid = parentRow ? handleGetRowId(parentRow) : ''
+      if ((isTreeAllExpanded || !parentRow || (expandMaps[pRowid] && $xeTable.isTreeExpandByRow(parentRow)))) {
+        const hasRowChild = row[childrenField] && row[childrenField].length
         const item: any = {
           _row: row,
           _level: nodes.length - 1,
@@ -1005,10 +1085,11 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
   const $xeGGWrapper = $xeGrid || $xeGantt
 
   const { treeConfig, showHeader, showFooter } = props
-  const { initStore, isGroup, footerTableData, exportStore, exportParams } = reactData
+  const { initStore, isGroup, rowGroupList, footerTableData, exportStore, exportParams } = reactData
   const { collectColumn, mergeBodyList, mergeFooterList } = internalData
   const exportOpts = $xeTable.computeExportOpts
-  const hasTree = treeConfig
+  const hasTree = !!treeConfig
+  const hasRowGroup = rowGroupList.length > 0
   const customOpts = $xeTable.computeCustomOpts
   const selectRecords = $xeTable.getCheckboxRecords()
   const proxyOpts = $xeGGWrapper ? $xeGGWrapper.computeProxyOpts : {}
@@ -1025,6 +1106,13 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
     current: 'current',
     modes: (proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : []).concat(['current', 'selected', 'empty'])
   }, options)
+
+  // 已废弃，参数 isAllExpand
+  if (XEUtils.isBoolean((defOpts as any).isAllExpand)) {
+    warnLog('vxe.error.delProp', ['isAllExpand', 'isTreeAllExpanded'])
+    defOpts.isTreeAllExpanded = (defOpts as any).isAllExpand
+  }
+
   const types = defOpts.types || XEUtils.keys(exportOpts._typeMaps)
   const modes = defOpts.modes || []
   const checkMethod = customOpts.checkMethod
@@ -1065,17 +1153,16 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
     column.disabled = (parent && parent.disabled) || (checkMethod ? !checkMethod({ $table: $xeTable, column }) : false)
   })
   // 更新条件
-  Object.assign(exportStore, {
-    columns: exportColumns,
-    typeList,
-    modeList,
-    hasFooter,
-    hasMerge,
-    hasTree,
-    isPrint,
-    hasColgroup: isGroup,
-    visible: true
-  })
+  exportStore.columns = exportColumns
+  exportStore.typeList = typeList
+  exportStore.modeList = modeList
+  exportStore.hasFooter = hasFooter
+  exportStore.hasMerge = hasMerge
+  exportStore.hasTree = hasTree
+  exportStore.hasRowGroup = hasRowGroup
+  exportStore.isPrint = !!isPrint
+  exportStore.hasColgroup = isGroup
+  exportStore.visible = true
   // 默认参数
   Object.assign(exportParams, {
     mode: selectRecords.length ? 'selected' : 'current'
@@ -1212,7 +1299,8 @@ export default {
         // filename: '',
         // sheetName: '',
         // original: false,
-        // isAllExpand: false,
+        // isTreeAllExpanded: false,
+        // isRowGroupAllExpanded: false,
         // data: null,
         // remote: false,
         // dataFilterMethod: null,
@@ -1222,6 +1310,13 @@ export default {
         // beforeExportMethod: null,
         // afterExportMethod: null
       }, exportOpts, options)
+
+      // 已废弃，参数 isAllExpand
+      if (XEUtils.isBoolean((opts as any).isAllExpand)) {
+        warnLog('vxe.error.delProp', ['isAllExpand', 'isTreeAllExpanded'])
+        opts.isTreeAllExpanded = (opts as any).isAllExpand
+      }
+
       let { filename, sheetName, type, mode, columns, original, columnFilterMethod, beforeExportMethod, includeFields, excludeFields } = opts
       let groups: any[] = []
       const selectRecords = $xeTable.getCheckboxRecords()
