@@ -3674,7 +3674,9 @@ const wheelScrollTopTo = (diffNum: number, cb: (progress: number) => void) => {
   let countTop = 0
   const step = (timestamp: number) => {
     let progress = (timestamp - startTime) / duration
-    if (progress > 1) {
+    if (progress < 0) {
+      progress = 0
+    } else if (progress > 1) {
       progress = 1
     }
     const easedProgress = Math.pow(progress, 2)
@@ -10463,6 +10465,10 @@ const Methods = {
     if (target && /^textarea$/i.test((target as HTMLElement).tagName)) {
       return
     }
+    // 如果滚轮未移动或者触摸板未变化位置
+    if (!deltaY && !deltaX) {
+      return
+    }
 
     const { highlightHoverRow } = tableProps
     const { scrollXLoad, scrollYLoad, expandColumn } = reactData
@@ -11066,7 +11072,7 @@ const Methods = {
     if (showFooter && footerData && footerData.length) {
       footData = footerData.slice(0)
     } else if (showFooter && footerMethod) {
-      footData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: afterFullData, $table: $xeTable, $grid: $xeGrid }) : []
+      footData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: afterFullData, $table: $xeTable, $grid: $xeGrid } as any) : []
     }
     reactData.footerTableData = footData
     $xeTable.handleUpdateFooterMerge()

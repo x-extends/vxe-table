@@ -281,7 +281,7 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
         $columnIndex = colRest.$index
         _columnIndex = colRest._index
       }
-      const expandParams: VxeTableDefines.CellRenderDataParams = {
+      const expandParams: any = {
         $grid: $xeGrid,
         $table: $xeTable,
         seq,
@@ -764,7 +764,7 @@ export default {
       const { id } = props
       if (id) {
         if (XEUtils.isFunction(id)) {
-          return `${id({ $table: $xeTable, $grid: $xeGrid }) || ''}`
+          return `${id({ $table: $xeTable, $grid: $xeGrid } as any) || ''}`
         }
         return `${id}`
       }

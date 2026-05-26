@@ -54,7 +54,7 @@ const renderRows = (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
     }
     const columnIndex = colRest.index
     const _columnIndex = colRest._index
-    const cellParams = {
+    const cellParams: any = {
       $table: $xeTable,
       $grid: $xeGrid,
       $rowIndex,

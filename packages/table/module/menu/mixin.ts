@@ -263,8 +263,9 @@ export default {
       if (!menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
         const gMenuOpts = menus.get(menu.code)
         const params = Object.assign({ menu, $grid: $xeGrid, $table: this, $event: evnt }, this.ctxMenuStore.args)
-        if (gMenuOpts && gMenuOpts.menuMethod) {
-          gMenuOpts.menuMethod(params, evnt)
+        const tmMethod = gMenuOpts ? (gMenuOpts.tableMenuMethod || gMenuOpts.menuMethod) : null
+        if (tmMethod) {
+          tmMethod(params, evnt)
         }
         // 在 v4 中废弃事件 context-menu-click
         if (this.$listeners['context-menu-click']) {
