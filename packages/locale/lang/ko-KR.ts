@@ -166,7 +166,7 @@ export default {
       cstmDragTarget: '움직임 : {0}',
       setting: {
         colSort: '종류',
-        sortHelpTip: '아이콘을 클릭하고 드래그하여 순서를 조정하십시오',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: '열 제목',
         colResizable: '열 폭 (픽셀)',
         colVisible: '표시 여부',
@@ -652,7 +652,7 @@ export default {
           groupPlaceholder: '여기로 끌어 그룹화하십시오',
           valuesPlaceholder: '집계를 위해 여기를 끌어냅니다',
           dragExistCol: '이 열은 이미 존재합니다',
-          sortHelpTip: '아이콘을 클릭하고 드래그하여 순서를 조정하십시오'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: '합계를 요청하십시오',

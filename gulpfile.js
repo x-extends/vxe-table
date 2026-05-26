@@ -13,6 +13,8 @@ const cleanCSS = require('gulp-clean-css')
 const prefixer = require('gulp-autoprefixer')
 const merge = require('merge-stream')
 const pack = require('./package.json')
+const { rollup } = require('rollup')
+const commonjs = require('@rollup/plugin-commonjs')
 const ts = require('gulp-typescript')
 const tsconfig = require('./tsconfig.json')
 
@@ -26,6 +28,7 @@ const tsSettings = {
 const exportModuleName = 'VxeUITable'
 const esmOutDir = 'es'
 const commOutDir = 'lib'
+const distOutDir = 'dist'
 
 const coreName = 'ui'
 const oldCoreName = 'v-x-e-table'
@@ -119,7 +122,27 @@ gulp.task('build_esjs', gulp.series('build_escode', function () {
     .pipe(gulp.dest(esmOutDir))
 }))
 
-gulp.task('build_es_all', gulp.series('build_esjs'))
+gulp.task('build_es_all', gulp.series('build_esjs', async () => {
+  const rollupConfig = {
+    input: `${esmOutDir}/index.esm.js`,
+    output: {
+      file: `${distOutDir}/all.esm.js`,
+      format: 'esm',
+      name: exportModuleName,
+      globals: {
+        vue: 'Vue',
+        'xe-utils': 'XEUtils'
+      }
+    },
+    plugins: [commonjs()],
+    external: ['vue', 'xe-utils']
+  }
+
+  fs.mkdirSync(distOutDir, { recursive: true })
+  const bundle = await rollup(rollupConfig)
+  const { output } = await bundle.generate(rollupConfig.output)
+  fs.writeFileSync(`${distOutDir}/all.esm.js`, output[0].code, 'utf-8')
+}))
 
 gulp.task('build_commoncode', function () {
   return gulp.src([
@@ -177,36 +200,38 @@ gulp.task('build_umdcss', () => {
   const styleStr = fs.readFileSync('lib_temp/index.css', 'utf-8')
   fs.writeFileSync('lib_temp/index.css', toCSSUnicode(styleStr))
   return gulp.src('lib_temp/index.css')
-    .pipe(gulp.dest('es'))
-    .pipe(gulp.dest('lib'))
+    .pipe(gulp.dest(esmOutDir))
+    .pipe(gulp.dest(commOutDir))
     .pipe(rename({
       suffix: '.min',
       extname: '.css'
     }))
-    .pipe(gulp.dest('es'))
-    .pipe(gulp.dest('lib'))
+    .pipe(gulp.dest(esmOutDir))
+    .pipe(gulp.dest(commOutDir))
     .pipe(rename({
       basename: 'style'
     }))
-    .pipe(gulp.dest('es'))
-    .pipe(gulp.dest('lib'))
+    .pipe(gulp.dest(esmOutDir))
+    .pipe(gulp.dest(commOutDir))
+    .pipe(gulp.dest(distOutDir))
     .pipe(rename({
       suffix: '.min',
       extname: '.css'
     }))
-    .pipe(gulp.dest('es'))
-    .pipe(gulp.dest('lib'))
+    .pipe(gulp.dest(esmOutDir))
+    .pipe(gulp.dest(commOutDir))
+    .pipe(gulp.dest(distOutDir))
 })
 
 gulp.task('build_umdjs', () => {
   return gulp.src('lib_temp/index.umd.js')
-    .pipe(gulp.dest('lib'))
+    .pipe(gulp.dest(commOutDir))
     .pipe(uglify())
     .pipe(rename({
       basename: 'index',
       extname: '.umd.min.js'
     }))
-    .pipe(gulp.dest('lib'))
+    .pipe(gulp.dest(commOutDir))
 })
 
 gulp.task('build_umd_all', gulp.parallel('build_umdjs', 'build_umdcss'))
@@ -216,8 +241,9 @@ gulp.task('build_icon', () => {
   return merge(
     gulp.src('lib/style.css')
       .pipe(replace(' format("woff2")', ` format("woff2"),url("./iconfont.${timeNow}.woff") format("woff"),url("./iconfont.${timeNow}.ttf") format("truetype")`))
-      .pipe(gulp.dest('lib'))
-      .pipe(gulp.dest('es')),
+      .pipe(gulp.dest(esmOutDir))
+      .pipe(gulp.dest(commOutDir))
+      .pipe(gulp.dest(distOutDir)),
     gulp.src('styles/icon/*')
       .pipe(rename({
         suffix: `.${timeNow}`
@@ -308,6 +334,7 @@ gulp.task('clear', () => {
   return del([
     commOutDir,
     esmOutDir,
+    distOutDir,
     'packages_temp'
   ])
 })

@@ -166,7 +166,7 @@ export default {
       cstmDragTarget: 'Bewegung: {0}',
       setting: {
         colSort: 'Sortieren',
-        sortHelpTip: 'Klicken Sie auf das Symbol und ziehen Sie das Symbol, um die Bestellung anzupassen',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Spaltenentitel',
         colResizable: 'Säulenbreite (Pixel)',
         colVisible: 'Ob angezeigt',
@@ -652,7 +652,7 @@ export default {
           groupPlaceholder: 'Ziehen Sie hier zur Gruppe',
           valuesPlaceholder: 'Ziehen Sie hierher, um zu aggregieren',
           dragExistCol: 'Diese Spalte existiert bereits',
-          sortHelpTip: 'Klicken Sie auf das Symbol und ziehen Sie das Symbol, um die Bestellung anzupassen'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: 'Bitten Sie nach Summe',

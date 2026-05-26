@@ -469,7 +469,7 @@ hooks.add('tableValidatorModule', {
         const errorRules: Rule[] = []
         const syncValidList: Promise<any>[] = []
         if (field && editRules) {
-          const rules = XEUtils.get(editRules, field)
+          const rules = column.rules ? column.rules : XEUtils.get(editRules, field)
           if (rules) {
             const cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, field) : val
             rules.forEach((rule) => {
@@ -540,7 +540,7 @@ hooks.add('tableValidatorModule', {
         const { editRules } = props
         const { field } = column
         if (field && editRules) {
-          const rules = XEUtils.get(editRules, field)
+          const rules = column.rules ? column.rules : XEUtils.get(editRules, field)
           return rules && !!XEUtils.find(rules, rule => type === 'all' || !rule.trigger || type === rule.trigger)
         }
         return false

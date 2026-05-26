@@ -697,10 +697,9 @@ export default defineVxeComponent({
       const { treeConfig, rowGroupConfig, aggregateConfig } = tableProps
       const { isCustomStatus, customColumnList, isCustomDragStatus } = tableReactData
       const customOpts = computeCustomOpts.value
-      const { immediate } = customOpts
       const columnDragOpts = computeColumnDragOpts.value
       const { popupStyle } = customStore
-      const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, allowGroup, allowValues, trigger, placement, showSortDragButton, showSortMoveButton, showSortPutButton } = customOpts
+      const { immediate, checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, allowGroup, allowValues, trigger, placement, showSortDragButton, showSortMoveButton, showSortPutButton } = customOpts
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
       const vSize = computeSize.value
       const { isCrossDrag } = columnDragOpts
