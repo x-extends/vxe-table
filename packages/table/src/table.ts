@@ -3616,12 +3616,12 @@ export default defineVxeComponent({
       }
     }
 
-    const handleGroupData = (list: any[], rowGroups: VxeTableDefines.RowGroupItem[]) => {
+    const handleGroupData = (list: any[], rowGroups: VxeTableDefines.RowGroupItem[], isCombinedField?: boolean) => {
       let fullData = list
       let treeData = list
       if (rowGroups) {
         const aggregateOpts = computeAggregateOpts.value
-        const { rowField, parentField, childrenField, mapChildrenField } = aggregateOpts
+        const { rowField, parentField, separator, childrenField, mapChildrenField } = aggregateOpts
         const rowOpts = computeRowOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField } = checkboxOpts
@@ -3633,11 +3633,26 @@ export default defineVxeComponent({
           const groupField = rgItem.field
           const groupColumn = $xeTable.getColumnByField(groupField)
           const groupMaps: Record<string, any[]> = {}
+          const groupCombinedMaps: Record<string, any[]> = {}
           const aggList: VxeTableDefines.AggregateRowInfo[] = []
           const rowkey = getRowkey($xeTable)
           list.forEach((row) => {
             const cellValue = groupColumn ? $xeTable.getCellLabel(row, groupColumn) : XEUtils.get(row, groupField)
-            const groupValue = XEUtils.eqNull(cellValue) ? '' : cellValue
+            let groupValue = XEUtils.eqNull(cellValue) ? '' : cellValue
+            if (isCombinedField) {
+              const groupVals = [groupValue]
+              rowGroups.slice(1).forEach(ogItem => {
+                const ogField = ogItem.field
+                const ogColumn = $xeTable.getColumnByField(ogField)
+                const ocValue = ogColumn ? $xeTable.getCellLabel(row, ogColumn) : XEUtils.get(row, ogField)
+                const ogValue = XEUtils.eqNull(ocValue) ? '' : ocValue
+                groupValue += (separator || ' / ') + ogValue
+                groupVals.push(ogValue)
+              })
+              if (!groupCombinedMaps[groupValue]) {
+                groupCombinedMaps[groupValue] = groupVals
+              }
+            }
             let childList = groupMaps[groupValue]
             if (!childList) {
               childList = []
@@ -3648,33 +3663,61 @@ export default defineVxeComponent({
             }
             childList.push(row)
           })
-          XEUtils.objectEach(groupMaps, (childList, groupValue) => {
-            const { fullData: childFullData, treeData: childTreeData } = handleGroupData(childList, rowGroups.slice(1))
-            const aggRow: VxeTableDefines.AggregateRowInfo = {
-              isAggregate: true,
-              aggData: {},
-              groupContent: groupValue,
-              groupField,
-              childCount: 0,
-              [rowField]: getRowUniqueId(),
-              [parentField]: null,
-              [childrenField]: childTreeData,
-              [mapChildrenField]: childTreeData
-            }
-            aggRow[rowkey] = createRowId(rowOpts, aggRow, rowkey)
-            if (checkField) {
-              aggRow[checkField] = false
-            }
-            if (indeterminateField) {
-              aggRow[indeterminateField] = false
-            }
-            aggList.push(aggRow)
-            treeData.push(aggRow)
-            fullData.push(aggRow)
-            if (childFullData.length) {
-              fullData.push(...childFullData)
-            }
-          })
+          if (isCombinedField) {
+            XEUtils.objectEach(groupMaps, (childList, groupValue) => {
+              const aggRow: VxeTableDefines.AggregateRowInfo = {
+                isAggregate: true,
+                aggData: {},
+                groupContent: groupValue,
+                groupCombineds: groupCombinedMaps[groupValue],
+                groupField,
+                childCount: 0,
+                [rowField]: getRowUniqueId(),
+                [parentField]: null,
+                [childrenField]: childList,
+                [mapChildrenField]: childList
+              }
+              aggRow[rowkey] = createRowId(rowOpts, aggRow, rowkey)
+              if (checkField) {
+                aggRow[checkField] = false
+              }
+              if (indeterminateField) {
+                aggRow[indeterminateField] = false
+              }
+              aggList.push(aggRow)
+              treeData.push(aggRow)
+              fullData.push(aggRow)
+            })
+          } else {
+            XEUtils.objectEach(groupMaps, (childList, groupValue) => {
+              const { fullData: childFullData, treeData: childTreeData } = handleGroupData(childList, rowGroups.slice(1))
+              const aggRow: VxeTableDefines.AggregateRowInfo = {
+                isAggregate: true,
+                aggData: {},
+                groupContent: groupValue,
+                groupCombineds: [],
+                groupField,
+                childCount: 0,
+                [rowField]: getRowUniqueId(),
+                [parentField]: null,
+                [childrenField]: childTreeData,
+                [mapChildrenField]: childTreeData
+              }
+              aggRow[rowkey] = createRowId(rowOpts, aggRow, rowkey)
+              if (checkField) {
+                aggRow[checkField] = false
+              }
+              if (indeterminateField) {
+                aggRow[indeterminateField] = false
+              }
+              aggList.push(aggRow)
+              treeData.push(aggRow)
+              fullData.push(aggRow)
+              if (childFullData.length) {
+                fullData.push(...childFullData)
+              }
+            })
+          }
           handleeGroupSummary(aggList)
         }
       }
@@ -3682,6 +3725,14 @@ export default defineVxeComponent({
         treeData,
         fullData
       }
+    }
+
+    const initGroupData = (list: any[], rowGroups: VxeTableDefines.RowGroupItem[]) => {
+      const aggregateOpts = computeAggregateOpts.value
+      const { mode } = aggregateOpts
+      const isCombinedField = mode === 'combined'
+      const groupRest = handleGroupData(list, rowGroups, isCombinedField)
+      return groupRest
     }
 
     const initData = () => {
@@ -3765,7 +3816,7 @@ export default defineVxeComponent({
           treeData = fullData.slice(0)
         }
       } else if ((aggregateConfig || rowGroupConfig) && rowGroupList.length) {
-        const groupRest = handleGroupData(fullData, rowGroupList)
+        const groupRest = initGroupData(fullData, rowGroupList)
         treeData = groupRest.treeData
         fullData = groupRest.fullData
         isRGroup = true
@@ -14039,6 +14090,9 @@ export default defineVxeComponent({
       }
       if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(XEUtils.keys(exportOpts._typeMaps), exportOpts.types)) {
         warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)).join(',') || XEUtils.keys(exportOpts._typeMaps).join(',')])
+      }
+      if (exportConfig && XEUtils.isBoolean((exportOpts as any).isAllExpand)) {
+        warnLog('vxe.error.delProp', ['isAllExpand', 'isTreeAllExpanded'])
       }
 
       if (!props.id) {

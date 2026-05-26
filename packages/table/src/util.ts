@@ -342,6 +342,7 @@ export function createReactData (): TableReactData {
       hasFooter: false,
       hasMerge: false,
       hasTree: false,
+      hasRowGroup: false,
       hasColgroup: false,
       visible: false
     },
@@ -352,7 +353,8 @@ export function createReactData (): TableReactData {
       type: '',
       isColgroup: false,
       isMerge: false,
-      isAllExpand: false,
+      isTreeAllExpanded: false,
+      isRowGroupAllExpanded: false,
       useStyle: false,
       original: false,
       message: true,

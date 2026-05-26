@@ -1,126 +1,90 @@
 <template>
   <div>
+    <div>
+      <vxe-button @click="expandNodeEvent">展开指定节点</vxe-button>
+      <vxe-button @click="expandAllEvent">展开所有</vxe-button>
+      <vxe-button @click="clearExpandEvent">关闭所有</vxe-button>
+    </div>
 
-      <div style="margin-bottom:10px;display:flex;gap:10px;">
-          <vxe-input v-model="searchText" placeholder="输入关键字并回车查询" @keyup.enter="toSearch" style="width:300px;"/>
-          <vxe-button type="primary" @click="toSearch">查询</vxe-button>
-      </div>
-      <vxe-grid :data="tableData"
-              v-bind="gridOptions"
-              ref="tableRef">
-
-      </vxe-grid>
+    <vxe-grid ref="gridRef" v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      searchText: '',
-      lastSearchText: '',
-      searchResults: [],
-      currentSearchIndex: -1,
-      tableData: [],
-      gridOptions: {
-        border: true,
-        round: true,
-        showOverflow: 'tooltip',
-        maxHeight: 500, // 初始值，后续动态计算
-        minHeight: 250,
-        align: 'center',
-        columnConfig: {
-          resizable: true
-        },
-        virtualXConfig: {
-          enabled: true,
-          oSize: 0
-        },
-        virtualYConfig: {
-          enabled: true,
-          oSize: 0
-        },
-        rowConfig: {
-          drag: true,
-          isCurrent: true,
-          isHover: true
-        },
-        toolbarConfig: {
-          refresh: false,
-          zoom: true,
-          custom: false
-        },
-        columns: [
-          { field: 'fieldName', minWidth: '110px', title: '参数名称', showOverflow: 'tooltip' },
-          {
-            field: 'enums',
-            minWidth: '110px',
-            title: '参数值',
-            showOverflow: false,
-            align: 'center'
-          }
-        ]
-      }
-    }
+<script lang="ts" setup>
+import { ref, reactive } from 'vue'
+import type { VxeGridProps, VxeGridInstance } from '../../../types'
+
+interface RowVO {
+  keyId: number
+  parentId: number | null
+  name: string
+  type: string
+  size: number
+  date: string
+}
+
+const gridRef = ref<VxeGridInstance<RowVO>>()
+
+const gridOptions = reactive<VxeGridProps<RowVO> & { data: RowVO[] }>({
+  border: true,
+  treeConfig: {
+    transform: true,
+    rowField: 'keyId',
+    parentField: 'parentId'
   },
-  methods: {
-    // 搜索并跳转到最近的一条数据的位置
-    async toSearch () {
-      const text = this.searchText.trim()
-      console.log('搜索参数为：', text)
-      const scrollTop = 0
-      if (!text) {
-        this.searchResults = []
-        this.currentSearchIndex = -1
-        this.lastSearchText = ''
-        return
-      }
-
-      if (text !== this.lastSearchText || this.searchResults.length === 0) {
-        this.searchResults = this.tableData.filter(row => {
-          const fieldName = row.fieldName || ''
-          return fieldName.toLowerCase().includes(text.toLowerCase())
-        })
-        this.currentSearchIndex = 0
-        this.lastSearchText = text
-
-        if (this.searchResults.length === 0) {
-          console.log('未找到匹配项')
-          return
-        }
-      } else {
-        this.currentSearchIndex = (this.currentSearchIndex + 1) % this.searchResults.length
-      }
-
-      const row = this.searchResults[this.currentSearchIndex]
-      console.log('匹配到结果：', row)
-      if (this.$refs.tableRef && row) {
-        await this.scrollRowEvent(row)
-      }
-    },
-    // 滚动到指定行
-    async scrollRowEvent (row) {
-      const $grid = this.$refs.tableRef
-      if ($grid) {
-        console.log($grid)
-        await $grid.scrollToRow(row)
-      }
-    }
+  exportConfig: {
+    isTreeAllExpanded: true
   },
-  created () {
-    const list2 = []
-    for (let index = 0; index < 30000; index++) {
-      let str = ''
-      for (let i = 0; i < Math.floor(Math.random() * 10000); i++) {
-        str += i
-      }
-      list2.push({
-        id: index,
-        fieldName: 'field' + index,
-        enums: str
-      })
-    }
-    this.tableData = list2
+  toolbarConfig: {
+    export: true
+  },
+  columns: [
+    { type: 'seq', width: 70 },
+    { field: 'name', title: 'Name', minWidth: 300, treeNode: true },
+    { field: 'size', title: 'Size' },
+    { field: 'type', title: 'Type' },
+    { field: 'date', title: 'Date' }
+  ],
+  data: [
+    { keyId: 10000, parentId: null, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+    { keyId: 10050, parentId: null, name: 'Test2', type: 'mp4', size: 0, date: '2021-04-01' },
+    { keyId: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+    { keyId: 20045, parentId: 24300, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+    { keyId: 10053, parentId: 24300, name: 'Test5', type: 'avi', size: 0, date: '2021-04-01' },
+    { keyId: 24330, parentId: 10053, name: 'Test6', type: 'txt', size: 25, date: '2021-10-01' },
+    { keyId: 21011, parentId: 10053, name: 'Test7', type: 'pdf', size: 512, date: '2020-01-01' },
+    { keyId: 22200, parentId: 10053, name: 'Test8', type: 'js', size: 1024, date: '2021-06-01' },
+    { keyId: 23666, parentId: null, name: 'Test9', type: 'xlsx', size: 2048, date: '2020-11-01' },
+    { keyId: 23677, parentId: 23666, name: 'Test10', type: 'js', size: 1024, date: '2021-06-01' },
+    { keyId: 23671, parentId: 23677, name: 'Test11', type: 'js', size: 1024, date: '2021-06-01' },
+    { keyId: 23672, parentId: 23677, name: 'Test12', type: 'js', size: 1024, date: '2021-06-01' },
+    { keyId: 23688, parentId: 23666, name: 'Test13', type: 'js', size: 1024, date: '2021-06-01' },
+    { keyId: 23681, parentId: 23688, name: 'Test14', type: 'js', size: 1024, date: '2021-06-01' },
+    { keyId: 23682, parentId: 23688, name: 'Test15', type: 'js', size: 1024, date: '2021-06-01' },
+    { keyId: 24555, parentId: null, name: 'Test16', type: 'avi', size: 224, date: '2020-10-01' },
+    { keyId: 24566, parentId: 24555, name: 'Test17', type: 'js', size: 1024, date: '2021-06-01' },
+    { keyId: 24577, parentId: 24555, name: 'Test18', type: 'js', size: 1024, date: '2021-06-01' }
+  ]
+})
+
+const expandNodeEvent = () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    $grid.setTreeExpand(gridOptions.data[1], true)
+  }
+}
+
+const expandAllEvent = () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    $grid.setAllTreeExpand(true)
+  }
+}
+
+const clearExpandEvent = () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    $grid.clearTreeExpand()
   }
 }
 </script>

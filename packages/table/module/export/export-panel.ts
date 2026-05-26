@@ -173,7 +173,7 @@ export default defineVxeComponent({
 
       const { defaultOptions, storeData } = props
       const { isAll: isAllChecked, isIndeterminate: isAllIndeterminate } = reactData
-      const { hasTree, hasMerge, isPrint, hasColgroup, columns } = storeData
+      const { hasTree, hasRowGroup, hasMerge, isPrint, hasColgroup, columns } = storeData
       const { isHeader } = defaultOptions
       const colVNs: VNode[] = []
       const checkedAll = computeCheckedAll.value
@@ -409,6 +409,17 @@ export default defineVxeComponent({
                                     : renderEmptyElement($xeTable),
                                   VxeUICheckboxComponent
                                     ? h(VxeUICheckboxComponent, {
+                                      modelValue: defaultOptions.isFooter,
+                                      disabled: !storeData.hasFooter,
+                                      title: getI18n('vxe.export.expFooterTitle'),
+                                      content: getI18n('vxe.export.expOptFooter'),
+                                      'onUpdate:modelValue' (value: any) {
+                                        defaultOptions.isFooter = value
+                                      }
+                                    })
+                                    : renderEmptyElement($xeTable),
+                                  VxeUICheckboxComponent
+                                    ? h(VxeUICheckboxComponent, {
                                       modelValue: isHeader ? defaultOptions.isTitle : false,
                                       disabled: !isHeader,
                                       title: getI18n('vxe.export.expTitleTitle'),
@@ -465,30 +476,30 @@ export default defineVxeComponent({
                                       'onUpdate:modelValue' (value: any) {
                                         defaultOptions.useStyle = value
                                       }
-                                    }),
-                                  VxeUICheckboxComponent
-                                    ? h(VxeUICheckboxComponent, {
-                                      modelValue: hasTree ? defaultOptions.isAllExpand : false,
-                                      disabled: hasEmptyData || !hasTree,
-                                      title: getI18n('vxe.export.expAllExpandTitle'),
-                                      content: getI18n('vxe.export.expOptAllExpand'),
-                                      'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.isAllExpand = value
-                                      }
                                     })
-                                    : renderEmptyElement($xeTable)
                                 ]),
                                 h('div', {
                                   class: 'vxe-table-export--panel-option-row'
                                 }, [
                                   VxeUICheckboxComponent
                                     ? h(VxeUICheckboxComponent, {
-                                      modelValue: defaultOptions.isFooter,
-                                      disabled: !storeData.hasFooter,
-                                      title: getI18n('vxe.export.expFooterTitle'),
-                                      content: getI18n('vxe.export.expOptFooter'),
+                                      modelValue: hasTree ? defaultOptions.isTreeAllExpanded : false,
+                                      disabled: hasEmptyData || !hasTree,
+                                      title: getI18n('vxe.export.expTreeAllExpandTitle'),
+                                      content: getI18n('vxe.export.expOptTreeAllExpand'),
                                       'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.isFooter = value
+                                        defaultOptions.isTreeAllExpanded = value
+                                      }
+                                    })
+                                    : renderEmptyElement($xeTable),
+                                  VxeUICheckboxComponent
+                                    ? h(VxeUICheckboxComponent, {
+                                      modelValue: hasRowGroup ? defaultOptions.isRowGroupAllExpanded : false,
+                                      disabled: hasEmptyData || !hasRowGroup,
+                                      title: getI18n('vxe.export.expRowGroupAllExpandTitle'),
+                                      content: getI18n('vxe.export.expOptRowGroupAllExpand'),
+                                      'onUpdate:modelValue' (value: any) {
+                                        defaultOptions.isRowGroupAllExpanded = value
                                       }
                                     })
                                     : renderEmptyElement($xeTable)
