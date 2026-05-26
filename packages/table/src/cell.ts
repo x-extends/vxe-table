@@ -1161,7 +1161,7 @@ export const Cell = {
     const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
     let isRequired = false
     if (editRules) {
-      const columnRules = XEUtils.get(editRules, column.field)
+      const columnRules = column.rules ? column.rules : XEUtils.get(editRules, column.field)
       if (columnRules) {
         isRequired = columnRules.some((rule: any) => rule.required)
       }

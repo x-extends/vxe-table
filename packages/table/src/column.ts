@@ -103,6 +103,8 @@ export const columnProps = {
   filterRender: Object as PropType<VxeColumnPropTypes.FilterRender>,
   // 是否显示浮动筛选
   floatingFilters: Object as PropType<VxeColumnPropTypes.FloatingFilters>,
+  // 列的校验规则
+  rules: Array as PropType<VxeColumnPropTypes.Rules>,
   // 设置为分组节点
   rowGroupNode: Boolean as PropType<VxeColumnPropTypes.RowGroupNode>,
   // 设置为树节点

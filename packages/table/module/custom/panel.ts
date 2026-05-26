@@ -799,10 +799,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const { treeConfig, rowGroupConfig, aggregateConfig } = tableProps
       const { isCustomStatus, customColumnList, isCustomDragStatus } = tableReactData
       const customOpts = $xeTable.computeCustomOpts
-      const { immediate } = customOpts
       const columnDragOpts = $xeTable.computeColumnDragOpts
       const { popupStyle } = customStore
-      const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, allowGroup, allowValues, trigger, placement, showSortDragButton, showSortMoveButton, showSortPutButton } = customOpts
+      const { immediate, checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, allowGroup, allowValues, trigger, placement, showSortDragButton, showSortMoveButton, showSortPutButton } = customOpts
       const isMaxFixedColumn = $xeTable.computeIsMaxFixedColumn
       const vSize = $xeTable.computeSize
       const { isCrossDrag } = columnDragOpts

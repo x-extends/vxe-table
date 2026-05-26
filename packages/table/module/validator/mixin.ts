@@ -394,9 +394,9 @@ export default {
     },
     hasCellRules (type: any, row: any, column: any) {
       const { editRules } = this
-      const { property } = column
-      if (property && editRules) {
-        const rules = XEUtils.get(editRules, property)
+      const { field } = column
+      if (field && editRules) {
+        const rules = column.rules ? column.rules : XEUtils.get(editRules, field)
         return rules && XEUtils.find(rules, rule => type === 'all' || !rule.trigger || type === rule.trigger)
       }
       return false
@@ -425,7 +425,7 @@ export default {
       const errorRules: Rule[] = []
       const syncValidList: Promise<any>[] = []
       if (field && editRules) {
-        const rules = XEUtils.get(editRules, field)
+        const rules = column.rules ? column.rules : XEUtils.get(editRules, field)
         if (rules) {
           const cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, field) : val
           rules.forEach((rule: any) => {

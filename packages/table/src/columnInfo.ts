@@ -120,6 +120,7 @@ export class ColumnInfo {
       filterRecoverMethod: _vm.filterRecoverMethod,
       filterRender: filterRender,
       floatingFilters: _vm.floatingFilters,
+      rules: _vm.rules,
       rowGroupNode: _vm.rowGroupNode,
       treeNode: _vm.treeNode,
       dragSort: _vm.dragSort,

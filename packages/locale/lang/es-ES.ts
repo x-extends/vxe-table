@@ -166,7 +166,7 @@ export default {
       cstmDragTarget: 'Mover: {0}',
       setting: {
         colSort: 'Clasificar',
-        sortHelpTip: 'Haga clic y arrastre el icono para ajustar el pedido',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Título de columna',
         colResizable: 'Ancho de columna (píxeles)',
         colVisible: 'Si mostrar',
@@ -652,7 +652,7 @@ export default {
           groupPlaceholder: 'Arrastre aquí al grupo',
           valuesPlaceholder: 'Arrastre aquí para agregar',
           dragExistCol: 'Esta columna ya existe',
-          sortHelpTip: 'Haga clic y arrastre el icono para ajustar el pedido'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: 'Pedir suma',

@@ -166,7 +166,7 @@ export default {
       cstmDragTarget: 'Di chuyển: {0}',
       setting: {
         colSort: 'Loại',
-        sortHelpTip: 'Nhấp và kéo biểu tượng để điều chỉnh thứ tự',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Tiêu đề cột',
         colResizable: 'Chiều rộng cột (pixel)',
         colVisible: 'Có hiển thị không',
@@ -652,7 +652,7 @@ export default {
           groupPlaceholder: 'Kéo ở đây để nhóm',
           valuesPlaceholder: 'Kéo ở đây để tổng hợp',
           dragExistCol: 'Cột này đã tồn tại',
-          sortHelpTip: 'Nhấp và kéo biểu tượng để điều chỉnh thứ tự'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: 'Yêu cầu tổng',

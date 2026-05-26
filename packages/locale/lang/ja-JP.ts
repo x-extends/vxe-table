@@ -166,7 +166,7 @@ export default {
       cstmDragTarget: '移動：{0}',
       setting: {
         colSort: '選別',
-        sortHelpTip: 'アイコンをクリックしてドラッグして、注文を調整します',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: '列のタイトル',
         colResizable: '列幅（ピクセル）',
         colVisible: '表示するかどうか',
@@ -652,7 +652,7 @@ export default {
           groupPlaceholder: 'ここでグループにドラッグします',
           valuesPlaceholder: 'ここにドラッグして集約します',
           dragExistCol: 'このコラムはすでに存在しています',
-          sortHelpTip: 'アイコンをクリックしてドラッグして、注文を調整します'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: '合計を尋ねます',

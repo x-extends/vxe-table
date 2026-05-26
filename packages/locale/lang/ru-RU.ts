@@ -166,7 +166,7 @@ export default {
       cstmDragTarget: 'MOVE: {0}',
       setting: {
         colSort: 'Сортировка',
-        sortHelpTip: 'Нажмите и перетащите значок, чтобы настроить заказ',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Заголовок столбца',
         colResizable: 'Ширина столбца (пиксели)',
         colVisible: 'Отображать ли',
@@ -652,7 +652,7 @@ export default {
           groupPlaceholder: 'Перетащите сюда, чтобы группировать',
           valuesPlaceholder: 'Перетащите сюда, чтобы агрегировать',
           dragExistCol: 'Эта колонка уже существует',
-          sortHelpTip: 'Нажмите и перетащите значок, чтобы настроить заказ'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: 'Попросить сумму',
