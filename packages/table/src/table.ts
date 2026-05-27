@@ -828,6 +828,12 @@ export default {
 
       return Object.assign({}, getConfig().table.aggregateConfig || getConfig().table.rowGroupConfig, props.aggregateConfig || props.rowGroupConfig)
     },
+    computeAggregateMode () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      const aggregateOpts = $xeTable.computeAggregateOpts
+      return aggregateOpts.mode
+    },
     computeAggregateAccuracyOpts () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
@@ -1650,6 +1656,15 @@ export default {
         $xeTable.$nextTick(() => {
           $xeTable.reloadData(tableFullData)
         })
+      }
+    },
+    computeAggregateMode () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+      const internalData = $xeTable as unknown as TableInternalData
+
+      if (reactData.isRowGroupStatus) {
+        this.loadTableData(internalData.tableSynchData, false, true)
       }
     }
   } as any,
