@@ -312,6 +312,11 @@ export default defineVxeComponent({
       return computeAggregateOpts.value
     })
 
+    const computeAggregateMode = computed(() => {
+      const aggregateOpts = computeAggregateOpts.value
+      return aggregateOpts.mode
+    })
+
     const computeAggregateAccuracyOpts = computed(() => {
       return Object.assign({}, getConfig().table.aggregateAccuracyConfig, props.aggregateAccuracyConfig)
     })
@@ -13927,6 +13932,12 @@ export default defineVxeComponent({
         kpfMaps[field] = 1
       })
       internalData.keepUpdateFieldMaps = kpfMaps
+    })
+
+    watch(computeAggregateMode, () => {
+      if (reactData.isRowGroupStatus) {
+        loadTableData(internalData.tableSynchData, false, true)
+      }
     })
 
     if ($xeTabs) {

@@ -1,5 +1,11 @@
 <template>
   <div>
+    <vxe-radio-group v-model="gridOptions.aggregateConfig.mode">
+      <vxe-radio-button checked-value="default" content="default"></vxe-radio-button>
+      <vxe-radio-button checked-value="combined" content="combined"></vxe-radio-button>
+      <vxe-radio-button checked-value="column" content="column"></vxe-radio-button>
+    </vxe-radio-group>
+
     <vxe-grid v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
@@ -18,7 +24,7 @@ interface RowVO {
   address: string
 }
 
-const gridOptions = reactive<VxeGridProps<RowVO>>({
+const gridOptions = reactive<VxeGridProps<RowVO> & { aggregateConfig: { mode: string } }>({
   height: 500,
   showOverflow: true,
   aggregateConfig: {
