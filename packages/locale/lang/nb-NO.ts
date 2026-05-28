@@ -18,8 +18,8 @@ export default {
       scrollErrProp: 'Denne parameteren "{0}" støttes ikke etter at virtuell rulling er aktivert',
       errConflicts: 'Parameter "{0}" Konflikter med "{1}"',
       modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
-      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notSupportProp: '"{1}" støttes ikke når parameteren "{0}" er aktivert, den skal være "{2}", ellers vil det oppstå en feil',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notConflictProp: 'Når du bruker "{0}", "{1}" skal settes, ellers kan det være funksjonelle konflikter',
       unableInsert: 'Kan ikke settes inn på det spesifiserte stedet, vennligst sjekk om parametrene er riktige',
       useErr: 'En feil oppstod mens du installerte "{0}" -modulen. Bestillingen kan være feil. Den avhengige modulen må installeres før tabellen',
@@ -109,7 +109,7 @@ export default {
       search: 'søk',
       loadingText: 'lasting',
       emptyText: 'Ingen data ennå',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
       searchEmpty: '未匹配到数据！'
     },

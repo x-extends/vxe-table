@@ -109,7 +109,7 @@ export default {
       search: 'Search',
       loadingText: 'Loading',
       emptyText: 'No data yet',
-      maxOpt: 'The maximum number that can be selected cannot exceed {0}.',
+      maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: 'The maximum selectable quantity of {0} has been exceeded. The excess part will be ignored!',
       searchEmpty: 'No matching data found!'
     },

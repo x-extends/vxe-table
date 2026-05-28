@@ -622,7 +622,12 @@ export const Cell = {
     if (rowGroupList.length) {
       const aggregateOpts = $table.computeAggregateOpts
       const { mode } = aggregateOpts
-      if (mode === 'column' ? column.field === row.groupField : rowGroupNode) {
+      if (mode === 'column') {
+        if (row.groupField && column.field === row.groupField) {
+          return [Cell.renderRowGroupBtn(h, params, cellVNodes)]
+        }
+        return cellVNodes
+      } else if (rowGroupNode) {
         return [Cell.renderRowGroupBtn(h, params, cellVNodes)]
       }
     }
