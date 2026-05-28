@@ -122,8 +122,8 @@ export default {
       allChecked: 'Wählen Sie alle aus',
       allExpand: 'Alle erweitern',
       clearExpand: 'Alle schließen',
-      close: '关闭',
       total: '已选 {0} 项',
+      close: '关闭',
       search: 'suchen',
       emptyText: 'Noch keine Daten'
     },

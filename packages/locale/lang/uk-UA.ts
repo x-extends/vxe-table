@@ -109,7 +109,7 @@ export default {
       search: 'обшук',
       loadingText: 'навантаження',
       emptyText: 'Ще немає даних',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
       searchEmpty: '未匹配到数据！'
     },

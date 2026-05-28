@@ -338,9 +338,10 @@ hooks.add('tableExportModule', {
     }
 
     const getBodyLabelData = (opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) => {
-      const { isTreeAllExpanded, isRowGroupAllExpanded, mode } = opts
+      const { isTreeAllExpanded, isRowGroupAllExpanded, mode: expMode } = opts
       const { treeConfig } = props
       const { isRowGroupStatus } = reactData
+      const { fullColumnFieldData } = internalData
       const radioOpts = computeRadioOpts.value
       const checkboxOpts = computeCheckboxOpts.value
       const treeOpts = computeTreeOpts.value
@@ -352,7 +353,7 @@ hooks.add('tableExportModule', {
       const { handleGetRowId } = createHandleGetRowId($xeTable)
       if (isRowGroupStatus) {
         // 如果是数据分组
-        const { mapChildrenField } = aggregateOpts
+        const { mode: aggMode, showTotal, totalMethod, countFields, contentMethod, formatValuesMethod, mapChildrenField } = aggregateOpts
         const rest: any[] = []
         const expandMaps: Record<string, boolean> = {}
         const useMaps: Record<string, boolean> = {}
@@ -373,8 +374,9 @@ hooks.add('tableExportModule', {
               _expand: hasRowChild && $xeTable.isRowExpandByRow(row)
             }
             columns.forEach((column, $columnIndex) => {
+              const { field, editRender, cellRender, aggFunc, rowGroupNode } = column
               let cellValue: string | number | boolean | null = ''
-              const renderOpts = column.editRender || column.cellRender
+              const renderOpts = editRender || cellRender
               let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
               if (!bodyExportMethod && renderOpts && renderOpts.name) {
                 const compConf = renderer.get(renderOpts.name)
@@ -391,21 +393,75 @@ hooks.add('tableExportModule', {
                 switch (column.type) {
                   case 'seq': {
                     const seqVal = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
-                    cellValue = mode === 'all' ? seqVal : getSeq(seqVal, row, $rowIndex, column, $columnIndex)
+                    cellValue = expMode === 'all' ? seqVal : getSeq(seqVal, row, $rowIndex, column, $columnIndex)
                     break
                   }
-                  case 'checkbox':
+                  case 'checkbox': {
                     cellValue = toBooleanValue($xeTable.isCheckedByCheckboxRow(row))
                     item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
                     item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ $table: $xeTable, row })
                     break
-                  case 'radio':
+                  }
+                  case 'radio': {
                     cellValue = toBooleanValue($xeTable.isCheckedByRadioRow(row))
                     item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
                     item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ $table: $xeTable, row })
                     break
-                  default:
-                    if (opts.original) {
+                  }
+                  default: {
+                    if (field && row.isAggregate) {
+                      const aggRow: VxeTableDefines.AggregateRowInfo = row
+                      const aggData = aggRow.aggData
+                      const currAggData = aggData ? aggData[field] : null
+                      const groupField = aggRow.groupField
+                      const groupContent = aggRow.groupContent
+                      const childList = mapChildrenField ? (aggRow[mapChildrenField] || []) : []
+                      const childCount = aggRow.childCount
+                      const colRest = fullColumnFieldData[groupField] || {}
+                      const ctParams = {
+                        $table: $xeTable,
+                        groupField,
+                        groupColumn: (colRest ? colRest.column : null) as VxeTableDefines.ColumnInfo,
+                        column,
+                        groupValue: groupContent,
+                        childList,
+                        childCount,
+                        aggValue: null as any,
+
+                        /**
+                         * 已废弃
+                         * @deprecated
+                         */
+                        children: childList,
+                        /**
+                         * 已废弃
+                         * @deprecated
+                         */
+                        totalValue: childCount
+                      }
+                      if (aggMode === 'column' ? field === aggRow.groupField : rowGroupNode) {
+                        cellValue = groupContent
+                        if (contentMethod) {
+                          cellValue = `${contentMethod(ctParams)}`
+                        }
+                        if (showTotal) {
+                          cellValue = getI18n('vxe.table.rowGroupContentTotal', [cellValue, totalMethod ? totalMethod(ctParams) : childCount, childCount])
+                        }
+                      } else if ($xeTable.getPivotTableAggregateCellAggValue) {
+                        const aggParams = {
+                          $table: $xeTable,
+                          row,
+                          column
+                        }
+                        cellValue = $xeTable.getPivotTableAggregateCellAggValue(aggParams)
+                      } else if (aggFunc === true || (countFields && countFields.includes(field))) {
+                        cellValue = currAggData ? currAggData.value : childCount
+                        ctParams.aggValue = cellValue
+                        if (formatValuesMethod) {
+                          cellValue = formatValuesMethod(ctParams)
+                        }
+                      }
+                    } else if (opts.original) {
                       cellValue = getCellValue(row, column)
                     } else {
                       cellValue = $xeTable.getCellLabel(row, column)
@@ -419,6 +475,8 @@ hooks.add('tableExportModule', {
                         }
                       }
                     }
+                    break
+                  }
                 }
               }
               item[column.id] = toStringValue(cellValue)
@@ -473,7 +531,7 @@ hooks.add('tableExportModule', {
                 switch (column.type) {
                   case 'seq': {
                     const seqVal = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
-                    cellValue = mode === 'all' ? seqVal : getSeq(seqVal, row, $rowIndex, column, $columnIndex)
+                    cellValue = expMode === 'all' ? seqVal : getSeq(seqVal, row, $rowIndex, column, $columnIndex)
                     break
                   }
                   case 'checkbox':
@@ -534,7 +592,7 @@ hooks.add('tableExportModule', {
             switch (column.type) {
               case 'seq': {
                 const seqValue = $rowIndex + 1
-                cellValue = mode === 'all' ? seqValue : getSeq(seqValue, row, $rowIndex, column, $columnIndex)
+                cellValue = expMode === 'all' ? seqValue : getSeq(seqValue, row, $rowIndex, column, $columnIndex)
                 break
               }
               case 'checkbox':

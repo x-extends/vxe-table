@@ -18,8 +18,8 @@ export default {
       scrollErrProp: 'Parameter ini "{0}" tidak disokong selepas menatal maya diaktifkan',
       errConflicts: 'Parameter "{0}" Konflik dengan "{1}"',
       modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
-      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notSupportProp: '"{1}" tidak disokong apabila parameter "{0}" diaktifkan, ia harus "{2}", jika tidak, ralat akan berlaku',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notConflictProp: 'Apabila menggunakan "{0}", "{1}" harus ditetapkan, jika tidak ada konflik fungsional',
       unableInsert: 'Tidak dapat dimasukkan ke lokasi yang ditentukan, sila periksa sama ada parameternya betul',
       useErr: 'Ralat berlaku semasa memasang modul "{0}". Perintah itu mungkin tidak betul. Modul bergantung perlu dipasang sebelum jadual',
@@ -109,7 +109,7 @@ export default {
       search: 'cari',
       loadingText: 'Memuatkan',
       emptyText: 'Belum ada data',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
       searchEmpty: '未匹配到数据！'
     },
