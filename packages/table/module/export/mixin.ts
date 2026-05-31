@@ -370,7 +370,7 @@ function getBooleanValue (cellValue: any) {
 function getHeaderTitle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, column: VxeTableDefines.ColumnInfo) {
   const columnOpts = $xeTable.computeColumnOpts
   const headExportMethod = column.headerExportMethod || columnOpts.headerExportMethod
-  return headExportMethod ? headExportMethod({ column, options: opts, $table: $xeTable }) : ((opts.isTitle ? column.getTitle() : column.field) || '')
+  return headExportMethod ? headExportMethod({ column, options: opts, $table: $xeTable }) : ((opts.isTitle ? $xeTable.getHeaderCellLabel(column) : column.field) || '')
 }
 
 function getFooterCellValue ($xeTable: any, opts: VxeTablePropTypes.ExportHandleOptions, row: any, column: VxeTableDefines.ColumnInfo) {
@@ -946,12 +946,12 @@ function handleImport ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
   const tableTitleMaps: Record<string, VxeTableDefines.ColumnInfo> = {}
   tableFullColumn.forEach((column) => {
     const field = column.field
-    const title = column.getTitle()
+    const title = $xeTable.getHeaderCellLabel(column)
     if (field) {
       tableFieldMaps[field] = column
     }
     if (title) {
-      tableTitleMaps[column.getTitle()] = column
+      tableTitleMaps[title] = column
     }
   })
   const tableConf = {

@@ -83,6 +83,7 @@ export function createInternalData (): TableInternalData {
 
     keepUpdateFieldMaps: {},
 
+    headerFullDataColData: {},
     footerFullDataRowData: {},
 
     // 渲染中缓存数据

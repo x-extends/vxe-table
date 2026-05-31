@@ -379,7 +379,7 @@ export const Cell = {
         return getSlotVNs(renderTitleContent(h, params, rtHeader.call($table, h, renderOpts, params))) as VNode[]
       }
     }
-    return renderTitleContent(h, params, formatText(column.getTitle(), 1))
+    return renderTitleContent(h, params, $table.getHeaderCellLabel(column))
   },
   renderDefaultHeader (h: CreateElement, params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return renderHeaderCellBaseVNs(h, params, Cell.renderHeaderTitle(h, params))
@@ -391,7 +391,7 @@ export const Cell = {
     const tableInternalData = $table as unknown as TableInternalData
     const { isRowGroupStatus } = tableReactData
     const { editConfig } = tableProps
-    const { field, slots, editRender, cellRender, rowGroupNode, aggFunc, formatter } = column
+    const { field, slots, editRender, cellRender, rowGroupNode, aggFunc } = column
     const isEnableEdit = editConfig && isEnableConf(editConfig)
     const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
     const cellRenderOpts = isEnableConf(cellRender) ? cellRender : null
@@ -464,8 +464,9 @@ export const Cell = {
         return renderCellBaseVNs(h, params, $table.callSlot(defaultSlot, params, h))
       }
       const renderOpts = editRenderOpts || cellRenderOpts
-      // formatter > (renderTableCell | renderTableDefault)
-      if (renderOpts && !formatter) {
+      // 如果是编辑表格：renderTableCell > formatter
+      // 如果是查看表格：renderTableDefault > formatter
+      if (renderOpts) {
         const compConf = renderer.get(renderOpts.name)
         if (compConf) {
           const renderFn = editRenderOpts ? (compConf.renderTableCell || compConf.renderCell) : (compConf.renderTableDefault || compConf.renderDefault)
@@ -640,7 +641,7 @@ export const Cell = {
   renderSeqHeader (h: CreateElement, params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
     const { slots } = column
-    return renderHeaderCellBaseVNs(h, params, renderTitleContent(h, params, slots && slots.header ? $table.callSlot(slots.header, params, h) : formatText(column.getTitle(), 1)))
+    return renderHeaderCellBaseVNs(h, params, renderTitleContent(h, params, slots && slots.header ? $table.callSlot(slots.header, params, h) : $table.getHeaderCellLabel(column)))
   },
   renderSeqCell (h: CreateElement, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
@@ -675,7 +676,7 @@ export const Cell = {
         : [
             h('span', {
               class: 'vxe-radio--label'
-            }, titleSlot ? $table.callSlot(titleSlot, params, h) : formatText(column.getTitle(), 1))
+            }, titleSlot ? $table.callSlot(titleSlot, params, h) : $table.getHeaderCellLabel(column))
           ])
     )
   },
@@ -751,7 +752,7 @@ export const Cell = {
     const titleSlot = slots ? slots.title : null
     const checkboxOpts = $table.computeCheckboxOpts
     const { checkStrictly, showHeader, headerTitle } = checkboxOpts
-    const colTitle = column.getTitle()
+    const colTitle = $table.getHeaderCellLabel(column)
     const ons: Record<string, any> = {}
     if (!isHidden) {
       ons.click = (evnt: MouseEvent) => {
