@@ -4603,8 +4603,8 @@ const tableMethods: any = {
     })
     reactData.tableData = tableData
     internalData.visibleDataRowIdData = visibleDataRowIdMaps
-    if ($xeGanttView && $xeGanttView.updateViewData) {
-      $xeGanttView.updateViewData(force)
+    if ($xeGanttView && ($xeGanttView as any).updateViewData) {
+      ($xeGanttView as any).updateViewData(force)
     }
     return $xeTable.$nextTick()
   },

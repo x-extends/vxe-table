@@ -391,7 +391,7 @@ export const Cell = {
     const tableInternalData = $table as unknown as TableInternalData
     const { isRowGroupStatus } = tableReactData
     const { editConfig } = tableProps
-    const { field, slots, editRender, cellRender, rowGroupNode, aggFunc, formatter } = column
+    const { field, slots, editRender, cellRender, rowGroupNode, aggFunc } = column
     const isEnableEdit = editConfig && isEnableConf(editConfig)
     const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
     const cellRenderOpts = isEnableConf(cellRender) ? cellRender : null
@@ -464,8 +464,9 @@ export const Cell = {
         return renderCellBaseVNs(h, params, $table.callSlot(defaultSlot, params, h))
       }
       const renderOpts = editRenderOpts || cellRenderOpts
-      // formatter > (renderTableCell | renderTableDefault)
-      if (renderOpts && !formatter) {
+      // 如果是编辑表格：renderTableCell > formatter
+      // 如果是查看表格：renderTableDefault > formatter
+      if (renderOpts) {
         const compConf = renderer.get(renderOpts.name)
         if (compConf) {
           const renderFn = editRenderOpts ? (compConf.renderTableCell || compConf.renderCell) : (compConf.renderTableDefault || compConf.renderDefault)

@@ -273,7 +273,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const filterOpts = $xeTable.computeFilterOpts
       const hasCheckOption = $xeFilterPanel.computeHasCheckOption
       const { filterRender, filterMultiple } = column
-      const { confirmButtonText, resetButtonText, showFooter } = filterOpts
+      const { confirmButtonText, resetButtonText, showFooter } = filterOpts as any
       const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
       let showFlFoot = !!filterMultiple
