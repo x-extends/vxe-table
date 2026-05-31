@@ -25,7 +25,7 @@ export default {
       useErr: 'เกิดข้อผิดพลาดขณะติดตั้งโมดูล "{0}" คำสั่งซื้ออาจไม่ถูกต้อง ต้องติดตั้งโมดูลขึ้นอยู่กับก่อนตาราง',
       barUnableLink: 'แถบเครื่องมือไม่สามารถเชื่อมโยงตารางได้',
       expandContent: 'สล็อตสำหรับบรรทัดที่ขยายควรเป็น "เนื้อหา" โปรดตรวจสอบว่าถูกต้องหรือไม่',
-      reqComp: 'ส่วนประกอบ "{0}" หายไปโปรดตรวจสอบว่าติดตั้งอย่างถูกต้องหรือไม่ https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'ไม่มีโมดูล "{0}"',
       reqProp: 'พารามิเตอร์ "{0}" ที่จำเป็นหายไปซึ่งอาจทำให้เกิดข้อผิดพลาด',
       emptyProp: 'พารามิเตอร์ "{0}" ไม่ได้รับอนุญาตให้ว่างเปล่า',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'ตารางต้นไม้ไม่รองรับการนำเข้า',
       treeCrossDrag: 'ลากระดับแรกเท่านั้น',
       treeDragChild: 'พ่อแม่ไม่สามารถลากลูกของตัวเองได้',
-      reqPlugin: '"{1}" ไม่ได้ติดตั้งที่ https://vxeui.com/other {0}/#/{1}/install',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'เกินปริมาณข้อมูลที่รองรับสูงสุด {0} แถวซึ่งอาจทำให้เกิดข้อผิดพลาด',
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,11 +104,12 @@ export default {
     select: {
       clear: '清除',
       allChecked: '全选',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'ค้นหา',
       loadingText: 'การโหลด',
       emptyText: 'ยังไม่มีข้อมูล',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
       searchEmpty: '未匹配到数据！'
     },
@@ -121,7 +122,8 @@ export default {
       allChecked: '全选',
       allExpand: '全部展开',
       clearExpand: '全部收起',
-      total: '已选 {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '搜索',
       emptyText: '暂无数据'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: 'ย้าย: {0}',
       setting: {
         colSort: 'เรียงลำดับ',
-        sortHelpTip: '点击并拖动图标可以调整顺序',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'ชื่อคอลัมน์',
         colResizable: 'ความกว้างของคอลัมน์ (พิกเซล)',
         colVisible: 'ไม่ว่าจะแสดง',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'คอลัมน์แช่แข็ง (คอลัมน์ {0} สูงสุด)',
         fixedLeft: 'ด้านซ้าย',
         fixedUnset: 'ไม่ได้ตั้งค่า',
-        fixedRight: 'ด้านขวา'
+        fixedRight: 'ด้านขวา',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: 'หากมีอยู่จะรองรับเซลล์ที่มีโครงสร้างที่ผสานเข้าด้วยกัน',
       expOptAllExpand: 'ขยายต้นไม้',
       expAllExpandTitle: 'หากมีอยู่จะได้รับการสนับสนุนเพื่อขยายข้อมูลทั้งหมดด้วยโครงสร้างแบบลำดับชั้น',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: 'สไตล์',
       expUseStyleTitle: 'หากมีอยู่จะรองรับเซลล์ที่มีสไตล์',
       expOptOriginal: 'แหล่งข้อมูล',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: '拖至此处进行分组',
           valuesPlaceholder: '拖至此处进行聚合',
           dragExistCol: '该列已存在',
-          sortHelpTip: '点击并拖动图标可以调整顺序'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: '求和',

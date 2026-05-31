@@ -25,7 +25,7 @@ export default {
       useErr: 'An error occurred while installing the "{0}" module. The order may be incorrect. The dependent module needs to be installed before Table',
       barUnableLink: 'The toolbar cannot associate tables',
       expandContent: 'The slot for the expanded line should be "content", please check if it is correct',
-      reqComp: 'The "{0}" component is missing, please check if it is installed correctly. https://vxeui.com/#/start/useGlobal',
+      reqComp: 'The component "{0}" is missing. Please check if it is installed correctly. https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Missing "{0}" module',
       reqProp: 'The necessary "{0}" parameter is missing, which may cause an error',
       emptyProp: 'Parameter "{0}" is not allowed to be empty',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'Tree tables do not support import',
       treeCrossDrag: 'Only drag the first level',
       treeDragChild: 'Parents cannot drag to their own children',
-      reqPlugin: '"{1}" is not installed at https://vxeui.com/other{0}/#/{1}/install',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Exceeding the maximum supported data volume {0} rows, this may cause an error',
       useNew: 'It is not recommended to use {0}. Please use {1} instead.',
       errorVersion: 'Version mismatch. Current version is {0}, while the minimum supported version is {1}.'
@@ -104,11 +104,12 @@ export default {
     select: {
       clear: 'Clear',
       allChecked: 'All',
-      total: '{0} / {1}',
+      total: '{0} items selected',
+      close: 'Close',
       search: 'Search',
       loadingText: 'Loading',
       emptyText: 'No data yet',
-      maxOpt: 'The maximum number that can be selected cannot exceed {0}.',
+      maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: 'The maximum selectable quantity of {0} has been exceeded. The excess part will be ignored!',
       searchEmpty: 'No matching data found!'
     },
@@ -121,7 +122,8 @@ export default {
       allChecked: 'Check all',
       allExpand: 'Expand all',
       clearExpand: 'Collapse all',
-      total: 'Selected {0}',
+      total: '{0} items selected',
+      close: 'Close',
       search: 'Search',
       emptyText: 'No data yet'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: 'Move: {0}',
       setting: {
         colSort: 'Sort',
-        sortHelpTip: 'Click and drag the icons to adjust the order.',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Column title',
         colResizable: 'Column width (pixels)',
         colVisible: 'Whether to display',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'Freeze columns (up to {0} columns)',
         fixedLeft: 'Left side',
         fixedUnset: 'Not set',
-        fixedRight: 'Right side'
+        fixedRight: 'Right side',
+        moveUp: 'Up',
+        moveDn: 'Down',
+        putTop: 'Top',
+        putBottom: 'Bottom',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: 'If present, cells with merged structures are supported',
       expOptAllExpand: 'Expand the tree',
       expAllExpandTitle: 'If it exists, it is supported to expand all data with hierarchical structures',
+      expOptTreeAllExpand: 'Expand tree',
+      expTreeAllExpandTitle: 'If present, automatically expand all tree levels',
+      expOptRowGroupAllExpand: 'Expand group',
+      expRowGroupAllExpandTitle: 'If present, automatically expand all group levels',
       expOptUseStyle: 'style',
       expUseStyleTitle: 'If present, cells with style are supported',
       expOptOriginal: 'Source data',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: 'Loading'
     },
+    switch: {
+      onText: 'On',
+      offText: 'Off'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: 'Drag here to set row groups',
           valuesPlaceholder: 'Drag here to aggregate',
           dragExistCol: 'The column already exists',
-          sortHelpTip: 'Click and drag the icons to adjust the order.'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: 'Sum',

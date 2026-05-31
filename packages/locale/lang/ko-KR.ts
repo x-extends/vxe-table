@@ -18,14 +18,14 @@ export default {
       scrollErrProp: '이 매개 변수 "{0}"은 가상 스크롤링이 활성화 된 후에 지원되지 않습니다.',
       errConflicts: '매개 변수 "{0}" "{1}"과 충돌합니다.',
       modelConflicts: '바운드 필드 값 "{0}"및 "{1}"사이에 충돌이 발생하며 오류가 발생합니다.',
-      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notSupportProp: '"{1}"은 "{0}"매개 변수가 활성화 될 때 지원되지 않습니다. "{2}"이어야합니다. 그렇지 않으면 오류가 발생합니다.',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notConflictProp: '"{0}"을 사용하는 경우 "{1}"을 설정해야합니다. 그렇지 않으면 기능적 충돌이있을 수 있습니다.',
       unableInsert: '지정된 위치에 삽입 할 수 없으므로 매개 변수가 올바른지 확인하십시오.',
       useErr: '"{0}"모듈을 설치하는 동안 오류가 발생했습니다. 주문이 잘못 될 수 있습니다. 종속 모듈은 테이블 전에 설치해야합니다',
       barUnableLink: '툴바는 테이블을 연결할 수 없습니다',
       expandContent: '확장 라인의 슬롯은 "콘텐츠"여야합니다. 올바른지 확인하십시오.',
-      reqComp: '"{0}"구성 요소가 누락되었습니다. 올바르게 설치되었는지 확인하십시오. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: '"{0}"모듈 누락',
       reqProp: '필요한 "{0}"매개 변수가 누락되어 오류가 발생할 수 있습니다.',
       emptyProp: '매개 변수 "{0}"은 비어 있지 않습니다',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: '트리 테이블은 가져 오기를 지원하지 않습니다',
       treeCrossDrag: '첫 번째 레벨 만 드래그하십시오',
       treeDragChild: '부모는 자신의 자녀에게 끌 수 없습니다',
-      reqPlugin: '"{1}"은 https://vxeui.com/other {0 }/#/1 }/install에 설치되지 않았습니다',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: '최대 지원되는 데이터 볼륨 {0} 행을 초과하면 오류가 발생할 수 있습니다.',
       useNew: '{0} 권장되지 않습니다. {1}을 사용하십시오.',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,7 +104,8 @@ export default {
     select: {
       clear: '분명한',
       allChecked: '모두를 선택하십시오',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '찾다',
       loadingText: '로딩',
       emptyText: '아직 데이터가 없습니다',
@@ -121,7 +122,8 @@ export default {
       allChecked: '모두를 선택하십시오',
       allExpand: '모든 것을 확장하십시오',
       clearExpand: '모두 닫으십시오',
-      total: '선택된 {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '찾다',
       emptyText: '아직 데이터가 없습니다'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: '움직임 : {0}',
       setting: {
         colSort: '종류',
-        sortHelpTip: '아이콘을 클릭하고 드래그하여 순서를 조정하십시오',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: '열 제목',
         colResizable: '열 폭 (픽셀)',
         colVisible: '표시 여부',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: '냉동 열 (최대 {0} 열)',
         fixedLeft: '왼쪽',
         fixedUnset: '설정되지 않았습니다',
-        fixedRight: '오른쪽'
+        fixedRight: '오른쪽',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: '존재하는 경우, 병합 된 구조를 갖는 세포가지지된다',
       expOptAllExpand: '나무를 확장하십시오',
       expAllExpandTitle: '존재하는 경우 계층 구조로 모든 데이터를 확장하도록 지원됩니다.',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: '스타일',
       expUseStyleTitle: '존재하는 경우 스타일이있는 셀이 지원됩니다',
       expOptOriginal: '소스 데이터',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: '여기로 끌어 그룹화하십시오',
           valuesPlaceholder: '집계를 위해 여기를 끌어냅니다',
           dragExistCol: '이 열은 이미 존재합니다',
-          sortHelpTip: '아이콘을 클릭하고 드래그하여 순서를 조정하십시오'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: '합계를 요청하십시오',

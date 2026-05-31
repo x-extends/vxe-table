@@ -25,7 +25,7 @@ export default {
       useErr: 'Bei der Installation des Moduls "{0}" trat ein Fehler auf. Die Bestellung kann falsch sein. Das abhängige Modul muss vor der Tabelle installiert werden',
       barUnableLink: 'Die Symbolleiste kann Tabellen nicht assoziieren',
       expandContent: 'Der Steckplatz für die erweiterte Linie sollte "Inhalt" sein. Bitte prüfen Sie, ob sie korrekt ist',
-      reqComp: 'Die "{0}" -Komponente fehlt, bitte prüfen Sie, ob sie korrekt installiert ist. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Fehlendes "{0}" Modul',
       reqProp: 'Der erforderliche Parameter "{0}" fehlt, der einen Fehler verursachen kann',
       emptyProp: 'Parameter "{0}" darf nicht leer sein',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'Baumtische unterstützen den Import nicht',
       treeCrossDrag: 'Ziehen Sie nur die erste Ebene',
       treeDragChild: 'Eltern können nicht zu ihren eigenen Kindern ziehen',
-      reqPlugin: '"{1}" ist nicht unter https://vxeui.com/Otheriationation installiert',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Wenn das maximal unterstützte Datenvolumen {0} Zeilen überschreitet, kann dies einen Fehler verursachen',
       useNew: '{0} wird nicht empfohlen, bitte verwenden Sie {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,7 +104,8 @@ export default {
     select: {
       clear: 'Klar',
       allChecked: 'Wählen Sie alle aus',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'suchen',
       loadingText: 'Laden',
       emptyText: 'Noch keine Daten',
@@ -121,7 +122,8 @@ export default {
       allChecked: 'Wählen Sie alle aus',
       allExpand: 'Alle erweitern',
       clearExpand: 'Alle schließen',
-      total: 'Ausgewählt {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'suchen',
       emptyText: 'Noch keine Daten'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: 'Bewegung: {0}',
       setting: {
         colSort: 'Sortieren',
-        sortHelpTip: 'Klicken Sie auf das Symbol und ziehen Sie das Symbol, um die Bestellung anzupassen',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Spaltenentitel',
         colResizable: 'Säulenbreite (Pixel)',
         colVisible: 'Ob angezeigt',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'Spalten einfrieren (bis zu {0} Spalten)',
         fixedLeft: 'Linke Seite',
         fixedUnset: 'Nicht gesetzt',
-        fixedRight: 'Rechte Seite'
+        fixedRight: 'Rechte Seite',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: 'Wenn vorhanden, werden Zellen mit zusammengeführten Strukturen unterstützt',
       expOptAllExpand: 'Den Baum erweitern',
       expAllExpandTitle: 'Wenn es existiert, wird es unterstützt, alle Daten mit hierarchischen Strukturen zu erweitern',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: 'Stil',
       expUseStyleTitle: 'Wenn vorhanden, werden Zellen mit Stil unterstützt',
       expOptOriginal: 'Quelldaten',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: 'Ziehen Sie hier zur Gruppe',
           valuesPlaceholder: 'Ziehen Sie hierher, um zu aggregieren',
           dragExistCol: 'Diese Spalte existiert bereits',
-          sortHelpTip: 'Klicken Sie auf das Symbol und ziehen Sie das Symbol, um die Bestellung anzupassen'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: 'Bitten Sie nach Summe',

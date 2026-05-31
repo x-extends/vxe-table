@@ -19,13 +19,13 @@ export default {
       errConflicts: 'المعلمة "{0}" تتعارض مع "{1}"',
       modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
       notSupportProp: 'لا يتم دعم "{1}" عند تمكين المعلمة "{0}" ، يجب أن يكون "{2}" ، وإلا',
-      notConflictProp: 'عند استخدام "{0}" ، يجب تعيين "{1}" ، وإلا قد يكون هناك تعارضات وظيفية',
       reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
+      notConflictProp: 'عند استخدام "{0}" ، يجب تعيين "{1}" ، وإلا قد يكون هناك تعارضات وظيفية',
       unableInsert: 'لا يمكن إدراجها في الموقع المحدد ، يرجى التحقق مما إذا كانت المعلمات صحيحة',
       useErr: 'حدث خطأ أثناء تثبيت وحدة "{0}". قد يكون الطلب غير صحيح. يجب تثبيت الوحدة التابعة قبل الجدول',
       barUnableLink: 'لا يمكن أن يربط شريط الأدوات الجداول',
       expandContent: 'يجب أن تكون الفتحة الخاصة بالخط الموسع "محتوى" ، يرجى التحقق مما إذا كان هذا صحيحًا',
-      reqComp: 'مكون المكون "{0}" مفقود ، يرجى التحقق مما إذا تم تثبيته بشكل صحيح. https://vxeui.com/#/start/usglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'مفقود "{0}" الوحدة النمطية',
       reqProp: 'المعلمة الضرورية "{0}" مفقودة ، والتي قد تسبب خطأ',
       emptyProp: 'المعلمة "{0}" غير مسموح لها أن تكون فارغة',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'لا تدعم جداول الأشجار الاستيراد',
       treeCrossDrag: 'فقط اسحب المستوى الأول',
       treeDragChild: 'لا يمكن للآباء السحب إلى أطفالهم',
-      reqPlugin: '"{1}" لم يتم تثبيته على https://vxeui.com/other',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'تجاوز الحد الأقصى لصفوف البيانات المدعومة {0} ، قد يتسبب ذلك في حدوث خطأ',
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,11 +104,12 @@ export default {
     select: {
       clear: '清除',
       allChecked: '全选',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'يبحث',
       loadingText: 'تحميل',
       emptyText: 'لا توجد بيانات حتى الآن',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
       searchEmpty: '未匹配到数据！'
     },
@@ -121,7 +122,8 @@ export default {
       allChecked: '全选',
       allExpand: '全部展开',
       clearExpand: '全部收起',
-      total: '已选 {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'Search',
       emptyText: '暂无数据'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: 'نقل: {0}',
       setting: {
         colSort: 'نوع',
-        sortHelpTip: '点击并拖动图标可以调整顺序',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'عنوان العمود',
         colResizable: 'عرض العمود (بكسل)',
         colVisible: 'ما إذا كان لعرض',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'أعمدة تجميد (تصل إلى {0})',
         fixedLeft: 'الجانب الأيسر',
         fixedUnset: 'لم يتم تعيينه',
-        fixedRight: 'الجانب الأيمن'
+        fixedRight: 'الجانب الأيمن',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: 'إذا كانت موجودة ، يتم دعم الخلايا ذات الهياكل المدمجة',
       expOptAllExpand: 'توسيع الشجرة',
       expAllExpandTitle: 'إذا كانت موجودة ، فسيتم دعمها لتوسيع جميع البيانات بالهياكل الهرمية',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: 'أسلوب',
       expUseStyleTitle: 'إذا كانت موجودة ، يتم دعم الخلايا ذات الأناقة',
       expOptOriginal: 'بيانات المصدر',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: '拖至此处进行分组',
           valuesPlaceholder: '拖至此处进行聚合',
           dragExistCol: '该列已存在',
-          sortHelpTip: '点击并拖动图标可以调整顺序'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: '求和',

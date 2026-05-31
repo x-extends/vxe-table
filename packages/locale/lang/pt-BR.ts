@@ -18,14 +18,14 @@ export default {
       scrollErrProp: 'Este parâmetro "{0}" não é suportado após a rolagem virtual ser ativada',
       errConflicts: 'Parâmetro "{0}" conflita com "{1}"',
       modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
-      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notSupportProp: '"{1}" não é suportado quando o parâmetro "{0}" estiver ativado, ele deve ser "{2}", caso contrário, um erro ocorrerá',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notConflictProp: 'Ao usar "{0}", "{1}" deve ser definido, caso contrário, pode haver conflitos funcionais',
       unableInsert: 'Não pode ser inserido no local especificado, verifique se os parâmetros estão corretos',
       useErr: 'Ocorreu um erro ao instalar o módulo "{0}". O pedido pode estar incorreto. O módulo dependente precisa ser instalado antes da tabela',
       barUnableLink: 'A barra de ferramentas não pode associar tabelas',
       expandContent: 'O slot para a linha expandida deve ser "conteúdo", verifique se está correto',
-      reqComp: 'O componente "{0}" está ausente, verifique se está instalado corretamente. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Módulo "{0}" ausente',
       reqProp: 'O parâmetro "{0}" necessário está faltando, o que pode causar um erro',
       emptyProp: 'Parâmetro "{0}" não tem permissão para estar vazio',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'As mesas de árvores não suportam a importação',
       treeCrossDrag: 'Apenas arraste o primeiro nível',
       treeDragChild: 'Os pais não podem arrastar para seus próprios filhos',
-      reqPlugin: '"{1}" não está instalado em https://vxeui.com/other {0a }/# {1age/install',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Excedendo o volume máximo de dados suportado {0} linhas, isso pode causar um erro',
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,11 +104,12 @@ export default {
     select: {
       clear: '清除',
       allChecked: '全选',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'procurar',
       loadingText: 'carregando',
       emptyText: 'Ainda não há dados',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
       searchEmpty: '未匹配到数据！'
     },
@@ -121,7 +122,8 @@ export default {
       allChecked: '全选',
       allExpand: '全部展开',
       clearExpand: '全部收起',
-      total: '已选 {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '搜索',
       emptyText: '暂无数据'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: 'Move: {0}',
       setting: {
         colSort: 'Organizar',
-        sortHelpTip: '点击并拖动图标可以调整顺序',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Título da coluna',
         colResizable: 'Largura da coluna (pixels)',
         colVisible: 'Se deve exibir',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'Colunas congeladas (até {0} colunas)',
         fixedLeft: 'Lado esquerdo',
         fixedUnset: 'Não definido',
-        fixedRight: 'Lado direito'
+        fixedRight: 'Lado direito',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: 'Se presente, as células com estruturas mescladas são suportadas',
       expOptAllExpand: 'Expandir a árvore',
       expAllExpandTitle: 'Se existir, é suportado para expandir todos os dados com estruturas hierárquicas',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: 'estilo',
       expUseStyleTitle: 'Se presente, células com estilo são suportadas',
       expOptOriginal: 'Dados de origem',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: '拖至此处进行分组',
           valuesPlaceholder: '拖至此处进行聚合',
           dragExistCol: '该列已存在',
-          sortHelpTip: '点击并拖动图标可以调整顺序'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: '求和',

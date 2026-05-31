@@ -25,7 +25,7 @@ export default {
       useErr: '「{0}」モジュールのインストール中にエラーが発生しました。注文が正しくない場合があります。従属モジュールは、テーブルの前にインストールする必要があります',
       barUnableLink: 'ツールバーはテーブルを関連付けることができません',
       expandContent: '拡張ラインのスロットは「コンテンツ」である必要があります。正しいかどうかを確認してください',
-      reqComp: '「{0}」コンポーネントがありません。正しくインストールされているかどうかを確認してください。 https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: '「{0}」モジュールがありません',
       reqProp: '必要な「{0}」パラメーターが欠落しているため、エラーが発生する場合があります',
       emptyProp: 'パラメーター「{0}」は空にすることは許可されていません',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'ツリーテーブルはインポートをサポートしていません',
       treeCrossDrag: '最初のレベルのみをドラッグします',
       treeDragChild: '親は自分の子供にドラッグすることはできません',
-      reqPlugin: '「{1}」はhttps://vxeui.com/other {0 }/#/ {1 }/installにインストールされていません',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'サポートされている最大データボリューム{0}行を超えると、これによりエラーが発生する可能性があります',
       useNew: '{0}はお勧めしません。{1}を使用してください',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,7 +104,8 @@ export default {
     select: {
       clear: 'クリア',
       allChecked: 'すべてを選択します',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '検索',
       loadingText: '読み込み',
       emptyText: 'まだデータはありません',
@@ -121,7 +122,8 @@ export default {
       allChecked: 'すべてを選択します',
       allExpand: 'すべて拡張します',
       clearExpand: 'すべてを閉じます',
-      total: '選択{0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '検索',
       emptyText: 'まだデータはありません'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: '移動：{0}',
       setting: {
         colSort: '選別',
-        sortHelpTip: 'アイコンをクリックしてドラッグして、注文を調整します',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: '列のタイトル',
         colResizable: '列幅（ピクセル）',
         colVisible: '表示するかどうか',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'フリーズ列（{0}列まで）',
         fixedLeft: '左側',
         fixedUnset: '設定されていません',
-        fixedRight: '右側'
+        fixedRight: '右側',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: '存在する場合、マージされた構造を持つ細胞がサポートされます',
       expOptAllExpand: 'ツリーを拡張します',
       expAllExpandTitle: '存在する場合、階層構造を使用してすべてのデータを拡張することがサポートされています',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: 'スタイル',
       expUseStyleTitle: '存在する場合、スタイルのあるセルがサポートされています',
       expOptOriginal: 'ソースデータ',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: 'ここでグループにドラッグします',
           valuesPlaceholder: 'ここにドラッグして集約します',
           dragExistCol: 'このコラムはすでに存在しています',
-          sortHelpTip: 'アイコンをクリックしてドラッグして、注文を調整します'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: '合計を尋ねます',

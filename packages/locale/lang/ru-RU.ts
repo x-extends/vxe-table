@@ -25,7 +25,7 @@ export default {
       useErr: 'Произошла ошибка при установке модуля "{0}". Заказ может быть неверным. Зависимый модуль должен быть установлен перед таблицей',
       barUnableLink: 'Панель инструментов не может связать таблицы',
       expandContent: 'Слот для расширенной строки должен быть «контентом», пожалуйста, проверьте, правильно ли это',
-      reqComp: 'Компонент "{0}" отсутствует, пожалуйста, проверьте, правильно ли он установлен. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Отсутствует модуль "{0}"',
       reqProp: 'Необходимый параметр «{0}» отсутствует, что может вызвать ошибку',
       emptyProp: 'Параметр "{0}" не разрешается быть пустым',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'Таблицы деревьев не поддерживают импорт',
       treeCrossDrag: 'Только перетащите первый уровень',
       treeDragChild: 'Родители не могут тащить своих детей',
-      reqPlugin: '"{1}" не установлен по адресу https://vxeui.com/otherbe',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Превышение максимального поддерживаемого объема данных {0} строк, это может вызвать ошибку',
       useNew: '{0} не рекомендуется, пожалуйста, используйте {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,7 +104,8 @@ export default {
     select: {
       clear: 'Прозрачный',
       allChecked: 'Выберите все',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'поиск',
       loadingText: 'загрузка',
       emptyText: 'Нет данных пока',
@@ -121,7 +122,8 @@ export default {
       allChecked: 'Выберите все',
       allExpand: 'Расширить все',
       clearExpand: 'Закрыть все',
-      total: 'Выбрано {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'поиск',
       emptyText: 'Нет данных пока'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: 'MOVE: {0}',
       setting: {
         colSort: 'Сортировка',
-        sortHelpTip: 'Нажмите и перетащите значок, чтобы настроить заказ',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Заголовок столбца',
         colResizable: 'Ширина столбца (пиксели)',
         colVisible: 'Отображать ли',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'Столбцы замораживания (до {0} столбцы)',
         fixedLeft: 'Левая сторона',
         fixedUnset: 'Не установлен',
-        fixedRight: 'Правая сторона'
+        fixedRight: 'Правая сторона',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: 'Если присутствует, клетки с объединенными структурами поддерживаются',
       expOptAllExpand: 'Расширить дерево',
       expAllExpandTitle: 'Если он существует, он поддерживается для расширения всех данных с помощью иерархических структур',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: 'стиль',
       expUseStyleTitle: 'Если присутствует, клетки со стилем поддерживаются',
       expOptOriginal: 'Исходные данные',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: 'Перетащите сюда, чтобы группировать',
           valuesPlaceholder: 'Перетащите сюда, чтобы агрегировать',
           dragExistCol: 'Эта колонка уже существует',
-          sortHelpTip: 'Нажмите и перетащите значок, чтобы настроить заказ'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: 'Попросить сумму',

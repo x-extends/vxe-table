@@ -18,14 +18,14 @@ export default {
       scrollErrProp: 'Denne parameteren "{0}" støttes ikke etter at virtuell rulling er aktivert',
       errConflicts: 'Parameter "{0}" Konflikter med "{1}"',
       modelConflicts: '绑定的字段值 "{0}" 与 "{1}" 存在冲突，将会出现错误',
-      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notSupportProp: '"{1}" støttes ikke når parameteren "{0}" er aktivert, den skal være "{2}", ellers vil det oppstå en feil',
+      reqSupportProp: '当使用 "{0}" 时，应该设置 "{1}"，否则可能会出现错误',
       notConflictProp: 'Når du bruker "{0}", "{1}" skal settes, ellers kan det være funksjonelle konflikter',
       unableInsert: 'Kan ikke settes inn på det spesifiserte stedet, vennligst sjekk om parametrene er riktige',
       useErr: 'En feil oppstod mens du installerte "{0}" -modulen. Bestillingen kan være feil. Den avhengige modulen må installeres før tabellen',
       barUnableLink: 'Verktøylinjen kan ikke knytte bord',
       expandContent: 'Sporet for den utvidede linjen skal være "innhold", sjekk om det er riktig',
-      reqComp: '"{0}" -komponenten mangler, vennligst sjekk om den er installert riktig. https://vxeui.com/#/start/usglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Mangler "{0}" -modul',
       reqProp: 'Den nødvendige "{0}" -parameteren mangler, noe som kan forårsake en feil',
       emptyProp: 'Parameter "{0}" har ikke lov til å være tom',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'Treetabeller støtter ikke import',
       treeCrossDrag: 'Bare dra det første nivået',
       treeDragChild: 'Foreldre kan ikke dra til sine egne barn',
-      reqPlugin: '"{1}" er ikke installert på http',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Overskridende det maksimale støttede datavolumet {0} Rader, dette kan føre til en feil',
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,11 +104,12 @@ export default {
     select: {
       clear: '清除',
       allChecked: '全选',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'søk',
       loadingText: 'lasting',
       emptyText: 'Ingen data ennå',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
       searchEmpty: '未匹配到数据！'
     },
@@ -121,7 +122,8 @@ export default {
       allChecked: '全选',
       allExpand: '全部展开',
       clearExpand: '全部收起',
-      total: '已选 {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '搜索',
       emptyText: '暂无数据'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: 'Flytt: {0}',
       setting: {
         colSort: 'Sortere',
-        sortHelpTip: '点击并拖动图标可以调整顺序',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Kolonnetittel',
         colResizable: 'Kolonnebredde (piksler)',
         colVisible: 'Om du skal vise',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'Frys kolonner (opp til {0} kolonner)',
         fixedLeft: 'Venstre side',
         fixedUnset: 'Ikke satt',
-        fixedRight: 'Høyre side'
+        fixedRight: 'Høyre side',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: 'Hvis de er til stede, støttes celler med sammenslåtte strukturer',
       expOptAllExpand: 'Utvid treet',
       expAllExpandTitle: 'Hvis det eksisterer, støttes den for å utvide alle data med hierarkiske strukturer',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: 'stil',
       expUseStyleTitle: 'Hvis de er til stede, støttes celler med stil',
       expOptOriginal: 'Kildedata',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: '拖至此处进行分组',
           valuesPlaceholder: '拖至此处进行聚合',
           dragExistCol: '该列已存在',
-          sortHelpTip: '点击并拖动图标可以调整顺序'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: '求和',

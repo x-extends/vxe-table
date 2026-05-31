@@ -25,7 +25,7 @@ export default {
       useErr: 'Đã xảy ra lỗi trong khi cài đặt mô -đun "{0}". Thứ tự có thể không chính xác. Mô -đun phụ thuộc cần được cài đặt trước bảng',
       barUnableLink: 'Thanh công cụ không thể liên kết các bảng',
       expandContent: 'Khe cắm cho dòng mở rộng phải là "nội dung", vui lòng kiểm tra xem nó có đúng không',
-      reqComp: 'Thành phần "{0}" bị thiếu, vui lòng kiểm tra xem nó có được cài đặt chính xác không. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Thiếu mô -đun "{0}"',
       reqProp: 'Tham số "{0}" cần thiết, có thể gây ra lỗi',
       emptyProp: 'Tham số "{0}" không được phép trống',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'Bảng cây không hỗ trợ nhập khẩu',
       treeCrossDrag: 'Chỉ kéo cấp độ đầu tiên',
       treeDragChild: 'Cha mẹ không thể kéo đến con cái của họ',
-      reqPlugin: '"{1}" không được cài đặt tại https://vxeui.com/other/khác',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Vượt quá khối lượng dữ liệu được hỗ trợ tối đa {0}, điều này có thể gây ra lỗi',
       useNew: '{0} không được khuyến nghị, vui lòng sử dụng {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,7 +104,8 @@ export default {
     select: {
       clear: 'Thông thoáng',
       allChecked: 'Chọn tất cả',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'tìm kiếm',
       loadingText: 'đang tải',
       emptyText: 'Chưa có dữ liệu',
@@ -121,7 +122,8 @@ export default {
       allChecked: 'Chọn tất cả',
       allExpand: 'Mở rộng tất cả',
       clearExpand: 'Đóng tất cả',
-      total: 'Đã chọn {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'tìm kiếm',
       emptyText: 'Chưa có dữ liệu'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: 'Di chuyển: {0}',
       setting: {
         colSort: 'Loại',
-        sortHelpTip: 'Nhấp và kéo biểu tượng để điều chỉnh thứ tự',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Tiêu đề cột',
         colResizable: 'Chiều rộng cột (pixel)',
         colVisible: 'Có hiển thị không',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'Các cột đóng băng (tối đa {0} cột)',
         fixedLeft: 'Bên trái',
         fixedUnset: 'Không đặt',
-        fixedRight: 'Bên phải'
+        fixedRight: 'Bên phải',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: 'Nếu có, các tế bào có cấu trúc hợp nhất được hỗ trợ',
       expOptAllExpand: 'Mở rộng cây',
       expAllExpandTitle: 'Nếu nó tồn tại, nó được hỗ trợ để mở rộng tất cả dữ liệu với các cấu trúc phân cấp',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: 'phong cách',
       expUseStyleTitle: 'Nếu có, các tế bào có phong cách được hỗ trợ',
       expOptOriginal: 'Dữ liệu nguồn',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: 'Kéo ở đây để nhóm',
           valuesPlaceholder: 'Kéo ở đây để tổng hợp',
           dragExistCol: 'Cột này đã tồn tại',
-          sortHelpTip: 'Nhấp và kéo biểu tượng để điều chỉnh thứ tự'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: 'Yêu cầu tổng',
