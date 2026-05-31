@@ -25,7 +25,7 @@ export default {
       useErr: 'قاچىلاش: "{0}" پارچىنى قاچىلىغاندا خاتالىق كۆرۈلدى ،بەلكىم رەت تەرتىۋىدە بىنۇرماللىق كۆرۈلگەن بولۇشى مومكىن，مۇناسىۋەتلىك پارچە چوقۇم  Table دىن ئاۋۋال قاچىلىنىشى كىرەك',
       barUnableLink: 'ئەسۋاب ئىستونى جەدىۋەل بىلەن ئۇلىنىشقا ئامالسىز',
       expandContent: 'ئىچىلغان قۇردىكى قىستۇرما ئەسلىي "content"،بولۇشى كىرەك ،سېلىشتۇرۇپ قايتا سىناڭ',
-      reqComp: 'كەم "{0}" گۇرۇپپا ھۆججىتى，قاچىلانغان ياكى قاچىلانمىغانلىقىنى تەكشۈرۈڭ。 https://vxeui.com/#/start/useGlobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'كەم "{0}" كود يازمىسى',
       reqProp: 'كىرەكلىك بولغان  "{0}" پارامېتىر كەم،بۇ بەلكىم خاتالىق كەلتۈرۈپ چىقىرىشى مومكىن',
       emptyProp: 'پارامېتىر "{0}" قۇرۇق بولسا بولمايدۇ',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'دەرەخ شەكىللىك جەدىۋەلنى ئەكىرىشنى قوللىمايدۇ',
       treeCrossDrag: '只能拖拽第一层级',
       treeDragChild: '父级不能拖拽到自己的子级中',
-      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/install',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: '超过支持的最大数据量 {0} 行，这可能会导致出现错误',
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,11 +104,12 @@ export default {
     select: {
       clear: '清除',
       allChecked: '全选',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'ئىزدەش',
       loadingText: 'يۈكلىنىۋاتىدۇ',
       emptyText: 'ھازىرچە ئۇچۇر يوق',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
       searchEmpty: '未匹配到数据！'
     },
@@ -121,7 +122,8 @@ export default {
       allChecked: '全选',
       allExpand: '全部展开',
       clearExpand: '全部收起',
-      total: '已选 {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '搜索',
       emptyText: '暂无数据'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: 'يۆتكەش：{0}',
       setting: {
         colSort: 'تەرتىپلەش',
-        sortHelpTip: '点击并拖动图标可以调整顺序',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: '列标题',
         colResizable: 'قۇر كەڭلىڭى(پېكسىل)',
         colVisible: 'كۆرۈنەمدۇ-كۆرۈنمەمدۇ',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'قۇر توڭلىتىش（ئەڭ كۆپ بولغاندا {0} قۇر）',
         fixedLeft: 'سول يان',
         fixedUnset: 'تەڭشىمەيمەن',
-        fixedRight: 'ئوڭ يان'
+        fixedRight: 'ئوڭ يان',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: 'ئەگەر مەۋجۇت بولسا برىكتۈرۈلگەن قۇرۇلمىلىق ھۆججەت ئىلمىنتىنى قوللايدۇ ',
       expOptAllExpand: '展开树',
       expAllExpandTitle: 'ئەگەر مەۋجۇت بولسا،دەرىجىسى بولغان بارلىق ئۇچۇرلار ئىچىلىدۇ ',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: 'نۇسخا',
       expUseStyleTitle: 'ئەگەر مەۋجۇت بولسا ،نۇسخىسى بولغان ئىلمىنىتلارغا نۇسخا قوشىلىدۇ',
       expOptOriginal: 'ئەسلىي ئۇچۇر',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: '拖至此处进行分组',
           valuesPlaceholder: '拖至此处进行聚合',
           dragExistCol: '该列已存在',
-          sortHelpTip: '点击并拖动图标可以调整顺序'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: '求和',

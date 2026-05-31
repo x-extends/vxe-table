@@ -25,7 +25,7 @@ export default {
       useErr: 'Під час встановлення модуля "{0}" сталася помилка. Порядок може бути неправильним. Залежний модуль потрібно встановити перед таблицею',
       barUnableLink: 'Панель інструментів не може асоціювати таблиці',
       expandContent: 'Слот для розширеної лінії повинен бути "вмістом", будь ласка, перевірте, чи це правильно',
-      reqComp: 'Компонент "{0}" відсутній, будь ласка, перевірте, чи встановлено його правильно. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Відсутній модуль "{0}"',
       reqProp: 'Необхідний параметр "{0}" відсутній, що може спричинити помилку',
       emptyProp: 'Параметр "{0}" не дозволяється бути порожнім',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'Таблиці дерев не підтримують імпорт',
       treeCrossDrag: 'Тільки перетягніть перший рівень',
       treeDragChild: 'Батьки не можуть тягнути до своїх дітей',
-      reqPlugin: '"{1}" не встановлюється на https://vxeui.com/other інд.',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Перевищення максимально підтримуваного обсягу даних {0} рядків це може спричинити помилку',
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,11 +104,12 @@ export default {
     select: {
       clear: '清除',
       allChecked: '全选',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'обшук',
       loadingText: 'навантаження',
       emptyText: 'Ще немає даних',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
       searchEmpty: '未匹配到数据！'
     },
@@ -121,7 +122,8 @@ export default {
       allChecked: '全选',
       allExpand: '全部展开',
       clearExpand: '全部收起',
-      total: '已选 {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '搜索',
       emptyText: '暂无数据'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: 'Перемістити: {0}',
       setting: {
         colSort: 'Сортувати',
-        sortHelpTip: '点击并拖动图标可以调整顺序',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Заголовок стовпців',
         colResizable: 'Ширина стовпця (пікселі)',
         colVisible: 'Чи відображати',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'Заморожування стовпців (до {0} стовпців)',
         fixedLeft: 'Лівий бік',
         fixedUnset: 'Не встановити',
-        fixedRight: 'Правий бік'
+        fixedRight: 'Правий бік',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: "Якщо вони присутні, підтримуються клітини з об'єднаними структурами",
       expOptAllExpand: 'Розширити дерево',
       expAllExpandTitle: 'Якщо він існує, підтримується розширення всіх даних за допомогою ієрархічних структур',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: 'стиль',
       expUseStyleTitle: 'Якщо вони присутні, підтримуються клітини зі стилем',
       expOptOriginal: 'Джерело даних',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: '拖至此处进行分组',
           valuesPlaceholder: '拖至此处进行聚合',
           dragExistCol: '该列已存在',
-          sortHelpTip: '点击并拖动图标可以调整顺序'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: '求和',

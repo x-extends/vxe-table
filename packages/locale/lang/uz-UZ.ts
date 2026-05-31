@@ -25,7 +25,7 @@ export default {
       useErr: "\"{0}\" modulini o'rnatishda xatolik yuz berdi. Buyurtma noto'g'ri bo'lishi mumkin. Qaram modul jadvaldan oldin o'rnatilishi kerak",
       barUnableLink: 'Asboblar paneli stollarni sotolmaydi',
       expandContent: "Kengaytirilgan chiziqning uyasi \"tarkib\" bo'lishi kerak, iltimos, u to'g'ri ekanligini tekshiring",
-      reqComp: "\"{0}\" komponenti yo'q bo'lib, u to'g'ri o'rnatilganligini tekshiring. https://vxeui.com/#/start/usaglobal",
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: "Yo'qolgan \"{0}\" moduli",
       reqProp: "Kerakli \"{0} parametrlari\" parametr yo'q, bu xatoga olib kelishi mumkin",
       emptyProp: "\"{0}\" parametr bo'sh bo'lishi mumkin emas",
@@ -56,7 +56,7 @@ export default {
       treeNotImp: "Daraxt stollari importni qo'llab-quvvatlamaydi",
       treeCrossDrag: 'Faqat birinchi darajani torting',
       treeDragChild: "Ota-onalar o'z farzandlariga sudrab ketolmaydilar",
-      reqPlugin: "\"{1}\" https://vxeui.com/oter{/#/#/#/install-da o'rnatilmagan",
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: "Maksimal qo'llab-quvvatlanadigan ma'lumotlar hajmi {0} qatorlar hajmidan oshib ketishi mumkin, bu xatoga olib kelishi mumkin",
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,11 +104,12 @@ export default {
     select: {
       clear: '清除',
       allChecked: '全选',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'qidirish',
       loadingText: 'yuklamoq',
       emptyText: "Hali ma'lumot yo'q",
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
       searchEmpty: '未匹配到数据！'
     },
@@ -121,7 +122,8 @@ export default {
       allChecked: '全选',
       allExpand: '全部展开',
       clearExpand: '全部收起',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '搜索',
       emptyText: '暂无数据'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: "Ko'chiring: {0}",
       setting: {
         colSort: 'Tartib',
-        sortHelpTip: '点击并拖动图标可以调整顺序',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Ustun unvon',
         colResizable: 'Ustun kengligi (piksellar)',
         colVisible: "Ko'rsatish kerakmi",
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'Ustunlarni muzlatgich ({0} ustunlargacha)',
         fixedLeft: 'Chap tomon',
         fixedUnset: "O'rnatilmagan",
-        fixedRight: "O'ng tomon"
+        fixedRight: "O'ng tomon",
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: "Agar hozirgi tuzilmalar bo'lgan hujayralar qo'llab-quvvatlansa",
       expOptAllExpand: 'Daraxtni kengaytiring',
       expAllExpandTitle: "Agar mavjud bo'lsa, ierarxik tuzilmalar bilan barcha ma'lumotlarni kengaytirish qo'llab-quvvatlanadi",
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: 'uslub',
       expUseStyleTitle: "Agar mavjud bo'lsa, uslublar bo'lgan hujayralar qo'llab-quvvatlanadi",
       expOptOriginal: "Manba ma'lumotlari",
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: '拖至此处进行分组',
           valuesPlaceholder: '拖至此处进行聚合',
           dragExistCol: '该列已存在',
-          sortHelpTip: '点击并拖动图标可以调整顺序'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: '求和',

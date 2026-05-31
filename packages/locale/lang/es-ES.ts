@@ -25,7 +25,7 @@ export default {
       useErr: 'Se produjo un error al instalar el módulo "{0}". El pedido puede ser incorrecto. El módulo dependiente debe instalarse antes de la tabla',
       barUnableLink: 'La barra de herramientas no puede asociar tablas',
       expandContent: 'La ranura para la línea expandida debe ser "contenido", verifique si es correcto',
-      reqComp: 'Falta el componente "{0}", verifique si está instalado correctamente. https://vxeui.com/#/start/useglobal',
+      reqComp: 'The component "{0}" is missing. Please check if it is installed correctly. https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Falta módulo "{0}"',
       reqProp: 'Falta el parámetro "{0}" necesario, lo que puede causar un error',
       emptyProp: 'El parámetro "{0}" no puede estar vacío',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'Las tablas de árboles no admiten la importación',
       treeCrossDrag: 'Solo arrastre el primer nivel',
       treeDragChild: 'Los padres no pueden arrastrar a sus propios hijos',
-      reqPlugin: '"{1}" no está instalado en https://vxeui.com/other{0 /#/{1}/install',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Al exceder las filas de volumen de datos máximos admitidos, esto puede causar un error',
       useNew: '{0} no se recomienda, use {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,7 +104,8 @@ export default {
     select: {
       clear: 'Claro',
       allChecked: 'Seleccionar todo',
-      total: '{0} / {1}',
+      total: '{0} items selected',
+      close: 'Close',
       search: 'buscar',
       loadingText: 'cargando',
       emptyText: 'Aún no hay datos',
@@ -121,7 +122,8 @@ export default {
       allChecked: 'Seleccionar todo',
       allExpand: 'Expandir todo',
       clearExpand: 'Cerrar todo',
-      total: 'Seleccionado {0}',
+      total: '{0} items selected',
+      close: 'Close',
       search: 'buscar',
       emptyText: 'Aún no hay datos'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: 'Mover: {0}',
       setting: {
         colSort: 'Clasificar',
-        sortHelpTip: 'Haga clic y arrastre el icono para ajustar el pedido',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Título de columna',
         colResizable: 'Ancho de columna (píxeles)',
         colVisible: 'Si mostrar',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'Columnas de congelación (hasta {0} columnas)',
         fixedLeft: 'Lado izquierdo',
         fixedUnset: 'No establecido',
-        fixedRight: 'Lado derecho'
+        fixedRight: 'Lado derecho',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: 'Si está presente, las células con estructuras fusionadas son compatibles',
       expOptAllExpand: 'Expandir el árbol',
       expAllExpandTitle: 'Si existe, es compatible para expandir todos los datos con estructuras jerárquicas',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: 'estilo',
       expUseStyleTitle: 'Si está presente, las celdas con estilo son compatibles',
       expOptOriginal: 'Datos de origen',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: 'Arrastre aquí al grupo',
           valuesPlaceholder: 'Arrastre aquí para agregar',
           dragExistCol: 'Esta columna ya existe',
-          sortHelpTip: 'Haga clic y arrastre el icono para ajustar el pedido'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: 'Pedir suma',

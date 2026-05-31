@@ -25,7 +25,7 @@ export default {
       useErr: 'Hiba történt a "{0}" modul telepítése során. A sorrend helytelen lehet. A függő modult a táblázat előtt kell telepíteni',
       barUnableLink: 'Az eszköztár nem társíthatja a táblákat',
       expandContent: 'A kibővített vonal résidőnek "tartalomnak" kell lennie, kérjük, ellenőrizze, hogy helyes -e',
-      reqComp: 'Hiányzik a "{0}" összetevő, kérjük, ellenőrizze, hogy helyesen van -e telepítve. https://vxeui.com/#/start/useglobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: 'Hiányzik a "{0}" modul',
       reqProp: 'Hiányzik a szükséges "{0}" paraméter, amely hibát okozhat',
       emptyProp: 'A "{0}" paraméter nem szabad üres lenni',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: 'A faasztalok nem támogatják az importot',
       treeCrossDrag: 'Csak húzza az első szintet',
       treeDragChild: 'A szülők nem tudnak elhúzni a saját gyermekeiket',
-      reqPlugin: 'A "{1}" nincs telepítve a https://vxeui.com/other oldalon {0 }/#/ (1 }/install',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'A maximális támogatott adatmennyiség {0} sorok túllépése, ez hibát okozhat',
       useNew: '不建议使用 {0}，请使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,11 +104,12 @@ export default {
     select: {
       clear: '清除',
       allChecked: '全选',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: 'keresés',
       loadingText: 'terhelés',
       emptyText: 'Még nincs adat',
-      maxOpt: '最大可选择的数量不能超过 {0} 个',
+      maxSize: '最大可选择的数量不能超过 {0} 个',
       overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
       searchEmpty: '未匹配到数据！'
     },
@@ -121,7 +122,8 @@ export default {
       allChecked: '全选',
       allExpand: '全部展开',
       clearExpand: '全部收起',
-      total: '已选 {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '搜索',
       emptyText: '暂无数据'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: 'Mozgás: {0}',
       setting: {
         colSort: 'Fajta',
-        sortHelpTip: '点击并拖动图标可以调整顺序',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: 'Oszlopcím',
         colResizable: 'Oszlop szélessége (pixelek)',
         colVisible: 'Függetlenül attól, hogy megjelenjen',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: 'Fagyasztva oszlopok ({0} oszlopokig)',
         fixedLeft: 'Bal oldal',
         fixedUnset: 'Nem állított be',
-        fixedRight: 'Jobb oldali'
+        fixedRight: 'Jobb oldali',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: 'Ha van jelen, az egyesített struktúrákkal rendelkező sejtek támogatottak',
       expOptAllExpand: 'Bővítse a fát',
       expAllExpandTitle: 'Ha létezik, akkor támogatott, hogy az összes adatot hierarchikus struktúrákkal bővítse',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: 'stílus',
       expUseStyleTitle: 'Ha van jelen, akkor a stílusú sejtek támogatottak',
       expOptOriginal: 'Forrásadatok',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: '拖至此处进行分组',
           valuesPlaceholder: '拖至此处进行聚合',
           dragExistCol: '该列已存在',
-          sortHelpTip: '点击并拖动图标可以调整顺序'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: '求和',

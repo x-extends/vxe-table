@@ -25,7 +25,7 @@ export default {
       useErr: '安裝 "{0}" 模塊時發生錯誤，可能順序不正確，依賴的模塊需要在 Table 之前安裝',
       barUnableLink: '工具欄無法關聯表格',
       expandContent: '展開行的插槽應該是 "content"，請檢查是否正確',
-      reqComp: '缺少 "{0}" 組件，請檢查是否正確安裝。 https://vxeui.com/#/start/useGlobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useUI/useGlobal',
       reqModule: '缺少 "{0}" 模塊',
       reqProp: '缺少必要的 "{0}" 參數，這可能會導致出現錯誤',
       emptyProp: '參數 "{0}" 不允許為空',
@@ -56,7 +56,7 @@ export default {
       treeNotImp: '樹表格不支持導入',
       treeCrossDrag: '只能拖拽第一層級',
       treeDragChild: '父級不能拖拽到自己的子級中',
-      reqPlugin: '擴展插件未安裝 "{1}" https://vxeui.com/other{0}/#/{1}/install',
+      reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: '超過支持的最大數據量 {0} 行，這可能會導致出現錯誤',
       useNew: '不建議使用 {0}，請使用 {1}',
       errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
@@ -104,7 +104,8 @@ export default {
     select: {
       clear: '清除',
       allChecked: '全選',
-      total: '{0} / {1}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '搜尋',
       loadingText: '載入中',
       emptyText: '暫無數據',
@@ -121,7 +122,8 @@ export default {
       allChecked: '全選',
       allExpand: '全部展開',
       clearExpand: '全部收起',
-      total: '已選 {0}',
+      total: '已选 {0} 项',
+      close: '关闭',
       search: '搜尋',
       emptyText: '暫無數據'
     },
@@ -164,7 +166,7 @@ export default {
       cstmDragTarget: '移動：{0}',
       setting: {
         colSort: '排序',
-        sortHelpTip: '點擊並拖動圖標可以調整順序',
+        sortHelpTip: '点击图标开始拖动',
         colTitle: '列標題',
         colResizable: '列寬（像素）',
         colVisible: '是否顯示',
@@ -172,7 +174,15 @@ export default {
         colFixedMax: '凍結列（最多 {0} 列）',
         fixedLeft: '左側',
         fixedUnset: '不設置',
-        fixedRight: '右側'
+        fixedRight: '右側',
+        moveUp: '上移',
+        moveDn: '下移',
+        putTop: '置顶',
+        putBottom: '置尾',
+        moveUpTitle: '点击向上移动',
+        moveDnTitle: '点击向下移动',
+        putTopTitle: '点击置顶',
+        putBottomTitle: '点击置尾'
       }
     },
     import: {
@@ -230,6 +240,10 @@ export default {
       expMergeTitle: '如果存在，則支持帶有合併結構的單元格',
       expOptAllExpand: '展開樹',
       expAllExpandTitle: '如果存在，則支持將帶有層級結構的數據全部展開',
+      expOptTreeAllExpand: '展开树',
+      expTreeAllExpandTitle: '如果存在，则自动展开所有树层级',
+      expOptRowGroupAllExpand: '展开分组',
+      expRowGroupAllExpandTitle: '如果存在，则自动展开所有分组层级',
       expOptUseStyle: '樣式',
       expUseStyleTitle: '如果存在，則支持帶樣式的單元格',
       expOptOriginal: '源數據',
@@ -548,6 +562,10 @@ export default {
     contextMenu: {
       loadingText: '加载中...'
     },
+    switch: {
+      onText: '打开',
+      offText: '关闭'
+    },
     gantt: {
       tFullFormat: {
         year: '{yyyy}年',
@@ -638,7 +656,7 @@ export default {
           groupPlaceholder: '拖至此處進行分組',
           valuesPlaceholder: '拖至此處進行聚合',
           dragExistCol: '該列已存在',
-          sortHelpTip: '點擊並拖動圖標可以調整順序'
+          sortHelpTip: '点击图标开始拖动'
         },
         aggFuncs: {
           sum: '求和',
