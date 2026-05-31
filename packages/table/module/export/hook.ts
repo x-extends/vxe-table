@@ -326,7 +326,7 @@ hooks.add('tableExportModule', {
     function getHeaderTitle (opts: VxeTablePropTypes.ExportHandleOptions, column: VxeTableDefines.ColumnInfo) {
       const columnOpts = computeColumnOpts.value
       const headExportMethod = column.headerExportMethod || columnOpts.headerExportMethod
-      return headExportMethod ? headExportMethod({ column, options: opts, $table: $xeTable }) : ((opts.isTitle ? column.getTitle() : column.field) || '')
+      return headExportMethod ? headExportMethod({ column, options: opts, $table: $xeTable }) : ((opts.isTitle ? $xeTable.getHeaderCellLabel(column) : column.field) || '')
     }
 
     const toBooleanValue = (cellValue: any) => {
@@ -994,12 +994,12 @@ hooks.add('tableExportModule', {
       const tableTitleMaps: Record<string, VxeTableDefines.ColumnInfo> = {}
       tableFullColumn.forEach((column) => {
         const field = column.field
-        const title = column.getTitle()
+        const title = $xeTable.getHeaderCellLabel(column)
         if (field) {
           tableFieldMaps[field] = column
         }
         if (title) {
-          tableTitleMaps[column.getTitle()] = column
+          tableTitleMaps[title] = column
         }
       })
       const tableConf = {

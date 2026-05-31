@@ -387,7 +387,7 @@ export const Cell = {
         }
       }
     }
-    return renderTitleContent(params, formatText(column.getTitle(), 1))
+    return renderTitleContent(params, $table.getHeaderCellLabel(column))
   },
   renderDefaultHeader (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     return renderHeaderCellBaseVNs(params, Cell.renderHeaderTitle(params))
@@ -399,7 +399,7 @@ export const Cell = {
     const tableInternalData = $table.internalData
     const { isRowGroupStatus } = tableReactData
     const { editConfig } = tableProps
-    const { field, slots, editRender, cellRender, rowGroupNode, aggFunc, formatter } = column
+    const { field, slots, editRender, cellRender, rowGroupNode, aggFunc } = column
     const isEnableEdit = editConfig && isEnableConf(editConfig)
     const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
     const cellRenderOpts = isEnableConf(cellRender) ? cellRender : null
@@ -473,8 +473,9 @@ export const Cell = {
         return renderCellBaseVNs(params, $table.callSlot(defaultSlot, params))
       }
       const renderOpts = editRenderOpts || cellRenderOpts
-      // formatter > (renderTableCell | renderTableDefault)
-      if (renderOpts && !formatter) {
+      // 如果是编辑表格：renderTableCell > formatter
+      // 如果是查看表格：renderTableDefault > formatter
+      if (renderOpts) {
         const compConf = renderer.get(renderOpts.name)
         if (compConf) {
           const renderFn = editRenderOpts ? (compConf.renderTableCell || compConf.renderCell) : (compConf.renderTableDefault || compConf.renderDefault)
@@ -650,7 +651,7 @@ export const Cell = {
     const { $table, column } = params
     const { slots } = column
     const headerSlot = slots ? slots.header : null
-    return renderHeaderCellBaseVNs(params, renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : formatText(column.getTitle(), 1)))
+    return renderHeaderCellBaseVNs(params, renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : $table.getHeaderCellLabel(column)))
   },
   renderSeqCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
@@ -687,7 +688,7 @@ export const Cell = {
         : [
             h('span', {
               class: 'vxe-radio--label'
-            }, titleSlot ? $table.callSlot(titleSlot, params) : formatText(column.getTitle(), 1))
+            }, titleSlot ? $table.callSlot(titleSlot, params) : $table.getHeaderCellLabel(column))
           ])
     )
   },
@@ -765,7 +766,7 @@ export const Cell = {
     const titleSlot = slots ? slots.title : null
     const checkboxOpts = computeCheckboxOpts.value
     const { checkStrictly, showHeader, headerTitle } = checkboxOpts
-    const colTitle = column.getTitle()
+    const colTitle = $table.getHeaderCellLabel(column)
     const ons: Record<string, any> = {}
     if (!isHidden) {
       ons.onClick = (evnt: MouseEvent) => {

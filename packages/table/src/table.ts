@@ -4218,6 +4218,7 @@ export default defineVxeComponent({
             loadScrollXData()
           }
         })
+        $xeTable.clearHeaderFormatterCache()
         $xeTable.clearMergeCells()
         $xeTable.clearMergeFooterItems()
         $xeTable.handleTableData(true)
@@ -5469,6 +5470,79 @@ export default defineVxeComponent({
             tableColumn.forEach(column => {
               $xeTable.getCellLabel(row, column)
             })
+          })
+        }
+        return nextTick()
+      },
+      getHeaderCellLabel (fieldOrColumn) {
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        if (!column) {
+          return null
+        }
+        const { headerFormatter } = column
+        const _columnIndex = $xeTable.getVTColumnIndex(column)
+        let cellLabel = column.getTitle()
+        if (headerFormatter) {
+          let formatData: Record<string, VxeTableDefines.RowCacheFormatObj> | undefined
+          const { headerFullDataColData } = internalData
+          const colid = column.id
+          let colRest = headerFullDataColData[colid]
+          if (!colRest) {
+            colRest = headerFullDataColData[colid] = {}
+          }
+          const formatObj = colRest.formatObj
+          if (formatObj && formatObj.value === cellLabel) {
+            return formatObj.label
+          }
+          const headFormatParams = {
+            $table: $xeTable,
+            cellTitle: cellLabel,
+            cellValue: cellLabel,
+            column,
+            _columnIndex,
+            columnIndex: $xeTable.getColumnIndex(column)
+          }
+          if (XEUtils.isString(headerFormatter)) {
+            const gFormatOpts = formats.get(headerFormatter)
+            const fcFormatMethod = gFormatOpts ? gFormatOpts.tableHeaderCellFormatMethod : null
+            cellLabel = XEUtils.toValueString(fcFormatMethod ? fcFormatMethod(headFormatParams) : '')
+          } else if (XEUtils.isArray(headerFormatter)) {
+            const gFormatOpts = formats.get(headerFormatter[0])
+            const fcFormatMethod = gFormatOpts ? gFormatOpts.tableHeaderCellFormatMethod : null
+            cellLabel = XEUtils.toValueString(fcFormatMethod ? fcFormatMethod(headFormatParams, ...headerFormatter.slice(1)) : '')
+          } else {
+            cellLabel = XEUtils.toValueString(headerFormatter(headFormatParams))
+          }
+          if (formatData) {
+            colRest.formatObj = { value: cellLabel, label: cellLabel }
+          }
+        }
+        return cellLabel
+      },
+      updateHeaderCellLabel (fieldOrColumn) {
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        if (!column) {
+          return ''
+        }
+        const { headerFullDataColData } = internalData
+        const colid = column.id
+        const colRest = headerFullDataColData[colid]
+        if (colRest) {
+          colRest.formatObj = undefined
+        }
+        return $xeTable.getHeaderCellLabel(column)
+      },
+      clearHeaderFormatterCache (isUpdate) {
+        const { tableColumn } = reactData
+        const { headerFullDataColData } = internalData
+        XEUtils.each(headerFullDataColData, (colRest: VxeTableDefines.HeaderColCacheItem) => {
+          if (colRest.formatObj) {
+            colRest.formatObj = undefined
+          }
+        })
+        if (isUpdate) {
+          tableColumn.forEach(column => {
+            $xeTable.getHeaderCellLabel(column)
           })
         }
         return nextTick()
@@ -7670,6 +7744,7 @@ export default defineVxeComponent({
           footData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: afterFullData, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }) : []
         }
         reactData.footerTableData = footData
+        $xeTable.clearFooterFormatterCache()
         $xeTable.handleUpdateFooterMerge()
         $xeTable.dispatchEvent('footer-data-change', {
           visibleColumn: internalData.visibleColumn,
