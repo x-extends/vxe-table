@@ -230,7 +230,7 @@ export default defineVxeComponent({
       const filterOpts = computeFilterOpts.value
       const hasCheckOption = computeHasCheckOption.value
       const { filterRender, filterMultiple } = column
-      const { confirmButtonText, resetButtonText, showFooter } = filterOpts
+      const { confirmButtonText, resetButtonText, showFooter } = filterOpts as any
       const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
       let showFlFoot = !!filterMultiple

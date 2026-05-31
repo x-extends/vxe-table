@@ -975,7 +975,7 @@ renderer.mixin({
           const digits = handleDefaultValue(props.digits, numberInputConfig.digits, 1)
           let amountLabel = XEUtils.toFixed(XEUtils.floor(itemValue, digits), digits)
           if (!autoFill) {
-            amountLabel = XEUtils.toNumber(amountLabel)
+            amountLabel = XEUtils.toNumber(amountLabel) as any
           }
           return amountLabel
         } else if (type === 'amount') {
