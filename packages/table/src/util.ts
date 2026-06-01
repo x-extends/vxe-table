@@ -775,10 +775,66 @@ export function toFilters (filters: any, colid?: string) {
   return filters
 }
 
-export function getColReMinWidth (params: any) {
+/**
+ * 列宽拖动最大宽度
+ */
+export function getColReMaxWidth (params: {
+  $table: VxeTableConstructor & VxeTablePrivateMethods;
+  column: VxeTableDefines.ColumnInfo;
+  columnIndex: number;
+  $columnIndex: number;
+  $rowIndex: number;
+  cell: HTMLTableCellElement;
+}) {
   const { $table, column, cell } = params
-  const internalData = $table
-  const { showHeaderOverflow: allColumnHeaderOverflow, resizableOpts } = $table
+  const internalData = $table as unknown as TableInternalData
+  const { elemStore } = internalData
+  const resizableOpts = $table.computeResizableOpts
+  const columnOpts = $table.computeColumnOpts
+  const { maxWidth: reMaxWidth } = resizableOpts
+  const colMaxWidth = column.maxWidth || columnOpts.maxWidth
+  // 如果自定义调整宽度逻辑
+  if (reMaxWidth) {
+    const customMaxWidth = XEUtils.isFunction(reMaxWidth) ? reMaxWidth(params) : reMaxWidth
+    if (customMaxWidth !== 'auto') {
+      return Math.max(1, XEUtils.toNumber(customMaxWidth))
+    }
+  }
+  const minTitleWidth = XEUtils.floor((XEUtils.toNumber(getComputedStyle(cell).fontSize) || 14) * 1.8)
+  const paddingLeftRight = getPaddingLeftRightSize(cell) + getPaddingLeftRightSize(queryElement(cell, '.vxe-cell'))
+  const mWidth = minTitleWidth + paddingLeftRight
+  // 如果设置最小宽
+  if (colMaxWidth) {
+    const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+    if (bodyScrollElem) {
+      if (isScale(colMaxWidth)) {
+        const bodyWidth = bodyScrollElem.clientWidth - 1
+        const meanWidth = bodyWidth / 100
+        return Math.max(mWidth, Math.floor(XEUtils.toInteger(colMaxWidth) * meanWidth))
+      } else if (isPx(colMaxWidth)) {
+        return Math.max(mWidth, XEUtils.toInteger(colMaxWidth))
+      }
+    }
+  }
+  return -1
+}
+
+/**
+ * 列宽拖动最小宽度
+ */
+export function getColReMinWidth (params: {
+  $table: VxeTableConstructor & VxeTablePrivateMethods;
+  column: VxeTableDefines.ColumnInfo;
+  columnIndex: number;
+  $columnIndex: number;
+  $rowIndex: number;
+  cell: HTMLTableCellElement;
+}) {
+  const { $table, column, cell } = params
+  const tableProps = $table
+  const internalData = $table as unknown as TableInternalData
+  const resizableOpts = $table.computeResizableOpts
+  const columnOpts = $table.computeColumnOpts
   const { minWidth } = resizableOpts
   // 如果自定义调整宽度逻辑
   if (minWidth) {
@@ -788,7 +844,9 @@ export function getColReMinWidth (params: any) {
     }
   }
   const { elemStore } = internalData
-  const { showHeaderOverflow, minWidth: colMinWidth } = column
+  const { showHeaderOverflow: allColumnHeaderOverflow } = tableProps
+  const { showHeaderOverflow } = column
+  const colMinWidth = column.minWidth || columnOpts.minWidth
   const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
   const showEllipsis = headOverflow === 'ellipsis'
   const showTitle = headOverflow === 'title'
