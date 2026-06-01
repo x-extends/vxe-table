@@ -751,8 +751,6 @@ export function getCalcHeight (height: number | 'unset' | undefined | null) {
 
 /**
  * 列宽拖动最大宽度
- * @param params
- * @returns
  */
 export function getColReMaxWidth (params: {
   $table: VxeTableConstructor & VxeTablePrivateMethods;
@@ -762,10 +760,14 @@ export function getColReMaxWidth (params: {
   $rowIndex: number;
   cell: HTMLTableCellElement;
 }) {
-  const { $table } = params
-  const { computeResizableOpts } = $table.getComputeMaps()
+  const { $table, column, cell } = params
+  const internalData = $table.internalData
+  const { elemStore } = internalData
+  const { computeColumnOpts, computeResizableOpts } = $table.getComputeMaps()
   const resizableOpts = computeResizableOpts.value
+  const columnOpts = computeColumnOpts.value
   const { maxWidth: reMaxWidth } = resizableOpts
+  const colMaxWidth = column.maxWidth || columnOpts.maxWidth
   // 如果自定义调整宽度逻辑
   if (reMaxWidth) {
     const customMaxWidth = XEUtils.isFunction(reMaxWidth) ? reMaxWidth(params) : reMaxWidth
@@ -773,13 +775,27 @@ export function getColReMaxWidth (params: {
       return Math.max(1, XEUtils.toNumber(customMaxWidth))
     }
   }
+  const minTitleWidth = XEUtils.floor((XEUtils.toNumber(getComputedStyle(cell).fontSize) || 14) * 1.8)
+  const paddingLeftRight = getPaddingLeftRightSize(cell) + getPaddingLeftRightSize(queryElement(cell, '.vxe-cell'))
+  const mWidth = minTitleWidth + paddingLeftRight
+  // 如果设置最小宽
+  if (colMaxWidth) {
+    const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+    if (bodyScrollElem) {
+      if (isScale(colMaxWidth)) {
+        const bodyWidth = bodyScrollElem.clientWidth - 1
+        const meanWidth = bodyWidth / 100
+        return Math.max(mWidth, Math.floor(XEUtils.toInteger(colMaxWidth) * meanWidth))
+      } else if (isPx(colMaxWidth)) {
+        return Math.max(mWidth, XEUtils.toInteger(colMaxWidth))
+      }
+    }
+  }
   return -1
 }
 
 /**
  * 列宽拖动最小宽度
- * @param params
- * @returns
  */
 export function getColReMinWidth (params: {
   $table: VxeTableConstructor & VxeTablePrivateMethods;
@@ -792,8 +808,9 @@ export function getColReMinWidth (params: {
   const { $table, column, cell } = params
   const tableProps = $table.props
   const internalData = $table.internalData
-  const { computeResizableOpts } = $table.getComputeMaps()
+  const { computeColumnOpts, computeResizableOpts } = $table.getComputeMaps()
   const resizableOpts = computeResizableOpts.value
+  const columnOpts = computeColumnOpts.value
   const { minWidth: reMinWidth } = resizableOpts
   // 如果自定义调整宽度逻辑
   if (reMinWidth) {
@@ -804,7 +821,8 @@ export function getColReMinWidth (params: {
   }
   const { elemStore } = internalData
   const { showHeaderOverflow: allColumnHeaderOverflow } = tableProps
-  const { showHeaderOverflow, minWidth: colMinWidth } = column
+  const { showHeaderOverflow } = column
+  const colMinWidth = column.minWidth || columnOpts.minWidth
   const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
   const showEllipsis = headOverflow === 'ellipsis'
   const showTitle = headOverflow === 'title'

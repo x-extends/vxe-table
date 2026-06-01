@@ -6,6 +6,7 @@
       border
       stripe
       resizable
+      show-overflow
       highlight-hover-row
       height="400"
       ref="tableRef"
@@ -23,14 +24,14 @@
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
       :data="demo1.tableData">
       <vxe-column field="seq" type="seq" width="60" row-resize></vxe-column>
-      <vxe-column field="checkbox" type="checkbox" title="ID" width="140"></vxe-column>
+      <vxe-column field="checkbox" type="checkbox" title="ID" width="140" max-width="200"></vxe-column>
       <vxe-colgroup title="分组1" field="g1">
         <vxe-column type="expand" field="role" title="Role">
           <template #content="{ row }">
             <div>{{ row.name }}</div>
           </template>
         </vxe-column>
-        <vxe-column field="name" title="Name" sortable></vxe-column>
+        <vxe-column field="name" title="Name" sortable width="auto"></vxe-column>
       </vxe-colgroup>
       <vxe-column field="Sex222" title="<span style='color:red;'>Sex222</span>" type="html"></vxe-column>
       <vxe-column field="Sex1111" title="<span style='color:red;'>Sex1111</span>" type="html" :visible="false"></vxe-column>
@@ -65,7 +66,8 @@ const rowConfig = reactive<VxeTablePropTypes.RowConfig>({
 const resizableConfig = reactive<VxeTablePropTypes.ResizableConfig>({
   isAllColumnDrag: true,
   isAllRowDrag: true,
-  isDblclickAutoHeight: true
+  isDblclickAutoHeight: true,
+  isDblclickAutoWidth: true
 })
 
 const demo1 = reactive({
@@ -115,15 +117,15 @@ onMounted(() => {
       { id: 10003, name: 'Test3', role: 'PM', sex: '0', age: 32, address: 'Shanghai' },
       { id: 10004, name: 'Test4', role: 'Designer', sex: '1', age: 23, address: 'test abc' },
       { id: 10005, name: 'Test5', role: 'Develop', sex: '1', age: 30, address: 'Shanghai' },
-      { id: 10006, name: 'Test6', role: 'Designer', sex: '1', age: 21, address: 'test abc' },
+      { id: 10006, name: 'Test6sdfs sdf fdf', role: 'Designer', sex: '1', age: 21, address: 'test abc' },
       { id: 10007, name: 'Test7', role: 'Test', sex: '0', age: 29, address: 'test abc' },
       { id: 10008, name: 'Test8', role: 'Develop', sex: '0', age: 35, address: 'test abc' },
       { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 21, address: 'test abc' },
-      { id: 10010, name: 'Test10', role: 'Develop', sex: '0', age: 28, address: 'test abc' },
+      { id: 10010, name: 'Test1sdf sdf f sdf fsd sf0', role: 'Develop', sex: '0', age: 28, address: 'test abc' },
       { id: 10011, name: 'Test11', role: 'Test', sex: '0', age: 29, address: 'test abc' },
       { id: 10012, name: 'Test12', role: 'Develop', sex: '1', age: 27, address: 'test abc' },
       { id: 10013, name: 'Test13', role: 'Test', sex: '0', age: 24, address: 'test abc' },
-      { id: 10014, name: 'Test14', role: 'Develop', sex: '1', age: 34, address: 'test abc' },
+      { id: 10014, name: 'Test1sdfds dsf dsfs fsdf fds fsdf sfd 4', role: 'Develop', sex: '1', age: 34, address: 'test abc' },
       { id: 10015, name: 'Test15', role: 'Test', sex: '1', age: 21, address: 'test abc' },
       { id: 10016, name: 'Test16', role: 'Develop', sex: '0', age: 20, address: 'test abc' },
       { id: 10017, name: 'Test17', role: 'Test', sex: '1', age: 31, address: 'test abc' },

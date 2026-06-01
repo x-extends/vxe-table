@@ -4,7 +4,7 @@ import XEUtils from 'xe-utils'
 import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollTopTo, wheelScrollLeftTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement, hasEventInputTarget } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
-import { createReactData, createInternalData, getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn } from './util'
+import { createReactData, createInternalData, getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, getColReMaxWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from '../../ui/src/anime'
 import { warnLog, errLog } from '../../ui/src/log'
@@ -1962,6 +1962,7 @@ export default defineVxeComponent({
       if (!xHandleEl) {
         return
       }
+      const columnOpts = computeColumnOpts.value
       let tWidth = 0
       const minCellWidth = 40 // 列宽最少限制 40px
       const bodyWidth = bodyWrapperElem.clientWidth
@@ -1970,53 +1971,92 @@ export default defineVxeComponent({
       const { fit } = props
       const { columnStore } = reactData
       const { resizeList, pxMinList, autoMinList, pxList, scaleList, scaleMinList, autoList, remainList } = columnStore
+
+      const parseColumnMaxWidth = (column: VxeTableDefines.ColumnInfo) => {
+        const maxWidth = column.maxWidth || columnOpts.maxWidth
+        if (maxWidth && maxWidth !== 'auto') {
+          if (isScale(maxWidth)) {
+            return Math.floor(XEUtils.toInteger(maxWidth) * meanWidth)
+          }
+          return XEUtils.toInteger(maxWidth)
+        }
+        return 0
+      }
+
       // 最小宽
       pxMinList.forEach((column) => {
-        const minWidth = XEUtils.toInteger(column.minWidth)
-        tWidth += minWidth
-        column.renderWidth = minWidth
+        let miWidth = XEUtils.toInteger(column.minWidth)
+        const mxWidth = parseColumnMaxWidth(column)
+        if (mxWidth) {
+          miWidth = Math.min(miWidth, mxWidth)
+        }
+        tWidth += miWidth
+        column.renderWidth = miWidth
       })
       // 最小自适应
       autoMinList.forEach((column) => {
-        const caWidth = Math.max(60, XEUtils.toInteger(column.renderAutoWidth))
+        let caWidth = Math.max(60, XEUtils.toInteger(column.renderAutoWidth))
+        const mxWidth = parseColumnMaxWidth(column)
+        if (mxWidth) {
+          caWidth = Math.min(caWidth, mxWidth)
+        }
         tWidth += caWidth
         column.renderWidth = caWidth
       })
       // 最小百分比
       scaleMinList.forEach((column) => {
-        const smWidth = Math.floor(XEUtils.toInteger(column.minWidth) * meanWidth)
+        let smWidth = Math.floor(XEUtils.toInteger(column.minWidth) * meanWidth)
+        const mxWidth = parseColumnMaxWidth(column)
+        if (mxWidth) {
+          smWidth = Math.min(smWidth, mxWidth)
+        }
         tWidth += smWidth
         column.renderWidth = smWidth
       })
       // 固定百分比
       scaleList.forEach((column) => {
-        const sfWidth = Math.floor(XEUtils.toInteger(column.width) * meanWidth)
+        let sfWidth = Math.floor(XEUtils.toInteger(column.width) * meanWidth)
+        const mxWidth = parseColumnMaxWidth(column)
+        if (mxWidth) {
+          sfWidth = Math.min(sfWidth, mxWidth)
+        }
         tWidth += sfWidth
         column.renderWidth = sfWidth
       })
       // 固定宽
       pxList.forEach((column) => {
-        const pWidth = XEUtils.toInteger(column.width)
+        let pWidth = XEUtils.toInteger(column.width)
+        const mxWidth = parseColumnMaxWidth(column)
+        if (mxWidth) {
+          pWidth = Math.min(pWidth, mxWidth)
+        }
         tWidth += pWidth
         column.renderWidth = pWidth
       })
       // 自适应宽
       autoList.forEach((column) => {
-        const aWidth = Math.max(60, XEUtils.toInteger(column.renderAutoWidth))
+        let aWidth = Math.max(60, XEUtils.toInteger(column.renderAutoWidth))
+        const mxWidth = parseColumnMaxWidth(column)
+        if (mxWidth) {
+          aWidth = Math.min(aWidth, mxWidth)
+        }
         tWidth += aWidth
         column.renderWidth = aWidth
       })
+
       // 调整了列宽
       resizeList.forEach((column) => {
         const reWidth = XEUtils.toInteger(column.resizeWidth)
         tWidth += reWidth
         column.renderWidth = reWidth
       })
+
+      const zoomColumnList = scaleMinList.concat(pxMinList).concat(autoMinList).filter(column => !parseColumnMaxWidth(column))
       remainWidth -= tWidth
-      meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + autoMinList.length + remainList.length)) : 0
+      meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (zoomColumnList.length + remainList.length)) : 0
       if (fit) {
         if (remainWidth > 0) {
-          scaleMinList.concat(pxMinList).concat(autoMinList).forEach((column) => {
+          zoomColumnList.forEach((column) => {
             tWidth += meanWidth
             column.renderWidth += meanWidth
           })
@@ -2034,8 +2074,9 @@ export default defineVxeComponent({
         /**
          * 偏移量算法
          * 如果所有列足够放的情况下，从最后动态列开始分配
+         * 排除已设置 max-width
          */
-        const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(autoMinList).concat(remainList)
+        const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(autoMinList).concat(remainList).filter(column => !parseColumnMaxWidth(column))
         let dynamicSize = dynamicList.length - 1
         if (dynamicSize > 0) {
           let i = bodyWidth - tWidth
@@ -9553,6 +9594,7 @@ export default defineVxeComponent({
         const dragPosLeft = dragBtnRect.x - tableRect.x + dragBtnOffsetWidth
 
         const minInterval = getColReMinWidth(cellParams) - dragBtnOffsetWidth // 列之间的最小间距
+        const maxInterval = getColReMaxWidth(cellParams) // 列之间的最大间距
         const dragMinLeft = isRightFixed ? 0 : (cellRect.x - tableRect.x + dragBtnWidth + minInterval)
         const dragMaxLeft = cellRect.x - tableRect.x + cell.clientWidth - minInterval
 
@@ -9594,7 +9636,10 @@ export default defineVxeComponent({
           }
 
           dragLeft = Math.max(left, dragMinLeft)
-
+          // 最大宽
+          if (maxInterval > 1) {
+            dragLeft = Math.min(dragLeft, maxInterval + dragMinLeft - minInterval)
+          }
           const resizeBarLeft = Math.max(1, dragLeft)
           resizeBarElem.style.left = `${resizeBarLeft}px`
           resizeBarElem.style.top = `${scrollbarXToTop ? osbHeight : 0}px`
@@ -9677,6 +9722,7 @@ export default defineVxeComponent({
           const cell = dragBtnElem.parentNode as HTMLTableCellElement
           const cellParams = Object.assign(params, { cell, $table: $xeTable })
           const colMinWidth = getColReMinWidth(cellParams)
+          const colMaxWidth = getColReMaxWidth(cellParams)
 
           el.setAttribute('data-calc-col', 'Y')
           let resizeWidth = calcColumnAutoWidth(resizeColumn, el)
@@ -9685,6 +9731,9 @@ export default defineVxeComponent({
             resizeWidth = Math.max(resizeWidth, colRest.width)
           }
           resizeWidth = Math.max(colMinWidth, resizeWidth)
+          if (colMaxWidth > 1) {
+            resizeWidth = Math.min(colMaxWidth, resizeWidth)
+          }
           const resizeParams = { ...params, resizeWidth, resizeColumn }
           reactData.isDragResize = false
           internalData._lastResizeTime = Date.now()

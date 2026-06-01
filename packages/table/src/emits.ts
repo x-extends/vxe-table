@@ -120,6 +120,7 @@ export const tableEmits: VxeTableEmits = [
   'cell-area-selection-all-end',
   'cell-area-arrows-start',
   'cell-area-arrows-end',
+  'cell-area-fill-copy',
   'active-cell-change-start',
   'active-cell-change-end'
 ]
