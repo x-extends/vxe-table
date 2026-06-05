@@ -432,13 +432,22 @@ function updateScrollXStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   return scrollXLoad
 }
 
+function syncGanttScrollYStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const $xeGanttView = internalData.xeGanttView
+  if ($xeGanttView && $xeGanttView.handleUpdateSYStatus) {
+    $xeGanttView.handleUpdateSYStatus(reactData.scrollYLoad)
+  }
+}
+
 function updateScrollYStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, fullData?: any[]) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
   const { treeConfig } = props
-  const $xeGanttView = internalData.xeGanttView
   const virtualYOpts = $xeTable.computeVirtualYOpts
   const treeOpts = $xeTable.computeTreeOpts
   const { transform } = treeOpts
@@ -446,9 +455,7 @@ function updateScrollYStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   // 如果gt为0，则总是启用
   const scrollYLoad = (transform || !treeConfig) && !!virtualYOpts.enabled && virtualYOpts.gt > -1 && (virtualYOpts.gt === 0 || virtualYOpts.gt < allList.length)
   reactData.scrollYLoad = scrollYLoad
-  if ($xeGanttView && $xeGanttView.handleUpdateSYStatus) {
-    $xeGanttView.handleUpdateSYStatus(scrollYLoad)
-  }
+  syncGanttScrollYStatus($xeTable)
   return scrollYLoad
 }
 
@@ -3509,6 +3516,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
     updateStyle($xeTable)
   }).then(() => {
     computeScrollLoad($xeTable)
+    syncGanttScrollYStatus($xeTable)
   }).then(() => {
     const virtualYOpts = $xeTable.computeVirtualYOpts
     // 是否启用了虚拟滚动
@@ -3571,6 +3579,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
           reactData.isRowLoading = false
           handleRecalculateStyle($xeTable, false, false, false)
           updateTreeLineStyle($xeTable)
+          syncGanttScrollYStatus($xeTable)
           // 如果是自动行高，特殊情况需调用 recalculate 手动刷新
           if (!props.showOverflow) {
             setTimeout(() => {
@@ -12373,10 +12382,10 @@ const tableMethods: any = {
       return updateStyle($xeTable)
     })
   },
-  updateScrollYStatus () {
+  updateScrollYStatus (fullData: any[]) {
     const $xeTable = this
 
-    return updateScrollYStatus($xeTable)
+    return updateScrollYStatus($xeTable, fullData)
   },
   /**
    * 如果有滚动条，则滚动到对应的位置
