@@ -39,10 +39,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
     const { $scopedSlots } = this
     const columnSlots: {
       header?: any
+      title?: any
     } = {}
 
     if ($scopedSlots.header) {
       columnSlots.header = $scopedSlots.header
+    }
+    if ($scopedSlots.title) {
+      columnSlots.title = $scopedSlots.title
     }
     this.columnConfig.slots = columnSlots
     assembleColumn($xeColgroup)
