@@ -19,10 +19,14 @@ export default defineVxeComponent({
     const columnConfig = Cell.createColumn($xeTable, props)
     const columnSlots: {
       header?: Slot
+      title?: Slot
     } = {}
 
     if (slots.header) {
       columnSlots.header = slots.header
+    }
+    if (slots.title) {
+      columnSlots.title = slots.title
     }
 
     columnConfig.slots = columnSlots

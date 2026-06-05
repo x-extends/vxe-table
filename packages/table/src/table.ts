@@ -2570,7 +2570,7 @@ export default defineVxeComponent({
       }
 
       let yScrollbarVisible = overflowY ? 'visible' : 'hidden'
-      if ((scrollbarYConf.visible === 'hidden' || scrollbarYConf.visible === false) || ($xeGanttView && !scrollbarYToLeft)) {
+      if ((scrollbarYConf.visible === 'hidden' || scrollbarYConf.visible === false) || (($xeGantt && $xeGanttView && $xeGantt.reactData.showRightView) && !scrollbarYToLeft)) {
         osbWidth = 0
         yScrollbarVisible = 'hidden'
       } else if (scrollbarYConf.visible === 'visible') {
@@ -3912,6 +3912,7 @@ export default defineVxeComponent({
         updateStyle()
       }).then(() => {
         computeScrollLoad()
+        syncGanttScrollYStatus()
       }).then(() => {
         const virtualYOpts = computeVirtualYOpts.value
         // 是否启用了虚拟滚动
@@ -3974,6 +3975,7 @@ export default defineVxeComponent({
               reactData.isRowLoading = false
               handleRecalculateStyle(false, false, false)
               updateTreeLineStyle()
+              syncGanttScrollYStatus()
 
               // 如果是自动行高，特殊情况需调用 recalculate 手动刷新
               if (!props.showOverflow) {
@@ -4298,9 +4300,15 @@ export default defineVxeComponent({
       return scrollXLoad
     }
 
+    const syncGanttScrollYStatus = () => {
+      const $xeGanttView = internalData.xeGanttView
+      if ($xeGanttView && $xeGanttView.handleUpdateSYStatus) {
+        $xeGanttView.handleUpdateSYStatus(reactData.scrollYLoad)
+      }
+    }
+
     const updateScrollYStatus = (fullData?: any[]) => {
       const { treeConfig } = props
-      const $xeGanttView = internalData.xeGanttView
       const virtualYOpts = computeVirtualYOpts.value
       const treeOpts = computeTreeOpts.value
       const { transform } = treeOpts
@@ -4308,9 +4316,7 @@ export default defineVxeComponent({
       // 如果gt为0，则总是启用
       const scrollYLoad = (transform || !treeConfig) && !!virtualYOpts.enabled && virtualYOpts.gt > -1 && (virtualYOpts.gt === 0 || virtualYOpts.gt < allList.length)
       reactData.scrollYLoad = scrollYLoad
-      if ($xeGanttView && $xeGanttView.handleUpdateSYStatus) {
-        $xeGanttView.handleUpdateSYStatus(scrollYLoad)
-      }
+      syncGanttScrollYStatus()
       return scrollYLoad
     }
 
