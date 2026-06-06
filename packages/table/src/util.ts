@@ -90,6 +90,7 @@ export function createInternalData (): TableInternalData {
     sourceDataRowIdData: {},
     fullColumnIdData: {},
     fullColumnFieldData: {},
+    fullCellHeightMaps: {},
 
     // 当前行
     currentRow: null,
@@ -160,7 +161,9 @@ export function createInternalData (): TableInternalData {
     inited: false,
     tooltipTimeout: null,
     initStatus: false,
-    isActivated: false
+    isActivated: false,
+
+    rceDelay: 0
 
     // _sToTime: null
   }
@@ -420,6 +423,23 @@ export function createReactData (): TableReactData {
     isRowLoading: false,
     isColLoading: false
   }
+}
+
+const maxKey = '__max'
+
+export function getRowMaxHeight (chRest: Record<string, number>, isForce: boolean) {
+  if (isForce || !chRest[maxKey]) {
+    let max = 0
+    for (const key in chRest) {
+      const val = chRest[key]
+      if (key !== maxKey && XEUtils.isNumber(val) && val > max) {
+        max = val
+      }
+    }
+    chRest[maxKey] = max
+    return max
+  }
+  return chRest[maxKey]
 }
 
 const getAllConvertColumns = (columns: any, parentColumn?: any) => {

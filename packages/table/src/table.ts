@@ -4,7 +4,7 @@ import XEUtils from 'xe-utils'
 import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollTopTo, wheelScrollLeftTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement, hasEventInputTarget } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
-import { createReactData, createInternalData, getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, getColReMaxWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn } from './util'
+import { createReactData, createInternalData, getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, getColReMaxWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn, getRowMaxHeight } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from '../../ui/src/anime'
 import { warnLog, errLog } from '../../ui/src/log'
@@ -2098,34 +2098,38 @@ export default defineVxeComponent({
     /**
      * 计算自适应行高
      */
-    const calcCellAutoHeight = (rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
-      const { scrollXLoad } = reactData
+    const calcCellAutoHeight = (rowid: string | number, rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
+      const { fullCellHeightMaps } = internalData
+      let chRest = fullCellHeightMaps[rowid]
+      if (!chRest) {
+        chRest = {}
+        fullCellHeightMaps[rowid] = chRest
+      }
       const wrapperElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`)
-      let colHeight = 0
       let firstCellStyle: CSSStyleDeclaration | null = null
       let topBottomPadding = 0
+      let changeCH = false
       for (let i = 0; i < wrapperElemList.length; i++) {
         const wrapperElem = wrapperElemList[i] as HTMLElement
         const cellElem = wrapperElem.parentElement as HTMLTableCellElement
         const cellStyle = cellElem.style
         const orHeight = cellStyle.height
-        if (!scrollXLoad) {
-          cellStyle.height = ''
-        }
+        const colid = wrapperElem.getAttribute('colid') || ''
+        cellStyle.height = ''
         if (!firstCellStyle) {
           firstCellStyle = getComputedStyle(cellElem)
           topBottomPadding = firstCellStyle ? Math.ceil(XEUtils.toNumber(firstCellStyle.paddingTop) + XEUtils.toNumber(firstCellStyle.paddingBottom)) : 0
         }
-        if (!scrollXLoad) {
-          cellStyle.height = orHeight
-        }
         const cellHeight = wrapperElem ? wrapperElem.clientHeight : 0
-        colHeight = Math.max(colHeight, Math.ceil(cellHeight + topBottomPadding))
+        const colHeight = Math.ceil(cellHeight + topBottomPadding)
+        if (chRest[colid] !== colHeight) {
+          changeCH = true
+          chRest[colid] = colHeight
+        }
+        cellStyle.height = orHeight
       }
-      if (scrollXLoad) {
-        colHeight = Math.max(colHeight, rowRest.height)
-      }
-      return colHeight
+      const cellMaxHeight = getRowMaxHeight(chRest, changeCH)
+      return cellMaxHeight
     }
 
     /**
@@ -2148,7 +2152,7 @@ export default defineVxeComponent({
           const rowid = handleGetRowId(row)
           const rowRest = fullAllDataRowIdData[rowid]
           if (rowRest) {
-            const reHeight = calcCellAutoHeight(rowRest, el)
+            const reHeight = calcCellAutoHeight(rowid, rowRest, el)
             rowRest.height = Math.max(defaultRowHeight, reHeight)
           }
           el.removeAttribute('data-calc-row')
@@ -3438,7 +3442,6 @@ export default defineVxeComponent({
 
     const handleRecalculateStyle = (reFull: boolean, reWidth: boolean, reHeight: boolean) => {
       const el = refElem.value
-      internalData.rceRunTime = Date.now()
       if (!el || !el.clientWidth) {
         return nextTick()
       }
@@ -3462,6 +3465,7 @@ export default defineVxeComponent({
       if (reFull) {
         updateTreeLineStyle()
       }
+      internalData.rceRunTime = Date.now()
       return computeScrollLoad().then(() => {
         // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
         if (reWidth) {
@@ -3482,11 +3486,14 @@ export default defineVxeComponent({
         if (reFull) {
           updateTreeLineStyle()
         }
+        internalData.rceRunTime = Date.now()
         if (reFull) {
           return computeScrollLoad()
         }
       })
     }
+
+    const minRunDelay = 50
 
     const handleLazyRecalculate = (reFull: boolean, reWidth: boolean, reHeight: boolean) => {
       return new Promise<void>(resolve => {
@@ -3494,7 +3501,16 @@ export default defineVxeComponent({
         const { customStore } = reactData
         const { rceTimeout, rceRunTime } = internalData
         const resizeOpts = computeResizeOpts.value
-        const refreshDelay = resizeOpts.refreshDelay || 20
+        let rceDelay = internalData.rceDelay
+        // 如果在500毫秒内频繁执行，则执行次数减缓
+        if (rceRunTime && rceRunTime > Date.now() - 500) {
+          rceDelay += 50
+        } else {
+          rceDelay = 0
+        }
+        internalData.rceDelay = rceDelay
+        const refreshDelay = resizeOpts.refreshDelay || 30
+        const reDelay = rceDelay + refreshDelay
         const el = refElem.value
         if (el && el.clientWidth) {
           autoCellWidth()
@@ -3505,7 +3521,7 @@ export default defineVxeComponent({
         }
         if (rceTimeout) {
           clearTimeout(rceTimeout)
-          if (rceRunTime && rceRunTime + (refreshDelay - 5) < Date.now()) {
+          if (rceRunTime && rceRunTime + minRunDelay < Date.now()) {
             resolve(
               handleRecalculateStyle(reFull, reWidth, reHeight)
             )
@@ -3525,12 +3541,25 @@ export default defineVxeComponent({
         internalData.rceTimeout = setTimeout(() => {
           internalData.rceTimeout = undefined
           handleRecalculateStyle(reFull, reWidth, reHeight)
-        }, refreshDelay)
+          if ($xeGanttView && $xeGanttView.handleLazyRecalculate) {
+            $xeGanttView.handleLazyRecalculate()
+          }
+        }, reDelay)
       })
     }
 
+    let resizePending = false
+
     const handleResizeEvent = () => {
-      handleLazyRecalculate(true, true, true)
+      if (resizePending) {
+        return
+      }
+      resizePending = true
+      handleLazyRecalculate(true, true, true).then(() => {
+        resizePending = false
+      }).catch(() => {
+        resizePending = false
+      })
     }
 
     const handleUpdateAggValues = () => {
@@ -3881,6 +3910,7 @@ export default defineVxeComponent({
       reactData.insertRowFlag++
       internalData.removeRowMaps = {}
       reactData.removeRowFlag++
+      internalData.fullCellHeightMaps = {}
       const sYLoad = updateScrollYStatus(fullData)
       // 全量数据
       internalData.tableFullData = fullData
@@ -4243,8 +4273,45 @@ export default defineVxeComponent({
       internalData.fullColumnFieldData = fullColFieldData
     }
 
-    const handleInitColumn = (collectColumn: VxeTableDefines.ColumnInfo[]) => {
+    const buildColumnInfo = () => {
+      const { scrollXLoad, scrollYLoad, expandColumn } = reactData
       const expandOpts = computeExpandOpts.value
+      cacheColumnMap()
+      parseColumns(true).then(() => {
+        if (reactData.scrollXLoad) {
+          loadScrollXData()
+        }
+      })
+      $xeTable.clearHeaderFormatterCache()
+      $xeTable.clearMergeCells()
+      $xeTable.clearMergeFooterItems()
+      $xeTable.handleTableData(true)
+      $xeTable.handleAggregateSummaryData()
+
+      if ((scrollXLoad || scrollYLoad) && (expandColumn && expandOpts.mode !== 'fixed')) {
+        warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
+      }
+
+      return nextTick().then(() => {
+        if ($xeToolbar) {
+          $xeToolbar.syncUpdate({
+            collectColumn: internalData.collectColumn,
+            $table: $xeTable
+          })
+        }
+        if ($xeTable.handleUpdateCustomColumn) {
+          $xeTable.handleUpdateCustomColumn()
+        }
+        const columnOpts = computeColumnOpts.value
+        if (props.showCustomHeader && reactData.isGroup && (columnOpts.resizable || props.resizable)) {
+          warnLog('vxe.error.notConflictProp', ['show-custom-header & colgroup', 'column-config.resizable=false'])
+        }
+        reactData.isColLoading = false
+        return handleLazyRecalculate(false, true, true)
+      })
+    }
+
+    const handleInitColumn = (collectColumn: VxeTableDefines.ColumnInfo[]) => {
       internalData.collectColumn = collectColumn
       const tFullColumn = getColumnList(collectColumn)
       internalData.tableFullColumn = tFullColumn
@@ -4254,40 +4321,7 @@ export default defineVxeComponent({
       return Promise.resolve(
         restoreCustomStorage()
       ).then(() => {
-        const { scrollXLoad, scrollYLoad, expandColumn } = reactData
-        cacheColumnMap()
-        parseColumns(true).then(() => {
-          if (reactData.scrollXLoad) {
-            loadScrollXData()
-          }
-        })
-        $xeTable.clearHeaderFormatterCache()
-        $xeTable.clearMergeCells()
-        $xeTable.clearMergeFooterItems()
-        $xeTable.handleTableData(true)
-        $xeTable.handleAggregateSummaryData()
-
-        if ((scrollXLoad || scrollYLoad) && (expandColumn && expandOpts.mode !== 'fixed')) {
-          warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
-        }
-
-        return nextTick().then(() => {
-          if ($xeToolbar) {
-            $xeToolbar.syncUpdate({
-              collectColumn: internalData.collectColumn,
-              $table: $xeTable
-            })
-          }
-          if ($xeTable.handleUpdateCustomColumn) {
-            $xeTable.handleUpdateCustomColumn()
-          }
-          const columnOpts = computeColumnOpts.value
-          if (props.showCustomHeader && reactData.isGroup && (columnOpts.resizable || props.resizable)) {
-            warnLog('vxe.error.notConflictProp', ['show-custom-header & colgroup', 'column-config.resizable=false'])
-          }
-          reactData.isColLoading = false
-          return handleLazyRecalculate(false, true, true)
-        })
+        return buildColumnInfo()
       })
     }
 
@@ -6229,7 +6263,7 @@ export default defineVxeComponent({
             const rowid = XEUtils.isString(row) || XEUtils.isNumber(row) ? row : handleGetRowId(row)
             const rowRest = fullAllDataRowIdData[rowid]
             if (rowRest) {
-              rowRest.resizeHeight = calcCellAutoHeight(rowRest, el)
+              rowRest.resizeHeight = calcCellAutoHeight(rowid, rowRest, el)
             }
             el.removeAttribute('data-calc-row')
           })
@@ -7979,6 +8013,66 @@ export default defineVxeComponent({
       clearHistory () {
         return $xeTable.handleClearStack()
       },
+      /**
+       * 用于 custom-config，用于手动恢复自定义列设置信息，恢复表格重置为初始状态
+       * @param storeData
+       * @returns
+       */
+      setCustomStoreData (storeData) {
+        if (!storeData) {
+          return nextTick()
+        }
+        const customOpts = computeCustomOpts.value
+        const { checkMethod } = customOpts
+        // 重置状态
+        clearTableAllStatus($xeTable)
+        // 恢复列
+        const allCols: VxeTableDefines.ColumnInfo[] = []
+        XEUtils.eachTree(internalData.collectColumn, (column) => {
+          column.resizeWidth = 0
+          column.fixed = column.defaultFixed
+          column.renderSortNumber = column.sortNumber
+          column.parentId = column.defaultParentId
+          if (!checkMethod || checkMethod({ $table: $xeTable, column })) {
+            column.visible = column.defaultVisible
+          }
+          column.aggFunc = column.defaultAggFunc
+          column.renderAggFn = column.defaultAggFunc
+          column.renderResizeWidth = column.renderWidth
+          allCols.push(column)
+        })
+        const newCollectCols = XEUtils.toArrayTree(XEUtils.orderBy(allCols, 'renderSortNumber'), { key: 'id', parentKey: 'parentId', children: 'children' })
+        internalData.collectColumn = newCollectCols
+        internalData.tableFullColumn = getColumnList(newCollectCols)
+
+        reactData.updateColFlag++
+        reactData.isColLoading = true
+        initColumnHierarchy()
+        return Promise.resolve(
+          handleCustomRestore(storeData)
+        ).then(() => {
+          return buildColumnInfo()
+        }).then(() => {
+          // 恢复数据聚合分组
+          const { isRowGroupStatus, rowGroupList } = reactData
+          if (isRowGroupStatus && !!$xeTable.handlePivotTableAggData) {
+            const rowGroupFields = computeRowGroupFields.value
+            if (rowGroupFields ? rowGroupFields.length : rowGroupList.length) {
+              if (rowGroupFields && rowGroupFields.length) {
+                $xeTable.setRowGroups(rowGroupFields)
+              } else {
+                $xeTable.clearRowGroups()
+              }
+            } else {
+              $xeTable.handleUpdateAggData()
+            }
+          }
+        })
+      },
+      /**
+       * 用于 custom-config，用于获取自定义列设置信息，用于自定义保持
+       * @returns
+       */
       getCustomStoreData () {
         const { id } = props
         const customOpts = computeCustomOpts.value
@@ -9752,6 +9846,9 @@ export default defineVxeComponent({
           }
         }
       },
+      /**
+       * @private
+       */
       handleRowResizeMousedownEvent (evnt, params) {
         evnt.stopPropagation()
         evnt.preventDefault()
@@ -9869,6 +9966,9 @@ export default defineVxeComponent({
         }
         updateEvent(evnt)
       },
+      /**
+       * @private
+       */
       handleRowResizeDblclickEvent (evnt, params) {
         const resizableOpts = computeResizableOpts.value
         const { isDblclickAutoHeight } = resizableOpts
@@ -9887,7 +9987,7 @@ export default defineVxeComponent({
           }
           const handleRsHeight = () => {
             el.setAttribute('data-calc-row', 'Y')
-            const resizeHeight = calcCellAutoHeight(rowRest, el)
+            const resizeHeight = calcCellAutoHeight(rowid, rowRest, el)
             el.removeAttribute('data-calc-row')
             const resizeParams = { ...params, resizeHeight, resizeRow: row }
             reactData.isDragResize = false
@@ -9906,6 +10006,9 @@ export default defineVxeComponent({
           }
         }
       },
+      /**
+       * @private
+       */
       saveCustomStore (type) {
         const { customConfig } = props
         const tableId = computeTableId.value
@@ -9951,6 +10054,9 @@ export default defineVxeComponent({
         }
         return nextTick()
       },
+      /**
+       * @private
+       */
       handleCustom () {
         const { mouseConfig } = props
         if (mouseConfig) {

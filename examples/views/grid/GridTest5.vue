@@ -1,189 +1,103 @@
 <template>
-  <div class="table-container">
-    <div
-      style="
-        margin-bottom: 15px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-      "
-    >
-      <label>要刷新的节点 ID:</label>
-      <input
-        v-model="targetId"
-        type="number"
-        placeholder="请输入 ID"
-        style="width: 100px; padding: 4px"
-      />
-      <button @click="refreshNodeById">刷新指定节点</button>
-    </div>
+  <div>
+    <vxe-radio-group v-model="customConfig.mode">
+      <vxe-radio-button checked-value="default" content="默认"></vxe-radio-button>
+      <vxe-radio-button checked-value="modal" content="弹窗"></vxe-radio-button>
+      <vxe-radio-button checked-value="drawer" content="抽屉"></vxe-radio-button>
+    </vxe-radio-group>
+    <vxe-button @click="customEvent">恢复</vxe-button>
 
-    <VxeTable
-      border
-      ref="tableRef"
-      height="300"
-      :keep-source="true"
-      show-overflow="title"
-      :show-header-overflow="true"
-      :show-footer-overflow="true"
-      :column-config="{ resizable: true }"
-      :row-config="{ isHover: true, keyField: 'id', isCurrent: true }"
-      :cell-config="{ height: 50 }"
-      :virtual-x-config="{ enabled: false, gt: 0 }"
-      :virtual-y-config="{ enabled: true, gt: 0 }"
-      :expand-config="{ mode: 'inside' }"
-      :loading="loading"
-      :scroll-y="{ enabled: true, gt: 0 }"
-      :tree-config="{
-        lazy: true,
-        transform: true,
-        rowField: 'id',
-        parentField: 'parentId',
-        hasChild: 'hasChild',
-        loadMethod: loadChildNodeMethod,
-      }"
-      :data="tableData"
-    >
-      <VxeColumn field="id" title="节点 ID" tree-node width="220"></VxeColumn>
-      <VxeColumn field="date" title="更新时间" min-width="220"></VxeColumn>
-    </VxeTable>
+    <vxe-grid ref="gridRef" v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
-import {
-  type TableMethods
-} from '../../../types'
+<script lang="ts" setup>
+import { ref, reactive } from 'vue'
+import type { VxeGridInstance, VxeGridProps, VxeTablePropTypes } from '../../../types'
 
-const tableRef = ref<TableMethods>({} as TableMethods)
-const loading = ref(false)
-const tableData = ref<any>([])
-const targetId = ref(2003) // 默认填入第一个 ID
-
-let idIndex = 2000
-
-// 模拟初始数据
-const loadList = () => {
-  const list = []
-  const firstLayerItem: any[] = []
-  for (let i = 0; i < 10; i++) {
-    const id = `${1001 + i}`
-    const firstItem = {
-      id,
-      name: `根节点 - ${i + 1}`,
-      type: 'Folder',
-      date: '2024-01-01',
-      expand: true
-      // hasChild: true
-    }
-    list.push(firstItem)
-    firstLayerItem.push(firstItem)
-    list.push({
-      id: `${id}-1`,
-      parentId: id,
-      type: 'Folder',
-      date: '2024-01-01',
-      hasChild: true
-    })
-  }
-  tableData.value = list
-  nextTick(() => {
-    firstLayerItem.forEach((t) => {
-      tableRef.value!.setTreeExpand(t, true)
-    })
-  })
+interface RowVO {
+  id: number
+  name: string
+  role: string
+  sex: string
+  age: number
+  address: string
 }
 
-// 懒加载逻辑
-const loadChildNodeMethod = ({ row }: any) => {
-  return new Promise<any>((resolve) => {
-    console.log('load', row.id)
-    setTimeout(() => {
-      const childList = [
+const gridRef = ref<VxeGridInstance>()
+
+const customConfig = reactive<VxeTablePropTypes.CustomConfig<RowVO>>({
+  storage: true,
+  mode: 'default',
+  immediate: true
+})
+
+const gridOptions = reactive<VxeGridProps<RowVO>>({
+  border: true,
+  id: 'myCustomStorage2',
+  rowConfig: {
+    keyField: 'id'
+  },
+  toolbarConfig: {
+    custom: true
+  },
+  customConfig,
+  columnConfig: {
+    drag: true,
+    resizable: true
+  },
+  columnDragConfig: {
+    isPeerDrag: true,
+    isCrossDrag: true,
+    isToChildDrag: true
+  },
+  columns: [
+    { field: 'seq', type: 'seq', width: 90 },
+    { field: 'name', title: 'Name' },
+    {
+      title: '分组1',
+      field: 'group1',
+      children: [
+        { field: 'nickname', title: 'Nickname' },
+        { field: 'role', title: 'role' }
+      ]
+    },
+    {
+      title: '分组3',
+      field: 'group3',
+      children: [
+        { field: 'sex', title: 'Sex' },
+        { field: 'attr1', title: 'Attr1' },
         {
-          id: `${++idIndex}`,
-          parentId: `${row.id}`,
-          name: '[新数据] 来自刷新或展开',
-          type: 'File',
-          date: new Date().toLocaleTimeString(),
-          hasChild: true
-        },
-        {
-          id: `${++idIndex}`,
-          parentId: `${row.id}`,
-          name: '[新数据] 来自刷新或展开',
-          type: 'File',
-          date: new Date().toLocaleTimeString(),
-          hasChild: true
+          title: '分组4',
+          field: 'group4',
+          children: [
+            { field: 'age', title: 'Age' },
+            { field: 'attr4', title: 'Attr4' },
+            { field: 'attr8', title: 'Attr8' }
+          ]
         }
       ]
-      resolve(childList)
-    }, 100)
-  })
-}
+    },
+    { field: 'address', title: 'address' }
+  ],
+  data: [
+    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+    { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+    { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
+  ]
+})
 
-const refreshNodeById = async () => {
-  const $table = tableRef.value
-  if (!$table) return
-
-  // 1. 直接获取字符串 ID
-  const searchId = String(targetId.value).trim()
-
-  // 2. 这里的 getRowById 现在会按字符串严格匹配
-  const row = $table.getRowById(searchId)
-
-  if (row) {
-    try {
-      loading.value = true
-      // 执行刷新
-      await $table.reloadTreeExpand(row)
-    } finally {
-      loading.value = false
-    }
-  } else {
-    console.warn(`未找到字符串 ID: "${searchId}"`)
+const customEvent = () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    debugger
+    $grid.setCustomStoreData({
+      fixedData: {
+        group1: 'left'
+      }
+    })
   }
 }
-
-onMounted(async () => {
-  loadList();
-  (async () => {
-    await nextTick()
-    await tableRef.value.setTreeExpand(
-      tableRef.value.getRowById('1001-1'),
-      true
-    )
-    await tableRef.value.setTreeExpand(tableRef.value.getRowById('2001'), true)
-    await tableRef.value.setTreeExpand(tableRef.value.getRowById('2003'), true)
-    await tableRef.value.setTreeExpand(tableRef.value.getRowById('2005'), true)
-  })()
-})
 </script>
-
-<style>
-.table-container {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-}
-
-button {
-  padding: 4px 12px;
-  cursor: pointer;
-  background-color: #409eff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-}
-
-button:hover {
-  background-color: #66b1ff;
-}
-
-input {
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  outline: none;
-}
-</style>
