@@ -3,7 +3,7 @@ import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollLe
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
-import { getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, getColReMaxWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem, getCellRestHeight, getLastChildColumn } from './util'
+import { getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, getColReMaxWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem, getCellRestHeight, getLastChildColumn, getRowMaxHeight } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from '../../ui/src/anime'
 import { warnLog, errLog } from '../../ui/src/log'
@@ -2562,36 +2562,40 @@ function autoCellWidth ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
 /**
  * 计算自适应行高
  */
-const calcCellAutoHeight = ($xeTable: VxeTableConstructor, rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
-  const reactData = $xeTable as unknown as TableReactData
+const calcCellAutoHeight = ($xeTable: VxeTableConstructor, rowid: string | number, rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
+  const internalData = $xeTable as unknown as TableInternalData
 
-  const { scrollXLoad } = reactData
+  const { fullCellHeightMaps } = internalData
+  let chRest = fullCellHeightMaps[rowid]
+  if (!chRest) {
+    chRest = {}
+    fullCellHeightMaps[rowid] = chRest
+  }
   const wrapperElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`)
-  let colHeight = 0
   let firstCellStyle: CSSStyleDeclaration | null = null
   let topBottomPadding = 0
+  let changeCH = false
   for (let i = 0; i < wrapperElemList.length; i++) {
     const wrapperElem = wrapperElemList[i] as HTMLElement
     const cellElem = wrapperElem.parentElement as HTMLTableCellElement
     const cellStyle = cellElem.style
     const orHeight = cellStyle.height
-    if (!scrollXLoad) {
-      cellStyle.height = ''
-    }
+    const colid = wrapperElem.getAttribute('colid') || ''
+    cellStyle.height = ''
     if (!firstCellStyle) {
       firstCellStyle = getComputedStyle(cellElem)
       topBottomPadding = firstCellStyle ? Math.ceil(XEUtils.toNumber(firstCellStyle.paddingTop) + XEUtils.toNumber(firstCellStyle.paddingBottom)) : 0
     }
-    if (!scrollXLoad) {
-      cellStyle.height = orHeight
-    }
     const cellHeight = wrapperElem ? wrapperElem.clientHeight : 0
-    colHeight = Math.max(colHeight, Math.ceil(cellHeight + topBottomPadding))
+    const colHeight = Math.ceil(cellHeight + topBottomPadding)
+    if (chRest[colid] !== colHeight) {
+      changeCH = true
+      chRest[colid] = colHeight
+    }
+    cellStyle.height = orHeight
   }
-  if (scrollXLoad) {
-    colHeight = Math.max(colHeight, rowRest.height)
-  }
-  return colHeight
+  const cellMaxHeight = getRowMaxHeight(chRest, changeCH)
+  return cellMaxHeight
 }
 
 /**
@@ -2618,7 +2622,7 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
       const rowid = handleGetRowId(row)
       const rowRest = fullAllDataRowIdData[rowid]
       if (rowRest) {
-        const height = calcCellAutoHeight($xeTable, rowRest, el)
+        const height = calcCellAutoHeight($xeTable, rowid, rowRest, el)
         rowRest.height = Math.max(defaultRowHeight, height)
       }
       el.removeAttribute('data-calc-row')
@@ -3140,7 +3144,6 @@ function handleRecalculateStyle ($xeTable: VxeTableConstructor & VxeTablePrivate
   const internalData = $xeTable as unknown as TableInternalData
 
   const el = $xeTable.$refs.refElem as HTMLDivElement
-  internalData.rceRunTime = Date.now()
   if (!el || !el.clientWidth) {
     return $xeTable.$nextTick()
   }
@@ -3164,6 +3167,7 @@ function handleRecalculateStyle ($xeTable: VxeTableConstructor & VxeTablePrivate
   if (reFull) {
     updateTreeLineStyle($xeTable)
   }
+  internalData.rceRunTime = Date.now()
   return computeScrollLoad($xeTable).then(() => {
     // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
     if (reWidth) {
@@ -3184,11 +3188,14 @@ function handleRecalculateStyle ($xeTable: VxeTableConstructor & VxeTablePrivate
     if (reFull) {
       updateTreeLineStyle($xeTable)
     }
+    internalData.rceRunTime = Date.now()
     if (reFull) {
       return computeScrollLoad($xeTable)
     }
   })
 }
+
+const minRunDelay = 50
 
 function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, reFull: boolean, reWidth: boolean, reHeight: boolean) {
   const reactData = $xeTable as unknown as TableReactData
@@ -3199,7 +3206,16 @@ function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateM
     const { rceTimeout, rceRunTime } = internalData
     const $xeGanttView = internalData.xeGanttView
     const resizeOpts = $xeTable.computeResizeOpts
-    const refreshDelay = resizeOpts.refreshDelay || 20
+    let rceDelay = internalData.rceDelay
+    // 如果在500毫秒内频繁执行，则执行次数减缓
+    if (rceRunTime && rceRunTime > Date.now() - 500) {
+      rceDelay += 50
+    } else {
+      rceDelay = 0
+    }
+    internalData.rceDelay = rceDelay
+    const refreshDelay = resizeOpts.refreshDelay || 30
+    const reDelay = rceDelay + refreshDelay
     const el = $xeTable.$refs.refElem as HTMLElement
     if (el && el.clientWidth) {
       autoCellWidth($xeTable)
@@ -3210,7 +3226,7 @@ function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateM
     }
     if (rceTimeout) {
       clearTimeout(rceTimeout)
-      if (rceRunTime && rceRunTime + (refreshDelay - 5) < Date.now()) {
+      if (rceRunTime && rceRunTime + minRunDelay < Date.now()) {
         resolve(
           handleRecalculateStyle($xeTable, reFull, reWidth, reHeight)
         )
@@ -3230,7 +3246,7 @@ function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateM
     internalData.rceTimeout = setTimeout(() => {
       internalData.rceTimeout = undefined
       handleRecalculateStyle($xeTable, reFull, reWidth, reHeight)
-    }, refreshDelay)
+    }, reDelay)
   })
 }
 
@@ -3579,6 +3595,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   reactData.insertRowFlag++
   internalData.removeRowMaps = {}
   reactData.removeRowFlag++
+  internalData.fullCellHeightMaps = {}
   const sYLoad = updateScrollYStatus($xeTable, fullData)
   // 全量数据
   internalData.tableFullData = fullData
@@ -3959,13 +3976,53 @@ function initColumnHierarchy ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   internalData.fullColumnFieldData = fullColFieldData
 }
 
-function handleInitColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, collectColumn: VxeTableDefines.ColumnInfo[]) {
+function buildColumnInfo ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const props = $xeTable
   const $xeToolbar = $xeTable.$refs.$xeToolbar as VxeToolbarConstructor
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
+  const { scrollXLoad, scrollYLoad, expandColumn } = reactData
   const expandOpts = $xeTable.computeExpandOpts
+  cacheColumnMap($xeTable)
+  parseColumns($xeTable, true).then(() => {
+    if (reactData.scrollXLoad) {
+      loadScrollXData($xeTable)
+    }
+  })
+  $xeTable.clearHeaderFormatterCache()
+  $xeTable.clearMergeCells()
+  $xeTable.clearMergeFooterItems()
+  $xeTable.handleTableData(true)
+  $xeTable.handleAggregateSummaryData()
+
+  if ((scrollXLoad || scrollYLoad) && (expandColumn && expandOpts.mode !== 'fixed')) {
+    warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
+  }
+
+  return $xeTable.$nextTick().then(() => {
+    if ($xeToolbar) {
+      $xeToolbar.syncUpdate({
+        collectColumn: internalData.collectColumn,
+        $table: $xeTable
+      })
+    }
+    if ($xeTable.handleUpdateCustomColumn) {
+      $xeTable.handleUpdateCustomColumn()
+    }
+    const columnOpts = $xeTable.computeColumnOpts
+    if (props.showCustomHeader && reactData.isGroup && (columnOpts.resizable || props.resizable)) {
+      warnLog('vxe.error.notConflictProp', ['show-custom-header & colgroup', 'column-config.resizable=false'])
+    }
+    reactData.isColLoading = false
+    return handleLazyRecalculate($xeTable, false, true, true)
+  })
+}
+
+function handleInitColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, collectColumn: VxeTableDefines.ColumnInfo[]) {
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+
   internalData.collectColumn = collectColumn
   const tFullColumn = getColumnList(collectColumn)
   internalData.tableFullColumn = tFullColumn
@@ -3975,40 +4032,7 @@ function handleInitColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   return Promise.resolve(
     restoreCustomStorage($xeTable)
   ).then(() => {
-    const { scrollXLoad, scrollYLoad, expandColumn } = reactData
-    cacheColumnMap($xeTable)
-    parseColumns($xeTable, true).then(() => {
-      if (reactData.scrollXLoad) {
-        loadScrollXData($xeTable)
-      }
-    })
-    $xeTable.clearHeaderFormatterCache()
-    $xeTable.clearMergeCells()
-    $xeTable.clearMergeFooterItems()
-    $xeTable.handleTableData(true)
-    $xeTable.handleAggregateSummaryData()
-
-    if ((scrollXLoad || scrollYLoad) && (expandColumn && expandOpts.mode !== 'fixed')) {
-      warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
-    }
-
-    return $xeTable.$nextTick().then(() => {
-      if ($xeToolbar) {
-        $xeToolbar.syncUpdate({
-          collectColumn: internalData.collectColumn,
-          $table: $xeTable
-        })
-      }
-      if ($xeTable.handleUpdateCustomColumn) {
-        $xeTable.handleUpdateCustomColumn()
-      }
-      const columnOpts = $xeTable.computeColumnOpts
-      if (props.showCustomHeader && reactData.isGroup && (columnOpts.resizable || props.resizable)) {
-        warnLog('vxe.error.notConflictProp', ['show-custom-header & colgroup', 'column-config.resizable=false'])
-      }
-      reactData.isColLoading = false
-      return handleLazyRecalculate($xeTable, false, true, true)
-    })
+    return buildColumnInfo($xeTable)
   })
 }
 
@@ -6455,6 +6479,9 @@ const tableMethods: any = {
     warnLog('vxe.error.delFunc', ['resetColumn', 'resetCustom'])
     return this.resetCustom(options)
   },
+  /**
+   * @private
+   */
   handleCustom () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
@@ -6510,6 +6537,70 @@ const tableMethods: any = {
       }
     }
   },
+  /**
+   * 用于 custom-config，用于手动恢复自定义列设置信息，恢复表格重置为初始状态
+   * @param storeData
+   * @returns
+   */
+  setCustomStoreData (storeData: VxeTableDefines.CustomStoreData | null) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
+
+    if (!storeData) {
+      return $xeTable.$nextTick()
+    }
+    const customOpts = $xeTable.computeCustomOpts
+    const { checkMethod } = customOpts
+    // 重置状态
+    clearTableAllStatus($xeTable)
+    // 恢复列
+    const allCols: VxeTableDefines.ColumnInfo[] = []
+    XEUtils.eachTree(internalData.collectColumn, (column) => {
+      column.resizeWidth = 0
+      column.fixed = column.defaultFixed
+      column.renderSortNumber = column.sortNumber
+      column.parentId = column.defaultParentId
+      if (!checkMethod || checkMethod({ $table: $xeTable, column })) {
+        column.visible = column.defaultVisible
+      }
+      column.aggFunc = column.defaultAggFunc
+      column.renderAggFn = column.defaultAggFunc
+      column.renderResizeWidth = column.renderWidth
+      allCols.push(column)
+    })
+    const newCollectCols = XEUtils.toArrayTree(XEUtils.orderBy(allCols, 'renderSortNumber'), { key: 'id', parentKey: 'parentId', children: 'children' })
+    internalData.collectColumn = newCollectCols
+    internalData.tableFullColumn = getColumnList(newCollectCols)
+
+    reactData.updateColFlag++
+    reactData.isColLoading = true
+    initColumnHierarchy($xeTable)
+    return Promise.resolve(
+      handleCustomRestore($xeTable, storeData)
+    ).then(() => {
+      return buildColumnInfo($xeTable)
+    }).then(() => {
+      // 恢复数据聚合分组
+      const { isRowGroupStatus, rowGroupList } = reactData
+      if (isRowGroupStatus && !!$xeTable.handlePivotTableAggData) {
+        const rowGroupFields = $xeTable.computeRowGroupFields
+        if (rowGroupFields ? rowGroupFields.length : rowGroupList.length) {
+          if (rowGroupFields && rowGroupFields.length) {
+            $xeTable.setRowGroups(rowGroupFields)
+          } else {
+            $xeTable.clearRowGroups()
+          }
+        } else {
+          $xeTable.handleUpdateAggData()
+        }
+      }
+    })
+  },
+  /**
+   * 用于 custom-config，用于获取自定义列设置信息，用于自定义保持
+   * @returns
+   */
   getCustomStoreData () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
@@ -6632,6 +6723,9 @@ const tableMethods: any = {
     }
     return storeData
   },
+  /**
+   * @private
+   */
   saveCustomStore (type: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
@@ -6981,6 +7075,9 @@ const tableMethods: any = {
       }
     }
   },
+  /**
+   * @private
+   */
   handleRowResizeMousedownEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
@@ -7103,6 +7200,9 @@ const tableMethods: any = {
     }
     updateEvent(evnt)
   },
+  /**
+   * @private
+   */
   handleRowResizeDblclickEvent (evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
@@ -7125,7 +7225,7 @@ const tableMethods: any = {
       }
       const handleRsHeight = () => {
         el.setAttribute('data-calc-row', 'Y')
-        const resizeHeight = calcCellAutoHeight($xeTable, rowRest, el)
+        const resizeHeight = calcCellAutoHeight($xeTable, rowid, rowRest, el)
         el.removeAttribute('data-calc-row')
         const resizeParams = { ...params, resizeHeight, resizeRow: row }
         reactData.isDragResize = false
@@ -7212,7 +7312,7 @@ const tableMethods: any = {
         const rowid = XEUtils.isString(row) || XEUtils.isNumber(row) ? row : handleGetRowId(row)
         const rowRest = fullAllDataRowIdData[rowid]
         if (rowRest) {
-          rowRest.resizeHeight = calcCellAutoHeight($xeTable, rowRest, el)
+          rowRest.resizeHeight = calcCellAutoHeight($xeTable, rowid, rowRest, el)
         }
         el.removeAttribute('data-calc-row')
       })
