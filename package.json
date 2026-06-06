@@ -69,7 +69,7 @@
     "typescript": "~4.7.4",
     "vue": "3.4.27",
     "vue-router": "~4.5.1",
-    "vxe-pc-ui": "4.14.29"
+    "vxe-pc-ui": "4.14.31"
   },
   "vetur": {
     "tags": "helper/vetur/tags.json",
