@@ -363,11 +363,25 @@ function renderTdColumn (
         }, column.renderCell(h, cellParams))
       )
     }
+    tdVNs.push(
+      h('div', {
+        key: 'tc',
+        class: ['vxe-cell', {
+          'c--title': showTitle,
+          'c--tooltip': showTooltip,
+          'c--ellipsis': showEllipsis
+        }],
+        style: tcStyle,
+        attrs: {
+          title: showTitle ? $xeTable.getCellLabel(row, column) : null
+        }
+      }, clVNs)
+    )
     if (showValidTip && errorValidItem) {
       const errRule = errorValidItem.rule
       const validSlot = slots ? slots.valid : null
       const validParams = { ...cellParams, ...errorValidItem, rule: errorValidItem }
-      clVNs.push(
+      tdVNs.push(
         h('div', {
           key: 'tcv',
           class: ['vxe-cell--valid-error-tip', getClass(validOpts.className, errorValidItem)],
@@ -391,20 +405,6 @@ function renderTdColumn (
         ])
       )
     }
-    tdVNs.push(
-      h('div', {
-        key: 'tc',
-        class: ['vxe-cell', {
-          'c--title': showTitle,
-          'c--tooltip': showTooltip,
-          'c--ellipsis': showEllipsis
-        }],
-        style: tcStyle,
-        attrs: {
-          title: showTitle ? $xeTable.getCellLabel(row, column) : null
-        }
-      }, clVNs)
-    )
   }
 
   let showAreaRowStatus = false
