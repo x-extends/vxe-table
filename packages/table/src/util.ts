@@ -92,6 +92,8 @@ export function createInternalData (): TableInternalData {
     fullColumnFieldData: {},
     fullCellHeightMaps: {},
 
+    fullCellStoreMaps: {},
+
     // 当前行
     currentRow: null,
 
