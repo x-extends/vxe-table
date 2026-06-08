@@ -897,7 +897,24 @@ renderer.mixin({
     renderTableEdit: nativeSelectEditRender,
     renderTableDefault: nativeSelectEditRender,
     renderTableCell (renderOpts, params) {
-      return getCellLabelVNs(renderOpts, params, getSelectCellValue(renderOpts, params))
+      const { options, optionGroups } = renderOpts
+      const { $table, row, column } = params
+      const opSize = options ? options.length : null
+      const ogSize = optionGroups ? optionGroups.length : null
+      const { cellResult } = $table.effectCellData(row, column, {
+        key: 'render_table_cell',
+        isChanged ({ oldValue, cellValue }) {
+          return oldValue && oldValue[0] === cellValue && oldValue[1] === opSize && oldValue[2] === ogSize
+        },
+        setValue ({ cellValue }) {
+          return [cellValue, opSize, ogSize]
+        },
+        getResult ({ cellValue }) {
+          return handleSelectCellValue(cellValue, renderOpts)
+        }
+      })
+      // const cellResult = getSelectCellValue(renderOpts, params)
+      return getCellLabelVNs(renderOpts, params, cellResult)
     },
     createTableFilterOptions: defaultFilterOptions,
     renderTableFilter (renderOpts, params) {
@@ -1013,16 +1030,20 @@ renderer.mixin({
     tableAutoFocus: 'input',
     renderTableEdit: defaultEditRender,
     renderTableCell (renderOpts, params) {
-      const { props = {} } = renderOpts
-      const { row, column } = params
-      let cellValue = XEUtils.get(row, column.field)
-      if (cellValue) {
-        if (props.type !== 'time') {
-          cellValue = getLabelFormatDate(cellValue, props)
+      const props = renderOpts.props || {}
+      const { $table, row, column } = params
+      const { cellResult } = $table.effectCellData(row, column, {
+        key: 'render_table_cell',
+        getResult ({ cellValue }) {
+          if (cellValue) {
+            if (props.type !== 'time') {
+              return getLabelFormatDate(cellValue, props)
+            }
+          }
+          return cellValue
         }
-      }
-
-      return getCellLabelVNs(renderOpts, params, cellValue)
+      })
+      return getCellLabelVNs(renderOpts, params, cellResult)
     },
     tableCellFormatter: handleFormatDatePicker,
     renderTableDefault: defaultEditRender,
@@ -1073,6 +1094,40 @@ renderer.mixin({
         })
       ]
     },
+    renderTableDefault (renderOpts, params) {
+      const { startField, endField } = renderOpts
+      const { row, column } = params
+      const { model } = column
+      const cellValue = getCellValue(row, column)
+      const seProps: Record<string, any> = {}
+      const seOs: Record<string, any> = {}
+      if (startField && endField) {
+        seProps.startValue = XEUtils.get(row, startField)
+        seProps.endValue = XEUtils.get(row, endField)
+        seOs['onUpdate:startValue'] = (value: any) => {
+          if (startField) {
+            XEUtils.set(row, startField, value)
+          }
+        }
+        seOs['onUpdate:endValue'] = (value: any) => {
+          if (endField) {
+            XEUtils.set(row, endField, value)
+          }
+        }
+      }
+      return [
+        h(getDefaultComponent(renderOpts), {
+          ...getCellEditProps(renderOpts, params, cellValue, seProps),
+          ...getComponentOns(renderOpts, params, {
+            model (cellValue) {
+              model.update = true
+              model.value = cellValue
+              setCellValue(row, column, cellValue)
+            }
+          }, seOs)
+        })
+      ]
+    },
     renderTableCell (renderOpts, params) {
       const { startField, endField } = renderOpts
       const { row, column } = params
@@ -1103,6 +1158,7 @@ renderer.mixin({
   },
   VxeTextarea: {
     tableAutoFocus: 'textarea',
+    renderTableDefault: defaultEditRender,
     renderTableEdit: defaultEditRender,
     renderTableCell (renderOpts, params) {
       const { row, column } = params
@@ -1130,7 +1186,24 @@ renderer.mixin({
     renderTableEdit: defaultSelectEditRender,
     renderTableDefault: defaultSelectEditRender,
     renderTableCell (renderOpts, params) {
-      return getCellLabelVNs(renderOpts, params, getSelectCellValue(renderOpts, params))
+      const { options, optionGroups } = renderOpts
+      const { $table, row, column } = params
+      const opSize = options ? options.length : null
+      const ogSize = optionGroups ? optionGroups.length : null
+      const { cellResult } = $table.effectCellData(row, column, {
+        key: 'render_table_cell',
+        isChanged ({ oldValue, cellValue }) {
+          return oldValue && oldValue[0] === cellValue && oldValue[1] === opSize && oldValue[2] === ogSize
+        },
+        setValue ({ cellValue }) {
+          return [cellValue, opSize, ogSize]
+        },
+        getResult ({ cellValue }) {
+          return handleSelectCellValue(cellValue, renderOpts)
+        }
+      })
+      // const cellResult = getSelectCellValue(renderOpts, params)
+      return getCellLabelVNs(renderOpts, params, cellResult)
     },
     createTableFilterOptions: defaultFilterOptions,
     renderTableFilter (renderOpts, params) {
@@ -1201,7 +1274,24 @@ renderer.mixin({
   },
   FormatSelect: {
     renderTableDefault (renderOpts, params) {
-      return getCellLabelVNs(renderOpts, params, getSelectCellValue(renderOpts, params))
+      const { options, optionGroups } = renderOpts
+      const { $table, row, column } = params
+      const opSize = options ? options.length : null
+      const ogSize = optionGroups ? optionGroups.length : null
+      const { cellResult } = $table.effectCellData(row, column, {
+        key: 'render_table_cell',
+        isChanged ({ oldValue, cellValue }) {
+          return oldValue && oldValue[0] === cellValue && oldValue[1] === opSize && oldValue[2] === ogSize
+        },
+        setValue ({ cellValue }) {
+          return [cellValue, opSize, ogSize]
+        },
+        getResult ({ cellValue }) {
+          return handleSelectCellValue(cellValue, renderOpts)
+        }
+      })
+      // const cellResult = getSelectCellValue(renderOpts, params)
+      return getCellLabelVNs(renderOpts, params, cellResult)
     },
     tableCellFormatter: handleFormatSelect,
     tableCellCopyMethod: handleFormatSelect,
@@ -1213,7 +1303,24 @@ renderer.mixin({
     tableAutoFocus: 'input',
     renderTableEdit: defaultTableOrTreeSelectEditRender,
     renderTableCell (renderOpts, params) {
-      return getCellLabelVNs(renderOpts, params, getTreeSelectCellValue(renderOpts, params))
+      const { options, optionGroups } = renderOpts
+      const { $table, row, column } = params
+      const opSize = options ? options.length : null
+      const ogSize = optionGroups ? optionGroups.length : null
+      const { cellResult } = $table.effectCellData(row, column, {
+        key: 'render_table_cell',
+        isChanged ({ oldValue, cellValue }) {
+          return oldValue && oldValue[0] === cellValue && oldValue[1] === opSize && oldValue[2] === ogSize
+        },
+        setValue ({ cellValue }) {
+          return [cellValue, opSize, ogSize]
+        },
+        getResult ({ cellValue }) {
+          return handleTreeSelectCellValue(cellValue, renderOpts)
+        }
+      })
+      // const cellResult = getTreeSelectCellValue(renderOpts, params)
+      return getCellLabelVNs(renderOpts, params, cellResult)
     },
     tableCellFormatter: handleFormatTreeSelect,
     tableCellCopyMethod: handleFormatTreeSelect,
@@ -1231,7 +1338,24 @@ renderer.mixin({
   },
   FormatTreeSelect: {
     renderTableDefault (renderOpts, params) {
-      return getCellLabelVNs(renderOpts, params, getTreeSelectCellValue(renderOpts, params))
+      const { options, optionGroups } = renderOpts
+      const { $table, row, column } = params
+      const opSize = options ? options.length : null
+      const ogSize = optionGroups ? optionGroups.length : null
+      const { cellResult } = $table.effectCellData(row, column, {
+        key: 'render_table_cell',
+        isChanged ({ oldValue, cellValue }) {
+          return oldValue && oldValue[0] === cellValue && oldValue[1] === opSize && oldValue[2] === ogSize
+        },
+        setValue ({ cellValue }) {
+          return [cellValue, opSize, ogSize]
+        },
+        getResult ({ cellValue }) {
+          return handleTreeSelectCellValue(cellValue, renderOpts)
+        }
+      })
+      // const cellResult = getTreeSelectCellValue(renderOpts, params)
+      return getCellLabelVNs(renderOpts, params, cellResult)
     },
     tableCellFormatter: handleFormatTreeSelect,
     tableCellCopyMethod: handleFormatTreeSelect,
@@ -1242,7 +1366,24 @@ renderer.mixin({
     tableAutoFocus: 'input',
     renderTableEdit: defaultTableOrTreeSelectEditRender,
     renderTableCell (renderOpts, params) {
-      return getCellLabelVNs(renderOpts, params, getTreeSelectCellValue(renderOpts, params))
+      const { options, optionGroups } = renderOpts
+      const { $table, row, column } = params
+      const opSize = options ? options.length : null
+      const ogSize = optionGroups ? optionGroups.length : null
+      const { cellResult } = $table.effectCellData(row, column, {
+        key: 'render_table_cell',
+        isChanged ({ oldValue, cellValue }) {
+          return oldValue && oldValue[0] === cellValue && oldValue[1] === opSize && oldValue[2] === ogSize
+        },
+        setValue ({ cellValue }) {
+          return [cellValue, opSize, ogSize]
+        },
+        getResult ({ cellValue }) {
+          return handleTreeSelectCellValue(cellValue, renderOpts)
+        }
+      })
+      // const cellResult = getTreeSelectCellValue(renderOpts, params)
+      return getCellLabelVNs(renderOpts, params, cellResult)
     },
     tableCellFormatter: handleFormatTreeSelect,
     tableCellCopyMethod: handleFormatTreeSelect,

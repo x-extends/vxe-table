@@ -3911,6 +3911,7 @@ export default defineVxeComponent({
       internalData.removeRowMaps = {}
       reactData.removeRowFlag++
       internalData.fullCellHeightMaps = {}
+      internalData.fullCellStoreMaps = {}
       const sYLoad = updateScrollYStatus(fullData)
       // 全量数据
       internalData.tableFullData = fullData
@@ -5426,6 +5427,58 @@ export default defineVxeComponent({
           })
         }
         return nextTick()
+      },
+      effectCellData (row, column, options) {
+        const { fullCellStoreMaps } = internalData
+        const editOpts = computeEditOpts.value
+        const { key, isChanged, setValue, getResult } = options
+        const rowid = getRowid($xeTable, row)
+        const colid = column.id
+        let rowStore = fullCellStoreMaps[rowid]
+        const cellValue = XEUtils.get(row, column.field)
+        const restParams: VxeTableDefines.CellCacheHandleParams = {
+          $table: $xeTable,
+          row,
+          rowid,
+          column,
+          colid,
+          cellValue,
+          oldValue: null
+        }
+
+        if (editOpts.cache === false && key === 'render_table_cell') {
+          const rest = restParams as VxeTableDefines.CellCacheResultObj
+          rest.cellResult = getResult ? getResult(restParams) : cellValue
+          return rest
+        }
+
+        if (!rowStore) {
+          rowStore = {}
+          fullCellStoreMaps[rowid] = rowStore
+        }
+        let cellStore = rowStore[colid]
+        if (!cellStore) {
+          cellStore = {
+            value: undefined,
+            result: {}
+          }
+          rowStore[colid] = cellStore
+        }
+        const restData = rowStore[colid]
+        const oldValue = restData.value
+        restParams.oldValue = oldValue
+        if (isChanged ? !isChanged(restParams) : oldValue !== cellValue) {
+          restData.value = setValue ? setValue(restParams) : cellValue
+          restData.result = {}
+        }
+        const storeData = restData.result
+        if (XEUtils.isUndefined(storeData[key])) {
+          storeData[key] = getResult ? getResult(restParams) : cellValue
+        }
+        const cellResult = storeData[key]
+        const rest = restParams as VxeTableDefines.CellCacheResultObj
+        rest.cellResult = cellResult
+        return rest
       },
       getCellElement (row, fieldOrColumn) {
         const { elemStore } = internalData
