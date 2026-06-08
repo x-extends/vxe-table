@@ -64,7 +64,7 @@ export default {
     table: {
       emptyText: '暂无数据',
       allTitle: '全选/取消',
-      seqTitle: '序号',
+      seqTitle: '#',
       actionTitle: '操作',
       confirmFilter: '筛选',
       resetFilter: '重置',
