@@ -22,6 +22,9 @@ export class ColumnInfo {
 
     const formatter: string | any[] = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
+    const defaultRenderWidth = _vm.width && `${_vm.width}`.indexOf('%') === -1 && _vm.width !== 'auto'
+      ? Math.max(0, XEUtils.toInteger(_vm.width))
+      : 0
 
     const flCompConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
     const ctFilterOptions = flCompConf ? flCompConf.createTableFilterOptions : null
@@ -170,7 +173,7 @@ export class ColumnInfo {
       renderFixed: '',
       renderVisible: false,
 
-      renderWidth: 0,
+      renderWidth: defaultRenderWidth,
       renderHeight: 0,
       renderResizeWidth: 0,
       renderAutoWidth: 0,
