@@ -465,14 +465,16 @@ export default defineVxeComponent({
         return
       }
       if (proxyConfig && isEnableConf(proxyOpts)) {
+        $xeGrid.dispatchEvent('form-submit', params, params.$event)
         internalData.uFoot = true
         $xeGrid.commitProxy('reload').then((rest) => {
           $xeGrid.dispatchEvent('proxy-query', { ...rest, isReload: true }, params.$event)
         })
         internalData.uFoot = false
         updateQueryFooter()
+      } else {
+        $xeGrid.dispatchEvent('form-submit', params, params.$event)
       }
-      $xeGrid.dispatchEvent('form-submit', params, params.$event)
     }
 
     const resetFormEvent: VxeFormEvents.Reset = (params) => {
@@ -481,6 +483,7 @@ export default defineVxeComponent({
       const { $event } = params
       const proxyOpts = computeProxyOpts.value
       if (proxyConfig && isEnableConf(proxyOpts)) {
+        $xeGrid.dispatchEvent('form-reset', params, $event)
         if ($xeTable) {
           $xeTable.clearScroll()
         }
@@ -490,8 +493,9 @@ export default defineVxeComponent({
         })
         internalData.uFoot = false
         updateQueryFooter()
+      } else {
+        $xeGrid.dispatchEvent('form-reset', params, $event)
       }
-      $xeGrid.dispatchEvent('form-reset', params, $event)
     }
 
     const submitInvalidEvent: VxeFormEvents.SubmitInvalid = (params) => {

@@ -1851,9 +1851,9 @@ export default defineVxeComponent({
         if (expandOpts.mode !== 'inside' && (treeConfig && !treeOpts.transform)) {
           errLog('vxe.error.notConflictProp', ['tree-config.transform=false', 'expand-config.mode=inside'])
         }
-        if (props.spanMethod) {
-          warnLog('vxe.error.notSupportProp', ['column.type=expand', 'span-method', 'span-method=null'])
-        }
+        // if (props.spanMethod) {
+        //   warnLog('vxe.error.notSupportProp', ['column.type=expand', 'span-method', 'span-method=null'])
+        // }
       }
 
       if (htmlColumn) {
