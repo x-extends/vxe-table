@@ -981,22 +981,26 @@ export const Cell = {
     }
     return renderCellBaseVNs(h, params, [
       showIcon && (!visibleMethod || visibleMethod(params))
-        ? h('span', {
+        ? h('div', {
           class: ['vxe-table--expanded', {
             'is--active': isActive
-          }],
-          on: {
-            mousedown (evnt: MouseEvent) {
-              evnt.stopPropagation()
-            },
-            click (evnt: MouseEvent) {
-              $table.triggerRowExpandEvent(evnt, params)
-            }
-          }
+          }]
         }, [
-          h('i', {
-            class: ['vxe-table--expand-btn', isLazyLoading ? (iconLoaded || getIcon().TABLE_EXPAND_LOADED) : (isActive ? (iconOpen || getIcon().TABLE_EXPAND_OPEN) : (iconClose || getIcon().TABLE_EXPAND_CLOSE))]
-          })
+          h('span', {
+            class: 'vxe-table--expand-btn',
+            on: {
+              mousedown (evnt: MouseEvent) {
+                evnt.stopPropagation()
+              },
+              click (evnt: MouseEvent) {
+                $table.triggerRowExpandEvent(evnt, params)
+              }
+            }
+          }, [
+            h('i', {
+              class: isLazyLoading ? (iconLoaded || getIcon().TABLE_EXPAND_LOADED) : (isActive ? (iconOpen || getIcon().TABLE_EXPAND_OPEN) : (iconClose || getIcon().TABLE_EXPAND_CLOSE))
+            })
+          ])
         ])
         : renderEmptyElement($table),
       defaultSlot || labelField

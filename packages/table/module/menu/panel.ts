@@ -48,8 +48,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       const { ctxMenuStore } = tableReactData
       const menuOpts = $xeTable.computeMenuOpts
-      const { destroyOnClose } = menuOpts
-      const { visible, list, className } = ctxMenuStore
+      const { destroyOnClose, className } = menuOpts
+      const { visible, list } = ctxMenuStore
       return h('div', {
         ref: 'refElem',
         class: ['vxe-table--context-menu-wrapper', className, {
