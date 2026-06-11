@@ -2,46 +2,44 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { toFilters } from './util'
 import { isEnableConf, getFuncText } from '../../ui/src/utils'
+import { isPx } from '../../ui/src/dom'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines } from '../../../types'
+import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeColumnProps } from '../../../types'
 
 const { getI18n, formats, renderer } = VxeUI
 
 export class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
-  constructor ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
+  constructor ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, colConfs: VxeColumnProps & { renderHeader?: any, renderCell?: any, renderFooter?: any, slots?: any }, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
     const tableProps = $xeTable.props
     const $xeGrid = $xeTable.xeGrid
     const $xeGantt = $xeTable.xeGantt
     const $xeGGWrapper = $xeGrid || $xeGantt
 
-    const { field, editRender, filterRender } = _vm
+    const { type, field, width, visible, aggFunc, formatter, filterMultiple, cellRender, editRender, filterRender } = colConfs
 
-    const colId = _vm.colId || XEUtils.uniqueId('col_')
+    const colId = colConfs.colId || XEUtils.uniqueId('col_')
 
-    const formatter: string | any[] = _vm.formatter
-    const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
-    const defaultRenderWidth = _vm.width && `${_vm.width}`.indexOf('%') === -1 && _vm.width !== 'auto'
-      ? Math.max(0, XEUtils.toInteger(_vm.width))
-      : 0
+    const defaultVisible = XEUtils.isBoolean(visible) ? visible : true
+    const defaultRenderWidth = width && isPx(width) && width !== 'auto' ? Math.max(0, XEUtils.toInteger(width)) : 0
 
-    const flCompConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+    const flCompConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
     const ctFilterOptions = flCompConf ? flCompConf.createTableFilterOptions : null
 
-    const filters = toFilters(_vm.filters, colId)
+    const filters = toFilters(colConfs.filters, colId)
 
     const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
-    if (_vm.type && types.indexOf(_vm.type) === -1) {
-      warnLog('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])
+    if (type && types.indexOf(type) === -1) {
+      warnLog('vxe.error.errProp', [`type=${type}`, types.join(', ')])
     }
-    if (XEUtils.isBoolean(_vm.cellRender) || (_vm.cellRender && !XEUtils.isObject(_vm.cellRender))) {
-      warnLog('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
+    if (XEUtils.isBoolean(cellRender) || (cellRender && !XEUtils.isObject(cellRender))) {
+      warnLog('vxe.error.errProp', [`column.cell-render=${cellRender}`, 'column.cell-render={}'])
     }
-    if (XEUtils.isBoolean(_vm.editRender) || (_vm.editRender && !XEUtils.isObject(_vm.editRender))) {
-      warnLog('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
+    if (XEUtils.isBoolean(editRender) || (editRender && !XEUtils.isObject(editRender))) {
+      warnLog('vxe.error.errProp', [`column.edit-render=${editRender}`, 'column.edit-render={}'])
     }
-    if (_vm.type === 'expand') {
+    if (type === 'expand') {
       const { treeConfig } = tableProps
       const { computeTreeOpts } = $xeTable.getComputeMaps()
       const treeOpts = computeTreeOpts.value
@@ -62,9 +60,9 @@ export class ColumnInfo {
         }
       }
     }
-    if (_vm.aggFunc) {
-      if (!$xeTable.handlePivotTableAggData && _vm.aggFunc !== true) {
-        errLog('vxe.error.errProp', [`column.agg-func=${_vm.aggFunc}`, 'column.agg-func=true'])
+    if (aggFunc) {
+      if (!$xeTable.handlePivotTableAggData && aggFunc !== true) {
+        errLog('vxe.error.errProp', [`column.agg-func=${aggFunc}`, 'column.agg-func=true'])
       }
     }
 
@@ -79,74 +77,73 @@ export class ColumnInfo {
 
     Object.assign(this, {
       // 基本属性
-      type: _vm.type,
-      property: _vm.field,
+      type: colConfs.type,
+      property: colConfs.field,
       field: field,
-      title: _vm.title,
-      width: _vm.width,
-      minWidth: _vm.minWidth,
-      maxWidth: _vm.maxWidth,
-      resizable: _vm.resizable,
-      fixed: _vm.fixed,
-      align: _vm.align,
-      headerAlign: _vm.headerAlign,
-      footerAlign: _vm.footerAlign,
-      showOverflow: _vm.showOverflow,
-      showHeaderOverflow: _vm.showHeaderOverflow,
-      showFooterOverflow: _vm.showFooterOverflow,
-      className: _vm.className,
-      headerClassName: _vm.headerClassName,
-      footerClassName: _vm.footerClassName,
+      title: colConfs.title,
+      width: colConfs.width,
+      minWidth: colConfs.minWidth,
+      maxWidth: colConfs.maxWidth,
+      resizable: colConfs.resizable,
+      fixed: colConfs.fixed,
+      align: colConfs.align,
+      headerAlign: colConfs.headerAlign,
+      footerAlign: colConfs.footerAlign,
+      showOverflow: colConfs.showOverflow,
+      showHeaderOverflow: colConfs.showHeaderOverflow,
+      showFooterOverflow: colConfs.showFooterOverflow,
+      className: colConfs.className,
+      headerClassName: colConfs.headerClassName,
+      footerClassName: colConfs.footerClassName,
       formatter: formatter,
-      headerFormatter: _vm.headerFormatter,
-      footerFormatter: _vm.footerFormatter,
-      padding: _vm.padding,
-      verticalAlign: _vm.verticalAlign,
-      sortable: _vm.sortable,
-      sortBy: _vm.sortBy,
-      sortType: _vm.sortType,
+      headerFormatter: colConfs.headerFormatter,
+      footerFormatter: colConfs.footerFormatter,
+      padding: colConfs.padding,
+      verticalAlign: colConfs.verticalAlign,
+      sortable: colConfs.sortable,
+      sortBy: colConfs.sortBy,
+      sortType: colConfs.sortType,
       filters: filters,
-      filterMultiple: XEUtils.isBoolean(_vm.filterMultiple) ? _vm.filterMultiple : true,
-      filterMethod: _vm.filterMethod,
-      filterResetMethod: _vm.filterResetMethod,
-      filterRecoverMethod: _vm.filterRecoverMethod,
+      filterMultiple: XEUtils.isBoolean(filterMultiple) ? filterMultiple : true,
+      filterMethod: colConfs.filterMethod,
+      filterResetMethod: colConfs.filterResetMethod,
+      filterRecoverMethod: colConfs.filterRecoverMethod,
       filterRender: filterRender,
-      floatingFilters: _vm.floatingFilters,
-      rules: _vm.rules,
-      rowGroupNode: _vm.rowGroupNode,
-      treeNode: _vm.treeNode,
-      dragSort: _vm.dragSort,
-      rowResize: _vm.rowResize,
-      cellType: _vm.cellType,
-      cellRender: _vm.cellRender,
+      floatingFilters: colConfs.floatingFilters,
+      rules: colConfs.rules,
+      rowGroupNode: colConfs.rowGroupNode,
+      treeNode: colConfs.treeNode,
+      dragSort: colConfs.dragSort,
+      rowResize: colConfs.rowResize,
+      cellType: colConfs.cellType,
+      cellRender: cellRender,
       editRender: editRender,
-      contentRender: _vm.contentRender,
-      headerExportMethod: _vm.headerExportMethod,
-      exportMethod: _vm.exportMethod,
-      footerExportMethod: _vm.footerExportMethod,
-      titleHelp: _vm.titleHelp,
-      titlePrefix: _vm.titlePrefix,
-      titleSuffix: _vm.titleSuffix,
+      contentRender: colConfs.contentRender,
+      headerExportMethod: colConfs.headerExportMethod,
+      exportMethod: colConfs.exportMethod,
+      footerExportMethod: colConfs.footerExportMethod,
+      titleHelp: colConfs.titleHelp,
+      titlePrefix: colConfs.titlePrefix,
+      titleSuffix: colConfs.titleSuffix,
 
-      aggFunc: _vm.aggFunc,
-      copyMethod: _vm.copyMethod,
-      cutMethod: _vm.cutMethod,
-      pasteMethod: _vm.pasteMethod,
+      aggFunc: colConfs.aggFunc,
+      copyMethod: colConfs.copyMethod,
+      cutMethod: colConfs.cutMethod,
+      pasteMethod: colConfs.pasteMethod,
 
       // 自定义参数
-      params: _vm.params,
+      params: colConfs.params,
       // 渲染属性
       id: colId,
       parentId: null,
-      visible,
+      visible: defaultVisible,
       // 内部属性（一旦被使用，将导致不可升级版本）
       defaultParentId: null,
       halfVisible: false,
-      defaultVisible: visible,
-      defaultFixed: _vm.fixed,
+      defaultVisible: defaultVisible,
+      defaultFixed: colConfs.fixed,
 
-      defaultAggGroup: _vm.aggGroup,
-      defaultAggFunc: _vm.aggFunc,
+      defaultAggFunc: colConfs.aggFunc,
 
       checked: false,
       halfChecked: false,
@@ -182,12 +179,12 @@ export class ColumnInfo {
       renderLeft: 0,
       renderArgs: [], // 渲染参数可用于扩展
       model: {},
-      renderHeader: renderHeader || _vm.renderHeader,
-      renderCell: renderCell || _vm.renderCell,
-      renderFooter: renderFooter || _vm.renderFooter,
+      renderHeader: renderHeader || colConfs.renderHeader,
+      renderCell: renderCell || colConfs.renderCell,
+      renderFooter: renderFooter || colConfs.renderFooter,
       renderData: renderData,
       // 单元格插槽，只对 grid 有效
-      slots: _vm.slots
+      slots: colConfs.slots
     })
     if (ctFilterOptions && (!filters || !filters.length)) {
       (this as any).filters = toFilters(ctFilterOptions({ $table: $xeTable, column: this as unknown as VxeTableDefines.ColumnInfo }), colId)
@@ -196,7 +193,7 @@ export class ColumnInfo {
       const { computeProxyOpts } = $xeGGWrapper.getComputeMaps()
       const proxyOpts = computeProxyOpts.value
       if (proxyOpts.beforeColumn) {
-        proxyOpts.beforeColumn({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, column: this })
+        proxyOpts.beforeColumn({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, column: this as unknown as VxeTableDefines.ColumnInfo })
       }
     }
   }
@@ -206,8 +203,8 @@ export class ColumnInfo {
   }
 
   getKey () {
-    const { type } = this
-    return this.field || (type ? `type=${type}` : null)
+    const { type, field } = this
+    return field || (type ? `type=${type}` : null)
   }
 
   update (name: string, value: any) {

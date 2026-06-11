@@ -996,24 +996,28 @@ export const Cell = {
     }
     return renderCellBaseVNs(params, [
       showIcon && (!visibleMethod || visibleMethod(params))
-        ? h('span', {
+        ? h('div', {
           class: ['vxe-table--expanded', {
             'is--active': isActive
-          }],
-          onMousedown (evnt) {
-            evnt.stopPropagation()
-          },
-          onClick (evnt: MouseEvent) {
-            $table.triggerRowExpandEvent(evnt, params)
-          }
+          }]
         }, [
-          h('i', {
-            class: ['vxe-table--expand-btn', isLazyLoading ? (iconLoaded || getIcon().TABLE_EXPAND_LOADED) : (isActive ? (iconOpen || getIcon().TABLE_EXPAND_OPEN) : (iconClose || getIcon().TABLE_EXPAND_CLOSE))]
-          })
+          h('span', {
+            class: 'vxe-table--expand-btn',
+            onMousedown (evnt) {
+              evnt.stopPropagation()
+            },
+            onClick (evnt: MouseEvent) {
+              $table.triggerRowExpandEvent(evnt, params)
+            }
+          }, [
+            h('i', {
+              class: isLazyLoading ? (iconLoaded || getIcon().TABLE_EXPAND_LOADED) : (isActive ? (iconOpen || getIcon().TABLE_EXPAND_OPEN) : (iconClose || getIcon().TABLE_EXPAND_CLOSE))
+            })
+          ])
         ])
         : renderEmptyElement($table),
       defaultSlot || labelField
-        ? h('span', {
+        ? h('div', {
           class: 'vxe-table--expand-label'
         }, defaultSlot ? $table.callSlot(defaultSlot, params) : XEUtils.get(row, labelField as string))
         : renderEmptyElement($table)

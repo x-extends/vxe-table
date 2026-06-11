@@ -2204,6 +2204,16 @@ $btnThemeList: (
   }
 
   /*展开行*/
+  .vxe-body--column {
+    &.col--expand {
+      & > .vxe-cell {
+        .vxe-cell--wrapper {
+          display: flex;
+          flex-direction: row;
+        }
+      }
+    }
+  }
   .vxe-table--row-expanded-wrapper {
     position: absolute;
     top: 0;
@@ -2237,20 +2247,28 @@ $btnThemeList: (
     border-right: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
   }
   .vxe-table--expanded {
-    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
     .vxe-table--expand-btn {
-      display: inline-block;
-      width: 1em;
-      height: 1em;
-      text-align: center;
+      cursor: pointer;
       user-select: none;
       color: var(--vxe-ui-font-lighten-color);
-      @include baseMixin.createAnimationTransition(transform);
       &:hover {
         color: var(--vxe-ui-font-color);
       }
+      i {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        line-height: 1em;
+        @include baseMixin.createAnimationTransition(transform);
+      }
     }
     &+.vxe-table--expand-label {
+      flex-grow: 1;
       padding-left: 0.5em;
     }
   }

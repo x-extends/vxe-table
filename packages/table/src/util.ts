@@ -725,7 +725,7 @@ function getElementMarginAndWidth (elem: HTMLElement | null) {
   return 0
 }
 
-export function toFilters (filters: any, colid?: string) {
+export function toFilters (filters: any, colid?: string | number) {
   if (filters) {
     if (XEUtils.isArray(filters)) {
       return filters.map(({ label, value, data, resetValue, checked }) => {

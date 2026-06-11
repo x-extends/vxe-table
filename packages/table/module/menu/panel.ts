@@ -35,8 +35,8 @@ export default defineVxeComponent({
       const { ctxMenuStore } = tableReactData
       const { computeMenuOpts } = $xeTable.getComputeMaps()
       const menuOpts = computeMenuOpts.value
-      const { transfer, destroyOnClose } = menuOpts
-      const { visible, list, className } = ctxMenuStore
+      const { transfer, destroyOnClose, className } = menuOpts
+      const { visible, list } = ctxMenuStore
 
       return h(Teleport, {
         to: 'body',
