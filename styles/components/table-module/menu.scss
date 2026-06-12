@@ -18,13 +18,16 @@
   font-family: var(--vxe-ui-font-family);
   background-color: var(--vxe-ui-layout-background-color);
 }
+.vxe-context-menu--option {
+  color: var(--vxe-ui-font-color);
+}
 .vxe-context-menu--link {
   display: flex;
   flex-direction: row;
   width: var(--vxe-ui-table-menu-item-width);
   line-height: 26px;
   padding: 0 0.8em;
-  color: var(--vxe-ui-font-color);
+  color: inherit;
   cursor: pointer;
   .vxe-context-menu--link-prefix,
   .vxe-context-menu--link-suffix {
@@ -41,7 +44,7 @@
     white-space: nowrap;
   }
 }
-.vxe-context-menu--option-wrapper,
+.vxe-table--context-menu-group-wrapper,
 .vxe-table--context-menu-clild-wrapper {
   margin: 0;
   padding: 0;
