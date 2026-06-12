@@ -1,6 +1,6 @@
 import { h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, Teleport, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, onMounted } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
-import XEUtils from 'xe-utils'
+import XEUtils, { isNaN } from 'xe-utils'
 import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollTopTo, wheelScrollLeftTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement, hasEventInputTarget } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
@@ -686,22 +686,32 @@ export default defineVxeComponent({
       const { tableFullColumn } = internalData
       const { updateColFlag } = reactData
       const editDirtyOpts = computeEditDirtyOpts.value
-      const { includeFields, excludeFields } = editDirtyOpts
+      const { extraFields, includeFields, excludeFields } = editDirtyOpts
       const kpFields: string[] = []
       if (updateColFlag) {
         if (includeFields && includeFields.length) {
           return includeFields
         }
-        const exfMaps: Record<string, number> = {}
+        const excludeFdMaps: Record<string, number> = {}
         if (excludeFields && excludeFields.length) {
           excludeFields.forEach(field => {
-            exfMaps[field] = 1
+            excludeFdMaps[field] = 1
+          })
+        }
+        const addFdMaps: Record<string, number> = {}
+        if (extraFields && extraFields.length) {
+          extraFields.forEach(field => {
+            if (!addFdMaps[field]) {
+              addFdMaps[field] = 1
+              kpFields.push(field)
+            }
           })
         }
         for (let i = 0; i < tableFullColumn.length; i++) {
           const column = tableFullColumn[i]
           const { field, type, editRender, cellRender } = column
-          if (field && !type && (editRender || cellRender) && !exfMaps[field]) {
+          if (field && !type && (editRender || cellRender) && !addFdMaps[field] && !excludeFdMaps[field]) {
+            addFdMaps[field] = 1
             kpFields.push(field)
           }
         }
@@ -2204,25 +2214,62 @@ export default defineVxeComponent({
           }
     }
 
+    const updateAfterTreeIndex = () => {
+      const { fullDataRowIdData, fullAllDataRowIdData, afterFullData, afterTreeFullData } = internalData
+      const treeOpts = computeTreeOpts.value
+      const { transform, mapChildrenField } = treeOpts
+      const childrenField = treeOpts.children || treeOpts.childrenField
+      const fullMaps: Record<string, any> = {}
+      let rowNum = 0
+      const { handleGetRowId } = createHandleGetRowId($xeTable)
+      XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
+        const rowid = handleGetRowId(row)
+        const rowRest = fullAllDataRowIdData[rowid]
+        const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+        if (rowRest) {
+          rowRest.seq = seq
+          rowRest._seq = rowNum
+          rowRest.treeIndex = index
+          rowRest._tIndex = rowNum
+        } else {
+          const rest = { row, rowid, _seq: rowNum, seq, index: -1, $index: -1, _index: -1, treeIndex: -1, _tIndex: rowNum, items: [], parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+          fullAllDataRowIdData[rowid] = rest
+          fullDataRowIdData[rowid] = rest
+        }
+        rowNum++
+        fullMaps[rowid] = row
+      }, { children: transform ? mapChildrenField : childrenField })
+      if (transform) {
+        afterFullData.forEach((row, index) => {
+          const rowid = handleGetRowId(row)
+          const rowRest = fullAllDataRowIdData[rowid]
+          if (rowRest) {
+            rowRest._index = index
+          }
+        })
+      }
+      internalData.afterFullRowMaps = fullMaps
+    }
+
     const updateAfterListIndex = () => {
-      const { treeConfig } = props
       const { afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
       const { handleGetRowId } = createHandleGetRowId($xeTable)
       const fullMaps: Record<string, any> = {}
+      let rowNum = 0
       afterFullData.forEach((row, index) => {
         const rowid = handleGetRowId(row)
         const rowRest = fullAllDataRowIdData[rowid]
         const seq = index + 1
         if (rowRest) {
-          if (!treeConfig) {
-            rowRest.seq = seq
-          }
+          rowRest.seq = seq
+          rowRest._seq = rowNum
           rowRest._index = index
         } else {
-          const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, treeIndex: -1, _tIndex: -1, items: [], parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+          const rest = { row, rowid, _seq: rowNum, seq, index: -1, $index: -1, _index: index, treeIndex: -1, _tIndex: -1, items: [], parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
           fullAllDataRowIdData[rowid] = rest
           fullDataRowIdData[rowid] = rest
         }
+        rowNum++
         fullMaps[rowid] = row
       })
       internalData.afterFullRowMaps = fullMaps
@@ -2234,44 +2281,8 @@ export default defineVxeComponent({
      */
     const updateAfterDataIndex = () => {
       const { treeConfig } = props
-      const { fullDataRowIdData, fullAllDataRowIdData, afterFullData, afterTreeFullData } = internalData
-      const treeOpts = computeTreeOpts.value
-      const { transform } = treeOpts
-      const childrenField = treeOpts.children || treeOpts.childrenField
-      const fullMaps: Record<string, any> = {}
       if (treeConfig) {
-        let _treeIndex = 0
-        const { handleGetRowId } = createHandleGetRowId($xeTable)
-        XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
-          const rowid = handleGetRowId(row)
-          const rowRest = fullAllDataRowIdData[rowid]
-          const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
-          if (rowRest) {
-            rowRest.seq = seq
-            rowRest.treeIndex = index
-            rowRest._tIndex = _treeIndex
-          } else {
-            const rest = { row, rowid, seq, index: -1, $index: -1, _index: -1, treeIndex: -1, _tIndex: _treeIndex, items: [], parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
-            fullAllDataRowIdData[rowid] = rest
-            fullDataRowIdData[rowid] = rest
-          }
-          _treeIndex++
-          fullMaps[rowid] = row
-        }, { children: transform ? treeOpts.mapChildrenField : childrenField })
-        if (transform) {
-          afterFullData.forEach((row, index) => {
-            const rowid = handleGetRowId(row)
-            const rowRest = fullAllDataRowIdData[rowid]
-            const seq = index + 1
-            if (rowRest) {
-              if (!treeConfig) {
-                rowRest.seq = seq
-              }
-              rowRest._index = index
-            }
-          })
-        }
-        internalData.afterFullRowMaps = fullMaps
+        updateAfterTreeIndex()
       } else {
         updateAfterListIndex()
       }
@@ -3493,9 +3504,12 @@ export default defineVxeComponent({
       })
     }
 
-    const minRunDelay = 50
+    const defaultMinRunDelay = 50
 
-    const handleLazyRecalculate = (reFull: boolean, reWidth: boolean, reHeight: boolean) => {
+    const handleLazyRecalculate = (reFull: boolean, reWidth: boolean, reHeight: boolean, options?: {
+      minRunDelay?: number // 多少毫秒内至少执行一次
+    }) => {
+      const minRunDelay = (options ? options.minRunDelay : defaultMinRunDelay) || defaultMinRunDelay
       return new Promise<void>(resolve => {
         const $xeGanttView = internalData.xeGanttView
         const { customStore } = reactData
@@ -3521,6 +3535,7 @@ export default defineVxeComponent({
         }
         if (rceTimeout) {
           clearTimeout(rceTimeout)
+          // 多少毫秒内至少执行一次
           if (rceRunTime && rceRunTime + minRunDelay < Date.now()) {
             resolve(
               handleRecalculateStyle(reFull, reWidth, reHeight)
@@ -3548,17 +3563,17 @@ export default defineVxeComponent({
       })
     }
 
-    let resizePending = false
-
     const handleResizeEvent = () => {
-      if (resizePending) {
+      if (internalData.rsePending) {
         return
       }
-      resizePending = true
-      handleLazyRecalculate(true, true, true).then(() => {
-        resizePending = false
+      internalData.rsePending = true
+      handleLazyRecalculate(true, true, true, {
+        minRunDelay: 200
+      }).then(() => {
+        internalData.rsePending = false
       }).catch(() => {
-        resizePending = false
+        internalData.rsePending = false
       })
     }
 
@@ -5181,7 +5196,7 @@ export default defineVxeComponent({
           XEUtils.eachTree(rows, (childRow, index, items, path, parentItem, nodes) => {
             const rowid = getRowid($xeTable, childRow)
             const parentRow = parentItem || parentRest.row
-            const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items, parent: parentRow, level: parentLevel + nodes.length, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+            const rest = { row: childRow, rowid, _seq: -1, seq: -1, index, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items, parent: parentRow, level: parentLevel + nodes.length, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
             fullDataRowIdData[rowid] = rest
             fullAllDataRowIdData[rowid] = rest
           }, { children: childrenField })
@@ -9566,19 +9581,21 @@ export default defineVxeComponent({
 
         const idMaps: Record<string, boolean> = {}
         const { handleUpdateRowId } = createHandleUpdateRowId($xeTable)
+        let rowNum = 0
         const handleRowCache = (row: any, index: number, items: any, currIndex: number, parentRow: any, rowid: string, level: number, seq: string | number) => {
           let rowRest = fullAllDataRowIdMaps[rowid]
           if (idMaps[rowid]) {
             errLog('vxe.error.repeatKey', [currKeyField, rowid])
           }
           if (!rowRest) {
-            rowRest = { row, rowid, seq, index: -1, _index: -1, $index: -1, treeIndex: index, _tIndex: -1, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+            rowRest = { row, rowid, _seq: -1, seq, index: -1, _index: -1, $index: -1, treeIndex: index, _tIndex: -1, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
             fullDataRowIdMaps[rowid] = rowRest
             fullAllDataRowIdMaps[rowid] = rowRest
           }
           rowRest.treeLoaded = false
           rowRest.expandLoaded = false
 
+          rowRest._seq = rowNum++
           rowRest.row = row
           rowRest.items = items
           rowRest.parent = parentRow
@@ -9594,6 +9611,7 @@ export default defineVxeComponent({
             rowExpandedMaps[rowid] = row
           }
 
+          rowNum++
           idMaps[rowid] = true
           fullDataRowIdMaps[rowid] = rowRest
           fullAllDataRowIdMaps[rowid] = rowRest
@@ -10875,31 +10893,162 @@ export default defineVxeComponent({
         const { treeConfig } = props
         const { row } = params
         const { isRowGroupStatus } = reactData
-        const { afterFullData } = internalData
+        const { fullAllDataRowIdData, afterFullData, afterTreeFullData, afterGroupFullData } = internalData
         const checkboxOpts = computeCheckboxOpts.value
-        const { checkMethod, trigger } = checkboxOpts
+        const aggregateOpts = computeAggregateOpts.value
+        const treeOpts = computeTreeOpts.value
+        const { checkMethod, trigger, checkStrictly } = checkboxOpts
         if (trigger === 'manual') {
           return
         }
         evnt.stopPropagation()
-        if (checkboxOpts.isShiftKey && evnt.shiftKey && !(treeConfig || isRowGroupStatus)) {
+
+        if (checkboxOpts.isShiftKey && evnt.shiftKey) {
+          const { handleGetRowId } = createHandleGetRowId($xeTable)
           const checkboxRecords = $xeTable.getCheckboxRecords()
-          if (checkboxRecords.length) {
-            const firstRow = checkboxRecords[0]
-            const _rowIndex = $xeTable.getVTRowIndex(row)
-            const _firstRowIndex = $xeTable.getVTRowIndex(firstRow)
-            if (_rowIndex !== _firstRowIndex) {
+          let currSeq = -1
+          let currRow: any = null
+          const currRowid = handleGetRowId(row)
+          const rowRest = fullAllDataRowIdData[currRowid]
+          if (rowRest) {
+            currRow = rowRest.row
+            currSeq = rowRest._seq
+          }
+          if (currRow && checkboxRecords.length) {
+            let rangeRows: any[] = []
+            let firstSeq = -1
+            let firstRow: any = null
+            let firstRowid = ''
+            let lastSeq = -1
+            let lastRow: any = null
+            let lastRowid = ''
+            // 根据序号取出范围最小/最大的行
+            const selectMaps: Record<string, any> = {}
+            checkboxRecords.forEach(item => {
+              const rowid = handleGetRowId(item)
+              const rowRest = fullAllDataRowIdData[rowid]
+              if (rowRest) {
+                if (!firstRow || firstSeq > rowRest._seq) {
+                  firstRowid = rowRest.rowid
+                  firstRow = rowRest.row
+                  firstSeq = rowRest._seq
+                }
+                if (!lastRow || lastSeq < rowRest._seq) {
+                  lastRowid = rowRest.rowid
+                  lastRow = rowRest.row
+                  lastSeq = rowRest._seq
+                }
+              }
+              selectMaps[rowid] = item
+            })
+            // 如果已选只有一条并选择当前则跳过
+            if (firstRow && lastRow && (checkboxRecords.length > 1 || currRowid !== firstRowid) && (Math.abs(firstSeq - lastSeq) > 1 || Math.abs(currSeq - firstSeq) > 1 || Math.abs(currSeq - lastSeq) > 1)) {
+              // 树与分组
+              if (treeConfig || isRowGroupStatus) {
+                const { transform } = treeOpts
+                const childrenField = treeOpts.children || treeOpts.childrenField
+                const iteratorChildField = treeConfig ? (transform ? treeOpts.mapChildrenField : childrenField) : aggregateOpts.mapChildrenField as string
+                let isMatchFirst = false
+                let matchStartRowid = ''
+                let matchEndRowid = ''
+
+                const handleGetChildRowid = (rowid: string, isLast: 0 | 1): string => {
+                  const rowRest = fullAllDataRowIdData[rowid]
+                  if (rowRest) {
+                    const item = rowRest.row
+                    const childList = item[iteratorChildField]
+                    if (childList && childList.length) {
+                      const targetRow = isLast ? XEUtils.last(childList) : XEUtils.first(childList)
+                      return handleGetChildRowid(handleGetRowId(targetRow), isLast)
+                    }
+                  }
+                  return rowid
+                }
+
+                const handleGetSelectParentRowid = (rowid: string): string => {
+                  const rowRest = fullAllDataRowIdData[rowid]
+                  if (rowRest) {
+                    const parentItem = rowRest.parent
+                    if (parentItem) {
+                      const parentRowid = handleGetRowId(parentItem)
+                      if (selectMaps[parentRowid]) {
+                        return handleGetSelectParentRowid(parentRowid)
+                      }
+                    }
+                  }
+                  return rowid
+                }
+
+                const handleGetRootRow = (row: string): VxeTableDefines.RowCacheItem | null => {
+                  const rowid = handleGetRowId(row)
+                  if (rowid) {
+                    const rest = fullAllDataRowIdData[rowid]
+                    if (rest) {
+                      return rest.parent ? handleGetRootRow(rest.parent) : rest
+                    }
+                  }
+                  return null
+                }
+
+                if (currSeq < firstSeq) {
+                  matchStartRowid = handleGetChildRowid(currRowid, 0)
+                  matchEndRowid = handleGetChildRowid(firstRowid, 1)
+                } else {
+                  if (currSeq > lastSeq) {
+                    matchStartRowid = handleGetSelectParentRowid(lastRowid)
+                  } else {
+                    matchStartRowid = handleGetChildRowid(firstRowid, 0)
+                  }
+                  matchEndRowid = handleGetChildRowid(currRowid, 1)
+                }
+
+                const handleRangeRow = (item: any) => {
+                  const rowid = handleGetRowId(item)
+                  const childList = item[iteratorChildField]
+                  if (!isMatchFirst && rowid === matchStartRowid) {
+                    isMatchFirst = true
+                  }
+                  // 如果是父子关联，则排除父节点
+                  if (isMatchFirst && (checkStrictly || !childList || !childList.length)) {
+                    rangeRows.push(item)
+                  }
+                  // break
+                  return rowid === matchEndRowid
+                }
+                if (treeConfig) {
+                  const matchStartRowRest = fullAllDataRowIdData[matchStartRowid]
+                  const firstRootRowRest = matchStartRowRest ? handleGetRootRow(matchStartRowRest.row) : null
+                  if (firstRootRowRest) {
+                    // 优化查找复杂度
+                    XEUtils.findTree(afterTreeFullData.slice(firstRootRowRest.treeIndex), handleRangeRow, { children: iteratorChildField })
+                  } else {
+                    XEUtils.findTree(afterTreeFullData, handleRangeRow, { children: iteratorChildField })
+                  }
+                } else {
+                  XEUtils.findTree(afterGroupFullData, handleRangeRow, { children: iteratorChildField })
+                }
+              } else {
+                const _currRowIndex = $xeTable.getVTRowIndex(currRow)
+                const _firstRowIndex = $xeTable.getVTRowIndex(firstRow)
+                const _lastRowIndex = $xeTable.getVTRowIndex(lastRow)
+                if (_currRowIndex < _firstRowIndex) {
+                  rangeRows = afterFullData.slice(_currRowIndex, _firstRowIndex + 1)
+                } else if (_currRowIndex > _lastRowIndex) {
+                  rangeRows = afterFullData.slice(_lastRowIndex, _currRowIndex + 1)
+                } else {
+                  rangeRows = afterFullData.slice(_firstRowIndex, _currRowIndex + 1)
+                }
+              }
               $xeTable.setAllCheckboxRow(false)
-              const rangeRows = _rowIndex < _firstRowIndex ? afterFullData.slice(_rowIndex, _firstRowIndex + 1) : afterFullData.slice(_firstRowIndex, _rowIndex + 1)
               nextTick(() => {
                 handleCheckedCheckboxRow(rangeRows, true, false)
               })
               dispatchEvent('checkbox-range-select', Object.assign({ rangeRecords: rangeRows }, params), evnt)
-              return
             }
           }
         }
-        if (isRowGroupStatus || !checkMethod || checkMethod({ $table: $xeTable, row })) {
+
+        if (!checkMethod || checkMethod({ $table: $xeTable, row })) {
           $xeTable.handleBatchSelectRows([row], checked)
           $xeTable.checkSelectionStatus()
           dispatchEvent('checkbox-change', Object.assign({
@@ -14473,9 +14622,6 @@ export default defineVxeComponent({
       }
       if (props.editConfig && editOpts.activeMethod) {
         warnLog('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
-      }
-      if (props.treeConfig && checkboxOpts.isShiftKey) {
-        errLog('vxe.error.reqSupportProp', ['tree-config', 'checkbox-config.isShiftKey=false'])
       }
       if (checkboxOpts.halfField) {
         warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])

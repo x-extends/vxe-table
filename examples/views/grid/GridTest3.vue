@@ -20,14 +20,20 @@ interface RowVO {
 const gridOptions = reactive<VxeGridProps<RowVO>>({
   border: true,
   showOverflow: true,
+  rowConfig: {
+    keyField: 'id'
+  },
   treeConfig: {
     transform: true
   },
   checkboxConfig: {
-    isShiftKey: true
+    isShiftKey: true,
+    checkStrictly: false
   },
   columns: [
     { type: 'checkbox', title: 'Name', width: 280, treeNode: true },
+    { field: 'id', title: 'ID' },
+    { field: 'name', title: 'Name' },
     { field: 'size', title: 'Size' },
     { field: 'type', title: 'Type' },
     { field: 'date', title: 'Date' }
