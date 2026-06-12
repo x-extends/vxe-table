@@ -61,7 +61,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           return options.every((item) => item.visible === false)
             ? renderEmptyElement($xeTable)
             : h('ul', {
-              class: 'vxe-context-menu--option-wrapper',
+              class: 'vxe-table--context-menu-group-wrapper',
               key: gIndex
             }, options.map((item, index) => {
               const { children, loading } = item
@@ -74,7 +74,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
               return item.visible === false
                 ? renderEmptyElement($xeTable)
                 : h('li', {
-                  class: [item.className, {
+                  class: ['vxe-table--context-menu--option', item.className, {
                     'link--loading': loading,
                     'link--disabled': item.disabled,
                     'link--active': item === ctxMenuStore.selected
@@ -128,12 +128,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
                       suffixOpts.content ? h('span', `${suffixOpts.content}`) : renderEmptyElement($xeTable)
                     ])
                   ]),
-                  hasChildMenus && item.children
+                  hasChildMenus && children
                     ? h('ul', {
                       class: ['vxe-table--context-menu-clild-wrapper', {
                         'is--show': item === ctxMenuStore.selected && ctxMenuStore.showChild
                       }]
-                    }, item.children.map((child, cIndex) => {
+                    }, children.map((child, cIndex) => {
                       const { loading: childLoading } = child
                       const childPrefixOpts = Object.assign({}, child.prefixConfig)
                       const childPrefixIcon = childPrefixOpts.icon || child.prefixIcon
@@ -143,7 +143,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
                       return child.visible === false
                         ? null
                         : h('li', {
-                          class: [child.className, {
+                          class: ['vxe-table--context-menu--option', child.className, {
                             'link--loading': childLoading,
                             'link--disabled': child.disabled,
                             'link--active': child === ctxMenuStore.selectChild

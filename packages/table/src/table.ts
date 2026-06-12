@@ -1863,7 +1863,7 @@ export default {
       warnLog('vxe.error.delProp', ['table.edit-config.activeMethod', 'table.edit-config.beforeEditMethod'])
     }
     if (props.treeConfig && checkboxOpts.isShiftKey) {
-      errLog('vxe.error.errConflicts', ['tree-config', 'checkbox-config.isShiftKey'])
+      errLog('vxe.error.reqSupportProp', ['tree-config', 'checkbox-config.isShiftKey=false'])
     }
     if (checkboxOpts.halfField) {
       warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])

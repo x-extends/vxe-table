@@ -453,7 +453,11 @@ function updateScrollYStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const { transform } = treeOpts
   const allList = fullData || internalData.tableFullData
   // 如果gt为0，则总是启用
-  const scrollYLoad = (transform || !treeConfig) && !!virtualYOpts.enabled && virtualYOpts.gt > -1 && (virtualYOpts.gt === 0 || virtualYOpts.gt < allList.length)
+  let scrollYLoad = !!virtualYOpts.enabled && virtualYOpts.gt > -1 && (virtualYOpts.gt === 0 || virtualYOpts.gt < allList.length)
+  if (scrollYLoad && (treeConfig && !transform)) {
+    errLog('vxe.error.notSupportProp', ['[table] virtual-y-config.enabled=true', 'tree-config.transform=false', 'tree-config.transform=true'])
+    scrollYLoad = false
+  }
   reactData.scrollYLoad = scrollYLoad
   syncGanttScrollYStatus($xeTable)
   return scrollYLoad
@@ -5160,7 +5164,7 @@ const tableMethods: any = {
       const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
       XEUtils.eachTree(tableFullTreeData, (row, index, items, path, parentRow, nodes) => {
         const rowid = handleUpdateRowId(row)
-        if (treeConfig && lazy) {
+        if (lazy) {
           if (row[hasChildField] && row[childrenField] === undefined) {
             row[childrenField] = null
           }
