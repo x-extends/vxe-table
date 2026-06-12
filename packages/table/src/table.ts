@@ -1348,22 +1348,32 @@ export default {
       const { tableFullColumn } = internalData
       const { updateColFlag } = reactData
       const editDirtyOpts = $xeTable.computeEditDirtyOpts
-      const { includeFields, excludeFields } = editDirtyOpts
+      const { extraFields, includeFields, excludeFields } = editDirtyOpts
       const kpFields: string[] = []
       if (updateColFlag) {
         if (includeFields && includeFields.length) {
           return includeFields
         }
-        const exfMaps: Record<string, number> = {}
+        const excludeFdMaps: Record<string, number> = {}
         if (excludeFields && excludeFields.length) {
           excludeFields.forEach(field => {
-            exfMaps[field] = 1
+            excludeFdMaps[field] = 1
+          })
+        }
+        const addFdMaps: Record<string, number> = {}
+        if (extraFields && extraFields.length) {
+          extraFields.forEach(field => {
+            if (!addFdMaps[field]) {
+              addFdMaps[field] = 1
+              kpFields.push(field)
+            }
           })
         }
         for (let i = 0; i < tableFullColumn.length; i++) {
           const column = tableFullColumn[i]
           const { field, type, editRender, cellRender } = column
-          if (field && !type && (editRender || cellRender) && !exfMaps[field]) {
+          if (field && !type && (editRender || cellRender) && !addFdMaps[field] && !excludeFdMaps[field]) {
+            addFdMaps[field] = 1
             kpFields.push(field)
           }
         }
@@ -1861,9 +1871,6 @@ export default {
     }
     if (props.editConfig && editOpts.activeMethod) {
       warnLog('vxe.error.delProp', ['table.edit-config.activeMethod', 'table.edit-config.beforeEditMethod'])
-    }
-    if (props.treeConfig && checkboxOpts.isShiftKey) {
-      errLog('vxe.error.reqSupportProp', ['tree-config', 'checkbox-config.isShiftKey=false'])
     }
     if (checkboxOpts.halfField) {
       warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
