@@ -1,0 +1,5 @@
+language: node_js
+node_js: 22
+script: npm run lib
+notifications:
+  email: false
