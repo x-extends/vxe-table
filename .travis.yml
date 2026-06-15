@@ -1,5 +1,0 @@
-language: node_js
-node_js: 24
-script: npm run build && npm run lib
-notifications:
-  email: false
