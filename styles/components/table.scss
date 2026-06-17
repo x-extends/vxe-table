@@ -213,7 +213,8 @@ $btnThemeList: (
         .vxe-date-picker,
         .vxe-date-range-picker,
         .vxe-number-input,
-        .vxe-ico-picker {
+        .vxe-ico-picker,
+        .vxe-cascader {
           width: 100%;
         }
       }
@@ -236,7 +237,8 @@ $btnThemeList: (
         & > .vxe-date-picker,
         & > .vxe-date-range-picker,
         & > .vxe-number-input,
-        & > .vxe-ico-picker {
+        & > .vxe-ico-picker,
+        .vxe-cascader {
           width: 100%;
         }
         & > .vxe-row-group--tree-node,
@@ -251,7 +253,8 @@ $btnThemeList: (
           .vxe-date-picker,
           .vxe-date-range-picker,
           .vxe-number-input,
-          .vxe-ico-picker {
+          .vxe-ico-picker,
+          .vxe-cascader {
             width: 100%;
           }
         }
@@ -272,7 +275,8 @@ $btnThemeList: (
   & > .vxe-date-picker,
   & > .vxe-date-range-picker,
   & > .vxe-number-input,
-  & > .vxe-ico-picker {
+  & > .vxe-ico-picker,
+  & > .vxe-cascader {
     width: 100%;
   }
 }
