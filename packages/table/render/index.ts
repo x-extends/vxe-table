@@ -882,7 +882,7 @@ function handleSetTreeSelectValue (renderOpts: VxeGlobalRendererHandles.RenderTa
  */
 renderer.mixin({
   input: {
-    tableAutoFocus: 'input',
+    tableAutoFocus: true,
     renderTableEdit: nativeEditRender,
     renderTableDefault: nativeEditRender,
     createTableFilterOptions: defaultFilterOptions,
@@ -890,7 +890,7 @@ renderer.mixin({
     tableFilterDefaultMethod: handleInputFilterMethod
   },
   textarea: {
-    tableAutoFocus: 'textarea',
+    tableAutoFocus: true,
     renderTableEdit: nativeEditRender
   },
   select: {
@@ -936,7 +936,7 @@ renderer.mixin({
     tableExportMethod: handleExportSelectMethod
   },
   VxeInput: {
-    tableAutoFocus: 'input',
+    tableAutoFocus: true,
     renderTableEdit: defaultEditRender,
     renderTableCell (renderOpts, params) {
       const { props = {} } = renderOpts
@@ -976,7 +976,7 @@ renderer.mixin({
     }
   },
   VxeNumberInput: {
-    tableAutoFocus: 'input',
+    tableAutoFocus: true,
     renderTableEdit: defaultEditRender,
     renderTableCell: handleNumberCell,
     renderTableFooter (renderOpts, params) {
@@ -1027,7 +1027,7 @@ renderer.mixin({
     }
   },
   VxeDatePicker: {
-    tableAutoFocus: 'input',
+    tableAutoFocus: true,
     renderTableEdit: defaultEditRender,
     renderTableCell (renderOpts, params) {
       const props = renderOpts.props || {}
@@ -1053,7 +1053,7 @@ renderer.mixin({
     tableFilterDefaultMethod: handleFilterMethod
   },
   VxeDateRangePicker: {
-    tableAutoFocus: 'input',
+    tableAutoFocus: true,
     renderTableEdit (renderOpts, params: VxeGlobalRendererHandles.RenderTableEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
       const { startField, endField } = renderOpts
       const { $table, row, column } = params
@@ -1157,7 +1157,7 @@ renderer.mixin({
     }
   },
   VxeTextarea: {
-    tableAutoFocus: 'textarea',
+    tableAutoFocus: true,
     renderTableDefault: defaultEditRender,
     renderTableEdit: defaultEditRender,
     renderTableCell (renderOpts, params) {
@@ -1182,7 +1182,7 @@ renderer.mixin({
     }
   },
   VxeSelect: {
-    tableAutoFocus: 'input',
+    tableAutoFocus: true,
     renderTableEdit: defaultSelectEditRender,
     renderTableDefault: defaultSelectEditRender,
     renderTableCell (renderOpts, params) {
@@ -1300,7 +1300,7 @@ renderer.mixin({
     tableExportMethod: handleExportSelectMethod
   },
   VxeTreeSelect: {
-    tableAutoFocus: 'input',
+    tableAutoFocus: true,
     renderTableEdit: defaultTableOrTreeSelectEditRender,
     renderTableCell (renderOpts, params) {
       const { options, optionGroups } = renderOpts
@@ -1362,8 +1362,36 @@ renderer.mixin({
     tableCellPasteMethod: handleSetTreeSelectValue,
     tableExportMethod: handleExportTreeSelectMethod
   },
+  VxeCascader: {
+    tableAutoFocus: true,
+    renderTableEdit: defaultTableOrTreeSelectEditRender,
+    renderTableCell (renderOpts, params) {
+      const { options, optionGroups } = renderOpts
+      const { $table, row, column } = params
+      const opSize = options ? options.length : null
+      const ogSize = optionGroups ? optionGroups.length : null
+      const { cellResult } = $table.effectCellData(row, column, {
+        key: 'render_table_cell',
+        isChanged ({ oldValue, cellValue }) {
+          return oldValue && oldValue[0] === cellValue && oldValue[1] === opSize && oldValue[2] === ogSize
+        },
+        setValue ({ cellValue }) {
+          return [cellValue, opSize, ogSize]
+        },
+        getResult ({ cellValue }) {
+          return handleTreeSelectCellValue(cellValue, renderOpts)
+        }
+      })
+      // const cellResult = getTreeSelectCellValue(renderOpts, params)
+      return getCellLabelVNs(renderOpts, params, cellResult)
+    },
+    tableCellFormatter: handleFormatTreeSelect,
+    tableCellCopyMethod: handleFormatTreeSelect,
+    tableCellPasteMethod: handleSetTreeSelectValue,
+    tableExportMethod: handleExportTreeSelectMethod
+  },
   VxeTableSelect: {
-    tableAutoFocus: 'input',
+    tableAutoFocus: true,
     renderTableEdit: defaultTableOrTreeSelectEditRender,
     renderTableCell (renderOpts, params) {
       const { options, optionGroups } = renderOpts
@@ -1391,7 +1419,7 @@ renderer.mixin({
     tableExportMethod: handleExportTreeSelectMethod
   },
   VxeColorPicker: {
-    tableAutoFocus: 'input',
+    tableAutoFocus: true,
     renderTableEdit (renderOpts, params: VxeGlobalRendererHandles.RenderTableEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
       const { row, column } = params
       const { options } = renderOpts
@@ -1419,7 +1447,7 @@ renderer.mixin({
     }
   },
   VxeIconPicker: {
-    tableAutoFocus: 'input',
+    tableAutoFocus: true,
     renderTableEdit (renderOpts, params: VxeGlobalRendererHandles.RenderTableEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
       const { row, column } = params
       const { options } = renderOpts
@@ -1509,7 +1537,7 @@ renderer.mixin({
 
   // 以下已废弃
   $input: {
-    tableAutoFocus: '.vxe-input--inner',
+    tableAutoFocus: 'input',
     renderTableEdit: oldEditRender,
     renderTableCell (renderOpts, params) {
       const { props = {} } = renderOpts
@@ -1536,7 +1564,7 @@ renderer.mixin({
     tableFilterDefaultMethod: handleInputFilterMethod
   },
   $textarea: {
-    tableAutoFocus: '.vxe-textarea--inner'
+    tableAutoFocus: 'textarea'
   },
   $button: {
     renderTableDefault: oldButtonEditRender
@@ -1545,7 +1573,7 @@ renderer.mixin({
     renderTableDefault: oldButtonsEditRender
   },
   $select: {
-    tableAutoFocus: '.vxe-input--inner',
+    tableAutoFocus: 'input',
     renderTableEdit: oldSelectEditRender,
     renderTableDefault: oldSelectEditRender,
     renderTableCell (renderOpts, params) {
@@ -1567,13 +1595,13 @@ renderer.mixin({
     tableExportMethod: handleExportSelectMethod
   },
   $radio: {
-    tableAutoFocus: '.vxe-radio--input'
+    tableAutoFocus: 'input'
   },
   $checkbox: {
-    tableAutoFocus: '.vxe-checkbox--input'
+    tableAutoFocus: 'input'
   },
   $switch: {
-    tableAutoFocus: '.vxe-switch--button',
+    tableAutoFocus: 'button',
     renderTableEdit: oldEditRender,
     renderTableDefault: oldEditRender
   }

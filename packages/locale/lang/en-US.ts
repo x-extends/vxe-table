@@ -351,6 +351,13 @@ export default {
       yearLabel: '{0}',
       monthLabel: '{0}'
     },
+    cascader: {
+      clearChecked: '清除',
+      allChecked: '全选',
+      total: '已选 {0} 项',
+      close: '关闭',
+      search: '搜索'
+    },
     numberInput: {
       currencySymbol: '$'
     },
