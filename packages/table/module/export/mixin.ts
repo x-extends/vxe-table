@@ -496,7 +496,7 @@ function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: V
 
   const { id, border, treeConfig, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow } = props
   const { isAllSelected, isIndeterminate } = reactData
-  const { mergeBodyCellMaps } = internalData
+  const { mergeBodyCellMaps, mergeFooterCellMaps } = internalData
   const treeOpts = $xeTable.computeTreeOpts
   const { print: isPrint, isHeader, isFooter, isColgroup, isMerge, colgroups, original } = opts
   const allCls = 'check-all'
@@ -637,16 +637,35 @@ function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: V
     const footers = getFooterData($xeTable, opts, footerTableData)
     if (footers.length) {
       tables.push('<tfoot>')
-      footers.forEach((row: any) => {
+      footers.forEach((row, rIndex) => {
         tables.push(
           `<tr>${columns.map(column => {
             const footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
             const classNames = hasEllipsis($xeTable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
             const cellValue = getFooterCellValue($xeTable, opts, row, column)
+            let rowSpan = 1
+                let colSpan = 1
+                if (isMerge) {
+                  const _rowIndex = rIndex
+                  const _columnIndex = $xeTable.getVTColumnIndex(column)
+                  const spanRest = mergeFooterCellMaps[`${_rowIndex}:${_columnIndex}`]
+                  if (spanRest) {
+                    const { rowspan, colspan } = spanRest
+                    if (!rowspan || !colspan) {
+                      return ''
+                    }
+                    if (rowspan > 1) {
+                      rowSpan = rowspan
+                    }
+                    if (colspan > 1) {
+                      colSpan = colspan
+                    }
+                  }
+                }
             if (footAlign) {
               classNames.push(`col--${footAlign}`)
             }
-            return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${formatText(cellValue, true)}</div></td>`
+            return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${formatText(cellValue, true)}</div></td>`
           }).join('')}</tr>`
         )
       })

@@ -26,7 +26,7 @@ import keyboardMixin from '../module/keyboard/mixin'
 import validatorMixin from '../module/validator/mixin'
 import customMixin from '../module/custom/mixin'
 
-import type { VxeTabsConstructor, VxeTabsPrivateMethods, VxeComponentStyleType } from 'vxe-pc-ui'
+import type { VxeTabsConstructor, VxeTabsPrivateMethods, VxeComponentStyleType, VxeModalConstructor, VxeModalMethods } from 'vxe-pc-ui'
 import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes, TableInternalData, TableReactData, VxeTableDefines } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
@@ -565,6 +565,9 @@ export default {
     }
   },
   inject: {
+    $xeModal: {
+      default: null
+    },
     $xeTabs: {
       default: null
     },
@@ -593,12 +596,14 @@ export default {
       reLayoutFlag: 0,
       footFlag: 0,
       kfFlag: 0,
+      layoutReFlag: 0,
       mergeFooteCellFlag: 0,
       crossTableDragRowInfo: crossTableDragRowGlobal
     }
   },
   computed: {
     ...({} as {
+      $xeModal(): (VxeModalConstructor & VxeModalMethods)| null
       $xeTabs(): (VxeTabsConstructor & VxeTabsPrivateMethods) | null
     }),
     tableId () {
@@ -1473,11 +1478,23 @@ export default {
 
       return Object.assign({}, getConfig().table.undoRedoHistoryConfig, props.undoRedoHistoryConfig)
     },
-    tabsResizeFlag () {
+    combineTabsResizeFlag () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const $xeTabs = $xeTable.$xeTabs
 
       return $xeTabs ? $xeTabs.reactData.resizeFlag : null
+    },
+    combineModalResizeFlag () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const $xeModal = $xeTable.$xeModal
+
+      return $xeModal ? $xeModal.reactData.resizeFlag : null
+    },
+    combineSplitterResizeFlag () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const $xeSplitter = $xeTable.$xeSplitter
+
+      return $xeSplitter ? $xeSplitter.reactData.resizeFlag : null
     },
     computeVxeLanguage () {
       return VxeUI.getLanguage()
@@ -1621,9 +1638,20 @@ export default {
         })
       }
     },
-    tabsResizeFlag () {
+
+    combineTabsResizeFlag () {
+      this.layoutReFlag++
+    },
+    combineModalResizeFlag () {
+      this.layoutReFlag++
+    },
+    combineSplitterResizeFlag () {
+      this.layoutReFlag++
+    },
+    layoutReFlag () {
       this.handleGlobalResizeEvent()
     },
+
     mergeCells (value: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 

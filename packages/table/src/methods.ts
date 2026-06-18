@@ -2973,11 +2973,36 @@ function handleTooltip ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   const { tooltipStore } = reactData
   const { column, row } = params
   const { showAll, contentMethod } = tipOpts
-  const customContent = contentMethod ? contentMethod(params) : null
-  const useCustom = contentMethod && !XEUtils.eqNull(customContent)
-  const content = useCustom ? customContent : XEUtils.toString(column.type === 'html' ? tipOverEl.innerText : tipOverEl.textContent).trim()
+  const cellText = XEUtils.toString(column.type === 'html' ? tipOverEl.innerText : tipOverEl.textContent).trim()
   const isOver = tipOverEl.scrollWidth > tipOverEl.clientWidth
-  if (content && (showAll || useCustom || isOver)) {
+  let isShow = false
+  let customContent: any = null
+  let content = ''
+  if (contentMethod) {
+    customContent = contentMethod(params)
+  }
+  // 是否全部展示
+  if (showAll) {
+    // 如果为 null 默认显示
+    if (XEUtils.eqNull(customContent)) {
+      isShow = true
+      content = cellText
+    } else if (customContent !== '' && customContent !== false) {
+      // 如果为 '' | false 则不显示
+      isShow = true
+      content = '' + customContent
+    }
+  } else {
+    // 如果为 null 使用默认逻辑
+    if (XEUtils.eqNull(customContent)) {
+      isShow = isOver
+    } else if (customContent !== '' && customContent !== false) {
+      // 如果为 '' | false 则不显示
+      isShow = true
+    }
+    content = cellText
+  }
+  if (isShow && content) {
     const tipContent = formatText(content)
     Object.assign(tooltipStore, {
       row,

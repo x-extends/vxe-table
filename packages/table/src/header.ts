@@ -229,6 +229,8 @@ function renderFilterRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, 
   const cellOpts = $xeTable.computeCellOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const headerCellOpts = $xeTable.computeHeaderCellOpts
+  const floatingFilterOpts = $xeTable.computeFloatingFilterOpts
+  const { cellClassName } = floatingFilterOpts
   const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
 
   return cols.map((column, $columnIndex) => {
@@ -288,7 +290,7 @@ function renderFilterRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, 
     }
 
     return h('th', {
-      class: ['vxe-table--column vxe-header--column', colid, fixedHiddenColumn ? 'fixed--hidden' : 'fixed--visible', {
+      class: ['vxe-table--column vxe-header--column is--floating-filters', colid, fixedHiddenColumn ? 'fixed--hidden' : 'fixed--visible', {
         [`col--${headAlign}`]: headAlign,
         [`col--${type}`]: type,
         'col--last': isLastColumn,
@@ -304,7 +306,7 @@ function renderFilterRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, 
       attrs: thAttrs
     }, [
       h('div', {
-        class: ['vxe-cell', {
+        class: ['vxe-cell', '' + (cellClassName || ''), {
           'c--title': showTitle,
           'c--tooltip': showTooltip,
           'c--ellipsis': showEllipsis
@@ -354,7 +356,8 @@ function renderHeads (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMo
       h('tr', {
         key: 'ff',
         class: [
-          'vxe-header--row'
+          'vxe-header--row is--floating-filters',
+          '' + (floatingFilterOpts.rowClassName || '')
         ]
       }, renderFilterRows(h, _vm, isOptimizeMode, renderColumnList))
     )
