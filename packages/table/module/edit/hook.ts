@@ -1034,6 +1034,40 @@ hooks.add('tableEditModule', {
               $xeTable.focus()
               if (evnt) {
                 $xeTable.dispatchEvent('cell-selected', params, evnt)
+                /*解决单元格编辑 第一个字母输入中文时,第一个输入的字符将用于激活编辑状态的问题
+                * 说明：在选择单元格后，创建一个透明度为0的输入框，输入完成之后，将输入框的值赋值给单元格下的input或textarea元素
+                */
+                handleCellSelected(params)
+                function handleCellSelected(params: any) {
+                  let editInput = document.getElementById('zhangyun173-editinput') as HTMLInputElement;
+                  const { cell, row, column, $table } = params;
+                  if (!editInput) {
+                    editInput = document.createElement('input');
+                    editInput.id = 'zhangyun173-editinput';
+                    editInput.style.position = 'absolute'; 
+                    editInput.style.opacity = '0';
+                    editInput.type = 'text';
+                    document.body.appendChild(editInput);
+                  }
+                  editInput.oninput = async () => {
+                    await $table?.setEditRow(row, column);
+                    const inputs = cell.querySelectorAll('input,textarea');
+                    if (inputs.length == 0) return;
+                    var item = inputs[0] as HTMLInputElement;
+                    // 排除禁用、只读
+                    if (!item.disabled && !item.readOnly) {
+                      item.value = editInput.value;
+                      item.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+                  };
+                  const { top, left } = cell.getBoundingClientRect();
+                  editInput.value = '';
+                  editInput.style.top = `${top + (document.documentElement.scrollTop || document.body.scrollTop)}px`;
+                  editInput.style.left = `${left + (document.documentElement.scrollLeft || document.body.scrollLeft)}px`;
+                  setTimeout(() => {
+                    editInput.focus();
+                  }, 1);
+                }
               }
             }
           }
