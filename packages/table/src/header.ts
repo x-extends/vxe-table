@@ -263,6 +263,8 @@ export default defineVxeComponent({
       const cellOpts = computeCellOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
       const headerCellOpts = computeHeaderCellOpts.value
+      const floatingFilterOpts = computeFloatingFilterOpts.value
+      const { cellClassName } = floatingFilterOpts
       const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
 
       return cols.map((column, $columnIndex) => {
@@ -322,7 +324,7 @@ export default defineVxeComponent({
         }
 
         return h('th', {
-          class: ['vxe-table--column vxe-header--column', colid, fixedHiddenColumn ? 'fixed--hidden' : 'fixed--visible', {
+          class: ['vxe-table--column vxe-header--column is--floating-filters', colid, fixedHiddenColumn ? 'fixed--hidden' : 'fixed--visible', {
             [`col--${headAlign}`]: headAlign,
             [`col--${type}`]: type,
             'col--last': isLastColumn,
@@ -338,7 +340,7 @@ export default defineVxeComponent({
           ...thAttrs
         }, [
           h('div', {
-            class: ['vxe-cell', {
+            class: ['vxe-cell', '' + (cellClassName || ''), {
               'c--title': showTitle,
               'c--tooltip': showTooltip,
               'c--ellipsis': showEllipsis
@@ -382,7 +384,8 @@ export default defineVxeComponent({
           h('tr', {
             key: 'ff',
             class: [
-              'vxe-header--row'
+              'vxe-header--row is--floating-filters',
+              '' + (floatingFilterOpts.rowClassName || '')
             ]
           }, renderFilterRows(isOptimizeMode, renderColumnList))
         )

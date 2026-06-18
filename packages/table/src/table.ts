@@ -30,7 +30,7 @@ import '../module/validator/hook'
 import '../module/custom/hook'
 import '../render'
 
-import type { VxeTooltipInstance, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType, VxeComponentStyleType } from 'vxe-pc-ui'
+import type { VxeTooltipInstance, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType, VxeComponentStyleType, VxeModalConstructor, VxeModalMethods, VxeSplitterConstructor, VxeSplitterMethods } from 'vxe-pc-ui'
 import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableEmits, VxeTableProps, VxeColumnPropTypes, VxeTableCustomPanelConstructor } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
@@ -62,8 +62,10 @@ export default defineVxeComponent({
     const VxeUILoadingComponent = VxeUI.getComponent('VxeLoading')
     const VxeUITooltipComponent = VxeUI.getComponent('VxeTooltip')
 
+    const $xeModal = inject<(VxeModalConstructor & VxeModalMethods) | null>('$xeModal', null)
     const $xeTabs = inject<(VxeTabsConstructor & VxeTabsPrivateMethods) | null>('$xeTabs', null)
     const $xeParentTable = inject<(VxeTableConstructor & VxeTablePrivateMethods) | null>('$xeTable', null)
+    const $xeSplitter = inject<(VxeSplitterConstructor & VxeSplitterMethods) | null>('$xeSplitter', null)
     const $xeGrid = inject<(VxeGridConstructor & VxeGridPrivateMethods) | null>('$xeGrid', null)
     const $xeGantt = inject<VxeTableDefines.InjectGanttType | null>('$xeGantt', null)
     const $xeGGWrapper = $xeGrid || $xeGantt
@@ -784,6 +786,18 @@ export default defineVxeComponent({
         return tableColumn.filter(column => column.aggFunc)
       }
       return []
+    })
+
+    const combineTabsResizeFlag = computed(() => {
+      return $xeTabs ? $xeTabs.reactData.resizeFlag : null
+    })
+
+    const combineModalResizeFlag = computed(() => {
+      return $xeModal ? $xeModal.reactData.resizeFlag : null
+    })
+
+    const combineSplitterResizeFlag = computed(() => {
+      return $xeSplitter ? $xeSplitter.reactData.resizeFlag : null
     })
 
     const refMaps: VxeTablePrivateRef = {
@@ -9249,11 +9263,36 @@ export default defineVxeComponent({
       const { tooltipStore } = reactData
       const { column, row } = params
       const { showAll, contentMethod } = tipOpts
-      const customContent = contentMethod ? contentMethod(params) : null
-      const useCustom = contentMethod && !XEUtils.eqNull(customContent)
-      const content = useCustom ? customContent : XEUtils.toString(column.type === 'html' ? tipOverEl.innerText : tipOverEl.textContent).trim()
+      const cellText = XEUtils.toString(column.type === 'html' ? tipOverEl.innerText : tipOverEl.textContent).trim()
       const isOver = tipOverEl.scrollWidth > tipOverEl.clientWidth
-      if (content && (showAll || useCustom || isOver)) {
+      let isShow = false
+      let customContent: any = null
+      let content = ''
+      if (contentMethod) {
+        customContent = contentMethod(params)
+      }
+      // 是否全部展示
+      if (showAll) {
+        // 如果为 null 默认显示
+        if (XEUtils.eqNull(customContent)) {
+          isShow = true
+          content = cellText
+        } else if (customContent !== '' && customContent !== false) {
+          // 如果为 '' | false 则不显示
+          isShow = true
+          content = '' + customContent
+        }
+      } else {
+        // 如果为 null 使用默认逻辑
+        if (XEUtils.eqNull(customContent)) {
+          isShow = isOver
+        } else if (customContent !== '' && customContent !== false) {
+          // 如果为 '' | false 则不显示
+          isShow = true
+        }
+        content = cellText
+      }
+      if (isShow && content) {
         const tipContent = formatText(content)
         Object.assign(tooltipStore, {
           row,
@@ -14382,11 +14421,19 @@ export default defineVxeComponent({
       }
     })
 
-    if ($xeTabs) {
-      watch(() => $xeTabs ? $xeTabs.reactData.resizeFlag : null, () => {
-        handleGlobalResizeEvent()
-      })
-    }
+    const layoutReFlag = ref(0)
+    watch(combineTabsResizeFlag, () => {
+      layoutReFlag.value++
+    })
+    watch(combineModalResizeFlag, () => {
+      layoutReFlag.value++
+    })
+    watch(combineSplitterResizeFlag, () => {
+      layoutReFlag.value++
+    })
+    watch(layoutReFlag, () => {
+      handleGlobalResizeEvent()
+    })
 
     handleKeyField()
 
