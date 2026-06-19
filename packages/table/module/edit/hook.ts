@@ -4,9 +4,11 @@ import { VxeUI } from '../../../ui'
 import { isEnableConf } from '../../../ui/src/utils'
 import { getCellValue, setCellValue, getRowid } from '../../src/util'
 import { removeClass, addClass } from '../../../ui/src/dom'
-import { warnLog, errLog } from '../../../ui/src/log'
+import { createComponentLog } from '../../../ui/src/log'
 
 import type { TableEditMethods, TableEditPrivateMethods, VxeTableDefines } from '../../../../types'
+
+const { warnLog, errLog } = createComponentLog('table')
 
 const { getConfig, renderer, hooks, getI18n } = VxeUI
 

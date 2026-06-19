@@ -5,9 +5,11 @@ import { isColumnInfo, getCellValue, createHandleGetRowId } from '../../src/util
 import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
 import { hasClass } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
-import { warnLog, errLog } from '../../../ui/src/log'
+import { createComponentLog } from '../../../ui/src/log'
 
 import type { VxeTablePropTypes, VxeColumnPropTypes, TableExportMethods, VxeGridPropTypes, VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods } from '../../../../types'
+
+const { warnLog, errLog } = createComponentLog('table')
 
 const { getI18n, hooks, renderer } = VxeUI
 

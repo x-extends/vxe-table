@@ -7,7 +7,7 @@ import { VxeUI } from '../../ui'
 import { gridProps } from './props'
 import { gridEmits } from './emits'
 import { getSlotVNs } from '../../ui/src/vn'
-import { warnLog, errLog } from '../../ui/src/log'
+import { createComponentLog } from '../../ui/src/log'
 import { tableEmits } from '../../table/src/emits'
 import { tableProps } from '../../table/src/props'
 import VxeTableComponent from '../../table/src/table'
@@ -15,6 +15,8 @@ import VxeToolbarComponent from '../../toolbar/src/toolbar'
 
 import type { ValueOf, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance, VxeComponentStyleType } from 'vxe-pc-ui'
 import type { VxeTableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, GridInternalData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxeToolbarInstance, GridPrivateRef, VxeTableProps, VxeTableConstructor, VxeTablePrivateMethods, VxeTableEvents, VxeTableDefines, VxeTableEventProps, VxeGridProps, VxeGridDefines } from '../../../types'
+
+const { warnLog, errLog } = createComponentLog('grid')
 
 const { getConfig, getI18n, commands, hooks, useFns, createEvent, globalEvents, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
 
@@ -531,7 +533,7 @@ export default defineVxeComponent({
           if (slots[funcSlot]) {
             return slots[funcSlot]
           } else {
-            errLog('vxe.error.notSlot', [`[grid] ${funcSlot}`])
+            errLog('vxe.error.notSlot', [funcSlot])
           }
         } else {
           return funcSlot
@@ -548,7 +550,7 @@ export default defineVxeComponent({
             if (slots[slotFunc]) {
               slotConf[slotKey] = slots[slotFunc]
             } else {
-              errLog('vxe.error.notSlot', [`[grid] ${slotFunc}`])
+              errLog('vxe.error.notSlot', [slotFunc])
             }
           } else {
             slotConf[slotKey] = slotFunc
@@ -857,7 +859,7 @@ export default defineVxeComponent({
             childVNs.push(renderPager())
             break
           default:
-            errLog('vxe.error.notProp', [`[grid] layouts -> ${key}`])
+            errLog('vxe.error.notProp', [`layouts -> ${key}`])
             break
         }
       })
@@ -1196,7 +1198,7 @@ export default defineVxeComponent({
                 return { status: false }
               })
             } else {
-              errLog('vxe.error.notFunc', ['[grid] proxy-config.ajax.query'])
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.query'])
             }
             break
           }
@@ -1235,7 +1237,7 @@ export default defineVxeComponent({
                 return { status: false }
               })
             } else {
-              errLog('vxe.error.notFunc', ['[grid] proxy-config.ajax.queryFooter'])
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.queryFooter'])
             }
             break
           }
@@ -1306,7 +1308,7 @@ export default defineVxeComponent({
                 }
               }
             } else {
-              errLog('vxe.error.notFunc', ['[grid] proxy-config.ajax.delete'])
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.delete'])
             }
             break
           }
@@ -1390,7 +1392,7 @@ export default defineVxeComponent({
                 }
               })
             } else {
-              errLog('vxe.error.notFunc', ['[grid] proxy-config.ajax.save'])
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.save'])
             }
             break
           }
@@ -1401,7 +1403,7 @@ export default defineVxeComponent({
               if (tCommandMethod) {
                 tCommandMethod({ code, button, $grid: $xeGrid, $table: $xeTable, $gantt: null }, ...args)
               } else {
-                errLog('vxe.error.notCommands', [`[grid] ${code}`])
+                errLog('vxe.error.notCommands', [code])
               }
             }
           }
@@ -1641,7 +1643,7 @@ export default defineVxeComponent({
             XEUtils.each(column.slots, (func) => {
               if (!XEUtils.isFunction(func)) {
                 if (!slots[func]) {
-                  errLog('vxe.error.notSlot', [`[grid] ${func}`])
+                  errLog('vxe.error.notSlot', [func])
                 }
               }
             })
@@ -1741,7 +1743,7 @@ export default defineVxeComponent({
         // }
 
         if (proxyOpts.props) {
-          warnLog('vxe.error.delProp', ['[grid] proxy-config.props', 'proxy-config.response'])
+          warnLog('vxe.error.delProp', ['proxy-config.props', 'proxy-config.response'])
         }
 
         if (columns && columns.length) {
