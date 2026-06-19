@@ -14,14 +14,13 @@
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
     "sourceMap": true,
-    "baseUrl": ".",
     "types": [
       "webpack-env",
       "resize-observer-browser"
     ],
     "paths": {
       "@/*": [
-        "examples/*"
+        "./examples/*"
       ]
     },
     "lib": [
@@ -32,11 +31,11 @@
     ]
   },
   "include": [
-    "examples/**/*.ts",
-    "examples/**/*.tsx",
-    "examples/**/*.vue",
-    "packages/**/*.ts",
-    "packages/**/*.tsx"
+    "./examples/**/*.ts",
+    "./examples/**/*.tsx",
+    "./examples/**/*.vue",
+    "./packages/**/*.ts",
+    "./packages/**/*.tsx"
   ],
   "exclude": [
     "node_modules"
