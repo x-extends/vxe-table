@@ -3,9 +3,11 @@ import { VxeUI } from '../../ui'
 import { toFilters } from './util'
 import { isEnableConf, getFuncText } from '../../ui/src/utils'
 import { isPx } from '../../ui/src/dom'
-import { warnLog, errLog } from '../../ui/src/log'
+import { createComponentLog } from '../../ui/src/log'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeColumnProps } from '../../../types'
+
+const { warnLog, errLog } = createComponentLog('table')
 
 const { getI18n, formats, renderer } = VxeUI
 

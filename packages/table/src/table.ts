@@ -10,7 +10,7 @@ import TableHeaderComponent from './header'
 import TableFooterComponent from './footer'
 import { tableProps } from './props'
 import { getSlotVNs } from '../../ui/src/vn'
-import { warnLog, errLog } from '../../ui/src/log'
+import { createComponentLog } from '../../ui/src/log'
 import { crossTableDragRowGlobal, getCrossTableDragRowInfo } from './store'
 import TableCustomPanelComponent from '../module/custom/panel'
 import TableFilterPanelComponent from '../module/filter/panel'
@@ -28,6 +28,8 @@ import customMixin from '../module/custom/mixin'
 
 import type { VxeTabsConstructor, VxeTabsPrivateMethods, VxeComponentStyleType, VxeModalConstructor, VxeModalMethods } from 'vxe-pc-ui'
 import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes, TableInternalData, TableReactData, VxeTableDefines } from '../../../types'
+
+const { warnLog, errLog } = createComponentLog('table')
 
 const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 

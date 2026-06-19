@@ -6,11 +6,13 @@ import Cell from './cell'
 import { getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, getColReMaxWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem, getCellRestHeight, getLastChildColumn, getRowMaxHeight } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from '../../ui/src/anime'
-import { warnLog, errLog } from '../../ui/src/log'
+import { createComponentLog } from '../../ui/src/log'
 import { getCrossTableDragRowInfo } from './store'
 
 import type { VxeTooltipInstance, ValueOf } from 'vxe-pc-ui'
 import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, TableReactData, VxeTableConstructor, VxeToolbarConstructor, VxeToolbarInstance, TableInternalData, VxeGridConstructor, VxeTablePrivateMethods, VxeTablePropTypes, VxeGridPrivateMethods } from '../../../types'
+
+const { warnLog, errLog } = createComponentLog('table')
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
 

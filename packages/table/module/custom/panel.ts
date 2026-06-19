@@ -3,11 +3,13 @@ import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
 import { getTpImg, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
-import { errLog } from '../../../ui/src/log'
+import { createComponentLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
 import type { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, TableReactData, TableInternalData, VxeColumnPropTypes, VxeTableCustomPanelConstructor, TableCustomPanelReactData, TableCustomPanelInternalData, TableCustomPrivateMethods } from '../../../../types'
 import type { VxeButtonDefines, VxeRadioGroupDefines } from 'vxe-pc-ui'
+
+const { errLog } = createComponentLog('table')
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
 

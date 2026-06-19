@@ -3,10 +3,12 @@ import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { formatText } from '../../../ui/src/utils'
-import { errLog } from '../../../ui/src/log'
+import { createComponentLog } from '../../../ui/src/log'
 
 import type { VxeComponentSizeType } from 'vxe-pc-ui'
 import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines } from '../../../../types'
+
+const { errLog } = createComponentLog('table')
 
 const { getI18n, getIcon, globalMixins, renderEmptyElement } = VxeUI
 

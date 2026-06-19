@@ -3,10 +3,12 @@ import { VxeUI } from '../../../ui'
 import { eqEmptyValue, getFuncText } from '../../../ui/src/utils'
 import { scrollToView } from '../../../ui/src/dom'
 import { handleFieldOrColumn, getRowid } from '../../src/util'
-import { warnLog, errLog } from '../../../ui/src/log'
+import { createComponentLog } from '../../../ui/src/log'
 
 import type { VxeTooltipInstance } from 'vxe-pc-ui'
 import type { VxeTableDefines, TableInternalData, TableReactData, VxeTableConstructor, VxeTablePrivateMethods } from '../../../../types'
+
+const { warnLog, errLog } = createComponentLog('table')
 
 const { getConfig, validators } = VxeUI
 

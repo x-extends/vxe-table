@@ -1,10 +1,12 @@
 import XEUtils from 'xe-utils'
 import { ColumnInfo } from './columnInfo'
 import { isScale, isPx, queryElement } from '../../ui/src/dom'
-import { warnLog, errLog } from '../../ui/src/log'
+import { createComponentLog } from '../../ui/src/log'
 import { eqEmptyValue } from '../../ui/src/utils'
 
 import type { VxeTableDefines, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePrivateMethods, VxeTablePropTypes } from '../../../types'
+
+const { warnLog, errLog } = createComponentLog('table')
 
 export function createInternalData (): TableInternalData {
   return {

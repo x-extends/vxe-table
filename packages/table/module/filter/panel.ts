@@ -4,10 +4,12 @@ import { VxeUI } from '../../../ui'
 import { formatText, isEnableConf } from '../../../ui/src/utils'
 import { getPropClass, toCssUnit } from '../../../ui/src/dom'
 import { getSlotVNs } from '../../../ui/src/vn'
-import { warnLog } from '../../../ui/src/log'
+import { createComponentLog } from '../../../ui/src/log'
 
 import type { VxeGlobalRendererOptions, VxeComponentSizeType } from 'vxe-pc-ui'
 import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, VxeTableDefines, VxeColumnPropTypes } from '../../../../types'
+
+const { warnLog } = createComponentLog('table')
 
 const { getI18n, getIcon, renderer, globalMixins, renderEmptyElement } = VxeUI
 

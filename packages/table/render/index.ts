@@ -4,9 +4,11 @@ import { VxeUI } from '../../ui'
 import { getCellValue, setCellValue } from '../src/util'
 import { getFuncText, formatText, isEmptyValue } from '../../ui/src/utils'
 import { getOnName, getModelEvent, getChangeEvent, hasInputType } from '../../ui/src/vn'
-import { errLog } from '../../ui/src/log'
+import { createComponentLog } from '../../ui/src/log'
 
 import type { VxeGlobalRendererHandles, VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines } from '../../../types'
+
+const { errLog } = createComponentLog('table')
 
 const { getConfig, renderer, getI18n, getComponent } = VxeUI
 

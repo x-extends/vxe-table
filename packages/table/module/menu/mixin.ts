@@ -2,9 +2,11 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { getDomNode, getAbsolutePos, getEventTargetNode } from '../../../ui/src/dom'
 import { isEnableConf, hasChildrenList } from '../../../ui/src/utils'
-import { warnLog } from '../../../ui/src/log'
+import { createComponentLog } from '../../../ui/src/log'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, TableReactData, VxeTableDefines } from '../../../../types'
+
+const { warnLog } = createComponentLog('table')
 
 const { menus, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
 
