@@ -6,7 +6,7 @@
     "jsx": "preserve",
     "jsxImportSource": "vue",
     "importHelpers": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "skipLibCheck": false,
     "esModuleInterop": true,
     "resolveJsonModule": true,
