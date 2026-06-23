@@ -208,18 +208,18 @@ function renderHeads (h: CreateElement, _vm: any, isOptimizeMode: boolean, rende
 
   const { footerRowClassName, footerRowStyle } = tableProps
 
-  return (footerTableData as any[][]).map((row, $rowIndex) => {
-    const _rowIndex = $rowIndex
-    const rowParams = { $table: $xeTable, row, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
+  return (footerTableData as any[][]).map((row, _rowIndex) => {
+    const $rowIndex = _rowIndex
+    const rowParams = { $table: $xeTable, row, rowIndex: _rowIndex, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
 
     return h('tr', {
-      key: $rowIndex,
+      key: _rowIndex,
       class: [
         'vxe-footer--row',
         footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''
       ],
       style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) as VxeComponentStyleType : undefined
-    }, renderRows(h, _vm, isOptimizeMode, renderColumnList, footerTableData, row, $rowIndex, _rowIndex))
+    }, renderRows(h, _vm, isOptimizeMode, renderColumnList, footerTableData, row, _rowIndex, _rowIndex))
   })
 }
 

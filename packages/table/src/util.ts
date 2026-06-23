@@ -802,14 +802,7 @@ export function toFilters (filters: any, colid?: string | number) {
 /**
  * 列宽拖动最大宽度
  */
-export function getColReMaxWidth (params: {
-  $table: VxeTableConstructor & VxeTablePrivateMethods;
-  column: VxeTableDefines.ColumnInfo;
-  columnIndex: number;
-  $columnIndex: number;
-  $rowIndex: number;
-  cell: HTMLTableCellElement;
-}) {
+export function getColReMaxWidth (params: (VxeTableDefines.CellRenderHeaderParams| VxeTableDefines.CellRenderBodyParams | VxeTableDefines.CellRenderFooterParams) & { cell: HTMLTableCellElement }) {
   const { $table, column, cell } = params
   const internalData = $table as unknown as TableInternalData
   const { elemStore } = internalData
@@ -846,14 +839,7 @@ export function getColReMaxWidth (params: {
 /**
  * 列宽拖动最小宽度
  */
-export function getColReMinWidth (params: {
-  $table: VxeTableConstructor & VxeTablePrivateMethods;
-  column: VxeTableDefines.ColumnInfo;
-  columnIndex: number;
-  $columnIndex: number;
-  $rowIndex: number;
-  cell: HTMLTableCellElement;
-}) {
+export function getColReMinWidth (params: (VxeTableDefines.CellRenderHeaderParams| VxeTableDefines.CellRenderBodyParams | VxeTableDefines.CellRenderFooterParams) & { cell: HTMLTableCellElement }) {
   const { $table, column, cell } = params
   const tableProps = $table
   const internalData = $table as unknown as TableInternalData

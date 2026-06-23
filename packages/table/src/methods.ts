@@ -9829,7 +9829,12 @@ const tableMethods: any = {
         }
         if (editOpts.trigger === 'manual') {
           if (actived.args && actived.row === row && column !== actived.column) {
-            handleChangeCell($xeTable, evnt, params)
+            if (editOpts.mode === 'row') {
+              handleChangeCell($xeTable, evnt, params)
+            } else {
+              checkValidate($xeTable, 'blur')
+                .catch((e: any) => e)
+            }
           }
         } else if (!actived.args || row !== actived.row || column !== actived.column) {
           if (editOpts.trigger === 'click') {
