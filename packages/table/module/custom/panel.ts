@@ -1087,8 +1087,11 @@ export default defineVxeComponent({
             const resizeParams = {
               $table: $xeTable,
               column,
-              columnIndex: index,
-              $columnIndex: index,
+              columnIndex: $xeTable.getColumnIndex(column),
+              $columnIndex: $xeTable.getVMColumnIndex(column),
+              _columnIndex: $xeTable.getVTColumnIndex(column),
+              rowIndex: -1,
+              _rowIndex: -1,
               $rowIndex: -1
             }
             if (reMinWidth) {

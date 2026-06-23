@@ -58,7 +58,7 @@ export default defineVxeComponent({
       })
     }
 
-    const renderRows = (isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][], $rowIndex: number, cols: VxeTableDefines.ColumnInfo[]) => {
+    const renderRows = (isGroup: boolean, isOptimizeMode: boolean, headerGroups: VxeTableDefines.ColumnInfo[][], _rowIndex: number, cols: VxeTableDefines.ColumnInfo[]) => {
       const $xeGrid = $xeTable.xeGrid
       const $xeGantt = $xeTable.xeGantt
 
@@ -74,7 +74,7 @@ export default defineVxeComponent({
       const headerCellOpts = computeHeaderCellOpts.value
       const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
       const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
-      const isLastRow = $rowIndex === headerGroups.length - 1
+      const isLastRow = _rowIndex === headerGroups.length - 1
 
       return cols.map((column, $columnIndex) => {
         const { type, showHeaderOverflow, headerAlign, align, filters, headerClassName, editRender, cellRender } = column
@@ -105,7 +105,9 @@ export default defineVxeComponent({
           $table: $xeTable,
           $grid: $xeGrid,
           $gantt: $xeGantt,
-          $rowIndex,
+          rowIndex: _rowIndex,
+          _rowIndex,
+          $rowIndex: _rowIndex,
           column,
           columnIndex,
           $columnIndex,
@@ -127,7 +129,7 @@ export default defineVxeComponent({
           thAttrs.rowspan = column.rowSpan > 1 ? column.rowSpan : null
         }
         if (mergeHeadFlag && mergeHeaderList.length && (showCustomHeader || isLastRow)) {
-          const spanRest = mergeHeaderCellMaps[`${$rowIndex}:${showCustomHeader ? $columnIndex : _columnIndex}`]
+          const spanRest = mergeHeaderCellMaps[`${_rowIndex}:${showCustomHeader ? $columnIndex : _columnIndex}`]
           if (spanRest) {
             const { rowspan, colspan } = spanRest
             if (!rowspan || !colspan) {
@@ -367,16 +369,16 @@ export default defineVxeComponent({
 
       const { headerRowClassName, headerRowStyle } = tableProps
       const floatingFilterOpts = computeFloatingFilterOpts.value
-      const rowVNs = headerGroups.map((cols, $rowIndex) => {
-        const params = { $table: $xeTable, $rowIndex, fixed: fixedType, type: renderType }
+      const rowVNs = headerGroups.map((cols, _rowIndex) => {
+        const params = { $table: $xeTable, rowIndex: _rowIndex, _rowIndex, $rowIndex: _rowIndex, fixed: fixedType, type: renderType }
         return h('tr', {
-          key: $rowIndex,
+          key: _rowIndex,
           class: [
             'vxe-header--row',
             headerRowClassName ? (XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName) : ''
           ],
           style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) : null
-        }, renderRows(isGroup, isOptimizeMode, headerGroups, $rowIndex, cols))
+        }, renderRows(isGroup, isOptimizeMode, headerGroups, _rowIndex, cols))
       })
 
       if (floatingFilterOpts.enabled) {

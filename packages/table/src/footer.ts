@@ -226,18 +226,18 @@ export default defineVxeComponent({
       const { fixedType, footerTableData } = props
       const { footerRowClassName, footerRowStyle } = tableProps
 
-      return footerTableData.map((row, $rowIndex) => {
-        const _rowIndex = $rowIndex
-        const rowParams = { $table: $xeTable, row, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
+      return footerTableData.map((row, _rowIndex) => {
+        const $rowIndex = _rowIndex
+        const rowParams = { $table: $xeTable, row, rowIndex: _rowIndex, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
 
         return h('tr', {
-          key: $rowIndex,
+          key: _rowIndex,
           class: [
             'vxe-footer--row',
             footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''
           ],
           style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
-        }, renderRows(isOptimizeMode, renderColumnList, footerTableData, row, $rowIndex, _rowIndex))
+        }, renderRows(isOptimizeMode, renderColumnList, footerTableData, row, _rowIndex, _rowIndex))
       })
     }
 
