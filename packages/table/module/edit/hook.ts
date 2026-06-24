@@ -773,16 +773,27 @@ hooks.add('tableEditModule', {
        */
       getUpdateRecords () {
         const { keepSource, treeConfig } = props
-        const { tableFullData } = internalData
+        const { tableFullData, tableFullTreeData } = internalData
         const treeOpts = computeTreeOpts.value
+        const updateRecords: any[] = []
         if (keepSource) {
           syncActivedCell()
           if (treeConfig) {
-            return XEUtils.filterTree(tableFullData, row => $xeTable.isUpdateByRow(row), treeOpts)
+            const childrenField = treeOpts.children || treeOpts.childrenField
+            XEUtils.eachTree(tableFullTreeData, row => {
+              if ($xeTable.isUpdateByRow(row)) {
+                updateRecords.push(row)
+              }
+            }, { children: childrenField })
+          } else {
+            tableFullData.forEach((row) => {
+              if ($xeTable.isUpdateByRow(row)) {
+                updateRecords.push(row)
+              }
+            })
           }
-          return tableFullData.filter((row: any) => $xeTable.isUpdateByRow(row))
         }
-        return []
+        return updateRecords
       },
       getActiveRecord () {
         warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditCell'])
