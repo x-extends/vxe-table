@@ -799,16 +799,27 @@ export default {
       const internalData = $xeTable as unknown as TableInternalData
 
       const { keepSource, treeConfig } = props
-      const { tableFullData } = internalData
+      const { tableFullData, tableFullTreeData } = internalData
       const treeOpts = $xeTable.computeTreeOpts
+      const updateRecords: any[] = []
       if (keepSource) {
         syncActivedCell($xeTable)
         if (treeConfig) {
-          return XEUtils.filterTree(tableFullData, row => $xeTable.isUpdateByRow(row), treeOpts)
+          const childrenField = treeOpts.children || treeOpts.childrenField
+          XEUtils.eachTree(tableFullTreeData, row => {
+            if ($xeTable.isUpdateByRow(row)) {
+              updateRecords.push(row)
+            }
+          }, { children: childrenField })
+        } else {
+          tableFullData.forEach((row) => {
+            if ($xeTable.isUpdateByRow(row)) {
+              updateRecords.push(row)
+            }
+          })
         }
-        return tableFullData.filter((row) => $xeTable.isUpdateByRow(row))
       }
-      return []
+      return updateRecords
     },
     /**
      * 处理激活编辑

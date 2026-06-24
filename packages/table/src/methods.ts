@@ -30,16 +30,18 @@ let crossTableDragRowObj: {
   $newTable: (VxeTableConstructor & VxeTablePrivateMethods) | null
 } | null = null
 
-function eqCellValue (row1: any, row2: any, field: any) {
-  const val1 = XEUtils.get(row1, field)
-  const val2 = XEUtils.get(row2, field)
+function eqCellValue (newRow: any, oldRow: any, field: any) {
+  const val1 = XEUtils.get(newRow, field)
+  const val2 = XEUtils.get(oldRow, field)
+  let result = false
   if (eqEmptyValue(val1) && eqEmptyValue(val2)) {
-    return true
+    result = true
+  } else if (XEUtils.isString(val1) || XEUtils.isNumber(val1)) {
+    result = ('' + val1) === ('' + val2)
+  } else {
+    result = XEUtils.isEqual(val1, val2)
   }
-  if (XEUtils.isString(val1) || XEUtils.isNumber(val1)) {
-    return ('' + val1) === ('' + val2)
-  }
-  return XEUtils.isEqual(val1, val2)
+  return { newValue: val1, oldValue: val2, result }
 }
 
 function hangleStorageDefaultValue (value: boolean | null | undefined, isAll: boolean) {
@@ -6052,18 +6054,60 @@ const tableMethods: any = {
       }
       const row = rowRest.row
       const oRow = sourceDataRowIdData[rowid]
-      if (oRow) {
-        if (arguments.length > 1) {
-          return !eqCellValue(oRow, row, field as string)
-        }
-        for (let i = 0; i < keepFields.length; i++) {
-          if (!eqCellValue(oRow, row, keepFields[i])) {
-            return true
-          }
+      if (!oRow) {
+        return false
+      }
+      if (arguments.length > 1) {
+        return !eqCellValue(oRow, row, field as string).result
+      }
+      for (let i = 0; i < keepFields.length; i++) {
+        if (!eqCellValue(oRow, row, keepFields[i]).result) {
+          return true
         }
       }
     }
     return false
+  },
+  getUpdateCells () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { keepSource, treeConfig } = props
+    const { tableFullData, tableFullTreeData, fullDataRowIdData, sourceDataRowIdData, fullColumnFieldData } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
+    const keepFields = $xeTable.computeKeepFields
+    const cellList: VxeTableDefines.UpdateCellObj[] = []
+    if (keepSource) {
+      const { handleGetRowId } = createHandleGetRowId($xeTable)
+      const handleCell = (item: any) => {
+        const rowid = handleGetRowId(item)
+        const rowRest = fullDataRowIdData[rowid]
+        // 新增的数据不需要检测
+        if (!rowRest) {
+          return
+        }
+        const row = rowRest.row
+        const oRow = sourceDataRowIdData[rowid]
+        if (!oRow) {
+          return
+        }
+        for (let i = 0; i < keepFields.length; i++) {
+          const field = keepFields[i]
+          const { result, newValue, oldValue } = eqCellValue(oRow, row, field)
+          if (!result) {
+            const column = fullColumnFieldData[field] ? fullColumnFieldData[field].column : null
+            cellList.push({ row, rowid, column, field, newValue, oldValue })
+          }
+        }
+      }
+      if (treeConfig) {
+        XEUtils.eachTree(tableFullTreeData, handleCell, treeOpts)
+      } else {
+        tableFullData.forEach(handleCell)
+      }
+    }
+    return cellList
   },
   /**
    * 获取表格的可视列，也可以指定索引获取列

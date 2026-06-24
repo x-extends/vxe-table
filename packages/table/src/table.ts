@@ -2078,8 +2078,7 @@ export default {
       }
       if ((props.showOverflow === true || props.showOverflow === 'tooltip') ||
           (props.showHeaderOverflow === true || props.showHeaderOverflow === 'tooltip') ||
-          (props.showFooterOverflow === true || props.showFooterOverflow === 'tooltip') ||
-          props.tooltipConfig || props.editRules) {
+          (props.showFooterOverflow === true || props.showFooterOverflow === 'tooltip')) {
         if (!VxeUITooltipComponent) {
           if (props.showOverflow === true) {
             errLog('vxe.error.errProp', ['show-overflow=true', 'show-overflow=title'])
