@@ -2659,7 +2659,7 @@ function getOrderField ($xeTable: VxeTableConstructor, column: VxeTableDefines.C
           cellValue = $xeTable.getCellLabel(row, column)
         }
         if (!sortType || sortType === 'auto') {
-          return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
+          return eqEmptyValue(cellValue) || isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
         } else if (sortType === 'number') {
           return XEUtils.toNumber(cellValue)
         } else if (sortType === 'string') {
@@ -2675,7 +2675,7 @@ function getOrderField ($xeTable: VxeTableConstructor, column: VxeTableDefines.C
           cellValue = $xeTable.getCellLabel(row, column)
         }
         if (!sortType || sortType === 'auto') {
-          return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
+          return eqEmptyValue(cellValue) || isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
         } else if (sortType === 'number') {
           return XEUtils.toNumber(cellValue)
         } else if (sortType === 'string') {
