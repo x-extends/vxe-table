@@ -1,6 +1,6 @@
 import { h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, Teleport, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, onMounted } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
-import XEUtils, { isNaN } from 'xe-utils'
+import XEUtils from 'xe-utils'
 import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollTopTo, wheelScrollLeftTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement, hasEventInputTarget } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
@@ -2206,7 +2206,7 @@ export default defineVxeComponent({
               cellValue = $xeTable.getCellLabel(row, column)
             }
             if (!sortType || sortType === 'auto') {
-              return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
+              return eqEmptyValue(cellValue) || isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
             } else if (sortType === 'number') {
               return XEUtils.toNumber(cellValue)
             } else if (sortType === 'string') {
@@ -2222,7 +2222,7 @@ export default defineVxeComponent({
               cellValue = $xeTable.getCellLabel(row, column)
             }
             if (!sortType || sortType === 'auto') {
-              return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
+              return eqEmptyValue(cellValue) || isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
             } else if (sortType === 'number') {
               return XEUtils.toNumber(cellValue)
             } else if (sortType === 'string') {
