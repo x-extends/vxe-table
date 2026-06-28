@@ -113,8 +113,12 @@ export default {
       overSizeErr: 'The maximum selectable quantity of {0} has been exceeded. The excess part will be ignored!',
       searchEmpty: 'No matching data found!'
     },
+    list: {
+      allChecked: 'All',
+      dragTip: 'Move: {0}'
+    },
     tree: {
-      searchEmpty: '未匹配到数据！',
+      searchEmpty: 'No matching data found!',
       dragTip: 'Move: {0}'
     },
     treeSelect: {

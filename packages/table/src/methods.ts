@@ -16,8 +16,6 @@ const { warnLog, errLog } = createComponentLog('table')
 
 const { getConfig, getI18n, renderer, formats, interceptor, createEvent, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
 
-const browseObj = XEUtils.browse()
-
 const supportMaxRow = 5e6
 const customStorageKey = 'VXE_CUSTOM_STORE'
 const maxYHeight = 5e6
@@ -1030,6 +1028,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   if (!el || (internalData.tBodyHeight && !el.clientHeight)) {
     return
   }
+  const browseObj = XEUtils.browse()
   const containerList = ['main', 'left', 'right']
   const { leftList, rightList } = columnStore
   let osbWidth = overflowY ? scrollbarWidth : 0
@@ -10121,9 +10120,12 @@ const tableMethods: any = {
    * 行拖拽
    */
   handleRowDragDragstartEvent (evnt: DragEvent) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     if (evnt.dataTransfer) {
       evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
     }
+    $xeTable.closeTooltip()
   },
   handleRowDragSwapEvent (evnt: DragEvent | null, isSyncRow: boolean | undefined, dragRow: any, prevDragRow: any, prevDragPos: '' | 'top' | 'bottom' | 'left' | 'right' | undefined, prevDragToChild: boolean | undefined) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -10837,9 +10839,12 @@ const tableMethods: any = {
    * 列拖拽
    */
   handleHeaderCellDragDragstartEvent (evnt: DragEvent) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
     if (evnt.dataTransfer) {
       evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
     }
+    $xeTable.closeTooltip()
   },
   handleColDragSwapColumn () {
     const $xeTable = this
@@ -10851,10 +10856,10 @@ const tableMethods: any = {
     })
   },
   handleColDragSwapEvent (evnt: DragEvent | null, isSyncColumn: boolean | undefined, dragCol: VxeTableDefines.ColumnInfo | null | undefined, prevDragCol: VxeTableDefines.ColumnInfo | undefined, prevDragPos: '' | 'top' | 'bottom' | 'left' | 'right' | undefined, prevDragToChild: boolean | undefined) {
-    const $xeTable = this
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
-    const reactData = $xeTable
-    const internalData = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
+    const internalData = $xeTable as unknown as TableInternalData
 
     const { mouseConfig } = props
     const columnDragOpts = $xeTable.computeColumnDragOpts

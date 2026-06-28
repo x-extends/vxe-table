@@ -113,6 +113,10 @@ export default {
       overSizeErr: '최대 선택적 숫자 {0}이 초과되었으며 초과는 무시됩니다!',
       searchEmpty: '데이터가 일치하지 않습니다!'
     },
+    list: {
+      allChecked: '全选',
+      dragTip: '移动：{0}'
+    },
     tree: {
       searchEmpty: '데이터가 일치하지 않습니다!',
       dragTip: '移动：{0}'

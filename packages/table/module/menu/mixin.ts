@@ -1,9 +1,10 @@
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
-import { getDomNode, getAbsolutePos, getEventTargetNode } from '../../../ui/src/dom'
+import { getDomNode, getAbsolutePos, getEventTargetNode, toCssUnit } from '../../../ui/src/dom'
 import { isEnableConf, hasChildrenList } from '../../../ui/src/utils'
 import { createComponentLog } from '../../../ui/src/log'
 
+import type { VxeComponentStyleType } from 'vxe-pc-ui'
 import type { VxeTableConstructor, VxeTablePrivateMethods, TableInternalData, TableReactData, VxeTableDefines } from '../../../../types'
 
 const { warnLog } = createComponentLog('table')
@@ -175,7 +176,7 @@ export default {
       const isContentMenu = $xeTable.computeIsContentMenu
       const menuOpts = $xeTable.computeMenuOpts
       const config = menuOpts[type]
-      const { zIndex, transfer, visibleMethod } = menuOpts
+      const { zIndex, transfer, width, visibleMethod } = menuOpts
       if (config) {
         const { options, disabled } = config
         if (disabled) {
@@ -199,17 +200,21 @@ export default {
 
               const handleVisible = () => {
                 internalData._currMenuParams = params
+                const ctxStyle: VxeComponentStyleType = {
+                  zIndex: zIndex || internalData.tZindex,
+                  top: `${top}px`,
+                  left: `${left}px`
+                }
+                if (width) {
+                  ctxStyle['--vxe-ui-table-menu-item-width'] = toCssUnit(width)
+                }
                 Object.assign(ctxMenuStore, {
                   visible: true,
                   list: options,
                   selected: null,
                   selectChild: null,
                   showChild: false,
-                  style: {
-                    zIndex: zIndex || internalData.tZindex,
-                    top: `${top}px`,
-                    left: `${left}px`
-                  }
+                  style: ctxStyle
                 })
                 $xeTable.$nextTick(() => {
                   const tableMenu = $xeTable.$refs.refTableMenu

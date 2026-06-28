@@ -113,6 +113,10 @@ export default {
       overSizeErr: '最大オプションの数値{0}は超えられており、超過は無視されます！',
       searchEmpty: '一致するデータはありません！'
     },
+    list: {
+      allChecked: '全选',
+      dragTip: '移动：{0}'
+    },
     tree: {
       searchEmpty: '一致するデータはありません！',
       dragTip: '移动：{0}'

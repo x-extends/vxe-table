@@ -11,8 +11,6 @@ const { warnLog, errLog } = createComponentLog('table')
 
 const { getConfig, renderer, getI18n } = VxeUI
 
-const browseObj = XEUtils.browse()
-
 function getEditColumnModel (row: any, column: VxeTableDefines.ColumnInfo) {
   const { model, editRender } = column
   if (editRender) {
@@ -948,6 +946,7 @@ export default {
       const { editRender } = column
       const editOpts = $xeTable.computeEditOpts
       if (isEnableConf(editRender)) {
+        const browseObj = XEUtils.browse()
         const compRender = renderer.get(editRender.name)
         let autoFocus = editRender.autofocus || editRender.autoFocus
         let autoSelect = editRender.autoSelect || editRender.autoselect

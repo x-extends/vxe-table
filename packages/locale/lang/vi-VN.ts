@@ -113,6 +113,10 @@ export default {
       overSizeErr: 'Số tùy chọn tối đa {0} đã bị vượt quá và phần vượt quá sẽ bị bỏ qua!',
       searchEmpty: 'Không có dữ liệu phù hợp!'
     },
+    list: {
+      allChecked: '全选',
+      dragTip: '移动：{0}'
+    },
     tree: {
       searchEmpty: 'Không có dữ liệu phù hợp!',
       dragTip: '移动：{0}'
