@@ -113,6 +113,10 @@ export default {
       overSizeErr: 'Максимальное необязательное число {0} было превышено, и избыток будет проигнорирован!',
       searchEmpty: 'Нет данных!'
     },
+    list: {
+      allChecked: '全选',
+      dragTip: '移动：{0}'
+    },
     tree: {
       searchEmpty: 'Нет данных!',
       dragTip: '移动：{0}'

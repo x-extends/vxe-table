@@ -113,6 +113,10 @@ export default {
       overSizeErr: '已超出最大可选数量 {0} 个，超出部分将被忽略！',
       searchEmpty: '未匹配到数据！'
     },
+    list: {
+      allChecked: '全选',
+      dragTip: '移动：{0}'
+    },
     tree: {
       searchEmpty: '未匹配到数据！',
       dragTip: '移动：{0}'

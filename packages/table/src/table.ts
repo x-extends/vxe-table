@@ -11480,6 +11480,7 @@ export default defineVxeComponent({
         if (evnt.dataTransfer) {
           evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
         }
+        $xeTable.closeTooltip()
       },
       handleRowDragSwapEvent (evnt, isSyncRow, dragRow, prevDragRow, prevDragPos, prevDragToChild) {
         const { treeConfig, dragConfig } = props
@@ -12152,6 +12153,7 @@ export default defineVxeComponent({
         if (evnt.dataTransfer) {
           evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
         }
+        $xeTable.closeTooltip()
       },
       handleColDragSwapColumn () {
         handleUpdateColumn()

@@ -1,9 +1,10 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
-import { getDomNode, getAbsolutePos, getEventTargetNode } from '../../../ui/src/dom'
+import { getDomNode, getAbsolutePos, getEventTargetNode, toCssUnit } from '../../../ui/src/dom'
 import { isEnableConf, hasChildrenList } from '../../../ui/src/utils'
 
+import type { VxeComponentStyleType } from 'vxe-pc-ui'
 import type { TableMenuMethods, TableMenuPrivateMethods } from '../../../../types'
 
 const { menus, hooks, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
@@ -31,7 +32,7 @@ hooks.add('tableMenuModule', {
       const isContentMenu = computeIsContentMenu.value
       const menuOpts = computeMenuOpts.value
       const config = menuOpts[type]
-      const { zIndex, transfer, visibleMethod } = menuOpts
+      const { zIndex, transfer, width, visibleMethod } = menuOpts
       if (config) {
         const { options, disabled } = config
         if (disabled) {
@@ -58,17 +59,21 @@ hooks.add('tableMenuModule', {
 
               const handleVisible = () => {
                 internalData._currMenuParams = params
+                const ctxStyle: VxeComponentStyleType = {
+                  zIndex: zIndex || internalData.tZindex,
+                  top: `${top}px`,
+                  left: `${left}px`
+                }
+                if (width) {
+                  ctxStyle['--vxe-ui-table-menu-item-width'] = toCssUnit(width)
+                }
                 Object.assign(ctxMenuStore, {
                   visible: true,
                   list: options,
                   selected: null,
                   selectChild: null,
                   showChild: false,
-                  style: {
-                    zIndex: zIndex || internalData.tZindex,
-                    top: `${top}px`,
-                    left: `${left}px`
-                  }
+                  style: ctxStyle
                 })
                 nextTick(() => {
                   const tableMenu = refTableMenu.value

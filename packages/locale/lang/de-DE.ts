@@ -113,6 +113,10 @@ export default {
       overSizeErr: 'Die maximale optionale Nummer {0} wurde überschritten und der Überschuss wird ignoriert!',
       searchEmpty: 'Keine Daten entspricht!'
     },
+    list: {
+      allChecked: '全选',
+      dragTip: '移动：{0}'
+    },
     tree: {
       searchEmpty: 'Keine Daten entspricht!',
       dragTip: '移动：{0}'
