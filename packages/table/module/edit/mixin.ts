@@ -543,7 +543,9 @@ export default {
      * @param {*} records
      */
     _insert (records: any) {
-      return handleInsertRowAt(this, records, null)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      return handleInsertRowAt($xeTable, records, null)
     },
     /**
      * 往表格指定行中插入临时数据
@@ -553,19 +555,29 @@ export default {
      * @returns
      */
     _insertAt (records: any, targetRowOrRowid: any) {
-      return handleInsertRowAt(this, records, targetRowOrRowid)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      return handleInsertRowAt($xeTable, records, targetRowOrRowid)
     },
     _insertNextAt (records: any, targetRowOrRowid: any) {
-      return handleInsertRowAt(this, records, targetRowOrRowid, true)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      return handleInsertRowAt($xeTable, records, targetRowOrRowid, true)
     },
     _insertChild (records: any, parentRowOrParentId: any) {
-      return handleInsertChildRowAt(this, records, parentRowOrParentId, null)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      return handleInsertChildRowAt($xeTable, records, parentRowOrParentId, null)
     },
     _insertChildAt (records: any, parentRowOrParentId: any, targetRowOrRowid: any) {
-      return handleInsertChildRowAt(this, records, parentRowOrParentId, targetRowOrRowid)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      return handleInsertChildRowAt($xeTable, records, parentRowOrParentId, targetRowOrRowid)
     },
     _insertChildNextAt (records: any, parentRowOrParentId: any, targetRowOrRowid: any) {
-      return handleInsertChildRowAt(this, records, parentRowOrParentId, targetRowOrRowid, true)
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      return handleInsertChildRowAt($xeTable, records, parentRowOrParentId, targetRowOrRowid, true)
     },
     /**
      * 删除指定行数据

@@ -2245,12 +2245,12 @@ export default {
     const { isCrossTableDrag } = rowDragOpts
     const tbOns: {
       contextmenu: (...args: any[]) => void
-        keydown: (...args: any[]) => void
-        dragover?: (...args: any[]) => void
-      } = {
-        contextmenu: this.contextMenuEvent,
-        keydown: this.keydownEvent
-      }
+      keydown: (...args: any[]) => void
+      dragover?: (...args: any[]) => void
+    } = {
+      contextmenu: this.contextMenuEvent,
+      keydown: this.keydownEvent
+    }
     if (isCrossTableDrag && !tableData.length) {
       tbOns.dragover = $xeTable.handleCrossTableRowDragoverEmptyEvent
     }

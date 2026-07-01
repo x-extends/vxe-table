@@ -287,6 +287,10 @@ export default {
       fixedRight: 'Freeze Right',
       cancelFixed: 'Scongelare'
     },
+    iconPicker: {
+      search: '搜索',
+      emptyText: '暂无数据'
+    },
     datePicker: {
       yearTitle: '{0} anni'
     },

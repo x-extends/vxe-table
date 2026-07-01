@@ -287,6 +287,10 @@ export default {
       fixedRight: 'Frys til høyre',
       cancelFixed: 'Frigjøre'
     },
+    iconPicker: {
+      search: '搜索',
+      emptyText: '暂无数据'
+    },
     datePicker: {
       yearTitle: '{0} år'
     },

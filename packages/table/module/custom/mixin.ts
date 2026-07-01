@@ -159,7 +159,7 @@ export default {
       }
       return $xeTable.openCustom()
     },
-    _saveCustom () {
+    _saveCustom (isDirectly?: boolean) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -167,34 +167,36 @@ export default {
       const { customColumnList, aggHandleFields, rowGroupList } = reactData
       const customOpts = $xeTable.computeCustomOpts
       const { allowVisible, allowSort, allowFixed, allowResizable, allowGroup, allowValues } = customOpts
-      XEUtils.eachTree(customColumnList, (column, index, items, path, parentColumn) => {
-        if (parentColumn) {
+      if (!isDirectly) {
+        XEUtils.eachTree(customColumnList, (column, index, items, path, parentColumn) => {
+          if (parentColumn) {
           // 更新子列信息
-          column.fixed = parentColumn.fixed
-        } else {
-          if (allowSort) {
-            const sortIndex = index + 1
-            column.renderSortNumber = sortIndex
-          }
-          if (allowFixed) {
-            column.fixed = column.renderFixed
-          }
-        }
-        if (allowResizable) {
-          if (column.renderVisible && (!column.children || !column.children.length)) {
-            if (column.renderResizeWidth !== column.renderWidth) {
-              column.resizeWidth = column.renderResizeWidth
-              column.renderWidth = column.renderResizeWidth
+            column.fixed = parentColumn.fixed
+          } else {
+            if (allowSort) {
+              const sortIndex = index + 1
+              column.renderSortNumber = sortIndex
+            }
+            if (allowFixed) {
+              column.fixed = column.renderFixed
             }
           }
-        }
-        if (allowVisible) {
-          column.visible = column.renderVisible
-        }
-        if (allowGroup && allowValues) {
-          column.aggFunc = column.renderAggFn
-        }
-      })
+          if (allowResizable) {
+            if (column.renderVisible && (!column.children || !column.children.length)) {
+              if (column.renderResizeWidth !== column.renderWidth) {
+                column.resizeWidth = column.renderResizeWidth
+                column.renderWidth = column.renderResizeWidth
+              }
+            }
+          }
+          if (allowVisible) {
+            column.visible = column.renderVisible
+          }
+          if (allowGroup && allowValues) {
+            column.aggFunc = column.renderAggFn
+          }
+        })
+      }
       reactData.isCustomStatus = true
       if (allowGroup && allowValues && !!$xeTable.handlePivotTableAggData) {
         if (rowGroupList.length !== aggHandleFields.length || rowGroupList.some((conf, i) => conf.field !== aggHandleFields[i])) {
@@ -376,10 +378,12 @@ export default {
       if (customStore.visible) {
         $xeTable.closeCustom()
         emitCustomEvent($xeTable, 'close', evnt)
+        $xeTable.dispatchEvent('custom-close', {}, evnt)
       } else {
         customStore.btnEl = evnt.target
         $xeTable.openCustom()
         emitCustomEvent($xeTable, 'open', evnt)
+        $xeTable.dispatchEvent('custom-open', {}, evnt)
       }
     },
     customOpenEvent (evnt: any) {
@@ -392,6 +396,7 @@ export default {
         customStore.btnEl = evnt.target
         $xeTable.openCustom()
         emitCustomEvent($xeTable, 'open', evnt)
+        $xeTable.dispatchEvent('custom-open', {}, evnt)
       }
     },
     customCloseEvent (evnt: any) {
@@ -403,6 +408,7 @@ export default {
         customStore.activeBtn = false
         $xeTable.closeCustom()
         emitCustomEvent($xeTable, 'close', evnt)
+        $xeTable.dispatchEvent('custom-close', {}, evnt)
       }
     },
     handleUpdateCustomColumn () {

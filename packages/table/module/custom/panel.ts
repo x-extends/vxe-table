@@ -180,7 +180,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
       $xeTable.saveCustom()
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('confirm', $event)
+      $xeTable.dispatchEvent('custom-confirm', {}, $event)
       $xeTable.emitCustomEvent('close', $event)
+      $xeTable.dispatchEvent('custom-close', {}, $event)
     },
     cancelCloseEvent ({ $event }: VxeButtonDefines.ClickEventParams) {
       const $xeTableCustomPanel = this
@@ -188,6 +190,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('close', $event)
+      $xeTable.dispatchEvent('custom-close', {}, $event)
     },
     cancelCustomEvent ({ $event }: VxeButtonDefines.ClickEventParams) {
       const $xeTableCustomPanel = this
@@ -196,7 +199,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
       $xeTable.cancelCustom()
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('cancel', $event)
+      $xeTable.dispatchEvent('custom-cancel', {}, $event)
       $xeTable.emitCustomEvent('close', $event)
+      $xeTable.dispatchEvent('custom-close', {}, $event)
     },
     handleResetCustomEvent (evnt: Event) {
       const $xeTableCustomPanel = this
@@ -205,7 +210,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
       $xeTable.resetCustom(true)
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('reset', evnt)
+      $xeTable.dispatchEvent('custom-reset', {}, evnt)
       $xeTable.emitCustomEvent('close', evnt)
+      $xeTable.dispatchEvent('custom-close', {}, evnt)
     },
     resetCustomEvent  (evnt: Event) {
       if (VxeUI.modal) {

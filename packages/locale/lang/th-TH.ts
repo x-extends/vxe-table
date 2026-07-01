@@ -287,6 +287,10 @@ export default {
       fixedRight: 'แช่แข็งขวา',
       cancelFixed: 'สูดดม'
     },
+    iconPicker: {
+      search: '搜索',
+      emptyText: '暂无数据'
+    },
     datePicker: {
       yearTitle: '{0} ปี'
     },
