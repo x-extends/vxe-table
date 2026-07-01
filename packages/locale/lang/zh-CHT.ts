@@ -287,6 +287,10 @@ export default {
       fixedRight: '凍結在右側',
       cancelFixed: '取消凍結列'
     },
+    iconPicker: {
+      search: '搜索',
+      emptyText: '暂无数据'
+    },
     datePicker: {
       yearTitle: '{0} 年'
     },

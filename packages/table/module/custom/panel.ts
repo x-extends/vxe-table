@@ -94,26 +94,33 @@ export default defineVxeComponent({
       $xeTable.saveCustom()
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('confirm', $event)
+      $xeTable.dispatchEvent('custom-confirm', {}, $event)
       $xeTable.emitCustomEvent('close', $event)
+      $xeTable.dispatchEvent('custom-close', {}, $event)
     }
 
     const cancelCloseEvent: VxeButtonEvents.Click = ({ $event }) => {
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('close', $event)
+      $xeTable.dispatchEvent('custom-close', {}, $event)
     }
 
     const cancelCustomEvent: VxeButtonEvents.Click = ({ $event }) => {
       $xeTable.cancelCustom()
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('cancel', $event)
+      $xeTable.dispatchEvent('custom-cancel', {}, $event)
       $xeTable.emitCustomEvent('close', $event)
+      $xeTable.dispatchEvent('custom-close', {}, $event)
     }
 
     const handleResetCustomEvent = (evnt: Event) => {
       $xeTable.resetCustom(true)
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('reset', evnt)
+      $xeTable.dispatchEvent('custom-reset', {}, evnt)
       $xeTable.emitCustomEvent('close', evnt)
+      $xeTable.dispatchEvent('custom-close', {}, evnt)
     }
 
     const resetCustomEvent: VxeButtonEvents.Click = ({ $event }) => {

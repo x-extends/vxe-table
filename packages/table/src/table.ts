@@ -9328,11 +9328,14 @@ export default defineVxeComponent({
         // 如果为 null 使用默认逻辑
         if (XEUtils.eqNull(customContent)) {
           isShow = isOver
+          content = cellText
         } else if (customContent !== '' && customContent !== false) {
           // 如果为 '' | false 则不显示
           isShow = true
+          content = customContent
+        } else {
+          content = cellText
         }
-        content = cellText
       }
       if (isShow && content) {
         const tipContent = formatText(content)

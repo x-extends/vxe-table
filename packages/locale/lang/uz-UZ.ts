@@ -287,6 +287,10 @@ export default {
       fixedRight: "O'ng tomonda muzlatib qo'ying",
       cancelFixed: "Urug'lar ustunini"
     },
+    iconPicker: {
+      search: '搜索',
+      emptyText: '暂无数据'
+    },
     datePicker: {
       yearTitle: '{0} yillar'
     },

@@ -557,7 +557,6 @@ hooks.add('tableEditModule', {
         return handleInsertRowAt(records, targetRowOrRowid, true)
       },
       insertChild (records, parentRowOrParentId) {
-        (window as any).aa = internalData
         return handleInsertChildRowAt(records, parentRowOrParentId, null)
       },
       insertChildAt (records, parentRowOrParentId, targetRow) {

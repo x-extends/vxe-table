@@ -287,6 +287,10 @@ export default {
       fixedRight: 'ئوڭ ياندا توڭلىتىش',
       cancelFixed: 'قۇر توڭلىتىشنى ئەمەلدىن قالدۇرۇش'
     },
+    iconPicker: {
+      search: '搜索',
+      emptyText: '暂无数据'
+    },
     datePicker: {
       yearTitle: '{0} يىل'
     },

@@ -160,38 +160,40 @@ VxeUI.hooks.add('tableCustomModule', {
       return openCustom()
     }
 
-    const saveCustom = () => {
+    const saveCustom = (isDirectly?: boolean) => {
       const { customColumnList, aggHandleFields, rowGroupList } = reactData
       const customOpts = computeCustomOpts.value
       const { allowVisible, allowSort, allowFixed, allowResizable, allowGroup, allowValues } = customOpts
-      XEUtils.eachTree(customColumnList, (column, index, items, path, parentColumn) => {
-        if (parentColumn) {
+      if (!isDirectly) {
+        XEUtils.eachTree(customColumnList, (column, index, items, path, parentColumn) => {
+          if (parentColumn) {
           // 更新子列信息
-          column.fixed = parentColumn.fixed
-        } else {
-          if (allowSort) {
-            const sortIndex = index + 1
-            column.renderSortNumber = sortIndex
-          }
-          if (allowFixed) {
-            column.fixed = column.renderFixed
-          }
-        }
-        if (allowResizable) {
-          if (column.renderVisible && (!column.children || !column.children.length)) {
-            if (column.renderResizeWidth !== column.renderWidth) {
-              column.resizeWidth = column.renderResizeWidth
-              column.renderWidth = column.renderResizeWidth
+            column.fixed = parentColumn.fixed
+          } else {
+            if (allowSort) {
+              const sortIndex = index + 1
+              column.renderSortNumber = sortIndex
+            }
+            if (allowFixed) {
+              column.fixed = column.renderFixed
             }
           }
-        }
-        if (allowVisible) {
-          column.visible = column.renderVisible
-        }
-        if (allowGroup && allowValues) {
-          column.aggFunc = column.renderAggFn
-        }
-      })
+          if (allowResizable) {
+            if (column.renderVisible && (!column.children || !column.children.length)) {
+              if (column.renderResizeWidth !== column.renderWidth) {
+                column.resizeWidth = column.renderResizeWidth
+                column.renderWidth = column.renderResizeWidth
+              }
+            }
+          }
+          if (allowVisible) {
+            column.visible = column.renderVisible
+          }
+          if (allowGroup && allowValues) {
+            column.aggFunc = column.renderAggFn
+          }
+        })
+      }
       reactData.isCustomStatus = true
       if (allowGroup && !!$xeTable.handlePivotTableAggData) {
         if (rowGroupList.length !== aggHandleFields.length || rowGroupList.some((conf, i) => conf.field !== aggHandleFields[i])) {
@@ -375,10 +377,12 @@ VxeUI.hooks.add('tableCustomModule', {
         if (customStore.visible) {
           closeCustom()
           emitCustomEvent('close', evnt)
+          $xeTable.dispatchEvent('custom-close', {}, evnt)
         } else {
           customStore.btnEl = evnt.target as HTMLDivElement
           openCustom()
           emitCustomEvent('open', evnt)
+          $xeTable.dispatchEvent('custom-open', {}, evnt)
         }
       },
       customOpenEvent (evnt) {
@@ -390,6 +394,7 @@ VxeUI.hooks.add('tableCustomModule', {
           customStore.btnEl = evnt.target as HTMLDivElement
           $xeTable.openCustom()
           $xeTable.emitCustomEvent('open', evnt)
+          $xeTable.dispatchEvent('custom-open', {}, evnt)
         }
       },
       customCloseEvent (evnt) {
@@ -400,6 +405,7 @@ VxeUI.hooks.add('tableCustomModule', {
           customStore.activeBtn = false
           $xeTable.closeCustom()
           $xeTable.emitCustomEvent('close', evnt)
+          $xeTable.dispatchEvent('custom-close', {}, evnt)
         }
       },
       handleUpdateCustomColumn,

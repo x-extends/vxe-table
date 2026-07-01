@@ -287,6 +287,10 @@ export default {
       fixedRight: 'Đóng băng bên phải',
       cancelFixed: 'Mở ra cột'
     },
+    iconPicker: {
+      search: '搜索',
+      emptyText: '暂无数据'
+    },
     datePicker: {
       yearTitle: '{0} năm'
     },
