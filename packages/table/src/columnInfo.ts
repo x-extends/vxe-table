@@ -19,7 +19,7 @@ export class ColumnInfo {
     const $xeGantt = $xeTable.xeGantt
     const $xeGGWrapper = $xeGrid || $xeGantt
 
-    const { type, field, width, visible, aggFunc, formatter, filterMultiple, cellRender, editRender, filterRender } = colConfs
+    const { type, field, width, visible, fixed, align, headerAlign, footerAlign, aggFunc, formatter, filterMultiple, cellRender, editRender, filterRender } = colConfs
 
     const colId = colConfs.colId || XEUtils.uniqueId('col_')
 
@@ -87,10 +87,10 @@ export class ColumnInfo {
       minWidth: colConfs.minWidth,
       maxWidth: colConfs.maxWidth,
       resizable: colConfs.resizable,
-      fixed: colConfs.fixed,
-      align: colConfs.align,
-      headerAlign: colConfs.headerAlign,
-      footerAlign: colConfs.footerAlign,
+      fixed,
+      align,
+      headerAlign,
+      footerAlign,
       showOverflow: colConfs.showOverflow,
       showHeaderOverflow: colConfs.showHeaderOverflow,
       showFooterOverflow: colConfs.showFooterOverflow,
@@ -128,7 +128,7 @@ export class ColumnInfo {
       titlePrefix: colConfs.titlePrefix,
       titleSuffix: colConfs.titleSuffix,
 
-      aggFunc: colConfs.aggFunc,
+      aggFunc,
       copyMethod: colConfs.copyMethod,
       cutMethod: colConfs.cutMethod,
       pasteMethod: colConfs.pasteMethod,
@@ -143,9 +143,12 @@ export class ColumnInfo {
       defaultParentId: null,
       halfVisible: false,
       defaultVisible: defaultVisible,
-      defaultFixed: colConfs.fixed,
+      defaultFixed: fixed,
+      defaultAlign: align,
+      defaultHeaderAlign: headerAlign,
+      defaultFooterAlign: footerAlign,
 
-      defaultAggFunc: colConfs.aggFunc,
+      defaultAggFunc: aggFunc,
 
       checked: false,
       halfChecked: false,
@@ -169,6 +172,9 @@ export class ColumnInfo {
       renderAggDigits: null,
       renderAggFormat: null,
 
+      renderAlign: '',
+      renderHeaderAlign: '',
+      renderFooterAlign: '',
       renderFixed: '',
       renderVisible: false,
 

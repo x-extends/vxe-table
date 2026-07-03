@@ -1,90 +1,69 @@
 <template>
   <div>
-    <div>
-      <vxe-button @click="expandNodeEvent">展开指定节点</vxe-button>
-      <vxe-button @click="expandAllEvent">展开所有</vxe-button>
-      <vxe-button @click="clearExpandEvent">关闭所有</vxe-button>
-    </div>
+    <vxe-radio-group v-model="customConfig.mode">
+      <vxe-radio-button checked-value="default" content="默认"></vxe-radio-button>
+      <vxe-radio-button checked-value="modal" content="弹窗"></vxe-radio-button>
+      <vxe-radio-button checked-value="drawer" content="抽屉"></vxe-radio-button>
+    </vxe-radio-group>
 
-    <vxe-grid ref="gridRef" v-bind="gridOptions"></vxe-grid>
+    <vxe-grid v-bind="gridOptions" class="my-table111"></vxe-grid>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import type { VxeGridProps, VxeGridInstance } from '../../../types'
+import { reactive } from 'vue'
+import type { VxeGridProps, VxeTablePropTypes } from '../../../types'
 
 interface RowVO {
-  keyId: number
-  parentId: number | null
+  id: number
   name: string
-  type: string
-  size: number
-  date: string
+  role: string
+  sex: string
+  age: number
+  address: string
 }
 
-const gridRef = ref<VxeGridInstance<RowVO>>()
-
-const gridOptions = reactive<VxeGridProps<RowVO> & { data: RowVO[] }>({
-  border: true,
-  treeConfig: {
-    transform: true,
-    rowField: 'keyId',
-    parentField: 'parentId'
-  },
-  exportConfig: {
-    isTreeAllExpanded: true
-  },
-  toolbarConfig: {
-    export: true
-  },
-  columns: [
-    { type: 'seq', width: 70 },
-    { field: 'name', title: 'Name', minWidth: 300, treeNode: true },
-    { field: 'size', title: 'Size' },
-    { field: 'type', title: 'Type' },
-    { field: 'date', title: 'Date' }
-  ],
-  data: [
-    { keyId: 10000, parentId: null, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
-    { keyId: 10050, parentId: null, name: 'Test2', type: 'mp4', size: 0, date: '2021-04-01' },
-    { keyId: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-    { keyId: 20045, parentId: 24300, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
-    { keyId: 10053, parentId: 24300, name: 'Test5', type: 'avi', size: 0, date: '2021-04-01' },
-    { keyId: 24330, parentId: 10053, name: 'Test6', type: 'txt', size: 25, date: '2021-10-01' },
-    { keyId: 21011, parentId: 10053, name: 'Test7', type: 'pdf', size: 512, date: '2020-01-01' },
-    { keyId: 22200, parentId: 10053, name: 'Test8', type: 'js', size: 1024, date: '2021-06-01' },
-    { keyId: 23666, parentId: null, name: 'Test9', type: 'xlsx', size: 2048, date: '2020-11-01' },
-    { keyId: 23677, parentId: 23666, name: 'Test10', type: 'js', size: 1024, date: '2021-06-01' },
-    { keyId: 23671, parentId: 23677, name: 'Test11', type: 'js', size: 1024, date: '2021-06-01' },
-    { keyId: 23672, parentId: 23677, name: 'Test12', type: 'js', size: 1024, date: '2021-06-01' },
-    { keyId: 23688, parentId: 23666, name: 'Test13', type: 'js', size: 1024, date: '2021-06-01' },
-    { keyId: 23681, parentId: 23688, name: 'Test14', type: 'js', size: 1024, date: '2021-06-01' },
-    { keyId: 23682, parentId: 23688, name: 'Test15', type: 'js', size: 1024, date: '2021-06-01' },
-    { keyId: 24555, parentId: null, name: 'Test16', type: 'avi', size: 224, date: '2020-10-01' },
-    { keyId: 24566, parentId: 24555, name: 'Test17', type: 'js', size: 1024, date: '2021-06-01' },
-    { keyId: 24577, parentId: 24555, name: 'Test18', type: 'js', size: 1024, date: '2021-06-01' }
-  ]
+const customConfig = reactive<VxeTablePropTypes.CustomConfig<RowVO>>({
+  storage: true,
+  mode: 'modal',
+  modalOptions: {
+    transfer: true
+  }
 })
 
-const expandNodeEvent = () => {
-  const $grid = gridRef.value
-  if ($grid) {
-    $grid.setTreeExpand(gridOptions.data[1], true)
-  }
-}
-
-const expandAllEvent = () => {
-  const $grid = gridRef.value
-  if ($grid) {
-    $grid.setAllTreeExpand(true)
-  }
-}
-
-const clearExpandEvent = () => {
-  const $grid = gridRef.value
-  if ($grid) {
-    $grid.clearTreeExpand()
-  }
-}
+const gridOptions = reactive<VxeGridProps<RowVO>>({
+  border: true,
+  id: 'myCustomStorage1',
+  rowConfig: {
+    keyField: 'id'
+  },
+  toolbarConfig: {
+    custom: true
+  },
+  customConfig,
+  columnConfig: {
+    drag: true,
+    resizable: true
+  },
+  columns: [
+    { field: 'seq', type: 'seq', width: 90 },
+    { field: 'name', title: 'Name' },
+    { field: 'role', title: 'role' },
+    { field: 'sex', title: 'Sex' },
+    { field: 'age', title: 'Age' },
+    { field: 'address', title: 'address' }
+  ],
+  data: [
+    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+    { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+    { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
+  ]
+})
 </script>
+
+<style lang="scss" scoped>
+.my-table111 {
+  --vxe-ui-vxe-table-custom-column-width-width: 300px;
+}
+</style>

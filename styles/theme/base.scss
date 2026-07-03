@@ -86,6 +86,17 @@
   --vxe-ui-table-validate-error-cell-background-color: rgba(245, 108,108, 0.1);
   --vxe-ui-table-validate-error-theme-normal-background-color: var(--vxe-ui-layout-background-color);
 
+  --vxe-ui-vxe-table-custom-default-min-width: 18em;
+  --vxe-ui-vxe-table-custom-default-max-width: 28em;
+  --vxe-ui-vxe-table-custom-column-checkbox-width: 60px;
+  --vxe-ui-vxe-table-custom-column-sort-width: 80px;
+  --vxe-ui-vxe-table-custom-column-title-min-width: 160px;
+  --vxe-ui-vxe-table-custom-column-width-width: 140px;
+  --vxe-ui-vxe-table-custom-column-fixed-width: 120px;
+  --vxe-ui-vxe-table-custom-column-align-width: 160px;
+  --vxe-ui-vxe-table-custom-column-header-align-width: var(--vxe-ui-vxe-table-custom-column-align-width);
+  --vxe-ui-vxe-table-custom-column-footer-align-width: var(--vxe-ui-vxe-table-custom-column-align-width);
+
   /*toolbar*/
   --vxe-ui-toolbar-custom-active-background-color: #D9DADB;
   --vxe-ui-toolbar-height-default: 48px;

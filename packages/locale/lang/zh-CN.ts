@@ -175,10 +175,16 @@ export default {
         colResizable: '列宽（像素）',
         colVisible: '是否显示',
         colFixed: '冻结列',
-        colFixedMax: '冻结列（最多 {0} 列）',
-        fixedLeft: '左侧',
-        fixedUnset: '不设置',
-        fixedRight: '右侧',
+        colFixedMax: '冻结列（{0}）',
+        colAlign: '对齐方式',
+        colHeadAlign: '表头对齐方式',
+        colFootAlign: '表尾对齐方式',
+        fixedLeft: '左',
+        fixedUnset: '无',
+        fixedRight: '右',
+        alignLeft: '左',
+        alignCenter: '中',
+        alignRight: '右',
         moveUp: '上移',
         moveDn: '下移',
         putTop: '置顶',
@@ -186,7 +192,10 @@ export default {
         moveUpTitle: '点击向上移动',
         moveDnTitle: '点击向下移动',
         putTopTitle: '点击置顶',
-        putBottomTitle: '点击置尾'
+        putBottomTitle: '点击置尾',
+        anLeftTitle: '左对齐',
+        anCenterTitle: '居中',
+        anRightTitle: '右对齐'
       }
     },
     import: {

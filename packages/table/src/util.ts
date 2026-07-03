@@ -240,7 +240,8 @@ export function createReactData (): TableReactData {
       activeWrapper: false,
       visible: false,
       maxHeight: null,
-      popupStyle: {},
+      defPopupStyle: {},
+      panePopupStyle: {},
       oldSortMaps: {},
       oldFixedMaps: {},
       oldVisibleMaps: {}
@@ -1112,4 +1113,37 @@ export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     }
   }
   return Promise.resolve()
+}
+
+function hangleBolleanDefaultValue (currVal: boolean | null | undefined, defVal: boolean | null | undefined) {
+  return XEUtils.isBoolean(currVal) ? currVal : defVal
+}
+
+export function handleCustomStoreConfig ($xeTable: VxeTableConstructor) {
+  const { computeCustomOpts } = $xeTable.getComputeMaps()
+  const customOpts = computeCustomOpts.value
+  const { storage, storeOptions } = customOpts
+
+  const isAllCustom = storage === true
+  const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign({}, isAllCustom ? {} : storage || {}, storeOptions)
+  const isCustomAlign = hangleBolleanDefaultValue(storageOpts.align, isAllCustom)
+  const isCustomHeaderAlign = hangleBolleanDefaultValue(storageOpts.headerAlign, isAllCustom)
+  const isCustomFooterAlign = hangleBolleanDefaultValue(storageOpts.footerAlign, isAllCustom)
+  const isCustomResizable = hangleBolleanDefaultValue(storageOpts.resizable, isAllCustom)
+  const isCustomVisible = hangleBolleanDefaultValue(storageOpts.visible, isAllCustom)
+  const isCustomFixed = hangleBolleanDefaultValue(storageOpts.fixed, isAllCustom)
+  const isCustomSort = hangleBolleanDefaultValue(storageOpts.sort, isAllCustom)
+  const isCustomAggGroup = hangleBolleanDefaultValue(storageOpts.aggGroup, isAllCustom)
+  const isCustomAggFunc = hangleBolleanDefaultValue(storageOpts.aggFunc, isAllCustom)
+  return {
+    isCustomAlign,
+    isCustomHeaderAlign,
+    isCustomFooterAlign,
+    isCustomResizable,
+    isCustomVisible,
+    isCustomFixed,
+    isCustomSort,
+    isCustomAggGroup,
+    isCustomAggFunc
+  }
 }

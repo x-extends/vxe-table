@@ -1,26 +1,42 @@
 <template>
-  <div class="page-layout-container">
-    <div class="page-layout-aside">
-      <div>
-        <button @click="changeTheme">切换主题</button>
-      </div>
-      <div>
-        <button @click="changeLang('zh-CN')">中文</button>
-        <button @click="changeLang('en-US')">英文</button>
-      </div>
-      <RouterLink  class="link" v-for="(item, index) in navList" :key="index" :to="item.routerLink">{{ item.name }}</RouterLink>
-    </div>
-    <div class="page-layout-body">
-      <RouterView />
-    </div>
-  </div>
+  <vxe-layout-container :size="componentsSize" vertical>
+    <vxe-layout-header>
+      <vxe-button @click="collapsed = !collapsed">折叠</vxe-button>
+      <vxe-switch v-model="theme" close-value="light" open-value="dark" @change="changeTheme">主题切换</vxe-switch>
+      <vxe-radio-group v-model="language" :options="langOptions" @change="changeLanguage"></vxe-radio-group>
+      <vxe-radio-group class="switch-size" v-model="componentsSize" :options="sizeOptions" type="button" size="mini"></vxe-radio-group>
+    </vxe-layout-header>
+    <vxe-layout-container>
+      <vxe-layout-aside class="page-layout-aside" :collapsed="collapsed">
+        <VxeMenu :options="navList" />
+      </vxe-layout-aside>
+      <vxe-layout-container vertical>
+        <vxe-layout-body padding>
+          <RouterView />
+        </vxe-layout-body>
+        <vxe-layout-footer fixed>11111</vxe-layout-footer>
+      </vxe-layout-container>
+    </vxe-layout-container>
+  </vxe-layout-container>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { VxeUI } from '../packages'
 
-const navList = ref([
+import { VxeMenuPropTypes, VxeLayoutContainerPropTypes } from 'vxe-pc-ui'
+
+const collapsed = ref(false)
+
+const componentsSize = ref<VxeLayoutContainerPropTypes.Size>('')
+const sizeOptions = ref([
+  { label: '默认', value: '' },
+  { label: '中', value: 'medium' },
+  { label: '小', value: 'small' },
+  { label: '迷你', value: 'mini' }
+])
+
+const navList = ref<VxeMenuPropTypes.Options>([
   { name: 'Home', icon: 'vxe-icon-user-fill', routerLink: { path: '/' } },
   { name: 'ToolbarTest', routerLink: { name: 'ToolbarTest' } },
   { name: 'TableTest1', routerLink: { name: 'TableTest1' } },
@@ -43,39 +59,33 @@ const navList = ref([
   { name: 'TestKeepTest3', routerLink: { name: 'TestKeepTest3' } }
 ])
 
-const theme = ref((localStorage.getItem('VXE_THEME') as 'default' | 'dark') || 'default')
+const theme = ref((localStorage.getItem('VXE_THEME') as 'light' | 'dark') || 'light')
 VxeUI.setTheme(theme.value)
 const changeTheme = () => {
-  const themeName = VxeUI.getTheme() === 'dark' ? 'default' : 'dark'
+  const themeName = VxeUI.getTheme() === 'dark' ? 'light' : 'dark'
   theme.value = themeName
   VxeUI.setTheme(themeName)
   localStorage.setItem('VXE_THEME', themeName)
 }
 
-VxeUI.setLanguage((localStorage.getItem('VXE_LANGUAGE') as 'zh-CN' | 'en-US') || 'zh-CN')
-const changeLang = (lang: 'zh-CN' | 'en-US') => {
-  VxeUI.setLanguage(lang)
-  localStorage.setItem('VXE_LANGUAGE', lang)
+const language = ref((localStorage.getItem('VXE_LANGUAGE') as 'zh-CN' | 'en-US') || 'zh-CN')
+const langOptions = ref([
+  { value: 'zh-CN', label: '中文' },
+  { value: 'en-US', label: '英文' }
+])
+const changeLanguage = () => {
+  VxeUI.setLanguage(language.value)
+  localStorage.setItem('VXE_LANGUAGE', language.value)
 }
 </script>
 
 <style lang="scss" scoped>
-.page-layout-container {
-  display: flex;
-  flex-direction: row;
+.nav {
+  display: block;
 }
 .page-layout-aside {
-  flex-shrink: 0;
-  width: 200px;
-  padding: 16px;
-  border-right: 1px solid #d0d7de;
-  .link {
-    display: block;
+  ::v-deep(.vxe-layout-aside--inner) {
+    overflow-y: scroll;
   }
-}
-.page-layout-body {
-  flex-grow: 1;
-  padding: 16px;
-  overflow: auto;
 }
 </style>

@@ -95,6 +95,9 @@ export const tableEmits: VxeTableEmits = [
   'custom-visible-all',
   'custom-fixed-change',
   'custom-sort-change',
+  'custom-align-change',
+  'custom-header-align-change',
+  'custom-footer-align-change',
 
   'change-fnr', // 废弃
 

@@ -8,6 +8,8 @@ import type { TableCustomMethods, TableCustomPrivateMethods, VxeColumnPropTypes,
 
 const tableCustomMethodKeys: (keyof TableCustomMethods)[] = ['openCustom', 'closeCustom', 'getCustomVisible', 'toggleCustom', 'saveCustom', 'cancelCustom', 'resetCustom', 'toggleCustomAllCheckbox', 'setCustomAllCheckbox']
 
+const customColumnCssKeys = ['checkbox', 'sort', 'title', 'width', 'fixed', 'align', 'header-align', 'footer-align']
+
 VxeUI.hooks.add('tableCustomModule', {
   setupTable ($xeTable) {
     const { reactData, internalData } = $xeTable
@@ -23,14 +25,15 @@ VxeUI.hooks.add('tableCustomModule', {
       const customOpts = computeCustomOpts.value
       const { mode, placement, popupOptions } = customOpts
       const showSimple = !(mode === 'modal' || mode === 'drawer')
-      const { transfer, maxHeight } = popupOptions || {}
+      const { transfer, minWidth, maxWidth, maxHeight } = popupOptions || {}
       const customSimpleMode = computeCustomSimpleMode.value
       const showCustomSimpleOutside = customSimpleMode === 'outside'
       const bodyEl = document.documentElement
       let wrapperEl = refElem.value
       let popupTop = 0
       let popupMaxHeight: string | number = 0
-      const popupStys: VxeComponentStyleType = {}
+      const defPupStys: VxeComponentStyleType = {}
+      const panePupStys: VxeComponentStyleType = {}
       if ($xeGantt) {
         const { refGanttContainerElem } = $xeGantt.getRefMaps()
         const ganttContainerElem = refGanttContainerElem.value
@@ -61,25 +64,42 @@ VxeUI.hooks.add('tableCustomModule', {
       }
       if (!placement || !(['left', 'right', 'bottom-left', 'bottom-right'].includes(placement))) {
         if (popupTop) {
-          popupStys.top = toCssUnit(popupTop)
+          defPupStys.top = toCssUnit(popupTop)
         }
       }
 
       if (showSimple && transfer) {
         if (placement === 'bottom-left' || placement === 'bottom-right') {
-          popupStys.bottom = toCssUnit(bodyEl.scrollHeight - tableRect.top - tableRect.height + 1)
+          defPupStys.bottom = toCssUnit(bodyEl.scrollHeight - tableRect.top - tableRect.height + 1)
         }
         if (placement === 'top-left' || placement === 'bottom-left') {
-          popupStys.left = toCssUnit(tableRect.left)
+          defPupStys.left = toCssUnit(tableRect.left)
         } else if (!placement || placement === 'top-right' || placement === 'bottom-right') {
-          popupStys.right = toCssUnit(bodyEl.scrollWidth - tableRect.left - tableRect.width + 1)
+          defPupStys.right = toCssUnit(bodyEl.scrollWidth - tableRect.left - tableRect.width + 1)
         }
       }
 
-      if (popupMxHeight) {
-        popupStys.maxHeight = toCssUnit(popupMxHeight)
+      // 同步表格的css变量到弹窗中
+      const bodyComputeStyle = getComputedStyle(bodyEl)
+      const tableComputeStyle = getComputedStyle(wrapperEl)
+      customColumnCssKeys.forEach(key => {
+        const currCssKey = `--vxe-ui-vxe-table-custom-column-${key}-${key === 'title' ? 'min-' : ''}width`
+        const currCssVal = tableComputeStyle.getPropertyValue(currCssKey)
+        if (currCssVal && currCssVal !== bodyComputeStyle.getPropertyValue(currCssKey)) {
+          panePupStys[currCssKey] = currCssVal
+        }
+      })
+      if (minWidth) {
+        defPupStys['--vxe-ui-vxe-table-custom-default-min-width'] = toCssUnit(minWidth)
       }
-      customStore.popupStyle = popupStys
+      if (maxWidth) {
+        defPupStys['--vxe-ui-vxe-table-custom-default-max-width'] = toCssUnit(maxWidth)
+      }
+      if (popupMxHeight) {
+        defPupStys.maxHeight = toCssUnit(popupMxHeight)
+      }
+      customStore.defPopupStyle = defPupStys
+      customStore.panePopupStyle = panePupStys
       customStore.maxHeight = popupMxHeight
       return nextTick()
     }
@@ -129,6 +149,9 @@ VxeUI.hooks.add('tableCustomModule', {
           column.renderFixed = column.fixed
           column.renderVisible = column.visible
           column.renderResizeWidth = column.renderWidth
+          column.renderAlign = column.align
+          column.renderHeaderAlign = column.headerAlign
+          column.renderFooterAlign = column.footerAlign
           sortMaps[colid] = column.renderSortNumber
           fixedMaps[colid] = column.fixed
           visibleMaps[colid] = column.visible
@@ -163,8 +186,16 @@ VxeUI.hooks.add('tableCustomModule', {
     const saveCustom = (isDirectly?: boolean) => {
       const { customColumnList, aggHandleFields, rowGroupList } = reactData
       const customOpts = computeCustomOpts.value
-      const { allowVisible, allowSort, allowFixed, allowResizable, allowGroup, allowValues } = customOpts
-      if (!isDirectly) {
+      const { allowVisible, allowSort, allowFixed, allowResizable, allowAlign, allowHeaderAlign, allowFooterAlign, allowGroup, allowValues } = customOpts
+      if (isDirectly) {
+        XEUtils.eachTree(customColumnList, (column) => {
+          if (allowResizable) {
+            if (column.renderVisible && (!column.children || !column.children.length)) {
+              column.resizeWidth = Math.max(0, XEUtils.toNumber(column.renderWidth))
+            }
+          }
+        })
+      } else {
         XEUtils.eachTree(customColumnList, (column, index, items, path, parentColumn) => {
           if (parentColumn) {
           // 更新子列信息
@@ -188,6 +219,15 @@ VxeUI.hooks.add('tableCustomModule', {
           }
           if (allowVisible) {
             column.visible = column.renderVisible
+          }
+          if (allowAlign) {
+            column.align = column.renderAlign
+          }
+          if (allowHeaderAlign) {
+            column.headerAlign = column.renderHeaderAlign
+          }
+          if (allowFooterAlign) {
+            column.footerAlign = column.renderFooterAlign
           }
           if (allowGroup && allowValues) {
             column.aggFunc = column.renderAggFn
@@ -218,7 +258,7 @@ VxeUI.hooks.add('tableCustomModule', {
       const { customColumnList, customStore } = reactData
       const { oldSortMaps, oldFixedMaps, oldVisibleMaps } = customStore
       const customOpts = computeCustomOpts.value
-      const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
+      const { allowVisible, allowSort, allowFixed, allowAlign, allowHeaderAlign, allowFooterAlign, allowResizable, allowGroup, allowValues } = customOpts
       XEUtils.eachTree(customColumnList, column => {
         const colid = column.getKey()
         const visible = !!oldVisibleMaps[colid]
@@ -236,6 +276,21 @@ VxeUI.hooks.add('tableCustomModule', {
         }
         if (allowResizable) {
           column.renderResizeWidth = column.renderWidth
+        }
+        if (allowAlign) {
+          column.align = column.renderAlign
+        }
+        if (allowHeaderAlign) {
+          column.headerAlign = column.renderHeaderAlign
+        }
+        if (allowFooterAlign) {
+          column.footerAlign = column.renderFooterAlign
+        }
+        if (allowGroup) {
+          // 无
+        }
+        if (allowValues) {
+          // 无
         }
       }, { children: 'children' })
       return nextTick()
@@ -300,7 +355,10 @@ VxeUI.hooks.add('tableCustomModule', {
           resizable: options === true,
           fixed: options === true,
           sort: options === true,
-          aggFunc: options === true
+          aggFunc: options === true,
+          align: options === true,
+          headerAlign: options === true,
+          footerAlign: options === true
         }, options)
         const allCols: VxeTableDefines.ColumnInfo[] = []
         XEUtils.eachTree(collectColumn, (column) => {
@@ -309,6 +367,7 @@ VxeUI.hooks.add('tableCustomModule', {
           }
           if (opts.fixed) {
             column.fixed = column.defaultFixed
+            column.renderFixed = column.defaultFixed
           }
           if (opts.sort) {
             column.renderSortNumber = column.sortNumber
@@ -316,6 +375,18 @@ VxeUI.hooks.add('tableCustomModule', {
           }
           if (!checkMethod || checkMethod({ $table: $xeTable, column })) {
             column.visible = column.defaultVisible
+          }
+          if (opts.align) {
+            column.align = column.defaultAlign
+            column.renderAlign = column.defaultAlign
+          }
+          if (opts.headerAlign) {
+            column.headerAlign = column.defaultHeaderAlign
+            column.renderHeaderAlign = column.defaultHeaderAlign
+          }
+          if (opts.footerAlign) {
+            column.footerAlign = column.defaultFooterAlign
+            column.renderFooterAlign = column.defaultFooterAlign
           }
           if (opts.aggFunc) {
             column.aggFunc = column.defaultAggFunc
