@@ -4,6 +4,8 @@ import { toCssUnit } from '../../../ui/src/dom'
 
 import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, TableReactData, TableInternalData, VxeComponentStyleType } from '../../../../types'
 
+const customColumnCssKeys = ['checkbox', 'sort', 'title', 'width', 'fixed', 'align', 'header-align', 'footer-align']
+
 function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const $xeGrid = $xeTable.$xeGrid
   const $xeGantt = $xeTable.$xeGantt
@@ -14,14 +16,15 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   const customOpts = $xeTable.computeCustomOpts
   const { mode, placement, popupOptions } = customOpts
   const showSimple = !(mode === 'modal' || mode === 'drawer')
-  const { transfer, maxHeight } = popupOptions || {}
+  const { transfer, minWidth, maxWidth, maxHeight } = popupOptions || {}
   const customSimpleMode = $xeTable.computeCustomSimpleMode
   const showCustomSimpleOutside = customSimpleMode === 'outside'
   const bodyEl = document.documentElement
   let wrapperEl = $xeTable.$refs.refElem as HTMLDivElement
   let popupTop = 0
   let popupMaxHeight: string | number = 0
-  const popupStys: VxeComponentStyleType = {}
+  const defPupStys: VxeComponentStyleType = {}
+  const panePupStys: VxeComponentStyleType = {}
   if ($xeGantt) {
     const ganttContainerElem = $xeGantt.$refs.refGanttContainerElem as HTMLDivElement
     if (ganttContainerElem) {
@@ -51,25 +54,42 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   }
   if (!placement || !(['left', 'right', 'bottom-left', 'bottom-right'].includes(placement))) {
     if (popupTop) {
-      popupStys.top = toCssUnit(popupTop)
+      defPupStys.top = toCssUnit(popupTop)
     }
   }
 
   if (showSimple && transfer) {
     if (placement === 'bottom-left' || placement === 'bottom-right') {
-      popupStys.bottom = toCssUnit(bodyEl.scrollHeight - tableRect.top - tableRect.height + 1)
+      defPupStys.bottom = toCssUnit(bodyEl.scrollHeight - tableRect.top - tableRect.height + 1)
     }
     if (placement === 'top-left' || placement === 'bottom-left') {
-      popupStys.left = toCssUnit(tableRect.left)
+      defPupStys.left = toCssUnit(tableRect.left)
     } else if (!placement || placement === 'top-right' || placement === 'bottom-right') {
-      popupStys.right = toCssUnit(bodyEl.scrollWidth - tableRect.left - tableRect.width + 1)
+      defPupStys.right = toCssUnit(bodyEl.scrollWidth - tableRect.left - tableRect.width + 1)
     }
   }
 
-  if (popupMxHeight) {
-    popupStys.maxHeight = toCssUnit(popupMxHeight)
+  // 同步表格的css变量到弹窗中
+  const bodyComputeStyle = getComputedStyle(bodyEl)
+  const tableComputeStyle = getComputedStyle(wrapperEl)
+  customColumnCssKeys.forEach(key => {
+    const currCssKey = `--vxe-ui-vxe-table-custom-column-${key}-${key === 'title' ? 'min-' : ''}width`
+    const currCssVal = tableComputeStyle.getPropertyValue(currCssKey)
+    if (currCssVal && currCssVal !== bodyComputeStyle.getPropertyValue(currCssKey)) {
+      panePupStys[currCssKey] = currCssVal
+    }
+  })
+  if (minWidth) {
+    defPupStys['--vxe-ui-vxe-table-custom-default-min-width'] = toCssUnit(minWidth)
   }
-  customStore.popupStyle = popupStys
+  if (maxWidth) {
+    defPupStys['--vxe-ui-vxe-table-custom-default-max-width'] = toCssUnit(maxWidth)
+  }
+  if (popupMxHeight) {
+    defPupStys.maxHeight = toCssUnit(popupMxHeight)
+  }
+  customStore.defPopupStyle = defPupStys
+  customStore.panePopupStyle = panePupStys
   customStore.maxHeight = popupMxHeight
   return $xeTable.$nextTick()
 }
@@ -166,8 +186,16 @@ export default {
 
       const { customColumnList, aggHandleFields, rowGroupList } = reactData
       const customOpts = $xeTable.computeCustomOpts
-      const { allowVisible, allowSort, allowFixed, allowResizable, allowGroup, allowValues } = customOpts
-      if (!isDirectly) {
+      const { allowVisible, allowSort, allowFixed, allowResizable, allowAlign, allowHeaderAlign, allowFooterAlign, allowGroup, allowValues } = customOpts
+      if (isDirectly) {
+        XEUtils.eachTree(customColumnList, (column) => {
+          if (allowResizable) {
+            if (column.renderVisible && (!column.children || !column.children.length)) {
+              column.resizeWidth = Math.max(0, XEUtils.toNumber(column.renderWidth))
+            }
+          }
+        })
+      } else {
         XEUtils.eachTree(customColumnList, (column, index, items, path, parentColumn) => {
           if (parentColumn) {
           // 更新子列信息
@@ -192,13 +220,22 @@ export default {
           if (allowVisible) {
             column.visible = column.renderVisible
           }
+          if (allowAlign) {
+            column.align = column.renderAlign
+          }
+          if (allowHeaderAlign) {
+            column.headerAlign = column.renderHeaderAlign
+          }
+          if (allowFooterAlign) {
+            column.footerAlign = column.renderFooterAlign
+          }
           if (allowGroup && allowValues) {
             column.aggFunc = column.renderAggFn
           }
         })
       }
       reactData.isCustomStatus = true
-      if (allowGroup && allowValues && !!$xeTable.handlePivotTableAggData) {
+      if (allowGroup && !!$xeTable.handlePivotTableAggData) {
         if (rowGroupList.length !== aggHandleFields.length || rowGroupList.some((conf, i) => conf.field !== aggHandleFields[i])) {
           // 更新数据分组
           if (aggHandleFields.length) {
@@ -223,7 +260,7 @@ export default {
       const { customColumnList, customStore } = reactData
       const { oldSortMaps, oldFixedMaps, oldVisibleMaps } = customStore
       const customOpts = $xeTable.computeCustomOpts
-      const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
+      const { allowVisible, allowSort, allowFixed, allowAlign, allowHeaderAlign, allowFooterAlign, allowResizable, allowGroup, allowValues } = customOpts
       XEUtils.eachTree(customColumnList, column => {
         const colid = column.getKey()
         const visible = !!oldVisibleMaps[colid]
@@ -242,6 +279,21 @@ export default {
         if (allowResizable) {
           column.renderResizeWidth = column.renderWidth
         }
+        if (allowAlign) {
+          column.align = column.renderAlign
+        }
+        if (allowHeaderAlign) {
+          column.headerAlign = column.renderHeaderAlign
+        }
+        if (allowFooterAlign) {
+          column.footerAlign = column.renderFooterAlign
+        }
+        if (allowGroup) {
+          // 无
+        }
+        if (allowValues) {
+          // 无
+        }
       }, { children: 'children' })
       return $xeTable.$nextTick()
     },
@@ -254,12 +306,15 @@ export default {
       const { collectColumn } = internalData
       const customOpts = $xeTable.computeCustomOpts
       const { checkMethod } = customOpts
-      const opts = Object.assign({
+      const opts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign({
         visible: true,
         resizable: options === true,
         fixed: options === true,
         sort: options === true,
-        aggFunc: options === true
+        aggFunc: options === true,
+        align: options === true,
+        headerAlign: options === true,
+        footerAlign: options === true
       }, options)
       const allCols: VxeTableDefines.ColumnInfo[] = []
       XEUtils.eachTree(collectColumn, (column) => {
@@ -268,6 +323,7 @@ export default {
         }
         if (opts.fixed) {
           column.fixed = column.defaultFixed
+          column.renderFixed = column.defaultFixed
         }
         if (opts.sort) {
           column.renderSortNumber = column.sortNumber
@@ -275,6 +331,18 @@ export default {
         }
         if (!checkMethod || checkMethod({ $table: $xeTable, column })) {
           column.visible = column.defaultVisible
+        }
+        if (opts.align) {
+          column.align = column.defaultAlign
+          column.renderAlign = column.defaultAlign
+        }
+        if (opts.headerAlign) {
+          column.headerAlign = column.defaultHeaderAlign
+          column.renderHeaderAlign = column.defaultHeaderAlign
+        }
+        if (opts.footerAlign) {
+          column.footerAlign = column.defaultFooterAlign
+          column.renderFooterAlign = column.defaultFooterAlign
         }
         if (opts.aggFunc) {
           column.aggFunc = column.defaultAggFunc
@@ -427,6 +495,9 @@ export default {
           column.renderFixed = column.fixed
           column.renderVisible = column.visible
           column.renderResizeWidth = column.renderWidth
+          column.renderAlign = column.align
+          column.renderHeaderAlign = column.headerAlign
+          column.renderFooterAlign = column.footerAlign
           sortMaps[colid] = column.renderSortNumber
           fixedMaps[colid] = column.fixed
           visibleMaps[colid] = column.visible

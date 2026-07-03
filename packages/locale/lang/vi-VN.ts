@@ -176,9 +176,15 @@ export default {
         colVisible: 'Chiều rộng (pixels)',
         colFixed: 'Sử dụn',
         colFixedMax: 'Sử dụng (lên đến {0})',
+        colAlign: '对齐方式',
+        colHeadAlign: '表头对齐方式',
+        colFootAlign: '表尾对齐方式',
         fixedLeft: 'Trái',
-        fixedUnset: 'Không',
+        fixedUnset: '无',
         fixedRight: 'Đúng',
+        alignLeft: '居左',
+        alignCenter: '居中',
+        alignRight: '居右',
         moveUp: '上移',
         moveDn: '下移',
         putTop: '置顶',
@@ -186,7 +192,10 @@ export default {
         moveUpTitle: '点击向上移动',
         moveDnTitle: '点击向下移动',
         putTopTitle: '点击置顶',
-        putBottomTitle: '点击置尾'
+        putBottomTitle: '点击置尾',
+        anLeftTitle: '左对齐',
+        anCenterTitle: '居中',
+        anRightTitle: '右对齐'
       }
     },
     import: {
