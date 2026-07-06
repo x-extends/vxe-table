@@ -487,8 +487,9 @@ function handleBaseTreeExpand ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   const result: any[] = []
   const columnIndex = $xeTable.getColumnIndex(treeNodeColumn)
   const $columnIndex = $xeTable.getVMColumnIndex(treeNodeColumn)
+  const _columnIndex = $xeTable.getVTColumnIndex(treeNodeColumn)
   const { handleGetRowId } = createHandleGetRowId($xeTable)
-  let validRows = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
+  let validRows = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column: treeNodeColumn, columnIndex, $columnIndex, _columnIndex, row })) : rows
   if (accordion) {
     validRows = validRows.length ? [validRows[validRows.length - 1]] : []
     // 同一级只能展开一个

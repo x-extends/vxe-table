@@ -553,7 +553,7 @@ export const Cell = {
     const treeOpts = $table.computeTreeOpts
     const { row, column, level } = params
     const { slots } = column
-    const { padding, indent, lazy, trigger, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
+    const { padding, indent, lazy, trigger, visibleMethod, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowChilds = row[childrenField]
@@ -593,7 +593,7 @@ export const Cell = {
             }
           : undefined
       }, [
-        showIcon && (lazy ? (isLazyLoaded ? hasChild : (hasChild || hasLazyChilds)) : hasChild)
+        showIcon && (lazy ? (isLazyLoaded ? hasChild : (hasChild || hasLazyChilds)) : hasChild) && (!visibleMethod || visibleMethod(params))
           ? [
               h('div', {
                 class: 'vxe-cell--tree-btn',
