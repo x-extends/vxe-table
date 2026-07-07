@@ -6064,10 +6064,10 @@ const tableMethods: any = {
         return false
       }
       if (arguments.length > 1) {
-        return !eqCellValue(oRow, row, field as string).result
+        return !eqCellValue(row, oRow, field as string).result
       }
       for (let i = 0; i < keepFields.length; i++) {
-        if (!eqCellValue(oRow, row, keepFields[i]).result) {
+        if (!eqCellValue(row, oRow, keepFields[i]).result) {
           return true
         }
       }
@@ -6100,7 +6100,7 @@ const tableMethods: any = {
         }
         for (let i = 0; i < keepFields.length; i++) {
           const field = keepFields[i]
-          const { result, newValue, oldValue } = eqCellValue(oRow, row, field)
+          const { result, newValue, oldValue } = eqCellValue(row, oRow, field)
           if (!result) {
             const column = fullColumnFieldData[field] ? fullColumnFieldData[field].column : null
             cellList.push({ row, rowid, column, field, newValue, oldValue })
