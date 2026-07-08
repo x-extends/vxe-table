@@ -1,5 +1,12 @@
 import { VueConstructor } from 'vue'
-import { VxeUIExport, VxeGlobalConfig } from 'vxe-pc-ui'
+import { VxeUIExport, VxeGlobalConfig, VxeComponentKebabCaseKeys } from 'vxe-pc-ui'
+
+// Vxe Table
+import VxeColumn from 'vxe-pc-ui/types/components/column'
+import VxeColgroup from 'vxe-pc-ui/types/components/colgroup'
+import VxeTable from 'vxe-pc-ui/types/components/table'
+import VxeGrid from 'vxe-pc-ui/types/components/grid'
+import VxeToolbar from 'vxe-pc-ui/types/components/toolbar'
 
 declare global {
   interface Window {
@@ -25,6 +32,34 @@ export const VXETable: VxeUIExport
 export type VXETableCore = VxeUIExport
 
 export function install (app: VueConstructor, options?: VxeGlobalConfig): void
+
+interface AllComponents {
+  // Vxe Table
+  /**
+   * Column 基础表格 - 列
+   */
+  VxeColumn: typeof VxeColumn
+  /**
+   * Colgroup 基础表格 - 分组列
+   */
+  VxeColgroup: typeof VxeColgroup
+  /**
+   * Table 基础表格
+   */
+  VxeTable: typeof VxeTable
+  /**
+   * Grid 高级表格
+   */
+  VxeGrid: typeof VxeGrid
+  /**
+   * Toolbar 基础表格 - 工具栏
+   */
+  VxeToolbar: typeof VxeToolbar
+}
+
+declare module '@vxe-ui/core' {
+  export interface VxeGlobalComponents extends AllComponents, VxeComponentKebabCaseKeys<AllComponents> {}
+}
 
 // Vxe core
 export * from 'vxe-pc-ui/types/ui'
