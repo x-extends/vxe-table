@@ -3533,13 +3533,13 @@ export default defineVxeComponent({
       const minRunDelay = (options ? options.minRunDelay : defaultMinRunDelay) || defaultMinRunDelay
       return new Promise<void>(resolve => {
         const $xeGanttView = internalData.xeGanttView
-        const { customStore } = reactData
+        const { customStore, tableData, tableColumn } = reactData
         const { rceTimeout, rceRunTime } = internalData
         const resizeOpts = computeResizeOpts.value
         let rceDelay = internalData.rceDelay
         // 如果在500毫秒内频繁执行，则执行次数减缓
         if (rceRunTime && rceRunTime > Date.now() - 500) {
-          rceDelay += 50
+          rceDelay = Math.min(Math.max(60, Math.min(800, tableData.length / 8)), rceDelay + 50)
         } else {
           rceDelay = 0
         }
@@ -3554,6 +3554,17 @@ export default defineVxeComponent({
         if (customStore.visible && $xeTable.handleCustomStyle) {
           $xeTable.handleCustomStyle()
         }
+
+        const renderCellSize = tableData.length * tableColumn.length
+        // 渲染量低的场景
+        if (renderCellSize < 400) {
+          rceDelay = 20
+        } else if (renderCellSize < 600) {
+          rceDelay = 40
+        } else if (renderCellSize < 800) {
+          rceDelay = 80
+        }
+
         if (rceTimeout) {
           clearTimeout(rceTimeout)
           // 多少毫秒内至少执行一次
@@ -3575,6 +3586,7 @@ export default defineVxeComponent({
           $xeGanttView.handleLazyRecalculate()
         }
         internalData.rceTimeout = setTimeout(() => {
+          internalData.rceDelay = 0
           internalData.rceTimeout = undefined
           handleRecalculateStyle(reFull, reWidth, reHeight)
           if ($xeGanttView && $xeGanttView.handleLazyRecalculate) {
