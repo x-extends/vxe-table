@@ -390,6 +390,7 @@ export function createReactData (): TableReactData {
     mergeFootFlag: 1,
 
     rowHeightStore: {
+      xlarge: 54,
       large: 52,
       default: 48,
       medium: 44,
