@@ -3,6 +3,7 @@
   --vxe-ui-font-family: -apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
   
   /*font size*/
+  --vxe-ui-font-size-xlarge: 16px;
   --vxe-ui-font-size-large: 16px;
   --vxe-ui-font-size-default: 14px;
   --vxe-ui-font-size-medium: 14px;
@@ -14,6 +15,8 @@
 
   /*input*/
   --vxe-ui-input-disabled-color: #dcdfe6;
+  --vxe-ui-input-height-xlarge: 40px;
+  --vxe-ui-input-height-large: 36px;
   --vxe-ui-input-height-default: 34px;
   --vxe-ui-input-height-medium: 32px;
   --vxe-ui-input-height-small: 30px;
@@ -31,6 +34,8 @@
   --vxe-ui-table-tree-node-line-style: dotted;
   --vxe-ui-table-header-font-weight: 700;
 
+  --vxe-ui-table-row-height-xlarge: 54px;
+  --vxe-ui-table-row-height-large: 52px;
   --vxe-ui-table-row-height-default: 48px;
   --vxe-ui-table-row-height-medium: 44px;
   --vxe-ui-table-row-height-small: 40px;
@@ -40,12 +45,16 @@
   --vxe-ui-table-column-icon-border-color: #c0c4cc;
   --vxe-ui-table-column-icon-border-hover-color: #515A6E;
 
+  --vxe-ui-table-cell-padding-xlarge: 10px;
+  --vxe-ui-table-cell-padding-large: 9px;
   --vxe-ui-table-cell-padding-default: 8px;
   --vxe-ui-table-cell-padding-medium: 7px;
   --vxe-ui-table-cell-padding-small: 6px;
   --vxe-ui-table-cell-padding-mini: 5px;
   --vxe-ui-table-cell-placeholder-color: #C0C4CC;
   --vxe-ui-table-cell-negative-color: #f56c6c;
+  --vxe-ui-table-cell-input-height-xlarge: var(--vxe-ui-table-row-height-xlarge) - 6;
+  --vxe-ui-table-cell-input-height-large: var(--vxe-ui-table-row-height-large) - 6;
   --vxe-ui-table-cell-input-height-default: var(--vxe-ui-table-row-height-default) - 6;
   --vxe-ui-table-cell-input-height-medium: var(--vxe-ui-table-row-height-medium) - 6;
   --vxe-ui-table-cell-input-height-small: var(--vxe-ui-table-row-height-small) - 6;
@@ -99,6 +108,8 @@
 
   /*toolbar*/
   --vxe-ui-toolbar-custom-active-background-color: #D9DADB;
+  --vxe-ui-toolbar-height-xlarge: 54px;
+  --vxe-ui-toolbar-height-large: 52px;
   --vxe-ui-toolbar-height-default: 48px;
   --vxe-ui-toolbar-height-medium: 46px;
   --vxe-ui-toolbar-height-small: 44px;
