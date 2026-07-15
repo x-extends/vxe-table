@@ -78,7 +78,7 @@ export default {
       expError: 'Export failed',
       expFilename: 'Export_{0}',
       expOriginFilename: 'Export_source_{0}',
-      customTitle: 'Column settings',
+      customTitle: 'Custom setting',
       customAll: 'All',
       customConfirm: 'Confirm',
       customClose: 'Closure',
@@ -162,7 +162,7 @@ export default {
       search: 'search'
     },
     custom: {
-      cstmTitle: 'Column settings',
+      cstmTitle: 'Custom setting',
       cstmRestore: 'Restore default',
       cstmCancel: 'Cancel',
       cstmConfirm: 'Sure',
@@ -288,7 +288,7 @@ export default {
       refresh: 'Refresh',
       zoomIn: 'Full screen',
       zoomOut: 'reduction',
-      custom: 'Column settings',
+      custom: 'Custom setting',
       customAll: 'All',
       customConfirm: 'Confirm',
       customRestore: 'Reset',

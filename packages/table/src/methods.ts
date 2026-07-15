@@ -3301,7 +3301,6 @@ function handleLazyRecalculate ($xeTable: VxeTableConstructor & VxeTablePrivateM
     internalData.rceTimeout = setTimeout(() => {
       internalData.rceDelay = 0
       internalData.rceTimeout = undefined
-      window.console.log('111111111111111')
       handleRecalculateStyle($xeTable, reFull, reWidth, reHeight)
       if ($xeGanttView && $xeGanttView.handleLazyRecalculate) {
         $xeGanttView.handleLazyRecalculate()

@@ -78,7 +78,7 @@ export default {
       expError: '导出失败',
       expFilename: '导出_{0}',
       expOriginFilename: '导出_源_{0}',
-      customTitle: '列设置',
+      customTitle: '个性化设置',
       customAll: '全部',
       customConfirm: '确认',
       customClose: '关闭',
@@ -162,7 +162,7 @@ export default {
       search: '搜索'
     },
     custom: {
-      cstmTitle: '列设置',
+      cstmTitle: '个性化设置',
       cstmRestore: '恢复默认',
       cstmCancel: '取消',
       cstmConfirm: '确定',
@@ -288,7 +288,7 @@ export default {
       refresh: '刷新',
       zoomIn: '全屏',
       zoomOut: '还原',
-      custom: '列设置',
+      custom: '个性化设置',
       customAll: '全部',
       customConfirm: '确认',
       customRestore: '重置',
