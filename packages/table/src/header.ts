@@ -29,7 +29,7 @@ export default defineVxeComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeMouseOpts, computeHeaderCellOpts, computeDefaultRowHeight, computeVirtualXOpts, computeFloatingFilterOpts, computeIsHeaderRenderOptimize } = $xeTable.getComputeMaps()
+    const { computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeMouseOpts, computeHeaderCellOpts, computeDefaultRowHeight, computeVirtualXOpts, computeFloatingFilterOpts, computeIsHeaderRenderOptimize, computeHeaderTooltipOpts } = $xeTable.getComputeMaps()
 
     const headerColumn = ref<VxeTableDefines.ColumnInfo[][]>([])
 
@@ -69,6 +69,7 @@ export default defineVxeComponent({
       const virtualXOpts = computeVirtualXOpts.value
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
+      const headerTooltipOpts = computeHeaderTooltipOpts.value
       const cellOpts = computeCellOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
       const headerCellOpts = computeHeaderCellOpts.value
@@ -89,7 +90,7 @@ export default defineVxeComponent({
         const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
         const showEllipsis = headOverflow === 'ellipsis'
         const showTitle = headOverflow === 'title'
-        const showTooltip = headOverflow === true || headOverflow === 'tooltip'
+        const showTooltip = headOverflow === true ? headerTooltipOpts.mode === 'tooltip' : headOverflow === 'tooltip'
         const hasEllipsis = showTitle || showTooltip || showEllipsis
         let hasFilter = false
         let firstFilterOption: VxeTableDefines.FilterOption | null = null
@@ -262,6 +263,7 @@ export default defineVxeComponent({
       const { showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign } = tableProps
       const { currentColumn, overflowX } = tableReactData
       const { fullColumnIdData } = tableInternalData
+      const headerTooltipOpts = computeHeaderTooltipOpts.value
       const cellOpts = computeCellOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
       const headerCellOpts = computeHeaderCellOpts.value
@@ -284,7 +286,7 @@ export default defineVxeComponent({
         const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
         const showEllipsis = headOverflow === 'ellipsis'
         const showTitle = headOverflow === 'title'
-        const showTooltip = headOverflow === true || headOverflow === 'tooltip'
+        const showTooltip = headOverflow === true ? headerTooltipOpts.mode === 'tooltip' : headOverflow === 'tooltip'
         const hasEllipsis = showTitle || showTooltip || showEllipsis
         let hasFilter = false
         let firstFilterOption: VxeTableDefines.FilterOption | null = null

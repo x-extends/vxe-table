@@ -72,6 +72,7 @@ VxeUI.setConfig({
       strict: true
     },
     tooltipConfig: {
+      mode: 'tooltip',
       enterable: true,
       defaultPlacement: 'top'
     },

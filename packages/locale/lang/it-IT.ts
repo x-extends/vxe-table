@@ -240,6 +240,13 @@ export default {
       expMode: 'Seleziona i dati',
       expCurrentColumn: 'Tutti i campi',
       expColumn: 'Seleziona il campo',
+      widthMode: '列宽方式',
+      wModeTitle: '设置打印时列宽的渲染方式',
+      wdModes: {
+        default: '默认',
+        auto: '自适应（根据内容自适应列宽）',
+        scale: '等比例（根据页面比例渲染列宽）'
+      },
       expOpts: 'Impostazioni dei parametri',
       expOptHeader: 'Intestazione',
       expHeaderTitle: "È richiesta l'intestazione del tavolo",

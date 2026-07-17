@@ -43,6 +43,14 @@ export default defineVxeComponent({
     const xInputFilename = ref() as Ref<HTMLInputElement>
     const xInputSheetname = ref() as Ref<HTMLInputElement>
 
+    const computeColWidthModeOptions = computed(() => {
+      return [
+        { value: '', label: getI18n('vxe.export.wdModes.default') },
+        { value: 'auto', label: getI18n('vxe.export.wdModes.auto') },
+        { value: 'scale', label: getI18n('vxe.export.wdModes.scale') }
+      ]
+    })
+
     const computeCheckedAll = computed(() => {
       const { storeData } = props
       return storeData.columns.every((column) => column.checked)
@@ -182,6 +190,7 @@ export default defineVxeComponent({
       const showSheet = computeShowSheet.value
       const supportMerge = computeSupportMerge.value
       const supportStyle = computeSupportStyle.value
+      const colWidthModeOptions = computeColWidthModeOptions.value
       // const supportGroup = computeSupportGroup.value
       const slots = defaultOptions.slots || {}
       const topSlot = slots.top
@@ -386,6 +395,22 @@ export default defineVxeComponent({
                               ])
                             ])
                           ]),
+                          isPrint
+                            ? h('tr', [
+                              h('td', getI18n('vxe.export.widthMode')),
+                              h('td', [
+                                VxeUISelectComponent
+                                  ? h(VxeUISelectComponent, {
+                                    modelValue: defaultOptions.widthMode,
+                                    options: colWidthModeOptions,
+                                    'onUpdate:modelValue' (value: any) {
+                                      defaultOptions.widthMode = value
+                                    }
+                                  })
+                                  : renderEmptyElement($xeTable)
+                              ])
+                            ])
+                            : renderEmptyElement($xeTable),
                           h('tr', [
                             h('td', getI18n('vxe.export.expOpts')),
                             parameterSlot
@@ -397,115 +422,105 @@ export default defineVxeComponent({
                               : h('td', [
                                 h('div', {
                                   class: 'vxe-table-export--panel-option-row'
-                                }, [
-                                  VxeUICheckboxComponent
-                                    ? h(VxeUICheckboxComponent, {
-                                      modelValue: hasEmptyData || isHeader,
-                                      disabled: hasEmptyData,
-                                      title: getI18n('vxe.export.expHeaderTitle'),
-                                      content: getI18n('vxe.export.expOptHeader'),
-                                      'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.isHeader = value
-                                      }
-                                    })
-                                    : renderEmptyElement($xeTable),
-                                  VxeUICheckboxComponent
-                                    ? h(VxeUICheckboxComponent, {
-                                      modelValue: defaultOptions.isFooter,
-                                      disabled: !storeData.hasFooter,
-                                      title: getI18n('vxe.export.expFooterTitle'),
-                                      content: getI18n('vxe.export.expOptFooter'),
-                                      'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.isFooter = value
-                                      }
-                                    })
-                                    : renderEmptyElement($xeTable),
-                                  VxeUICheckboxComponent
-                                    ? h(VxeUICheckboxComponent, {
-                                      modelValue: isHeader ? defaultOptions.isTitle : false,
-                                      disabled: !isHeader,
-                                      title: getI18n('vxe.export.expTitleTitle'),
-                                      content: getI18n('vxe.export.expOptTitle'),
-                                      'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.isTitle = value
-                                      }
-                                    })
-                                    : renderEmptyElement($xeTable),
-                                  VxeUICheckboxComponent
-                                    ? h(VxeUICheckboxComponent, {
-                                      modelValue: isHeader && hasColgroup && supportMerge ? defaultOptions.isColgroup : false,
-                                      title: getI18n('vxe.export.expColgroupTitle'),
-                                      disabled: !isHeader || !hasColgroup || !supportMerge,
-                                      content: getI18n('vxe.export.expOptColgroup'),
-                                      'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.isColgroup = value
-                                      }
-                                    })
-                                    : renderEmptyElement($xeTable)
-                                ]),
+                                }, VxeUICheckboxComponent
+                                  ? [
+                                      h(VxeUICheckboxComponent, {
+                                        modelValue: hasEmptyData || isHeader,
+                                        disabled: hasEmptyData,
+                                        title: getI18n('vxe.export.expHeaderTitle'),
+                                        content: getI18n('vxe.export.expOptHeader'),
+                                        'onUpdate:modelValue' (value: any) {
+                                          defaultOptions.isHeader = value
+                                        }
+                                      }),
+                                      h(VxeUICheckboxComponent, {
+                                        modelValue: defaultOptions.isFooter,
+                                        disabled: !storeData.hasFooter,
+                                        title: getI18n('vxe.export.expFooterTitle'),
+                                        content: getI18n('vxe.export.expOptFooter'),
+                                        'onUpdate:modelValue' (value: any) {
+                                          defaultOptions.isFooter = value
+                                        }
+                                      }),
+                                      h(VxeUICheckboxComponent, {
+                                        modelValue: isHeader ? defaultOptions.isTitle : false,
+                                        disabled: !isHeader,
+                                        title: getI18n('vxe.export.expTitleTitle'),
+                                        content: getI18n('vxe.export.expOptTitle'),
+                                        'onUpdate:modelValue' (value: any) {
+                                          defaultOptions.isTitle = value
+                                        }
+                                      }),
+                                      h(VxeUICheckboxComponent, {
+                                        modelValue: isHeader && hasColgroup && supportMerge ? defaultOptions.isColgroup : false,
+                                        title: getI18n('vxe.export.expColgroupTitle'),
+                                        disabled: !isHeader || !hasColgroup || !supportMerge,
+                                        content: getI18n('vxe.export.expOptColgroup'),
+                                        'onUpdate:modelValue' (value: any) {
+                                          defaultOptions.isColgroup = value
+                                        }
+                                      })
+                                    ]
+                                  : []),
                                 h('div', {
                                   class: 'vxe-table-export--panel-option-row'
-                                }, [
-                                  VxeUICheckboxComponent
-                                    ? h(VxeUICheckboxComponent, {
-                                      modelValue: hasEmptyData ? false : defaultOptions.original,
-                                      disabled: hasEmptyData,
-                                      title: getI18n('vxe.export.expOriginalTitle'),
-                                      content: getI18n('vxe.export.expOptOriginal'),
-                                      'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.original = value
-                                      }
-                                    })
-                                    : renderEmptyElement($xeTable),
-                                  VxeUICheckboxComponent
-                                    ? h(VxeUICheckboxComponent, {
-                                      modelValue: hasMerge && supportMerge && checkedAll ? defaultOptions.isMerge : false,
-                                      title: getI18n('vxe.export.expMergeTitle'),
-                                      disabled: hasEmptyData || !hasMerge || !supportMerge || !checkedAll,
-                                      content: getI18n('vxe.export.expOptMerge'),
-                                      'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.isMerge = value
-                                      }
-                                    })
-                                    : renderEmptyElement($xeTable),
-                                  isPrint || !VxeUICheckboxComponent
-                                    ? renderEmptyElement($xeTable)
-                                    : h(VxeUICheckboxComponent, {
-                                      modelValue: supportStyle ? defaultOptions.useStyle : false,
-                                      disabled: !supportStyle,
-                                      title: getI18n('vxe.export.expUseStyleTitle'),
-                                      content: getI18n('vxe.export.expOptUseStyle'),
-                                      'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.useStyle = value
-                                      }
-                                    })
-                                ]),
+                                }, VxeUICheckboxComponent
+                                  ? [
+                                      h(VxeUICheckboxComponent, {
+                                        modelValue: hasEmptyData ? false : defaultOptions.original,
+                                        disabled: hasEmptyData,
+                                        title: getI18n('vxe.export.expOriginalTitle'),
+                                        content: getI18n('vxe.export.expOptOriginal'),
+                                        'onUpdate:modelValue' (value: any) {
+                                          defaultOptions.original = value
+                                        }
+                                      }),
+                                      h(VxeUICheckboxComponent, {
+                                        modelValue: hasMerge && supportMerge && checkedAll ? defaultOptions.isMerge : false,
+                                        title: getI18n('vxe.export.expMergeTitle'),
+                                        disabled: hasEmptyData || !hasMerge || !supportMerge || !checkedAll,
+                                        content: getI18n('vxe.export.expOptMerge'),
+                                        'onUpdate:modelValue' (value: any) {
+                                          defaultOptions.isMerge = value
+                                        }
+                                      }),
+                                      isPrint
+                                        ? renderEmptyElement($xeTable)
+                                        : h(VxeUICheckboxComponent, {
+                                          modelValue: supportStyle ? defaultOptions.useStyle : false,
+                                          disabled: !supportStyle,
+                                          title: getI18n('vxe.export.expUseStyleTitle'),
+                                          content: getI18n('vxe.export.expOptUseStyle'),
+                                          'onUpdate:modelValue' (value: any) {
+                                            defaultOptions.useStyle = value
+                                          }
+                                        })
+                                    ]
+                                  : []),
                                 h('div', {
                                   class: 'vxe-table-export--panel-option-row'
-                                }, [
-                                  VxeUICheckboxComponent
-                                    ? h(VxeUICheckboxComponent, {
-                                      modelValue: hasTree ? defaultOptions.isTreeAllExpanded : false,
-                                      disabled: hasEmptyData || !hasTree,
-                                      title: getI18n('vxe.export.expTreeAllExpandTitle'),
-                                      content: getI18n('vxe.export.expOptTreeAllExpand'),
-                                      'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.isTreeAllExpanded = value
-                                      }
-                                    })
-                                    : renderEmptyElement($xeTable),
-                                  VxeUICheckboxComponent
-                                    ? h(VxeUICheckboxComponent, {
-                                      modelValue: hasRowGroup ? defaultOptions.isRowGroupAllExpanded : false,
-                                      disabled: hasEmptyData || !hasRowGroup,
-                                      title: getI18n('vxe.export.expRowGroupAllExpandTitle'),
-                                      content: getI18n('vxe.export.expOptRowGroupAllExpand'),
-                                      'onUpdate:modelValue' (value: any) {
-                                        defaultOptions.isRowGroupAllExpanded = value
-                                      }
-                                    })
-                                    : renderEmptyElement($xeTable)
-                                ])
+                                }, VxeUICheckboxComponent
+                                  ? [
+                                      h(VxeUICheckboxComponent, {
+                                        modelValue: hasTree ? defaultOptions.isTreeAllExpanded : false,
+                                        disabled: hasEmptyData || !hasTree,
+                                        title: getI18n('vxe.export.expTreeAllExpandTitle'),
+                                        content: getI18n('vxe.export.expOptTreeAllExpand'),
+                                        'onUpdate:modelValue' (value: any) {
+                                          defaultOptions.isTreeAllExpanded = value
+                                        }
+                                      }),
+                                      h(VxeUICheckboxComponent, {
+                                        modelValue: hasRowGroup ? defaultOptions.isRowGroupAllExpanded : false,
+                                        disabled: hasEmptyData || !hasRowGroup,
+                                        title: getI18n('vxe.export.expRowGroupAllExpandTitle'),
+                                        content: getI18n('vxe.export.expOptRowGroupAllExpand'),
+                                        'onUpdate:modelValue' (value: any) {
+                                          defaultOptions.isRowGroupAllExpanded = value
+                                        }
+                                      })
+                                    ]
+                                  : [])
                               ])
                           ])
                         ]

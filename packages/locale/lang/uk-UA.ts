@@ -240,6 +240,13 @@ export default {
       expMode: 'Виберіть дані',
       expCurrentColumn: 'Всі поля',
       expColumn: 'Виберіть поле',
+      widthMode: '列宽方式',
+      wModeTitle: '设置打印时列宽的渲染方式',
+      wdModes: {
+        default: '默认',
+        auto: '自适应（根据内容自适应列宽）',
+        scale: '等比例（根据页面比例渲染列宽）'
+      },
       expOpts: 'Налаштування параметрів',
       expOptHeader: 'Заголовок',
       expHeaderTitle: 'Необхідний заголовок столу',

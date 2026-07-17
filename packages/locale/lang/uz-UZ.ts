@@ -240,6 +240,13 @@ export default {
       expMode: "Ma'lumotni tanlang",
       expCurrentColumn: 'Barcha maydonlar',
       expColumn: 'Maydonni tanlang',
+      widthMode: '列宽方式',
+      wModeTitle: '设置打印时列宽的渲染方式',
+      wdModes: {
+        default: '默认',
+        auto: '自适应（根据内容自适应列宽）',
+        scale: '等比例（根据页面比例渲染列宽）'
+      },
       expOpts: 'Parametr sozlamalari',
       expOptHeader: 'Sarlavha',
       expHeaderTitle: 'Stol sarlavhasi talab qilinadi',

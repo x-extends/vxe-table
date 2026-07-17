@@ -240,6 +240,13 @@ export default {
       expMode: '데이터를 선택하십시오',
       expCurrentColumn: '모든 필드',
       expColumn: '필드를 선택하십시오',
+      widthMode: '列宽方式',
+      wModeTitle: '设置打印时列宽的渲染方式',
+      wdModes: {
+        default: '默认',
+        auto: '自适应（根据内容自适应列宽）',
+        scale: '等比例（根据页面比例渲染列宽）'
+      },
       expOpts: '매개 변수 설정',
       expOptHeader: '헤더',
       expHeaderTitle: '테이블 헤더가 필요합니다',

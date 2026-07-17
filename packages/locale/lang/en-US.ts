@@ -240,6 +240,13 @@ export default {
       expMode: 'Select data',
       expCurrentColumn: 'All fields',
       expColumn: 'Select field',
+      widthMode: 'Column width mode',
+      wModeTitle: 'Set the rendering mode for column width during printing',
+      wdModes: {
+        default: 'Default',
+        auto: 'Adaptive (adjusting column width according to content)',
+        scale: 'Proportional (adjusting column widths according to the page ratio)'
+      },
       expOpts: 'Parameter settings',
       expOptHeader: 'Header',
       expHeaderTitle: 'Is the table header required',
