@@ -148,7 +148,7 @@ function renderTdColumn (
   const cellOverflow = XEUtils.eqNull(showOverflow) ? allShowOverflow : showOverflow
   const showEllipsis = cellOverflow === 'ellipsis'
   const showTitle = cellOverflow === 'title'
-  const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+  const showTooltip = cellOverflow === true ? tooltipOpts.mode === 'tooltip' : cellOverflow === 'tooltip'
   const hasEllipsis = isAllOverflow || showTitle || showTooltip || showEllipsis
   const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
   const isCsHeight = !!customCellHeight

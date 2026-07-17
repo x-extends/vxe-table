@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { isColumnInfo, getCellValue, createHandleGetRowId } from '../../src/util'
 import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
-import { hasClass } from '../../../ui/src/dom'
+import { hasClass, toCssUnit } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { createComponentLog } from '../../../ui/src/log'
 
@@ -491,6 +491,10 @@ function hasEllipsis ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, co
   return isEllipsis
 }
 
+function getCustomColKey (conf: VxeTableDefines.ColumnInfo<any> | VxeTablePropTypes.ExportOrPrintColumnOption) {
+  return `${conf.field || ''}:${conf.type || ''}`
+}
+
 function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
@@ -500,17 +504,103 @@ function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: V
   const { isAllSelected, isIndeterminate } = reactData
   const { mergeBodyCellMaps, mergeFooterCellMaps } = internalData
   const treeOpts = $xeTable.computeTreeOpts
-  const { print: isPrint, isHeader, isFooter, isColgroup, isMerge, colgroups, original } = opts
+  const { print: isPrint, widthMode, isHeader, isFooter, isColgroup, isMerge, colgroups, _columnConfs, original } = opts
+  const isAutoWidth = widthMode === 'auto'
+  const isScaleWidth = widthMode === 'scale'
+  const isDefaultWidth = !isAutoWidth && !isScaleWidth
+
+  const customWidthMaps: Record<string, number | string> = {}
+  if (_columnConfs) {
+    _columnConfs.forEach(conf => {
+      if (!isColumnInfo(conf)) {
+        if ((conf.field || conf.type) && conf.width) {
+          customWidthMaps[getCustomColKey(conf)] = conf.width
+        }
+      }
+    })
+  }
+
+  // 计算宽度
+  const colWidthMaps: Record<string, number> = {}
+  const printWidthMaps: Record<string, number> = {}
+  if (isPrint) {
+    let tableWidth = 0
+    columns.forEach(column => {
+      tableWidth += column.renderWidth
+    })
+    if (colgroups) {
+      colgroups.forEach((cols) => {
+        cols.forEach((column: any) => {
+          if (!column.childNodes || !column.childNodes.length) {
+            return
+          }
+          let childWidth = 0
+          let countChild = 0
+          XEUtils.eachTree([column], item => {
+            if (!item.childNodes || !column.childNodes.length) {
+              countChild++
+            }
+            const ptWidth = printWidthMaps[item.id]
+            childWidth += ptWidth || 0
+          }, { children: 'childNodes' })
+          const colWidth = childWidth - countChild
+          colWidthMaps[column.id] = colWidth
+          printWidthMaps[column.id] = XEUtils.floor(colWidth / tableWidth * 180, 2)
+        })
+      })
+    }
+    columns.forEach(column => {
+      const colWidth = column.renderWidth
+      if (column.width) {
+        colWidthMaps[column.id] = colWidth
+      }
+      printWidthMaps[column.id] = XEUtils.floor(colWidth / tableWidth * 180, 2)
+    })
+  }
+
+  const getHeaderWidthStyle = (column: VxeTableDefines.ColumnInfo) => {
+    const cmColKey = getCustomColKey(column)
+    const cmWidthMaps = customWidthMaps[cmColKey]
+    if (cmWidthMaps) {
+      return 'width:' + toCssUnit(cmWidthMaps)
+    }
+    if (isAutoWidth) {
+      return ''
+    }
+    if (isScaleWidth) {
+      return printWidthMaps[column.id] ? ('width:' + printWidthMaps[column.id] + 'mm') : ''
+    }
+    return colWidthMaps[column.id] ? ('width:' + toCssUnit(colWidthMaps[column.id])) : ''
+  }
+
+  const getCellWidthStyle = (column: VxeTableDefines.ColumnInfo) => {
+    const cmColKey = getCustomColKey(column)
+    const cmWidthMaps = customWidthMaps[cmColKey]
+    if (cmWidthMaps) {
+      return 'width:' + toCssUnit(cmWidthMaps)
+    }
+    if (isAutoWidth || isDefaultWidth) {
+      return ''
+    }
+    if (isScaleWidth) {
+      return printWidthMaps[column.id] ? ('width:' + printWidthMaps[column.id] + 'mm') : ''
+    }
+    return colWidthMaps[column.id] ? ('width:' + toCssUnit(colWidthMaps[column.id])) : ''
+  }
+
   const allCls = 'check-all'
   const clss = [
     'vxe-table',
     `border--${toTableBorder(border)}`,
     isPrint ? 'is--print' : '',
+    isAutoWidth ? 'is--auto-width' : '',
+    isScaleWidth ? 'is--scale-width' : '',
+    isDefaultWidth ? 'is--default-width' : '',
     isHeader ? 'is--header' : ''
   ].filter(cls => cls)
   const tables = [
     `<table class="${clss.join(' ')}" border="0" cellspacing="0" cellpadding="0">`,
-    `<colgroup>${columns.map(column => `<col style="width:${column.renderWidth}px">`).join('')}</colgroup>`
+    `<colgroup>${columns.map((column) => `<col style="${getHeaderWidthStyle(column)}">`).join('')}</colgroup>`
   ]
   if (isHeader) {
     tables.push('<thead>')
@@ -521,22 +611,13 @@ function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: V
             const headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
             const classNames = hasEllipsis($xeTable, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
             const cellTitle = getHeaderTitle($xeTable, opts, column)
-            let childWidth = 0
-            let countChild = 0
-            XEUtils.eachTree([column], item => {
-              if (!item.childNodes || !column.childNodes.length) {
-                countChild++
-              }
-              childWidth += item.renderWidth
-            }, { children: 'childNodes' })
-            const cellWidth = childWidth - countChild
-            if (headAlign) {
+             if (headAlign) {
               classNames.push(`col--${headAlign}`)
             }
             if (column.type === 'checkbox') {
-              return `<th class="${classNames.join(' ')}" colspan="${column._colSpan}" rowspan="${column._rowSpan}"><div ${isPrint ? '' : `style="width: ${cellWidth}px"`}><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></th>`
+              return `<th class="${classNames.join(' ')}" colspan="${column._colSpan}" rowspan="${column._rowSpan}"><div style="${getCellWidthStyle(column)}"><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></th>`
             }
-            return `<th class="${classNames.join(' ')}" colspan="${column._colSpan}" rowspan="${column._rowSpan}" title="${cellTitle}"><div ${isPrint ? '' : `style="width: ${cellWidth}px"`}><span>${formatText(cellTitle, true)}</span></div></th>`
+            return `<th class="${classNames.join(' ')}" colspan="${column._colSpan}" rowspan="${column._rowSpan}" title="${cellTitle}"><div style="${getCellWidthStyle(column)}"><span>${formatText(cellTitle, true)}</span></div></th>`
           }).join('')}</tr>`
         )
       })
@@ -550,9 +631,9 @@ function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: V
             classNames.push(`col--${headAlign}`)
           }
           if (column.type === 'checkbox') {
-            return `<th class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></th>`
+            return `<th class="${classNames.join(' ')}"><div style="${getCellWidthStyle(column)}"><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></th>`
           }
-          return `<th class="${classNames.join(' ')}" title="${cellTitle}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><span>${formatText(cellTitle, true)}</span></div></th>`
+          return `<th class="${classNames.join(' ')}" title="${cellTitle}"><div style="${getCellWidthStyle(column)}"><span>${formatText(cellTitle, true)}</span></div></th>`
         }).join('')}</tr>`
       )
     }
@@ -577,18 +658,18 @@ function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: V
               }
               classNames.push('vxe-table--tree-node')
               if (column.type === 'radio') {
-                return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></div></div></td>`
+                return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></div></div></td>`
               } else if (column.type === 'checkbox') {
-                return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></div></div></td>`
+                return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></div></div></td>`
               }
-              return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell">${cellValue}</div></div></div></td>`
+              return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell">${cellValue}</div></div></div></td>`
             }
             if (column.type === 'radio') {
-              return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></td>`
+              return `<td class="${classNames.join(' ')}"><div style="${getCellWidthStyle(column)}"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></td>`
             } else if (column.type === 'checkbox') {
-              return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
+              return `<td class="${classNames.join(' ')}"><div style="${getCellWidthStyle(column)}"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
             }
-            return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${formatText(cellValue, true)}</div></td>`
+            return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}">${formatText(cellValue, true)}</div></td>`
           }).join('') + '</tr>'
         )
       })
@@ -623,11 +704,11 @@ function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: V
               classNames.push(`col--${cellAlign}`)
             }
             if (column.type === 'radio') {
-              return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></td>`
+              return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}"><div style="${getCellWidthStyle(column)}"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></td>`
             } else if (column.type === 'checkbox') {
-              return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
+              return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}"><div style="${getCellWidthStyle(column)}"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
             }
-            return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${formatText(cellValue, true)}</div></td>`
+            return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}" title="${cellValue}"><div style="${getCellWidthStyle(column)}">${formatText(cellValue, true)}</div></td>`
           }).join('') + '</tr>'
         )
       })
@@ -646,28 +727,28 @@ function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: V
             const classNames = hasEllipsis($xeTable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
             const cellValue = getFooterCellValue($xeTable, opts, row, column)
             let rowSpan = 1
-                let colSpan = 1
-                if (isMerge) {
-                  const _rowIndex = rIndex
-                  const _columnIndex = $xeTable.getVTColumnIndex(column)
-                  const spanRest = mergeFooterCellMaps[`${_rowIndex}:${_columnIndex}`]
-                  if (spanRest) {
-                    const { rowspan, colspan } = spanRest
-                    if (!rowspan || !colspan) {
-                      return ''
-                    }
-                    if (rowspan > 1) {
-                      rowSpan = rowspan
-                    }
-                    if (colspan > 1) {
-                      colSpan = colspan
-                    }
-                  }
+            let colSpan = 1
+            if (isMerge) {
+              const _rowIndex = rIndex
+              const _columnIndex = $xeTable.getVTColumnIndex(column)
+              const spanRest = mergeFooterCellMaps[`${_rowIndex}:${_columnIndex}`]
+              if (spanRest) {
+                const { rowspan, colspan } = spanRest
+                if (!rowspan || !colspan) {
+                  return ''
                 }
+                if (rowspan > 1) {
+                  rowSpan = rowspan
+                }
+                if (colspan > 1) {
+                  colSpan = colspan
+                }
+              }
+            }
             if (footAlign) {
               classNames.push(`col--${footAlign}`)
             }
-            return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${formatText(cellValue, true)}</div></td>`
+            return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}" title="${cellValue}"><div style="${getCellWidthStyle(column)}">${formatText(cellValue, true)}</div></td>`
           }).join('')}</tr>`
         )
       })
@@ -677,7 +758,7 @@ function toHtml ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: V
   // 是否半选状态
   const script = !isAllSelected && isIndeterminate ? `<script>(function(){var a=document.querySelector(".${allCls}");if(a){a.indeterminate=true}})()</script>` : ''
   tables.push('</table>', script)
-  return isPrint ? tables.join('') : createHtmlPage(opts, tables.join(''))
+  return isAutoWidth ? tables.join('') : createHtmlPage(opts, tables.join(''))
 }
 
 function toXML ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: any, columns: any[], datas: any[]) {
@@ -1277,6 +1358,9 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
   if (!typeList.some(item => item.value === type)) {
     exportParams.type = typeList[0].value
   }
+  if (!exportParams.widthMode) {
+    exportParams.widthMode = ''
+  }
   initStore.export = true
   return $xeTable.$nextTick()
 }
@@ -1421,7 +1505,7 @@ export default {
           return isChecked
         }, { children: 'children', mapChildren: 'childNodes', original: true })
       }
-      const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({ } as { data: any[], colgroups: any[], columns: any[] }, opts, { filename: '', sheetName: '' })
+      const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({ } as { data: any[], colgroups: any[], columns: any[] }, opts, { filename: '', sheetName: '', _columnConfs: columns })
       // 如果设置源数据，则默认导出设置了字段的列
       if (!isCustomCol && !columnFilterMethod) {
         columnFilterMethod = ({ column }) => {

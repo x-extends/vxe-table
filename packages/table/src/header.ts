@@ -29,6 +29,7 @@ function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMod
   const virtualXOpts = $xeTable.computeVirtualXOpts
   const columnOpts = $xeTable.computeColumnOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
+  const headerTooltipOpts = $xeTable.computeHeaderTooltipOpts
   const cellOpts = $xeTable.computeCellOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const headerCellOpts = $xeTable.computeHeaderCellOpts
@@ -50,7 +51,7 @@ function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMod
     const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
     const showEllipsis = headOverflow === 'ellipsis'
     const showTitle = headOverflow === 'title'
-    const showTooltip = headOverflow === true || headOverflow === 'tooltip'
+    const showTooltip = headOverflow === true ? headerTooltipOpts.mode === 'tooltip' : headOverflow === 'tooltip'
     const hasEllipsis = showTitle || showTooltip || showEllipsis
     let hasFilter = false
     let firstFilterOption: VxeColumnPropTypes.FilterItem | null = null
@@ -228,6 +229,7 @@ function renderFilterRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, 
   const { showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign } = tableProps
   const { currentColumn, overflowX } = tableReactData
   const { fullColumnIdData } = tableInternalData
+  const headerTooltipOpts = $xeTable.computeHeaderTooltipOpts
   const cellOpts = $xeTable.computeCellOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const headerCellOpts = $xeTable.computeHeaderCellOpts
@@ -250,7 +252,7 @@ function renderFilterRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, 
     const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
     const showEllipsis = headOverflow === 'ellipsis'
     const showTitle = headOverflow === 'title'
-    const showTooltip = headOverflow === true || headOverflow === 'tooltip'
+    const showTooltip = headOverflow === true ? headerTooltipOpts.mode === 'tooltip' : headOverflow === 'tooltip'
     const hasEllipsis = showTitle || showTooltip || showEllipsis
     let hasFilter = false
     let firstFilterOption: VxeTableDefines.FilterOption | null = null

@@ -240,6 +240,13 @@ export default {
       expMode: '選擇數據',
       expCurrentColumn: '全部字段',
       expColumn: '選擇字段',
+      widthMode: '列宽方式',
+      wModeTitle: '设置打印时列宽的渲染方式',
+      wdModes: {
+        default: '默认',
+        auto: '自适应（根据内容自适应列宽）',
+        scale: '等比例（根据页面比例渲染列宽）'
+      },
       expOpts: '參數設置',
       expOptHeader: '表頭',
       expHeaderTitle: '是否需要表頭',
