@@ -14958,24 +14958,33 @@ export default defineVxeComponent({
         }
       }
       if (!VxeUITooltipComponent) {
-        errLog('vxe.error.reqComp', ['vxe-tooltip'])
+        let useOvTip = false
         if (showOverflow === 'tooltip') {
+          useOvTip = true
           errLog('vxe.error.errProp', ['show-overflow=' + showOverflow, 'show-overflow=false,title,ellipsis'])
         }
         if (showOverflow === true && tooltipOpts.mode === 'tooltip') {
+          useOvTip = true
           errLog('vxe.error.notSupportProp', ['show-overflow=' + showOverflow, 'tooltip-config.mode=tooltip', 'tooltip-config.mode=title,ellipsis'])
         }
         if (showHeaderOverflow === 'tooltip') {
+          useOvTip = true
           errLog('vxe.error.errProp', ['show-header-overflow=' + showHeaderOverflow, 'show-header-overflow=false,title,ellipsis'])
         }
         if (showHeaderOverflow === true && headerTooltipOpts.mode === 'tooltip') {
+          useOvTip = true
           errLog('vxe.error.notSupportProp', ['show-header-overflow=' + showHeaderOverflow, 'header-tooltip-config.mode=tooltip', 'header-tooltip-config.mode=title,ellipsis'])
         }
         if (showFooterOverflow === 'tooltip') {
+          useOvTip = true
           errLog('vxe.error.errProp', ['show-footer-overflow=' + showFooterOverflow, 'show-footer-overflow=false,title,ellipsis'])
         }
         if (showFooterOverflow === true && footerTooltipOpts.mode === 'tooltip') {
+          useOvTip = true
           errLog('vxe.error.notSupportProp', ['show-footer-overflow=' + showFooterOverflow, 'footer-tooltip-config.mode=tooltip', 'footer-tooltip-config.mode=title,ellipsis'])
+        }
+        if (useOvTip) {
+          errLog('vxe.error.reqComp', ['vxe-tooltip'])
         }
       }
     })
