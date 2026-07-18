@@ -47,7 +47,7 @@ function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMod
     const isColGroup = column.children && column.children.length
     const fixedHiddenColumn = overflowX && !isColGroup && (fixedType ? column.fixed !== fixedType : !!column.fixed)
     const isPadding = XEUtils.isBoolean(headerCellOpts.padding) ? headerCellOpts.padding : cellOpts.padding
-    const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+    const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
     const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
     const showEllipsis = headOverflow === 'ellipsis'
     const showTitle = headOverflow === 'title'

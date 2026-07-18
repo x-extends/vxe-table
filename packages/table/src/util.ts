@@ -656,11 +656,11 @@ export function createHandleGetRowId ($xeTable: VxeTableConstructor) {
 }
 
 // 编码行主键
-export function encodeRowid (rowVal: string) {
+export function encodeRowid (rowVal: string | number) {
   return XEUtils.eqNull(rowVal) ? '' : encodeURIComponent(rowVal)
 }
 
-function getDeepRowIdByKey (row: any, rowKey: string) {
+function getDeepRowIdByKey (row: any, rowKey: string | number) {
   return XEUtils.get(row, rowKey)
 }
 
