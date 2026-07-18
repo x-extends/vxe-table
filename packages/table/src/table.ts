@@ -4,7 +4,7 @@ import XEUtils from 'xe-utils'
 import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollTopTo, wheelScrollLeftTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement, hasEventInputTarget } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
-import { createReactData, createInternalData, getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, getColReMaxWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn, getRowMaxHeight, handleCustomStoreConfig } from './util'
+import { createReactData, createInternalData, getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, getColReMaxWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn, getRowMaxHeight, handleCustomStoreConfig, encodeRowid } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from '../../ui/src/anime'
 import { createComponentLog } from '../../ui/src/log'
@@ -2927,7 +2927,8 @@ export default defineVxeComponent({
           handleCheckedAllCheckboxRow(true, true)
         } else if (checkRowKeys) {
           const defSelection: any[] = []
-          checkRowKeys.forEach((rowid: any) => {
+          checkRowKeys.forEach((rowKey: any) => {
+            const rowid = encodeRowid(rowKey)
             if (fullDataRowIdData[rowid]) {
               defSelection.push(fullDataRowIdData[rowid].row)
             }
@@ -2945,7 +2946,8 @@ export default defineVxeComponent({
       if (radioConfig) {
         const { fullDataRowIdData } = internalData
         const radioOpts = computeRadioOpts.value
-        const { checkRowKey: rowid, reserve } = radioOpts
+        const { checkRowKey: rowKey, reserve } = radioOpts
+        const rowid = rowKey ? encodeRowid(rowKey) : null
         if (rowid) {
           if (fullDataRowIdData[rowid]) {
             handleCheckedRadioRow(fullDataRowIdData[rowid].row, true)
@@ -2971,7 +2973,8 @@ export default defineVxeComponent({
           $xeTable.setAllRowExpand(true)
         } else if (expandRowKeys) {
           const defExpandeds: any[] = []
-          expandRowKeys.forEach((rowid: any) => {
+          expandRowKeys.forEach((rowKey: any) => {
+            const rowid = encodeRowid(rowKey)
             if (fullDataRowIdData[rowid]) {
               defExpandeds.push(fullDataRowIdData[rowid].row)
             }
@@ -3228,7 +3231,8 @@ export default defineVxeComponent({
           $xeTable.setAllTreeExpand(true)
         } else if (expandRowKeys) {
           const defExpandeds: any[] = []
-          expandRowKeys.forEach((rowid) => {
+          expandRowKeys.forEach((rowKey) => {
+            const rowid = encodeRowid(rowKey)
             const rowRest = fullAllDataRowIdData[rowid]
             if (rowRest) {
               defExpandeds.push(rowRest.row)
@@ -6584,19 +6588,23 @@ export default defineVxeComponent({
         }
         return handleCheckedCheckboxRow(rows, checked, true)
       },
-      setCheckboxRowKey (keys: any, checked) {
+      setCheckboxRowByKey (keys: any, checked) {
         const { fullAllDataRowIdData } = internalData
         if (!XEUtils.isArray(keys)) {
           keys = [keys]
         }
         const rows: any = []
-        keys.forEach((rowid: string) => {
+        keys.forEach((rowKey: string) => {
+          const rowid = encodeRowid(rowKey)
           const rowRest = fullAllDataRowIdData[rowid]
           if (rowRest) {
             rows.push(rowRest.row)
           }
         })
         return handleCheckedCheckboxRow(rows, checked, true)
+      },
+      setCheckboxRowKey (keys, checked) {
+        return $xeTable.setCheckboxRowByKey(keys, checked)
       },
       isCheckedByCheckboxRow (row) {
         const { updateCheckboxFlag } = reactData
@@ -6608,11 +6616,12 @@ export default defineVxeComponent({
         }
         return !!updateCheckboxFlag && !!selectCheckboxMaps[getRowid($xeTable, row)]
       },
-      isCheckedByCheckboxRowKey (rowid: any) {
+      isCheckedByCheckboxRowKey (rowKey: any) {
         const { updateCheckboxFlag } = reactData
         const { fullAllDataRowIdData, selectCheckboxMaps } = internalData
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField } = checkboxOpts
+        const rowid = encodeRowid(rowKey)
         if (checkField) {
           const rowRest = fullAllDataRowIdData[rowid]
           if (rowRest) {
@@ -6626,8 +6635,9 @@ export default defineVxeComponent({
         const { treeIndeterminateRowMaps } = internalData
         return !!treeIndeterminateRowMaps[getRowid($xeTable, row)] && !$xeTable.isCheckedByCheckboxRow(row)
       },
-      isIndeterminateByCheckboxRowKey (rowid: any) {
+      isIndeterminateByCheckboxRowKey (rowKey: any) {
         const { treeIndeterminateRowMaps } = internalData
+        const rowid = encodeRowid(rowKey)
         return !!treeIndeterminateRowMaps[rowid] && !$xeTable.isCheckedByCheckboxRowKey(rowid)
       },
       /**
@@ -6815,13 +6825,17 @@ export default defineVxeComponent({
        * 用于单选行，设置某一行为选中状态
        * @param key 行主键
        */
-      setRadioRowKey (rowid: any) {
+      setRadioByRowKey (rowKey: any) {
         const { fullAllDataRowIdData } = internalData
+        const rowid = encodeRowid(rowKey)
         const rowRest = fullAllDataRowIdData[rowid]
         if (rowRest) {
           return handleCheckedRadioRow(rowRest.row, true)
         }
         return nextTick()
+      },
+      setRadioRowKey (rowKey) {
+        return $xeTable.setRadioByRowKey(rowKey)
       },
       /**
        * 用于当前行，手动清空当前高亮的状态
