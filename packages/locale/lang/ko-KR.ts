@@ -240,7 +240,7 @@ export default {
       expMode: '데이터를 선택하십시오',
       expCurrentColumn: '모든 필드',
       expColumn: '필드를 선택하십시오',
-      widthMode: '列宽方式',
+      widthMode: '列宽设置',
       wModeTitle: '设置打印时列宽的渲染方式',
       wdModes: {
         default: '默认',

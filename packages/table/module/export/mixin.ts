@@ -431,7 +431,7 @@ function toTxtCellLabel (val: any) {
   if (/[",\s\n]/.test(val)) {
     return `"${val.replace(/"/g, '""')}"`
   }
-  return val
+  return XEUtils.eqNull(val) ? '' : val
 }
 
 function toCsv ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
@@ -1221,19 +1221,21 @@ function handleFilterColumns (exportOpts: VxeTablePropTypes.ExportConfig, column
   })
 }
 
-function handleFilterFields (exportOpts: VxeTablePropTypes.ExportConfig, column: VxeTableDefines.ColumnInfo, includeFields: string[] | undefined, excludeFields: string[] | undefined) {
-  if (excludeFields) {
-    if (XEUtils.includes(excludeFields, column.field)) {
-      return false
-    }
+function handleFilterFields (exportOpts: VxeTablePropTypes.ExportConfig, column: VxeTableDefines.ColumnInfo, includeFields: string[] | undefined, includeFdMaps: Record<string, number>, excludeFdMaps: Record<string, number>, extraFdMaps: Record<string, number>) {
+  const { field } = column
+  if (excludeFdMaps[field]) {
+    return false
   }
   if (includeFields) {
-    if (XEUtils.includes(includeFields, column.field)) {
+    if (includeFdMaps[field]) {
       return true
     }
     return false
   }
-  return exportOpts.original ? !!column.field : defaultFilterExportColumn(column)
+  if (extraFdMaps[field]) {
+    return true
+  }
+  return exportOpts.original ? !!field : defaultFilterExportColumn(column)
 }
 
 function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTablePropTypes.ExportOpts | VxeTablePropTypes.ExportConfig, isPrint?: any) {
@@ -1277,7 +1279,7 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
   const modes = defOpts.modes || []
   const checkMethod = customOpts.checkMethod
   const exportColumns = collectColumn.slice(0)
-  const { columns, excludeFields, includeFields } = defOpts
+  const { columns, excludeFields, includeFields, extraFields } = defOpts
   // 处理类型
   const typeList = types.map((value) => {
     return {
@@ -1297,20 +1299,46 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
       label: getI18n(`vxe.export.modes.${item}`)
     }
   })
+
+  const excludeFdMaps: Record<string, number> = {}
+  if (excludeFields && excludeFields.length) {
+    excludeFields.forEach(field => {
+      excludeFdMaps[field] = 1
+    })
+  }
+  const includeFdMaps: Record<string, number> = {}
+  if (includeFields && includeFields.length) {
+    includeFields.forEach(field => {
+      includeFdMaps[field] = 1
+    })
+  }
+  const extraFdMaps: Record<string, number> = {}
+  if (extraFields) {
+    extraFields.forEach(field => {
+      extraFdMaps[field] = 1
+    })
+  }
+
   // 默认选中
-  XEUtils.eachTree(exportColumns, (column, index, items, path, parent) => {
+  // 优先级 columns > excludeFields > (includeFields || extraFields)
+  XEUtils.eachTree(exportColumns, (column, index, items, path, parentColumn) => {
     const isColGroup = column.children && column.children.length > 0
     let isChecked = false
+    const isExtraChecked = extraFdMaps[column.field]
     if (columns && columns.length) {
       isChecked = handleFilterColumns(defOpts, column, columns)
     } else if (excludeFields || includeFields) {
-      isChecked = handleFilterFields(defOpts, column, includeFields, excludeFields)
+      isChecked = handleFilterFields(defOpts, column, includeFields, includeFdMaps, excludeFdMaps, extraFdMaps)
     } else {
-      isChecked = column.visible && (isColGroup || defaultFilterExportColumn(column))
+      if (isExtraChecked) {
+        isChecked = true
+      } else {
+        isChecked = column.visible && (isColGroup || defaultFilterExportColumn(column))
+      }
     }
     column.checked = isChecked
     column.halfChecked = false
-    column.disabled = (parent && parent.disabled) || (checkMethod ? !checkMethod({ $table: $xeTable, column }) : false)
+    column.disabled = (parentColumn && parentColumn.disabled) || (checkMethod ? !checkMethod({ $table: $xeTable, column }) : false)
   })
   // 更新条件
   exportStore.columns = exportColumns
@@ -1480,27 +1508,52 @@ export default {
         opts.isTreeAllExpanded = (opts as any).isAllExpand
       }
 
-      let { filename, sheetName, type, mode, columns, original, columnFilterMethod, beforeExportMethod, includeFields, excludeFields } = opts
+      let { filename, sheetName, type, mode, columns, columnFilterMethod, beforeExportMethod, includeFields, excludeFields, extraFields } = opts
       let groups: any[] = []
       const selectRecords = $xeTable.getCheckboxRecords()
       if (!mode) {
         mode = selectRecords.length ? 'selected' : 'current'
       }
+
+      const excludeFdMaps: Record<string, number> = {}
+      if (excludeFields && excludeFields.length) {
+        excludeFields.forEach(field => {
+          excludeFdMaps[field] = 1
+        })
+      }
+      const includeFdMaps: Record<string, number> = {}
+      if (includeFields && includeFields.length) {
+        includeFields.forEach(field => {
+          includeFdMaps[field] = 1
+        })
+      }
+      const extraFdMaps: Record<string, number> = {}
+      if (extraFields) {
+        extraFields.forEach(field => {
+          extraFdMaps[field] = 1
+        })
+      }
+
       let isCustomCol = false
       let customCols = []
       if (columns && columns.length) {
         isCustomCol = true
-        customCols = columns
+        customCols = XEUtils.searchTree(columns, () => true, { children: 'children', mapChildren: 'childNodes', original: true })
       } else {
         customCols = XEUtils.searchTree(collectColumn, column => {
           const isColGroup = column.children && column.children.length > 0
           let isChecked = false
+          const isExtraChecked = extraFdMaps[column.field]
           if (columns && columns.length) {
             isChecked = handleFilterColumns(opts, column, columns)
           } else if (excludeFields || includeFields) {
-            isChecked = handleFilterFields(opts, column, includeFields, excludeFields)
+            isChecked = handleFilterFields(opts, column, includeFields, includeFdMaps, excludeFdMaps, extraFdMaps)
           } else {
-            isChecked = column.visible && (isColGroup || defaultFilterExportColumn(column))
+            if (isExtraChecked) {
+              isChecked = true
+            } else {
+              isChecked = column.visible && (isColGroup || defaultFilterExportColumn(column))
+            }
           }
           return isChecked
         }, { children: 'children', mapChildren: 'childNodes', original: true })
@@ -1508,20 +1561,7 @@ export default {
       const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({ } as { data: any[], colgroups: any[], columns: any[] }, opts, { filename: '', sheetName: '', _columnConfs: columns })
       // 如果设置源数据，则默认导出设置了字段的列
       if (!isCustomCol && !columnFilterMethod) {
-        columnFilterMethod = ({ column }) => {
-          if (excludeFields) {
-            if (XEUtils.includes(excludeFields, column.field)) {
-              return false
-            }
-          }
-          if (includeFields) {
-            if (XEUtils.includes(includeFields, column.field)) {
-              return true
-            }
-            return false
-          }
-          return original ? !!column.field : defaultFilterExportColumn(column)
-        }
+        columnFilterMethod = ({ column }) => handleFilterFields(handleOptions, column, includeFields, includeFdMaps, excludeFdMaps, extraFdMaps)
         handleOptions.columnFilterMethod = columnFilterMethod
       }
       if (customCols) {

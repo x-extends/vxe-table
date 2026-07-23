@@ -240,3 +240,11 @@ export function wheelScrollTopTo (diffNum: number, cb: (progress: number) => voi
     wtaFrame = null
   })
 }
+
+export function getPopupContainer (appendTo: string | HTMLElement | ((params: any) => string | HTMLElement) | undefined) {
+  const selectElem = appendTo && XEUtils.isFunction(appendTo) ? appendTo({}) : appendTo
+  if (XEUtils.isString(selectElem)) {
+    return document.querySelector(selectElem) || document.body
+  }
+  return selectElem || document.body
+}

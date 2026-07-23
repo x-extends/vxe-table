@@ -2447,7 +2447,7 @@ $btnThemeList: (
       width: 100%;
       position: absolute;
       left: 50%;
-      font-size: 12px;
+      font-size: var(--vxe-ui-table-validate-error-font-size);
       line-height: 1em;
       transform: translate(-50%, -2px);
       text-align: left;
