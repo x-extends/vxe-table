@@ -693,14 +693,15 @@ export default defineVxeComponent({
       const { extraFields, includeFields, excludeFields } = editDirtyOpts
       const kpFields: string[] = []
       if (updateColFlag) {
-        if (includeFields && includeFields.length) {
-          return includeFields
-        }
+        // 优先级 excludeFields > (includeFields || extraFields)
         const excludeFdMaps: Record<string, number> = {}
         if (excludeFields && excludeFields.length) {
           excludeFields.forEach(field => {
             excludeFdMaps[field] = 1
           })
+        }
+        if (includeFields && includeFields.length) {
+          return excludeFields && excludeFields.length ? includeFields.filter(field => !excludeFdMaps[field]) : includeFields
         }
         const addFdMaps: Record<string, number> = {}
         if (extraFields && extraFields.length) {

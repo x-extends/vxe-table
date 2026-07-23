@@ -240,7 +240,7 @@ export default {
       expMode: 'Select data',
       expCurrentColumn: 'All fields',
       expColumn: 'Select field',
-      widthMode: 'Column width mode',
+      widthMode: 'Column width settings',
       wModeTitle: 'Set the rendering mode for column width during printing',
       wdModes: {
         default: 'Default',
