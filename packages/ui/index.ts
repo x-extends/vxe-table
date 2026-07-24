@@ -392,7 +392,7 @@ VxeUI.setIcon({
   TOOLBAR_TOOLS_PRINT: iconPrefix + 'print',
   TOOLBAR_TOOLS_FULLSCREEN: iconPrefix + 'fullscreen',
   TOOLBAR_TOOLS_MINIMIZE: iconPrefix + 'minimize',
-  TOOLBAR_TOOLS_CUSTOM: iconPrefix + 'custom-column',
+  TOOLBAR_TOOLS_CUSTOM: iconPrefix + 'setting',
   TOOLBAR_TOOLS_FIXED_LEFT: iconPrefix + 'fixed-left',
   TOOLBAR_TOOLS_FIXED_LEFT_ACTIVE: iconPrefix + 'fixed-left-fill',
   TOOLBAR_TOOLS_FIXED_RIGHT: iconPrefix + 'fixed-right',

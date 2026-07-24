@@ -1252,8 +1252,8 @@ export default defineVxeComponent({
                           immediate: false,
                           disabled: isHidden,
                           modelValue: column.renderResizeWidth,
-                          min: customMinWidth || undefined,
-                          max: customMaxWidth || undefined,
+                          min: customMinWidth || 0,
+                          max: customMaxWidth || 9999,
                           'onUpdate:modelValue' (value: any) {
                             const width = Math.max(0, Number(value))
                             column.renderResizeWidth = width
