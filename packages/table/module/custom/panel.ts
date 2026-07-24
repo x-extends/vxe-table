@@ -1445,8 +1445,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
                             immediate: false,
                             disabled: isHidden,
                             value: column.renderResizeWidth,
-                            min: customMinWidth || undefined,
-                            max: customMaxWidth || undefined
+                            min: customMinWidth || 0,
+                            max: customMaxWidth || 9999
                           },
                           on: {
                             modelValue (value: any) {
