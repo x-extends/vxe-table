@@ -190,8 +190,8 @@ function renderTitleContent (h: CreateElement, params: VxeTableDefines.CellRende
   const headerTooltipOpts = $table.computeHeaderTooltipOpts
   const showAllTip = headerTooltipOpts.showAll
   const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
-  const showTitle = headOverflow === 'title'
-  const showTooltip = headOverflow === true || headOverflow === 'tooltip'
+  const showTitle = (headOverflow === true ? headerTooltipOpts.mode : headOverflow) === 'title'
+  const showTooltip = (headOverflow === true ? headerTooltipOpts.mode : headOverflow) === 'tooltip'
   const ons: Record<string, any> = {}
   if (showTitle || showTooltip || showAllTip) {
     ons.mouseenter = (evnt: MouseEvent) => {

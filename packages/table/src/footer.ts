@@ -47,9 +47,9 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
     const isPadding = XEUtils.isBoolean(footerCellOpts.padding) ? footerCellOpts.padding : cellOpts.padding
     const footOverflow = XEUtils.eqNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
     const footAlign = footerAlign || (compConf ? compConf.tableFooterCellAlign : '') || allFooterAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
-    const showEllipsis = footOverflow === 'ellipsis'
-    const showTitle = footOverflow === 'title'
-    const showTooltip = footOverflow === true ? footerTooltipOpts.mode === 'tooltip' : footOverflow === 'tooltip'
+    const showEllipsis = (footOverflow === true ? footerTooltipOpts.mode : footOverflow) === 'ellipsis'
+    const showTitle = (footOverflow === true ? footerTooltipOpts.mode : footOverflow) === 'title'
+    const showTooltip = (footOverflow === true ? footerTooltipOpts.mode : footOverflow) === 'tooltip'
     const hasEllipsis = showTitle || showTooltip || showEllipsis
     const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
     const attrs: any = { colid }

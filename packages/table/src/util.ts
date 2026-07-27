@@ -165,6 +165,8 @@ export function createInternalData (): TableInternalData {
     initStatus: false,
     isActivated: false,
 
+    // rceTimeout: undefined,
+    // rceRunTime: undefined,
     rceDelay: 0
 
     // _sToTime: null
@@ -1123,6 +1125,7 @@ export function handleCustomStoreConfig ($xeTable: VxeTableConstructor) {
   const isCustomSort = hangleBolleanDefaultValue(storageOpts.sort, isAllCustom)
   const isCustomAggGroup = hangleBolleanDefaultValue(storageOpts.aggGroup, isAllCustom)
   const isCustomAggFunc = hangleBolleanDefaultValue(storageOpts.aggFunc, isAllCustom)
+  const isCustomPager = hangleBolleanDefaultValue(storageOpts.pager, isAllCustom)
   return {
     isCustomAlign,
     isCustomHeaderAlign,
@@ -1132,6 +1135,7 @@ export function handleCustomStoreConfig ($xeTable: VxeTableConstructor) {
     isCustomFixed,
     isCustomSort,
     isCustomAggGroup,
-    isCustomAggFunc
+    isCustomAggFunc,
+    isCustomPager
   }
 }

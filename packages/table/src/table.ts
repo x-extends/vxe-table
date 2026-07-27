@@ -1767,9 +1767,9 @@ export default {
     // if (treeConfig && (treeOpts.showLine || treeOpts.line) && !showOverflow) {
     //   warnLog('vxe.error.reqProp', ['show-overflow'])
     // }
-    if (treeConfig && !treeOpts.transform && props.stripe) {
-      warnLog('vxe.error.noTree', ['stripe'])
-    }
+    // if (treeConfig && !treeOpts.transform && props.stripe) {
+    //   warnLog('vxe.error.noTree', ['stripe'])
+    // }
     if (treeConfig && !treeOpts.transform) {
       if (sortOpts.isDeep) {
         warnLog('vxe.error.reqSupportProp', ['transform=false', 'sort-config.isDeep=false'])

@@ -1462,6 +1462,21 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }
       return null
     },
+    getCustomPagerData () {
+      const $xeGrid = this
+      const props = $xeGrid
+      const reactData = $xeGrid.reactData
+
+      const { pagerConfig } = props
+      const { tablePage } = reactData
+      const pagerOpts = $xeGrid.computePagerOpts
+      if (pagerConfig && isEnableConf(pagerOpts)) {
+        return {
+          pSize: tablePage.pageSize
+        }
+      }
+      return {}
+    },
     loadColumn (columns: any[]) {
       const $xeGrid = this
       const slots = $xeGrid.$scopedSlots
