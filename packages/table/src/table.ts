@@ -1610,9 +1610,9 @@ export default defineVxeComponent({
     const handleCustomRestore = (storeData: VxeTableDefines.CustomStoreData) => {
       const { aggregateConfig, rowGroupConfig } = props
       const { collectColumn } = internalData
-      const { isCustomAlign, isCustomHeaderAlign, isCustomFooterAlign, isCustomResizable, isCustomVisible, isCustomFixed, isCustomSort, isCustomAggGroup, isCustomAggFunc } = handleCustomStoreConfig($xeTable)
+      const { isCustomAlign, isCustomHeaderAlign, isCustomFooterAlign, isCustomResizable, isCustomVisible, isCustomFixed, isCustomSort, isCustomAggGroup, isCustomAggFunc, isCustomPager } = handleCustomStoreConfig($xeTable)
 
-      let { alignData, headerAlignData, footerAlignData, resizableData, sortData, visibleData, fixedData, aggGroupData, aggFuncData } = storeData
+      let { alignData, headerAlignData, footerAlignData, resizableData, sortData, visibleData, fixedData, aggGroupData, aggFuncData, pagerData } = storeData
       // 处理还原
       if ((isCustomAlign && alignData) ||
         (isCustomHeaderAlign && headerAlignData) ||
@@ -1622,7 +1622,8 @@ export default defineVxeComponent({
         (isCustomVisible && visibleData) ||
         (isCustomFixed && fixedData) ||
         (isCustomAggGroup && aggGroupData) ||
-        (isCustomAggFunc && aggFuncData)) {
+        (isCustomAggFunc && aggFuncData) ||
+        (isCustomPager && pagerData && $xeGGWrapper)) {
         const sortColMaps: Record<string, {
           key: string
           sNum: number
@@ -1957,7 +1958,7 @@ export default defineVxeComponent({
       const autoWidthColumnList = computeAutoWidthColumnList.value
       const { fullColumnIdData } = internalData
       const el = refElem.value
-      if (el) {
+      if (el && autoWidthColumnList.length) {
         el.setAttribute('data-calc-col', 'Y')
         autoWidthColumnList.forEach(column => {
           const colid = column.id
@@ -2244,7 +2245,7 @@ export default defineVxeComponent({
       const fullMaps: Record<string, any> = {}
       let rowNum = 0
       const { handleGetRowId } = createHandleGetRowId($xeTable)
-      XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
+      XEUtils.eachTree(afterTreeFullData, (row, index, items, path, parentRow) => {
         const rowid = handleGetRowId(row)
         const rowRest = fullAllDataRowIdData[rowid]
         const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
@@ -2252,9 +2253,10 @@ export default defineVxeComponent({
           rowRest.seq = seq
           rowRest._seq = rowNum
           rowRest.treeIndex = index
+          rowRest._index = rowNum
           rowRest._tIndex = rowNum
         } else {
-          const rest = { row, rowid, _seq: rowNum, seq, index: -1, $index: -1, _index: -1, treeIndex: -1, _tIndex: rowNum, items: [], parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+          const rest = { row, rowid, _seq: rowNum, seq, index, $index: -1, _index: rowNum, treeIndex: index, _tIndex: rowNum, items, parent: parentRow, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
           fullAllDataRowIdData[rowid] = rest
           fullDataRowIdData[rowid] = rest
         }
@@ -3493,7 +3495,7 @@ export default defineVxeComponent({
       if (reWidth) {
         calcCellWidth()
       }
-      if (reFull) {
+      if (reWidth || reFull) {
         autoCellWidth()
       }
       calcScrollbar()
@@ -3508,7 +3510,7 @@ export default defineVxeComponent({
         if (reWidth) {
           calcCellWidth()
         }
-        if (reFull) {
+        if (reWidth || reFull) {
           autoCellWidth()
         }
         if (reHeight) {
@@ -3606,7 +3608,7 @@ export default defineVxeComponent({
         return
       }
       internalData.rsePending = true
-      handleLazyRecalculate(true, true, true, {
+      handleLazyRecalculate(false, true, true, {
         minRunDelay: 200
       }).then(() => {
         internalData.rsePending = false
@@ -4888,12 +4890,12 @@ export default defineVxeComponent({
         return
       }
       const expandOpts = computeExpandOpts.value
-      const rowOpts = computeRowOpts.value
-      const cellOpts = computeCellOpts.value
-      const defaultRowHeight = computeDefaultRowHeight.value
       const { mode } = expandOpts
       if (expandColumn && mode === 'fixed') {
         const { elemStore, fullAllDataRowIdData } = internalData
+        const rowOpts = computeRowOpts.value
+        const cellOpts = computeCellOpts.value
+        const defaultRowHeight = computeDefaultRowHeight.value
         const rowExpandEl = refRowExpandElem.value
         const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
         if (rowExpandEl && bodyScrollElem) {
@@ -8241,7 +8243,7 @@ export default defineVxeComponent({
         const { isRowGroupStatus, rowGroupList } = reactData
         const { fullColumnFieldData, collectColumn } = internalData
         const { storage, checkMethod } = customOpts
-        const { isCustomAlign, isCustomHeaderAlign, isCustomFooterAlign, isCustomResizable, isCustomVisible, isCustomFixed, isCustomSort, isCustomAggGroup, isCustomAggFunc } = handleCustomStoreConfig($xeTable)
+        const { isCustomAlign, isCustomHeaderAlign, isCustomFooterAlign, isCustomResizable, isCustomVisible, isCustomFixed, isCustomSort, isCustomAggGroup, isCustomAggFunc, isCustomPager } = handleCustomStoreConfig($xeTable)
 
         const alignData: Record<string, VxeColumnPropTypes.Align> = {}
         const headerAlignData: Record<string, VxeColumnPropTypes.HeaderAlign> = {}
@@ -8254,6 +8256,7 @@ export default defineVxeComponent({
         const aggFuncData: Record<string, VxeColumnPropTypes.AggFunc> = {}
 
         const storeData: VxeTableDefines.CustomStoreData = {
+          pagerData: isCustomPager && $xeGGWrapper && $xeGGWrapper.getCustomPagerData ? $xeGGWrapper.getCustomPagerData() : undefined,
           alignData: undefined,
           headerAlignData: undefined,
           footerAlignData: undefined,
@@ -9090,8 +9093,10 @@ export default defineVxeComponent({
       if (!el || !el.clientWidth) {
         return
       }
+      if (internalData.rsePending) {
+        return
+      }
       handleResizeEvent()
-      $xeTable.updateCellAreas()
     }
 
     const handleTargetEnterEvent = (isClear: boolean) => {
@@ -10232,7 +10237,7 @@ export default defineVxeComponent({
         const tableId = computeTableId.value
         const customOpts = computeCustomOpts.value
         const { updateStore, storage } = customOpts
-        const { isCustomAlign, isCustomHeaderAlign, isCustomFooterAlign, isCustomResizable, isCustomVisible, isCustomFixed, isCustomSort, isCustomAggGroup, isCustomAggFunc } = handleCustomStoreConfig($xeTable)
+        const { isCustomAlign, isCustomHeaderAlign, isCustomFooterAlign, isCustomResizable, isCustomVisible, isCustomFixed, isCustomSort, isCustomAggGroup, isCustomAggFunc, isCustomPager } = handleCustomStoreConfig($xeTable)
 
         if (type !== 'reset') {
           // fix：修复拖动列宽，重置按钮无法点击的问题
@@ -10249,7 +10254,8 @@ export default defineVxeComponent({
             isCustomFixed ||
             isCustomSort ||
             isCustomAggGroup ||
-            isCustomAggFunc
+            isCustomAggFunc ||
+            isCustomPager
           )
         ) {
           if (!tableId) {
@@ -10258,6 +10264,7 @@ export default defineVxeComponent({
           }
           const storeData: VxeTableDefines.CustomStoreData = type === 'reset'
             ? {
+                pagerData: {},
                 alignData: {},
                 headerAlignData: {},
                 footerAlignData: {},
@@ -14657,9 +14664,9 @@ export default defineVxeComponent({
       // if (treeConfig && (treeOpts.showLine || treeOpts.line) && !showOverflow) {
       //   warnLog('vxe.error.reqProp', ['show-overflow'])
       // }
-      if (treeConfig && !treeOpts.transform && props.stripe) {
-        warnLog('vxe.error.noTree', ['stripe'])
-      }
+      // if (treeConfig && !treeOpts.transform && props.stripe) {
+      //   warnLog('vxe.error.noTree', ['stripe'])
+      // }
       if (treeConfig && !treeOpts.transform) {
         if (sortOpts.isDeep) {
           warnLog('vxe.error.reqSupportProp', ['transform=false', 'sort-config.isDeep=false'])

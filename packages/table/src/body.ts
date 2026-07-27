@@ -161,9 +161,9 @@ export default defineVxeComponent({
       let fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
       const isCellPadding = XEUtils.eqNull(padding) ? (allPadding === null ? cellOpts.padding : allPadding) : padding
       const cellOverflow = XEUtils.eqNull(showOverflow) ? allShowOverflow : showOverflow
-      const showEllipsis = cellOverflow === 'ellipsis'
-      const showTitle = cellOverflow === 'title'
-      const showTooltip = cellOverflow === true ? tooltipOpts.mode === 'tooltip' : cellOverflow === 'tooltip'
+      const showEllipsis = (cellOverflow === true ? tooltipOpts.mode : cellOverflow) === 'ellipsis'
+      const showTitle = (cellOverflow === true ? tooltipOpts.mode : cellOverflow) === 'title'
+      const showTooltip = (cellOverflow === true ? tooltipOpts.mode : cellOverflow) === 'tooltip'
       const hasEllipsis = isAllOverflow || showTitle || showTooltip || showEllipsis
       const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
       const isCsHeight = !!customCellHeight

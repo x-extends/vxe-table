@@ -4,6 +4,10 @@ body {
   padding: 0;
   margin: 0;
 }
+html, body, #app {
+  overflow: auto;
+  height: 100%;
+}
 * {
   box-sizing: border-box;
 }

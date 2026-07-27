@@ -1536,6 +1536,17 @@ export default defineVxeComponent({
           }
         }
         return null
+      },
+      getCustomPagerData () {
+        const { pagerConfig } = props
+        const { tablePage } = reactData
+        const pagerOpts = computePagerOpts.value
+        if (pagerConfig && isEnableConf(pagerOpts)) {
+          return {
+            pSize: tablePage.pageSize
+          }
+        }
+        return {}
       }
       // setProxyInfo (options) {
       //   if (props.proxyConfig && options) {

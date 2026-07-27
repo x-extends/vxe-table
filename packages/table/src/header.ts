@@ -88,9 +88,9 @@ export default defineVxeComponent({
         const isPadding = XEUtils.isBoolean(headerCellOpts.padding) ? headerCellOpts.padding : cellOpts.padding
         const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
         const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
-        const showEllipsis = headOverflow === 'ellipsis'
-        const showTitle = headOverflow === 'title'
-        const showTooltip = headOverflow === true ? headerTooltipOpts.mode === 'tooltip' : headOverflow === 'tooltip'
+        const showEllipsis = (headOverflow === true ? headerTooltipOpts.mode : headOverflow) === 'ellipsis'
+        const showTitle = (headOverflow === true ? headerTooltipOpts.mode : headOverflow) === 'title'
+        const showTooltip = (headOverflow === true ? headerTooltipOpts.mode : headOverflow) === 'tooltip'
         const hasEllipsis = showTitle || showTooltip || showEllipsis
         let hasFilter = false
         let firstFilterOption: VxeTableDefines.FilterOption | null = null
