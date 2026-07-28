@@ -1,28 +1,75 @@
 <template>
   <div>
-    <vxe-table show-footer :row-config="{ isHover: true }" :footer-data="footerData" :data="tableData">
-      <vxe-column field="seq" type="seq" width="70"></vxe-column>
-      <vxe-column field="name" title="名称" show-overflow="ellipsis"></vxe-column>
-      <vxe-column field="role" title="角色" show-overflow></vxe-column>
-      <vxe-column field="date" title="标题溢出，显示为 tooltip 标题溢出标题溢出标题溢出标题溢出标题溢出标题溢出标题溢出" show-header-overflow show-overflow="title" show-footer-overflow></vxe-column>
-      <vxe-column field="rate" title="Rate" show-header-overflow="title">
-        <template #header>
-          <span>标题显示原生 title ___________________________</span>
-        </template>
-      </vxe-column>
-      <vxe-column field="address" title="长标题长标题长标题长标题长标题长标题长标题长标题长标题" width="160"></vxe-column>
-    </vxe-table>
+    <vxe-button @click="exportEvent">高级导出</vxe-button>
+    <vxe-grid ref="gridRef" v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-const tableData = ref([
-  { name: 'Test1', role: '前端', date: '内容显示原生 title 内容显示原生 title', rate: 5, address: 'address1' },
-  { name: '内容超出隐藏，不显示提示信息xxxxxxxxxxxxxxxxxxx', role: '后端', date: '2020-02-22', rate: 2, address: 'address2\ntooltip文本换行\n换行xx' },
-  { name: 'Test3', role: '内容超出一行显示为 tooltip xxxxxxxxxxxxxx 内容超出一行显示为 tooltip xxxxxxxxxxxxxx', date: '2020-01-01', rate: 0, address: 'address3\ntooltip文本换行\n换行xx' },
-  { name: 'Test4', role: '设计师', date: '2020-02-23', rate: 1, address: 'address4' },
-  { name: 'Test5', role: '前端', date: '2020-01-20', rate: 3, address: 'address5\ntooltip文本换行\n换行xx' }
-])
-const footerData = ref([{ seq: '合计', date: '说明 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx长文本内容长文本内容xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', rate: '不想换行不想换行不想换行不想换行不想换行不想换行不想换行不想换行' }])
+<script lang="ts" setup>
+import { ref, reactive } from 'vue'
+import type { VxeGridInstance, VxeGridProps } from '../../../types'
+
+interface RowVO {
+  id: number
+  name: string
+  role: string
+  sex: string
+  age: number
+  address: string
+}
+
+const gridRef = ref<VxeGridInstance<RowVO>>()
+
+const gridOptions = reactive<VxeGridProps<RowVO>>({
+  border: true,
+  showFooter: true,
+  mergeCells: [
+    { row: 1, col: 2, colspan: 2, rowspan: 1 }
+  ],
+  mergeFooterCells: [
+    { row: 0, col: 2, colspan: 2, rowspan: 1 }
+  ],
+  exportConfig: {
+    filename () {
+      return `导出文件名${Date.now()}`
+    },
+    sheetName () {
+      return `导出标题${Date.now()}`
+    }
+  },
+  columns: [
+    { field: 'seq', type: 'seq', width: 70 },
+    { field: 'checkbox', type: 'checkbox', width: 70 },
+    {
+      title: '分组1',
+      children: [
+        { field: 'name', title: 'Name' }
+      ]
+    },
+    {
+      title: '分组2',
+      children: [
+        { field: 'sex', title: 'Sex' },
+        { field: 'age', title: 'Age' }
+      ]
+    }
+  ],
+  data: [
+    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+    { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+    { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
+  ],
+  footerData: [
+    { seq: '合计', name: '45', sex: '666', age: '999' },
+    { seq: '平均', name: '98', sex: '888', age: '333' }
+  ]
+})
+
+const exportEvent = () => {
+  const $grid = gridRef.value
+  if ($grid) {
+    $grid.openExport()
+  }
+}
 </script>

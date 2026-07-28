@@ -11580,6 +11580,7 @@ export default defineVxeComponent({
           status: false
         }
         if (!(el && prevDragRow && dragRow)) {
+          handleRowDragEndClearStatus()
           return Promise.resolve(errRest)
         }
         // 判断是否有拖动
@@ -11688,6 +11689,9 @@ export default defineVxeComponent({
           }
 
           const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
+          if (dEndMethod) {
+            handleRowDragEndClearStatus()
+          }
           return Promise.resolve(dEndMethod ? dEndMethod(dragParams) : true).then((status) => {
             if (!status) {
               return errRest
@@ -11991,6 +11995,9 @@ export default defineVxeComponent({
             const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
             const errRest = {
               status: false
+            }
+            if (dragEndMethod) {
+              handleRowDragEndClearStatus()
             }
             Promise.resolve(dragEndMethod ? dragEndMethod(dragParams) : true).then((status) => {
               if (!status) {

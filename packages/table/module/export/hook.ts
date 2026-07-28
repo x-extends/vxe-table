@@ -1355,7 +1355,7 @@ hooks.add('tableExportModule', {
         const isColGroup = column.children && column.children.length > 0
         let isChecked = false
         const isExtraChecked = extraFdMaps[column.field]
-        if (columns && columns.length) {
+        if (columns) {
           isChecked = handleFilterColumns(defOpts, column, columns)
         } else if (excludeFields || includeFields) {
           isChecked = handleFilterFields(defOpts, column, includeFields, includeFdMaps, excludeFdMaps, extraFdMaps)
@@ -1510,7 +1510,7 @@ hooks.add('tableExportModule', {
 
         let isCustomCol = false
         let customCols = []
-        if (columns && columns.length) {
+        if (columns) {
           isCustomCol = true
           customCols = XEUtils.searchTree(columns, () => true, { children: 'children', mapChildren: 'childNodes', original: true })
         } else {
@@ -1518,7 +1518,7 @@ hooks.add('tableExportModule', {
             const isColGroup = column.children && column.children.length > 0
             let isChecked = false
             const isExtraChecked = extraFdMaps[column.field]
-            if (columns && columns.length) {
+            if (columns) {
               isChecked = handleFilterColumns(opts, column, columns)
             } else if (excludeFields || includeFields) {
               isChecked = handleFilterFields(opts, column, includeFields, includeFdMaps, excludeFdMaps, extraFdMaps)
