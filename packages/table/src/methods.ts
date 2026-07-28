@@ -10258,6 +10258,7 @@ const tableMethods: any = {
       status: false
     }
     if (!(el && prevDragRow && dragRow)) {
+      handleRowDragEndClearStatus($xeTable)
       return Promise.resolve(errRest)
     }
     // 判断是否有拖动
@@ -10366,6 +10367,9 @@ const tableMethods: any = {
       }
 
       const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
+      if (dEndMethod) {
+        handleRowDragEndClearStatus($xeTable)
+      }
       return Promise.resolve(dEndMethod ? dEndMethod(dragParams) : true).then((status) => {
         if (!status) {
           return errRest
@@ -10685,6 +10689,9 @@ const tableMethods: any = {
         const isDragToChildFlag = isSelfToChildDrag && dragToChildMethod ? dragToChildMethod(dragParams) : prevDragToChild
         const errRest = {
           status: false
+        }
+        if (dragEndMethod) {
+          handleRowDragEndClearStatus($xeTable)
         }
         Promise.resolve(dragEndMethod ? dragEndMethod(dragParams) : true).then((status) => {
           if (!status) {

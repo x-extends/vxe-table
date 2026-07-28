@@ -4,6 +4,27 @@
 @use './icon.scss';
 @use './table-module/all.scss';
 
+
+// 局部变量
+.vxe-table {
+  --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-default);
+  &.size--xlarge {
+    --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-xlarge);
+  }
+  &.size--large {
+    --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-large);
+  }
+  &.size--medium {
+    --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-medium);
+  }
+  &.size--small {
+    --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-small);
+  }
+  &.size--mini {
+    --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-mini);
+  }
+}
+
 $btnThemeList: (
   (
     name: "primary",
@@ -1374,7 +1395,7 @@ $btnThemeList: (
 /*table*/
 .vxe-table--render-default {
   position: relative;
-  font-size: var(--vxe-ui-font-size-default);
+  font-size: var(--vxe-ui-table-current-font-size);
   color: var(--vxe-ui-font-color);
   font-family: var(--vxe-ui-font-family);
   direction: ltr;
@@ -1832,7 +1853,6 @@ $btnThemeList: (
   }
   
   &.size--medium {
-    font-size: var(--vxe-ui-font-size-medium);
     .vxe-table--empty-placeholder,
     .vxe-table--empty-block {
       min-height: var(--vxe-ui-table-row-height-medium);
@@ -1866,7 +1886,6 @@ $btnThemeList: (
     }
   }
   &.size--small {
-    font-size: var(--vxe-ui-font-size-small);
     .vxe-table--empty-placeholder,
     .vxe-table--empty-block {
       min-height: var(--vxe-ui-table-row-height-small);
@@ -1900,7 +1919,6 @@ $btnThemeList: (
     }
   }
   &.size--mini {
-    font-size: var(--vxe-ui-font-size-mini);
     .vxe-table--empty-placeholder,
     .vxe-table--empty-block {
       min-height: var(--vxe-ui-table-row-height-mini);
@@ -2447,7 +2465,7 @@ $btnThemeList: (
       width: 100%;
       position: absolute;
       left: 50%;
-      font-size: var(--vxe-ui-table-validate-error-font-size);
+      font-size: var(--vxe-ui-table-validate-error-font-size, var(--vxe-ui-table-current-font-size));
       line-height: 1em;
       transform: translate(-50%, -2px);
       text-align: left;
@@ -2473,7 +2491,7 @@ $btnThemeList: (
       // }
     }
     .vxe-cell--valid-error-theme-beautify {
-      padding: 0.2em 0.6em 0.25em 0.6em;
+      padding: var(--vxe-ui-table-validate-error-padding, 0.2em 0.6em);
       color: #fff;
       background-color: var(--vxe-ui-table-validate-error-color);
       .vxe-cell--valid-error-msg {
