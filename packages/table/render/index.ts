@@ -980,7 +980,12 @@ renderer.mixin({
   },
   FormatNumberInput: {
     renderTableDefault: handleNumberCell,
-    tableFilterDefaultMethod: handleInputFilterMethod,
+    tableFilterDefaultMethod ({ option, row, column }) {
+      const { data } = option
+      const cellValue = XEUtils.get(row, column.field)
+      /* eslint-disable eqeqeq */
+      return cellValue == data
+    },
     tableExportMethod (params) {
       const { row, column } = params
       const cellValue = XEUtils.get(row, column.field)
@@ -1031,7 +1036,12 @@ renderer.mixin({
     createTableFilterOptions: defaultFilterOptions,
     renderTableFilter: defaultFilterRender,
     renderTableFloatingFilter: defaultFloatingFilterRender,
-    tableFilterDefaultMethod: handleInputFilterMethod,
+    tableFilterDefaultMethod ({ option, row, column }) {
+      const { data } = option
+      const cellValue = XEUtils.get(row, column.field)
+      /* eslint-disable eqeqeq */
+      return cellValue == data
+    },
     tableExportMethod (params) {
       const { row, column } = params
       const cellValue = XEUtils.get(row, column.field)

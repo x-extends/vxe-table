@@ -1513,7 +1513,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 ? [
                     h(VxeUIRadioGroupComponent, {
                       props: {
-                        value: column.renderAlign || '',
+                        value: column.renderAlign || 'left',
                         type: 'button',
                         strict: false,
                         disabled: isHidden,
@@ -1542,7 +1542,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
                     ? [
                         h(VxeUIRadioGroupComponent, {
                           props: {
-                            value: column.renderHeaderAlign || '',
+                            value: column.renderHeaderAlign || 'left',
                             type: 'button',
                             strict: false,
                             disabled: isHidden,
@@ -1571,7 +1571,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
                     ? [
                         h(VxeUIRadioGroupComponent, {
                           props: {
-                            value: column.renderFooterAlign || '',
+                            value: column.renderFooterAlign || 'left',
                             type: 'button',
                             strict: false,
                             disabled: isHidden,

@@ -656,7 +656,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const proxyOpts = $xeGrid.computeProxyOpts
       const pagerOpts = $xeGrid.computePagerOpts
       const toolbarOpts = $xeGrid.computeToolbarOpts
-      const { beforeQuery, afterQuery, beforeQueryFooter, afterQueryFooter, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {} } = proxyOpts
+      const { beforeQuery: oldBeforeQuery, afterQuery: oldAfterQuery, beforeQueryFooter: oldBeforeQueryFooter, afterQueryFooter: oldAfterQueryFooter, beforeDelete: oldBeforeDelete, afterDelete: oldAfterDelete, beforeSave: oldBeforeSave, afterSave: oldAfterSave, ajax = {} } = proxyOpts
       const resConfigs = (proxyOpts.response || proxyOpts.props || {}) as VxeGridDefines.ProxyConfigResponseConfig
       const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
       let formData = $xeGrid.getFormData()
@@ -706,10 +706,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
         case 'initial':
         case 'reload':
         case 'query': {
-          const qMethods = ajax.query
-          const qsMethods = ajax.querySuccess
-          const qeMethods = ajax.queryError
-          if (qMethods) {
+          const bqMethod = ajax.beforeQuery
+          const qMethod = ajax.query
+          const aqMethod = ajax.afterQuery
+          const qsMethod = ajax.querySuccess
+          const qeMethod = ajax.queryError
+          if (qMethod) {
             const isInited = code === 'initial'
             const isReload = code === 'reload'
             if (!isInited && reactData.tableLoading) {
@@ -787,83 +789,108 @@ export default /* define-vxe-component start */ defineVxeComponent({
               sorts: sortList,
               filters: filterList,
               form: formData,
-              options: qMethods
+              options: qMethod
             }
-            reactData.sortData = sortList
-            reactData.filterData = filterList
-            reactData.tableLoading = true
-            return Promise.all([
-              Promise.resolve((beforeQuery || qMethods)(commitParams, ...args)),
-              operPromise
-            ]).then(([rest]) => {
-              let tableData: any[] = []
-              reactData.tableLoading = false
-              if (rest) {
-                const reParams = { data: rest, $table: $xeTable, $grid: $xeGrid as VxeGridConstructor, $gantt: null }
-                if (pagerConfig && isEnableConf(pagerOpts)) {
-                  const totalProp = resConfigs.total
-                  const total = (XEUtils.isFunction(totalProp) ? totalProp(reParams) : XEUtils.get(rest, totalProp || 'page.total')) || 0
-                  tablePage.total = XEUtils.toNumber(total)
-                  const resultProp = resConfigs.result
-                  tableData = (XEUtils.isFunction(resultProp) ? resultProp(reParams) : XEUtils.get(rest, resultProp || 'result')) || []
-                  // 检验当前页码，不能超出当前最大页数
-                  const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
-                  if (tablePage.currentPage > pageCount) {
-                    tablePage.currentPage = pageCount
-                  }
+            const handleQuery = () => {
+              reactData.sortData = sortList
+              reactData.filterData = filterList
+              reactData.tableLoading = true
+              return Promise.all([
+                Promise.resolve((oldBeforeQuery || qMethod)(commitParams, ...args)),
+                operPromise
+              ]).then(([rest]) => {
+                reactData.tableLoading = false
+                if (aqMethod) {
+                  aqMethod({ ...commitParams, response: rest, status: 'success' }, ...args)
                 } else {
-                  const listProp = resConfigs.list
-                  if (XEUtils.isArray(rest)) {
-                    tableData = rest
-                  } else if (listProp) {
-                    tableData = (XEUtils.isFunction(listProp) ? listProp(reParams) : XEUtils.get(rest, listProp)) || []
+                  let tableData: any[] = []
+                  if (rest) {
+                    const reParams = { data: rest, $table: $xeTable, $grid: $xeGrid as VxeGridConstructor, $gantt: null }
+                    if (pagerConfig && isEnableConf(pagerOpts)) {
+                      const totalProp = resConfigs.total
+                      const total = (XEUtils.isFunction(totalProp) ? totalProp(reParams) : XEUtils.get(rest, totalProp || 'page.total')) || 0
+                      tablePage.total = XEUtils.toNumber(total)
+                      const resultProp = resConfigs.result
+                      tableData = (XEUtils.isFunction(resultProp) ? resultProp(reParams) : XEUtils.get(rest, resultProp || 'result')) || []
+                      // 检验当前页码，不能超出当前最大页数
+                      const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
+                      if (tablePage.currentPage > pageCount) {
+                        tablePage.currentPage = pageCount
+                      }
+                    } else {
+                      const listProp = resConfigs.list
+                      if (XEUtils.isArray(rest)) {
+                        tableData = rest
+                      } else if (listProp) {
+                        tableData = (XEUtils.isFunction(listProp) ? listProp(reParams) : XEUtils.get(rest, listProp)) || []
+                      }
+                    }
+                    if (showFooter) {
+                      const fdProp = resConfigs.footerData
+                      const footerList = fdProp ? (XEUtils.isFunction(fdProp) ? fdProp(reParams) : XEUtils.get(rest, fdProp)) : []
+                      if (XEUtils.isArray(footerList)) {
+                        reactData.footerData = footerList
+                      }
+                    }
                   }
-                }
-                if (showFooter) {
-                  const fdProp = resConfigs.footerData
-                  const footerList = fdProp ? (XEUtils.isFunction(fdProp) ? fdProp(reParams) : XEUtils.get(rest, fdProp)) : []
-                  if (XEUtils.isArray(footerList)) {
-                    reactData.footerData = footerList
-                  }
-                }
-              }
-              if ($xeTable) {
-                $xeTable.loadData(tableData)
-              } else {
-                $xeGrid.$nextTick(() => {
-                  const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
                   if ($xeTable) {
                     $xeTable.loadData(tableData)
+                  } else {
+                    $xeGrid.$nextTick(() => {
+                      const $xeTable = $xeGrid.$refs.refTable as VxeTableConstructor & VxeTablePrivateMethods
+                      if ($xeTable) {
+                        $xeTable.loadData(tableData)
+                      }
+                    })
                   }
-                })
-              }
-              if (afterQuery) {
-                afterQuery(commitParams, ...args)
-              }
-              if (qsMethods) {
-                qsMethods({ ...commitParams, response: rest })
-              }
-              return { status: true }
-            }).catch((rest) => {
-              reactData.tableLoading = false
-              if (qeMethods) {
-                qeMethods({ ...commitParams, response: rest })
-              }
-              return { status: false }
-            })
+                  if (oldAfterQuery) {
+                    oldAfterQuery({ ...commitParams, response: rest }, ...args)
+                  }
+                }
+                if (qsMethod) {
+                  qsMethod({ ...commitParams, response: rest })
+                }
+                return { status: true }
+              }).catch((rest) => {
+                reactData.tableLoading = false
+                if (aqMethod) {
+                  aqMethod({ ...commitParams, response: rest, status: 'error' }, ...args)
+                }
+                if (qeMethod) {
+                  qeMethod({ ...commitParams, response: rest })
+                }
+                return { status: false }
+              })
+            }
+            if (bqMethod) {
+              return Promise.resolve(bqMethod(commitParams, ...args)).then(status => {
+                if (status !== false) {
+                  return handleQuery()
+                }
+              })
+            }
+            return handleQuery()
           } else {
             errLog('vxe.error.notFunc', ['proxy-config.ajax.query'])
           }
           break
         }
         case 'queryFooter': {
-          const qfMethods = ajax.queryFooter
-          const qfSuccessMethods = ajax.queryFooterSuccess
-          const qfErrorMethods = ajax.queryFooterError
-          if (qfMethods) {
+          const bqfMethod = ajax.beforeQueryFooter
+          const qfMethod = ajax.queryFooter
+          const aqfMethod = ajax.afterQueryFooter
+          const qfSuccessMethod = ajax.queryFooterSuccess
+          const qfErrorMethod = ajax.queryFooterError
+          if (qfMethod) {
             let filterList: VxeTableDefines.FilterCheckedParams[] = []
             if ($xeTable) {
               filterList = $xeTable.getCheckedFilters()
+            }
+            let pageParams: any = {}
+            if (pagerConfig) {
+              if (isEnableConf(pagerConfig)) {
+                pageParams = { ...tablePage }
+              }
             }
             const commitParams = {
               $table: $xeTable,
@@ -871,35 +898,55 @@ export default /* define-vxe-component start */ defineVxeComponent({
               $gantt: null,
               code,
               button,
+              page: pageParams,
               filters: filterList,
               form: formData,
-              options: qfMethods
+              options: qfMethod
             }
-            return Promise.resolve((beforeQueryFooter || qfMethods)(commitParams, ...args)).then(rest => {
-              reactData.footerData = XEUtils.isArray(rest) ? rest : []
-              if (afterQueryFooter) {
-                afterQueryFooter(commitParams, ...args)
-              }
-              if (qfSuccessMethods) {
-                qfSuccessMethods({ ...commitParams, response: rest })
-              }
-              return { status: true }
-            }).catch((rest) => {
-              if (qfErrorMethods) {
-                qfErrorMethods({ ...commitParams, response: rest })
-              }
-              return { status: false }
-            })
+            const handleQueryFooter = () => {
+              return Promise.resolve((oldBeforeQueryFooter || qfMethod)(commitParams, ...args)).then(rest => {
+                if (aqfMethod) {
+                  aqfMethod({ ...commitParams, response: rest, status: 'success' }, ...args)
+                } else {
+                  reactData.footerData = XEUtils.isArray(rest) ? rest : []
+                  if (oldAfterQueryFooter) {
+                    oldAfterQueryFooter({ ...commitParams, response: rest }, ...args)
+                  }
+                }
+                if (qfSuccessMethod) {
+                  qfSuccessMethod({ ...commitParams, response: rest })
+                }
+                return { status: true }
+              }).catch((rest) => {
+                if (aqfMethod) {
+                  aqfMethod({ ...commitParams, response: rest, status: 'error' }, ...args)
+                }
+                if (qfErrorMethod) {
+                  qfErrorMethod({ ...commitParams, response: rest })
+                }
+                return { status: false }
+              })
+            }
+            if (bqfMethod) {
+              return Promise.resolve(bqfMethod(commitParams, ...args)).then(status => {
+                if (status !== false) {
+                  return handleQueryFooter()
+                }
+              })
+            }
+            return handleQueryFooter()
           } else {
             errLog('vxe.error.notFunc', ['proxy-config.ajax.queryFooter'])
           }
           break
         }
         case 'delete': {
-          const dMethods = ajax.delete
-          const deleteSuccessMethods = ajax.deleteSuccess
-          const deleteErrorMethods = ajax.deleteError
-          if (dMethods) {
+          const bdMethod = ajax.beforeDelete
+          const dMethod = ajax.delete
+          const adMethod = ajax.afterDelete
+          const deleteSuccessMethod = ajax.deleteSuccess
+          const deleteErrorMethod = ajax.deleteError
+          if (dMethod) {
             const selectRecords = $xeTable.getCheckboxRecords()
             const removeRecords = selectRecords.filter((row) => !$xeTable.isInsertByRow(row))
             const body = { removeRecords }
@@ -911,49 +958,67 @@ export default /* define-vxe-component start */ defineVxeComponent({
               button,
               body,
               form: formData,
-              options: dMethods
+              options: dMethod
             }
-            const applyArgs = [commitParams].concat(args)
             if (selectRecords.length) {
               return $xeGrid.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
                 if (!removeRecords.length) {
                   return $xeTable.remove(selectRecords)
                 }
-                reactData.tableLoading = true
-                return Promise.resolve((beforeDelete || dMethods)(...applyArgs))
-                  .then(rest => {
-                    reactData.tableLoading = false
-                    $xeTable.setPendingRow(removeRecords, false)
-                    if (isRespMsg) {
-                      if (VxeUI.modal) {
-                        VxeUI.modal.message({ content: $xeGrid.getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
+                const handleDelete = () => {
+                  reactData.tableLoading = true
+                  return Promise.resolve((oldBeforeDelete || dMethod)(commitParams, ...args))
+                    .then(rest => {
+                      reactData.tableLoading = false
+                      if (adMethod) {
+                        adMethod({ ...commitParams, response: rest, status: 'success' }, ...args)
+                      } else {
+                        $xeTable.setPendingRow(removeRecords, false)
+                        if (isRespMsg) {
+                          if (VxeUI.modal) {
+                            VxeUI.modal.message({ content: $xeGrid.getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
+                          }
+                        }
+                        if (oldAfterDelete) {
+                          oldAfterDelete({ ...commitParams, response: rest }, ...args)
+                        } else {
+                          internalData.uFoot = true
+                          $xeGrid.commitProxy('query')
+                          internalData.uFoot = false
+                          $xeGrid.updateQueryFooter()
+                        }
                       }
-                    }
-                    if (afterDelete) {
-                      afterDelete(...applyArgs)
-                    } else {
-                      internalData.uFoot = true
-                      $xeGrid.commitProxy('query')
-                      internalData.uFoot = false
-                      $xeGrid.updateQueryFooter()
-                    }
-                    if (deleteSuccessMethods) {
-                      deleteSuccessMethods({ ...commitParams, response: rest })
-                    }
-                    return { status: true }
-                  })
-                  .catch(rest => {
-                    reactData.tableLoading = false
-                    if (isRespMsg) {
-                      if (VxeUI.modal) {
-                        VxeUI.modal.message({ id: code, content: $xeGrid.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
+                      if (deleteSuccessMethod) {
+                        deleteSuccessMethod({ ...commitParams, response: rest })
                       }
+                      return { status: true }
+                    })
+                    .catch(rest => {
+                      reactData.tableLoading = false
+                      if (adMethod) {
+                        adMethod({ ...commitParams, response: rest, status: 'error' }, ...args)
+                      } else {
+                        if (isRespMsg) {
+                          if (VxeUI.modal) {
+                            VxeUI.modal.message({ id: code, content: $xeGrid.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
+                          }
+                        }
+                      }
+                      if (deleteErrorMethod) {
+                        deleteErrorMethod({ ...commitParams, response: rest })
+                      }
+                      return { status: false }
+                    })
+                }
+
+                if (bdMethod) {
+                  return Promise.resolve(bdMethod(commitParams, ...args)).then(status => {
+                    if (status !== false) {
+                      return handleDelete()
                     }
-                    if (deleteErrorMethods) {
-                      deleteErrorMethods({ ...commitParams, response: rest })
-                    }
-                    return { status: false }
                   })
+                }
+                return handleDelete()
               })
             } else {
               if (isActiveMsg) {
@@ -968,10 +1033,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
           break
         }
         case 'save': {
-          const ajaxMethods = ajax.save
-          const saveSuccessMethods = ajax.saveSuccess
-          const saveErrorMethods = ajax.saveError
-          if (ajaxMethods) {
+          const bSaveMethod = ajax.beforeSave
+          const sMethod = ajax.save
+          const aSaveMethod = ajax.afterSave
+          const sSuccessMethod = ajax.saveSuccess
+          const sErrorMethod = ajax.saveError
+          if (sMethod) {
             const body = $xeGrid.getRecordset()
             const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
             const commitParams = {
@@ -982,9 +1049,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
               button,
               body,
               form: formData,
-              options: ajaxMethods
+              options: sMethod
             }
-            const applyArgs = [commitParams].concat(args)
             // 排除掉新增且标记为删除的数据
             if (insertRecords.length) {
               body.pendingRecords = pendingRecords.filter((row) => insertRecords.indexOf(row) === -1)
@@ -1004,41 +1070,57 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 return
               }
               if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
-                reactData.tableLoading = true
-                return Promise.resolve((beforeSave || ajaxMethods)(...applyArgs))
-                  .then(rest => {
-                    reactData.tableLoading = false
-                    $xeTable.clearPendingRow()
-                    if (isRespMsg) {
-                      if (VxeUI.modal) {
-                        VxeUI.modal.message({ content: $xeGrid.getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
+                const handleSave = () => {
+                  reactData.tableLoading = true
+                  return Promise.resolve((oldBeforeSave || sMethod)(commitParams, ...args))
+                    .then(rest => {
+                      reactData.tableLoading = false
+                      if (aSaveMethod) {
+                        $xeTable.clearPendingRow()
+                        if (isRespMsg) {
+                          if (VxeUI.modal) {
+                            VxeUI.modal.message({ content: $xeGrid.getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
+                          }
+                        }
+                        if (oldAfterSave) {
+                          oldAfterSave({ ...commitParams, response: rest }, ...args)
+                        } else {
+                          internalData.uFoot = true
+                          $xeGrid.commitProxy('query')
+                          internalData.uFoot = false
+                          $xeGrid.updateQueryFooter()
+                        }
                       }
-                    }
-                    if (afterSave) {
-                      afterSave(...applyArgs)
-                    } else {
-                      internalData.uFoot = true
-                      $xeGrid.commitProxy('query')
-                      internalData.uFoot = false
-                      $xeGrid.updateQueryFooter()
-                    }
-                    if (saveSuccessMethods) {
-                      saveSuccessMethods({ ...commitParams, response: rest })
-                    }
-                    return { status: true }
-                  })
-                  .catch(rest => {
-                    reactData.tableLoading = false
-                    if (isRespMsg) {
-                      if (VxeUI.modal) {
-                        VxeUI.modal.message({ id: code, content: $xeGrid.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
+                      if (sSuccessMethod) {
+                        sSuccessMethod({ ...commitParams, response: rest })
                       }
+                      return { status: true }
+                    })
+                    .catch(rest => {
+                      reactData.tableLoading = false
+                      if (aSaveMethod) {
+                        aSaveMethod({ ...commitParams, response: rest, status: 'error' }, ...args)
+                      } else {
+                        if (isRespMsg) {
+                          if (VxeUI.modal) {
+                            VxeUI.modal.message({ id: code, content: $xeGrid.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
+                          }
+                        }
+                      }
+                      if (sErrorMethod) {
+                        sErrorMethod({ ...commitParams, response: rest })
+                      }
+                      return { status: false }
+                    })
+                }
+                if (bSaveMethod) {
+                  return Promise.resolve(bSaveMethod(commitParams, ...args)).then(status => {
+                    if (status !== false) {
+                      return handleSave()
                     }
-                    if (saveErrorMethods) {
-                      saveErrorMethods({ ...commitParams, response: rest })
-                    }
-                    return { status: false }
                   })
+                }
+                return handleSave()
               } else {
                 if (isActiveMsg) {
                   if (VxeUI.modal) {
