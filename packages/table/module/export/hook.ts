@@ -1654,17 +1654,19 @@ hooks.add('tableExportModule', {
               const { computeProxyOpts } = $xeGGWrapper.getComputeMaps()
               const proxyOpts = computeProxyOpts.value
               const { sortData } = gridReactData
-              const { beforeQueryAll, afterQueryAll, ajax = {} } = proxyOpts
+              const { beforeQueryAll: oldBeforeQueryAll, afterQueryAll: oldAfterQueryAll, ajax = {} } = proxyOpts
               const resConfigs = proxyOpts.response || proxyOpts.props || {}
-              const ajaxMethods = ajax.queryAll
-              const queryAllSuccessMethods = ajax.queryAllSuccess
-              const queryAllErrorMethods = ajax.queryAllError
+              const beforeQueryAllMethod = ajax.beforeQueryAll
+              const queryAllMethod = ajax.queryAll
+              const afterQueryAllMethod = ajax.afterQueryAll
+              const queryAllSuccessMethod = ajax.queryAllSuccess
+              const queryAllErrorMethod = ajax.queryAllError
 
-              if (!ajaxMethods) {
+              if (!queryAllMethod) {
                 errLog('vxe.error.notFunc', ['proxy-config.ajax.queryAll'])
               }
 
-              if (ajaxMethods) {
+              if (queryAllMethod) {
                 const params = {
                   $table: $xeTable,
                   $grid: $xeGrid,
@@ -1675,35 +1677,54 @@ hooks.add('tableExportModule', {
                   form: gridReactData.formData,
                   options: handleOptions
                 }
-                return Promise.resolve((beforeQueryAll || ajaxMethods)(params))
-                  .then(rest => {
-                    const listProp = resConfigs.list
-                    let tdData: any[] = []
-                    if (listProp) {
-                      if (XEUtils.isFunction(listProp)) {
-                        tdData = listProp({ data: rest, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
+
+                const handleQueryAll = () => {
+                  return Promise.resolve((oldBeforeQueryAll || queryAllMethod)(params))
+                    .then((rest) => {
+                      if (afterQueryAllMethod) {
+                        afterQueryAllMethod({ ...params, response: rest, status: 'success' })
                       } else {
-                        tdData = XEUtils.isArray(rest) ? rest : XEUtils.get(rest, listProp)
+                        const listProp = resConfigs.list
+                        let tdData: any[] = []
+                        if (listProp) {
+                          if (XEUtils.isFunction(listProp)) {
+                            tdData = listProp({ data: rest, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
+                          } else {
+                            tdData = XEUtils.isArray(rest) ? rest : XEUtils.get(rest, listProp)
+                          }
+                        } else {
+                          if (XEUtils.isArray(rest)) {
+                            tdData = rest
+                          }
+                        }
+                        handleOptions.data = tdData
+                        if (oldAfterQueryAll) {
+                          oldAfterQueryAll({ ...params, response: rest })
+                        }
                       }
-                    } else {
-                      if (XEUtils.isArray(rest)) {
-                        tdData = rest
+                      if (queryAllSuccessMethod) {
+                        queryAllSuccessMethod({ ...params, response: rest })
                       }
+                      return handleExport(handleOptions)
+                    })
+                    .catch((rest) => {
+                      if (afterQueryAllMethod) {
+                        afterQueryAllMethod({ ...params, response: rest, status: 'error' })
+                      }
+                      if (queryAllErrorMethod) {
+                        queryAllErrorMethod({ ...params, response: rest })
+                      }
+                    })
+                }
+
+                if (beforeQueryAllMethod) {
+                  return Promise.resolve(beforeQueryAllMethod(params)).then(status => {
+                    if (status !== false) {
+                      return handleQueryAll()
                     }
-                    handleOptions.data = tdData
-                    if (afterQueryAll) {
-                      afterQueryAll(params)
-                    }
-                    if (queryAllSuccessMethods) {
-                      queryAllSuccessMethods({ ...params, response: rest })
-                    }
-                    return handleExport(handleOptions)
                   })
-                  .catch((rest) => {
-                    if (queryAllErrorMethods) {
-                      queryAllErrorMethods({ ...params, response: rest })
-                    }
-                  })
+                }
+                return handleQueryAll()
               }
             }
           } if (mode === 'current') {

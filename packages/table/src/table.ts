@@ -3608,7 +3608,7 @@ export default defineVxeComponent({
         return
       }
       internalData.rsePending = true
-      handleLazyRecalculate(false, true, true, {
+      handleLazyRecalculate(true, true, true, {
         minRunDelay: 200
       }).then(() => {
         internalData.rsePending = false

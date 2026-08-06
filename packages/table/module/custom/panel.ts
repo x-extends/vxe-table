@@ -1308,7 +1308,7 @@ export default defineVxeComponent({
               }, VxeUIRadioGroupComponent
                 ? [
                     h(VxeUIRadioGroupComponent, {
-                      modelValue: column.renderAlign || '',
+                      modelValue: column.renderAlign || 'left',
                       type: 'button',
                       strict: false,
                       disabled: isHidden,
@@ -1332,7 +1332,7 @@ export default defineVxeComponent({
                 : (VxeUIRadioGroupComponent
                     ? [
                         h(VxeUIRadioGroupComponent, {
-                          modelValue: column.renderHeaderAlign || '',
+                          modelValue: column.renderHeaderAlign || 'left',
                           type: 'button',
                           strict: false,
                           disabled: isHidden,
@@ -1357,7 +1357,7 @@ export default defineVxeComponent({
                 : (VxeUIRadioGroupComponent
                     ? [
                         h(VxeUIRadioGroupComponent, {
-                          modelValue: column.renderFooterAlign || '',
+                          modelValue: column.renderFooterAlign || 'left',
                           type: 'button',
                           strict: false,
                           disabled: isHidden,
