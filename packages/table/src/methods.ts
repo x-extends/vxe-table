@@ -5744,6 +5744,18 @@ const tableMethods: any = {
     }
     const { editConfig } = props
     const { formatter, editRender, cellRender } = column
+    let etOpSize = null
+    let etOgSize = null
+    let clOpSize = null
+    let clOgSize = null
+    if (editRender) {
+      etOpSize = editRender.options ? editRender.options.length : 0
+      etOgSize = editRender.optionGroups ? editRender.optionGroups.length : 0
+    }
+    if (cellRender) {
+      clOpSize = cellRender.options ? cellRender.options.length : 0
+      clOgSize = cellRender.optionGroups ? cellRender.optionGroups.length : 0
+    }
     // formatter > tableCellFormatter
     const renderOpts = formatter ? null : (editConfig && isEnableConf(editRender) ? editRender : (isEnableConf(cellRender) ? cellRender : null))
     const compConf = renderOpts ? renderer.get(renderOpts.name) : null
@@ -5762,7 +5774,8 @@ const tableMethods: any = {
           formatData = fullAllDataRowIdData[rowid].formatData = {}
         }
         if (rowRest && formatData[colid]) {
-          if (formatData[colid].value === cellValue) {
+          const ftValue = formatData[colid].value
+          if (ftValue && ftValue[0] === cellValue && ftValue[1] === etOpSize && ftValue[2] === etOgSize && ftValue[3] === clOpSize && ftValue[4] === clOgSize) {
             return formatData[colid].label
           }
         }
@@ -5791,7 +5804,8 @@ const tableMethods: any = {
         cellLabel = tcFormatter(renderOpts, formatParams)
       }
       if (formatData) {
-        formatData[colid] = { value: cellValue, label: cellLabel }
+        const ftValue = [cellValue, etOpSize, etOgSize, clOpSize, clOgSize]
+        formatData[colid] = { value: ftValue, label: cellLabel }
       }
     }
     return cellLabel

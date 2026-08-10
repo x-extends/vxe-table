@@ -805,12 +805,13 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 } else {
                   let tableData: any[] = []
                   if (rest) {
+                    const listProp = resConfigs.list
+                    const resultProp = resConfigs.result
                     const reParams = { data: rest, $table: $xeTable, $grid: $xeGrid as VxeGridConstructor, $gantt: null }
                     if (pagerConfig && isEnableConf(pagerOpts)) {
                       const totalProp = resConfigs.total
                       const total = (XEUtils.isFunction(totalProp) ? totalProp(reParams) : XEUtils.get(rest, totalProp || 'page.total')) || 0
                       tablePage.total = XEUtils.toNumber(total)
-                      const resultProp = resConfigs.result
                       tableData = (XEUtils.isFunction(resultProp) ? resultProp(reParams) : XEUtils.get(rest, resultProp || 'result')) || []
                       // 检验当前页码，不能超出当前最大页数
                       const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
@@ -818,7 +819,6 @@ export default /* define-vxe-component start */ defineVxeComponent({
                         tablePage.currentPage = pageCount
                       }
                     } else {
-                      const listProp = resConfigs.list
                       if (XEUtils.isArray(rest)) {
                         tableData = rest
                       } else if (listProp) {
