@@ -463,15 +463,15 @@ export const Cell = {
       if (defaultSlot) {
         return renderCellBaseVNs(h, params, $table.callSlot(defaultSlot, params, h))
       }
-      const renderOpts = editRenderOpts || cellRenderOpts
+      const renderOpts = cellRenderOpts || editRenderOpts
       // 如果是编辑表格：renderTableCell > formatter
       // 如果是查看表格：renderTableDefault > formatter
       if (renderOpts) {
         const compConf = renderer.get(renderOpts.name)
         if (compConf) {
-          const renderFn = editRenderOpts ? (compConf.renderTableCell || compConf.renderCell) : (compConf.renderTableDefault || compConf.renderDefault)
+          const renderFn = cellRenderOpts ? (compConf.renderTableDefault || compConf.renderDefault) : (compConf.renderTableCell || compConf.renderCell)
           if (renderFn) {
-            return renderCellBaseVNs(h, params, getSlotVNs(renderFn.call($table, h, renderOpts, Object.assign({ $type: editRenderOpts ? 'edit' : 'cell' }, params))))
+            return renderCellBaseVNs(h, params, getSlotVNs(renderFn.call($table, h, renderOpts, Object.assign({ $type: cellRenderOpts ? 'cell' : 'edit' }, params))))
           }
         }
       }
