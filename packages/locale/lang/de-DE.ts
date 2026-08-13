@@ -620,7 +620,27 @@ export default {
         minute: '{mm}',
         second: '{ss}'
       },
+      stepFormat: {
+        year: '{start.yyyy}~{end.yyyy}年',
+        quarter: '{start.q}~{end.q}季度',
+        month: '{start.M}~{end.M}月',
+        week: '{start.W}~{end.W}周',
+        day: '{sE}~{eE}',
+        date: '{start.d}~{end.d}',
+        hour: '{start.HH}~{end.HH}',
+        minute: '{start.mm}~{end.mm}',
+        second: '{start.ss}~{end.ss}'
+      },
       dayss: {
+        w0: '日',
+        w1: '一',
+        w2: '二',
+        w3: '三',
+        w4: '四',
+        w5: '五',
+        w6: '六'
+      },
+      days: {
         w0: '日',
         w1: '一',
         w2: '二',
