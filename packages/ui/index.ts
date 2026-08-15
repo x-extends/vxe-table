@@ -205,9 +205,11 @@ VxeUI.setConfig({
     },
     editConfig: {
       // mode: 'cell',
+      // cache: true,
       showIcon: true,
       showAsterisk: true,
-      autoFocus: true
+      autoFocus: true,
+      isReuseKeep: true
     },
     importConfig: {
       _typeMaps: {
