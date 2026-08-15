@@ -6,7 +6,7 @@ import { getCellValue, setCellValue, getRowid } from '../../src/util'
 import { removeClass, addClass } from '../../../ui/src/dom'
 import { createComponentLog } from '../../../ui/src/log'
 
-import type { TableEditMethods, TableEditPrivateMethods, VxeTableDefines } from '../../../../types'
+import type { VxeTableConstructor, TableEditMethods, TableEditPrivateMethods, VxeTableDefines, VxeGlobalRendererHandles } from '../../../../types'
 
 const { warnLog, errLog } = createComponentLog('table')
 
@@ -388,7 +388,18 @@ hooks.add('tableEditModule', {
       return nextTick().then(() => $xeTable.updateCellAreas())
     }
 
-    const handleEditActive = (params: any, evnt: Event | null, options: {
+    const handleEditActive = (params: {
+      $table: VxeTableConstructor
+      column: VxeTableDefines.ColumnInfo
+      columnIndex: number
+      _columnIndex: number
+      $columnIndex: number
+      rowIndex: number
+      $rowIndex: number
+      _rowIndex: number
+      row: any
+      cell?: HTMLElement
+    }, evnt: Event | null, options: {
       isClear?: boolean
       isFocus?: boolean
       isPos?: boolean
@@ -404,16 +415,16 @@ hooks.add('tableEditModule', {
       const { row, column } = params
       const { editRender } = column
       const { isFocus, isPos, isClear } = options
-      const cell = (params.cell || $xeTable.getCellElement(row, column))
+      const cell = (params.cell || $xeTable.getCellElement(row, column)) as HTMLElement
       const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
-      params.cell = cell
+      const editParams = { ...params, cell }
       if (cell && isEnableConf(editConfig) && isEnableConf(editRender)) {
         // 激活编辑
         if (!$xeTable.isPendingByRow(row) && !$xeTable.isAggregateRecord(row)) {
           if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
             // 判断是否禁用编辑
             let type: 'edit-disabled' | 'edit-activated' = 'edit-disabled'
-            if (!beforeEditMethod || beforeEditMethod({ ...params, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })) {
+            if (!beforeEditMethod || beforeEditMethod({ ...editParams, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })) {
               if (mouseConfig) {
                 $xeTable.clearSelected()
                 if ($xeTable.clearCellAreas) {
@@ -427,7 +438,7 @@ hooks.add('tableEditModule', {
               }
               type = 'edit-activated'
               column.renderHeight = cell.offsetHeight
-              actived.args = params
+              actived.args = editParams
               actived.row = row
               actived.column = column
               $xeTable.handlePushStack()
@@ -442,10 +453,10 @@ hooks.add('tableEditModule', {
               const afterEditMethod = editOpts.afterEditMethod
               nextTick(() => {
                 if (isFocus) {
-                  $xeTable.handleFocus(params, evnt)
+                  $xeTable.handleFocus(editParams, evnt)
                 }
                 if (afterEditMethod) {
-                  afterEditMethod({ ...params, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
+                  afterEditMethod({ ...editParams, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
                 }
               })
             }
@@ -488,11 +499,11 @@ hooks.add('tableEditModule', {
               }
             }
             column.renderHeight = cell.offsetHeight
-            actived.args = params
+            actived.args = editParams
             actived.column = column
             if (isPos) {
               setTimeout(() => {
-                $xeTable.handleFocus(params, evnt)
+                $xeTable.handleFocus(editParams, evnt)
               })
             }
           }
@@ -519,8 +530,12 @@ hooks.add('tableEditModule', {
             handleEditActive({
               row,
               rowIndex: $xeTable.getRowIndex(row),
+              $rowIndex: $xeTable.getVMRowIndex(row),
+              _rowIndex: $xeTable.getVTRowIndex(row),
               column,
               columnIndex: $xeTable.getColumnIndex(column),
+              $columnIndex: $xeTable.getVMColumnIndex(column),
+              _columnIndex: $xeTable.getVTColumnIndex(column),
               cell,
               $table: $xeTable
             }, null, {
@@ -925,17 +940,64 @@ hooks.add('tableEditModule', {
           if (rowIndex > -1 && column) {
             const cell = $xeTable.getCellElement(row, column)
             const params = {
+              $table: $xeTable,
               row,
               rowIndex,
+              $rowIndex: $xeTable.getVMRowIndex(row),
+              _rowIndex: $xeTable.getVTRowIndex(row),
               column,
               columnIndex: $xeTable.getColumnIndex(column),
+              $columnIndex: $xeTable.getVMColumnIndex(column),
+              _columnIndex: $xeTable.getVTColumnIndex(column),
               cell
             }
-            $xeTable.handleSelected(params, {})
+            $xeTable.handleSelected(params, null)
           }
         }
         return nextTick()
       }
+    }
+
+    const handleCellFocus = (cell: HTMLElement, params: {
+      $table: VxeTableConstructor
+      column: VxeTableDefines.ColumnInfo
+      row: any
+    }) => {
+      const { editConfig } = props
+      const { column } = params
+      const { editRender } = column
+      const editOpts = computeEditOpts.value
+      if (editConfig && isEnableConf(editRender)) {
+        const compRender = renderer.get(editRender.name)
+        let autoFocus: boolean | string | ((params: VxeGlobalRendererHandles.TableAutoFocusParams) => HTMLElement | null) | null | undefined = editRender.autofocus || editRender.autoFocus
+        let autoSelect = editRender.autoSelect || editRender.autoselect
+        let inputElem: HTMLElement | null = null
+        // 是否启用聚焦
+        if (editOpts.autoFocus) {
+          if (!autoFocus && compRender) {
+            autoFocus = compRender.tableAutoFocus || compRender.tableAutofocus || compRender.autofocus
+          }
+          if (!autoSelect && compRender) {
+            autoSelect = compRender.tableAutoSelect || compRender.autoselect
+          }
+          // 如果指定了聚焦 class
+          if (XEUtils.isFunction(autoFocus)) {
+            inputElem = autoFocus(params)
+          } else if (autoFocus) {
+            if (autoFocus === true) {
+              // 自动匹配模式，会自动匹配第一个可输入元素
+              inputElem = cell.querySelector('input,textarea')
+            } else {
+              inputElem = cell.querySelector(autoFocus)
+            }
+            if (inputElem) {
+              inputElem.focus()
+            }
+          }
+        }
+        return inputElem as HTMLInputElement
+      }
+      return null
     }
 
     editPrivateMethods = {
@@ -960,6 +1022,7 @@ hooks.add('tableEditModule', {
        * @returns
        */
       handleClearEdit,
+      handleCellFocus,
       /**
        * 处理聚焦
        */
@@ -968,40 +1031,15 @@ hooks.add('tableEditModule', {
         const { editRender } = column
         const editOpts = computeEditOpts.value
         if (isEnableConf(editRender)) {
-          const compRender = renderer.get(editRender.name)
-          let autoFocus = editRender.autofocus || editRender.autoFocus
-          let autoSelect = editRender.autoSelect || editRender.autoselect
-          let inputElem
-          // 是否启用聚焦
-          if (editOpts.autoFocus) {
-            if (!autoFocus && compRender) {
-              autoFocus = compRender.tableAutoFocus || compRender.tableAutofocus || compRender.autofocus
-            }
-            if (!autoSelect && compRender) {
-              autoSelect = compRender.tableAutoSelect || compRender.autoselect
-            }
-            // 如果指定了聚焦 class
-            if (XEUtils.isFunction(autoFocus)) {
-              inputElem = autoFocus(params)
-            } else if (autoFocus) {
-              if (autoFocus === true) {
-                // 自动匹配模式，会自动匹配第一个可输入元素
-                inputElem = cell.querySelector('input,textarea')
-              } else {
-                inputElem = cell.querySelector(autoFocus)
-              }
-              if (inputElem) {
-                inputElem.focus()
-              }
-            }
-          }
+          const autoSelect = editRender.autoSelect || editRender.autoselect
+          const inputElem = handleCellFocus(cell, params)
           if (inputElem) {
             if (autoSelect) {
               inputElem.select()
             } else {
               // 保持一致行为，光标移到末端
               if (browseObj.msie) {
-                const textRange = inputElem.createTextRange()
+                const textRange = (inputElem as any).createTextRange()
                 textRange.collapse(false)
                 textRange.select()
               }
@@ -1021,7 +1059,7 @@ hooks.add('tableEditModule', {
        * 处理选中源
        */
       handleSelected (params, evnt) {
-        const { mouseConfig } = props
+        const { mouseConfig, editConfig } = props
         const { editStore } = reactData
         const mouseOpts = computeMouseOpts.value
         const editOpts = computeEditOpts.value
@@ -1044,6 +1082,18 @@ hooks.add('tableEditModule', {
                 editPrivateMethods.addCellSelectedClass()
               }
               $xeTable.focus()
+              // 如果是支持可复用控件
+              if (editConfig && editOpts.isReuseKeep && isEnableConf(editOpts) && isEnableConf(column.editRender)) {
+                setTimeout(() => {
+                  const cell = $xeTable.getCellElement(row, column)
+                  if (cell) {
+                    const hasReusekeep = cell.querySelector('.vxe-reusekeep-control')
+                    if (hasReusekeep) {
+                      handleCellFocus(cell, params)
+                    }
+                  }
+                }, 0)
+              }
               if (evnt) {
                 $xeTable.dispatchEvent('cell-selected', params, evnt)
               }

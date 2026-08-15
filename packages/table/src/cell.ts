@@ -311,7 +311,11 @@ function renderHeaderHandle (params: VxeTableDefines.CellRenderHeaderParams & {
   const { column, $table } = params
   const tableProps = $table.props
   const { editConfig } = tableProps
-  const { type, filters, sortable, editRender } = column
+  const { type, filters, sortable, editRender, slots } = column
+  const headerSlot = slots ? slots.header : null
+  if (headerSlot) {
+    return renderTitleContent(params, $table.callSlot(headerSlot, params))
+  }
   switch (type) {
     case 'seq':
       return Cell.renderSeqHeader(params)
@@ -369,11 +373,7 @@ export const Cell = {
     const { $table, column } = params
     const tableProps = $table.props
     const { editConfig } = tableProps
-    const { slots, editRender, cellRender } = column
-    const headerSlot = slots ? slots.header : null
-    if (headerSlot) {
-      return renderTitleContent(params, $table.callSlot(headerSlot, params))
-    }
+    const { editRender, cellRender } = column
     const isEnableEdit = editConfig && isEnableConf(editConfig)
     const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
     const cellRenderOpts = isEnableConf(cellRender) ? cellRender : null
@@ -649,9 +649,7 @@ export const Cell = {
    */
   renderSeqHeader (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
-    const { slots } = column
-    const headerSlot = slots ? slots.header : null
-    return renderHeaderCellBaseVNs(params, renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : $table.getHeaderCellLabel(column)))
+    return renderHeaderCellBaseVNs(params, renderTitleContent(params, $table.getHeaderCellLabel(column)))
   },
   renderSeqCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
@@ -680,16 +678,13 @@ export const Cell = {
   renderRadioHeader (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
     const { slots } = column
-    const headerSlot = slots ? slots.header : null
     const titleSlot = slots ? slots.title : null
     return renderHeaderCellBaseVNs(params,
-      renderTitleContent(params, headerSlot
-        ? $table.callSlot(headerSlot, params)
-        : [
-            h('span', {
-              class: 'vxe-radio--label'
-            }, titleSlot ? $table.callSlot(titleSlot, params) : $table.getHeaderCellLabel(column))
-          ])
+      renderTitleContent(params, [
+        h('span', {
+          class: 'vxe-radio--label'
+        }, titleSlot ? $table.callSlot(titleSlot, params) : $table.getHeaderCellLabel(column))
+      ])
     )
   },
   renderRadioCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
@@ -762,7 +757,6 @@ export const Cell = {
     const { isAllSelected: isAllCheckboxSelected, isIndeterminate: isAllCheckboxIndeterminate } = tableReactData
     const isAllCheckboxDisabled = computeIsAllCheckboxDisabled.value
     const { slots } = column
-    const headerSlot = slots ? slots.header : null
     const titleSlot = slots ? slots.title : null
     const checkboxOpts = computeCheckboxOpts.value
     const { checkStrictly, showHeader, headerTitle } = checkboxOpts
@@ -776,9 +770,6 @@ export const Cell = {
       }
     }
     const checkboxParams = { ...params, checked: isAllCheckboxSelected, disabled: isAllCheckboxDisabled, indeterminate: isAllCheckboxIndeterminate }
-    if (headerSlot) {
-      return renderHeaderCellBaseVNs(params, renderTitleContent(checkboxParams, $table.callSlot(headerSlot, checkboxParams)))
-    }
     if (checkStrictly ? !showHeader : showHeader === false) {
       return renderHeaderCellBaseVNs(params, renderTitleContent(checkboxParams, [
         h('span', {

@@ -8614,8 +8614,8 @@ export default defineVxeComponent({
       if (isEsc) {
         $xeTable.preventEvent(evnt, 'event.keydown', null, () => {
           dispatchEvent('keydown-start', {}, evnt)
-          if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKeyboardCellAreaEvent) {
-            $xeTable.handleKeyboardCellAreaEvent(evnt)
+          if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKdClAreaEvent) {
+            $xeTable.handleKdClAreaEvent(evnt)
           } else if (actived.row || filterStore.visible || ctxMenuStore.visible) {
             evnt.stopPropagation()
             // 如果按下了 Esc 键，关闭快捷菜单、筛选
@@ -8668,6 +8668,7 @@ export default defineVxeComponent({
           const { selected, actived } = editStore
           const childrenField = treeOpts.children || treeOpts.childrenField
           const keyCode = evnt.keyCode
+          const isProcess = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.PROCESS)
           const isEsc = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ESCAPE)
           const hasBackspaceKey = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.BACKSPACE)
           const isTab = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.TAB)
@@ -8689,6 +8690,7 @@ export default defineVxeComponent({
           const operCtxMenu = isContentMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
           const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
           const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
+          const selectRow = selected.row
           const selectColumn = selected.column
           if (operCtxMenu) {
             // 如果配置了右键菜单; 支持方向键操作、回车
@@ -8698,8 +8700,8 @@ export default defineVxeComponent({
             } else {
               $xeTable.moveCtxMenu(evnt, ctxMenuStore, 'selected', isRightArrow, true, menuList)
             }
-          } else if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKeyboardCellAreaEvent) {
-            $xeTable.handleKeyboardCellAreaEvent(evnt)
+          } else if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKdClAreaEvent) {
+            $xeTable.handleKdClAreaEvent(evnt)
           } else if (isEsc) {
             // 如果按下了 Esc 键，关闭快捷菜单、筛选
             if ($xeTable.closeMenu) {
@@ -8717,7 +8719,7 @@ export default defineVxeComponent({
                 }
               }
             }
-          } else if (isSpacebar && keyboardConfig && keyboardOpts.isChecked && selected.row && selectColumn && (selectColumn.type === 'checkbox' || selectColumn.type === 'radio')) {
+          } else if (isSpacebar && keyboardConfig && keyboardOpts.isChecked && selectRow && selectColumn && (selectColumn.type === 'checkbox' || selectColumn.type === 'radio')) {
             // 空格键支持选中复选框
             evnt.preventDefault()
             if (selectColumn.type === 'checkbox') {
@@ -8728,19 +8730,19 @@ export default defineVxeComponent({
           } else if (isF2 && isEnableConf(editConfig)) {
             if (!isEditStatus) {
               // 如果按下了 F2 键
-              if (selected.row && selectColumn) {
+              if (selectRow && selectColumn) {
                 evnt.preventDefault()
                 $xeTable.handleEdit(selected.args, evnt)
               }
             }
           } else if (isContextMenu) {
             // 如果按下上下文键
-            internalData._keyCtx = selected.row && selectColumn && bodyMenu.length
+            internalData._keyCtx = selectRow && selectColumn && bodyMenu.length
             clearTimeout(internalData.keyCtxTimeout)
             internalData.keyCtxTimeout = setTimeout(() => {
               internalData._keyCtx = false
             }, 1000)
-          } else if (isEnter && !isAltKey && keyboardConfig && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
+          } else if (isEnter && !isAltKey && keyboardConfig && keyboardOpts.isEnter && (selectRow || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
             // 退出选中
             if (isControlKey) {
               // 如果是激活编辑状态，则取消编辑
@@ -8756,11 +8758,11 @@ export default defineVxeComponent({
               }
             } else {
               // 如果是激活状态，退则出到上一行/下一行
-              if (selected.row || actived.row) {
-                const activeRow = selected.row || actived.row
+              if (selectRow || actived.row) {
+                const activeRow = selectRow || actived.row
                 const activeColumn = selectColumn || actived.column
                 if (activeColumn) {
-                  const activeParams = selected.row ? selected.args : actived.args
+                  const activeParams = selectRow ? selected.args : actived.args
                   if (hasShiftKey) {
                     if (keyboardOpts.enterToTab) {
                       $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
@@ -8863,7 +8865,7 @@ export default defineVxeComponent({
           } else if (operArrow && keyboardConfig && keyboardOpts.isArrow) {
             if (!isEditStatus) {
               // 如果按下了方向键
-              if (mouseOpts.selected && selected.row && selectColumn) {
+              if (mouseOpts.selected && selectRow && selectColumn) {
                 $xeTable.moveArrowSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
               } else {
                 // 当前行按键上下移动
@@ -8878,11 +8880,11 @@ export default defineVxeComponent({
             }
           } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
             // 如果按下了 Tab 键切换
-            if (selected.row || actived.row) {
-              const activeRow = selected.row || actived.row
+            if (selectRow || actived.row) {
+              const activeRow = selectRow || actived.row
               const activeColumn = selectColumn || actived.column
               if (activeColumn) {
-                const activeParams = selected.row ? selected.args : actived.args
+                const activeParams = selectRow ? selected.args : actived.args
                 const _rowIndex = $xeTable.getVTRowIndex(activeRow)
                 const _columnIndex = $xeTable.getVTColumnIndex(activeColumn)
                 const ttrParams = {
@@ -8924,13 +8926,13 @@ export default defineVxeComponent({
                 }
               }
             }
-          } else if (keyboardConfig && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selected.row || selectColumn)) {
+          } else if (keyboardConfig && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selectRow || selectColumn)) {
             // 如果是删除键
             if (!isEditStatus) {
               const { delMethod } = keyboardOpts
               const params = {
-                row: selected.row,
-                rowIndex: $xeTable.getRowIndex(selected.row),
+                row: selectRow,
+                rowIndex: $xeTable.getRowIndex(selectRow),
                 column: selectColumn as VxeTableDefines.ColumnInfo,
                 columnIndex: $xeTable.getColumnIndex(selectColumn),
                 $table: $xeTable,
@@ -8942,10 +8944,10 @@ export default defineVxeComponent({
                 if (delMethod) {
                   delMethod(params)
                 } else {
-                  const selectCellValue = getCellValue(selected.row, selectColumn)
+                  const selectCellValue = getCellValue(selectRow, selectColumn)
                   if (selectCellValue !== null) {
                     $xeTable.handlePushStack()
-                    setCellValue(selected.row, selectColumn, null)
+                    setCellValue(selectRow, selectColumn, null)
                   }
                 }
                 // 如果按下 del 键，更新表尾数据
@@ -8953,16 +8955,20 @@ export default defineVxeComponent({
                 dispatchEvent('cell-delete-value', params, evnt)
               }
             }
-          } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selected.row || selectColumn)) {
+          } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selectRow || selectColumn)) {
             if (!isEditStatus) {
               const { backMethod } = keyboardOpts
               // 如果是删除键
-              if (keyboardOpts.isDel && isEnableConf(editConfig) && (selected.row || selectColumn)) {
+              if (keyboardOpts.isDel && isEnableConf(editConfig) && (selectRow || selectColumn)) {
                 const params = {
-                  row: selected.row,
-                  rowIndex: $xeTable.getRowIndex(selected.row),
+                  row: selectRow,
+                  rowIndex: $xeTable.getRowIndex(selectRow),
+                  $rowIndex: $xeTable.getVMRowIndex(selectRow),
+                  _rowIndex: $xeTable.getVTRowIndex(selectRow),
                   column: selectColumn as VxeTableDefines.ColumnInfo,
                   columnIndex: $xeTable.getColumnIndex(selectColumn),
+                  $columnIndex: $xeTable.getVMColumnIndex(selectColumn),
+                  _columnIndex: $xeTable.getVTColumnIndex(selectColumn),
                   $table: $xeTable,
                   $grid: $xeGrid,
                   $gantt: $xeGantt
@@ -9009,20 +9015,24 @@ export default defineVxeComponent({
                 $xeTable.handleUndoStackEvent(evnt)
               }
             }
-          } else if (keyboardConfig && isEnableConf(editConfig) && keyboardOpts.isEdit && !isControlKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
+          } else if (keyboardConfig && isEnableConf(editConfig) && keyboardOpts.isEdit && !isControlKey && (isSpacebar || isProcess || evnt.key === 'Process' || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
             const { editMode, editMethod } = keyboardOpts
             // 启用编辑后，空格键功能将失效
             // if (isSpacebar) {
             //   evnt.preventDefault()
             // }
             // 如果是按下非功能键之外允许直接编辑
-            if (selectColumn && selected.row && isEnableConf(selectColumn.editRender)) {
+            if (selectColumn && selectRow && isEnableConf(selectColumn.editRender)) {
               const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
               const params = {
-                row: selected.row,
-                rowIndex: $xeTable.getRowIndex(selected.row),
+                row: selectRow,
+                rowIndex: $xeTable.getRowIndex(selectRow),
+                $rowIndex: $xeTable.getVMRowIndex(selectRow),
+                _rowIndex: $xeTable.getVTRowIndex(selectRow),
                 column: selectColumn,
                 columnIndex: $xeTable.getColumnIndex(selectColumn),
+                $columnIndex: $xeTable.getVMColumnIndex(selectColumn),
+                _columnIndex: $xeTable.getVTColumnIndex(selectColumn),
                 $table: $xeTable,
                 $grid: $xeGrid,
                 $gantt: $xeGantt
@@ -14755,7 +14765,7 @@ export default defineVxeComponent({
       if (rowOpts.height && !props.showOverflow) {
         warnLog('vxe.error.notProp', ['table.show-overflow'])
       }
-      if (!$xeTable.triggerCelllAreaMnEvent) {
+      if (!$xeTable.triggerClAreaMnEvent) {
         if (props.areaConfig) {
           warnLog('vxe.error.notProp', ['area-config'])
         }

@@ -1,4 +1,4 @@
-import { h, resolveComponent, ComponentOptions } from 'vue'
+import { h, VNode, resolveComponent, ComponentOptions } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getCellValue, setCellValue } from '../../table/src/util'
@@ -104,6 +104,7 @@ function getCellLabelVNs (renderOpts: VxeGlobalRendererHandles.RenderTableEditOp
   const { placeholder } = renderOpts
   return [
     h('span', {
+      key: 1,
       class: ['vxe-cell--label', opts ? opts.class : '']
     }, placeholder && isEmptyValue(cellLabel)
       ? [
@@ -384,20 +385,32 @@ function getNativeFilterOns (renderOpts: VxeGlobalRendererHandles.RenderTableFil
   })
 }
 
+function nativeInputCellRender (renderOpts: VxeGlobalRendererHandles.RenderTableCellOptions, renderParams: VxeGlobalRendererHandles.RenderTableEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+  const { row, column } = renderParams
+  const cellValue = XEUtils.get(row, column.field)
+  const cellVNs = [
+    h('span', {
+      key: 1
+    }, cellValue)
+  ]
+  return getNativeInputRenderCellVNs(cellValue, cellVNs, renderOpts, renderParams)
+}
+
 /**
  * 单元格可编辑渲染-原生的标签
- * input、textarea、select
+ * input、textarea
  */
-function nativeEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: any) {
-  const { row, column } = params
+function nativeInputEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, renderParams: VxeGlobalRendererHandles.RenderTableEditParams) {
+  const { row, column } = renderParams
   const { name } = renderOpts
-  const cellValue = isImmediateCell(renderOpts, params) ? getCellValue(row, column) : column.model.value
+  const cellValue = isImmediateCell(renderOpts, renderParams) ? getCellValue(row, column) : column.model.value
   return [
-    h(`${name}`, {
+    h('' + name, {
+      key: 2,
       class: `vxe-default-${name}`,
       ...getNativeAttrs(renderOpts),
       value: cellValue,
-      ...getNativeEditOns(renderOpts, params)
+      ...getNativeEditOns(renderOpts, renderParams)
     })
   ]
 }
@@ -407,6 +420,18 @@ function buttonCellRender (renderOpts: VxeGlobalRendererHandles.RenderTableCellO
     h(getDefaultComponent(renderOpts), {
       ...getCellEditProps(renderOpts, params, null),
       ...getComponentOns(renderOpts, params)
+    })
+  ]
+}
+
+function defaultInputEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+  const { row, column } = params
+  const cellValue = getCellValue(row, column)
+  return [
+    h(getDefaultComponent(renderOpts), {
+      key: 2,
+      ...getCellEditProps(renderOpts, params, cellValue),
+      ...getEditOns(renderOpts, params)
     })
   ]
 }
@@ -724,11 +749,9 @@ function handleExportTreeSelectMethod (params: any) {
   return options.original ? getCellValue(row, column) : getTreeSelectCellValue(column.editRender || column.cellRender, params)
 }
 
-function handleNumberCell (renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, params: VxeGlobalRendererHandles.RenderTableDefaultParams) {
+function handleNumberCell (cellValue: any, renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, params: VxeGlobalRendererHandles.RenderTableDefaultParams) {
   const { props = {}, showNegativeStatus } = renderOpts
-  const { row, column } = params
   const { type } = props
-  let cellValue = XEUtils.get(row, column.field)
   let isNegative = false
   if (!isEmptyValue(cellValue)) {
     const numberInputConfig = getConfig().numberInput || {}
@@ -879,21 +902,94 @@ function handleSetTreeSelectValue (renderOpts: VxeGlobalRendererHandles.RenderTa
   }
 }
 
+function getNativeInputRenderCellVNs (cellValue: any, labelVNs: VNode[], renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, renderParams: VxeGlobalRendererHandles.RenderTableEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+  const { $table, row, column } = renderParams
+  const { name } = renderOpts
+  const tableProps = $table.props
+  const { editConfig, mouseConfig } = tableProps
+  let isColSelected = false
+  let isActiveCellArea = false
+  if (editConfig && mouseConfig) {
+    const tableReactData = $table.reactData
+    const { editStore } = tableReactData
+    const { selected } = editStore
+    isColSelected = row === selected.row && column === selected.column
+    if ($table.getActiveCellArea) {
+      const activeCellArea = $table.getActiveCellArea()
+      if (activeCellArea) {
+        isActiveCellArea = row === activeCellArea.row && column === activeCellArea.column
+      }
+    }
+  }
+  const cellVNs = labelVNs
+  if (isActiveCellArea || isColSelected) {
+    cellVNs.push(
+      h('' + name, {
+        key: 2,
+        class: `vxe-default-${name} vxe-reusekeep-control`,
+        value: cellValue,
+        ...getNativeAttrs(renderOpts),
+        ...getNativeEditOns(renderOpts, renderParams)
+      })
+    )
+  }
+  return cellVNs
+}
+
+function getInputRenderCellVNs (cellValue: any, labelVNs: VNode[], renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, renderParams: VxeGlobalRendererHandles.RenderTableEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+  const { $table, row, column } = renderParams
+  const tableProps = $table.props
+  const { editConfig, mouseConfig } = tableProps
+  let isColSelected = false
+  let isActiveCellArea = false
+  if (editConfig && mouseConfig) {
+    const tableReactData = $table.reactData
+    const { editStore } = tableReactData
+    const { computeEditOpts } = $table.getComputeMaps()
+    const editOpts = computeEditOpts.value
+    if (editOpts.isReuseKeep) {
+      const { selected } = editStore
+      isColSelected = row === selected.row && column === selected.column
+      if ($table.getActiveCellArea) {
+        const activeCellArea = $table.getActiveCellArea()
+        if (activeCellArea) {
+          isActiveCellArea = row === activeCellArea.row && column === activeCellArea.column
+        }
+      }
+    }
+  }
+  const cellVNs = labelVNs
+  if (isActiveCellArea || isColSelected) {
+    cellVNs.push(
+      h(getDefaultComponent(renderOpts), {
+        key: 2,
+        ...getCellEditProps(renderOpts, renderParams, cellValue),
+        inputClassName: 'vxe-reusekeep-control',
+        ...getEditOns(renderOpts, renderParams)
+      })
+    )
+  }
+  return cellVNs
+}
+
 /**
  * 表格 - 渲染器
  */
 renderer.mixin({
   input: {
     tableAutoFocus: true,
-    renderTableEdit: nativeEditRender,
-    renderTableDefault: nativeEditRender,
+    renderTableEdit: nativeInputEditRender,
+    renderTableCell: nativeInputCellRender,
+    renderTableDefault: nativeInputEditRender,
     createTableFilterOptions: defaultFilterOptions,
     renderTableFilter: nativeFilterRender,
     tableFilterDefaultMethod: handleInputFilterMethod
   },
   textarea: {
     tableAutoFocus: true,
-    renderTableEdit: nativeEditRender
+    renderTableEdit: nativeInputEditRender,
+    renderTableCell: nativeInputCellRender,
+    renderTableDefault: nativeInputEditRender
   },
   select: {
     renderTableEdit: nativeSelectEditRender,
@@ -939,10 +1035,10 @@ renderer.mixin({
   },
   VxeInput: {
     tableAutoFocus: true,
-    renderTableEdit: defaultEditRender,
-    renderTableCell (renderOpts, params) {
+    renderTableEdit: defaultInputEditRender,
+    renderTableCell (renderOpts, renderParams: VxeGlobalRendererHandles.RenderTableEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
       const { props = {} } = renderOpts
-      const { row, column } = params
+      const { row, column } = renderParams
       const inputConfig = getConfig().input || {}
       const digits = props.digits || inputConfig.digits || 2
       let cellValue = XEUtils.get(row, column.field)
@@ -960,16 +1056,21 @@ renderer.mixin({
             break
         }
       }
-      return getCellLabelVNs(renderOpts, params, cellValue)
+      const cellVNs = getCellLabelVNs(renderOpts, renderParams, cellValue)
+      return getInputRenderCellVNs(cellValue, cellVNs, renderOpts, renderParams)
     },
-    renderTableDefault: defaultEditRender,
+    renderTableDefault: defaultInputEditRender,
     createTableFilterOptions: defaultFilterOptions,
     renderTableFilter: defaultFilterRender,
     renderTableFloatingFilter: defaultFloatingFilterRender,
     tableFilterDefaultMethod: handleInputFilterMethod
   },
   FormatNumberInput: {
-    renderTableDefault: handleNumberCell,
+    renderTableDefault (renderOpts, renderParams) {
+      const { row, column } = renderParams
+      const cellValue = XEUtils.get(row, column.field)
+      return handleNumberCell(cellValue, renderOpts, renderParams)
+    },
     tableFilterDefaultMethod ({ option, row, column }) {
       const { data } = option
       const cellValue = XEUtils.get(row, column.field)
@@ -984,8 +1085,13 @@ renderer.mixin({
   },
   VxeNumberInput: {
     tableAutoFocus: true,
-    renderTableEdit: defaultEditRender,
-    renderTableCell: handleNumberCell,
+    renderTableEdit: defaultInputEditRender,
+    renderTableCell (renderOpts, renderParams: VxeGlobalRendererHandles.RenderTableEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+      const { row, column } = renderParams
+      const cellValue = XEUtils.get(row, column.field)
+      const cellVNs = handleNumberCell(cellValue, renderOpts, renderParams)
+      return getInputRenderCellVNs(cellValue, cellVNs, renderOpts, renderParams)
+    },
     renderTableFooter (renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column, _columnIndex } = params
@@ -1022,7 +1128,7 @@ renderer.mixin({
       }
       return getFuncText(itemValue, 1)
     },
-    renderTableDefault: defaultEditRender,
+    renderTableDefault: defaultInputEditRender,
     createTableFilterOptions: defaultFilterOptions,
     renderTableFilter: defaultFilterRender,
     renderTableFloatingFilter: defaultFloatingFilterRender,
@@ -1170,13 +1276,14 @@ renderer.mixin({
   },
   VxeTextarea: {
     tableAutoFocus: true,
-    renderTableDefault: defaultEditRender,
-    renderTableEdit: defaultEditRender,
-    renderTableCell (renderOpts, params) {
-      const { row, column } = params
+    renderTableDefault: defaultInputEditRender,
+    renderTableCell (renderOpts, renderParams: VxeGlobalRendererHandles.RenderTableEditParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
+      const { row, column } = renderParams
       const cellValue = XEUtils.get(row, column.field)
-      return getCellLabelVNs(renderOpts, params, cellValue)
-    }
+      const cellVNs = getCellLabelVNs(renderOpts, renderParams, cellValue)
+      return getInputRenderCellVNs(cellValue, cellVNs, renderOpts, renderParams)
+    },
+    renderTableEdit: defaultInputEditRender
   },
   VxeButton: {
     renderTableDefault: buttonCellRender
