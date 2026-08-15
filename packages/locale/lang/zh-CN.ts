@@ -603,7 +603,7 @@ export default {
         quarter: '{yyyy}年第{q}季度',
         month: '{yyyy}年{MM}月',
         week: '{yyyy}年第{W}周',
-        day: '{yyyy}年{MM}月 {E}',
+        day: '{yyyy}年{MM}月 {eLabel}',
         date: '{yyyy}年{MM}月{dd}日',
         hour: '{yyyy}年{MM}月{dd}日{HH}时',
         minute: '{yyyy}年{MM}月{dd}日{HH}时{mm}分',
@@ -614,13 +614,33 @@ export default {
         quarter: '{q}季度',
         month: '{M}月',
         week: '{W}周',
-        day: '{d}',
+        day: '{eLabel}',
         date: '{d}',
         hour: '{HH}',
         minute: '{mm}',
         second: '{ss}'
       },
+      stepFormat: {
+        year: '{start.yyyy}~{end.yyyy}年',
+        quarter: '{start.q}~{end.q}季度',
+        month: '{start.M}~{end.M}月',
+        week: '{start.W}~{end.W}周',
+        day: '{eStartLabel}~{eEndLabel}',
+        date: '{start.d}~{end.d}',
+        hour: '{start.HH}~{end.HH}',
+        minute: '{start.mm}~{end.mm}',
+        second: '{start.ss}~{end.ss}'
+      },
       dayss: {
+        w0: '日',
+        w1: '一',
+        w2: '二',
+        w3: '三',
+        w4: '四',
+        w5: '五',
+        w6: '六'
+      },
+      days: {
         w0: '日',
         w1: '一',
         w2: '二',
