@@ -960,11 +960,14 @@ function getInputRenderCellVNs (cellValue: any, labelVNs: VNode[], renderOpts: V
   }
   const cellVNs = labelVNs
   if (isActiveCellArea || isColSelected) {
+    const compProps = getCellEditProps(renderOpts, renderParams, cellValue)
+    const { className, inputClassName } = compProps
     cellVNs.push(
       h(getDefaultComponent(renderOpts), {
         key: 2,
-        ...getCellEditProps(renderOpts, renderParams, cellValue),
-        inputClassName: 'vxe-reusekeep-control',
+        ...compProps,
+        className: 'vxe-reusekeep-control' + (className ? (' ' + className) : ''),
+        inputClassName: 'vxe-reusekeep-control' + (inputClassName ? (' ' + inputClassName) : ''),
         ...getEditOns(renderOpts, renderParams)
       })
     )
