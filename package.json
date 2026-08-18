@@ -65,7 +65,7 @@
     "sass-loader": "^14.2.0",
     "typescript": "~5.9.3",
     "vue": "3.4.27",
-    "vue-router": "~4.5.2",
+    "vue-router": "~4.5.1",
     "vxe-pc-ui": "4.17.3"
   },
   "vetur": {
