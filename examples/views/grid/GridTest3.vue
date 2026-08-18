@@ -1,75 +1,64 @@
 <template>
   <div>
-    <vxe-button @click="exportEvent">高级导出</vxe-button>
-    <vxe-grid ref="gridRef" v-bind="gridOptions"></vxe-grid>
+    <vxe-grid v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import type { VxeGridInstance, VxeGridProps } from '../../../types'
+import { reactive } from 'vue'
+import type { VxeGridProps } from '../../../types'
 
 interface RowVO {
   id: number
   name: string
+  nickname: string
   role: string
   sex: string
   age: number
+  date: string
   address: string
 }
 
-const gridRef = ref<VxeGridInstance<RowVO>>()
-
 const gridOptions = reactive<VxeGridProps<RowVO>>({
   border: true,
-  showFooter: true,
-  mergeCells: [
-    { row: 1, col: 2, colspan: 2, rowspan: 1 }
-  ],
-  mergeFooterCells: [
-    { row: 0, col: 2, colspan: 2, rowspan: 1 }
-  ],
-  exportConfig: {
-    filename () {
-      return `导出文件名${Date.now()}`
-    },
-    sheetName () {
-      return `导出标题${Date.now()}`
-    }
+  showOverflow: true,
+  showHeaderOverflow: true,
+  showFooterOverflow: true,
+  height: 1000,
+  virtualYConfig: {
+    enabled: true,
+    gt: 0
   },
   columns: [
-    { field: 'seq', type: 'seq', width: 70 },
-    { field: 'checkbox', type: 'checkbox', width: 70 },
-    {
-      title: '分组1',
-      children: [
-        { field: 'name', title: 'Name' }
-      ]
-    },
-    {
-      title: '分组2',
-      children: [
-        { field: 'sex', title: 'Sex' },
-        { field: 'age', title: 'Age' }
-      ]
-    }
+    { type: 'seq', width: 70 },
+    { field: 'name', title: 'Name' },
+    { field: 'nickname', title: 'Nickname', width: 'auto' },
+    { field: 'role', title: 'Role' },
+    { field: 'sex', title: 'Sex' },
+    { field: 'age', title: 'Age' },
+    { field: 'date', title: 'date' },
+    { field: 'address', title: 'Address' }
   ],
-  data: [
-    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
-    { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-    { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
-  ],
-  footerData: [
-    { seq: '合计', name: '45', sex: '666', age: '999' },
-    { seq: '平均', name: '98', sex: '888', age: '333' }
-  ]
+  data: []
 })
 
-const exportEvent = () => {
-  const $grid = gridRef.value
-  if ($grid) {
-    $grid.openExport()
+// 模拟行数据
+const loadList = (size = 200) => {
+  const dataList: RowVO[] = []
+  for (let i = 0; i < size; i++) {
+    dataList.push({
+      id: 10000 + i,
+      name: 'Test' + i,
+      nickname: i === 100 ? 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' : 'Name' + i,
+      role: 'Developer',
+      sex: '男',
+      age: 18,
+      date: '2018-01-01',
+      address: 'address'
+    })
   }
+  gridOptions.data = dataList
 }
+
+loadList(500)
 </script>

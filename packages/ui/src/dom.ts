@@ -55,7 +55,13 @@ export function isScale (val: any) {
 }
 
 export function hasClass (elem: any, cls: any) {
-  return !!(elem && elem.className && elem.className.match && elem.className.match(getClsRE(cls)))
+  if (elem) {
+    if (elem.classList) {
+      return elem.classList.contains(cls)
+    }
+    return !!(elem.className && elem.className.match && elem.className.match(getClsRE(cls)))
+  }
+  return false
 }
 
 export function removeClass (elem: any, cls: any) {

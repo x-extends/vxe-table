@@ -806,9 +806,9 @@ function handleNumberCell (cellValue: any, renderOpts: VxeGlobalRendererHandles.
     : {})
 }
 
-function handleFormatDatePicker (renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, params: VxeGlobalRendererHandles.TableCellFormatterParams) {
+function handleFormatDatePicker (renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, renderParams: VxeGlobalRendererHandles.TableCellFormatterParams) {
   const { props = {} } = renderOpts
-  const { cellValue } = params
+  const { cellValue } = renderParams
   if (cellValue) {
     if (props.type !== 'time') {
       return getLabelFormatDate(cellValue, props)
@@ -817,13 +817,13 @@ function handleFormatDatePicker (renderOpts: VxeGlobalRendererHandles.RenderTabl
   return cellValue
 }
 
-function handleFormatSelect (renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, params: VxeGlobalRendererHandles.TableCellFormatterParams | VxeGlobalRendererHandles.TableCellCopyMethodParams) {
-  const { cellValue } = params
+function handleFormatSelect (renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, renderParams: VxeGlobalRendererHandles.TableCellFormatterParams | VxeGlobalRendererHandles.TableCellCopyMethodParams) {
+  const { cellValue } = renderParams
   return handleSelectCellValue(cellValue, renderOpts)
 }
 
-function handleSetSelectValue (renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, params: VxeGlobalRendererHandles.TableCellFormatterParams | VxeGlobalRendererHandles.TableCellCopyMethodParams) {
-  const { row, column, cellValue } = params
+function handleSetSelectValue (renderOpts: VxeGlobalRendererHandles.RenderTableDefaultOptions, renderParams: VxeGlobalRendererHandles.TableCellFormatterParams | VxeGlobalRendererHandles.TableCellCopyMethodParams) {
+  const { row, column, cellValue } = renderParams
   const { field } = column
   if (field) {
     const { options, optionGroups, optionProps = {}, optionGroupProps = {}, props } = renderOpts

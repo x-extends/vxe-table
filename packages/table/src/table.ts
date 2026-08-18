@@ -4699,6 +4699,7 @@ export default defineVxeComponent({
 
     const handleSyncScroll = (isRollX: boolean, isRollY: boolean) => {
       const { scrollXLoad, scrollYLoad, isAllOverflow } = reactData
+      const autoWidthColumnList = computeAutoWidthColumnList.value
       internalData.lcsRunTime = Date.now()
       internalData.lcsTimeout = undefined
       internalData.intoRunScroll = false
@@ -4720,7 +4721,14 @@ export default defineVxeComponent({
         xRest = $xeTable.updateScrollXData()
       }
       if (isRollY && scrollYLoad) {
+        if (autoWidthColumnList.length) {
+          calcCellWidth()
+        }
         yRest = $xeTable.updateScrollYData().then(() => {
+          if (autoWidthColumnList.length) {
+            calcCellWidth()
+            autoCellWidth()
+          }
           if (!isAllOverflow) {
             calcCellHeight()
             updateRowOffsetTop()
