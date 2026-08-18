@@ -4224,6 +4224,7 @@ function handleSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   const internalData = $xeTable as unknown as TableInternalData
 
   const { scrollXLoad, scrollYLoad, isAllOverflow } = reactData
+  const autoWidthColumnList = $xeTable.computeAutoWidthColumnList
   internalData.lcsRunTime = Date.now()
   internalData.lcsTimeout = undefined
   internalData.intoRunScroll = false
@@ -4245,7 +4246,14 @@ function handleSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
     xRest = $xeTable.updateScrollXData()
   }
   if (isRollY && scrollYLoad) {
+    if (autoWidthColumnList.length) {
+      calcCellWidth($xeTable)
+    }
     yRest = $xeTable.updateScrollYData().then(() => {
+      if (autoWidthColumnList.length) {
+        calcCellWidth($xeTable)
+        autoCellWidth($xeTable)
+      }
       if (!isAllOverflow) {
         calcCellHeight($xeTable)
         updateRowOffsetTop($xeTable)
