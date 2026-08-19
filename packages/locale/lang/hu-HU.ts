@@ -40,6 +40,8 @@ export default {
       noTree: 'A "{0}" nem támogatott a faszerkezetben',
       noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Nem támogatott paraméter "{0}"',
+      returnErr: '参数 "{0}" 的返回值期望是 "{1}" 实际是 "{2}"',
+      notSupportReturn: '当返回值为 "{0}" 时的参数应该使用用 "{1}" 而不是 "{2}"',
       checkProp: 'Ha az adatmennyiség túl nagy, akkor a jelölőnégyzet dadoghat. Javasoljuk, hogy állítsa be a "{0}" paramétert a megjelenítési sebesség javítása érdekében',
       coverProp: 'A "{1}" paramétert a "{0}" paramétere többször meghatározza, ami hibát okozhat',
       uniField: 'A "{0}" mező nevét többször definiálják, ami hibát okozhat',

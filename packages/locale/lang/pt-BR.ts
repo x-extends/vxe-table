@@ -40,6 +40,8 @@ export default {
       noTree: '"{0}" não é suportado na estrutura da árvore',
       noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Parâmetro não suportado "{0}"',
+      returnErr: '参数 "{0}" 的返回值期望是 "{1}" 实际是 "{2}"',
+      notSupportReturn: '当返回值为 "{0}" 时的参数应该使用用 "{1}" 而不是 "{2}"',
       checkProp: 'Quando o volume de dados é muito grande, a caixa de seleção pode ser gaguejada. Recomenda -se definir o parâmetro "{0}" para melhorar a velocidade de renderização',
       coverProp: 'O parâmetro "{1}" de "{0}" é definido repetidamente, o que pode causar um erro',
       uniField: 'O nome do campo "{0}" é definido repetidamente, o que pode causar um erro',

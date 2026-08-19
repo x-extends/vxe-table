@@ -40,6 +40,8 @@ export default {
       noTree: '"{0}" støttes ikke i trestrukturen',
       noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Ikke støttet parameter "{0}"',
+      returnErr: '参数 "{0}" 的返回值期望是 "{1}" 实际是 "{2}"',
+      notSupportReturn: '当返回值为 "{0}" 时的参数应该使用用 "{1}" 而不是 "{2}"',
       checkProp: 'Når datavolumet er for stort, kan avmerkingsboksen være stammet. Det anbefales å angi parameteren "{0}" for å forbedre gjengivelseshastigheten',
       coverProp: 'Parameteren "{1}" av "{0}" er gjentatte ganger definert, noe som kan forårsake en feil',
       uniField: 'Feltnavnet "{0}" er gjentatte ganger definert, noe som kan forårsake en feil',

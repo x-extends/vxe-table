@@ -40,6 +40,8 @@ export default {
       noTree: '"{0}" không được hỗ trợ trong cấu trúc cây',
       noGroup: '"{0}" không được hỗ trợ sau khi nhóm dữ liệu',
       notProp: 'Tham số không được hỗ trợ "{0}"',
+      returnErr: '参数 "{0}" 的返回值期望是 "{1}" 实际是 "{2}"',
+      notSupportReturn: '当返回值为 "{0}" 时的参数应该使用用 "{1}" 而不是 "{2}"',
       checkProp: 'Khi khối lượng dữ liệu quá lớn, hộp kiểm có thể được lắp. Bạn nên đặt tham số "{0}" để cải thiện tốc độ kết xuất',
       coverProp: 'Tham số "{1}" của "{0}" được xác định nhiều lần, có thể gây ra lỗi',
       uniField: 'Tên trường "{0}" được xác định nhiều lần, có thể gây ra lỗi',

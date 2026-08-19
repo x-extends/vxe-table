@@ -40,6 +40,8 @@ export default {
       noTree: '"{0}" is not supported in the tree structure',
       noGroup: '"{0}" is not supported in the aggregation grouping',
       notProp: 'Unsupported parameter "{0}"',
+      returnErr: '参数 "{0}" 的返回值期望是 "{1}" 实际是 "{2}"',
+      notSupportReturn: '当返回值为 "{0}" 时的参数应该使用用 "{1}" 而不是 "{2}"',
       checkProp: 'When the data volume is too large, the check box may be stuttered. It is recommended to set the parameter "{0}" to improve rendering speed',
       coverProp: 'The parameter "{1}" of "{0}" is repeatedly defined, which may cause an error',
       uniField: 'The field name "{0}" is repeatedly defined, which may cause an error',

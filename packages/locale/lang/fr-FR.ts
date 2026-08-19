@@ -40,6 +40,8 @@ export default {
       noTree: "\"{0}\" n'est pas pris en charge dans la structure de l'arbre",
       noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Paramètre non pris en charge "{0}"',
+      returnErr: '参数 "{0}" 的返回值期望是 "{1}" 实际是 "{2}"',
+      notSupportReturn: '当返回值为 "{0}" 时的参数应该使用用 "{1}" 而不是 "{2}"',
       checkProp: 'Lorsque le volume de données est trop grand, la case peut être bégayée. Il est recommandé de définir le paramètre "{0}" pour améliorer la vitesse de rendu',
       coverProp: 'Le paramètre "{1}" de "{0}" est défini à plusieurs reprises, ce qui peut provoquer une erreur',
       uniField: 'Le nom de champ "{0}" est défini à plusieurs reprises, ce qui peut provoquer une erreur',

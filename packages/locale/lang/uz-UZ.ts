@@ -40,6 +40,8 @@ export default {
       noTree: "\"{0}\" daraxt tuzilmasida qo'llab-quvvatlanmaydi",
       noGroup: '数据分组后不支持 "{0}"',
       notProp: "\"{0}\" ni qo'llab-quvvatlamagan parametr",
+      returnErr: '参数 "{0}" 的返回值期望是 "{1}" 实际是 "{2}"',
+      notSupportReturn: '当返回值为 "{0}" 时的参数应该使用用 "{1}" 而不是 "{2}"',
       checkProp: "Ma'lumotlar balandligi juda katta bo'lsa, katagiga ko'tarilishi mumkin. Tezlikni yaxshilash uchun \"{0}\" parametrini belgilash tavsiya etiladi",
       coverProp: '"{1}" parametr "{0}" parametr bir necha bor aniqlanadi, bu xatoga olib kelishi mumkin',
       uniField: '"{0}" dagi "{0}" da bir necha bor aniqlanadi, bu xatoga olib kelishi mumkin',

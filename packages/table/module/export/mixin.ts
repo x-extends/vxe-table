@@ -1659,7 +1659,15 @@ export default {
 
       if (!handleOptions.print) {
         if (beforeExportMethod) {
-          beforeExportMethod({ options: handleOptions, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
+          const beRest = beforeExportMethod({ options: handleOptions, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
+          if (XEUtils.isBoolean(beRest)) {
+            if (!beRest) {
+              const params = { status: false }
+              return Promise.reject(params)
+            }
+          } else {
+            warnLog('vxe.error.returnErr', ['beforeExportMethod', 'boolean', beRest])
+          }
         }
       }
 
@@ -1767,14 +1775,22 @@ export default {
       const opts = Object.assign({}, options)
       const { beforeImportMethod } = opts
       if (beforeImportMethod) {
-        beforeImportMethod({ options: opts, $table: $xeTable })
+        const biRest = beforeImportMethod({ options: opts, $table: $xeTable })
+        if (XEUtils.isBoolean(biRest)) {
+          if (!biRest) {
+            const params = { status: false }
+            return Promise.reject(params)
+          }
+        } else {
+          warnLog('vxe.error.returnErr', ['beforeImportMethod', 'boolean', biRest])
+        }
       }
       return handleFileImport($xeTable, file, opts)
     },
     _importData (options?: VxeTablePropTypes.ImportConfig) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      const { importOpts } = this
+      const importOpts = $xeTable.computeImportOpts
       const opts = Object.assign({
         types: XEUtils.keys(importOpts._typeMaps)
         // beforeImportMethod: null,
@@ -1782,7 +1798,15 @@ export default {
       }, importOpts, options)
       const { beforeImportMethod, afterImportMethod } = opts
       if (beforeImportMethod) {
-        beforeImportMethod({ options: opts, $table: this })
+        const biRest = beforeImportMethod({ options: opts, $table: $xeTable })
+        if (XEUtils.isBoolean(biRest)) {
+          if (!biRest) {
+            const params = { status: false }
+            return Promise.reject(params)
+          }
+        } else {
+          warnLog('vxe.error.returnErr', ['beforeImportMethod', 'boolean', biRest])
+        }
       }
       return VxeUI.readFile(opts).catch(e => {
         if (afterImportMethod) {
@@ -1843,6 +1867,7 @@ export default {
       }
 
       const beforePrintMethod = opts.beforePrintMethod
+      const printMethod = opts.printMethod
       const tableHtml = opts.html || opts.content
       return new Promise((resolve, reject) => {
         if (VxeUI.print) {
@@ -1855,6 +1880,30 @@ export default {
                 beforeMethod: beforePrintMethod
                   ? ({ html }) => {
                       return beforePrintMethod({
+                        html,
+                        content: html,
+                        options: opts,
+                        $table: $xeTable,
+                        $grid: $xeGrid,
+                        $gantt: $xeGantt
+                      })
+                    }
+                  : undefined,
+                beforePrintMethod: beforePrintMethod
+                  ? ({ html }) => {
+                      return beforePrintMethod({
+                        html,
+                        content: html,
+                        options: opts,
+                        $table: $xeTable,
+                        $grid: $xeGrid,
+                        $gantt: $xeGantt
+                      })
+                    }
+                  : undefined,
+                printMethod: printMethod
+                  ? ({ html }) => {
+                      return printMethod({
                         html,
                         content: html,
                         options: opts,
@@ -1876,6 +1925,30 @@ export default {
                   beforeMethod: beforePrintMethod
                     ? ({ html }) => {
                         return beforePrintMethod({
+                          html,
+                          content: html,
+                          options: opts,
+                          $table: $xeTable,
+                          $grid: $xeGrid,
+                          $gantt: $xeGantt
+                        })
+                      }
+                    : undefined,
+                  beforePrintMethod: beforePrintMethod
+                    ? ({ html }) => {
+                        return beforePrintMethod({
+                          html,
+                          content: html,
+                          options: opts,
+                          $table: $xeTable,
+                          $grid: $xeGrid,
+                          $gantt: $xeGantt
+                        })
+                      }
+                    : undefined,
+                  printMethod: printMethod
+                    ? ({ html }) => {
+                        return printMethod({
                           html,
                           content: html,
                           options: opts,
