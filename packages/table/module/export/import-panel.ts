@@ -2,7 +2,7 @@ import { CreateElement, PropType } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
-import { parseFile } from '../../../ui/src/utils'
+import { getDefaultConfig, parseFile } from '../../../ui/src/utils'
 import { createComponentLog } from '../../../ui/src/log'
 
 import type { VxeComponentSizeType } from 'vxe-pc-ui'
@@ -154,7 +154,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const { defaultOptions, storeData } = props
       const selectName = $xeImportPanel.computeSelectName as string
       const hasFile = $xeImportPanel.computeHasFile
+      const importOpts = $xeTable.computeImportOpts
       const parseTypeLabel = $xeImportPanel.computeParseTypeLabel as string
+      const modelOptions = importOpts.modelOptions || {}
+      const settingOptions = importOpts.settingOptions || {}
       const slots = defaultOptions.slots || {}
       const topSlot = slots.top
       const bottomSlot = slots.bottom
@@ -165,17 +168,19 @@ export default /* define-vxe-component start */ defineVxeComponent({
         props: {
           id: 'VXE_IMPORT_MODAL',
           value: storeData.visible,
-          title: getI18n('vxe.import.impTitle'),
-          width: 540,
-          minWidth: 360,
-          minHeight: 240,
+          title: modelOptions.title || getI18n('vxe.import.impTitle'),
+          width: modelOptions.width || 540,
+          height: modelOptions.height,
+          minWidth: modelOptions.minWidth || 360,
+          minHeight: modelOptions.minHeight || 240,
           mask: true,
           lockView: true,
           showFooter: true,
           escClosable: true,
           maskClosable: true,
-          showMaximize: true,
-          resize: true,
+          showMinimize: modelOptions.showMinimize,
+          showMaximize: getDefaultConfig(modelOptions.showMaximize, true),
+          resize: getDefaultConfig(modelOptions.resize, true),
           loading: reactData.loading
         },
         on: {
@@ -250,22 +255,24 @@ export default /* define-vxe-component start */ defineVxeComponent({
                           h('td', getI18n('vxe.import.impType')),
                           h('td', parseTypeLabel)
                         ]),
-                        h('tr', [
-                          h('td', getI18n('vxe.import.impMode')),
-                          h('td', [
-                            h('vxe-select', {
-                              props: {
-                                value: defaultOptions.mode,
-                                options: storeData.modeList
-                              },
-                              on: {
-                                modelValue (value: any) {
-                                  defaultOptions.mode = value
+                        settingOptions.showMode === false
+                          ? renderEmptyElement($xeTable)
+                          : h('tr', [
+                            h('td', getI18n('vxe.import.impMode')),
+                            h('td', [
+                              h('vxe-select', {
+                                props: {
+                                  value: defaultOptions.mode,
+                                  options: storeData.modeList
+                                },
+                                on: {
+                                  modelValue (value: any) {
+                                    defaultOptions.mode = value
+                                  }
                                 }
-                              }
-                            })
+                              })
+                            ])
                           ])
-                        ])
                       ])
                     ])
                   ]

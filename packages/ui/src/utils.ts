@@ -54,3 +54,7 @@ export function eqEmptyValue (cellValue: any) {
 export function getClass (property: any, params: any) {
   return property ? XEUtils.isFunction(property) ? property(params) : property : ''
 }
+
+export function getDefaultConfig (val1: any, def1: any) {
+  return XEUtils.eqNull(val1) ? def1 : val1
+}
