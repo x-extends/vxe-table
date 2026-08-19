@@ -40,6 +40,8 @@ export default {
       noTree: '"{0}" tidak didukung dalam struktur pohon',
       noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Parameter yang tidak didukung "{0}"',
+      returnErr: '参数 "{0}" 的返回值期望是 "{1}" 实际是 "{2}"',
+      notSupportReturn: '当返回值为 "{0}" 时的参数应该使用用 "{1}" 而不是 "{2}"',
       checkProp: 'Ketika volume data terlalu besar, kotak centang mungkin tergagap. Disarankan untuk mengatur parameter "{0}" untuk meningkatkan kecepatan rendering',
       coverProp: 'Parameter "{1}" dari "{0}" berulang kali didefinisikan, yang dapat menyebabkan kesalahan',
       uniField: 'Nama bidang "{0}" berulang kali didefinisikan, yang dapat menyebabkan kesalahan',

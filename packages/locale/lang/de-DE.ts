@@ -40,6 +40,8 @@ export default {
       noTree: '"{0}" wird in der Baumstruktur nicht unterstützt',
       noGroup: '"{0}" wird nach der Datengruppierung nicht unterstützt',
       notProp: 'Nicht unterstützter Parameter "{0}"',
+      returnErr: '参数 "{0}" 的返回值期望是 "{1}" 实际是 "{2}"',
+      notSupportReturn: '当返回值为 "{0}" 时的参数应该使用用 "{1}" 而不是 "{2}"',
       checkProp: 'Wenn das Datenvolumen zu groß ist, kann das Kontrollkästchen stottern. Es wird empfohlen, den Parameter "{0}" festzulegen, um die Rendering -Geschwindigkeit zu verbessern',
       coverProp: 'Der Parameter "{1}" von "{0}" wird wiederholt definiert, was einen Fehler verursachen kann',
       uniField: 'Der Feldname "{0}" wird wiederholt definiert, was einen Fehler verursachen kann',

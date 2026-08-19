@@ -40,6 +40,8 @@ export default {
       noTree: '"{0}" no es compatible con la estructura del árbol',
       noGroup: '"{0}" no es compatible después de la agrupación de datos',
       notProp: 'Parámetro no compatible "{0}"',
+      returnErr: '参数 "{0}" 的返回值期望是 "{1}" 实际是 "{2}"',
+      notSupportReturn: '当返回值为 "{0}" 时的参数应该使用用 "{1}" 而不是 "{2}"',
       checkProp: 'Cuando el volumen de datos es demasiado grande, la casilla de verificación puede tartamudear. Se recomienda establecer el parámetro "{0}" para mejorar la velocidad de renderización',
       coverProp: 'El parámetro "{1}" de "{0}" se define repetidamente, lo que puede causar un error',
       uniField: 'El nombre de campo "{0}" se define repetidamente, lo que puede causar un error',

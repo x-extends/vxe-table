@@ -40,6 +40,8 @@ export default {
       noTree: '"{0}" tidak disokong dalam struktur pokok',
       noGroup: '数据分组后不支持 "{0}"',
       notProp: 'Parameter yang tidak disokong "{0}"',
+      returnErr: '参数 "{0}" 的返回值期望是 "{1}" 实际是 "{2}"',
+      notSupportReturn: '当返回值为 "{0}" 时的参数应该使用用 "{1}" 而不是 "{2}"',
       checkProp: 'Apabila jumlah data terlalu besar, kotak semak boleh digagalkan. Adalah disyorkan untuk menetapkan parameter "{0}" untuk meningkatkan kelajuan rendering',
       coverProp: 'Parameter "{1}" dari "{0}" ditakrifkan berulang kali, yang boleh menyebabkan ralat',
       uniField: 'Nama medan "{0}" ditakrifkan berulang kali, yang boleh menyebabkan ralat',
