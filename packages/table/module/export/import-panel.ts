@@ -2,7 +2,7 @@ import { h, ref, Ref, computed, inject, reactive, nextTick, PropType } from 'vue
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
-import { parseFile } from '../../../ui/src/utils'
+import { getDefaultConfig, parseFile } from '../../../ui/src/utils'
 import { createComponentLog } from '../../../ui/src/log'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines } from '../../../../types'
@@ -107,7 +107,10 @@ export default defineVxeComponent({
       const { defaultOptions, storeData } = props
       const selectName = computeSelectName.value
       const hasFile = computeHasFile.value
+      const importOpts = computeImportOpts.value
       const parseTypeLabel = computeParseTypeLabel.value
+      const modelOptions = importOpts.modelOptions || {}
+      const settingOptions = importOpts.settingOptions || {}
       const slots = defaultOptions.slots || {}
       const topSlot = slots.top
       const bottomSlot = slots.bottom
@@ -117,18 +120,20 @@ export default defineVxeComponent({
         ? h(VxeUIModalComponent, {
           id: 'VXE_IMPORT_MODAL',
           modelValue: storeData.visible,
-          title: getI18n('vxe.import.impTitle'),
+          title: modelOptions.title || getI18n('vxe.import.impTitle'),
           className: 'vxe-table-export-popup-wrapper',
-          width: 540,
-          minWidth: 360,
-          minHeight: 240,
+          width: modelOptions.width || 540,
+          height: modelOptions.height,
+          minWidth: modelOptions.minWidth || 360,
+          minHeight: modelOptions.minHeight || 240,
           mask: true,
           lockView: true,
           showFooter: true,
           escClosable: true,
           maskClosable: true,
-          showMaximize: true,
-          resize: true,
+          showMinimize: modelOptions.showMinimize,
+          showMaximize: getDefaultConfig(modelOptions.showMaximize, true),
+          resize: getDefaultConfig(modelOptions.resize, true),
           loading: reactData.loading,
           'onUpdate:modelValue' (value: any) {
             storeData.visible = value
@@ -188,20 +193,23 @@ export default defineVxeComponent({
                           h('td', getI18n('vxe.import.impType')),
                           h('td', parseTypeLabel)
                         ]),
-                        h('tr', [
-                          h('td', getI18n('vxe.import.impMode')),
-                          h('td', [
-                            VxeUISelectComponent
-                              ? h(VxeUISelectComponent, {
-                                modelValue: defaultOptions.mode,
-                                options: storeData.modeList,
-                                'onUpdate:modelValue' (value: any) {
-                                  defaultOptions.mode = value
-                                }
-                              })
-                              : renderEmptyElement($xeTable)
+                        settingOptions.showMode === false
+                          ? renderEmptyElement($xeTable)
+                          : h('tr', [
+                            h('td', getI18n('vxe.import.impMode')),
+                            h('td', [
+                              VxeUISelectComponent
+                                ? h(VxeUISelectComponent, {
+                                  modelValue: defaultOptions.mode,
+                                  options: storeData.modeList,
+                                  'onUpdate:modelValue' (value: any) {
+                                    defaultOptions.mode = value
+                                  }
+                                })
+                                : renderEmptyElement($xeTable)
+                            ])
                           ])
-                        ])
+
                       ])
                     ])
                   ]
