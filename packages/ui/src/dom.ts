@@ -270,5 +270,14 @@ export function wheelScrollTopTo (diffNum: number, cb: (progress: number) => voi
 }
 
 export function getPopupContainer (appendTo: string | HTMLElement | ((params: any) => string | HTMLElement) | undefined) {
-  return appendTo ? ((XEUtils.isFunction(appendTo) ? appendTo({}) : appendTo) || 'body') : 'body'
+  const selectElem = appendTo && XEUtils.isFunction(appendTo) ? appendTo({}) : appendTo
+  return selectElem || 'body'
+}
+
+export function getPopupAppendElement (appendTo: string | HTMLElement | ((params: any) => string | HTMLElement) | undefined) {
+  const selectElem = getPopupContainer(appendTo)
+  if (XEUtils.isString(selectElem)) {
+    return document.querySelector<HTMLElement>(selectElem) || document.body
+  }
+  return selectElem
 }
