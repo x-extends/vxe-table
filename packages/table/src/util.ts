@@ -706,7 +706,15 @@ export function handleRowidOrRow ($xeTable: VxeTableConstructor, rowidOrRow: any
 }
 
 export function getCellRestHeight (rowRest: VxeTableDefines.RowCacheItem, cellOpts: VxeTablePropTypes.CellConfig, rowOpts: VxeTablePropTypes.RowConfig, defaultRowHeight: number) {
-  return rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+  const { height, minHeight, maxHeight } = cellOpts
+  let cellHeight = rowRest.resizeHeight || height || rowOpts.height || rowRest.height || defaultRowHeight
+  if (maxHeight && maxHeight < cellHeight) {
+    cellHeight = maxHeight
+  }
+  if (minHeight && minHeight > cellHeight) {
+    cellHeight = minHeight
+  }
+  return cellHeight
 }
 
 function getPaddingLeftRightSize (elem: HTMLElement | null) {

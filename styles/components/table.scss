@@ -2165,7 +2165,8 @@ $btnThemeList: (
     }
     &.col--cs-height,
     &.col--rs-height,
-    &.col--auto-height {
+    &.col--auto-height,
+    &.col--max-height {
       overflow: hidden;
       &.col--tree-node,
       &.col--valid-error {
