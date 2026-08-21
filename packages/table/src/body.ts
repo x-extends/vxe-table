@@ -129,7 +129,7 @@ function renderTdColumn (
   const cellOffsetWidth = $xeTable.computeCellOffsetWidth
   const { selectCellToRow } = areaOpts
   const { field, type, cellRender, editRender, align, showOverflow, className, treeNode, rowResize, padding, verticalAlign, slots } = column
-  const { verticalAlign: allVerticalAlign } = cellOpts
+  const { verticalAlign: allVerticalAlign, minHeight, maxHeight } = cellOpts
   const { actived } = editStore
   const rowRest = fullAllDataRowIdData[rowid] || {}
   const colid = column.id
@@ -315,6 +315,10 @@ function renderTdColumn (
   }
 
   const tcStyle: Record<string, string> = {}
+  if (maxHeight) {
+    tcStyle.maxHeight = maxHeight + 'px'
+  }
+
   if (hasEllipsis && resizeWidthFlag) {
     let mergeColWidth = 0
     if (mergeColspan > 1) {
@@ -325,12 +329,15 @@ function renderTdColumn (
         }
       }
     }
-    tcStyle.width = `${column.renderWidth + mergeColWidth - cellOffsetWidth}px`
+    tcStyle.width = (column.renderWidth + mergeColWidth - cellOffsetWidth) + 'px'
   }
   if (scrollYLoad || scrollXLoad || hasEllipsis || isCsHeight || isRsHeight) {
-    tcStyle.height = `${cellHeight}px`
+    tcStyle.height = cellHeight + 'px'
   } else {
-    tcStyle.minHeight = `${cellHeight}px`
+    tcStyle.minHeight = cellHeight + 'px'
+  }
+  if (minHeight) {
+    tcStyle.minHeight = minHeight + 'px'
   }
 
   const tdVNs: VxeComponentSlotType[] = []
@@ -387,7 +394,7 @@ function renderTdColumn (
           class: ['vxe-cell--valid-error-tip', getClass(validOpts.className, errorValidItem)],
           style: errRule && errRule.maxWidth
             ? {
-                width: `${errRule.maxWidth}px`
+                width: errRule.maxWidth + 'px'
               }
             : undefined
         }, [
@@ -456,6 +463,7 @@ function renderTdColumn (
         'col--rs-height': isRsHeight,
         'col--to-row': showAreaRowStatus,
         'col--auto-height': isVNAutoHeight,
+        'col--max-height': maxHeight,
         'fixed--width': !isAutoCellWidth,
         'fixed--hidden': fixedHiddenColumn,
         'is--padding': isCellPadding,
