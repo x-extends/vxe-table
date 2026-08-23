@@ -1107,7 +1107,7 @@ function handleImport ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, c
     }
     VxeUI.modal.message({ content: getI18n('vxe.error.impFields'), status: 'error' })
     if (_importReject) {
-      _importReject({ status: false })
+      _importReject({ status: false, msg: 'field mismatching' })
     }
   }
 }
@@ -1128,7 +1128,7 @@ function handleFileImport ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
       }
       VxeUI.modal.message({ content: getI18n('vxe.error.notType', [type]), status: 'error' })
     }
-    const params = { status: false }
+    const params = { status: false, msg: 'type error' }
     return Promise.reject(params)
   }
 
@@ -1163,7 +1163,7 @@ function handleFileImport ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
           const reader = new FileReader()
           reader.onerror = () => {
             errLog('vxe.error.notType', [type])
-            _importReject({ status: false })
+            _importReject({ status: false, msg: 'reading file error' })
           }
           reader.onload = (e: any) => {
             handleImport($xeTable, e.target.result, options)
@@ -1174,7 +1174,7 @@ function handleFileImport ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
     } else {
       // 不支持的浏览器
       errLog('vxe.error.notExp')
-      _importResolve({ status: true })
+      _importResolve({ status: false, msg: 'unsupported browser' })
     }
   })
 
@@ -1653,7 +1653,7 @@ export default {
         if (['xlsx', 'pdf'].includes(type)) {
           warnLog('vxe.error.reqPlugin', [3, 'plugin-export-xlsx'])
         }
-        const params = { status: false }
+        const params = { status: false, msg: 'type error' }
         return Promise.reject(params)
       }
 
@@ -1662,7 +1662,7 @@ export default {
           const beRest = beforeExportMethod({ options: handleOptions, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
           if (XEUtils.isBoolean(beRest)) {
             if (!beRest) {
-              const params = { status: false }
+              const params = { status: false, msg: 'before prevent' }
               return Promise.reject(params)
             }
           } else {
@@ -1778,7 +1778,7 @@ export default {
         const biRest = beforeImportMethod({ options: opts, $table: $xeTable })
         if (XEUtils.isBoolean(biRest)) {
           if (!biRest) {
-            const params = { status: false }
+            const params = { status: false, mas: 'before prevent' }
             return Promise.reject(params)
           }
         } else {
@@ -1801,7 +1801,7 @@ export default {
         const biRest = beforeImportMethod({ options: opts, $table: $xeTable })
         if (XEUtils.isBoolean(biRest)) {
           if (!biRest) {
-            const params = { status: false }
+            const params = { status: false, mas: 'before prevent' }
             return Promise.reject(params)
           }
         } else {
@@ -1963,7 +1963,8 @@ export default {
             )
           }
         } else {
-          const e = { status: false }
+          errLog('vxe.error.reqComp', ['vxe-print'])
+          const e = { status: false, msg: 'print not exist' }
           reject(e)
         }
       })

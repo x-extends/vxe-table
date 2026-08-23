@@ -1076,6 +1076,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
                     .then(rest => {
                       reactData.tableLoading = false
                       if (aSaveMethod) {
+                        aSaveMethod({ ...commitParams, response: rest, status: 'success' }, ...args)
+                      } else {
                         $xeTable.clearPendingRow()
                         if (isRespMsg) {
                           if (VxeUI.modal) {
