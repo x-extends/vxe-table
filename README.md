@@ -128,7 +128,6 @@
 * [x] ([企业版](https://store.vxeui.com)) 单元格区域选取
 * [x] ([企业版](https://store.vxeui.com)) 单元格复制/粘贴
 * [x] ([企业版](https://store.vxeui.com)) 单元格查找和替换
-* [x] ([企业版](https://store.vxeui.com)) 全键盘操作
 * [x] ([企业版](https://store.vxeui.com)) 集成图表
 
 ## 安装
@@ -156,7 +155,7 @@ createApp(App).use(VxeUITable).mount('#app')
 ### CDN
 
 使用第三方 CDN 方式记得锁定版本号，避免受到非兼容性更新的影响  
-***不建议将第三方的 CDN 地址用于正式环境，因为该连接随时都可能会失效***  
+**不建议将第三方的 CDN 地址用于正式环境，因为该连接随时都可能会失效**  
 
 ```HTML
 <!DOCTYPE html>

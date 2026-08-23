@@ -2165,8 +2165,7 @@ $btnThemeList: (
     }
     &.col--cs-height,
     &.col--rs-height,
-    &.col--auto-height,
-    &.col--max-height {
+    &.col--auto-height {
       overflow: hidden;
       &.col--tree-node,
       &.col--valid-error {
@@ -2174,6 +2173,16 @@ $btnThemeList: (
       }
       & > .vxe-cell {
         overflow: hidden;
+      }
+    }
+    &.col--max-height {
+      overflow: hidden;
+      &.col--tree-node,
+      &.col--valid-error {
+        overflow: unset;
+      }
+      & > .vxe-cell {
+        overflow: auto;
       }
     }
     & > .vxe-cell {
