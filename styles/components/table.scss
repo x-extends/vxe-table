@@ -2188,7 +2188,6 @@ $btnThemeList: (
     & > .vxe-cell {
       display: flex;
       flex-direction: row;
-      align-items: center;
     }
   }
   /*溢出列*/
@@ -2705,6 +2704,9 @@ $btnThemeList: (
     }
   }
 
+  .vxe-cell--wrapper {
+    margin: auto 0;
+  }
   .vxe-body--row {
     .vxe-table--column {
       .vxe-cell {

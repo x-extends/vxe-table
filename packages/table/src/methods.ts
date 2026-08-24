@@ -2634,9 +2634,10 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
   if (!el || !el.clientWidth) {
     return
   }
+  const cellOpts = $xeTable.computeCellOpts
   const treeOpts = $xeTable.computeTreeOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
-  if (!isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine))) {
+  if (!isAllOverflow && (scrollYLoad || scrollXLoad || cellOpts.maxHeight || (treeConfig && treeOpts.showLine))) {
     const { handleGetRowId } = createHandleGetRowId($xeTable)
     el.setAttribute('data-calc-row', 'Y')
     tableData.forEach(row => {
@@ -4467,7 +4468,7 @@ function updateRowOffsetTop ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
     const rowid = handleGetRowId(row)
     const rowRest = fullAllDataRowIdData[rowid] || {}
     rowRest.oTop = offsetTop
-    offsetTop += rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+    offsetTop += getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
     // 是否展开行
     if (expandColumn && rowExpandedMaps[rowid]) {
       offsetTop += rowRest.expandHeight || expandOpts.height || 0
@@ -4510,7 +4511,7 @@ function updateRowExpandStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMe
             if (isScrollYBig && trEl) {
               offsetTop = trEl.offsetTop + trEl.offsetHeight
             } else {
-              offsetTop = rowRest.oTop + (rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight)
+              offsetTop = rowRest.oTop + getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
             }
           } else {
             if (trEl) {
@@ -7384,7 +7385,7 @@ const tableMethods: any = {
       return
     }
     const defaultRowHeight = $xeTable.computeDefaultRowHeight
-    let currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+    let currCellHeight = getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
     if (!showOverflow) {
       currCellHeight = tdEl.clientHeight
     }
@@ -7551,7 +7552,7 @@ const tableMethods: any = {
       if (rowRest) {
         const resizeHeight = rowRest.resizeHeight
         if (resizeHeight || isFull) {
-          const currCellHeight = resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+          const currCellHeight = getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
           rest[rowid] = currCellHeight
         }
       }
@@ -7626,7 +7627,7 @@ const tableMethods: any = {
     const rowid = XEUtils.isString(rowOrId) || XEUtils.isNumber(rowOrId) ? rowOrId : getRowid($xeTable, rowOrId)
     const rowRest = fullAllDataRowIdData[rowid]
     if (rowRest) {
-      return rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+      return getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
     }
     return 0
   },
