@@ -708,10 +708,10 @@ export function handleRowidOrRow ($xeTable: VxeTableConstructor, rowidOrRow: any
 export function getCellRestHeight (rowRest: VxeTableDefines.RowCacheItem, cellOpts: VxeTablePropTypes.CellConfig, rowOpts: VxeTablePropTypes.RowConfig, defaultRowHeight: number) {
   const { height, minHeight, maxHeight } = cellOpts
   let cellHeight = rowRest.resizeHeight || height || rowOpts.height || rowRest.height || defaultRowHeight
-  if (maxHeight && maxHeight < cellHeight) {
+  if (maxHeight && maxHeight <= cellHeight) {
     cellHeight = maxHeight
   }
-  if (minHeight && minHeight > cellHeight) {
+  if (minHeight && minHeight >= cellHeight) {
     cellHeight = minHeight
   }
   return cellHeight

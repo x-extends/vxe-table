@@ -2176,9 +2176,10 @@ export default defineVxeComponent({
       if (!el || !el.clientWidth) {
         return
       }
+      const cellOpts = computeCellOpts.value
       const treeOpts = computeTreeOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
-      if (!isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine))) {
+      if (!isAllOverflow && (scrollYLoad || scrollXLoad || cellOpts.maxHeight || (treeConfig && treeOpts.showLine))) {
         const { handleGetRowId } = createHandleGetRowId($xeTable)
         el.setAttribute('data-calc-row', 'Y')
         tableData.forEach(row => {
@@ -4880,7 +4881,7 @@ export default defineVxeComponent({
         const rowid = handleGetRowId(row)
         const rowRest = fullAllDataRowIdData[rowid] || {}
         rowRest.oTop = offsetTop
-        offsetTop += rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+        offsetTop += getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
         // 是否展开行
         if (expandColumn && rowExpandedMaps[rowid]) {
           offsetTop += rowRest.expandHeight || expandOpts.height || 0
@@ -4920,7 +4921,7 @@ export default defineVxeComponent({
                 if (isScrollYBig && trEl) {
                   offsetTop = trEl.offsetTop + trEl.offsetHeight
                 } else {
-                  offsetTop = rowRest.oTop + (rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight)
+                  offsetTop = rowRest.oTop + getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
                 }
               } else {
                 if (trEl) {
@@ -6418,7 +6419,7 @@ export default defineVxeComponent({
           if (rowRest) {
             const resizeHeight = rowRest.resizeHeight
             if (resizeHeight || isFull) {
-              const currCellHeight = resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+              const currCellHeight = getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
               rest[rowid] = currCellHeight
             }
           }
@@ -6484,7 +6485,7 @@ export default defineVxeComponent({
         const rowid = XEUtils.isString(rowOrId) || XEUtils.isNumber(rowOrId) ? rowOrId : getRowid($xeTable, rowOrId)
         const rowRest = fullAllDataRowIdData[rowid]
         if (rowRest) {
-          return rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+          return getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
         }
         return 0
       },
@@ -10144,7 +10145,7 @@ export default defineVxeComponent({
           return
         }
         const defaultRowHeight = computeDefaultRowHeight.value
-        let currCellHeight = rowRest.resizeHeight || cellOpts.height || rowOpts.height || rowRest.height || defaultRowHeight
+        let currCellHeight = getCellRestHeight(rowRest, cellOpts, rowOpts, defaultRowHeight)
         if (!showOverflow) {
           currCellHeight = tdEl.clientHeight
         }
