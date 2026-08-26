@@ -6,6 +6,7 @@ import { updateCellTitle, getPropClass } from '../../ui/src/dom'
 import { getCalcHeight } from './util'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines } from '../../../types'
+import { getDefaultConfig } from '../../ui/src/utils'
 
 const { renderer, renderEmptyElement } = VxeUI
 
@@ -71,8 +72,15 @@ export default defineVxeComponent({
         const compConf = renderOpts ? renderer.get(renderOpts.name) : null
         const showAllTip = footerTooltipOpts.showAll
         const fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
-        const isPadding = XEUtils.isBoolean(footerCellOpts.padding) ? footerCellOpts.padding : cellOpts.padding
-        const footOverflow = XEUtils.eqNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
+
+        const cellPadding = getDefaultConfig(footerCellOpts.padding, cellOpts.padding)
+        const isAllCellPadding = cellPadding === true
+        const isCellPaddingTop = cellPadding ? (isAllCellPadding || cellPadding.top !== false) : false
+        const isCellPaddingBottom = cellPadding ? (isAllCellPadding || cellPadding.bottom !== false) : false
+        const isCellPaddingLeft = cellPadding ? (isAllCellPadding || cellPadding.left !== false) : false
+        const isCellPaddingRight = cellPadding ? (isAllCellPadding || cellPadding.right !== false) : false
+
+        const footOverflow = getDefaultConfig(showFooterOverflow, allColumnFooterOverflow)
         const footAlign = footerAlign || (compConf ? compConf.tableFooterCellAlign : '') || allFooterAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
         const showEllipsis = (footOverflow === true ? footerTooltipOpts.mode : footOverflow) === 'ellipsis'
         const showTitle = (footOverflow === true ? footerTooltipOpts.mode : footOverflow) === 'title'
@@ -182,7 +190,10 @@ export default defineVxeComponent({
             'col--last': isLastColumn,
             'fixed--width': !isAutoCellWidth,
             'fixed--hidden': fixedHiddenColumn,
-            'is--padding': isPadding,
+            'is--pg-top': isCellPaddingTop,
+            'is--pg-bottom': isCellPaddingBottom,
+            'is--pg-left': isCellPaddingLeft,
+            'is--pg-right': isCellPaddingRight,
             'col--ellipsis': hasEllipsis,
             'col--current': currentColumn === column
           }, getPropClass(footerClassName, cellParams), getPropClass(footerCellClassName, cellParams)],

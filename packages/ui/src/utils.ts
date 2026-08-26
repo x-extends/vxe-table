@@ -51,6 +51,6 @@ export function eqEmptyValue (cellValue: any) {
   return cellValue === '' || XEUtils.eqNull(cellValue)
 }
 
-export function getDefaultConfig (val1: any, def1: any) {
+export function getDefaultConfig <T = any, D = any> (val1: T, def1: D): (T | D) {
   return XEUtils.eqNull(val1) ? def1 : val1
 }

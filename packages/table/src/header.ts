@@ -2,7 +2,7 @@ import { h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted 
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { isEnableConf } from '../../ui/src/utils'
+import { getDefaultConfig, isEnableConf } from '../../ui/src/utils'
 import { getCalcHeight, convertHeaderColumnToRows, convertHeaderToGridRows } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 
@@ -85,8 +85,15 @@ export default defineVxeComponent({
         const compConf = renderOpts ? renderer.get(renderOpts.name) : null
         const isColGroup = column.children && column.children.length
         const fixedHiddenColumn = overflowX && !isColGroup && (fixedType ? column.fixed !== fixedType : !!column.fixed)
-        const isPadding = XEUtils.isBoolean(headerCellOpts.padding) ? headerCellOpts.padding : cellOpts.padding
-        const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+
+        const cellPadding = getDefaultConfig(headerCellOpts.padding, cellOpts.padding)
+        const isAllCellPadding = cellPadding === true
+        const isCellPaddingTop = cellPadding ? (isAllCellPadding || cellPadding.top !== false) : false
+        const isCellPaddingBottom = cellPadding ? (isAllCellPadding || cellPadding.bottom !== false) : false
+        const isCellPaddingLeft = cellPadding ? (isAllCellPadding || cellPadding.left !== false) : false
+        const isCellPaddingRight = cellPadding ? (isAllCellPadding || cellPadding.right !== false) : false
+
+        const headOverflow = getDefaultConfig(showHeaderOverflow, allColumnHeaderOverflow)
         const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
         const showEllipsis = (headOverflow === true ? headerTooltipOpts.mode : headOverflow) === 'ellipsis'
         const showTitle = (headOverflow === true ? headerTooltipOpts.mode : headOverflow) === 'title'
@@ -210,7 +217,10 @@ export default defineVxeComponent({
             'col--group': isColGroup,
             'col--ellipsis': hasEllipsis,
             'fixed--width': !isAutoCellWidth,
-            'is--padding': isPadding,
+            'is--pg-top': isCellPaddingTop,
+            'is--pg-bottom': isCellPaddingBottom,
+            'is--pg-left': isCellPaddingLeft,
+            'is--pg-right': isCellPaddingRight,
             'is--sortable': column.sortable,
             'col--filter': !!filters,
             'is--filter-active': hasFilter,

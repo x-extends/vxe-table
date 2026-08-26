@@ -2176,10 +2176,9 @@ export default defineVxeComponent({
       if (!el || !el.clientWidth) {
         return
       }
-      const cellOpts = computeCellOpts.value
       const treeOpts = computeTreeOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
-      if (!isAllOverflow && (scrollYLoad || scrollXLoad || cellOpts.maxHeight || (treeConfig && treeOpts.showLine))) {
+      if (!isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine))) {
         const { handleGetRowId } = createHandleGetRowId($xeTable)
         el.setAttribute('data-calc-row', 'Y')
         tableData.forEach(row => {
@@ -14482,6 +14481,12 @@ export default defineVxeComponent({
     watch(() => {
       const scrollbarYOpts = computeScrollbarYOpts.value
       return scrollbarYOpts.visible
+    }, () => {
+      reLayoutFlag.value++
+    })
+    watch(() => {
+      const cellOpts = computeCellOpts.value
+      return cellOpts.height
     }, () => {
       reLayoutFlag.value++
     })
