@@ -2,7 +2,7 @@ import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { defineVxeComponent } from '../../ui/src/comp'
-import { isEnableConf, getClass } from '../../ui/src/utils'
+import { isEnableConf, getClass, getDefaultConfig } from '../../ui/src/utils'
 import { getRowid, createHandleGetRowId, getCellRestHeight } from './util'
 import { updateCellTitle } from '../../ui/src/dom'
 import { getSlotVNs } from '../../ui/src/vn'
@@ -144,8 +144,14 @@ function renderTdColumn (
   const isEdit = isEnableConf(editRender)
   const resizeHeight = resizeHeightFlag ? rowRest.resizeHeight : 0
   let fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
-  const isCellPadding = XEUtils.eqNull(padding) ? (allPadding === null ? cellOpts.padding : allPadding) : padding
-  const cellOverflow = XEUtils.eqNull(showOverflow) ? allShowOverflow : showOverflow
+  const cellPadding = getDefaultConfig(padding, (allPadding === null ? cellOpts.padding : allPadding))
+  const isAllCellPadding = cellPadding === true
+  const isCellPaddingTop = cellPadding ? (isAllCellPadding || cellPadding.top !== false) : false
+  const isCellPaddingBottom = cellPadding ? (isAllCellPadding || cellPadding.bottom !== false) : false
+  const isCellPaddingLeft = cellPadding ? (isAllCellPadding || cellPadding.left !== false) : false
+  const isCellPaddingRight = cellPadding ? (isAllCellPadding || cellPadding.right !== false) : false
+
+  const cellOverflow = getDefaultConfig(showOverflow, allShowOverflow)
   const showEllipsis = cellOverflow === 'ellipsis'
   const showTitle = cellOverflow === 'title'
   const showTooltip = cellOverflow === true ? tooltipOpts.mode === 'tooltip' : cellOverflow === 'tooltip'
@@ -466,7 +472,10 @@ function renderTdColumn (
         'col--max-height': maxHeight,
         'fixed--width': !isAutoCellWidth,
         'fixed--hidden': fixedHiddenColumn,
-        'is--padding': isCellPadding,
+        'is--pg-top': isCellPaddingTop,
+        'is--pg-bottom': isCellPaddingBottom,
+        'is--pg-left': isCellPaddingLeft,
+        'is--pg-right': isCellPaddingRight,
         'is--progress': (fixedHiddenColumn && isAllOverflow) || isVNPreEmptyStatus,
         'is--drag-cell': isRowDragCell && (isCrossDrag || isPeerDrag || !rowLevel),
         'is--drag-disabled': isDisabledDrag,

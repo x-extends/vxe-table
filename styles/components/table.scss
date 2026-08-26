@@ -8,20 +8,27 @@
 // 局部变量
 .vxe-table {
   --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-default);
+  --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-default);
+  --vxe-ui-table-current-row-line-height: var(--vxe-ui-table-row-line-height);
   &.size--xlarge {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-xlarge);
+    --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-xlarge);
   }
   &.size--large {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-large);
+    --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-large);
   }
   &.size--medium {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-medium);
+    --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-medium);
   }
   &.size--small {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-small);
+    --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-small);
   }
   &.size--mini {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-mini);
+    --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-mini);
   }
 }
 
@@ -1392,6 +1399,34 @@ $btnThemeList: (
   white-space: nowrap;
 }
 
+.vxe-header--column,
+.vxe-body--column,
+.vxe-footer--column {
+  &.is--pg-top {
+    .vxe-cell {
+      padding-top: var(--vxe-ui-table-current-cell-padding);
+    }
+  }
+  &.is--pg-bottom {
+    .vxe-cell {
+      padding-bottom: var(--vxe-ui-table-current-cell-padding);
+    }
+  }
+  &.is--pg-left {
+    .vxe-cell {
+      padding-left: var(--vxe-ui-table-current-cell-padding);
+    }
+  }
+  &.is--pg-right {
+    .vxe-cell {
+      padding-right: var(--vxe-ui-table-current-cell-padding);
+    }
+  }
+  .vxe-default-textarea {
+    padding: var(--vxe-ui-table-current-cell-padding);
+  }
+}
+
 /*table*/
 .vxe-table--render-default {
   position: relative;
@@ -1504,7 +1539,7 @@ $btnThemeList: (
   .vxe-body--column,
   .vxe-footer--column {
     position: relative;
-    line-height: var(--vxe-ui-table-row-line-height);
+    line-height: var(--vxe-ui-table-current-row-line-height);
     text-align: left;
     &.col--center {
       text-align: center;
@@ -1573,7 +1608,7 @@ $btnThemeList: (
   .vxe-body--column,
   .vxe-footer--column {
     position: relative;
-    line-height: var(--vxe-ui-table-row-line-height);
+    line-height: var(--vxe-ui-table-current-row-line-height);
     text-align: left;
     &.col--current {
       background-color: var(--vxe-ui-table-column-current-background-color);
@@ -1857,18 +1892,6 @@ $btnThemeList: (
     .vxe-table--empty-block {
       min-height: var(--vxe-ui-table-row-height-medium);
     }
-    .vxe-header--column,
-    .vxe-body--column,
-    .vxe-footer--column {
-      &.is--padding {
-        .vxe-cell {
-          padding: var(--vxe-ui-table-cell-padding-medium);
-          .vxe-default-textarea {
-            padding: var(--vxe-ui-table-cell-padding-medium);
-          }
-        }
-      }
-    }
     .vxe-cell {
       .vxe-default-input,
       .vxe-default-textarea,
@@ -1889,18 +1912,6 @@ $btnThemeList: (
     .vxe-table--empty-placeholder,
     .vxe-table--empty-block {
       min-height: var(--vxe-ui-table-row-height-small);
-    }
-    .vxe-header--column,
-    .vxe-body--column,
-    .vxe-footer--column {
-      &.is--padding {
-        .vxe-cell {
-          padding: var(--vxe-ui-table-cell-padding-small);
-          .vxe-default-textarea {
-            padding: var(--vxe-ui-table-cell-padding-small);
-          }
-        }
-      }
     }
     .vxe-cell {
       .vxe-default-input,
@@ -1923,18 +1934,6 @@ $btnThemeList: (
     .vxe-table--empty-block {
       min-height: var(--vxe-ui-table-row-height-mini);
     }
-    .vxe-header--column,
-    .vxe-body--column,
-    .vxe-footer--column {
-      &.is--padding {
-        .vxe-cell {
-          padding: var(--vxe-ui-table-cell-padding-mini);
-          .vxe-default-textarea {
-            padding: var(--vxe-ui-table-cell-padding-mini);
-          }
-        }
-      }
-    }
     .vxe-cell {
       .vxe-default-input,
       .vxe-default-textarea,
@@ -1949,19 +1948,6 @@ $btnThemeList: (
     }
     .vxe-cell--valid-error-tip {
       padding: 0 var(--vxe-ui-table-cell-padding-mini);
-    }
-  }
-
-  .vxe-header--column,
-  .vxe-body--column,
-  .vxe-footer--column {
-    &.is--padding {
-      .vxe-cell {
-        padding: var(--vxe-ui-table-cell-padding-default);
-        .vxe-default-textarea {
-          padding: var(--vxe-ui-table-cell-padding-default);
-        }
-      }
     }
   }
   
@@ -2396,30 +2382,6 @@ $btnThemeList: (
     }
   }
 
-  &.size--medium {
-    .vxe-cell--checkbox {
-      font-size: var(--vxe-checkbox-font-size-medium);
-    }
-    .vxe-cell--radio {
-      font-size: var(--vxe-radio-font-size-medium);
-    }
-  }
-  &.size--small {
-    .vxe-cell--checkbox {
-      font-size: var(--vxe-checkbox-font-size-small);
-    }
-    .vxe-cell--radio {
-      font-size: var(--vxe-radio-font-size-small);
-    }
-  }
-  &.size--mini {
-    .vxe-cell--checkbox {
-      font-size: var(--vxe-checkbox-font-size-mini);
-    }
-    .vxe-cell--radio {
-      font-size: var(--vxe-radio-font-size-mini);
-    }
-  }
 
   /*暂无数据*/
   .vxe-table--empty-placeholder,

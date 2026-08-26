@@ -1508,6 +1508,12 @@ export default {
       const scrollbarXOpts = $xeTable.computeScrollbarXOpts
       const scrollbarYOpts = $xeTable.computeScrollbarYOpts
       return `${scrollbarXOpts.visible}${scrollbarYOpts.visible}`
+    },
+    computeCellConfHeitht () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      const cellOpts = $xeTable.computeCellOpts
+      return cellOpts.height
     }
   } as any,
   watch: {
@@ -1593,6 +1599,9 @@ export default {
       this.reLayoutFlag++
     },
     computeScrollbarVisible () {
+      this.reLayoutFlag++
+    },
+    computeCellConfHeitht () {
       this.reLayoutFlag++
     },
     reLayoutFlag () {

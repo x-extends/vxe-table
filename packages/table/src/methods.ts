@@ -2634,10 +2634,9 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
   if (!el || !el.clientWidth) {
     return
   }
-  const cellOpts = $xeTable.computeCellOpts
   const treeOpts = $xeTable.computeTreeOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
-  if (!isAllOverflow && (scrollYLoad || scrollXLoad || cellOpts.maxHeight || (treeConfig && treeOpts.showLine))) {
+  if (!isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine))) {
     const { handleGetRowId } = createHandleGetRowId($xeTable)
     el.setAttribute('data-calc-row', 'Y')
     tableData.forEach(row => {
