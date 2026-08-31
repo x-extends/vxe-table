@@ -511,6 +511,13 @@ export default {
     handleCustomStyle () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
+      const reactData = $xeTable.reactData
+      const { customStore } = reactData
+
+      if (!customStore.visible) {
+        return $xeTable.$nextTick()
+      }
+      reactData.isCustomDragStatus = false
       return updatePopupStyle($xeTable)
     }
   } as any

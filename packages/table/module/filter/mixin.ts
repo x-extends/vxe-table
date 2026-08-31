@@ -10,6 +10,96 @@ const { renderer } = VxeUI
 
 const sourceType = 'table'
 
+function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const $xeGrid = $xeTable.$xeGrid
+  const $xeGantt = $xeTable.$xeGantt
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
+  const $xeGGWrapper = $xeGrid || $xeGantt
+
+  const { filterStore } = reactData
+  const { elemStore } = internalData
+  const { column, targetEl } = filterStore
+  if (!column || !targetEl) {
+    return $xeTable.$nextTick()
+  }
+  const tableEl = $xeTable.$refs.refElem as HTMLDivElement
+  const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
+  const filterOpts = $xeTable.computeFilterOpts
+  const { maxHeight: customMaxHeight, transfer, zIndex } = filterOpts
+  const currEl = targetEl
+  const tableRect = tableEl.getBoundingClientRect()
+  const filterRender = column ? column.filterRender : null
+  const compConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+
+  const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
+  if (!headerScrollElem) {
+    return $xeTable.$nextTick()
+  }
+  const tableFilter = $xeTable.$refs.refTableFilter
+  const filterWrapperElem = tableFilter ? (tableFilter as any).$el as HTMLDivElement : null
+  if (!filterWrapperElem) {
+    return $xeTable.$nextTick()
+  }
+  const btnRect = currEl.getBoundingClientRect()
+  const filterHeadElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-header')
+  const filterFootElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-footer')
+  const filterWidth = filterWrapperElem.offsetWidth
+  const centerWidth = currEl ? filterWidth / 2 : ((filterWidth - column.renderWidth) / 2)
+  let left = 0
+  let top = 0
+  let maxHeight: number = 0
+  /**
+   * 是否显示筛选按钮图标
+   * 如果不存在图标，则相对单元格居中显示
+   */
+  if (transfer) {
+    left = btnRect.left - centerWidth + scrollLeft
+    top = btnRect.top + currEl.clientHeight + scrollTop
+    maxHeight = Math.min(Math.max(tableRect.height, Math.floor(visibleHeight / 2)), Math.max(80, visibleHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 28))
+    if (left < 16) {
+      left = 16
+    } else if (left > (visibleWidth - filterWidth - 16)) {
+      left = visibleWidth - filterWidth - 16
+    }
+  } else {
+    left = btnRect.left - tableRect.left - centerWidth
+    top = btnRect.top - tableRect.top + currEl.clientHeight
+    maxHeight = Math.max(40, tableEl.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
+    if (left < 1) {
+      left = 1
+    } else if (left > (tableEl.clientWidth - filterWidth - 1)) {
+      left = tableEl.clientWidth - filterWidth - 1
+    }
+    if ($xeGGWrapper) {
+      const wrapperEl = $xeGGWrapper.$refs.refElem as HTMLDivElement
+      if (wrapperEl) {
+        const wrapperRect = wrapperEl.getBoundingClientRect()
+        top += tableRect.top - wrapperRect.top
+      }
+    }
+  }
+  const fStys: Record<string, any> = {
+    top: toCssUnit(top),
+    left: toCssUnit(left)
+  }
+  if (zIndex) {
+    fStys.zIndex = zIndex
+  }
+  filterStore.style = fStys
+  // 筛选面板是自适应表格高度
+  if (compConf ? !compConf.tableFilterAutoHeight : false) {
+    maxHeight = 0
+  } else {
+    if (customMaxHeight) {
+      maxHeight = customMaxHeight > maxHeight ? maxHeight : customMaxHeight
+    }
+  }
+  // 判断面板不能大于表格高度
+  filterStore.maxHeight = maxHeight
+  return $xeTable.$nextTick()
+}
+
 export default {
   methods: {
     /**
@@ -99,92 +189,22 @@ export default {
     },
     handleOpenFilterColumn (evnt: MouseEvent, btnEl: HTMLDivElement | null, colEl: HTMLDivElement, column: VxeTableDefines.ColumnInfo, params: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-      const $xeGrid = $xeTable.$xeGrid
-      const $xeGantt = $xeTable.$xeGantt
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
-      const $xeGGWrapper = $xeGrid || $xeGantt
 
       const { initStore, filterStore } = reactData
-      const { elemStore } = internalData
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
-        const tableEl = $xeTable.$refs.refElem as HTMLDivElement
-        const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
-        const filterOpts = $xeTable.computeFilterOpts
-        const { maxHeight: customMaxHeight, transfer, zIndex } = filterOpts
         const currEl = btnEl || colEl
-        const tableRect = tableEl.getBoundingClientRect()
-        const filterRender = column ? column.filterRender : null
-        const compConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
         $xeTable.handleFilterOptions(column)
         internalData._currFilterParams = params
+        filterStore.targetEl = currEl
         filterStore.style = null
         filterStore.visible = true
         initStore.filter = true
         $xeTable.$nextTick(() => {
-          const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
-          if (!headerScrollElem) {
-            return
-          }
-          const tableFilter = $xeTable.$refs.refTableFilter
-          const filterWrapperElem = tableFilter ? (tableFilter as any).$el as HTMLDivElement : null
-          if (!filterWrapperElem) {
-            return
-          }
-          const btnRect = currEl.getBoundingClientRect()
-          const filterHeadElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-header')
-          const filterFootElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-footer')
-          const filterWidth = filterWrapperElem.offsetWidth
-          const centerWidth = filterWidth / 2
-          let left = 0
-          let top = 0
-          let maxHeight = 0
-          if (transfer) {
-            left = btnRect.left - centerWidth + scrollLeft
-            top = btnRect.top + currEl.clientHeight + scrollTop
-            maxHeight = Math.min(Math.max(tableRect.height, Math.floor(visibleHeight / 2)), Math.max(80, visibleHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 28))
-            if (left < 16) {
-              left = 16
-            } else if (left > (visibleWidth - filterWidth - 16)) {
-              left = visibleWidth - filterWidth - 16
-            }
-          } else {
-            left = btnRect.left - tableRect.left - centerWidth
-            top = btnRect.top - tableRect.top + currEl.clientHeight
-            maxHeight = Math.max(40, tableEl.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
-            if (left < 1) {
-              left = 1
-            } else if (left > (tableEl.clientWidth - filterWidth - 1)) {
-              left = tableEl.clientWidth - filterWidth - 1
-            }
-            if ($xeGGWrapper) {
-              const wrapperEl = $xeGGWrapper.$refs.refElem as HTMLDivElement
-              if (wrapperEl) {
-                const wrapperRect = wrapperEl.getBoundingClientRect()
-                top += tableRect.top - wrapperRect.top
-              }
-            }
-          }
-          const fStys: Record<string, any> = {
-            top: toCssUnit(top),
-            left: toCssUnit(left)
-          }
-          if (zIndex) {
-            fStys.zIndex = zIndex
-          }
-          filterStore.style = fStys
-          // 筛选面板是自适应表格高度
-          if (compConf ? !compConf.tableFilterAutoHeight : false) {
-            maxHeight = 0
-          } else {
-            if (customMaxHeight) {
-              maxHeight = customMaxHeight > maxHeight ? maxHeight : customMaxHeight
-            }
-          }
-          // 判断面板不能大于表格高度
-          filterStore.maxHeight = maxHeight
+          updatePopupStyle($xeTable)
         })
       }
       $xeTable.dispatchEvent('filter-visible', { column, field: column.field, property: column.field, filterList: $xeTable.getCheckedFilters(), visible: filterStore.visible }, evnt)
@@ -461,6 +481,16 @@ export default {
           $xeTable.dispatchEvent('clear-filter', { filterList: [] }, evnt)
         }
       }
+    },
+    handleFilterStyle () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
+
+      const { filterStore } = reactData
+      if (!filterStore.visible) {
+        return $xeTable.$nextTick()
+      }
+      return updatePopupStyle($xeTable)
     },
     /**
      * 清空指定列的筛选条件

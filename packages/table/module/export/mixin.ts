@@ -1252,7 +1252,7 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
   const exportOpts = $xeTable.computeExportOpts
   const hasTree = !!treeConfig
   const hasRowGroup = rowGroupList.length > 0
-  const customOpts = $xeTable.computeCustomOpts
+  const printOpts = $xeTable.computePrintOpts
   const selectRecords = $xeTable.getCheckboxRecords()
   const proxyOpts = $xeGGWrapper ? $xeGGWrapper.computeProxyOpts : {}
   const hasFooter = !!footerTableData.length
@@ -1275,9 +1275,9 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
     defOpts.isTreeAllExpanded = (defOpts as any).isAllExpand
   }
 
-  const types = defOpts.types || XEUtils.keys(exportOpts._typeMaps)
+  const types: string[] = isPrint ? [] : (defOpts.types || XEUtils.keys(exportOpts._typeMaps))
   const modes = defOpts.modes || []
-  const checkMethod = customOpts.checkMethod
+  const checkMethod = (isPrint ? printOpts : exportOpts).checkMethod
   const exportColumns = collectColumn.slice(0)
   const { columns, excludeFields, includeFields, extraFields } = defOpts
   // 处理类型
@@ -1381,10 +1381,10 @@ function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTableP
     }
   }
   if (!modeList.some(item => item.value === mode)) {
-    exportParams.mode = modeList[0].value
+    exportParams.mode = modeList.length ? modeList[0].value : ''
   }
   if (!typeList.some(item => item.value === type)) {
-    exportParams.type = typeList[0].value
+    exportParams.type = typeList.length ? typeList[0].value : ''
   }
   if (!exportParams.widthMode) {
     exportParams.widthMode = ''
@@ -1536,7 +1536,12 @@ export default {
 
       let isCustomCol = false
       let customCols = []
-      if (columns) {
+      const _columns = (opts as any)._columns
+      if (_columns) {
+        // 内部导出使用 _columns -> _children 为自定义子集
+        isCustomCol = true
+        customCols = XEUtils.searchTree(_columns, () => true, { children: '_children', mapChildren: 'childNodes', original: true })
+      } else if (columns) {
         isCustomCol = true
         customCols = XEUtils.searchTree(columns, () => true, { children: 'children', mapChildren: 'childNodes', original: true })
       } else {

@@ -7914,7 +7914,13 @@ const tableMethods: any = {
   },
   handleGlobalScrollEvent (evnt: MouseEvent) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
 
+    const { filterStore } = reactData
+    const filterOpts = $xeTable.computeFilterOpts
+    if (filterStore.visible && filterOpts.transfer) {
+      $xeTable.handleFilterStyle()
+    }
     reUpdateCustomStyleEvent($xeTable, evnt)
   },
   /**
@@ -7933,11 +7939,15 @@ const tableMethods: any = {
    */
   keydownEvent (evnt: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const props = $xeTable
+    const reactData = $xeTable as unknown as TableReactData
 
-    const { filterStore, ctxMenuStore, editStore, keyboardConfig, mouseConfig, mouseOpts, keyboardOpts } = this
+    const { mouseConfig, keyboardConfig } = props
+    const { filterStore, ctxMenuStore, editStore } = reactData
+    const mouseOpts = $xeTable.computeMouseOpts
+    const keyboardOpts = $xeTable.computeKeyboardOpts
     const { actived } = editStore
-    const { keyCode } = evnt
-    const isEsc = keyCode === 27
+    const isEsc = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ESCAPE)
     if (isEsc) {
       this.preventEvent(evnt, 'event.keydown', null, () => {
         $xeTable.dispatchEvent('keydown-start', {}, evnt)
