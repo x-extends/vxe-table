@@ -137,9 +137,10 @@ export default defineVxeComponent({
       const { hasMerge, columns } = storeData
       const checkedAll = computeCheckedAll.value
       const supportMerge = computeSupportMerge.value
-      const expColumns = XEUtils.searchTree(columns, (column: any) => column.checked, { children: 'children', mapChildren: 'childNodes', original: true })
+      // 内部导出使用 _columns -> _children 为自定义子集
+      const expColumns = XEUtils.searchTree(columns, (column: any) => column.checked, { children: 'children', mapChildren: '_children', original: true })
       return Object.assign({}, defaultOptions, {
-        columns: expColumns,
+        _columns: expColumns,
         isMerge: hasMerge && supportMerge && checkedAll ? defaultOptions.isMerge : false
       })
     }

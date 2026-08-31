@@ -20,7 +20,7 @@ export function getTpImg () {
 }
 
 export function getPropClass (property: any, params: any) {
-  return property ? XEUtils.isFunction(property) ? property(params) : property : ''
+  return property ? (XEUtils.isFunction(property) ? property(params) : property) || '' : ''
 }
 
 function getClsRE (cls: any) {

@@ -8596,6 +8596,11 @@ export default defineVxeComponent({
     }
 
     const handleGlobalScrollEvent = (evnt: MouseEvent) => {
+      const { filterStore } = reactData
+      const filterOpts = computeFilterOpts.value
+      if (filterStore.visible && filterOpts.transfer) {
+        $xeTable.handleFilterStyle()
+      }
       reUpdateCustomStyleEvent(evnt)
     }
 

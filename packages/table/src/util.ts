@@ -251,6 +251,7 @@ export function createReactData (): TableReactData {
     customColumnList: [],
     // 当前选中的筛选列
     filterStore: {
+      targetEl: null,
       isAllSelected: false,
       isIndeterminate: false,
       style: null,

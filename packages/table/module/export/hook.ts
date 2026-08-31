@@ -304,7 +304,7 @@ const tableExportMethodKeys: (keyof TableExportMethods)[] = ['exportData', 'impo
 hooks.add('tableExportModule', {
   setupTable ($xeTable) {
     const { props, reactData, internalData } = $xeTable
-    const { computeTreeOpts, computePrintOpts, computeExportOpts, computeImportOpts, computeCustomOpts, computeSeqOpts, computeRadioOpts, computeCheckboxOpts, computeColumnOpts, computeAggregateOpts } = $xeTable.getComputeMaps()
+    const { computeTreeOpts, computePrintOpts, computeExportOpts, computeImportOpts, computeSeqOpts, computeRadioOpts, computeCheckboxOpts, computeColumnOpts, computeAggregateOpts } = $xeTable.getComputeMaps()
 
     const getSeq = (cellValue: any, row: any, $rowIndex: number, column: VxeTableDefines.ColumnInfo, $columnIndex: number) => {
       const seqOpts = computeSeqOpts.value
@@ -1280,9 +1280,9 @@ hooks.add('tableExportModule', {
       const { initStore, isGroup, rowGroupList, footerTableData, exportStore, exportParams } = reactData
       const { collectColumn, mergeBodyList, mergeFooterList } = internalData
       const exportOpts = computeExportOpts.value
+      const printOpts = computePrintOpts.value
       const hasTree = !!treeConfig
       const hasRowGroup = rowGroupList.length > 0
-      const customOpts = computeCustomOpts.value
       const selectRecords = $xeTable.getCheckboxRecords()
       const proxyOpts = $xeGGWrapper ? $xeGGWrapper.getComputeMaps().computeProxyOpts.value : {} as VxeGridPropTypes.ProxyOpts
       const hasFooter = !!footerTableData.length
@@ -1305,9 +1305,9 @@ hooks.add('tableExportModule', {
         defOpts.isTreeAllExpanded = (defOpts as any).isAllExpand
       }
 
-      const types: string[] = defOpts.types || XEUtils.keys(exportOpts._typeMaps)
+      const types: string[] = isPrint ? [] : (defOpts.types || XEUtils.keys(exportOpts._typeMaps))
       const modes: string[] = defOpts.modes || []
-      const checkMethod = customOpts.checkMethod
+      const checkMethod = (isPrint ? printOpts : exportOpts).checkMethod
       const exportColumns = collectColumn.slice(0)
       const { columns, excludeFields, includeFields, extraFields } = defOpts
       // 处理类型
@@ -1411,10 +1411,10 @@ hooks.add('tableExportModule', {
         }
       }
       if (!modeList.some(item => item.value === mode)) {
-        exportParams.mode = modeList[0].value
+        exportParams.mode = modeList.length ? modeList[0].value : ''
       }
       if (!typeList.some(item => item.value === type)) {
-        exportParams.type = typeList[0].value
+        exportParams.type = typeList.length ? typeList[0].value : ''
       }
       if (!exportParams.widthMode) {
         exportParams.widthMode = ''
@@ -1510,7 +1510,12 @@ hooks.add('tableExportModule', {
 
         let isCustomCol = false
         let customCols = []
-        if (columns) {
+        const _columns = (opts as any)._columns
+        if (_columns) {
+          // 内部导出使用 _columns -> _children 为自定义子集
+          isCustomCol = true
+          customCols = XEUtils.searchTree(_columns, () => true, { children: '_children', mapChildren: 'childNodes', original: true })
+        } else if (columns) {
           isCustomCol = true
           customCols = XEUtils.searchTree(columns, () => true, { children: 'children', mapChildren: 'childNodes', original: true })
         } else {
