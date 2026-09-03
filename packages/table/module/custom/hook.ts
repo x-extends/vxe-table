@@ -482,8 +482,8 @@ VxeUI.hooks.add('tableCustomModule', {
       handleUpdateCustomColumn,
       handleCustomStyle () {
         const reactData = $xeTable.reactData
-        const { customStore } = reactData
 
+        const { customStore } = reactData
         if (!customStore.visible) {
           return nextTick()
         }
