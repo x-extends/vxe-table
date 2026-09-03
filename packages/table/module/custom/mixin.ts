@@ -510,10 +510,9 @@ export default {
     },
     handleCustomStyle () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const reactData = $xeTable as unknown as TableReactData
 
-      const reactData = $xeTable.reactData
       const { customStore } = reactData
-
       if (!customStore.visible) {
         return $xeTable.$nextTick()
       }
