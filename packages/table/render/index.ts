@@ -1574,16 +1574,25 @@ renderer.mixin({
       ]
     },
     renderTableCell (h, renderOpts, params) {
-      const { row, column } = params
+      const { $table, row, column } = params
+      const { props } = renderOpts
+      const customSize = props ? props.size : null
+      const vSize = customSize || $table.computeSize
       const cellValue = XEUtils.get(row, column.field)
       return h('span', {
-        class: 'vxe-color-picker--readonly'
+        class: ['vxe-color-picker--readonly', {
+          [`size--${vSize}`]: vSize
+        }]
       }, [
         h('div', {
-          class: 'vxe-color-picker--readonly-color',
-          style: {
-            backgroundColor: cellValue
-          }
+          class: ['vxe-color-picker--readonly-color', {
+            'is--empty': !cellValue
+          }],
+          style: cellValue
+            ? {
+                backgroundColor: cellValue
+              }
+            : undefined
         })
       ])
     }
