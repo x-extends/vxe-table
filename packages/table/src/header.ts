@@ -24,8 +24,8 @@ function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMod
 
   const { fixedType } = props
   const { resizable: allResizable, columnKey, showCustomHeader, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
-  const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX, mergeHeadFlag, tableColumn } = tableReactData
-  const { fullColumnIdData, scrollXStore, mergeHeaderList, mergeHeaderCellMaps } = tableInternalData
+  const { dragCol, scrollXLoad, scrollYLoad, overflowX, mergeHeadFlag, tableColumn, currColFlag } = tableReactData
+  const { fullColumnIdData, scrollXStore, mergeHeaderList, mergeHeaderCellMaps, currentCol } = tableInternalData
   const virtualXOpts = $xeTable.computeVirtualXOpts
   const columnOpts = $xeTable.computeColumnOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
@@ -186,7 +186,7 @@ function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMod
         'is--filter-active': hasFilter,
         'is--drag-active': columnOpts.drag && !column.fixed && !isDisabledDrag && (isCrossDrag || isPeerDrag || !column.parentId),
         'is--drag-disabled': columnOpts.drag && isDisabledDrag,
-        'col--current': currentColumn === column
+        'col--current': currColFlag && currentCol === column
       }, getClass(headerClassName, cellParams), getClass(headerCellClassName, cellParams)],
       attrs: thAttrs,
       style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(cellParams) : headerCellStyle) as VxeComponentStyleType : undefined,
@@ -237,8 +237,8 @@ function renderFilterRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, 
 
   const { fixedType } = props
   const { showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign } = tableProps
-  const { currentColumn, overflowX } = tableReactData
-  const { fullColumnIdData } = tableInternalData
+  const { overflowX, currColFlag } = tableReactData
+  const { fullColumnIdData, currentCol } = tableInternalData
   const headerTooltipOpts = $xeTable.computeHeaderTooltipOpts
   const cellOpts = $xeTable.computeCellOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
@@ -313,7 +313,7 @@ function renderFilterRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, 
         'fixed--width': !isAutoCellWidth,
         'is--padding': isPadding,
         'is--sortable': column.sortable,
-        'col--current': currentColumn === column
+        'col--current': currColFlag && currentCol === column
       }
       ],
       key: colid,

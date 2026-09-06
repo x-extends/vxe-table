@@ -70,7 +70,7 @@
     padding-top: 0.2em;
   }
   .vxe-table--filter-body {
-    max-height: 200px;
+    max-height: var(--vxe-ui-vxe-table-filter-default-max-height);
     padding-bottom: 0.2em;
   }
   & > ul {

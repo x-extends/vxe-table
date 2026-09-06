@@ -931,13 +931,21 @@ export default {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
-      return Object.assign({}, getConfig().tooltip, getConfig().table.headerTooltipConfig, props.headerTooltipConfig)
+      const tooltipOpts = $xeTable.computeTooltipOpts
+      return Object.assign({}, getConfig().tooltip, {
+        enterable: tooltipOpts.enterable,
+        defaultPlacement: tooltipOpts.defaultPlacement
+      }, getConfig().table.headerTooltipConfig, props.headerTooltipConfig)
     },
     computeFooterTooltipOpts () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
-      return Object.assign({}, getConfig().tooltip, getConfig().table.footerTooltipConfig, props.footerTooltipConfig)
+      const tooltipOpts = $xeTable.computeTooltipOpts
+      return Object.assign({}, getConfig().tooltip, {
+        enterable: tooltipOpts.enterable,
+        defaultPlacement: tooltipOpts.defaultPlacement
+      }, getConfig().table.footerTooltipConfig, props.footerTooltipConfig)
     },
     computeTableTipConfig () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods

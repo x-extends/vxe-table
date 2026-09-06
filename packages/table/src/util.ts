@@ -41,8 +41,14 @@ export function createInternalData (): TableInternalData {
     customHeight: 0,
     customMinHeight: 0,
     customMaxHeight: 0,
+
     // 当前 hover 行
     hoverRow: null,
+    hoverCol: null,
+    // 当前行
+    currentRow: null,
+    currentCol: null,
+
     // 最后滚动位置
     lastScrollLeft: 0,
     lastScrollTop: 0,
@@ -95,9 +101,6 @@ export function createInternalData (): TableInternalData {
     fullCellHeightMaps: {},
 
     fullCellStoreMaps: {},
-
-    // 当前行
-    currentRow: null,
 
     // 合并表头单元格的数据
     mergeHeaderList: [],
@@ -207,8 +210,6 @@ export function createReactData (): TableReactData {
     isAllSelected: false,
     // 复选框属性，有选中且非全选状态
     isIndeterminate: false,
-    // 单选框属性，选中列
-    currentColumn: null,
     // 单选框属性，选中行
     selectRadioRow: null,
     // 表尾合计数据
@@ -428,7 +429,9 @@ export function createReactData (): TableReactData {
 
     isDragResize: false,
     isRowLoading: false,
-    isColLoading: false
+    isColLoading: false,
+
+    currColFlag: 1
   }
 }
 

@@ -403,14 +403,12 @@ export default {
     // 处理当前列方向键移动
     moveCurrentColumn (isLeftArrow: boolean, isRightArrow: boolean, evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-      const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
 
-      const { currentColumn } = reactData
-      const { visibleColumn } = internalData
+      const { currentCol, visibleColumn } = internalData
       let targetCol: VxeTableDefines.ColumnInfo | null = null
-      if (currentColumn) {
-        const _columnIndex = $xeTable.getVTColumnIndex(currentColumn)
+      if (currentCol) {
+        const _columnIndex = $xeTable.getVTColumnIndex(currentCol)
         if (isLeftArrow && _columnIndex > 0) {
           targetCol = visibleColumn[_columnIndex - 1]
         } else if (isRightArrow && _columnIndex < visibleColumn.length - 1) {

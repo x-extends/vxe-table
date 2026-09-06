@@ -24,8 +24,8 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
 
   const { fixedType } = props
   const { resizable: allResizable, border, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
-  const { scrollXLoad, scrollYLoad, overflowX, currentColumn, mergeFootFlag } = tableReactData
-  const { fullColumnIdData, mergeFooterList, mergeFooterCellMaps, scrollXStore } = tableInternalData
+  const { scrollXLoad, scrollYLoad, overflowX, mergeFootFlag, currColFlag } = tableReactData
+  const { fullColumnIdData, mergeFooterList, mergeFooterCellMaps, scrollXStore, currentCol } = tableInternalData
   const virtualXOpts = $xeTable.computeVirtualXOpts
   const footerTooltipOpts = $xeTable.computeFooterTooltipOpts
   const resizableOpts = $xeTable.resizableOpts
@@ -167,7 +167,7 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
         'is--pg-left': isCellPaddingLeft,
         'is--pg-right': isCellPaddingRight,
         'col--ellipsis': hasEllipsis,
-        'col--current': currentColumn === column
+        'col--current': currColFlag && currentCol === column
       }, getClass(footerClassName, cellParams), getClass(footerCellClassName, cellParams)],
       attrs,
       style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(cellParams) : footerCellStyle) as VxeComponentStyleType : undefined,
