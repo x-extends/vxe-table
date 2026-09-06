@@ -201,6 +201,20 @@ export function hasEventInputTarget (target: EventTarget | Element | null) {
   return tagName && ['input', 'textarea'].includes((tagName.toLowerCase()))
 }
 
+/**
+ * 判断是否由内部可复用控件触发，输入框带有 vxe-reusekeep-control
+ */
+function hasReusekeepControl (elem: EventTarget | HTMLElement | null) {
+  if (elem) {
+    return hasClass(elem as HTMLElement, 'vxe-reusekeep-control')
+  }
+  return false
+}
+
+export function hasAxternalInputTarget (target: EventTarget | Element | null) {
+  return hasEventInputTarget(target) ? !hasReusekeepControl(target) : false
+}
+
 const scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
 const scrollIntoView = 'scrollIntoView'
 
@@ -267,6 +281,168 @@ export function wheelScrollTopTo (diffNum: number, cb: (progress: number) => voi
     cb(offsetTop)
     wtaFrame = null
   })
+}
+
+interface PanelPlacementOptions {
+  defaultTop?: number
+  defaultLeft?: number
+  placement?: '' | 'top' | 'bottom' | null
+  defaultPlacement?: '' | 'top' | 'bottom' | null
+  teleportTo?: boolean
+  marginSize?: number
+  isMinWidth?: boolean
+}
+
+/**
+ * 通用定位计算
+ */
+export function updatePanelPlacement (targetElem: HTMLElement | null | undefined, panelElem: HTMLElement | null | undefined, options: PanelPlacementOptions) {
+  const { defaultTop, defaultLeft, placement, defaultPlacement, teleportTo, marginSize, isMinWidth } = Object.assign({
+    teleportTo: false,
+    marginSize: 18,
+    isMinWidth: true
+  }, options)
+  let panelPlacement: 'top' | 'bottom' = 'bottom'
+  let top: number | '' = ''
+  let bottom: number | '' = ''
+  let left = 0
+  let minWidth: number | '' = ''
+  let arrowLeft: number | '' = ''
+  const stys: Record<string, string> = {}
+  if (panelElem && targetElem) {
+    const bodyEl = document.body
+    const parentWrapperEl = getPopupWrapperElement(panelElem)
+    if (parentWrapperEl) {
+      const targetWidth = targetElem.offsetWidth
+      const targetHeight = targetElem.offsetHeight
+      const panelWidth = panelElem.offsetWidth
+      const panelHeight = panelElem.offsetHeight
+
+      const parentWrapperRect = parentWrapperEl.getBoundingClientRect()
+      const panelRect = panelElem.getBoundingClientRect()
+      const targetRect = targetElem.getBoundingClientRect()
+      const visibleHeight = bodyEl.clientHeight
+      const visibleWidth = bodyEl.clientWidth
+
+      const offsetLeft = parentWrapperRect.left
+      const offsetTop = parentWrapperRect.top
+      const targetLeft = targetRect.left
+      const targetTop = targetRect.top
+
+      minWidth = targetElem.offsetWidth
+
+      if (teleportTo) {
+        left = defaultLeft || (targetLeft - (panelWidth - targetWidth) / 2)
+        top = defaultTop || (targetTop + targetHeight)
+        if (placement === 'top') {
+          panelPlacement = 'top'
+          top = targetTop - panelHeight
+        } else if (!placement) {
+          if (defaultPlacement === 'top') {
+            panelPlacement = 'top'
+            if (!defaultTop) {
+              top = targetTop - panelHeight
+            }
+            // 如果上面不够放，则向下
+            if (top < marginSize) {
+              panelPlacement = 'bottom'
+              top = targetTop + targetHeight
+            }
+            // 如果下面不够放，则向上（优先）
+            if (top + panelHeight + marginSize > visibleHeight) {
+              panelPlacement = 'top'
+              top = targetTop - panelHeight
+            }
+          } else {
+            // 如果下面不够放，则向上
+            if (top + panelHeight + marginSize > visibleHeight) {
+              panelPlacement = 'top'
+              top = targetTop - panelHeight
+            }
+            // 如果上面不够放，则向下（优先）
+            if (top < marginSize) {
+              panelPlacement = 'bottom'
+              top = targetTop + targetHeight
+            }
+          }
+        }
+        // 如果溢出右边
+        if (left + panelWidth + marginSize > visibleWidth) {
+          left -= left + panelWidth + marginSize - visibleWidth
+        }
+        // 如果溢出左边
+        if (left < marginSize) {
+          left = marginSize
+        }
+
+        // 偏移
+        top -= offsetTop
+        left -= offsetLeft
+      } else {
+        if (placement === 'top') {
+          panelPlacement = 'top'
+          bottom = targetHeight
+        } else if (!placement) {
+          // 如果下面不够放，则向上
+          top = targetHeight
+          if (targetTop + targetHeight + panelHeight + marginSize > visibleHeight) {
+            // 如果上面不够放，则向下（优先）
+            if (targetTop - targetHeight - panelHeight > marginSize) {
+              panelPlacement = 'top'
+              top = ''
+              bottom = targetHeight
+            }
+          }
+        }
+        // 是否超出右侧
+        if (panelRect.left + panelRect.width + marginSize > visibleWidth) {
+          left = -(panelRect.left + panelRect.width + marginSize - visibleWidth)
+        }
+      }
+      if (XEUtils.isNumber(top)) {
+        stys.top = toCssUnit(top)
+      }
+      if (XEUtils.isNumber(bottom)) {
+        stys.bottom = toCssUnit(bottom)
+      }
+      if (XEUtils.isNumber(left)) {
+        stys.left = toCssUnit(left)
+      }
+      if (isMinWidth && XEUtils.isNumber(minWidth)) {
+        stys.minWidth = toCssUnit(minWidth)
+      }
+
+      // 箭头
+      if (left === targetLeft) {
+        if (targetWidth <= panelWidth) {
+          arrowLeft = targetWidth / 2
+        }
+      } else if (left < targetLeft) {
+        if (left + panelWidth > targetLeft + targetWidth) {
+          arrowLeft = (targetLeft - left) + targetWidth / 2
+        } else {
+          arrowLeft = (targetLeft - left) + (panelWidth - (targetLeft - left)) / 2
+        }
+      }
+    }
+  }
+  return {
+    top: top || 0,
+    bottom: bottom || 0,
+    left: left || 0,
+    arrowLeft: arrowLeft || 0,
+    style: stys,
+    placement: panelPlacement
+  }
+}
+
+export function getPopupWrapperElement (panelElem: HTMLElement | null | undefined) {
+  if (!panelElem) {
+    return null
+  }
+  const bodyEl = document.body
+  const parentEl = panelElem.parentElement
+  return (parentEl === bodyEl ? document.documentElement : parentEl) || null
 }
 
 export function getPopupContainer (appendTo: string | HTMLElement | ((params: any) => string | HTMLElement) | undefined) {

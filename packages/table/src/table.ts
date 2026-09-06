@@ -1,7 +1,7 @@
 import { h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, Teleport, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, onMounted } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
-import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollTopTo, wheelScrollLeftTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement, hasEventInputTarget } from '../../ui/src/dom'
+import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollTopTo, wheelScrollLeftTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement, hasAxternalInputTarget } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import { createReactData, createInternalData, getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, getColReMaxWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn, getRowMaxHeight, handleCustomStoreConfig, encodeRowid } from './util'
@@ -362,11 +362,19 @@ export default defineVxeComponent({
     })
 
     const computeHeaderTooltipOpts = computed(() => {
-      return Object.assign({}, getConfig().tooltip, getConfig().table.headerTooltipConfig, props.headerTooltipConfig)
+      const tooltipOpts = computeTooltipOpts.value
+      return Object.assign({}, getConfig().tooltip, {
+        enterable: tooltipOpts.enterable,
+        defaultPlacement: tooltipOpts.defaultPlacement
+      }, getConfig().table.headerTooltipConfig, props.headerTooltipConfig)
     })
 
     const computeFooterTooltipOpts = computed(() => {
-      return Object.assign({}, getConfig().tooltip, getConfig().table.footerTooltipConfig, props.footerTooltipConfig)
+      const tooltipOpts = computeTooltipOpts.value
+      return Object.assign({}, getConfig().tooltip, {
+        enterable: tooltipOpts.enterable,
+        defaultPlacement: tooltipOpts.defaultPlacement
+      }, getConfig().table.footerTooltipConfig, props.footerTooltipConfig)
     })
 
     const computeTableTipConfig = computed(() => {
@@ -6927,7 +6935,7 @@ export default defineVxeComponent({
       },
       getCurrentColumn () {
         const columnOpts = computeColumnOpts.value
-        return columnOpts.isCurrent || props.highlightCurrentColumn ? reactData.currentColumn : null
+        return columnOpts.isCurrent || props.highlightCurrentColumn ? internalData.currentCol : null
       },
       /**
        * 用于当前列，设置某列行为高亮状态
@@ -6939,7 +6947,8 @@ export default defineVxeComponent({
         const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column) {
           $xeTable.clearCurrentColumn()
-          reactData.currentColumn = column
+          internalData.currentCol = column
+          reactData.currColFlag++ // 刷新当前列状态
         }
         return nextTick().then(() => {
           // 更新状选中态
@@ -6952,7 +6961,8 @@ export default defineVxeComponent({
        * 用于当前列，手动清空当前高亮的状态
        */
       clearCurrentColumn () {
-        reactData.currentColumn = null
+        internalData.currentCol = null
+        reactData.currColFlag++ // 刷新当前列状态
         return nextTick()
       },
       setPendingRow (rows: any | any[], status: boolean) {
@@ -8597,8 +8607,7 @@ export default defineVxeComponent({
 
     const handleGlobalScrollEvent = (evnt: MouseEvent) => {
       const { filterStore } = reactData
-      const filterOpts = computeFilterOpts.value
-      if (filterStore.visible && filterOpts.transfer) {
+      if (filterStore.visible) {
         $xeTable.handleFilterStyle()
       }
       reUpdateCustomStyleEvent(evnt)
@@ -9016,7 +9025,7 @@ export default defineVxeComponent({
                 .then(() => $xeTable.scrollToRow(parentRow))
                 .then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
             }
-          } else if (keyboardConfig && keyboardOpts.isUndoRedo && isControlKey && (isZ || isY) && !hasEventInputTarget(evnt.target)) {
+          } else if (keyboardConfig && keyboardOpts.isUndoRedo && isControlKey && (isZ || isY) && !hasAxternalInputTarget(evnt.target)) {
             if (evnt.target) {
               if (isY || (hasShiftKey && isZ)) {
               // 恢复被撤销的操作：Ctrl + Y 或 Ctrl + Shift + Z
@@ -9123,6 +9132,10 @@ export default defineVxeComponent({
     }
 
     const handleGlobalResizeEvent = () => {
+      const { filterStore } = reactData
+      if (filterStore.visible) {
+        $xeTable.handleFilterStyle()
+      }
       if ($xeTable.closeMenu) {
         $xeTable.closeMenu()
       }
@@ -11310,7 +11323,7 @@ export default defineVxeComponent({
         }
       },
       triggerCurrentColumnEvent (evnt, params) {
-        const { currentColumn: oldValue } = reactData
+        const { currentCol: oldValue } = internalData
         const columnOpts = computeColumnOpts.value
         const currentColumnOpts = computeCurrentColumnOpts.value
         const beforeRowMethod = currentColumnOpts.beforeSelectMethod || columnOpts.currentMethod as any
@@ -13540,9 +13553,9 @@ export default defineVxeComponent({
       },
       setHoverRow (row) {
         const $xeGanttView = internalData.xeGanttView
+        $xeTable.clearHoverRow()
         const rowid = getRowid($xeTable, row)
         const el = refElem.value
-        $xeTable.clearHoverRow()
         if (el) {
           XEUtils.arrayEach(el.querySelectorAll(`.vxe-body--row[rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
         }

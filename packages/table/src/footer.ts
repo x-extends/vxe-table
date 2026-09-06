@@ -52,8 +52,8 @@ export default defineVxeComponent({
 
       const { fixedType } = props
       const { resizable: allResizable, border, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
-      const { scrollXLoad, scrollYLoad, overflowX, currentColumn, mergeFootFlag } = tableReactData
-      const { fullColumnIdData, mergeFooterList, mergeFooterCellMaps, scrollXStore } = tableInternalData
+      const { scrollXLoad, scrollYLoad, overflowX, mergeFootFlag, currColFlag } = tableReactData
+      const { fullColumnIdData, mergeFooterList, mergeFooterCellMaps, scrollXStore, currentCol } = tableInternalData
       const virtualXOpts = computeVirtualXOpts.value
       const footerTooltipOpts = computeFooterTooltipOpts.value
       const resizableOpts = computeResizableOpts.value
@@ -195,7 +195,7 @@ export default defineVxeComponent({
             'is--pg-left': isCellPaddingLeft,
             'is--pg-right': isCellPaddingRight,
             'col--ellipsis': hasEllipsis,
-            'col--current': currentColumn === column
+            'col--current': currColFlag && currentCol === column
           }, getPropClass(footerClassName, cellParams), getPropClass(footerCellClassName, cellParams)],
           ...attrs,
           style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(cellParams) : footerCellStyle) : null,

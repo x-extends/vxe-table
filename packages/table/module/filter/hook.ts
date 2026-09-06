@@ -2,7 +2,7 @@ import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { toFilters, handleFieldOrColumn, getRefElem } from '../../src/util'
-import { toCssUnit, triggerEvent, getDomNode } from '../../../ui/src/dom'
+import { toCssUnit, triggerEvent, updatePanelPlacement } from '../../../ui/src/dom'
 import { isEnableConf } from '../../../ui/src/utils'
 
 import type { TableFilterMethods, TableFilterPrivateMethods, VxeTableDefines } from '../../../../types'
@@ -27,15 +27,12 @@ hooks.add('tableFilterModule', {
       const { filterStore } = reactData
       const { elemStore } = internalData
       const { column, targetEl } = filterStore
-      if (!column || !targetEl) {
+      if (!column) {
         return nextTick()
       }
       const tableEl = refElem.value
-      const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
       const filterOpts = computeFilterOpts.value
       const { maxHeight: customMaxHeight, transfer, zIndex } = filterOpts
-      const currEl = targetEl
-      const tableRect = tableEl.getBoundingClientRect()
       const filterRender = column ? column.filterRender : null
       const compConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
 
@@ -48,63 +45,81 @@ hooks.add('tableFilterModule', {
       if (!filterWrapperElem) {
         return nextTick()
       }
-      const btnRect = currEl.getBoundingClientRect()
       const filterHeadElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-header')
       const filterFootElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-footer')
-      const filterWidth = filterWrapperElem.offsetWidth
-      const centerWidth = currEl ? filterWidth / 2 : ((filterWidth - column.renderWidth) / 2)
-      let left = 0
-      let top = 0
-      let maxHeight: number = 0
+
       /**
        * 是否显示筛选按钮图标
        * 如果不存在图标，则相对单元格居中显示
        */
-      if (transfer) {
-        left = btnRect.left - centerWidth + scrollLeft
-        top = btnRect.top + currEl.clientHeight + scrollTop
-        maxHeight = Math.min(Math.max(tableRect.height, Math.floor(visibleHeight / 2)), Math.max(80, visibleHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 28))
-        if (left < 16) {
-          left = 16
-        } else if (left > (visibleWidth - filterWidth - 16)) {
-          left = visibleWidth - filterWidth - 16
-        }
-      } else {
-        left = btnRect.left - tableRect.left - centerWidth
-        top = btnRect.top - tableRect.top + currEl.clientHeight
-        maxHeight = Math.max(40, tableEl.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
-        if (left < 1) {
-          left = 1
-        } else if (left > (tableEl.clientWidth - filterWidth - 1)) {
-          left = tableEl.clientWidth - filterWidth - 1
-        }
-        if ($xeGGWrapper) {
-          const wrapperEl = $xeGGWrapper.getRefMaps().refElem.value
-          if (wrapperEl) {
-            const wrapperRect = wrapperEl.getBoundingClientRect()
-            top += tableRect.top - wrapperRect.top
+      const handleStyle = () => {
+        let currEl = targetEl
+        if (!targetEl) {
+          const headerWrapperElem = getRefElem(elemStore[`${column.fixed || 'main'}-header-wrapper`] || elemStore['main-header-wrapper'])
+          const colEl = headerWrapperElem ? headerWrapperElem.querySelector<HTMLDivElement>(`.vxe-header--column.${column.id}`) : null
+          if (colEl) {
+            currEl = colEl
           }
         }
-      }
-      const fStys: Record<string, any> = {
-        top: toCssUnit(top),
-        left: toCssUnit(left)
-      }
-      if (zIndex) {
-        fStys.zIndex = zIndex
-      }
-      filterStore.style = fStys
-      // 筛选面板是自适应表格高度
-      if (compConf ? !compConf.tableFilterAutoHeight : false) {
-        maxHeight = 0
-      } else {
-        if (customMaxHeight) {
-          maxHeight = customMaxHeight > maxHeight ? maxHeight : customMaxHeight
+        if (!currEl) {
+          return nextTick()
         }
+
+        const btnRect = currEl.getBoundingClientRect()
+        const tableRect = tableEl.getBoundingClientRect()
+        let left = 0
+        let top = 0
+        let maxHeight = 0
+        let panelStyle: Record<string, string | number> = {}
+        if (transfer) {
+          const ppObj = updatePanelPlacement(currEl, filterWrapperElem, {
+            defaultPlacement: 'bottom',
+            isMinWidth: false,
+            teleportTo: transfer
+          })
+          panelStyle = ppObj.style
+        } else {
+          const filterWidth = filterWrapperElem.offsetWidth
+          const centerWidth = targetEl ? filterWidth / 2 : ((filterWidth - column.renderWidth) / 2)
+          left = btnRect.left - tableRect.left - centerWidth
+          top = btnRect.top - tableRect.top + currEl.clientHeight
+          maxHeight = Math.max(40, tableEl.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
+          if (left < 1) {
+            left = 1
+          } else if (left > (tableEl.clientWidth - filterWidth - 1)) {
+            left = tableEl.clientWidth - filterWidth - 1
+          }
+          if ($xeGGWrapper) {
+            const wrapperEl = $xeGGWrapper.getRefMaps().refElem.value
+            if (wrapperEl) {
+              const wrapperRect = wrapperEl.getBoundingClientRect()
+              top += tableRect.top - wrapperRect.top
+            }
+          }
+          panelStyle = {
+            top: toCssUnit(top),
+            left: toCssUnit(left)
+          }
+        }
+        if (zIndex) {
+          panelStyle.zIndex = zIndex
+        }
+        filterStore.style = panelStyle
+        // 筛选面板是自适应表格高度
+        if (compConf ? !compConf.tableFilterAutoHeight : false) {
+          maxHeight = 0
+        } else {
+          if (customMaxHeight) {
+            maxHeight = customMaxHeight > maxHeight ? maxHeight : customMaxHeight
+          }
+        }
+        // 判断面板不能大于表格高度
+        filterStore.maxHeight = maxHeight
       }
-      // 判断面板不能大于表格高度
-      filterStore.maxHeight = maxHeight
-      return nextTick()
+      handleStyle()
+      return nextTick().then(() => {
+        handleStyle()
+      })
     }
     const filterPrivateMethods: TableFilterPrivateMethods = {
       checkFilterOptions () {
@@ -121,15 +136,14 @@ hooks.add('tableFilterModule', {
         if (filterStore.column === column && filterStore.visible) {
           filterStore.visible = false
         } else {
-          const currEl = btnEl || colEl
           $xeTable.handleFilterOptions(column)
           internalData._currFilterParams = params
-          filterStore.targetEl = currEl
+          filterStore.targetEl = btnEl
           filterStore.style = null
           filterStore.visible = true
           initStore.filter = true
         }
-        nextTick(() => {
+        nextTick().then(() => {
           updatePopupStyle()
         })
         $xeTable.dispatchEvent('filter-visible', { column, field: column.field, property: column.field, filterList: $xeTable.getCheckedFilters(), visible: filterStore.visible }, evnt)

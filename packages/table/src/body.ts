@@ -122,8 +122,8 @@ export default defineVxeComponent({
       const $xeGantt = $xeTable.xeGantt
 
       const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, treeConfig, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
-      const { tableData, tableColumn, dragRow, overflowX, overflowY, currentColumn, scrollXLoad, scrollYLoad, mergeBodyFlag, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, editStore, isAllOverflow, validErrorMaps } = tableReactData
-      const { fullAllDataRowIdData, fullColumnIdData, mergeBodyCellMaps, visibleColumn, afterFullData, mergeBodyList, scrollXStore, scrollYStore, keepUpdateFieldMaps } = tableInternalData
+      const { tableData, tableColumn, dragRow, overflowX, overflowY, scrollXLoad, scrollYLoad, mergeBodyFlag, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, editStore, isAllOverflow, validErrorMaps, currColFlag } = tableReactData
+      const { fullAllDataRowIdData, fullColumnIdData, mergeBodyCellMaps, visibleColumn, afterFullData, mergeBodyList, scrollXStore, scrollYStore, keepUpdateFieldMaps, currentCol } = tableInternalData
       const cellOpts = computeCellOpts.value
       const validOpts = computeValidOpts.value
       const checkboxOpts = computeCheckboxOpts.value
@@ -491,7 +491,7 @@ export default defineVxeComponent({
             'col--active': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
             'col--valid-error': !!errorValidItem,
             'show--valid-bg': errorValidItem && validOpts.showErrorBackground,
-            'col--current': currentColumn === column
+            'col--current': currColFlag && currentCol === column
           },
           getPropClass(compCellClassName, cellParams),
           getPropClass(className, cellParams),

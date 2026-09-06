@@ -414,11 +414,10 @@ hooks.add('tableKeyboardModule', {
       },
       // 处理当前列方向键移动
       moveCurrentColumn (isLeftArrow, isRightArrow, evnt) {
-        const { currentColumn } = reactData
-        const { visibleColumn } = internalData
+        const { currentCol, visibleColumn } = internalData
         let targetCol: VxeTableDefines.ColumnInfo | null = null
-        if (currentColumn) {
-          const _columnIndex = $xeTable.getVTColumnIndex(currentColumn)
+        if (currentCol) {
+          const _columnIndex = $xeTable.getVTColumnIndex(currentCol)
           if (isLeftArrow && _columnIndex > 0) {
             targetCol = visibleColumn[_columnIndex - 1]
           } else if (isRightArrow && _columnIndex < visibleColumn.length - 1) {

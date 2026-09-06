@@ -64,8 +64,8 @@ export default defineVxeComponent({
 
       const { fixedType } = props
       const { resizable: allResizable, columnKey, showCustomHeader, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
-      const { currentColumn, dragCol, scrollXLoad, scrollYLoad, overflowX, mergeHeadFlag, tableColumn } = tableReactData
-      const { fullColumnIdData, scrollXStore, mergeHeaderList, mergeHeaderCellMaps } = tableInternalData
+      const { dragCol, scrollXLoad, scrollYLoad, overflowX, mergeHeadFlag, tableColumn, currColFlag } = tableReactData
+      const { fullColumnIdData, scrollXStore, mergeHeaderList, mergeHeaderCellMaps, currentCol } = tableInternalData
       const virtualXOpts = computeVirtualXOpts.value
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
@@ -226,7 +226,7 @@ export default defineVxeComponent({
             'is--filter-active': hasFilter,
             'is--drag-active': columnOpts.drag && !column.fixed && !isDisabledDrag && (isCrossDrag || isPeerDrag || !column.parentId),
             'is--drag-disabled': columnOpts.drag && isDisabledDrag,
-            'col--current': currentColumn === column
+            'col--current': currColFlag && currentCol === column
           },
           headerClassName ? (XEUtils.isFunction(headerClassName) ? headerClassName(cellParams) : headerClassName) : '',
           headerCellClassName ? (XEUtils.isFunction(headerCellClassName) ? headerCellClassName(cellParams) : headerCellClassName) : ''
@@ -271,8 +271,8 @@ export default defineVxeComponent({
 
       const { fixedType } = props
       const { showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign } = tableProps
-      const { currentColumn, overflowX } = tableReactData
-      const { fullColumnIdData } = tableInternalData
+      const { overflowX, currColFlag } = tableReactData
+      const { fullColumnIdData, currentCol } = tableInternalData
       const headerTooltipOpts = computeHeaderTooltipOpts.value
       const cellOpts = computeCellOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
@@ -347,7 +347,7 @@ export default defineVxeComponent({
             'fixed--width': !isAutoCellWidth,
             'is--padding': isPadding,
             'is--sortable': column.sortable,
-            'col--current': currentColumn === column
+            'col--current': currColFlag && currentCol === column
           }
           ],
           key: colid,
