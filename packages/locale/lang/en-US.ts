@@ -658,7 +658,7 @@ export default {
           mergeErr: 'This operation cannot be performed on merged cells',
           multiErr: 'This operation cannot be performed on multiple selection areas',
           selectErr: 'Unable to operate on cells in the specified range',
-          extendErr: 'If the extended range contains merged cells, all merged cells must be the same size',
+          extendErr: 'To perform this operation, all merged cells must be of the same size',
           pasteMultiErr: 'Unable to paste, the copied and pasted areas need to be of the same size to perform this operation',
           cpInvalidErr: 'The operation cannot be performed. There are prohibited columns ({0}) in the range you selected.'
         },
@@ -810,7 +810,7 @@ export default {
       area: {
         mergeErr: 'This operation cannot be performed on merged cells',
         multiErr: 'This operation cannot be performed on multiple selection areas',
-        extendErr: 'If the extended range contains merged cells, all merged cells must be the same size',
+        extendErr: 'To perform this operation, all merged cells must be of the same size',
         pasteMultiErr: 'Unable to paste, the copied and pasted areas need to be of the same size to perform this operation'
       },
       fnr: {
