@@ -8,7 +8,7 @@ import { getSlotVNs } from '../../ui/src/vn'
 
 import type { VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, VxeComponentSlotType } from '../../../types'
 
-const { getI18n, getIcon, renderer, renderEmptyElement } = VxeUI
+const { getConfig, getI18n, getIcon, renderer, renderEmptyElement } = VxeUI
 
 function renderTitlePrefixIcon (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
   const { $table, column } = params
@@ -312,10 +312,15 @@ function renderHeaderHandle (params: VxeTableDefines.CellRenderHeaderParams & {
   const tableProps = $table.props
   const { editConfig } = tableProps
   const { type, filters, sortable, editRender, slots } = column
-  const headerSlot = slots ? slots.header : null
-  if (headerSlot) {
-    return renderTitleContent(params, $table.callSlot(headerSlot, params))
+
+  // 兼容已废弃方式
+  if (getConfig().tableHeadeSlotToTitleSlot !== 'obsolete') {
+    const headerSlot = slots ? slots.header : null
+    if (headerSlot) {
+      return renderTitleContent(params, $table.callSlot(headerSlot, params))
+    }
   }
+
   switch (type) {
     case 'seq':
       return Cell.renderSeqHeader(params)
@@ -373,11 +378,20 @@ export const Cell = {
     const { $table, column } = params
     const tableProps = $table.props
     const { editConfig } = tableProps
-    const { editRender, cellRender } = column
+    const { slots, editRender, cellRender } = column
     const isEnableEdit = editConfig && isEnableConf(editConfig)
     const editRenderOpts = isEnableEdit && isEnableConf(editRender) ? editRender : null
     const cellRenderOpts = isEnableConf(cellRender) ? cellRender : null
     const renderOpts = editRenderOpts || cellRenderOpts
+
+    // 兼容已废弃方式
+    if (getConfig().tableHeadeSlotToTitleSlot === 'obsolete') {
+      const headerSlot = slots ? slots.header : null
+      if (headerSlot) {
+        return renderTitleContent(params, $table.callSlot(headerSlot, params))
+      }
+    }
+
     if (renderOpts) {
       const compConf = renderer.get(renderOpts.name)
       if (compConf) {
@@ -649,6 +663,14 @@ export const Cell = {
    */
   renderSeqHeader (params: VxeTableDefines.CellRenderHeaderParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
     const { $table, column } = params
+
+    // 兼容已废弃方式
+    if (getConfig().tableHeadeSlotToTitleSlot === 'obsolete') {
+      const { slots } = column
+      const headerSlot = slots ? slots.header : null
+      return renderHeaderCellBaseVNs(params, renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : $table.getHeaderCellLabel(column)))
+    }
+
     return renderHeaderCellBaseVNs(params, renderTitleContent(params, $table.getHeaderCellLabel(column)))
   },
   renderSeqCell (params: VxeTableDefines.CellRenderBodyParams & { $table: VxeTableConstructor & VxeTablePrivateMethods }) {
@@ -679,6 +701,21 @@ export const Cell = {
     const { $table, column } = params
     const { slots } = column
     const titleSlot = slots ? slots.title : null
+
+    // 兼容已废弃方式
+    if (getConfig().tableHeadeSlotToTitleSlot === 'obsolete') {
+      const headerSlot = slots ? slots.header : null
+      return renderHeaderCellBaseVNs(params,
+        renderTitleContent(params, headerSlot
+          ? $table.callSlot(headerSlot, params)
+          : [
+              h('span', {
+                class: 'vxe-radio--label'
+              }, titleSlot ? $table.callSlot(titleSlot, params) : $table.getHeaderCellLabel(column))
+            ])
+      )
+    }
+
     return renderHeaderCellBaseVNs(params,
       renderTitleContent(params, [
         h('span', {
@@ -770,6 +807,15 @@ export const Cell = {
       }
     }
     const checkboxParams = { ...params, checked: isAllCheckboxSelected, disabled: isAllCheckboxDisabled, indeterminate: isAllCheckboxIndeterminate }
+
+    // 兼容已废弃方式
+    if (getConfig().tableHeadeSlotToTitleSlot === 'obsolete') {
+      const headerSlot = slots ? slots.header : null
+      if (headerSlot) {
+        return renderHeaderCellBaseVNs(params, renderTitleContent(checkboxParams, $table.callSlot(headerSlot, checkboxParams)))
+      }
+    }
+
     if (checkStrictly ? !showHeader : showHeader === false) {
       return renderHeaderCellBaseVNs(params, renderTitleContent(checkboxParams, [
         h('span', {
