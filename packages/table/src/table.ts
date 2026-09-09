@@ -14814,6 +14814,9 @@ export default defineVxeComponent({
         if (mouseOpts.area && areaOpts.selectCellByHeader && columnOpts.drag && columnDragOpts.trigger === 'cell') {
           errLog('vxe.error.notSupportProp', ['area-config.selectCellByHeader & column-config.drag', 'column-drag-config.trigger=cell', 'column-drag-config.trigger=default | area-config.selectCellByHeader=false'])
         }
+        if (mouseOpts.area && props.spanMethod) {
+          errLog('vxe.error.notSupportProp', ['mouse-config.area', 'span-method', 'merge-cells'])
+        }
       }
       if (!$xeTable.handlePivotTableAggData) {
         if (customOpts.allowGroup) {
