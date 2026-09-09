@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  flex-wrap: wrap;
+  row-gap: 0.5em;
   padding: 0.5em 0;
   color: var(--vxe-ui-font-color);
   font-family: var(--vxe-ui-font-family);
