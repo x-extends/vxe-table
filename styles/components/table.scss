@@ -2673,7 +2673,7 @@ $btnThemeList: (
     .vxe-table--column {
       .vxe-cell {
         .vxe-cell--wrapper {
-          & > .vxe-reusekeep-control {
+          %ReusekeepControl {
             position: absolute;
             width: 0;
             height: 0;
@@ -2681,6 +2681,15 @@ $btnThemeList: (
             border: 0;
             padding: 0;
             outline: none;
+          }
+          & > .vxe-reusekeep-control {
+            @extend %ReusekeepControl;
+          }
+          & > div,
+          & > span {
+            & > .vxe-reusekeep-control {
+              @extend %ReusekeepControl;
+            }
           }
         }
       }
