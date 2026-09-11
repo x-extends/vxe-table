@@ -5607,13 +5607,17 @@ export default defineVxeComponent({
           clOpSize = cellRender.options ? cellRender.options.length : 0
           clOgSize = cellRender.optionGroups ? cellRender.optionGroups.length : 0
         }
-        // formatter > tableCellFormatter
-        const renderOpts = formatter ? null : (editConfig && isEnableConf(editRender) ? editRender : (isEnableConf(cellRender) ? cellRender : null))
-        const compConf = renderOpts ? renderer.get(renderOpts.name) : null
-        const tcFormatter = compConf ? compConf.tableCellFormatter : null
+        const isEnableEdit = editConfig && isEnableConf(editConfig)
+        const editRenderOpts = formatter ? null : (isEnableEdit && isEnableConf(editRender) ? editRender : null)
+        const cellRenderOpts = formatter ? null : (isEnableConf(cellRender) ? cellRender : null)
+        // formatter > cellRender.tableCellFormatter > editRender.tableCellFormatter
+        const cellCompConf = cellRenderOpts ? renderer.get(cellRenderOpts.name) : null
+        const editCompConf = editRenderOpts ? renderer.get(editRenderOpts.name) : null
+        const cellDfFormatter = cellCompConf ? cellCompConf.tableCellFormatter : null
+        const editDfFormatter = editCompConf ? editCompConf.tableCellFormatter : null
         const cellValue = getCellValue(row, column)
         let cellLabel = cellValue
-        if (formatter || tcFormatter) {
+        if (formatter || cellDfFormatter || editDfFormatter) {
           let formatData: Record<string, VxeTableDefines.RowCacheFormatObj> | undefined
           const { fullAllDataRowIdData } = internalData
           const rowid = getRowid($xeTable, row)
@@ -5651,8 +5655,10 @@ export default defineVxeComponent({
             } else {
               cellLabel = formatter(formatParams)
             }
-          } else if (renderOpts && tcFormatter) {
-            cellLabel = tcFormatter(renderOpts, formatParams)
+          } else if (cellRenderOpts && cellDfFormatter) {
+            cellLabel = cellDfFormatter(cellRenderOpts, formatParams)
+          } else if (editRenderOpts && editDfFormatter) {
+            cellLabel = editDfFormatter(editRenderOpts, formatParams)
           }
           if (formatData) {
             const ftValue = [cellValue, etOpSize, etOgSize, clOpSize, clOgSize]

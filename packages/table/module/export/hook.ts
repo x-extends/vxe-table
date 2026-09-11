@@ -343,7 +343,7 @@ hooks.add('tableExportModule', {
       const { isTreeAllExpanded, isRowGroupAllExpanded, mode: expMode } = opts
       const { treeConfig } = props
       const { isRowGroupStatus } = reactData
-      const { fullColumnFieldData } = internalData
+      const { fullColumnFieldData, fullAllDataRowIdData } = internalData
       const radioOpts = computeRadioOpts.value
       const checkboxOpts = computeCheckboxOpts.value
       const treeOpts = computeTreeOpts.value
@@ -494,6 +494,7 @@ hooks.add('tableExportModule', {
       }
       if (treeConfig) {
         // 如果是树结构
+        const { seqMode } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
         const rest: any[] = []
         const expandMaps: Record<string, boolean> = {}
@@ -514,6 +515,7 @@ hooks.add('tableExportModule', {
               _hasChild: hasRowChild,
               _expand: hasRowChild && $xeTable.isTreeExpandByRow(row)
             }
+            const rowRest = fullAllDataRowIdData[rowid] || {}
             columns.forEach((column, $columnIndex) => {
               let cellValue: string | number | boolean | null = ''
               const renderOpts = column.editRender || column.cellRender
@@ -532,7 +534,10 @@ hooks.add('tableExportModule', {
               } else {
                 switch (column.type) {
                   case 'seq': {
-                    const seqVal = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+                    let seqVal: number | string = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+                    if (seqMode === 'increasing') {
+                      seqVal = rowRest ? (rowRest._index + 1) : -1
+                    }
                     cellValue = expMode === 'all' ? seqVal : getSeq(seqVal, row, $rowIndex, column, $columnIndex)
                     break
                   }
