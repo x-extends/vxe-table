@@ -1161,6 +1161,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const formOpts = $xeGrid.computeFormOpts
       return proxyConfig && isEnableConf(proxyOpts) && proxyOpts.form ? formData : formOpts.data
     },
+    /**
+     * 已废弃，被 getFormFlatItems 替换
+     * @deprecated
+     */
     getFormItems (itemIndex?: number): any {
       const $xeGrid = this
       const props = $xeGrid
@@ -1172,7 +1176,35 @@ export default /* define-vxe-component start */ defineVxeComponent({
       XEUtils.eachTree(formConfig && isEnableConf(formOpts) && items ? items : [], item => {
         itemList.push(item)
       }, { children: 'children' })
+      // errLog('vxe.error.delFunc', ['getFormItems', 'getFormFlatItems'])
       return XEUtils.isUndefined(itemIndex) ? itemList : itemList[itemIndex]
+    },
+    getFormFlatItems () {
+      const $xeGrid = this
+
+      const $form = $xeGrid.$refs.refForm as VxeFormInstance
+      if ($form) {
+        return $form.getFlatItems()
+      }
+      return []
+    },
+    getFormNestedItems () {
+      const $xeGrid = this
+
+      const $form = $xeGrid.$refs.refForm as VxeFormInstance
+      if ($form) {
+        return $form.getNestedItems()
+      }
+      return []
+    },
+    getFormItemByField (field: string) {
+      const $xeGrid = this
+
+      const $form = $xeGrid.$refs.refForm as VxeFormInstance
+      if ($form) {
+        return $form.getItemByField(field)
+      }
+      return null
     },
     resetForm () {
       const $xeGrid = this
