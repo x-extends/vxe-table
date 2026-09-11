@@ -1529,6 +1529,13 @@ export default defineVxeComponent({
         }, { children: 'children' })
         return XEUtils.isUndefined(itemIndex) ? itemList : itemList[itemIndex]
       },
+      getFormItemByField (field: string) {
+        const formOpts = computeFormOpts.value
+        const { formConfig } = props
+        const { items } = formOpts
+        const rest = XEUtils.findTree(formConfig && isEnableConf(formOpts) && items ? items : [], item => item.field === field, { children: 'children' })
+        return rest ? rest.item : null
+      },
       resetForm () {
         const $form = refForm.value
         if ($form) {
