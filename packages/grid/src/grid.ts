@@ -1519,6 +1519,10 @@ export default defineVxeComponent({
         return handleZoom()
       },
       getFormData,
+      /**
+       * 已废弃，被 getFormFlatItems 替换
+       * @deprecated
+       */
       getFormItems (itemIndex?: number): any {
         const formOpts = computeFormOpts.value
         const { formConfig } = props
@@ -1527,14 +1531,29 @@ export default defineVxeComponent({
         XEUtils.eachTree(formConfig && isEnableConf(formOpts) && items ? items : [], item => {
           itemList.push(item)
         }, { children: 'children' })
+        // errLog('vxe.error.delFunc', ['getFormItems', 'getFormFlatItems'])
         return XEUtils.isUndefined(itemIndex) ? itemList : itemList[itemIndex]
       },
+      getFormFlatItems () {
+        const $form = refForm.value
+        if ($form) {
+          return $form.getFlatItems()
+        }
+        return []
+      },
+      getFormNestedItems () {
+        const $form = refForm.value
+        if ($form) {
+          return $form.getNestedItems()
+        }
+        return []
+      },
       getFormItemByField (field: string) {
-        const formOpts = computeFormOpts.value
-        const { formConfig } = props
-        const { items } = formOpts
-        const rest = XEUtils.findTree(formConfig && isEnableConf(formOpts) && items ? items : [], item => item.field === field, { children: 'children' })
-        return rest ? rest.item : null
+        const $form = refForm.value
+        if ($form) {
+          return $form.getItemByField(field)
+        }
+        return null
       },
       resetForm () {
         const $form = refForm.value
