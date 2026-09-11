@@ -477,16 +477,24 @@ export const Cell = {
       if (defaultSlot) {
         return renderCellBaseVNs(h, params, $table.callSlot(defaultSlot, params, h))
       }
-      const renderOpts = editRenderOpts || cellRenderOpts
-      // 如果是编辑表格：renderTableCell > formatter
-      // 如果是查看表格：renderTableDefault > formatter
-      if (renderOpts) {
-        const compConf = renderer.get(renderOpts.name)
-        if (compConf) {
-          const renderFn = editRenderOpts ? (compConf.renderTableCell || compConf.renderCell) : (compConf.renderTableDefault || compConf.renderDefault)
-          if (renderFn) {
-            return renderCellBaseVNs(h, params, getSlotVNs(renderFn.call($table, h, renderOpts, Object.assign({ $type: editRenderOpts ? 'edit' : 'cell' }, params))))
-          }
+      // 如果是编辑模式-查看：slot default > formatter > cellRender.renderTableDefault > editRender.renderTableCell > editRender.renderTableDefault > cellRender.tableCellFormatter > editRender.tableCellFormatter > field
+      // 如果是查看表格：slot default > formatter > cellRender。renderTableDefault > cellRender.tableCellFormatter > field
+      const cellCompConf = cellRenderOpts ? renderer.get(cellRenderOpts.name) : null
+      if (cellRenderOpts) {
+        const cellDefaultRenderFn = cellCompConf ? (cellCompConf.renderTableDefault || cellCompConf.renderDefault) : null
+        if (cellDefaultRenderFn && cellRenderOpts) {
+          return renderCellBaseVNs(h, params, getSlotVNs(cellDefaultRenderFn(h, cellRenderOpts, Object.assign({ $type: editRenderOpts ? 'edit' : 'cell' }, params))))
+        }
+      }
+      if (editRenderOpts) {
+        const editCompConf = editRenderOpts ? renderer.get(editRenderOpts.name) : null
+        const editCellRenderFn = editCompConf
+          ? (
+              (editCompConf.renderTableCell || editCompConf.renderCell) ||
+              (editCompConf.renderTableDefault || editCompConf.renderDefault))
+          : null
+        if (editCellRenderFn) {
+          return renderCellBaseVNs(h, params, getSlotVNs(editCellRenderFn(h, editRenderOpts, Object.assign({ $type: editRenderOpts ? 'edit' : 'cell' }, params))))
         }
       }
       cellValue = $table.getCellLabel(row, column)
@@ -1319,6 +1327,7 @@ export const Cell = {
       }
     }
 
+    // slot default > formatter
     if (formatter) {
       return renderCellBaseVNs(h, params, [
         h('span', {
