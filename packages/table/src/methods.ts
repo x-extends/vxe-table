@@ -817,6 +817,7 @@ function updateAfterFullData ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const filterOpts = $xeTable.computeFilterOpts
   const sortOpts = $xeTable.computeSortOpts
   const aggregateOpts = $xeTable.computeAggregateOpts
+  const rendererOpts = $xeTable.computeRendererOpts
   const treeOpts = $xeTable.computeTreeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
   const { transform, rowField, parentField, mapChildrenField } = treeOpts
@@ -862,7 +863,7 @@ function updateAfterFullData ($xeTable: VxeTableConstructor & VxeTablePrivateMet
       const handleFilter = (row: any) => {
         return filterColumns.every(({ column, valueList, itemList }) => {
           const { filterMethod, filterRender } = column
-          const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+          const compConf = isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
           const compFilterMethod = compConf ? (compConf.tableFilterMethod || compConf.filterMethod) : null
           const tdFilterMethod = compConf ? (compConf.tableFilterDefaultMethod || compConf.defaultTableFilterMethod || compConf.defaultFilterMethod) : null
           const cellValue = getCellValue(row, column)
@@ -5762,6 +5763,7 @@ const tableMethods: any = {
     }
     const { editConfig } = props
     const { formatter, editRender, cellRender } = column
+    const rendererOpts = $xeTable.computeRendererOpts
     let etOpSize = null
     let etOgSize = null
     let clOpSize = null
@@ -5778,8 +5780,8 @@ const tableMethods: any = {
     const editRenderOpts = formatter ? null : (isEnableEdit && isEnableConf(editRender) ? editRender : null)
     const cellRenderOpts = formatter ? null : (isEnableConf(cellRender) ? cellRender : null)
     // formatter > cellRender.tableCellFormatter > editRender.tableCellFormatter
-    const cellCompConf = cellRenderOpts ? renderer.get(cellRenderOpts.name) : null
-    const editCompConf = editRenderOpts ? renderer.get(editRenderOpts.name) : null
+    const cellCompConf = cellRenderOpts && cellRenderOpts.name ? (rendererOpts[cellRenderOpts.name] || renderer.get(cellRenderOpts.name)) : null
+    const editCompConf = editRenderOpts && editRenderOpts.name ? (rendererOpts[editRenderOpts.name] || renderer.get(editRenderOpts.name)) : null
     const cellDfFormatter = cellCompConf ? cellCompConf.tableCellFormatter : null
     const editDfFormatter = editCompConf ? editCompConf.tableCellFormatter : null
     const cellValue = getCellValue(row, column)
@@ -7073,8 +7075,9 @@ const tableMethods: any = {
     if (column) {
       const { filterStore } = reactData
       const { filterRender, filters } = column
+      const rendererOpts = $xeTable.computeRendererOpts
       const filterOptions = filters || []
-      const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+      const compConf = isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
       const frMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
       filterStore.column = column
       // 复原状态

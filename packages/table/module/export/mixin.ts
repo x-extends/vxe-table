@@ -72,6 +72,7 @@ function getBodyLabelData ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   const treeOpts = $xeTable.computeTreeOpts
   const columnOpts = $xeTable.computeColumnOpts
   const aggregateOpts = $xeTable.computeAggregateOpts
+  const rendererOpts = $xeTable.computeRendererOpts
   if (!htmlCellElem) {
     htmlCellElem = document.createElement('div')
   }
@@ -104,7 +105,7 @@ function getBodyLabelData ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
           const renderOpts = editRender || cellRender
           let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
           if (!bodyExportMethod && renderOpts && renderOpts.name) {
-            const compConf = renderer.get(renderOpts.name)
+            const compConf = rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)
             if (compConf) {
               bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
             }
@@ -244,7 +245,7 @@ function getBodyLabelData ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
           const renderOpts = column.editRender || column.cellRender
           let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
           if (!bodyExportMethod && renderOpts && renderOpts.name) {
-            const compConf = renderer.get(renderOpts.name)
+            const compConf = rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)
             if (compConf) {
               bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
             }
@@ -311,7 +312,7 @@ function getBodyLabelData ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
       const renderOpts = column.editRender || column.cellRender
       let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
       if (!bodyExportMethod && renderOpts && renderOpts.name) {
-        const compConf = renderer.get(renderOpts.name)
+        const compConf = rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)
         if (compConf) {
           bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
         }
@@ -382,10 +383,11 @@ function getHeaderTitle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods,
 
 function getFooterCellValue ($xeTable: any, opts: VxeTablePropTypes.ExportHandleOptions, row: any, column: VxeTableDefines.ColumnInfo) {
   const columnOpts = $xeTable.computeColumnOpts
+  const rendererOpts = $xeTable.computeRendererOpts
   const renderOpts = column.editRender || column.cellRender
   let footLabelMethod: VxeColumnPropTypes.FooterExportMethod | undefined = column.footerExportMethod
   if (!footLabelMethod && renderOpts && renderOpts.name) {
-    const compConf = renderer.get(renderOpts.name)
+    const compConf = rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)
     if (compConf) {
       footLabelMethod = compConf.tableFooterExportMethod || compConf.footerExportMethod || (compConf as any).footerCellExportMethod
     }

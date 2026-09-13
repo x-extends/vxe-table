@@ -27,7 +27,8 @@ export class ColumnInfo {
     const defaultVisible = XEUtils.isBoolean(visible) ? visible : true
     const defaultRenderWidth = width && isPx(width) && width !== 'auto' ? Math.max(0, XEUtils.toInteger(width)) : 0
 
-    const flCompConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+    const rendererOpts = $xeTable.computeRendererOpts
+    const flCompConf = filterRender && isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
     const ctFilterOptions = flCompConf ? flCompConf.createTableFilterOptions : null
 
     const filters = toFilters(colConfs.filters, colId)

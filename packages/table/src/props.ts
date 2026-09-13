@@ -306,6 +306,10 @@ export const tableProps = {
   animat: { type: Boolean, default: () => getConfig().table.animat },
   // （可能会被废弃的参数，不要使用）
   delayHover: { type: Number, default: () => getConfig().table.delayHover },
+  /**
+   * 渲染器配置项
+   */
+  rendererConfig: Object as PropType<VxeTablePropTypes.RendererConfig>,
   // 额外的参数
   params: Object as PropType<VxeTablePropTypes.Params>
 }

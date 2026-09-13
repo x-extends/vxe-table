@@ -25,9 +25,10 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   }
   const tableEl = $xeTable.$refs.refElem as HTMLDivElement
   const filterOpts = $xeTable.computeFilterOpts
+  const rendererOpts = $xeTable.computeRendererOpts
   const { maxHeight: customMaxHeight, transfer, zIndex } = filterOpts
   const filterRender = column ? column.filterRender : null
-  const compConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+  const compConf = filterRender && isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
 
   const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
   if (!headerScrollElem) {
@@ -464,13 +465,14 @@ export default {
         $xeTable.handleColumnConfirmFilter(column, evnt)
       }
     },
-    handleClearFilter (column: any) {
+    handleClearFilter (column: VxeTableDefines.ColumnInfo) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       if (column) {
         const { filters, filterRender } = column
         if (filters) {
-          const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+          const rendererOpts = $xeTable.computeRendererOpts
+          const compConf = isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
           const filterResetMethod = column.filterResetMethod || (compConf ? (compConf.tableFilterResetMethod || compConf.filterResetMethod) : null)
           filters.forEach((item: any) => {
             item._checked = false
@@ -480,7 +482,7 @@ export default {
             }
           })
           if (filterResetMethod) {
-            filterResetMethod({ options: filters, column, $table: $xeTable })
+            filterResetMethod({ options: filters as VxeTableDefines.FilterOption[], column, $table: $xeTable })
           }
         }
       }

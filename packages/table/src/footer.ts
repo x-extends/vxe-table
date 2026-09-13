@@ -35,13 +35,14 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
   const cellOpts = $xeTable.computeCellOpts
   const footerCellOpts = $xeTable.computeFooterCellOpts
   const currCellHeight = getCalcHeight(footerCellOpts.height) || defaultRowHeight
+  const rendererOpts = $xeTable.computeRendererOpts
 
   return tableColumn.map((column, $columnIndex) => {
     const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
     const colid = column.id
     const colRest = fullColumnIdData[colid] || {}
     const renderOpts = editRender || cellRender
-    const compConf = renderOpts ? renderer.get(renderOpts.name) : null
+    const compConf = renderOpts && renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
     const showAllTip = footerTooltipOpts.showAll
     const fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
 

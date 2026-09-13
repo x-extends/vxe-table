@@ -258,9 +258,10 @@ export default /* define-vxe-component start */ defineVxeComponent({
         return []
       }
       const filterOpts = $xeTable.computeFilterOpts
+      const rendererOpts = $xeTable.computeRendererOpts
       const hasCheckOption = $xeFilterPanel.computeHasCheckOption
       const { filterRender, filterMultiple } = column
-      const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+      const compConf = filterRender && isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
       return filterMultiple && (compConf ? !(compConf.showTableFilterFooter === false || compConf.showFilterFooter === false || compConf.isFooter === false) : true)
         ? [
@@ -298,8 +299,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
       if (!column) {
         return renderEmptyElement($xeFilterPanel)
       }
+      const rendererOpts = $xeTable.computeRendererOpts
       const filterRender = column ? column.filterRender : null
-      const compConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+      const compConf = filterRender && isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
       const filterClassName = compConf ? (compConf.tableFilterClassName || compConf.filterClassName) : ''
       const params = Object.assign({}, tableInternalData._currFilterParams, { $panel: $xeFilterPanel, $table: $xeTable })
       const tableProps = $xeTable

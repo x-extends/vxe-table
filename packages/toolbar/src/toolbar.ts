@@ -486,10 +486,11 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const buttonSuffixSlot = slots.buttonSuffix || slots['button-suffix']
       const btnVNs: VxeComponentSlotType[] = []
       if (buttons) {
+        const rendererOpts = ($table ? $table.computeRendererOpts : null) || {}
         buttons.forEach((item) => {
           const { dropdowns, buttonRender } = item
           if (item.visible !== false) {
-            const compConf = buttonRender ? renderer.get(buttonRender.name) : null
+            const compConf = buttonRender && buttonRender.name ? (rendererOpts[buttonRender.name] || renderer.get(buttonRender.name)) : null
             if (buttonRender && compConf && compConf.renderToolbarButton) {
               const toolbarButtonClassName = compConf.toolbarButtonClassName
               const params = { $grid: $xeGrid, $gantt: $xeGantt, $table: $table!, button: item }
@@ -555,17 +556,17 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const toolSuffixSlot = slots.toolSuffix || slots['tool-suffix']
       const btnVNs: VxeComponentSlotType[] = []
       if (tools) {
+        const rendererOpts = ($table ? $table.computeRendererOpts : null) || {}
         tools.forEach((item, tIndex) => {
           const { dropdowns, toolRender } = item
           if (item.visible !== false) {
-            const rdName = toolRender ? toolRender.name : null
-            const compConf = toolRender ? renderer.get(rdName) : null
+            const compConf = toolRender && toolRender.name ? (rendererOpts[toolRender.name] || renderer.get(toolRender.name)) : null
             if (toolRender && compConf && compConf.renderToolbarTool) {
               const toolbarToolClassName = compConf.toolbarToolClassName
               const params = { $grid: $xeGrid, $gantt: $xeGantt, $table: $table!, tool: item }
               btnVNs.push(
                 h('span', {
-                  key: rdName as string,
+                  key: tIndex,
                   class: ['vxe-tool--item', toolbarToolClassName ? (XEUtils.isFunction(toolbarToolClassName) ? toolbarToolClassName(params) : toolbarToolClassName) : '']
                 }, getSlotVNs(compConf.renderToolbarTool(h, toolRender, params)))
               )

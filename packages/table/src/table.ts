@@ -173,7 +173,8 @@ function renderEmptyBody (h: CreateElement, $xeTable: VxeTableConstructor & VxeT
   if (emptySlot) {
     emptyContent = emptySlot.call($xeTable, emptyParams)
   } else {
-    const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
+    const rendererOpts = $xeTable.computeRendererOpts
+    const compConf = emptyOpts.name ? (rendererOpts[emptyOpts.name] || renderer.get(emptyOpts.name)) : null
     const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
     if (rtEmptyView) {
       emptyContent = getSlotVNs(rtEmptyView.call($xeTable, h, emptyOpts, emptyParams))
@@ -1488,6 +1489,12 @@ export default {
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.undoRedoHistoryConfig, props.undoRedoHistoryConfig)
+    },
+    computeRendererOpts () {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
+
+      return Object.assign({}, getConfig().table.rendererConfig, props.rendererConfig)
     },
     combineTabsResizeFlag () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods

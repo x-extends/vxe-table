@@ -33,6 +33,7 @@ function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMod
   const cellOpts = $xeTable.computeCellOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const headerCellOpts = $xeTable.computeHeaderCellOpts
+  const rendererOpts = $xeTable.computeRendererOpts
   const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
   const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
   const isLastRow = _rowIndex === headerGroups.length - 1
@@ -43,7 +44,7 @@ function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMod
     const colid = column.id
     const colRest = fullColumnIdData[colid] || {}
     const renderOpts = editRender || cellRender
-    const compConf = renderOpts ? renderer.get(renderOpts.name) : null
+    const compConf = renderOpts && renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
     const isColGroup = column.children && column.children.length
     const fixedHiddenColumn = overflowX && !isColGroup && (fixedType ? column.fixed !== fixedType : !!column.fixed)
 
@@ -244,6 +245,7 @@ function renderFilterRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, 
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const headerCellOpts = $xeTable.computeHeaderCellOpts
   const floatingFilterOpts = $xeTable.computeFloatingFilterOpts
+  const rendererOpts = $xeTable.computeRendererOpts
   const { cellClassName } = floatingFilterOpts
   const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
 
@@ -252,8 +254,8 @@ function renderFilterRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, 
     const colid = column.id
     const colRest = fullColumnIdData[colid] || {}
     const renderOpts = editRender || cellRender
-    const compConf = renderOpts ? renderer.get(renderOpts.name) : null
-    const flCompConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+    const compConf = renderOpts && renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
+    const flCompConf = isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
     const rtFloatingFilter = flCompConf ? flCompConf.renderTableFloatingFilter : null
     const flSlot = slots ? (slots.floatingFilter || slots['floating-filter']) : null
     const fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)

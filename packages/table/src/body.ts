@@ -117,6 +117,7 @@ function renderTdColumn (
   const tooltipOpts = $xeTable.computeTooltipOpts
   const virtualXOpts = $xeTable.computeVirtualXOpts
   const virtualYOpts = $xeTable.computeVirtualYOpts
+  const rendererOpts = $xeTable.computeRendererOpts
   const { isAllColumnDrag, isAllRowDrag } = $xeTable.resizableOpts
   const rowOpts = $xeTable.computeRowOpts
   const rowDragOpts = $xeTable.computeRowDragOpts
@@ -135,7 +136,7 @@ function renderTdColumn (
   const colid = column.id
   const colRest = fullColumnIdData[colid] || {}
   const renderOpts = editRender || cellRender
-  const compConf = renderOpts ? renderer.get(renderOpts.name) : null
+  const compConf = renderOpts && renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
   const compCellClassName = compConf ? (compConf.tableCellClassName || compConf.cellClassName) : null
   const compCellStyle = compConf ? (compConf.tableCellStyle || compConf.cellStyle) : ''
   const showAllTip = tooltipOpts.showAll
@@ -862,7 +863,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
     if (emptySlot) {
       emptyContent = emptySlot.call($xeTable, emptyParams)
     } else {
-      const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
+      const rendererOpts = $xeTable.computeRendererOpts
+      const compConf = emptyOpts.name ? (rendererOpts[emptyOpts.name] || renderer.get(emptyOpts.name)) : null
       const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
       if (rtEmptyView) {
         emptyContent = getSlotVNs(rtEmptyView.call($xeTable, h, emptyOpts, emptyParams))
