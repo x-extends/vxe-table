@@ -21,7 +21,7 @@ hooks.add('tableFilterModule', {
 
     const { props, reactData, internalData } = $xeTable
     const { refElem, refTableFilter } = $xeTable.getRefMaps()
-    const { computeFilterOpts, computeMouseOpts } = $xeTable.getComputeMaps()
+    const { computeFilterOpts, computeMouseOpts, computeRendererOpts } = $xeTable.getComputeMaps()
 
     const updatePopupStyle = () => {
       const { filterStore } = reactData
@@ -32,9 +32,10 @@ hooks.add('tableFilterModule', {
       }
       const tableEl = refElem.value
       const filterOpts = computeFilterOpts.value
+      const rendererOpts = computeRendererOpts.value
       const { maxHeight: customMaxHeight, transfer, zIndex } = filterOpts
       const filterRender = column ? column.filterRender : null
-      const compConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+      const compConf = filterRender && isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
 
       const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
       if (!headerScrollElem) {
@@ -169,7 +170,8 @@ hooks.add('tableFilterModule', {
         if (column) {
           const { filters, filterRender } = column
           if (filters) {
-            const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+            const rendererOpts = computeRendererOpts.value
+            const compConf = isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
             const frMethod = column.filterResetMethod || (compConf ? (compConf.tableFilterResetMethod || compConf.filterResetMethod) : null)
             filters.forEach((item: any) => {
               item._checked = false
@@ -179,7 +181,7 @@ hooks.add('tableFilterModule', {
               }
             })
             if (frMethod) {
-              frMethod({ options: filters, column, $table: $xeTable })
+              frMethod({ options: filters as VxeTableDefines.FilterOption[], column, $table: $xeTable })
             }
           }
         }

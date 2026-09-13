@@ -29,7 +29,7 @@ export default defineVxeComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeEditOpts, computeMouseOpts, computeCellOffsetWidth, computeAreaOpts, computeDefaultRowHeight, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeResizableOpts, computeVirtualXOpts, computeVirtualYOpts, computeIsBodyRenderOptimize } = $xeTable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeCellOffsetWidth, computeAreaOpts, computeDefaultRowHeight, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeResizableOpts, computeVirtualXOpts, computeVirtualYOpts, computeIsBodyRenderOptimize, computeRendererOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refBodyScroll = ref() as Ref<HTMLDivElement>
@@ -132,6 +132,7 @@ export default defineVxeComponent({
       const resizableOpts = computeResizableOpts.value
       const virtualXOpts = computeVirtualXOpts.value
       const virtualYOpts = computeVirtualYOpts.value
+      const rendererOpts = computeRendererOpts.value
       const { isAllColumnDrag, isAllRowDrag } = resizableOpts
       const rowOpts = computeRowOpts.value
       const rowDragOpts = computeRowDragOpts.value
@@ -150,7 +151,7 @@ export default defineVxeComponent({
       const colid = column.id
       const colRest = fullColumnIdData[colid] || {}
       const renderOpts = editRender || cellRender
-      const compConf = renderOpts ? renderer.get(renderOpts.name) : null
+      const compConf = renderOpts && renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
       const compCellClassName = compConf ? (compConf.tableCellClassName || compConf.cellClassName) : null
       const compCellStyle = compConf ? (compConf.tableCellStyle || compConf.cellStyle) : ''
       const showAllTip = tooltipOpts.showAll
@@ -834,7 +835,8 @@ export default defineVxeComponent({
       if (emptySlot) {
         emptyContent = $xeTable.callSlot(emptySlot, emptyParams)
       } else {
-        const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
+        const rendererOpts = computeRendererOpts.value
+        const compConf = emptyOpts.name ? (rendererOpts[emptyOpts.name] || renderer.get(emptyOpts.name)) : null
         const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
         if (rtEmptyView) {
           emptyContent = getSlotVNs(rtEmptyView(emptyOpts, emptyParams))

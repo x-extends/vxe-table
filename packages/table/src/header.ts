@@ -29,7 +29,7 @@ export default defineVxeComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeMouseOpts, computeHeaderCellOpts, computeDefaultRowHeight, computeVirtualXOpts, computeFloatingFilterOpts, computeIsHeaderRenderOptimize, computeHeaderTooltipOpts } = $xeTable.getComputeMaps()
+    const { computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeMouseOpts, computeHeaderCellOpts, computeDefaultRowHeight, computeVirtualXOpts, computeFloatingFilterOpts, computeIsHeaderRenderOptimize, computeHeaderTooltipOpts, computeRendererOpts } = $xeTable.getComputeMaps()
 
     const headerColumn = ref<VxeTableDefines.ColumnInfo[][]>([])
 
@@ -73,6 +73,7 @@ export default defineVxeComponent({
       const cellOpts = computeCellOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
       const headerCellOpts = computeHeaderCellOpts.value
+      const rendererOpts = computeRendererOpts.value
       const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
       const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
       const isLastRow = _rowIndex === headerGroups.length - 1
@@ -82,7 +83,7 @@ export default defineVxeComponent({
         const colid = column.id
         const colRest = fullColumnIdData[colid] || {}
         const renderOpts = editRender || cellRender
-        const compConf = renderOpts ? renderer.get(renderOpts.name) : null
+        const compConf = renderOpts && renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
         const isColGroup = column.children && column.children.length
         const fixedHiddenColumn = overflowX && !isColGroup && (fixedType ? column.fixed !== fixedType : !!column.fixed)
 
@@ -278,6 +279,7 @@ export default defineVxeComponent({
       const defaultRowHeight = computeDefaultRowHeight.value
       const headerCellOpts = computeHeaderCellOpts.value
       const floatingFilterOpts = computeFloatingFilterOpts.value
+      const rendererOpts = computeRendererOpts.value
       const { cellClassName } = floatingFilterOpts
       const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
 
@@ -287,8 +289,8 @@ export default defineVxeComponent({
         const colRest = fullColumnIdData[colid] || {}
         const renderOpts = editRender || cellRender
         const flSlot = slots ? (slots.floatingFilter || slots['floating-filter']) : null
-        const compConf = renderOpts ? renderer.get(renderOpts.name) : null
-        const flCompConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+        const compConf = renderOpts && renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
+        const flCompConf = isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
         const rtFloatingFilter = flCompConf ? flCompConf.renderTableFloatingFilter : null
         const fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
         const isPadding = XEUtils.isBoolean(headerCellOpts.padding) ? headerCellOpts.padding : cellOpts.padding

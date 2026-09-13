@@ -37,7 +37,7 @@ export default defineVxeComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeFooterTooltipOpts, computeColumnOpts, computeCellOpts, computeFooterCellOpts, computeDefaultRowHeight, computeResizableOpts, computeVirtualXOpts, computeIsFooterRenderOptimize } = $xeTable.getComputeMaps()
+    const { computeFooterTooltipOpts, computeColumnOpts, computeCellOpts, computeFooterCellOpts, computeDefaultRowHeight, computeResizableOpts, computeVirtualXOpts, computeIsFooterRenderOptimize, computeRendererOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refFooterScroll = ref() as Ref<HTMLDivElement>
@@ -63,13 +63,14 @@ export default defineVxeComponent({
       const cellOpts = computeCellOpts.value
       const footerCellOpts = computeFooterCellOpts.value
       const currCellHeight = getCalcHeight(footerCellOpts.height) || defaultRowHeight
+      const rendererOpts = computeRendererOpts.value
 
       return tableColumn.map((column, $columnIndex) => {
         const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
         const colid = column.id
         const colRest = fullColumnIdData[colid] || {}
         const renderOpts = editRender || cellRender
-        const compConf = renderOpts ? renderer.get(renderOpts.name) : null
+        const compConf = renderOpts && renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
         const showAllTip = footerTooltipOpts.showAll
         const fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
 

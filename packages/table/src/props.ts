@@ -319,6 +319,10 @@ export const tableProps = {
     type: Number as PropType<VxeTablePropTypes.DelayHover>,
     default: () => getConfig().table.delayHover as number
   },
+  /**
+   * 渲染器配置项
+   */
+  rendererConfig: Object as PropType<VxeTablePropTypes.RendererConfig>,
   // 额外的参数
   params: Object as PropType<VxeTablePropTypes.Params>
 }

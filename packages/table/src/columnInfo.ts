@@ -19,6 +19,8 @@ export class ColumnInfo {
     const $xeGantt = $xeTable.xeGantt
     const $xeGGWrapper = $xeGrid || $xeGantt
 
+    const { computeRendererOpts, computeTreeOpts } = $xeTable.getComputeMaps()
+
     const { type, field, width, visible, fixed, align, headerAlign, footerAlign, aggFunc, formatter, filterMultiple, cellRender, editRender, filterRender } = colConfs
 
     const colId = colConfs.colId || XEUtils.uniqueId('col_')
@@ -26,7 +28,8 @@ export class ColumnInfo {
     const defaultVisible = XEUtils.isBoolean(visible) ? visible : true
     const defaultRenderWidth = width && isPx(width) && width !== 'auto' ? Math.max(0, XEUtils.toInteger(width)) : 0
 
-    const flCompConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+    const rendererOpts = computeRendererOpts.value
+    const flCompConf = filterRender && isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
     const ctFilterOptions = flCompConf ? flCompConf.createTableFilterOptions : null
 
     const filters = toFilters(colConfs.filters, colId)
@@ -43,7 +46,6 @@ export class ColumnInfo {
     }
     if (type === 'expand') {
       const { treeConfig } = tableProps
-      const { computeTreeOpts } = $xeTable.getComputeMaps()
       const treeOpts = computeTreeOpts.value
       if (treeConfig && (treeOpts.showLine || treeOpts.line)) {
         errLog('vxe.error.errConflicts', ['tree-config.showLine', 'column.type=expand'])

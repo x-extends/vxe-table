@@ -246,7 +246,9 @@ function getFooterContent (params: VxeTableDefines.CellRenderFooterParams & { $t
   const renderOpts = editRenderOpts || cellRenderOpts
   const itemValue = $table.getFooterCellLabel(row, column)
   if (renderOpts) {
-    const compConf = renderer.get(renderOpts.name)
+    const { computeRendererOpts } = $table.getComputeMaps()
+    const rendererOpts = computeRendererOpts.value
+    const compConf = renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
     if (compConf) {
       const rtFooter = compConf.renderTableFooter || compConf.renderFooter
       if (rtFooter) {
@@ -393,7 +395,9 @@ export const Cell = {
     }
 
     if (renderOpts) {
-      const compConf = renderer.get(renderOpts.name)
+      const { computeRendererOpts } = $table.getComputeMaps()
+      const rendererOpts = computeRendererOpts.value
+      const compConf = renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
       if (compConf) {
         const rtHeader = compConf.renderTableHeader || compConf.renderHeader
         if (rtHeader) {
@@ -486,9 +490,11 @@ export const Cell = {
       if (defaultSlot) {
         return renderCellBaseVNs(params, $table.callSlot(defaultSlot, params))
       }
+      const { computeRendererOpts } = $table.getComputeMaps()
+      const rendererOpts = computeRendererOpts.value
       // 如果是编辑模式-查看：slot default > formatter > cellRender.renderTableDefault > editRender.renderTableCell > editRender.renderTableDefault > cellRender.tableCellFormatter > editRender.tableCellFormatter > field
       // 如果是查看表格：slot default > formatter > cellRender.renderTableDefault > cellRender.tableCellFormatter > field
-      const cellCompConf = cellRenderOpts ? renderer.get(cellRenderOpts.name) : null
+      const cellCompConf = cellRenderOpts && cellRenderOpts.name ? (rendererOpts[cellRenderOpts.name] || renderer.get(cellRenderOpts.name)) : null
       if (cellRenderOpts) {
         const cellDefaultRenderFn = cellCompConf ? (cellCompConf.renderTableDefault || cellCompConf.renderDefault) : null
         if (cellDefaultRenderFn && cellRenderOpts) {
@@ -496,7 +502,7 @@ export const Cell = {
         }
       }
       if (editRenderOpts) {
-        const editCompConf = editRenderOpts ? renderer.get(editRenderOpts.name) : null
+        const editCompConf = editRenderOpts && editRenderOpts.name ? (rendererOpts[editRenderOpts.name] || renderer.get(editRenderOpts.name)) : null
         const editCellRenderFn = editCompConf
           ? (
               (editCompConf.renderTableCell || editCompConf.renderCell) ||
@@ -1079,7 +1085,9 @@ export const Cell = {
       return $table.callSlot(contentSlot, params)
     }
     if (contentRender) {
-      const compConf = renderer.get(contentRender.name)
+      const { computeRendererOpts } = $table.getComputeMaps()
+      const rendererOpts = computeRendererOpts.value
+      const compConf = contentRender.name ? (rendererOpts[contentRender.name] || renderer.get(contentRender.name)) : null
       if (compConf) {
         const rtExpand = compConf.renderTableExpand || compConf.renderExpand
         if (rtExpand) {
@@ -1308,7 +1316,9 @@ export const Cell = {
       if (editSlot) {
         return $table.callSlot(editSlot, cellParams)
       }
-      const compConf = renderer.get(editRenderOpts.name)
+      const { computeRendererOpts } = $table.getComputeMaps()
+      const rendererOpts = computeRendererOpts.value
+      const compConf = editRenderOpts.name ? (rendererOpts[editRenderOpts.name] || renderer.get(editRenderOpts.name)) : null
       const rtEdit = compConf ? (compConf.renderTableEdit || compConf.renderEdit) : null
       if (rtEdit) {
         return getSlotVNs(rtEdit(editRenderOpts, cellParams))

@@ -18,7 +18,7 @@ hooks.add('tableEditModule', {
   setupTable ($xeTable) {
     const { props, reactData, internalData } = $xeTable
     const { refElem } = $xeTable.getRefMaps()
-    const { computeMouseOpts, computeEditOpts, computeCheckboxOpts, computeTreeOpts, computeValidOpts } = $xeTable.getComputeMaps()
+    const { computeMouseOpts, computeEditOpts, computeCheckboxOpts, computeTreeOpts, computeValidOpts, computeRendererOpts } = $xeTable.getComputeMaps()
 
     const browseObj = XEUtils.browse()
 
@@ -968,7 +968,9 @@ hooks.add('tableEditModule', {
       const { editRender } = column
       const editOpts = computeEditOpts.value
       if (editConfig && isEnableConf(editRender)) {
-        const compRender = renderer.get(editRender.name)
+        const rendererOpts = computeRendererOpts.value
+        const renderName = editRender.name
+        const compRender = renderName ? (rendererOpts[renderName] || renderer.get(renderName)) : null
         let autoFocus: boolean | string | ((params: VxeGlobalRendererHandles.TableAutoFocusParams) => HTMLElement | null) | null | undefined = editRender.autofocus || editRender.autoFocus
         let autoSelect = editRender.autoSelect || editRender.autoselect
         let inputElem: HTMLElement | null = null

@@ -304,7 +304,7 @@ const tableExportMethodKeys: (keyof TableExportMethods)[] = ['exportData', 'impo
 hooks.add('tableExportModule', {
   setupTable ($xeTable) {
     const { props, reactData, internalData } = $xeTable
-    const { computeTreeOpts, computePrintOpts, computeExportOpts, computeImportOpts, computeSeqOpts, computeRadioOpts, computeCheckboxOpts, computeColumnOpts, computeAggregateOpts } = $xeTable.getComputeMaps()
+    const { computeTreeOpts, computePrintOpts, computeExportOpts, computeImportOpts, computeSeqOpts, computeRadioOpts, computeCheckboxOpts, computeColumnOpts, computeAggregateOpts, computeRendererOpts } = $xeTable.getComputeMaps()
 
     const getSeq = (cellValue: any, row: any, $rowIndex: number, column: VxeTableDefines.ColumnInfo, $columnIndex: number) => {
       const seqOpts = computeSeqOpts.value
@@ -349,6 +349,7 @@ hooks.add('tableExportModule', {
       const treeOpts = computeTreeOpts.value
       const columnOpts = computeColumnOpts.value
       const aggregateOpts = computeAggregateOpts.value
+      const rendererOpts = computeRendererOpts.value
       if (!htmlCellElem) {
         htmlCellElem = document.createElement('div')
       }
@@ -381,7 +382,7 @@ hooks.add('tableExportModule', {
               const renderOpts = editRender || cellRender
               let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
               if (!bodyExportMethod && renderOpts && renderOpts.name) {
-                const compConf = renderer.get(renderOpts.name)
+                const compConf = rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)
                 if (compConf) {
                   bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
                 }
@@ -521,7 +522,7 @@ hooks.add('tableExportModule', {
               const renderOpts = column.editRender || column.cellRender
               let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
               if (!bodyExportMethod && renderOpts && renderOpts.name) {
-                const compConf = renderer.get(renderOpts.name)
+                const compConf = rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)
                 if (compConf) {
                   bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
                 }
@@ -588,7 +589,7 @@ hooks.add('tableExportModule', {
           const renderOpts = column.editRender || column.cellRender
           let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
           if (!bodyExportMethod && renderOpts && renderOpts.name) {
-            const compConf = renderer.get(renderOpts.name)
+            const compConf = rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)
             if (compConf) {
               bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
             }
@@ -649,10 +650,11 @@ hooks.add('tableExportModule', {
 
     const getFooterCellValue = (opts: VxeTablePropTypes.ExportHandleOptions, row: any, column: VxeTableDefines.ColumnInfo) => {
       const columnOpts = computeColumnOpts.value
+      const rendererOpts = computeRendererOpts.value
       const renderOpts = column.editRender || column.cellRender
       let footLabelMethod: VxeColumnPropTypes.FooterExportMethod | undefined = column.footerExportMethod
       if (!footLabelMethod && renderOpts && renderOpts.name) {
-        const compConf = renderer.get(renderOpts.name)
+        const compConf = rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)
         if (compConf) {
           footLabelMethod = compConf.tableFooterExportMethod || compConf.footerExportMethod
         }

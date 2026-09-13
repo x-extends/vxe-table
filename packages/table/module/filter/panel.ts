@@ -27,7 +27,7 @@ export default defineVxeComponent({
 
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
     const { reactData: tableReactData, internalData: tableInternalData, getComputeMaps } = $xeTable
-    const { computeFilterOpts } = getComputeMaps()
+    const { computeFilterOpts, computeRendererOpts } = getComputeMaps()
 
     const refElem = ref<HTMLDivElement>()
 
@@ -223,10 +223,11 @@ export default defineVxeComponent({
         return []
       }
       const filterOpts = computeFilterOpts.value
+      const rendererOpts = computeRendererOpts.value
       const hasCheckOption = computeHasCheckOption.value
       const { filterRender, filterMultiple } = column
       const { confirmButtonText, resetButtonText, showFooter } = filterOpts
-      const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+      const compConf = filterRender && isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
       let showFlFoot = !!filterMultiple
       if (XEUtils.isBoolean(showFooter)) {
@@ -261,8 +262,9 @@ export default defineVxeComponent({
       if (!column) {
         return renderEmptyElement($xeFilterPanel)
       }
+      const rendererOpts = computeRendererOpts.value
       const filterRender = column ? column.filterRender : null
-      const compConf = filterRender && isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+      const compConf = filterRender && isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
       const filterClassName = compConf ? (compConf.tableFilterClassName || compConf.filterClassName) : ''
       const params = Object.assign({}, tableInternalData._currFilterParams, { $panel: $xeFilterPanel, $table: $xeTable })
       const tableProps = $xeTable.props

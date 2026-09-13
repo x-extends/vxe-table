@@ -811,6 +811,10 @@ export default defineVxeComponent({
       return $xeSplitter ? $xeSplitter.reactData.resizeFlag : null
     })
 
+    const computeRendererOpts = computed(() => {
+      return Object.assign({}, getConfig().table.rendererConfig, props.rendererConfig)
+    })
+
     const refMaps: VxeTablePrivateRef = {
       refElem,
       refTooltip,
@@ -918,6 +922,7 @@ export default defineVxeComponent({
       computeRowGroupColumns,
       computeAggFuncColumns,
       computeUndoRedoHistoryOpts,
+      computeRendererOpts,
 
       computeFNROpts,
       computeSXOpts,
@@ -2384,6 +2389,7 @@ export default defineVxeComponent({
       const filterOpts = computeFilterOpts.value
       const sortOpts = computeSortOpts.value
       const aggregateOpts = computeAggregateOpts.value
+      const rendererOpts = computeRendererOpts.value
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const { transform, rowField, parentField, mapChildrenField } = treeOpts
@@ -2428,7 +2434,7 @@ export default defineVxeComponent({
           const handleFilter = (row: any) => {
             return filterColumns.every(({ column, valueList, itemList }) => {
               const { filterMethod, filterRender } = column
-              const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+              const compConf = isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
               const compFilterMethod = compConf ? (compConf.tableFilterMethod || compConf.filterMethod) : null
               const tdFilterMethod = compConf ? (compConf.tableFilterDefaultMethod || compConf.defaultTableFilterMethod || compConf.defaultFilterMethod) : null
               const cellValue = getCellValue(row, column)
@@ -5595,6 +5601,7 @@ export default defineVxeComponent({
         }
         const { editConfig } = props
         const { formatter, editRender, cellRender } = column
+        const rendererOpts = computeRendererOpts.value
         let etOpSize = null
         let etOgSize = null
         let clOpSize = null
@@ -5611,8 +5618,8 @@ export default defineVxeComponent({
         const editRenderOpts = formatter ? null : (isEnableEdit && isEnableConf(editRender) ? editRender : null)
         const cellRenderOpts = formatter ? null : (isEnableConf(cellRender) ? cellRender : null)
         // formatter > cellRender.tableCellFormatter > editRender.tableCellFormatter
-        const cellCompConf = cellRenderOpts ? renderer.get(cellRenderOpts.name) : null
-        const editCompConf = editRenderOpts ? renderer.get(editRenderOpts.name) : null
+        const cellCompConf = cellRenderOpts && cellRenderOpts.name ? (rendererOpts[cellRenderOpts.name] || renderer.get(cellRenderOpts.name)) : null
+        const editCompConf = editRenderOpts && editRenderOpts.name ? (rendererOpts[editRenderOpts.name] || renderer.get(editRenderOpts.name)) : null
         const cellDfFormatter = cellCompConf ? cellCompConf.tableCellFormatter : null
         const editDfFormatter = editCompConf ? editCompConf.tableCellFormatter : null
         const cellValue = getCellValue(row, column)
@@ -10372,8 +10379,9 @@ export default defineVxeComponent({
         if (column) {
           const { filterStore } = reactData
           const { filterRender, filters } = column
+          const rendererOpts = computeRendererOpts.value
           const filterOptions = filters || []
-          const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
+          const compConf = isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
           const frMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
           filterStore.column = column
           // 复原状态
@@ -13684,7 +13692,8 @@ export default defineVxeComponent({
       if (emptySlot) {
         return emptySlot(emptyParams)
       } else {
-        const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
+        const rendererOpts = computeRendererOpts.value
+        const compConf = emptyOpts.name ? (rendererOpts[emptyOpts.name] || renderer.get(emptyOpts.name)) : null
         const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
         if (rtEmptyView) {
           return getSlotVNs(rtEmptyView(emptyOpts, emptyParams))
