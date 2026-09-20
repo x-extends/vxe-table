@@ -587,7 +587,7 @@ export default defineVxeComponent({
             // 处理插槽
             formOpts.items.forEach((item) => {
               XEUtils.each(item.slots, (func) => {
-                if (!XEUtils.isFunction(func)) {
+                if (func && !XEUtils.isFunction(func)) {
                   if (slots[func]) {
                     formSlots[func] = slots[func] as any
                   }
@@ -1768,7 +1768,7 @@ export default defineVxeComponent({
         XEUtils.eachTree(columns, (column) => {
           if (column.slots) {
             XEUtils.each(column.slots, (func) => {
-              if (!XEUtils.isFunction(func)) {
+              if (func && !XEUtils.isFunction(func)) {
                 if (!slots[func]) {
                   errLog('vxe.error.notSlot', [func])
                 }
