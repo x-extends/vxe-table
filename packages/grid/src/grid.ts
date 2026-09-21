@@ -1451,13 +1451,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       const { proxyConfig } = props
       const proxyOpts = $xeGrid.computeProxyOpts
+      const formOptions = proxyOpts.formOptions || {}
       if (reactData.tableLoading) {
         return
       }
       if (proxyConfig && isEnableConf(proxyOpts)) {
         $xeGrid.dispatchEvent('form-submit', params, params.$event)
         internalData.uFoot = true
-        $xeGrid.commitProxy('reload').then((rest) => {
+        $xeGrid.commitProxy(formOptions.submitMode || 'reload').then((rest) => {
           $xeGrid.dispatchEvent('proxy-query', { ...rest, isReload: true }, params.$event)
         })
         internalData.uFoot = false
