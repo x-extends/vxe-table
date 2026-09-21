@@ -10093,8 +10093,8 @@ const tableMethods: any = {
         }
       }
     }
-    // 如果是双击编辑模式
-    if (isEnableConf(editConfig) && editOpts.trigger === 'dblclick') {
+    // 如果是双击编辑模式，当autoClear=false时
+    if (isEnableConf(editConfig) && editOpts.autoClear !== false && editOpts.trigger === 'dblclick') {
       if (actived.row && actived.column) {
         if (editOpts.mode === 'row') {
           if (!$xeTable.eqRow(actived.row, row)) {
