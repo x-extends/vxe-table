@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "4.22.1",
+  "version": "4.22.2",
   "description": "A PC-end table component based on Vxe UI, supporting copy-paste, data pivot table, and high-performance virtual list table solution.",
   "scripts": {
     "update": "npm install --legacy-peer-deps",
@@ -61,12 +61,12 @@
     "gulp-uglify": "^3.0.2",
     "postcss": "^8.4.38",
     "rollup": "^4.53.3",
-    "sass": "^1.80.4",
+    "sass": "~1.101.7",
     "sass-loader": "^14.2.0",
     "typescript": "~5.9.3",
     "vue": "3.4.27",
     "vue-router": "~4.5.1",
-    "vxe-pc-ui": "4.18.17"
+    "vxe-pc-ui": "4.18.18"
   },
   "vetur": {
     "tags": "helper/vetur/tags.json",
