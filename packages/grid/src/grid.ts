@@ -875,7 +875,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
           }
           break
         }
-        case 'queryFooter': {
+        case 'queryFooter':
+        case 'query_footer': {
           const bqfMethod = ajax.beforeQueryFooter
           const qfMethod = ajax.queryFooter
           const aqfMethod = ajax.afterQueryFooter
@@ -1477,12 +1478,13 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const { $event } = params
       const proxyOpts = $xeGrid.computeProxyOpts
       if (proxyConfig && isEnableConf(proxyOpts)) {
+        const formOptions = proxyOpts.formOptions || {}
         $xeGrid.dispatchEvent('form-reset', params, $event)
         if ($xeTable) {
           $xeTable.clearScroll()
         }
         internalData.uFoot = true
-        $xeGrid.commitProxy('reload').then((rest) => {
+        $xeGrid.commitProxy(formOptions.resetMode === 'reset_form' ? 'query' : 'reload').then((rest) => {
           $xeGrid.dispatchEvent('proxy-query', { ...rest, isReload: true }, $event)
         })
         internalData.uFoot = false
