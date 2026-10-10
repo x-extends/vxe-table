@@ -7,8 +7,8 @@ import { VxeUI } from '../../ui'
 import { getSlotVNs } from '../../ui/src/vn'
 import { createComponentLog } from '../../ui/src/log'
 import { tableProps } from '../../table/src/props'
-import VxeTableComponent from '../../table/src/table'
-import VxeToolbarComponent from '../../toolbar/src/toolbar'
+import VxeTableComponent from '../../table'
+import VxeToolbarComponent from '../../toolbar'
 
 import type { VxeFormItemProps, VxeFormDefines, VxeComponentStyleType, VxeComponentSizeType, ValueOf, VxeFormInstance, VxeFormItemPropTypes, VxePagerInstance } from 'vxe-pc-ui'
 import type { GridReactData, VxeTablePropTypes, VxeGridConstructor, VxeToolbarPropTypes, VxeToolbarInstance, VxeGridPropTypes, VxeTableMethods, GridInternalData, VxeGridEmits, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, TableInternalData, VxeTableProps, VxeGridDefines } from '../../../types'
@@ -183,6 +183,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const props = $xeGrid
 
       return Object.assign({}, getConfig().grid.pagerConfig, props.pagerConfig)
+    },
+    computePagerProps () {
+      const $xeGrid = this
+
+      const pagerOpts = $xeGrid.computePagerOpts
+      return Object.assign({}, pagerOpts, { enabled: undefined, slots: undefined })
     },
     formOpts () {
       const $xeGrid = this
@@ -1223,7 +1229,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       if ($form) {
         return $form.validate()
       }
-      return $xeGrid.$nextTick() as unknown as Promise<VxeFormDefines.ValidateErrorMapParams>
+      return Promise.resolve()
     },
     validateFormField (field: VxeFormItemPropTypes.Field | VxeFormItemPropTypes.Field[] | VxeFormDefines.ItemInfo | VxeFormDefines.ItemInfo[] | null) {
       const $xeGrid = this
@@ -1232,7 +1238,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       if ($form) {
         return $form.validateField(field)
       }
-      return $xeGrid.$nextTick() as unknown as Promise<VxeFormDefines.ValidateErrorMapParams>
+      return Promise.resolve()
     },
     clearFormValidate (field?: VxeFormItemPropTypes.Field | VxeFormItemPropTypes.Field[] | VxeFormDefines.ItemInfo | VxeFormDefines.ItemInfo[] | null) {
       const $xeGrid = this
@@ -1886,6 +1892,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const { proxyConfig, pagerConfig } = props
       const proxyOpts = $xeGrid.computeProxyOpts
       const pagerOpts = $xeGrid.computePagerOpts
+      const pagerProps = $xeGrid.computePagerProps
       const pagerSlot = slots.pager
       if ((pagerConfig && isEnableConf(pagerOpts)) || slots.pager) {
         return h('div', {
@@ -1899,7 +1906,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 ? h(VxeUIPagerComponent, {
                   ref: 'refPager',
                   props: {
-                    ...pagerOpts,
+                    ...pagerProps,
                     ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {})
                   },
                   on: {

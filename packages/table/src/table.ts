@@ -2142,7 +2142,7 @@ export default {
       if (this.autoResize) {
         const resizeObserver = globalResize.create(() => {
           if (this.autoResize) {
-            this.handleResizeEvent()
+            this.layoutReFlag++
           }
         })
         resizeObserver.observe(this.$el)

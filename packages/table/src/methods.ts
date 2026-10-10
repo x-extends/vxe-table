@@ -13565,7 +13565,7 @@ const tableMethods: any = {
   scrollToColumn (fieldOrColumn: any, options?: VxeTableDefines.ScrollToColumnConfig) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    return handleScrollToRowColumn($xeTable, null, fieldOrColumn, options)
+    return handleScrollToRowColumn($xeTable, fieldOrColumn, null, options)
   },
   /**
    * 如果有滚动条，则滚动到第一列
