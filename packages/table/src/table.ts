@@ -14958,7 +14958,7 @@ export default defineVxeComponent({
           const parentEl = $xeTable.getParentElem()
           resizeObserver = globalResize.create(() => {
             if (props.autoResize) {
-              handleResizeEvent()
+              layoutReFlag.value++
             }
           })
           if (el) {

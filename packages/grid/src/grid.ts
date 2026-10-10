@@ -10,8 +10,8 @@ import { getSlotVNs } from '../../ui/src/vn'
 import { createComponentLog } from '../../ui/src/log'
 import { tableEmits } from '../../table/src/emits'
 import { tableProps } from '../../table/src/props'
-import VxeTableComponent from '../../table/src/table'
-import VxeToolbarComponent from '../../toolbar/src/toolbar'
+import VxeTableComponent from '../../table'
+import VxeToolbarComponent from '../../toolbar'
 
 import type { ValueOf, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance, VxeComponentStyleType } from 'vxe-pc-ui'
 import type { VxeTableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, GridInternalData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxeToolbarInstance, GridPrivateRef, VxeTableProps, VxeTableConstructor, VxeTablePrivateMethods, VxeTableEvents, VxeTableDefines, VxeTableEventProps, VxeGridProps, VxeGridDefines } from '../../../types'
@@ -123,6 +123,11 @@ export default defineVxeComponent({
 
     const computePagerOpts = computed(() => {
       return Object.assign({}, getConfig().grid.pagerConfig, props.pagerConfig)
+    })
+
+    const computePagerProps = computed(() => {
+      const pagerOpts = computePagerOpts.value
+      return Object.assign({}, pagerOpts, { enabled: undefined, slots: undefined })
     })
 
     const computeFormOpts = computed(() => {
@@ -807,6 +812,7 @@ export default defineVxeComponent({
       const { proxyConfig, pagerConfig } = props
       const proxyOpts = computeProxyOpts.value
       const pagerOpts = computePagerOpts.value
+      const pagerProps = computePagerProps.value
       const pagerSlot = slots.pager
       if ((pagerConfig && isEnableConf(pagerOpts)) || slots.pager) {
         return h('div', {
@@ -819,7 +825,7 @@ export default defineVxeComponent({
               VxeUIPagerComponent
                 ? h(VxeUIPagerComponent, {
                   ref: refPager,
-                  ...pagerOpts,
+                  ...pagerProps,
                   ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {}),
                   onPageChange: pageChangeEvent
                 }, getConfigSlot(pagerOpts.slots))
@@ -1570,14 +1576,14 @@ export default defineVxeComponent({
         if ($form) {
           return $form.validate()
         }
-        return nextTick()
+        return Promise.resolve()
       },
       validateFormField (field) {
         const $form = refForm.value
         if ($form) {
           return $form.validateField(field)
         }
-        return nextTick()
+        return Promise.resolve()
       },
       clearFormValidate (field) {
         const $form = refForm.value
