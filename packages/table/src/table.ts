@@ -8658,7 +8658,7 @@ export default defineVxeComponent({
               $xeTable.closeMenu()
             }
             $xeTable.closeFilter()
-            if (keyboardConfig && keyboardOpts.isEsc) {
+            if (keyboardOpts.isEsc) {
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 const params = actived.args
@@ -8743,7 +8743,7 @@ export default defineVxeComponent({
               $xeTable.closeMenu()
             }
             $xeTable.closeFilter()
-            if (keyboardConfig && keyboardOpts.isEsc) {
+            if (keyboardOpts.isEsc) {
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 const params = actived.args
@@ -8754,7 +8754,7 @@ export default defineVxeComponent({
                 }
               }
             }
-          } else if (isSpacebar && keyboardConfig && keyboardOpts.isChecked && selectRow && selectColumn && (selectColumn.type === 'checkbox' || selectColumn.type === 'radio')) {
+          } else if (isSpacebar && keyboardOpts.isChecked && selectRow && selectColumn && (selectColumn.type === 'checkbox' || selectColumn.type === 'radio')) {
             // 空格键支持选中复选框
             evnt.preventDefault()
             if (selectColumn.type === 'checkbox') {
@@ -8777,7 +8777,7 @@ export default defineVxeComponent({
             internalData.keyCtxTimeout = setTimeout(() => {
               internalData._keyCtx = false
             }, 1000)
-          } else if (isEnter && !isAltKey && keyboardConfig && keyboardOpts.isEnter && (selectRow || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
+          } else if (isEnter && !isAltKey && keyboardOpts.isEnter && (selectRow || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
             // 退出选中
             if (isControlKey) {
               // 如果是激活编辑状态，则取消编辑
@@ -8897,7 +8897,7 @@ export default defineVxeComponent({
                 }
               }
             }
-          } else if (operArrow && keyboardConfig && keyboardOpts.isArrow) {
+          } else if (operArrow && keyboardOpts.isArrow) {
             if (!isEditStatus) {
               // 如果按下了方向键
               if (mouseOpts.selected && selectRow && selectColumn) {
@@ -8913,7 +8913,7 @@ export default defineVxeComponent({
                 }
               }
             }
-          } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
+          } else if (isTab && keyboardOpts.isTab) {
             // 如果按下了 Tab 键切换
             if (selectRow || actived.row) {
               const activeRow = selectRow || actived.row
@@ -8961,7 +8961,7 @@ export default defineVxeComponent({
                 }
               }
             }
-          } else if (keyboardConfig && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selectRow || selectColumn)) {
+          } else if (keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selectRow || selectColumn)) {
             // 如果是删除键
             if (!isEditStatus) {
               const { delMethod } = keyboardOpts
@@ -8990,7 +8990,7 @@ export default defineVxeComponent({
                 dispatchEvent('cell-delete-value', params, evnt)
               }
             }
-          } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selectRow || selectColumn)) {
+          } else if (hasBackspaceKey && keyboardOpts.isBack && isEnableConf(editConfig) && (selectRow || selectColumn)) {
             if (!isEditStatus) {
               const { backMethod } = keyboardOpts
               // 如果是删除键
@@ -9038,7 +9038,7 @@ export default defineVxeComponent({
                 .then(() => $xeTable.scrollToRow(parentRow))
                 .then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
             }
-          } else if (keyboardConfig && keyboardOpts.isUndoRedo && isControlKey && (isZ || isY) && !hasAxternalInputTarget(evnt.target)) {
+          } else if (keyboardOpts.isUndoRedo && isControlKey && (isZ || isY) && !hasAxternalInputTarget(evnt.target)) {
             if (evnt.target) {
               if (isY || (hasShiftKey && isZ)) {
               // 恢复被撤销的操作：Ctrl + Y 或 Ctrl + Shift + Z
