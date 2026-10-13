@@ -1,6 +1,6 @@
 import { CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
-import { getFuncText, isEnableConf } from '../../ui/src/utils'
+import { getFuncText, hasEnableConf, isEnableConf } from '../../ui/src/utils'
 import { initTpImg, toCssUnit } from '../../ui/src/dom'
 import { createReactData, createInternalData, createHandleGetRowId, getCalcHeight, hasDeepKey } from './util'
 import { VxeUI } from '../../ui'
@@ -1742,7 +1742,7 @@ export default {
 
     handleKeyField($xeTable)
 
-    const { editConfig, exportConfig, importConfig, treeConfig, minHeight, keepSource } = props
+    const { editConfig, exportConfig, importConfig, treeConfig, minHeight, keepSource, areaConfig } = props
     const { scrollXStore, scrollYStore } = internalData
     const columnOpts = $xeTable.computeColumnOpts
     const columnDragOpts = $xeTable.computeColumnDragOpts
@@ -1842,13 +1842,13 @@ export default {
     //   warnLog('vxe.error.delProp', ['scroll-x', 'virtual-x-config'])
     // }
     // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
-    if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), importOpts.types)) {
+    if (hasEnableConf(importConfig, importOpts) && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), importOpts.types)) {
       warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)).join(',') || XEUtils.keys(importOpts._typeMaps).join(',')])
     }
-    if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(XEUtils.keys(exportOpts._typeMaps), exportOpts.types)) {
+    if (hasEnableConf(exportConfig, exportOpts) && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(XEUtils.keys(exportOpts._typeMaps), exportOpts.types)) {
       warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)).join(',') || XEUtils.keys(exportOpts._typeMaps).join(',')])
     }
-    if (exportConfig && XEUtils.isBoolean((exportOpts as any).isAllExpand)) {
+    if (hasEnableConf(exportConfig, exportOpts) && XEUtils.isBoolean((exportOpts as any).isAllExpand)) {
       warnLog('vxe.error.delProp', ['isAllExpand', 'isTreeAllExpanded'])
     }
 
@@ -1863,8 +1863,8 @@ export default {
     if (rowOpts.height && !this.showOverflow) {
       warnLog('vxe.error.notProp', ['table.show-overflow'])
     }
-    if (!$xeTable.triggerClAreaMnEvent) {
-      if (props.areaConfig) {
+    if (!$xeTable.triggerClAaMnEvent) {
+      if (hasEnableConf(areaConfig, areaOpts)) {
         warnLog('vxe.error.notProp', ['area-config'])
       }
       if (props.clipConfig) {
@@ -1984,10 +1984,10 @@ export default {
     if (columnOpts.currentMethod) {
       warnLog('vxe.error.delProp', ['row-config.currentMethod', 'current-column-config.beforeSelectMethod'])
     }
-    // if ((rowOpts.isCurrent || highlightCurrentRow) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
+    // if ((rowOpts.isCurrent || highlightCurrentRow) && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isArrow && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
     //   warnLog('vxe.error.notConflictProp', ['row-config.isCurrent & keyboard-config.isArrow', 'current-row-config.isFollowSelected'])
     // }
-    // if ((columnOpts.isCurrent || highlightCurrentColumn) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
+    // if ((columnOpts.isCurrent || highlightCurrentColumn) && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isArrow && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
     //   warnLog('vxe.error.notConflictProp', ['column-config.isCurrent & keyboard-config.isArrow', 'current-column-config.isFollowSelected'])
     // }
 
@@ -2007,18 +2007,18 @@ export default {
     // }
 
     // 检查是否有安装需要的模块
-    if (props.editConfig && !$xeTable.insert) {
-      errLog('vxe.error.reqModule', ['Edit'])
-    }
-    if (props.editRules && !$xeTable.validate) {
-      errLog('vxe.error.reqModule', ['Validator'])
-    }
-    if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xeTable.handleCellMousedownEvent) {
-      errLog('vxe.error.reqModule', ['Keyboard'])
-    }
-    if ((props.printConfig || props.importConfig || props.exportConfig) && !$xeTable.exportData) {
-      errLog('vxe.error.reqModule', ['Export'])
-    }
+    // if (props.editConfig && !$xeTable.insert) {
+    //   errLog('vxe.error.reqModule', ['Edit'])
+    // }
+    // if (props.editRules && !$xeTable.validate) {
+    //   errLog('vxe.error.reqModule', ['Validator'])
+    // }
+    // if ((checkboxOpts.range || hasEnableConf(keyboardConfig, keyboardOpts) || hasEnableConf(mouseConfig, mouseOpts)) && !$xeTable.handleCellMousedownEvent) {
+    //   errLog('vxe.error.reqModule', ['Keyboard'])
+    // }
+    // if ((hasEnableConf(printConfig, printOpts) || hasEnableConf(importConfig, importOpts) || hasEnableConf(exportConfig, exportOpts)) && !$xeTable.exportData) {
+    //   errLog('vxe.error.reqModule', ['Export'])
+    // }
 
     Object.assign(scrollYStore, {
       startIndex: 0,
@@ -2248,7 +2248,7 @@ export default {
 
     const { xID } = $xeTable
 
-    const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
+    const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules, importConfig, exportConfig, printConfig } = props
     const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, isRowGroupStatus, columnStore, filterStore, customStore, tooltipStore } = reactData
     const { leftList, rightList } = columnStore
     const loadingSlot = slots.loading
@@ -2275,10 +2275,13 @@ export default {
     const isContentMenu = $xeTable.computeIsContentMenu
     const currLoading = reactData.isColLoading || reactData.isRowLoading || loading
     const resizableOpts = $xeTable.computeResizableOpts
-    const isArea = mouseConfig && mouseOpts.area
+    const isArea = hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area
     const columnDragOpts = $xeTable.computeColumnDragOpts
     const scrollbarXToTop = $xeTable.computeScrollbarXToTop
     const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
+    const exportOpts = $xeTable.computeExportOpts
+    const importOpts = $xeTable.computeImportOpts
+    const printOpts = $xeTable.computePrintOpts
     const { isCrossTableDrag } = rowDragOpts
     const tbOns: {
       contextmenu: (...args: any[]) => void
@@ -2299,7 +2302,7 @@ export default {
         'vxe-editable': !!editConfig,
         'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete',
         'cell--highlight': highlightCell,
-        'cell--selected': mouseConfig && mouseOpts.selected,
+        'cell--selected': hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected,
         'cell--area': isArea,
         'header-cell--area': isArea && areaOpts.selectCellByHeader,
         'body-cell--area': isArea && areaOpts.selectCellByBody,
@@ -2515,7 +2518,7 @@ export default {
       /**
        * 导入
        */
-      initStore.import && this.importConfig
+      initStore.import && hasEnableConf(importConfig, importOpts)
         ? h(TableImportPanelComponent, {
           key: 'it',
           props: {
@@ -2527,7 +2530,7 @@ export default {
       /**
        * 导出
        */
-      initStore.export && (this.exportConfig || this.printConfig)
+      initStore.export && (hasEnableConf(exportConfig, exportOpts) || hasEnableConf(printConfig, printOpts))
         ? h(TableExportPanelComponent, {
           key: 'et',
           props: {

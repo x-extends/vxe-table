@@ -2,7 +2,7 @@ import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { defineVxeComponent } from '../../ui/src/comp'
-import { isEnableConf, getClass, getDefaultConfig } from '../../ui/src/utils'
+import { isEnableConf, getClass, getDefaultConfig, hasEnableConf } from '../../ui/src/utils'
 import { getCalcHeight, convertHeaderColumnToRows, convertHeaderToGridRows } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 
@@ -34,6 +34,7 @@ function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMod
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   const headerCellOpts = $xeTable.computeHeaderCellOpts
   const rendererOpts = $xeTable.computeRendererOpts
+  const mouseOpts = $xeTable.computeMouseOpts
   const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
   const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
   const isLastRow = _rowIndex === headerGroups.length - 1
@@ -125,7 +126,7 @@ function renderRows (h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMod
       isDisabledDrag = !!(dragDisabledMethod && dragDisabledMethod(cellParams))
     }
     // 按下事件处理
-    if (mouseConfig || isColDragCell) {
+    if (hasEnableConf(mouseConfig, mouseOpts) || isColDragCell) {
       thOns.mousedown = (evnt: any) => $xeTable.triggerHeaderCellMousedownEvent(evnt, cellParams)
     }
     // 拖拽列事件
@@ -567,7 +568,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
             ref: 'refHeaderTHead'
           }, renderHeads(h, _vm, isGroup, isOptimizeMode, renderHeaderList, renderColumnList))
         ]),
-        mouseConfig && mouseOpts.area
+        hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area
           ? h('div', {
             class: 'vxe-table--cell-area',
             attrs: {

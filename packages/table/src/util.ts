@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import { ColumnInfo } from './columnInfo'
 import { isScale, isPx, queryElement } from '../../ui/src/dom'
 import { createComponentLog } from '../../ui/src/log'
-import { eqEmptyValue } from '../../ui/src/utils'
+import { eqEmptyValue, hasEnableConf } from '../../ui/src/utils'
 
 import type { VxeTableDefines, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePrivateMethods, VxeTablePropTypes } from '../../../types'
 
@@ -949,6 +949,9 @@ export function clearTableDefaultStatus ($xeTable: VxeTableConstructor & VxeTabl
   const props = $xeTable
   const internalData = $xeTable as unknown as TableInternalData
 
+  const { keyboardConfig, mouseConfig } = props
+  const mouseOpts = $xeTable.computeMouseOpts
+  const keyboardOpts = $xeTable.computeKeyboardOpts
   internalData.initStatus = false
   const actionList = [
     $xeTable.clearSort(),
@@ -968,12 +971,12 @@ export function clearTableDefaultStatus ($xeTable: VxeTableConstructor & VxeTabl
       $xeTable.clearFilter()
     )
   }
-  if ($xeTable.clearSelected && (props.keyboardConfig || props.mouseConfig)) {
+  if ($xeTable.clearSelected && (hasEnableConf(keyboardConfig, keyboardOpts) || hasEnableConf(mouseConfig, mouseOpts))) {
     actionList.push(
       $xeTable.clearSelected()
     )
   }
-  if ($xeTable.clearCellAreas && props.mouseConfig) {
+  if ($xeTable.clearCellAreas && hasEnableConf(mouseConfig, mouseOpts)) {
     actionList.push(
       $xeTable.clearCellAreas(),
       $xeTable.clearCopyCellArea()

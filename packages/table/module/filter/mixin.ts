@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { toFilters, handleFieldOrColumn, getRefElem } from '../../src/util'
 import { toCssUnit, triggerEvent, updatePanelPlacement } from '../../../ui/src/dom'
-import { isEnableConf } from '../../../ui/src/utils'
+import { hasEnableConf, isEnableConf } from '../../../ui/src/utils'
 
 import type { VxeTableConstructor, VxeTableDefines, TableReactData, TableInternalData, VxeColumnPropTypes, VxeTablePrivateMethods } from '../../../../types'
 
@@ -428,7 +428,7 @@ export default {
         $xeTable.handleTableData(true)
         $xeTable.checkSelectionStatus()
       }
-      if (mouseConfig && mouseOpts.area && $xeTable.handleFilterEvent) {
+      if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleFilterEvent) {
         $xeTable.handleFilterEvent(evnt as Event, params)
       }
       if (evnt) {

@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import { getRefElem } from '../../src/util'
 import { getAbsolutePos, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
+import { hasEnableConf } from '../../../ui/src/utils'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, TableReactData, TableInternalData } from '../../../../types'
 
@@ -492,13 +493,13 @@ export default {
       const checkboxOpts = $xeTable.computeCheckboxOpts
       const mouseOpts = $xeTable.computeMouseOpts
       const editOpts = $xeTable.computeEditOpts
-      if (mouseConfig && mouseOpts.area && $xeTable.triggerClAreaMnEvent) {
-        return $xeTable.triggerClAreaMnEvent(evnt, params)
+      if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.triggerClAaMnEvent) {
+        return $xeTable.triggerClAaMnEvent(evnt, params)
       } else {
         if (checkboxConfig && checkboxOpts.range) {
           handleCheckboxRangeEvent($xeTable, evnt, params)
         }
-        if (mouseConfig && mouseOpts.selected) {
+        if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected) {
           if (!editConfig || editOpts.mode === 'cell') {
             $xeTable.handleSelected(params, evnt)
           }

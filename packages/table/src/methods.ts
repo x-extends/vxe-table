@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollLeftTo, wheelScrollTopTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement, hasAxternalInputTarget } from '../../ui/src/dom'
-import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
+import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue, hasEnableConf } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
 import { getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, getColReMaxWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem, getCellRestHeight, getLastChildColumn, getRowMaxHeight, handleCustomStoreConfig, encodeRowid } from './util'
@@ -1320,7 +1320,7 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   if (currentRow) {
     $xeTable.setCurrentRow(currentRow)
   }
-  if (mouseConfig && mouseOpts.selected && editStore.selected.row && editStore.selected.column) {
+  if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected && editStore.selected.row && editStore.selected.column) {
     $xeTable.addCellSelectedClass()
   }
   if ($xeGanttView && $xeGanttView.handleUpdateStyle) {
@@ -3601,12 +3601,13 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
-  const { keepSource, treeConfig, aggregateConfig, rowGroupConfig } = props
+  const { keepSource, treeConfig, rowGroupConfig, aggregateConfig, mouseConfig } = props
   const { rowGroupList, scrollYLoad: oldScrollYLoad } = reactData
   const { initStatus, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
   const rowOpts = $xeTable.computeRowOpts
   const treeOpts = $xeTable.computeTreeOpts
   const expandOpts = $xeTable.computeExpandOpts
+  const mouseOpts = $xeTable.computeMouseOpts
   const { transform } = treeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
   let treeData = []
@@ -3694,7 +3695,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   if (keepSource) {
     $xeTable.cacheSourceMap(fullData)
   }
-  if ($xeTable.clearCellAreas && props.mouseConfig) {
+  if ($xeTable.clearCellAreas && hasEnableConf(mouseConfig, mouseOpts)) {
     $xeTable.clearCellAreas()
     $xeTable.clearCopyCellArea()
   }
@@ -4885,10 +4886,25 @@ const tableMethods: any = {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const $xeGrid = $xeTable.$xeGrid
     const $xeGantt = $xeTable.$xeGantt
-    const $xeGGWrapper = $xeGrid || $xeGantt
 
-    const { $el } = this
-    return $xeGGWrapper ? $xeGGWrapper.$el.parentNode : $el.parentNode
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    if (!el) {
+      return null
+    }
+    const parentEl = el.parentElement
+    if (!parentEl) {
+      return null
+    }
+    if ($xeGantt && hasClass(parentEl, 'vxe-gantt--table-wrapper')) {
+      return $xeGantt.getParentElem()
+    } else if ($xeGrid && hasClass(parentEl, 'vxe-grid--table-wrapper')) {
+      return $xeGrid.getParentElem()
+    }
+    // 如果是虚拟滚动条
+    if (parentEl && hasClass(parentEl, 'vxe-scrollbar--view-inner')) {
+      return parentEl.parentElement
+    }
+    return parentEl
   },
   /**
    * 获取父容器的高度
@@ -4901,22 +4917,30 @@ const tableMethods: any = {
 
     const { height } = props
     const el = $xeTable.$refs.refElem as HTMLDivElement
-    if (el) {
-      const parentElem = el.parentNode as HTMLElement
-      const parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
-      let parentWrapperHeight = 0
-      if (parentElem) {
-        if ($xeGantt && hasClass(parentElem, 'vxe-gantt--table-wrapper')) {
-          parentWrapperHeight = $xeGantt.getParentHeight()
-        } else if ($xeGrid && hasClass(parentElem, 'vxe-grid--table-wrapper')) {
-          parentWrapperHeight = $xeGrid.getParentHeight()
-        } else {
-          parentWrapperHeight = parentElem.clientHeight
-        }
-      }
-      return Math.floor(parentWrapperHeight - parentPaddingSize)
+    if (!el) {
+      return 0
     }
-    return 0
+    let parentEl = el.parentElement
+    let parentPaddingSize = 0
+    let parentWrapperHeight = 0
+    if (!parentEl) {
+      return 0
+    }
+    if ($xeGantt && hasClass(parentEl, 'vxe-gantt--table-wrapper')) {
+      parentWrapperHeight = $xeGantt.getParentHeight()
+    } else if ($xeGrid && hasClass(parentEl, 'vxe-grid--table-wrapper')) {
+      parentWrapperHeight = $xeGrid.getParentHeight()
+    } else {
+      // 如果是虚拟滚动条
+      if (parentEl && hasClass(parentEl, 'vxe-scrollbar--view-inner')) {
+        parentEl = parentEl.parentElement
+      }
+      if (parentEl) {
+        parentWrapperHeight = parentEl.clientHeight
+        parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentEl) : 0
+      }
+    }
+    return Math.floor(parentWrapperHeight - parentPaddingSize)
   },
   /**
    * 获取需要排除的高度
@@ -6716,7 +6740,8 @@ const tableMethods: any = {
     const props = $xeTable
 
     const { mouseConfig } = props
-    if (mouseConfig) {
+    const mouseOpts = $xeTable.computeMouseOpts
+    if (hasEnableConf(mouseConfig, mouseOpts)) {
       if ($xeTable.clearSelected) {
         $xeTable.clearSelected()
       }
@@ -7812,6 +7837,7 @@ const tableMethods: any = {
     const editOpts = $xeTable.computeEditOpts
     const validOpts = $xeTable.computeValidOpts
     const areaOpts = $xeTable.computeAreaOpts
+    const mouseOpts = $xeTable.computeMouseOpts
     const { actived } = editStore
     const tableFilter = $xeTable.$refs.refTableFilter as Vue
     const tableMenu = $xeTable.$refs.refTableMenu as Vue
@@ -7903,7 +7929,7 @@ const tableMethods: any = {
           }
         }
       }
-    } else if (mouseConfig) {
+    } else if (hasEnableConf(mouseConfig, mouseOpts)) {
       if (!getEventTargetNode(evnt, el).flag && !($xeGGWrapper && getEventTargetNode(evnt, $xeGGWrapper.$el).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.$el).flag) && !(this.$toolbar && getEventTargetNode(evnt, this.$toolbar.$el).flag)) {
         if ($xeTable.clearSelected) {
           $xeTable.clearSelected()
@@ -7984,20 +8010,20 @@ const tableMethods: any = {
     if (isEsc) {
       $xeTable.preventEvent(evnt, 'event.keydown', null, () => {
         $xeTable.dispatchEvent('keydown-start', {}, evnt)
-        if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKdClAreaEvent) {
+        if (hasEnableConf(keyboardConfig, keyboardOpts) && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleKdClAreaEvent) {
           $xeTable.handleKdClAreaEvent(evnt)
         } else if (actived.row || filterStore.visible || ctxMenuStore.visible) {
           evnt.stopPropagation()
           // 如果按下了 Esc 键，关闭快捷菜单、筛选
           $xeTable.closeFilter()
           $xeTable.closeMenu()
-          if (keyboardConfig && keyboardOpts.isEsc) {
+          if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isEsc) {
             // 如果是激活编辑状态，则取消编辑
             if (actived.row) {
               const params = actived.args
               $xeTable.handleClearEdit(evnt)
               // 如果配置了选中功能，则为选中状态
-              if (mouseConfig && mouseOpts.selected) {
+              if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected) {
                 $xeTable.$nextTick(() => $xeTable.handleSelected(params, evnt))
               }
             }
@@ -8075,7 +8101,7 @@ const tableMethods: any = {
           } else {
             $xeTable.moveCtxMenu(evnt, ctxMenuStore, 'selected', isRightArrow, true, menuList)
           }
-        } else if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKdClAreaEvent) {
+        } else if (hasEnableConf(keyboardConfig, keyboardOpts) && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleKdClAreaEvent) {
           $xeTable.handleKdClAreaEvent(evnt)
         } else if (isEsc) {
           // 如果按下了 Esc 键，关闭快捷菜单、筛选
@@ -8083,7 +8109,7 @@ const tableMethods: any = {
             $xeTable.closeMenu()
           }
           $xeTable.closeFilter()
-          if (keyboardConfig && keyboardOpts.isEsc) {
+          if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isEsc) {
             // 如果是激活编辑状态，则取消编辑
             if (actived.row) {
               const params = actived.args
@@ -8094,7 +8120,7 @@ const tableMethods: any = {
               }
             }
           }
-        } else if (keyboardConfig && isSpacebar && keyboardOpts.isChecked && selectRow && selectColumn && (selectColumn.type === 'checkbox' || selectColumn.type === 'radio')) {
+        } else if (hasEnableConf(keyboardConfig, keyboardOpts) && isSpacebar && keyboardOpts.isChecked && selectRow && selectColumn && (selectColumn.type === 'checkbox' || selectColumn.type === 'radio')) {
           // 空格键支持选中复选框
           evnt.preventDefault()
           if (selectColumn.type === 'checkbox') {
@@ -8117,7 +8143,7 @@ const tableMethods: any = {
           internalData.keyCtxTimeout = setTimeout(() => {
             internalData._keyCtx = false
           }, 1000)
-        } else if (isEnter && !hasAltKey && keyboardConfig && keyboardOpts.isEnter && (selectRow || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
+        } else if (isEnter && !hasAltKey && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isEnter && (selectRow || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
           // 退出选中
           if (isControlKey) {
             // 如果是激活编辑状态，则取消编辑
@@ -8125,7 +8151,7 @@ const tableMethods: any = {
               const params = actived.args
               $xeTable.handleClearEdit(evnt)
               // 如果配置了选中功能，则为选中状态
-              if (mouseConfig && mouseOpts.selected) {
+              if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected) {
                 $xeTable.$nextTick(() => $xeTable.handleSelected(params, evnt))
               }
             }
@@ -8235,7 +8261,7 @@ const tableMethods: any = {
               }
             }
           }
-        } else if (operArrow && keyboardConfig && keyboardOpts.isArrow) {
+        } else if (operArrow && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isArrow) {
           if (!isEditStatus) {
             // 如果按下了方向键
             if (mouseOpts.selected && selectRow && selectColumn) {
@@ -8251,7 +8277,7 @@ const tableMethods: any = {
               }
             }
           }
-        } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
+        } else if (isTab && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isTab) {
           // 如果按下了 Tab 键切换
           if (selectRow || actived.row) {
             const activeRow = selectRow || actived.row
@@ -8299,7 +8325,7 @@ const tableMethods: any = {
               }
             }
           }
-        } else if (keyboardConfig && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selectRow || selectColumn)) {
+        } else if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selectRow || selectColumn)) {
           // 如果是删除键
           if (!isEditStatus) {
             const { delMethod } = keyboardOpts
@@ -8328,7 +8354,7 @@ const tableMethods: any = {
               $xeTable.dispatchEvent('cell-delete-value', params, evnt)
             }
           }
-        } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selectRow || selectColumn)) {
+        } else if (hasBackspaceKey && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isBack && isEnableConf(editConfig) && (selectRow || selectColumn)) {
           if (!isEditStatus) {
             const { backMethod } = keyboardOpts
             // 如果是删除键
@@ -8359,7 +8385,7 @@ const tableMethods: any = {
               }
             }
           }
-        } else if (hasBackspaceKey && keyboardConfig && treeConfig && keyboardOpts.isBack && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
+        } else if (hasBackspaceKey && hasEnableConf(keyboardConfig, keyboardOpts) && treeConfig && keyboardOpts.isBack && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
           // 如果树形表格回退键关闭当前行返回父节点
           const { parent: parentRow } = XEUtils.findTree(internalData.afterTreeFullData, item => item === currentRow, { children: childrenField })
           if (parentRow) {
@@ -8376,7 +8402,7 @@ const tableMethods: any = {
               .then(() => $xeTable.scrollToRow(parentRow))
               .then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
           }
-        } else if (keyboardConfig && keyboardOpts.isUndoRedo && isControlKey && (isZ || isY) && !hasAxternalInputTarget(evnt.target)) {
+        } else if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isUndoRedo && isControlKey && (isZ || isY) && !hasAxternalInputTarget(evnt.target)) {
           if (isY || (hasShiftKey && isZ)) {
             // 恢复被撤销的操作：Ctrl + Y 或 Ctrl + Shift + Z
             evnt.preventDefault()
@@ -8386,7 +8412,7 @@ const tableMethods: any = {
             evnt.preventDefault()
             $xeTable.handleUndoStackEvent(evnt)
           }
-        } else if (keyboardConfig && keyboardOpts.isEdit && !isControlKey && (isSpacebar || isProcess || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
+        } else if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isEdit && !isControlKey && (isSpacebar || isProcess || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
           const { editMode, editMethod } = keyboardOpts
           // 启用编辑后，空格键功能将失效
           // if (isSpacebar) {
@@ -8442,7 +8468,7 @@ const tableMethods: any = {
     const { actived } = editStore
     if (isActivated && !filterStore.visible) {
       if (!(actived.row || actived.column)) {
-        if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xeTable.handlePeClAreaEvent) {
+        if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isClip && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handlePeClAreaEvent) {
           $xeTable.handlePeClAreaEvent(evnt)
         }
       }
@@ -8463,7 +8489,7 @@ const tableMethods: any = {
     const { actived } = editStore
     if (isActivated && !filterStore.visible) {
       if (!(actived.row || actived.column)) {
-        if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xeTable.handleCyClAreaEvent) {
+        if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isClip && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleCyClAreaEvent) {
           $xeTable.handleCyClAreaEvent(evnt)
         }
       }
@@ -8484,7 +8510,7 @@ const tableMethods: any = {
     const { actived } = editStore
     if (isActivated && !filterStore.visible) {
       if (!(actived.row || actived.column)) {
-        if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xeTable.handleCutCellAreaEvent) {
+        if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isClip && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleCutCellAreaEvent) {
           $xeTable.handleCutCellAreaEvent(evnt)
         }
       }
@@ -9963,7 +9989,7 @@ const tableMethods: any = {
 
     const { mouseConfig } = props
     const mouseOpts = $xeTable.computeMouseOpts
-    const isMouseSelected = mouseConfig && mouseOpts.selected
+    const isMouseSelected = hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected
     const column = handleFieldOrColumn($xeTable, fieldOrColumn)
     if (column) {
       $xeTable.clearCurrentColumn()
@@ -10178,7 +10204,7 @@ const tableMethods: any = {
     const { field, sortable, order } = column
     if (sortable) {
       const params = { $table: $xeTable, $event: evnt, column, field, property: field, order, sortList: $xeTable.getSortColumns(), sortTime: column.sortTime }
-      if (mouseConfig && mouseOpts.area && $xeTable.handleSortEvent) {
+      if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleSortEvent) {
         $xeTable.handleSortEvent(evnt, params)
       }
       if (!order) {
@@ -10265,7 +10291,7 @@ const tableMethods: any = {
         $xeTable.handleHeaderCellDragMousedownEvent(evnt, params)
       }
     }
-    if (!triggerDrag && mouseConfig && mouseOpts.area && $xeTable.handleHeaderCellAreaMouseDnEvent) {
+    if (!triggerDrag && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleHeaderCellAreaMouseDnEvent) {
       $xeTable.handleHeaderCellAreaMouseDnEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
     }
     $xeTable.focus()
@@ -11073,6 +11099,7 @@ const tableMethods: any = {
 
     const { mouseConfig } = props
     const columnDragOpts = $xeTable.computeColumnDragOpts
+    const mouseOpts = $xeTable.computeMouseOpts
     const { animation, isPeerDrag, isCrossDrag, isSelfToChildDrag, isToChildDrag, dragEndMethod, dragToChildMethod } = columnDragOpts
     const { collectColumn, fullColumnIdData } = internalData
     const el = $xeTable.$refs.refElem as HTMLDivElement
@@ -11246,7 +11273,7 @@ const tableMethods: any = {
         })
 
         $xeTable.handleClearStack()
-        if (mouseConfig) {
+        if (hasEnableConf(mouseConfig, mouseOpts)) {
           if ($xeTable.clearSelected) {
             $xeTable.clearSelected()
           }
@@ -13987,7 +14014,7 @@ const tableMethods: any = {
 
     const { mouseConfig } = props
     const mouseOpts = $xeTable.computeMouseOpts
-    if (mouseConfig && mouseOpts.area && $xeTable.handleRecalculateCellAreaEvent) {
+    if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleRecalculateCellAreaEvent) {
       return $xeTable.handleRecalculateCellAreaEvent()
     }
     return $xeTable.$nextTick()

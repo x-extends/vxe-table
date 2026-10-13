@@ -2,7 +2,7 @@ import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { defineVxeComponent } from '../../ui/src/comp'
-import { isEnableConf, getClass, getDefaultConfig } from '../../ui/src/utils'
+import { isEnableConf, getClass, getDefaultConfig, hasEnableConf } from '../../ui/src/utils'
 import { getRowid, createHandleGetRowId, getCellRestHeight } from './util'
 import { updateCellTitle } from '../../ui/src/dom'
 import { getSlotVNs } from '../../ui/src/vn'
@@ -227,7 +227,7 @@ function renderTdColumn (
     }
   }
   // 按下事件处理
-  if (isRowDragCell || checkboxOpts.range || mouseConfig) {
+  if (isRowDragCell || checkboxOpts.range || hasEnableConf(mouseConfig, mouseOpts)) {
     tdOns.mousedown = (evnt: MouseEvent) => {
       $xeTable.triggerCellMousedownEvent(evnt, cellParams)
     }
@@ -422,7 +422,7 @@ function renderTdColumn (
   }
 
   let showAreaRowStatus = false
-  if (mouseConfig && mouseOpts.area && !_columnIndex && selectCellToRow) {
+  if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && !_columnIndex && selectCellToRow) {
     showAreaRowStatus = true
   }
 
@@ -936,7 +936,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         h('div', {
           class: 'vxe-table--checkbox-range'
         }),
-        mouseConfig && mouseOpts.area
+        hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area
           ? h('div', {
             class: 'vxe-table--cell-area',
             attrs: {

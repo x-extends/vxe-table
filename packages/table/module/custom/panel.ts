@@ -1,7 +1,7 @@
 import { CreateElement, VNode, PropType } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
-import { formatText } from '../../../ui/src/utils'
+import { formatText, hasEnableConf } from '../../../ui/src/utils'
 import { getTpImg, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
 import { createComponentLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
@@ -443,6 +443,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const { customColumnList } = tableReactData
       const { collectColumn } = tableInternalData
       const customOpts = $xeTable.computeCustomOpts
+      const mouseOpts = $xeTable.computeMouseOpts
       const { immediate } = customOpts
       const trEl = evnt.currentTarget as HTMLElement
       const columnDragOpts = $xeTable.computeColumnDragOpts
@@ -595,7 +596,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
               customColumnList.splice(nafIndex + dragOffsetIndex, 0, dragColumn)
             }
 
-            if (mouseConfig) {
+            if (hasEnableConf(mouseConfig, mouseOpts)) {
               if ($xeTable.clearSelected) {
                 $xeTable.clearSelected()
               }

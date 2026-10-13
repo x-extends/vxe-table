@@ -2,7 +2,7 @@ import { CreateElement, VNode, PropType } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
-import { getOffsetHeight, getPaddingTopBottomSize, getDomNode, toCssUnit } from '../../ui/src/dom'
+import { getOffsetHeight, getPaddingTopBottomSize, getDomNode, toCssUnit, hasClass } from '../../ui/src/dom'
 import { VxeUI } from '../../ui'
 import { getSlotVNs } from '../../ui/src/vn'
 import { createComponentLog } from '../../ui/src/log'
@@ -483,13 +483,27 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }
       return 0
     },
+    getParentElem () {
+      const $xeGrid = this
+
+      const el = $xeGrid.$refs.refElem as HTMLDivElement
+      if (!el) {
+        return null
+      }
+      let parentEl = el.parentElement
+      // 如果是虚拟滚动条
+      if (parentEl && hasClass(parentEl, 'vxe-scrollbar--view-inner')) {
+        parentEl = parentEl.parentElement
+      }
+      return parentEl
+    },
     getParentHeight () {
       const $xeGrid = this
       const reactData = $xeGrid.reactData
 
       const el = $xeGrid.$refs.refElem as HTMLDivElement
       if (el) {
-        const parentEl = el.parentElement as HTMLElement
+        const parentEl = $xeGrid.getParentElem()
         return (reactData.isZMax ? getDomNode().visibleHeight : (parentEl ? XEUtils.toNumber(getComputedStyle(parentEl).height) : 0)) - $xeGrid.getExcludeHeight()
       }
       return 0

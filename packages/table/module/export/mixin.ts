@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { isColumnInfo, getCellValue, createHandleGetRowId } from '../../src/util'
-import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
+import { parseFile, formatText, eqEmptyValue, hasEnableConf } from '../../../ui/src/utils'
 import { hasClass, toCssUnit } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { createComponentLog } from '../../../ui/src/log'
@@ -2029,7 +2029,7 @@ export default {
         }
         return
       }
-      if (!importConfig) {
+      if (!hasEnableConf(importConfig, importOpts)) {
         errLog('vxe.error.reqProp', ['import-config'])
       }
       // 处理类型
@@ -2070,12 +2070,13 @@ export default {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
+      const { exportConfig } = props
       const exportOpts = $xeTable.computeExportOpts
       const defOpts = Object.assign({
         message: true,
         types: XEUtils.keys(exportOpts._typeMaps)
       }, exportOpts, options)
-      if (!props.exportConfig) {
+      if (!hasEnableConf(exportConfig, exportOpts)) {
         errLog('vxe.error.reqProp', ['export-config'])
       }
       return handleExportAndPrint($xeTable, defOpts)
@@ -2085,11 +2086,12 @@ export default {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
+      const { printConfig } = props
       const printOpts = $xeTable.computePrintOpts
       const defOpts = Object.assign({
         message: true
       }, printOpts, options)
-      if (!props.printConfig) {
+      if (!hasEnableConf(printConfig, printOpts)) {
         errLog('vxe.error.reqProp', ['print-config'])
       }
       return handleExportAndPrint($xeTable, defOpts, true)
