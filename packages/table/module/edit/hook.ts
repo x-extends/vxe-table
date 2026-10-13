@@ -1,7 +1,7 @@
 import { reactive, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
-import { isEnableConf } from '../../../ui/src/utils'
+import { hasEnableConf, isEnableConf } from '../../../ui/src/utils'
 import { getCellValue, setCellValue, getRowid } from '../../src/util'
 import { removeClass, addClass } from '../../../ui/src/dom'
 import { createComponentLog } from '../../../ui/src/log'
@@ -410,6 +410,7 @@ hooks.add('tableEditModule', {
       const { editConfig, mouseConfig } = props
       const { editStore, tableColumn } = reactData
       const editOpts = computeEditOpts.value
+      const mouseOpts = computeMouseOpts.value
       const { mode } = editOpts
       const { actived, focused } = editStore
       const { row, column } = params
@@ -425,7 +426,7 @@ hooks.add('tableEditModule', {
             // 判断是否禁用编辑
             let type: 'edit-disabled' | 'edit-activated' = 'edit-disabled'
             if (!beforeEditMethod || beforeEditMethod({ ...editParams, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })) {
-              if (mouseConfig) {
+              if (hasEnableConf(mouseConfig, mouseOpts)) {
                 $xeTable.clearSelected()
                 if ($xeTable.clearCellAreas) {
                   $xeTable.clearCellAreas()
@@ -482,7 +483,7 @@ hooks.add('tableEditModule', {
             }
           } else {
             const { column: oldColumn } = actived
-            if (mouseConfig) {
+            if (hasEnableConf(mouseConfig, mouseOpts)) {
               $xeTable.clearSelected()
               if ($xeTable.clearCellAreas) {
                 $xeTable.clearCellAreas()
@@ -1067,7 +1068,7 @@ hooks.add('tableEditModule', {
         const editOpts = computeEditOpts.value
         const { actived, selected } = editStore
         const { row, column } = params
-        const isMouseSelected = mouseConfig && mouseOpts.selected
+        const isMouseSelected = hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected
         const selectMethod = () => {
           if (isMouseSelected && (selected.row !== row || selected.column !== column)) {
             if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {

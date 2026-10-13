@@ -2,7 +2,7 @@ import { h, ref, computed, provide, reactive, onBeforeUnmount, watch, nextTick, 
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
-import { getOffsetHeight, getPaddingTopBottomSize, getDomNode, toCssUnit } from '../../ui/src/dom'
+import { getOffsetHeight, getPaddingTopBottomSize, getDomNode, toCssUnit, hasClass } from '../../ui/src/dom'
 import { VxeUI } from '../../ui'
 import { gridProps } from './props'
 import { gridEmits } from './emits'
@@ -1728,10 +1728,22 @@ export default defineVxeComponent({
         }
         return 0
       },
+      getParentElem () {
+        const el = refElem.value
+        if (!el) {
+          return null
+        }
+        let parentEl = el.parentElement
+        // 如果是虚拟滚动条
+        if (parentEl && hasClass(parentEl, 'vxe-scrollbar--view-inner')) {
+          parentEl = parentEl.parentElement
+        }
+        return parentEl
+      },
       getParentHeight () {
         const el = refElem.value
         if (el) {
-          const parentEl = el.parentElement as HTMLElement
+          const parentEl = $xeGrid.getParentElem()
           return (reactData.isZMax ? getDomNode().visibleHeight : (parentEl ? XEUtils.toNumber(getComputedStyle(parentEl).height) : 0)) - gridPrivateMethods.getExcludeHeight()
         }
         return 0

@@ -2,6 +2,7 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { getRefElem } from '../../src/util'
 import { getAbsolutePos, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
+import { hasEnableConf } from '../../../ui/src/utils'
 
 import type { TableKeyboardPrivateMethods, VxeTableDefines } from '../../../../types'
 
@@ -244,13 +245,13 @@ hooks.add('tableKeyboardModule', {
       const checkboxOpts = computeCheckboxOpts.value
       const mouseOpts = computeMouseOpts.value
       const editOpts = computeEditOpts.value
-      if (mouseConfig && mouseOpts.area && $xeTable.triggerClAreaMnEvent) {
-        return $xeTable.triggerClAreaMnEvent(evnt, params)
+      if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.triggerClAaMnEvent) {
+        return $xeTable.triggerClAaMnEvent(evnt, params)
       } else {
         if (checkboxConfig && checkboxOpts.range) {
           handleCheckboxRangeEvent(evnt, params)
         }
-        if (mouseConfig && mouseOpts.selected) {
+        if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected) {
           if (!editConfig || editOpts.mode === 'cell') {
             $xeTable.handleSelected(params, evnt)
           }

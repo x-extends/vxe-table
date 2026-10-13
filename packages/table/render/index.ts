@@ -2,7 +2,7 @@ import { h, VNode, resolveComponent, ComponentOptions } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getCellValue, setCellValue } from '../../table/src/util'
-import { getFuncText, formatText, isEmptyValue } from '../../ui/src/utils'
+import { getFuncText, formatText, isEmptyValue, hasEnableConf } from '../../ui/src/utils'
 import { getOnName, getModelEvent, getChangeEvent, hasInputType } from '../../ui/src/vn'
 import { createComponentLog } from '../../ui/src/log'
 
@@ -907,9 +907,11 @@ function getNativeInputRenderCellVNs (cellValue: any, labelVNs: VNode[], renderO
   const { name } = renderOpts
   const tableProps = $table.props
   const { editConfig, mouseConfig } = tableProps
+  const { computeMouseOpts } = $table.getComputeMaps()
+  const mouseOpts = computeMouseOpts.value
   let isColSelected = false
   let isActiveCellArea = false
-  if (editConfig && mouseConfig) {
+  if (editConfig && hasEnableConf(mouseConfig, mouseOpts)) {
     const tableReactData = $table.reactData
     const { editStore } = tableReactData
     const { selected } = editStore
@@ -940,12 +942,13 @@ function getInputRenderCellVNs (cellValue: any, labelVNs: VNode[], renderOpts: V
   const { $table, row, column } = renderParams
   const tableProps = $table.props
   const { editConfig, mouseConfig } = tableProps
+  const { computeEditOpts, computeMouseOpts } = $table.getComputeMaps()
+  const mouseOpts = computeMouseOpts.value
   let isColSelected = false
   let isActiveCellArea = false
-  if (editConfig && mouseConfig) {
+  if (editConfig && hasEnableConf(mouseConfig, mouseOpts)) {
     const tableReactData = $table.reactData
     const { editStore } = tableReactData
-    const { computeEditOpts } = $table.getComputeMaps()
     const editOpts = computeEditOpts.value
     if (editOpts.isReuseKeep) {
       const { selected } = editStore

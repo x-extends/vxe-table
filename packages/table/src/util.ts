@@ -2,7 +2,7 @@ import { watch, reactive } from 'vue'
 import XEUtils from 'xe-utils'
 import { ColumnInfo } from './columnInfo'
 import { isPx, isScale, queryElement } from '../../ui/src/dom'
-import { eqEmptyValue } from '../../ui/src/utils'
+import { eqEmptyValue, hasEnableConf } from '../../ui/src/utils'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeTablePropTypes, TableReactData, TableInternalData } from '../../../types'
 
@@ -976,6 +976,10 @@ export function getLastChildColumn (column: VxeTableDefines.ColumnInfo): VxeTabl
 export function clearTableDefaultStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const { props, internalData } = $xeTable
 
+  const { keyboardConfig, mouseConfig } = props
+  const { computeMouseOpts, computeKeyboardOpts } = $xeTable.getComputeMaps()
+  const mouseOpts = computeMouseOpts.value
+  const keyboardOpts = computeKeyboardOpts.value
   internalData.initStatus = false
   const actionList = [
     $xeTable.clearSort(),
@@ -995,12 +999,12 @@ export function clearTableDefaultStatus ($xeTable: VxeTableConstructor & VxeTabl
       $xeTable.clearFilter()
     )
   }
-  if ($xeTable.clearSelected && (props.keyboardConfig || props.mouseConfig)) {
+  if ($xeTable.clearSelected && (hasEnableConf(keyboardConfig, keyboardOpts) || hasEnableConf(mouseConfig, mouseOpts))) {
     actionList.push(
       $xeTable.clearSelected()
     )
   }
-  if ($xeTable.clearCellAreas && props.mouseConfig) {
+  if ($xeTable.clearCellAreas && hasEnableConf(mouseConfig, mouseOpts)) {
     actionList.push(
       $xeTable.clearCellAreas(),
       $xeTable.clearCopyCellArea()

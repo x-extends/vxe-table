@@ -2,7 +2,7 @@ import { h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTi
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollTopTo, wheelScrollLeftTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement, hasAxternalInputTarget } from '../../ui/src/dom'
-import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
+import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue, hasEnableConf } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import { createReactData, createInternalData, getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, getColReMaxWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn, getRowMaxHeight, handleCustomStoreConfig, encodeRowid } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
@@ -2873,7 +2873,7 @@ export default defineVxeComponent({
       if (currentRow) {
         $xeTable.setCurrentRow(currentRow)
       }
-      if (mouseConfig && mouseOpts.selected && editStore.selected.row && editStore.selected.column) {
+      if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected && editStore.selected.row && editStore.selected.column) {
         $xeTable.addCellSelectedClass()
       }
       if ($xeGanttView && $xeGanttView.handleUpdateStyle) {
@@ -3904,12 +3904,13 @@ export default defineVxeComponent({
      * @param {Array} datas 数据
      */
     const loadTableData = (datas: any[], isReload: boolean, isReset: boolean) => {
-      const { keepSource, treeConfig, rowGroupConfig, aggregateConfig } = props
+      const { keepSource, treeConfig, rowGroupConfig, aggregateConfig, mouseConfig } = props
       const { rowGroupList, scrollYLoad: oldScrollYLoad } = reactData
       const { initStatus, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
       const rowOpts = computeRowOpts.value
       const treeOpts = computeTreeOpts.value
       const expandOpts = computeExpandOpts.value
+      const mouseOpts = computeMouseOpts.value
       const { transform } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       let treeData = []
@@ -3997,7 +3998,7 @@ export default defineVxeComponent({
       if (keepSource) {
         $xeTable.cacheSourceMap(fullData)
       }
-      if ($xeTable.clearCellAreas && props.mouseConfig) {
+      if ($xeTable.clearCellAreas && hasEnableConf(mouseConfig, mouseOpts)) {
         $xeTable.clearCellAreas()
         $xeTable.clearCopyCellArea()
       }
@@ -6956,7 +6957,7 @@ export default defineVxeComponent({
       setCurrentColumn (fieldOrColumn) {
         const { mouseConfig } = props
         const mouseOpts = computeMouseOpts.value
-        const isMouseSelected = mouseConfig && mouseOpts.selected
+        const isMouseSelected = hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected
         const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column) {
           $xeTable.clearCurrentColumn()
@@ -8205,7 +8206,7 @@ export default defineVxeComponent({
       updateCellAreas () {
         const { mouseConfig } = props
         const mouseOpts = computeMouseOpts.value
-        if (mouseConfig && mouseOpts.area && $xeTable.handleRecalculateCellAreaEvent) {
+        if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleRecalculateCellAreaEvent) {
           return $xeTable.handleRecalculateCellAreaEvent()
         }
         return nextTick()
@@ -8465,6 +8466,7 @@ export default defineVxeComponent({
       const editOpts = computeEditOpts.value
       const validOpts = computeValidOpts.value
       const areaOpts = computeAreaOpts.value
+      const mouseOpts = computeMouseOpts.value
       const { actived } = editStore
       const $validTooltip = refValidTooltip.value
       const tableFilter = refTableFilter.value
@@ -8557,7 +8559,7 @@ export default defineVxeComponent({
             }
           }
         }
-      } else if (mouseConfig) {
+      } else if (hasEnableConf(mouseConfig, mouseOpts)) {
         if (!getEventTargetNode(evnt, el).flag && !($xeGGWrapper && getEventTargetNode(evnt, $xeGGWrapper.getRefMaps().refElem.value).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) && !($xeToolbar && getEventTargetNode(evnt, $xeToolbar.getRefMaps().refElem.value).flag)) {
           if ($xeTable.clearSelected) {
             $xeTable.clearSelected()
@@ -8649,7 +8651,7 @@ export default defineVxeComponent({
       if (isEsc) {
         $xeTable.preventEvent(evnt, 'event.keydown', null, () => {
           dispatchEvent('keydown-start', {}, evnt)
-          if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKdClAreaEvent) {
+          if (hasEnableConf(keyboardConfig, keyboardOpts) && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleKdClAreaEvent) {
             $xeTable.handleKdClAreaEvent(evnt)
           } else if (actived.row || filterStore.visible || ctxMenuStore.visible) {
             evnt.stopPropagation()
@@ -8658,7 +8660,7 @@ export default defineVxeComponent({
               $xeTable.closeMenu()
             }
             $xeTable.closeFilter()
-            if (keyboardConfig && keyboardOpts.isEsc) {
+            if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isEsc) {
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 const params = actived.args
@@ -8735,7 +8737,7 @@ export default defineVxeComponent({
             } else {
               $xeTable.moveCtxMenu(evnt, ctxMenuStore, 'selected', isRightArrow, true, menuList)
             }
-          } else if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKdClAreaEvent) {
+          } else if (hasEnableConf(keyboardConfig, keyboardOpts) && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleKdClAreaEvent) {
             $xeTable.handleKdClAreaEvent(evnt)
           } else if (isEsc) {
             // 如果按下了 Esc 键，关闭快捷菜单、筛选
@@ -8743,7 +8745,7 @@ export default defineVxeComponent({
               $xeTable.closeMenu()
             }
             $xeTable.closeFilter()
-            if (keyboardConfig && keyboardOpts.isEsc) {
+            if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isEsc) {
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 const params = actived.args
@@ -8754,7 +8756,7 @@ export default defineVxeComponent({
                 }
               }
             }
-          } else if (isSpacebar && keyboardConfig && keyboardOpts.isChecked && selectRow && selectColumn && (selectColumn.type === 'checkbox' || selectColumn.type === 'radio')) {
+          } else if (isSpacebar && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isChecked && selectRow && selectColumn && (selectColumn.type === 'checkbox' || selectColumn.type === 'radio')) {
             // 空格键支持选中复选框
             evnt.preventDefault()
             if (selectColumn.type === 'checkbox') {
@@ -8777,7 +8779,7 @@ export default defineVxeComponent({
             internalData.keyCtxTimeout = setTimeout(() => {
               internalData._keyCtx = false
             }, 1000)
-          } else if (isEnter && !isAltKey && keyboardConfig && keyboardOpts.isEnter && (selectRow || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
+          } else if (isEnter && !isAltKey && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isEnter && (selectRow || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
             // 退出选中
             if (isControlKey) {
               // 如果是激活编辑状态，则取消编辑
@@ -8897,7 +8899,7 @@ export default defineVxeComponent({
                 }
               }
             }
-          } else if (operArrow && keyboardConfig && keyboardOpts.isArrow) {
+          } else if (operArrow && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isArrow) {
             if (!isEditStatus) {
               // 如果按下了方向键
               if (mouseOpts.selected && selectRow && selectColumn) {
@@ -8913,7 +8915,7 @@ export default defineVxeComponent({
                 }
               }
             }
-          } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
+          } else if (isTab && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isTab) {
             // 如果按下了 Tab 键切换
             if (selectRow || actived.row) {
               const activeRow = selectRow || actived.row
@@ -8961,7 +8963,7 @@ export default defineVxeComponent({
                 }
               }
             }
-          } else if (keyboardConfig && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selectRow || selectColumn)) {
+          } else if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selectRow || selectColumn)) {
             // 如果是删除键
             if (!isEditStatus) {
               const { delMethod } = keyboardOpts
@@ -8990,7 +8992,7 @@ export default defineVxeComponent({
                 dispatchEvent('cell-delete-value', params, evnt)
               }
             }
-          } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selectRow || selectColumn)) {
+          } else if (hasBackspaceKey && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isBack && isEnableConf(editConfig) && (selectRow || selectColumn)) {
             if (!isEditStatus) {
               const { backMethod } = keyboardOpts
               // 如果是删除键
@@ -9021,7 +9023,7 @@ export default defineVxeComponent({
                 }
               }
             }
-          } else if (hasBackspaceKey && keyboardConfig && treeConfig && keyboardOpts.isBack && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
+          } else if (hasBackspaceKey && hasEnableConf(keyboardConfig, keyboardOpts) && treeConfig && keyboardOpts.isBack && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
             // 如果树形表格回退键关闭当前行返回父节点
             const { parent: parentRow } = XEUtils.findTree(internalData.afterTreeFullData, item => item === currentRow, { children: childrenField })
             if (parentRow) {
@@ -9038,7 +9040,7 @@ export default defineVxeComponent({
                 .then(() => $xeTable.scrollToRow(parentRow))
                 .then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
             }
-          } else if (keyboardConfig && keyboardOpts.isUndoRedo && isControlKey && (isZ || isY) && !hasAxternalInputTarget(evnt.target)) {
+          } else if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isUndoRedo && isControlKey && (isZ || isY) && !hasAxternalInputTarget(evnt.target)) {
             if (evnt.target) {
               if (isY || (hasShiftKey && isZ)) {
               // 恢复被撤销的操作：Ctrl + Y 或 Ctrl + Shift + Z
@@ -9050,7 +9052,7 @@ export default defineVxeComponent({
                 $xeTable.handleUndoStackEvent(evnt)
               }
             }
-          } else if (keyboardConfig && isEnableConf(editConfig) && keyboardOpts.isEdit && !isControlKey && (isSpacebar || isProcess || evnt.key === 'Process' || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
+          } else if (hasEnableConf(keyboardConfig, keyboardOpts) && isEnableConf(editConfig) && keyboardOpts.isEdit && !isControlKey && (isSpacebar || isProcess || evnt.key === 'Process' || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
             const { editMode, editMethod } = keyboardOpts
             // 启用编辑后，空格键功能将失效
             // if (isSpacebar) {
@@ -9102,7 +9104,7 @@ export default defineVxeComponent({
       const { actived } = editStore
       if (isActivated && !filterStore.visible) {
         if (!(actived.row || actived.column)) {
-          if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xeTable.handlePeClAreaEvent) {
+          if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isClip && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handlePeClAreaEvent) {
             $xeTable.handlePeClAreaEvent(evnt)
           }
         }
@@ -9119,7 +9121,7 @@ export default defineVxeComponent({
       const { actived } = editStore
       if (isActivated && !filterStore.visible) {
         if (!(actived.row || actived.column)) {
-          if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xeTable.handleCyClAreaEvent) {
+          if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isClip && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleCyClAreaEvent) {
             $xeTable.handleCyClAreaEvent(evnt)
           }
         }
@@ -9136,7 +9138,7 @@ export default defineVxeComponent({
       const { actived } = editStore
       if (isActivated && !filterStore.visible) {
         if (!(actived.row || actived.column)) {
-          if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xeTable.handleCutCellAreaEvent) {
+          if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isClip && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleCutCellAreaEvent) {
             $xeTable.handleCutCellAreaEvent(evnt)
           }
         }
@@ -9658,11 +9660,23 @@ export default defineVxeComponent({
        */
       getParentElem () {
         const el = refElem.value
-        if ($xeGGWrapper) {
-          const gridEl = $xeGGWrapper.getRefMaps().refElem.value
-          return gridEl ? gridEl.parentNode as HTMLElement : null
+        if (!el) {
+          return null
         }
-        return el ? el.parentNode as HTMLElement : null
+        const parentEl = el.parentElement
+        if (!parentEl) {
+          return null
+        }
+        if ($xeGantt && hasClass(parentEl, 'vxe-gantt--table-wrapper')) {
+          return $xeGantt.getParentElem()
+        } else if ($xeGrid && hasClass(parentEl, 'vxe-grid--table-wrapper')) {
+          return $xeGrid.getParentElem()
+        }
+        // 如果是虚拟滚动条
+        if (parentEl && hasClass(parentEl, 'vxe-scrollbar--view-inner')) {
+          return parentEl.parentElement
+        }
+        return parentEl
       },
       /**
        * 获取父容器的高度
@@ -9670,23 +9684,30 @@ export default defineVxeComponent({
       getParentHeight () {
         const { height } = props
         const el = refElem.value
-        if (el) {
-          const parentElem = el.parentNode as HTMLElement
-          let parentPaddingSize = 0
-          let parentWrapperHeight = 0
-          if (parentElem) {
-            if ($xeGantt && hasClass(parentElem, 'vxe-gantt--table-wrapper')) {
-              parentWrapperHeight = $xeGantt.getParentHeight()
-            } else if ($xeGrid && hasClass(parentElem, 'vxe-grid--table-wrapper')) {
-              parentWrapperHeight = $xeGrid.getParentHeight()
-            } else {
-              parentWrapperHeight = parentElem.clientHeight
-              parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
-            }
-          }
-          return Math.floor(parentWrapperHeight - parentPaddingSize)
+        if (!el) {
+          return 0
         }
-        return 0
+        let parentEl = el.parentElement
+        let parentPaddingSize = 0
+        let parentWrapperHeight = 0
+        if (!parentEl) {
+          return 0
+        }
+        if ($xeGantt && hasClass(parentEl, 'vxe-gantt--table-wrapper')) {
+          parentWrapperHeight = $xeGantt.getParentHeight()
+        } else if ($xeGrid && hasClass(parentEl, 'vxe-grid--table-wrapper')) {
+          parentWrapperHeight = $xeGrid.getParentHeight()
+        } else {
+          // 如果是虚拟滚动条
+          if (parentEl && hasClass(parentEl, 'vxe-scrollbar--view-inner')) {
+            parentEl = parentEl.parentElement
+          }
+          if (parentEl) {
+            parentWrapperHeight = parentEl.clientHeight
+            parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentEl) : 0
+          }
+        }
+        return Math.floor(parentWrapperHeight - parentPaddingSize)
       },
       /**
        * 获取需要排除的高度
@@ -10357,7 +10378,8 @@ export default defineVxeComponent({
        */
       handleCustom () {
         const { mouseConfig } = props
-        if (mouseConfig) {
+        const mouseOpts = computeMouseOpts.value
+        if (hasEnableConf(mouseConfig, mouseOpts)) {
           if ($xeTable.clearSelected) {
             $xeTable.clearSelected()
           }
@@ -11490,7 +11512,7 @@ export default defineVxeComponent({
         const { field, sortable, order } = column
         if (sortable) {
           const params = { $table: $xeTable, $event: evnt, column, field, property: field, order, sortList: $xeTable.getSortColumns(), sortTime: column.sortTime }
-          if (mouseConfig && mouseOpts.area && $xeTable.handleSortEvent) {
+          if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleSortEvent) {
             $xeTable.handleSortEvent(evnt, params)
           }
           if (!order) {
@@ -11566,7 +11588,7 @@ export default defineVxeComponent({
             $xeTable.handleHeaderCellDragMousedownEvent(evnt, params)
           }
         }
-        if (!triggerDrag && mouseConfig && mouseOpts.area && $xeTable.handleHeaderCellAreaMouseDnEvent) {
+        if (!triggerDrag && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleHeaderCellAreaMouseDnEvent) {
           $xeTable.handleHeaderCellAreaMouseDnEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
         }
         $xeTable.focus()
@@ -12315,6 +12337,7 @@ export default defineVxeComponent({
       handleColDragSwapEvent (evnt, isSyncColumn, dragCol, prevDragCol, prevDragPos, prevDragToChild) {
         const { mouseConfig } = props
         const columnDragOpts = computeColumnDragOpts.value
+        const mouseOpts = computeMouseOpts.value
         const { animation, isPeerDrag, isCrossDrag, isSelfToChildDrag, isToChildDrag, dragEndMethod, dragToChildMethod } = columnDragOpts
         const { collectColumn, fullColumnIdData } = internalData
         const el = refElem.value
@@ -12487,7 +12510,7 @@ export default defineVxeComponent({
             })
 
             $xeTable.handleClearStack()
-            if (mouseConfig) {
+            if (hasEnableConf(mouseConfig, mouseOpts)) {
               if ($xeTable.clearSelected) {
                 $xeTable.clearSelected()
               }
@@ -14032,7 +14055,7 @@ export default defineVxeComponent({
     }
 
     const renderVN = () => {
-      const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
+      const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules, importConfig, exportConfig, printConfig } = props
       const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, isRowGroupStatus, columnStore, filterStore, customStore, tooltipStore } = reactData
       const { teleportToWrapperElem, popupToWrapperElem, customPopupToElem } = internalData
       const { leftList, rightList } = columnStore
@@ -14060,10 +14083,13 @@ export default defineVxeComponent({
       const isContentMenu = computeIsContentMenu.value
       const currLoading = reactData.isColLoading || reactData.isRowLoading || loading
       const resizableOpts = computeResizableOpts.value
-      const isArea = mouseConfig && mouseOpts.area
+      const isArea = hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area
       const columnDragOpts = computeColumnDragOpts.value
       const scrollbarXToTop = computeScrollbarXToTop.value
       const scrollbarYToLeft = computeScrollbarYToLeft.value
+      const exportOpts = computeExportOpts.value
+      const importOpts = computeImportOpts.value
+      const printOpts = computePrintOpts.value
       const { isCrossTableDrag } = rowDragOpts
       const tbOns: {
         onContextmenu: (...args: any[]) => void
@@ -14084,7 +14110,7 @@ export default defineVxeComponent({
           'vxe-editable': !!editConfig,
           'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete',
           'cell--highlight': highlightCell,
-          'cell--selected': mouseConfig && mouseOpts.selected,
+          'cell--selected': hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected,
           'cell--area': isArea,
           'header-cell--area': isArea && areaOpts.selectCellByHeader,
           'body-cell--area': isArea && areaOpts.selectCellByBody,
@@ -14298,7 +14324,7 @@ export default defineVxeComponent({
         /**
          * 导入
          */
-        initStore.import && props.importConfig
+        initStore.import && hasEnableConf(importConfig, importOpts)
           ? h(TableImportPanelComponent, {
             key: 'it',
             defaultOptions: reactData.importParams,
@@ -14308,7 +14334,7 @@ export default defineVxeComponent({
         /**
          * 导出
          */
-        initStore.export && (props.exportConfig || props.printConfig)
+        initStore.export && (hasEnableConf(exportConfig, exportOpts) || hasEnableConf(printConfig, printOpts))
           ? h(TableExportPanelComponent, {
             key: 'et',
             defaultOptions: reactData.exportParams,
@@ -14673,7 +14699,7 @@ export default defineVxeComponent({
     })
 
     onMounted(() => {
-      const { editConfig, exportConfig, importConfig, treeConfig, minHeight, keepSource } = props
+      const { editConfig, exportConfig, importConfig, treeConfig, minHeight, keepSource, areaConfig } = props
       const { scrollXStore, scrollYStore } = internalData
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
@@ -14791,13 +14817,13 @@ export default defineVxeComponent({
       //   warnLog('vxe.error.delProp', ['scroll-x', 'virtual-x-config'])
       // }
       // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
-      if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), importOpts.types)) {
+      if (hasEnableConf(importConfig, importOpts) && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), importOpts.types)) {
         warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)).join(',') || XEUtils.keys(importOpts._typeMaps).join(',')])
       }
-      if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(XEUtils.keys(exportOpts._typeMaps), exportOpts.types)) {
+      if (hasEnableConf(exportConfig, exportOpts) && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(XEUtils.keys(exportOpts._typeMaps), exportOpts.types)) {
         warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type) => XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)).join(',') || XEUtils.keys(exportOpts._typeMaps).join(',')])
       }
-      if (exportConfig && XEUtils.isBoolean((exportOpts as any).isAllExpand)) {
+      if (hasEnableConf(exportConfig, exportOpts) && XEUtils.isBoolean((exportOpts as any).isAllExpand)) {
         warnLog('vxe.error.delProp', ['isAllExpand', 'isTreeAllExpanded'])
       }
 
@@ -14812,8 +14838,8 @@ export default defineVxeComponent({
       if (rowOpts.height && !props.showOverflow) {
         warnLog('vxe.error.notProp', ['table.show-overflow'])
       }
-      if (!$xeTable.triggerClAreaMnEvent) {
-        if (props.areaConfig) {
+      if (!$xeTable.triggerClAaMnEvent) {
+        if (hasEnableConf(areaConfig, areaOpts)) {
           warnLog('vxe.error.notProp', ['area-config'])
         }
         if (props.clipConfig) {
@@ -14901,10 +14927,10 @@ export default defineVxeComponent({
       if (columnOpts.currentMethod) {
         warnLog('vxe.error.delProp', ['row-config.currentMethod', 'current-column-config.beforeSelectMethod'])
       }
-      // if ((rowOpts.isCurrent || highlightCurrentRow) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
+      // if ((rowOpts.isCurrent || highlightCurrentRow) && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isArrow && !XEUtils.isBoolean(currentRowOpts.isFollowSelected)) {
       //   warnLog('vxe.error.notConflictProp', ['row-config.isCurrent & keyboard-config.isArrow', 'current-row-config.isFollowSelected'])
       // }
-      // if ((columnOpts.isCurrent || highlightCurrentColumn) && props.keyboardConfig && keyboardOpts.isArrow && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
+      // if ((columnOpts.isCurrent || highlightCurrentColumn) && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isArrow && !XEUtils.isBoolean(currentColumnOpts.isFollowSelected)) {
       //   warnLog('vxe.error.notConflictProp', ['column-config.isCurrent & keyboard-config.isArrow', 'current-column-config.isFollowSelected'])
       // }
 
@@ -14930,10 +14956,10 @@ export default defineVxeComponent({
       // if (props.editRules && !$xeTable.validate) {
       //   errLog('vxe.error.reqModule', ['Validator'])
       // }
-      // if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xeTable.handleCellMousedownEvent) {
+      // if ((checkboxOpts.range || hasEnableConf(keyboardConfig, keyboardOpts) || hasEnableConf(mouseConfig, mouseOpts)) && !$xeTable.handleCellMousedownEvent) {
       //   errLog('vxe.error.reqModule', ['Keyboard'])
       // }
-      // if ((props.printConfig || props.importConfig || props.exportConfig) && !$xeTable.exportData) {
+      // if (hasEnableConf(printConfig, printOpts) || hasEnableConf(importConfig, importOpts) || hasEnableConf(exportConfig, exportOpts)) && !$xeTable.exportData) {
       //   errLog('vxe.error.reqModule', ['Export'])
       // }
 

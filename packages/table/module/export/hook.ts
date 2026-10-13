@@ -2,7 +2,7 @@ import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { isColumnInfo, getCellValue, createHandleGetRowId } from '../../src/util'
-import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
+import { parseFile, formatText, eqEmptyValue, hasEnableConf } from '../../../ui/src/utils'
 import { hasClass, toCssUnit } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { createComponentLog } from '../../../ui/src/log'
@@ -1985,7 +1985,7 @@ hooks.add('tableExportModule', {
           }
           return
         }
-        if (!importConfig) {
+        if (!hasEnableConf(importConfig, importOpts)) {
           errLog('vxe.error.reqProp', ['import-config'])
         }
         // 处理类型
@@ -2023,23 +2023,25 @@ hooks.add('tableExportModule', {
       },
       closeExport: handleCloseExport,
       openExport (options) {
+        const { exportConfig } = props
         const exportOpts = computeExportOpts.value
         const defOpts = Object.assign({
           message: true,
           types: XEUtils.keys(exportOpts._typeMaps)
         }, exportOpts, options)
-        if (!props.exportConfig) {
+        if (!hasEnableConf(exportConfig, exportOpts)) {
           errLog('vxe.error.reqProp', ['export-config'])
         }
         return handleExportAndPrint(defOpts)
       },
       closePrint: handleCloseExport,
       openPrint (options) {
+        const { printConfig } = props
         const printOpts = computePrintOpts.value
         const defOpts = Object.assign({
           message: true
         }, printOpts, options)
-        if (!props.printConfig) {
+        if (!hasEnableConf(printConfig, printOpts)) {
           errLog('vxe.error.reqProp', ['print-config'])
         }
         return handleExportAndPrint(defOpts, true)

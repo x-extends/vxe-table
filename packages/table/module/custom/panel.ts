@@ -1,7 +1,7 @@
 import { h, inject, ref, Ref, provide, VNode, PropType, nextTick, TransitionGroup, reactive, onUnmounted } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
-import { formatText } from '../../../ui/src/utils'
+import { formatText, hasEnableConf } from '../../../ui/src/utils'
 import { getTpImg, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
 import { createComponentLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
@@ -45,7 +45,7 @@ export default defineVxeComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeSize, computeCustomOpts, computeColumnDragOpts, computeColumnOpts, computeIsMaxFixedColumn, computeResizableOpts, computeAggregateOpts } = $xeTable.getComputeMaps()
+    const { computeSize, computeCustomOpts, computeMouseOpts, computeColumnDragOpts, computeColumnOpts, computeIsMaxFixedColumn, computeResizableOpts, computeAggregateOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refBodyWrapperElem = ref() as Ref<HTMLDivElement>
@@ -368,6 +368,7 @@ export default defineVxeComponent({
       const { customColumnList } = tableReactData
       const { collectColumn } = tableInternalData
       const customOpts = computeCustomOpts.value
+      const mouseOpts = computeMouseOpts.value
       const { immediate } = customOpts
       const trEl = evnt.currentTarget as HTMLElement
       const columnDragOpts = computeColumnDragOpts.value
@@ -520,7 +521,7 @@ export default defineVxeComponent({
               customColumnList.splice(nafIndex + dragOffsetIndex, 0, dragColumn)
             }
 
-            if (mouseConfig) {
+            if (hasEnableConf(mouseConfig, mouseOpts)) {
               if ($xeTable.clearSelected) {
                 $xeTable.clearSelected()
               }

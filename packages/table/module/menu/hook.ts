@@ -2,7 +2,7 @@ import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { getDomNode, getAbsolutePos, getEventTargetNode, toCssUnit } from '../../../ui/src/dom'
-import { isEnableConf, hasChildrenList } from '../../../ui/src/utils'
+import { isEnableConf, hasChildrenList, hasEnableConf } from '../../../ui/src/utils'
 
 import type { VxeComponentStyleType } from 'vxe-pc-ui'
 import type { TableMenuMethods, TableMenuPrivateMethods } from '../../../../types'
@@ -190,7 +190,7 @@ hooks.add('tableMenuModule', {
             const type = 'body'
             const params: any = { source: 'table', type, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, keyboard: true, columns: visibleColumn.slice(0), $event: evnt }
             // 如果开启单元格区域
-            if (mouseConfig && mouseOpts.area) {
+            if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area) {
               const activeArea = $xeTable.getActiveCellArea()
               if (activeArea && activeArea.row && activeArea.column) {
                 params.row = activeArea.row
@@ -198,7 +198,7 @@ hooks.add('tableMenuModule', {
                 handleOpenMenuEvent(evnt, type, params)
                 return
               }
-            } else if (mouseConfig && mouseOpts.selected) {
+            } else if (hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected) {
               // 如果启用键盘导航且已选中单元格
               if (selected.row && selected.column) {
                 params.row = selected.row

@@ -2,7 +2,7 @@ import { h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted 
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { getDefaultConfig, isEnableConf } from '../../ui/src/utils'
+import { getDefaultConfig, hasEnableConf, isEnableConf } from '../../ui/src/utils'
 import { getCalcHeight, convertHeaderColumnToRows, convertHeaderToGridRows } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 
@@ -74,6 +74,7 @@ export default defineVxeComponent({
       const defaultRowHeight = computeDefaultRowHeight.value
       const headerCellOpts = computeHeaderCellOpts.value
       const rendererOpts = computeRendererOpts.value
+      const mouseOpts = computeMouseOpts.value
       const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
       const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
       const isLastRow = _rowIndex === headerGroups.length - 1
@@ -165,7 +166,7 @@ export default defineVxeComponent({
           isDisabledDrag = !!(dragDisabledMethod && dragDisabledMethod(cellParams))
         }
         // 按下事件处理
-        if (mouseConfig || isColDragCell) {
+        if (hasEnableConf(mouseConfig, mouseOpts) || isColDragCell) {
           thOns.onMousedown = (evnt: MouseEvent) => $xeTable.triggerHeaderCellMousedownEvent(evnt, cellParams)
         }
         // 拖拽列事件
@@ -513,7 +514,7 @@ export default defineVxeComponent({
               ref: refHeaderTHead
             }, renderHeads(isGroup, isOptimizeMode, renderHeaderList, renderColumnList))
           ]),
-          mouseConfig && mouseOpts.area
+          hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area
             ? h('div', {
               class: 'vxe-table--cell-area',
               xid: xID
