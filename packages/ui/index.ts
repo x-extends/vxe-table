@@ -269,16 +269,14 @@ VxeUI.setConfig({
       oSize: 0
     },
     scrollbarConfig: {
-      // width: 14,
-      // height: 14,
-      x: {
-        // position: 'bottom',
-        visible: true
-      },
-      y: {
-        // position: 'right',
-        visible: true
-      }
+      // xConfig: {
+      //   // position: 'bottom',
+      //   // visible: true
+      // },
+      // yConfig: {
+      //   // position: 'right',
+      //   // visible: true
+      // }
     },
     undoRedoHistoryConfig: {
       stackSize: 50
