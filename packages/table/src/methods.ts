@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 import { getTpImg, isPx, isScale, hasClass, addClass, removeClass, wheelScrollLeftTo, wheelScrollTopTo, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, toCssUnit, hasControlKey, checkTargetElement, hasAxternalInputTarget } from '../../ui/src/dom'
-import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue, hasEnableConf } from '../../ui/src/utils'
+import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue, hasEnableConf, getDefaultConfig } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
 import { getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getColReMinWidth, getColReMaxWidth, createHandleUpdateRowId, createHandleGetRowId, getRefElem, getCellRestHeight, getLastChildColumn, getRowMaxHeight, handleCustomStoreConfig, encodeRowid } from './util'
@@ -1047,7 +1047,6 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const isHeaderRenderOptimize = $xeTable.computeIsHeaderRenderOptimize
   const isBodyRenderOptimize = $xeTable.computeIsBodyRenderOptimize
   const isFooterRenderOptimize = $xeTable.computeIsFooterRenderOptimize
-  const scrollbarOpts = $xeTable.computeScrollbarOpts
   const mouseOpts = $xeTable.computeMouseOpts
   const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
   const bodyTableElem = getRefElem(elemStore['main-body-table'])
@@ -1056,24 +1055,26 @@ function updateStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
     emptyPlaceholderElem.style.height = bodyWrapperElem ? `${bodyWrapperElem.offsetHeight - osbHeight}px` : ''
   }
 
-  const scrollbarXConf = scrollbarOpts.x || {}
-  const scrollbarYConf = scrollbarOpts.y || {}
+  const scrollbarXOpts = $xeTable.computeScrollbarXOpts
+  const scrollbarYOpts = $xeTable.computeScrollbarYOpts
   const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
 
   let xScrollbarVisible = overflowX ? 'visible' : 'hidden'
-  if (scrollbarXConf.visible === 'visible' || $xeGanttView) {
+  const hideXScroll = scrollbarXOpts.visible === false || scrollbarXOpts.visible === 'hidden'
+  if (!hideXScroll || $xeGanttView) {
     osbHeight = scrollbarHeight
     xScrollbarVisible = 'visible'
-  } else if (scrollbarXConf.visible === 'hidden' || scrollbarXConf.visible === false) {
+  } else if (hideXScroll) {
     osbHeight = 0
     xScrollbarVisible = 'hidden'
   }
 
   let yScrollbarVisible = overflowY ? 'visible' : 'hidden'
-  if ((scrollbarYConf.visible === 'hidden' || scrollbarYConf.visible === false) || (($xeGantt && $xeGanttView && $xeGantt.reactData.showRightView) && !scrollbarYToLeft)) {
+  const showYScroll = !(scrollbarYOpts.visible === false || scrollbarYOpts.visible === 'hidden')
+  if (!showYScroll || (($xeGantt && $xeGanttView && $xeGantt.reactData.showRightView) && !scrollbarYToLeft)) {
     osbWidth = 0
     yScrollbarVisible = 'hidden'
-  } else if (scrollbarYConf.visible === 'visible') {
+  } else if (showYScroll) {
     osbWidth = scrollbarWidth
     yScrollbarVisible = 'visible'
   }
@@ -3147,6 +3148,7 @@ function computeScrollLoad ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
 }
 
 function calcScrollbar ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const scrollDefaultConf = ($xeTable as any).scrollDefaultConf
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -3165,15 +3167,19 @@ function calcScrollbar ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) 
   let overflowY = false
   let overflowX = false
   if (bodyWrapperElem) {
+    const scrollbarXOpts = $xeTable.computeScrollbarXOpts
+    const scrollbarYOpts = $xeTable.computeScrollbarYOpts
+    const barWidth = XEUtils.toNumber(getDefaultConfig(getDefaultConfig(scrollbarYOpts.width, scrollbarOpts.width), scrollDefaultConf.width))
+    const barHeight = XEUtils.toNumber(getDefaultConfig(getDefaultConfig(scrollbarXOpts.height, scrollbarOpts.height), scrollDefaultConf.height))
     overflowY = scrollYHeight > bodyWrapperElem.clientHeight
     if (yHandleEl) {
-      reactData.scrollbarWidth = scrollbarOpts.width || (yHandleEl.offsetWidth - yHandleEl.clientWidth) || 14
+      reactData.scrollbarWidth = (barWidth || barHeight) || (yHandleEl.offsetWidth - yHandleEl.clientWidth) || 14
     }
     reactData.overflowY = overflowY
 
     overflowX = scrollXWidth > bodyWrapperElem.clientWidth
     if (xHandleEl) {
-      reactData.scrollbarHeight = scrollbarOpts.height || (xHandleEl.offsetHeight - xHandleEl.clientHeight) || 14
+      reactData.scrollbarHeight = (barHeight || barWidth) || (xHandleEl.offsetHeight - xHandleEl.clientHeight) || 14
     }
     reactData.overflowX = overflowX
 
@@ -13022,14 +13028,14 @@ const tableMethods: any = {
 
     if (isRollX) {
       // 如果禁用滚动
-      if (scrollbarXOpts.visible === 'hidden') {
+      if (scrollbarXOpts.visible === false || scrollbarXOpts.visible === 'hidden') {
         evnt.preventDefault()
         return
       }
     }
     if (isRollY) {
       // 如果禁用滚动
-      if (scrollbarYOpts.visible === 'hidden') {
+      if (scrollbarYOpts.visible === false || scrollbarYOpts.visible === 'hidden') {
         evnt.preventDefault()
         return
       }

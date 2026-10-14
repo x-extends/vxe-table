@@ -298,6 +298,10 @@ export const tableProps = {
   virtualXConfig: Object as PropType<VxeTablePropTypes.VirtualXConfig>,
   // 纵向虚拟滚动配置项
   virtualYConfig: Object as PropType<VxeTablePropTypes.VirtualYConfig>,
+  useScrollbar: {
+    type: Boolean as PropType<VxeTablePropTypes.UseScrollbar>,
+    default: () => getConfig().table.useScrollbar
+  },
   // 滚动条配置项
   scrollbarConfig: Object as PropType<VxeTablePropTypes.ScrollbarConfig>,
   // 撤销/恢复历史配置项
