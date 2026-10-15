@@ -1,5 +1,6 @@
 import { PropType } from 'vue'
 import { VxeUI } from '../../ui'
+import { getDefaultConfig } from '../../ui/src/utils'
 
 import type { VxeTablePropTypes } from '../../../types'
 
@@ -81,7 +82,10 @@ export const tableProps = {
     type: Boolean as PropType<VxeTablePropTypes.HighlightCurrentRow>,
     default: () => getConfig().table.highlightCurrentRow
   },
-  // （即将废弃）鼠标移到行是否要高亮显示
+  /**
+   * （即将废弃）鼠标移到行是否要高亮显示
+   * @deprecated
+   */
   highlightHoverRow: {
     type: Boolean as PropType<VxeTablePropTypes.HighlightHoverRow>,
     default: () => getConfig().table.highlightHoverRow
@@ -307,7 +311,7 @@ export const tableProps = {
   virtualYConfig: Object as PropType<VxeTablePropTypes.VirtualYConfig>,
   useScrollbar: {
     type: Boolean as PropType<VxeTablePropTypes.UseScrollbar>,
-    default: () => getConfig().table.useScrollbar
+    default: () => getDefaultConfig(getConfig().table.useScrollbar, getConfig().useScrollbar)
   },
   // 滚动条配置项
   scrollbarConfig: Object as PropType<VxeTablePropTypes.ScrollbarConfig>,
