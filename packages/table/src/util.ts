@@ -49,9 +49,17 @@ export function createInternalData (): TableInternalData {
     currentRow: null,
     currentCol: null,
 
-    // 最后滚动位置
-    lastScrollLeft: 0,
+    // resizeObserver: undefined,
+
+    // 滚动条
+    // scrollObserver: undefined,
+    // isThumbDrag: false,
+    thumbDragOffset: 0,
+    yThumbTop: 0,
+    xThumbLeft: 0,
     lastScrollTop: 0,
+    lastScrollLeft: 0,
+
     // 单选框属性，已选中保留的行
     radioReserveRow: null,
     // 复选框属性，已选中保留的行集合
@@ -199,6 +207,11 @@ export function createReactData (): TableReactData {
     scrollbarWidth: 0,
     // 横向滚动条的高度
     scrollbarHeight: 0,
+
+    // 滚动条
+    yThumbHeight: 0,
+    xThumbWidth: 0,
+
     // 行高
     rowHeight: 0,
     // 表格父容器的高度

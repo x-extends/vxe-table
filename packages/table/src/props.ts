@@ -1,5 +1,6 @@
 import { PropType } from 'vue'
 import { VxeUI } from '../../ui'
+import { getDefaultConfig } from '../../ui/src/utils'
 
 import type { VxeTablePropTypes } from '../../../types'
 
@@ -300,7 +301,7 @@ export const tableProps = {
   virtualYConfig: Object as PropType<VxeTablePropTypes.VirtualYConfig>,
   useScrollbar: {
     type: Boolean as PropType<VxeTablePropTypes.UseScrollbar>,
-    default: () => getConfig().table.useScrollbar
+    default: () => getDefaultConfig(getConfig().table.useScrollbar, getConfig().useScrollbar)
   },
   // 滚动条配置项
   scrollbarConfig: Object as PropType<VxeTablePropTypes.ScrollbarConfig>,
