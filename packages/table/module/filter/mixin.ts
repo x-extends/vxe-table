@@ -72,6 +72,7 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
     if (transfer) {
       const ppObj = updatePanelPlacement(currEl, filterWrapperElem, {
         defaultPlacement: 'bottom',
+        appendTo: '',
         isMinWidth: false,
         teleportTo: transfer
       })

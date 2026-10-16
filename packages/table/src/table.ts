@@ -1091,7 +1091,8 @@ export default {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
-      return Object.assign({}, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
+      const { useScrollbar } = props
+      return Object.assign({ useScrollbar }, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
     },
     tipConfig () {
       return { ...this.tooltipOpts }
@@ -2803,7 +2804,8 @@ export default {
             ref: 'refCommTooltip',
             props: {
               isArrow: false,
-              enterable: false
+              enterable: false,
+              useScrollbar
             }
           })
           : renderEmptyElement($xeTable),
@@ -2830,7 +2832,8 @@ export default {
               maxHeight: tableTipConfig.maxHeight,
               placement: tableTipConfig.placement,
               defaultPlacement: tableTipConfig.defaultPlacement,
-              popupClassName: tableTipConfig.popupClassName
+              popupClassName: tableTipConfig.popupClassName,
+              useScrollbar: tableTipConfig.useScrollbar
             },
             scopedSlots: currTooltipSlot
               ? {
@@ -2873,7 +2876,8 @@ export default {
               theme: validTipConfig.theme,
               enterable: validTipConfig.enterable,
               enterDelay: validTipConfig.enterDelay,
-              leaveDelay: validTipConfig.leaveDelay
+              leaveDelay: validTipConfig.leaveDelay,
+              useScrollbar
             }
           })
           : renderEmptyElement($xeTable)

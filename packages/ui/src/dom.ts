@@ -266,6 +266,7 @@ interface PanelPlacementOptions {
   defaultLeft?: number
   placement?: '' | 'top' | 'bottom' | null
   defaultPlacement?: '' | 'top' | 'bottom' | null
+  appendTo?: string | HTMLElement | ((params: any) => string | HTMLElement)
   teleportTo?: boolean
   marginSize?: number
   isMinWidth?: boolean
@@ -275,7 +276,8 @@ interface PanelPlacementOptions {
  * 通用定位计算
  */
 export function updatePanelPlacement (targetElem: HTMLElement | null | undefined, panelElem: HTMLElement | null | undefined, options: PanelPlacementOptions) {
-  const { defaultTop, defaultLeft, placement, defaultPlacement, teleportTo, marginSize, isMinWidth } = Object.assign({
+  const { defaultTop, defaultLeft, placement, defaultPlacement, appendTo, teleportTo, marginSize, isMinWidth } = Object.assign({
+    appendTo: '',
     teleportTo: false,
     marginSize: 18,
     isMinWidth: true
@@ -289,7 +291,7 @@ export function updatePanelPlacement (targetElem: HTMLElement | null | undefined
   const stys: Record<string, string> = {}
   if (panelElem && targetElem) {
     const bodyEl = document.body
-    const parentWrapperEl = getPopupWrapperElement(panelElem)
+    const parentWrapperEl = getPopupWrapperElement(teleportTo ? getPopupAppendElement(appendTo) : panelElem)
     if (parentWrapperEl) {
       const targetWidth = targetElem.offsetWidth
       const targetHeight = targetElem.offsetHeight
@@ -302,16 +304,18 @@ export function updatePanelPlacement (targetElem: HTMLElement | null | undefined
       const visibleHeight = bodyEl.clientHeight
       const visibleWidth = bodyEl.clientWidth
 
-      const offsetLeft = parentWrapperRect.left
-      const offsetTop = parentWrapperRect.top
+      const parentWrapperScrollLeft = parentWrapperEl.scrollLeft
+      const parentWrapperScrollTop = parentWrapperEl.scrollTop
+      const parentWrapperOffsetLeft = parentWrapperRect.left
+      const parentWrapperOffsetTop = parentWrapperRect.top
       const targetLeft = targetRect.left
       const targetTop = targetRect.top
 
       minWidth = targetElem.offsetWidth
 
       if (teleportTo) {
-        left = defaultLeft || (targetLeft - (panelWidth - targetWidth) / 2)
-        top = defaultTop || (targetTop + targetHeight)
+        left = (defaultLeft || (targetLeft - (panelWidth - targetWidth) / 2)) - parentWrapperScrollLeft
+        top = (defaultTop || (targetTop + targetHeight)) - parentWrapperScrollTop
         if (placement === 'top') {
           panelPlacement = 'top'
           top = targetTop - panelHeight
@@ -354,8 +358,8 @@ export function updatePanelPlacement (targetElem: HTMLElement | null | undefined
         }
 
         // 偏移
-        top -= offsetTop
-        left -= offsetLeft
+        top -= parentWrapperOffsetTop
+        left -= parentWrapperOffsetLeft
       } else {
         if (placement === 'top') {
           panelPlacement = 'top'
