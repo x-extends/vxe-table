@@ -7,7 +7,6 @@ import { VxeUI } from '../../ui'
 import { createReactData, createInternalData, getRowUniqueId, createRowId, clearTableAllStatus, getColumnList, toFilters, hasDeepKey, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleRowidOrRow, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem, getColReMinWidth, getColReMaxWidth, createHandleUpdateRowId, createHandleGetRowId, getCalcHeight, getCellRestHeight, getLastChildColumn, getRowMaxHeight, handleCustomStoreConfig, encodeRowid } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from '../../ui/src/anime'
-import { getThumbOffsetSize, getThumbSize, getScrollFromClick, getScrollFromDrag } from './scrollbar'
 import { createComponentLog } from '../../ui/src/log'
 import { getCrossTableDragRowInfo } from './store'
 import Cell from './cell'
@@ -36,7 +35,9 @@ import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, Vx
 
 const { warnLog, errLog } = createComponentLog('table')
 
-const { getConfig, getIcon, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, domUtils, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
+const { getConfig, getIcon, getI18n, renderer, formats, scrollbarUtils, createEvent, globalResize, interceptor, hooks, domUtils, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
+
+const { getThumbOffsetSize, getThumbSize, getScrollFromClick, getScrollFromDrag } = scrollbarUtils || {}
 
 const supportMaxRow = 5e6
 const customStorageKey = 'VXE_CUSTOM_STORE'
@@ -425,7 +426,8 @@ export default defineVxeComponent({
     })
 
     const computeTooltipOpts = computed(() => {
-      return Object.assign({}, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
+      const { useScrollbar } = props
+      return Object.assign({ useScrollbar }, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
     })
 
     const computeHeaderTooltipOpts = computed(() => {
@@ -14719,7 +14721,8 @@ export default defineVxeComponent({
               key: 'ctp',
               ref: refCommTooltip,
               isArrow: false,
-              enterable: false
+              enterable: false,
+              useScrollbar
             }),
             /**
               * 工具提示
@@ -14742,7 +14745,8 @@ export default defineVxeComponent({
               maxHeight: tableTipConfig.maxHeight,
               placement: tableTipConfig.placement,
               defaultPlacement: tableTipConfig.defaultPlacement,
-              popupClassName: tableTipConfig.popupClassName
+              popupClassName: tableTipConfig.popupClassName,
+              useScrollbar: tableTipConfig.useScrollbar
             }, currTooltipSlot
               ? {
                   content: () => {
@@ -14781,7 +14785,8 @@ export default defineVxeComponent({
                 theme: validTipConfig.theme,
                 enterable: validTipConfig.enterable,
                 enterDelay: validTipConfig.enterDelay,
-                leaveDelay: validTipConfig.leaveDelay
+                leaveDelay: validTipConfig.leaveDelay,
+                useScrollbar
               })
               : renderEmptyElement($xeTable)
           ])
