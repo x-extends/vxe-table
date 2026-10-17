@@ -9814,7 +9814,7 @@ const tableMethods: any = {
             } else {
               dragRow[parentField] = null
             }
-            dragList.forEach(row => {
+            dragList.forEach((row: any) => {
               row[childrenField] = undefined
               row[mapChildrenField] = undefined
             })
@@ -12938,6 +12938,16 @@ const tableMethods: any = {
       internalData.xeGanttView = $ganttView
     }
     return $xeTable.$nextTick()
+  },
+  getInternalData () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+    return internalData
+  },
+  getReactData () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    return reactData
   },
 
   /*************************
