@@ -81,7 +81,11 @@ export default defineVxeComponent({
     const internalData = createInternalData()
 
     let tableMethods = {} as TableMethods
-    let tablePrivateMethods = {} as TablePrivateMethods
+    let tablePrivateMethods = {} as TablePrivateMethods & {
+      handleSyncScrollTop(params: {
+        scrollTop: number
+      }): void
+    }
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refVarElem = ref() as Ref<HTMLDivElement>
@@ -13471,6 +13475,16 @@ export default defineVxeComponent({
           $xeTable.handleTableData()
           $xeTable.updateScrollYSpace()
         })
+      },
+      handleSyncScrollTop (params: {
+        scrollTop: number;
+      }) {
+        const { scrollTop } = params
+        const { elemStore } = internalData
+        const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+        if (bodyScrollElem) {
+          bodyScrollElem.scrollTop = scrollTop
+        }
       },
       /**
        * 处理固定列的显示状态
