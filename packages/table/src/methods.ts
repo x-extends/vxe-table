@@ -13283,6 +13283,19 @@ const tableMethods: any = {
       $xeTable.updateScrollYSpace()
     })
   },
+  handleSyncScrollTop (params: {
+    scrollTop: number;
+  }) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { scrollTop } = params
+    const { elemStore } = internalData
+    const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+    if (bodyScrollElem) {
+      bodyScrollElem.scrollTop = scrollTop
+    }
+  },
   // 更新纵向 Y 可视渲染上下剩余空间大小
   updateScrollYSpace () {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
