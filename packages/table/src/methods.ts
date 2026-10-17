@@ -13948,6 +13948,16 @@ const tableMethods: any = {
     }
     return $xeTable.$nextTick()
   },
+  getInternalData () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+    return internalData
+  },
+  getReactData () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    return reactData
+  },
 
   /*************************
    * Publish methods
