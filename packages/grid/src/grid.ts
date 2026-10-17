@@ -1732,7 +1732,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         }
         // 处理插槽
         formOpts.items.forEach((item) => {
-          XEUtils.each(item.slots, (func) => {
+          XEUtils.each(item.slots, (func: any) => {
             if (!XEUtils.isFunction(func)) {
               if (slots[func]) {
                 formSlots[func] = slots[func]
