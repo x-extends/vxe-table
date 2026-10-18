@@ -35,9 +35,7 @@ import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, Vx
 
 const { warnLog, errLog } = createComponentLog('table')
 
-const { getConfig, getIcon, getI18n, renderer, formats, scrollbarUtils, createEvent, globalResize, interceptor, hooks, domUtils, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
-
-const { getThumbOffsetSize, getThumbSize, getScrollFromClick, getScrollFromDrag } = scrollbarUtils || {}
+const { getConfig, getIcon, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, domUtils, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
 
 const supportMaxRow = 5e6
 const customStorageKey = 'VXE_CUSTOM_STORE'
@@ -77,15 +75,13 @@ export default defineVxeComponent({
     const $xeGGWrapper = $xeGrid || $xeGantt
 
     const { computeSize } = useFns.useSize(props)
+    const { computeIsVScrollbar } = useFns.useVScrollbar(props)
 
     const crossTableDragRowInfo = getCrossTableDragRowInfo()
 
     const reactData = reactive(createReactData())
 
     const internalData = createInternalData()
-
-    let tableMethods = {} as TableMethods
-    let tablePrivateMethods = {} as TablePrivateMethods
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refVarElem = ref() as Ref<HTMLDivElement>
@@ -136,11 +132,6 @@ export default defineVxeComponent({
     const refScrollYBottomCornerElem = ref<HTMLDivElement>()
     const refScrollXSpaceElem = ref<HTMLDivElement>()
     const refScrollYSpaceElem = ref<HTMLDivElement>()
-
-    const refTrackXElem = ref<HTMLDivElement>()
-    const refTrackYElem = ref<HTMLDivElement>()
-    const refThumbXElem = ref<HTMLDivElement>()
-    const refThumbYElem = ref<HTMLDivElement>()
 
     let $xeToolbar: VxeToolbarConstructor
 
@@ -426,8 +417,8 @@ export default defineVxeComponent({
     })
 
     const computeTooltipOpts = computed(() => {
-      const { useScrollbar } = props
-      return Object.assign({ useScrollbar }, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
+      const isVScrollbar = computeIsVScrollbar.value
+      return Object.assign({ useScrollbar: isVScrollbar }, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
     })
 
     const computeHeaderTooltipOpts = computed(() => {
@@ -470,7 +461,8 @@ export default defineVxeComponent({
     })
 
     const computeFilterOpts = computed(() => {
-      return Object.assign({}, getConfig().table.filterConfig, props.filterConfig) as VxeTablePropTypes.FilterOpts
+      const isVScrollbar = computeIsVScrollbar.value
+      return Object.assign({ useScrollbar: isVScrollbar }, getConfig().table.filterConfig, props.filterConfig) as VxeTablePropTypes.FilterOpts
     })
 
     const computeFloatingFilterOpts = computed(() => {
@@ -915,7 +907,9 @@ export default defineVxeComponent({
 
     const computeMaps: VxeTablePrivateComputed = {
       computeSize,
+      computeIsVScrollbar,
       computeTableId,
+      computeTableStyle,
       computeValidOpts,
       computeRowField,
       computeVirtualXOpts,
@@ -1020,6 +1014,22 @@ export default defineVxeComponent({
       // 已废弃
       xegrid: $xeGrid
     } as unknown as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods
+
+    const {
+      refTrackXElem,
+      refTrackYElem,
+      refThumbXElem,
+      refThumbYElem,
+      updateThumbSize,
+      updateThumbOffset,
+      clickTrackXEvent,
+      clickTrackYEvent,
+      pointerdownThumbXEvent,
+      pointermoveThumbXEvent,
+      cleatPointerThumbEvent,
+      pointerdownThumbYEvent,
+      pointermoveThumbYEvent
+    } = useFns.useInitVScrollbar($xeTable)
 
     const eqCellValue = (newRow: any, oldRow: any, field: string) => {
       const val1 = XEUtils.get(newRow, field)
@@ -3618,6 +3628,7 @@ export default defineVxeComponent({
         if (reFull) {
           updateTreeLineStyle()
         }
+        updateScrollbar()
         internalData.rceRunTime = Date.now()
         if (reFull) {
           return computeScrollLoad()
@@ -3626,8 +3637,14 @@ export default defineVxeComponent({
     }
 
     const updateScrollbar = () => {
-      updateThumbSize()
-      updateThumbOffset()
+      const isVScrollbar = computeIsVScrollbar.value
+      if (isVScrollbar) {
+        return nextTick().then(() => {
+          updateThumbSize()
+          updateThumbOffset()
+        })
+      }
+      return Promise.resolve()
     }
 
     const defaultMinRunDelay = 50
@@ -4811,6 +4828,12 @@ export default defineVxeComponent({
       reactData.lazScrollLoading = false
       internalData.scrollRenderType = ''
 
+      const $xeGanttView = internalData.xeGanttView
+      if ($xeGanttView) {
+        const ganttInternalData = $xeGanttView.internalData
+        ganttInternalData.isSyncTableScrollTop = false
+      }
+
       let xRest = null
       let yRest = null
       if (!isAllOverflow) {
@@ -4884,14 +4907,15 @@ export default defineVxeComponent({
     }
 
     const syncGanttScrollTop = (scrollTop: number) => {
+      const { isSyncGanttScrollTop } = internalData
+      if (isSyncGanttScrollTop) {
+        return
+      }
       const $xeGanttView = internalData.xeGanttView
       if ($xeGanttView) {
         const ganttInternalData = $xeGanttView.internalData
-        const { elemStore: ganttElemStore } = ganttInternalData
-        const ganttBodyScrollElem = getRefElem(ganttElemStore['main-body-scroll'])
-        if (ganttBodyScrollElem) {
-          ganttBodyScrollElem.scrollTop = scrollTop
-        }
+        ganttInternalData.isSyncTableScrollTop = true
+        $xeGanttView.handleSyncScrollTop({ scrollTop })
       }
     }
 
@@ -5183,10 +5207,15 @@ export default defineVxeComponent({
       }
     }
 
-    tableMethods = {
+    const tableMethods: TableMethods = {
       dispatchEvent,
       getEl () {
         return refElem.value
+      },
+      getScrollViewElem () {
+        const { elemStore } = internalData
+        const viewEl = getRefElem(elemStore['main-body-scroll'])
+        return viewEl
       },
       /**
        * 重置表格的一切数据状态
@@ -9734,7 +9763,13 @@ export default defineVxeComponent({
     /**
      * 内部方法
      */
-    tablePrivateMethods = {
+    const tablePrivateMethods: TablePrivateMethods = {
+      getReactData () {
+        return reactData
+      },
+      getInternalData () {
+        return internalData
+      },
       getSetupOptions () {
         return getConfig()
       },
@@ -12914,7 +12949,10 @@ export default defineVxeComponent({
           direction,
           ...params
         }
-        updateThumbOffset()
+        const isVScrollbar = computeIsVScrollbar.value
+        if (isVScrollbar) {
+          updateThumbOffset()
+        }
         updateRowExpandStyle()
         checkLastSyncScroll(isRollX, isRollY)
         if (isRollX) {
@@ -12957,8 +12995,8 @@ export default defineVxeComponent({
         }
       },
       triggerBodyScrollEvent (evnt, fixedType) {
-        const { useScrollbar } = props
         const { scrollYLoad, scrollXLoad } = reactData
+        const isVScrollbar = computeIsVScrollbar.value
         const { elemStore, intoRunScroll, lastScrollTop, lastScrollLeft, inWheelScroll, inVirtualScroll, inHeaderScroll, inBodyScroll, scrollRenderType, inFooterScroll } = internalData
         if (inWheelScroll || inVirtualScroll || inHeaderScroll || inFooterScroll) {
           return
@@ -12977,7 +13015,7 @@ export default defineVxeComponent({
         if (!bodyScrollElem) {
           return
         }
-        if (!useScrollbar) {
+        if (!isVScrollbar) {
           if (!xHandleEl) {
             return
           }
@@ -13594,6 +13632,14 @@ export default defineVxeComponent({
           $xeTable.updateScrollYSpace()
         })
       },
+      handleSyncScrollTop (params) {
+        const { scrollTop } = params
+        const { elemStore } = internalData
+        const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+        if (bodyScrollElem) {
+          bodyScrollElem.scrollTop = scrollTop
+        }
+      },
       /**
        * 处理固定列的显示状态
        */
@@ -13739,185 +13785,22 @@ export default defineVxeComponent({
       }
     }
 
-    const updateThumbSize = () => {
+    const bindScrollbarResize = () => {
       const { elemStore } = internalData
-
-      const viewEl = getRefElem(elemStore['main-body-scroll'])
-      if (!viewEl) {
-        return
-      }
-      if (!viewEl.clientHeight || !viewEl.clientHeight) {
-        return
-      }
-      const trackXEl = refTrackXElem.value
-      const xThumbWidth = trackXEl ? getThumbSize(viewEl.clientWidth, viewEl.scrollWidth, trackXEl.clientWidth) : 0
-      const thumbXElem = refThumbXElem.value
-      if (thumbXElem) {
-        thumbXElem.style.width = xThumbWidth + 'px'
-      }
-      reactData.xThumbWidth = xThumbWidth
-
-      const trackYEl = refTrackYElem.value
-
-      const yThumbHeight = trackYEl ? getThumbSize(viewEl.clientHeight, viewEl.scrollHeight, trackYEl.clientHeight) : 0
-      const thumbYElem = refThumbYElem.value
-      if (thumbYElem) {
-        thumbYElem.style.height = yThumbHeight + 'px'
-      }
-      reactData.yThumbHeight = yThumbHeight
-    }
-
-    const updateThumbOffset = () => {
-      const { elemStore } = internalData
-
-      const viewEl = getRefElem(elemStore['main-body-scroll'])
-      if (!viewEl) {
-        return
-      }
-      if (!viewEl.clientHeight || !viewEl.clientHeight) {
-        return
-      }
-      const { xThumbWidth, yThumbHeight } = reactData
-      const trackXEl = refTrackXElem.value
-      const thumbXElem = refThumbXElem.value
-      const xThumbLeft = trackXEl && xThumbWidth ? getThumbOffsetSize(viewEl.scrollLeft, viewEl.clientWidth, viewEl.scrollWidth, trackXEl.clientWidth, xThumbWidth) : 0
-      internalData.xThumbLeft = xThumbLeft
-      if (thumbXElem && xThumbWidth) {
-        thumbXElem.style.width = xThumbWidth + 'px'
-        thumbXElem.style.transform = `translateX(${xThumbLeft}px)`
-      }
-
-      const trackYEl = refTrackYElem.value
-      const thumbYElem = refThumbYElem.value
-      const yThumbTop = trackYEl && yThumbHeight ? getThumbOffsetSize(viewEl.scrollTop, viewEl.clientHeight, viewEl.scrollHeight, trackYEl.clientHeight, yThumbHeight) : 0
-      internalData.yThumbTop = yThumbTop
-      if (thumbYElem && yThumbHeight) {
-        thumbYElem.style.height = yThumbHeight + 'px'
-        thumbYElem.style.transform = `translateY(${yThumbTop}px)`
-      }
-    }
-
-    const clickTrackXEvent = (evnt: MouseEvent) => {
-      const { elemStore } = internalData
-
-      const trackEl = evnt.currentTarget as HTMLDivElement
-      if (trackEl !== evnt.target) {
-        return
-      }
-      const viewEl = getRefElem(elemStore['main-body-scroll'])
-      if (!viewEl) {
-        return
-      }
-      const { xThumbWidth } = reactData
-      const trackRect = trackEl.getBoundingClientRect()
-      viewEl.scrollTo({
-        left: getScrollFromClick(evnt.clientX - trackRect.left, viewEl.clientWidth, viewEl.scrollWidth, trackEl.clientWidth, xThumbWidth),
-        behavior: 'auto'
-      })
-    }
-
-    const clickTrackYEvent = (evnt: MouseEvent) => {
-      const { elemStore } = internalData
-
-      const trackEl = evnt.currentTarget as HTMLDivElement
-      if (trackEl !== evnt.target) {
-        return
-      }
-      const viewEl = getRefElem(elemStore['main-body-scroll'])
-      if (!viewEl) {
-        return
-      }
-      const { yThumbHeight } = reactData
-      const trackRect = trackEl.getBoundingClientRect()
-      viewEl.scrollTo({
-        top: getScrollFromClick(evnt.clientY - trackRect.top, viewEl.clientHeight, viewEl.scrollHeight, trackEl.clientHeight, yThumbHeight),
-        behavior: 'auto'
-      })
-    }
-
-    const pointerdownThumbXEvent = (evnt: PointerEvent) => {
-      const { elemStore } = internalData
-
-      const thumbEl = evnt.currentTarget as HTMLDivElement
-      internalData.isThumbDrag = true
-      thumbEl.setPointerCapture(evnt.pointerId)
-
-      const viewEl = getRefElem(elemStore['main-body-scroll'])
-      if (!viewEl) {
-        return
-      }
-      const { xThumbWidth } = reactData
-      const trackEl = thumbEl.parentElement as HTMLDivElement
-      const trackRect = trackEl.getBoundingClientRect()
-      const pointerPosition = evnt.clientX - trackRect.left
-      // 记录 thumb 的偏移
-      const thumbOffset = getThumbOffsetSize(viewEl.scrollLeft, viewEl.clientWidth, viewEl.scrollWidth, trackEl.clientWidth, xThumbWidth)
-      internalData.thumbDragOffset = pointerPosition - thumbOffset
-    }
-
-    const pointermoveThumbXEvent = (evnt: PointerEvent) => {
-      const thumbEl = evnt.currentTarget as HTMLDivElement
-      if (!thumbEl.hasPointerCapture(evnt.pointerId)) {
-        return
-      }
-      const { elemStore, isThumbDrag, thumbDragOffset } = internalData
-      if (isThumbDrag) {
-        const viewEl = getRefElem(elemStore['main-body-scroll'])
-        if (!viewEl) {
-          return
+      const isVScrollbar = computeIsVScrollbar.value
+      if (isVScrollbar) {
+        const el = refElem.value
+        const viewInnerEl = getRefElem(elemStore['main-body-table'])
+        const scrollObserver = globalResize.create(() => {
+          reScrollFlag.value++
+        })
+        if (el) {
+          scrollObserver.observe(el)
         }
-        const { xThumbWidth } = reactData
-        const thumbEl = evnt.currentTarget as HTMLDivElement
-        const trackEl = thumbEl.parentElement as HTMLDivElement
-        const trackRect = trackEl.getBoundingClientRect()
-        // 更新偏移
-        viewEl.scrollLeft = getScrollFromDrag(evnt.clientX - trackRect.left, thumbDragOffset, viewEl.clientWidth, viewEl.scrollWidth, trackEl.clientWidth, xThumbWidth)
-      }
-    }
-
-    const cleatPointerThumbEvent = (evnt: PointerEvent) => {
-      const thumbEl = evnt.currentTarget as HTMLDivElement
-      thumbEl.releasePointerCapture(evnt.pointerId)
-      internalData.isThumbDrag = false
-    }
-
-    const pointerdownThumbYEvent = (evnt: PointerEvent) => {
-      const { elemStore } = internalData
-
-      const thumbEl = evnt.currentTarget as HTMLDivElement
-      internalData.isThumbDrag = true
-      thumbEl.setPointerCapture(evnt.pointerId)
-
-      const viewEl = getRefElem(elemStore['main-body-scroll'])
-      if (!viewEl) {
-        return
-      }
-      const { yThumbHeight } = reactData
-      const trackEl = thumbEl.parentElement as HTMLDivElement
-      const trackRect = trackEl.getBoundingClientRect()
-      const pointerPosition = evnt.clientY - trackRect.top
-      // 记录 thumb 的偏移
-      const thumbOffset = getThumbOffsetSize(viewEl.scrollTop, viewEl.clientHeight, viewEl.scrollHeight, trackEl.clientHeight, yThumbHeight)
-      internalData.thumbDragOffset = pointerPosition - thumbOffset
-    }
-
-    const pointermoveThumbYEvent = (evnt: PointerEvent) => {
-      const thumbEl = evnt.currentTarget as HTMLDivElement
-      if (!thumbEl.hasPointerCapture(evnt.pointerId)) {
-        return
-      }
-      const { elemStore, isThumbDrag, thumbDragOffset } = internalData
-      if (isThumbDrag) {
-        const viewEl = getRefElem(elemStore['main-body-scroll'])
-        if (!viewEl) {
-          return
+        if (viewInnerEl) {
+          scrollObserver.observe(viewInnerEl)
         }
-        const { yThumbHeight } = reactData
-        const thumbEl = evnt.currentTarget as HTMLDivElement
-        const trackEl = thumbEl.parentElement as HTMLDivElement
-        const trackRect = trackEl.getBoundingClientRect()
-        // 更新偏移
-        viewEl.scrollTop = getScrollFromDrag(evnt.clientY - trackRect.top, thumbDragOffset, viewEl.clientHeight, viewEl.scrollHeight, trackEl.clientHeight, yThumbHeight)
+        internalData.scrollObserver = scrollObserver
       }
     }
 
@@ -14354,8 +14237,8 @@ export default defineVxeComponent({
     const renderVirtualBody = () => {
       const $xeGanttView = internalData.xeGanttView
 
-      const { useScrollbar } = props
       const { xThumbWidth, yThumbHeight } = reactData
+      const isVScrollbar = computeIsVScrollbar.value
       const scrollbarOpts = computeScrollbarOpts.value
       const scrollXAutoHide = computeScrollXAutoHide.value
       const scrollYAutoHide = computeScrollYAutoHide.value
@@ -14370,10 +14253,10 @@ export default defineVxeComponent({
       return h('div', {
         key: 'lvb',
         class: ['vxe-table--layout-wrapper', `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`, `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`, {
-          'is--virtual-scrollbar': useScrollbar,
-          'ov-padding': useScrollbar && scrollbarOpts.padding,
-          'ov-x--auto-hide': useScrollbar && scrollXAutoHide,
-          'ov-y--auto-hide': useScrollbar && scrollYAutoHide,
+          'is--virtual-scrollbar': isVScrollbar,
+          'ov-padding': isVScrollbar && scrollbarOpts.padding,
+          'ov-x--auto-hide': isVScrollbar && scrollXAutoHide,
+          'ov-y--auto-hide': isVScrollbar && scrollYAutoHide,
           'overflow-y': yThumbHeight,
           'overflow-x': xThumbWidth
         }]
@@ -14421,10 +14304,11 @@ export default defineVxeComponent({
     }
 
     const renderVN = () => {
-      const { loading, stripe, useScrollbar, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules, importConfig, exportConfig, printConfig } = props
+      const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules, importConfig, exportConfig, printConfig } = props
       const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, isRowGroupStatus, columnStore, filterStore, customStore, tooltipStore } = reactData
       const { teleportToWrapperElem, popupToWrapperElem, customPopupToElem } = internalData
       const { leftList, rightList } = columnStore
+      const isVScrollbar = computeIsVScrollbar.value
       const loadingSlot = slots.loading
       const tipSlots = {
         header: slots.headerTooltip || slots['header-tooltip'],
@@ -14470,7 +14354,7 @@ export default defineVxeComponent({
       }
       return h('div', {
         ref: refElem,
-        class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, useScrollbar ? 'is--virtual-scrollbar' : 'is--native-scrollbar', `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`, `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`, {
+        class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, isVScrollbar ? 'is--virtual-scrollbar' : 'is--native-scrollbar', `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`, `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`, {
           [`size--${vSize}`]: vSize,
           [`valid-msg--${validOpts.msgMode}`]: !!editRules,
           'vxe-editable': !!editConfig,
@@ -14535,7 +14419,7 @@ export default defineVxeComponent({
         h('div', {
           key: 'tw',
           class: 'vxe-table--render-wrapper'
-        }, useScrollbar
+        }, isVScrollbar
           ? [renderVirtualBody()]
           : (scrollbarXToTop
               ? [
@@ -14722,7 +14606,7 @@ export default defineVxeComponent({
               ref: refCommTooltip,
               isArrow: false,
               enterable: false,
-              useScrollbar
+              useScrollbar: isVScrollbar
             }),
             /**
               * 工具提示
@@ -14786,7 +14670,7 @@ export default defineVxeComponent({
                 enterable: validTipConfig.enterable,
                 enterDelay: validTipConfig.enterDelay,
                 leaveDelay: validTipConfig.leaveDelay,
-                useScrollbar
+                useScrollbar: validTipConfig.useScrollbar
               })
               : renderEmptyElement($xeTable)
           ])
@@ -14897,43 +14781,44 @@ export default defineVxeComponent({
     watch(() => VxeUI.getLanguage(), () => {
       reLayoutFlag.value++
     })
+    watch(computeIsVScrollbar, () => {
+      nextTick(() => {
+        bindScrollbarResize()
+        nextTick(() => {
+          reLayoutFlag.value++
+        })
+      })
+    })
     watch(computeScrollbarXToTop, () => {
-      reScrollFlag.value++
       reLayoutFlag.value++
     })
     watch(computeScrollbarYToLeft, () => {
-      reScrollFlag.value++
       reLayoutFlag.value++
     })
     watch(computeScrollXVisible, () => {
-      reScrollFlag.value++
       reLayoutFlag.value++
     })
     watch(computeScrollYVisible, () => {
-      reScrollFlag.value++
       reLayoutFlag.value++
     })
     watch(computeScrollXHeight, () => {
-      reScrollFlag.value++
       reLayoutFlag.value++
     })
     watch(computeScrollYWidth, () => {
-      reScrollFlag.value++
       reLayoutFlag.value++
     })
     watch(computeCellHeitht, () => {
       reLayoutFlag.value++
     })
     watch(reLayoutFlag, () => {
-      $xeTable.recalculate(true)
+      nextTick().then(() => {
+        $xeTable.recalculate(true)
+      })
     })
 
     watch(reScrollFlag, () => {
-      nextTick(() => {
-        $xeTable.updateScrollbar()
-        nextTick(() => {
-          $xeTable.updateScrollbar()
-        })
+      updateScrollbar().then(() => {
+        updateScrollbar()
       })
     })
 
@@ -15082,7 +14967,7 @@ export default defineVxeComponent({
 
     onMounted(() => {
       const { editConfig, exportConfig, importConfig, treeConfig, minHeight, keepSource, areaConfig } = props
-      const { elemStore, scrollXStore, scrollYStore } = internalData
+      const { scrollXStore, scrollYStore } = internalData
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
       const aggregateOpts = computeAggregateOpts.value
@@ -15369,22 +15254,9 @@ export default defineVxeComponent({
       initData()
 
       nextTick(() => {
-        const { useScrollbar, autoResize } = props
-        const el = refElem.value
-        if (useScrollbar) {
-          const viewInnerEl = getRefElem(elemStore['main-body-table'])
-          const scrollObserver = globalResize.create(() => {
-            reScrollFlag.value++
-          })
-          if (el) {
-            scrollObserver.observe(el)
-          }
-          if (viewInnerEl) {
-            scrollObserver.observe(viewInnerEl)
-          }
-          internalData.scrollObserver = scrollObserver
-        }
+        const { autoResize } = props
         if (autoResize) {
+          const el = refElem.value
           const parentEl = $xeTable.getParentElem()
           const resizeObserver = globalResize.create(() => {
             if (props.autoResize) {
@@ -15399,6 +15271,7 @@ export default defineVxeComponent({
           }
           internalData.resizeObserver = resizeObserver
         }
+        bindScrollbarResize()
       })
 
       if (virtualYOpts.mode !== 'scroll') {

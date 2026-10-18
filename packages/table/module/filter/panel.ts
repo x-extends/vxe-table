@@ -2,7 +2,7 @@ import { h, ref, computed, inject, Teleport, PropType } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
 import { VxeUI } from '../../../ui'
 import { formatText, isEnableConf } from '../../../ui/src/utils'
-import { getPropClass, toCssUnit } from '../../../ui/src/dom'
+import { getPropClass } from '../../../ui/src/dom'
 import { getSlotVNs } from '../../../ui/src/vn'
 import { createComponentLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
@@ -24,6 +24,8 @@ export default defineVxeComponent({
   },
   setup (props, context) {
     const xID = XEUtils.uniqueId()
+
+    const VxeUIScrollbarComponent = VxeUI.getComponent('VxeScrollbar')
 
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
     const { reactData: tableReactData, internalData: tableInternalData, getComputeMaps } = $xeTable
@@ -124,10 +126,12 @@ export default defineVxeComponent({
 
     const renderOptions = (filterRender: VxeColumnPropTypes.FilterRender | null, compConf: VxeGlobalRendererOptions | null) => {
       const { filterStore } = props
-      const { column, maxHeight } = filterStore
+      const { column } = filterStore
       if (!column) {
         return []
       }
+      const filterOpts = computeFilterOpts.value
+      const { useScrollbar } = filterOpts
       const { filterMultiple, filters, slots } = column
       const filterOptions = (filters || []) as VxeTableDefines.FilterOption[]
       const filterSlot = slots ? slots.filter : null
@@ -136,33 +140,48 @@ export default defineVxeComponent({
       if (filterSlot) {
         return [
           h('div', {
-            class: 'vxe-table--filter-template',
-            style: maxHeight
-              ? {
-                  maxHeight: toCssUnit(maxHeight)
-                }
-              : {}
+            class: 'vxe-table--filter-template'
           }, $xeTable.callSlot(filterSlot, params))
         ]
       } else if (filterRender && rtFilter) {
         return [
           h('div', {
-            class: 'vxe-table--filter-template',
-            style: maxHeight
-              ? {
-                  maxHeight: toCssUnit(maxHeight)
-                }
-              : {}
+            class: 'vxe-table--filter-template'
           }, getSlotVNs(rtFilter(filterRender, params)))
         ]
       }
       const isAllChecked = filterMultiple ? filterStore.isAllSelected : !filterOptions.some((item) => item._checked)
       const isAllIndeterminate = filterMultiple && filterStore.isIndeterminate
+
+      const optVNs = filterOptions.map((item: any) => {
+        const isChecked = item._checked
+        const isIndeterminate = false
+        return h('div', {
+          class: ['vxe-table--filter-option', {
+            'is--checked': item._checked
+          }],
+          title: item.label,
+          onClick: (evnt: MouseEvent) => {
+            changeOption(evnt, !item._checked, item)
+          }
+        }, (filterMultiple
+          ? [
+              h('span', {
+                class: ['vxe-checkbox--icon', isIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
+              })
+            ]
+          : []).concat([
+          h('span', {
+            class: 'vxe-checkbox--label'
+          }, formatText(item.label, 1))
+        ]))
+      })
+
       return [
-        h('ul', {
+        h('div', {
           class: 'vxe-table--filter-header'
         }, [
-          h('li', {
+          h('div', {
             class: ['vxe-table--filter-option', {
               'is--checked': isAllChecked,
               'is--indeterminate': isAllIndeterminate
@@ -183,36 +202,16 @@ export default defineVxeComponent({
             }, getI18n('vxe.table.allFilter'))
           ]))
         ]),
-        h('ul', {
-          class: 'vxe-table--filter-body',
-          style: maxHeight
-            ? {
-                maxHeight: toCssUnit(maxHeight)
-              }
-            : {}
-        }, filterOptions.map((item: any) => {
-          const isChecked = item._checked
-          const isIndeterminate = false
-          return h('li', {
-            class: ['vxe-table--filter-option', {
-              'is--checked': item._checked
-            }],
-            title: item.label,
-            onClick: (evnt: MouseEvent) => {
-              changeOption(evnt, !item._checked, item)
-            }
-          }, (filterMultiple
-            ? [
-                h('span', {
-                  class: ['vxe-checkbox--icon', isIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
-                })
-              ]
-            : []).concat([
-            h('span', {
-              class: 'vxe-checkbox--label'
-            }, formatText(item.label, 1))
-          ]))
-        }))
+        useScrollbar
+          ? h(VxeUIScrollbarComponent, {
+            class: 'vxe-table--scrollbar-filter-body',
+            viewClassName: 'vxe-table--scrollbar-filter-body-view'
+          }, {
+            default: () => optVNs
+          })
+          : h('div', {
+            class: 'vxe-table--filter-body'
+          }, optVNs)
       ]
     }
 

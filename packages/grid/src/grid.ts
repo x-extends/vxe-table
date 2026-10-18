@@ -64,6 +64,7 @@ export default defineVxeComponent({
     const defaultLayouts: VxeGridPropTypes.Layouts = [['Form'], ['Toolbar', 'Top', 'Table', 'Bottom', 'Pager']]
 
     const { computeSize } = useFns.useSize(props)
+    const { computeIsVScrollbar } = useFns.useVScrollbar(props)
 
     const reactData = reactive(createReactData())
 
@@ -268,6 +269,8 @@ export default defineVxeComponent({
     }
 
     const computeMaps: VxeGridPrivateComputed = {
+      computeSize,
+      computeIsVScrollbar,
       computeProxyOpts,
       computePagerOpts,
       computeFormOpts,

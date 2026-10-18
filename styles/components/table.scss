@@ -2781,5 +2781,9 @@ div.vxe-table--tooltip-wrapper {
   }
   & > .vxe-scrollbar {
     position: unset;
+    & > .vxe-scrollbar--track-x,
+    & > .vxe-scrollbar--track-y {
+      z-index: 7;
+    }
   }
 }
