@@ -170,7 +170,7 @@ VxeUI.setConfig({
       destroyOnClose: true,
       multiple: true,
       showIcon: true,
-      maxHeight: 280
+      maxHeight: 320
     },
     floatingFilterConfig: {
       // enabled: false

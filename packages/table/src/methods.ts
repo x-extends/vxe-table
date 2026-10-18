@@ -14,9 +14,7 @@ import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, TableReactData
 
 const { warnLog, errLog } = createComponentLog('table')
 
-const { getConfig, getI18n, renderer, scrollbarUtils, formats, interceptor, createEvent, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
-
-const { getThumbOffsetSize, getThumbSize, getScrollFromClick, getScrollFromDrag } = scrollbarUtils || {}
+const { getConfig, getI18n, renderer, formats, interceptor, createEvent, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
 
 const supportMaxRow = 5e6
 const customStorageKey = 'VXE_CUSTOM_STORE'
@@ -3242,6 +3240,7 @@ function handleRecalculateStyle ($xeTable: VxeTableConstructor & VxeTablePrivate
     if (reFull) {
       updateTreeLineStyle($xeTable)
     }
+    $xeTable.updateScrollbar()
     internalData.rceRunTime = Date.now()
     if (reFull) {
       return computeScrollLoad($xeTable)
@@ -4240,8 +4239,15 @@ function handleSyncScroll ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   internalData.inHeaderScroll = false
   internalData.inBodyScroll = false
   internalData.inFooterScroll = false
+  internalData.isSyncGanttScrollTop = false
   reactData.lazScrollLoading = false
   internalData.scrollRenderType = ''
+
+  const $xeGanttView = internalData.xeGanttView
+  if ($xeGanttView) {
+    const ganttInternalData = $xeGanttView.internalData
+    ganttInternalData.isSyncTableScrollTop = false
+  }
 
   let xRest = null
   let yRest = null
@@ -4321,14 +4327,15 @@ const getWheelSpeed = (lastScrollTime: number) => {
 const syncGanttScrollTop = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, scrollTop: number) => {
   const internalData = $xeTable as unknown as TableInternalData
 
+  const { isSyncGanttScrollTop } = internalData
+  if (isSyncGanttScrollTop) {
+    return
+  }
   const $xeGanttView = internalData.xeGanttView
   if ($xeGanttView) {
     const ganttInternalData = $xeGanttView.internalData
-    const { elemStore: ganttElemStore } = ganttInternalData
-    const ganttBodyScrollElem = getRefElem(ganttElemStore['main-body-scroll'])
-    if (ganttBodyScrollElem) {
-      ganttBodyScrollElem.scrollTop = scrollTop
-    }
+    ganttInternalData.isSyncTableScrollTop = true
+    $xeGanttView.handleSyncScrollTop({ scrollTop })
   }
 }
 
@@ -4883,6 +4890,14 @@ const tableMethods: any = {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     return $xeTable.$refs.refElem as HTMLDivElement
+  },
+  getScrollViewElem () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { elemStore } = internalData
+    const viewEl = getRefElem(elemStore['main-body-scroll'])
+    return viewEl
   },
   /**
    * 获取父容器元素
@@ -10274,9 +10289,16 @@ const tableMethods: any = {
    * @private
    */
   updateScrollbar () {
-    const $xeTable = this
-    $xeTable.updateThumbSize()
-    $xeTable.updateThumbOffset()
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+    const isVScrollbar = $xeTable.computeIsVScrollbar
+    if (isVScrollbar) {
+      return $xeTable.$nextTick().then(() => {
+        $xeTable.updateThumbSize()
+        $xeTable.updateThumbOffset()
+      })
+    }
+    return Promise.resolve()
   },
   /**
    * 表头单元格按下事件
@@ -12772,7 +12794,10 @@ const tableMethods: any = {
       direction,
       ...params
     }
-    $xeTable.updateThumbOffset()
+    const isVScrollbar = $xeTable.computeIsVScrollbar
+    if (isVScrollbar) {
+      $xeTable.updateThumbOffset()
+    }
     updateRowExpandStyle($xeTable)
     checkLastSyncScroll($xeTable, isRollX, isRollY)
     if (isRollX) {
@@ -12820,12 +12845,11 @@ const tableMethods: any = {
   },
   triggerBodyScrollEvent (evnt: Event, fixedType: '' | 'left' | 'right') {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
 
-    const { useScrollbar } = props
     const { scrollYLoad, scrollXLoad } = reactData
+    const isVScrollbar = $xeTable.computeIsVScrollbar
     const { elemStore, intoRunScroll, lastScrollTop, lastScrollLeft, inWheelScroll, inVirtualScroll, inHeaderScroll, inBodyScroll, scrollRenderType, inFooterScroll } = internalData
     if (inWheelScroll || inVirtualScroll || inHeaderScroll || inFooterScroll) {
       return
@@ -12844,7 +12868,7 @@ const tableMethods: any = {
     if (!bodyScrollElem) {
       return
     }
-    if (!useScrollbar) {
+    if (!isVScrollbar) {
       if (!xHandleEl) {
         return
       }
@@ -13326,6 +13350,19 @@ const tableMethods: any = {
       $xeTable.handleTableData()
       $xeTable.updateScrollYSpace()
     })
+  },
+  handleSyncScrollTop (params: {
+    scrollTop: number
+  }) {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+
+    const { scrollTop } = params
+    const { elemStore } = internalData
+    const bodyScrollElem = getRefElem(elemStore['main-body-scroll'])
+    if (bodyScrollElem) {
+      bodyScrollElem.scrollTop = scrollTop
+    }
   },
   // 更新纵向 Y 可视渲染上下剩余空间大小
   updateScrollYSpace () {
@@ -14051,210 +14088,6 @@ const tableMethods: any = {
 
     return $xeTable.handleClearStack()
   },
-
-  // 滚动条
-  updateThumbSize () {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const reactData = $xeTable as unknown as TableReactData
-    const internalData = $xeTable as unknown as TableInternalData
-
-    const { elemStore } = internalData
-    const viewEl = getRefElem(elemStore['main-body-scroll'])
-    if (!viewEl) {
-      return
-    }
-    if (!viewEl.clientHeight || !viewEl.clientHeight) {
-      return
-    }
-    const trackXEl = $xeTable.$refs.refTrackXElem as HTMLDivElement
-    const xThumbWidth = trackXEl ? getThumbSize(viewEl.clientWidth, viewEl.scrollWidth, trackXEl.clientWidth) : 0
-    const thumbXElem = $xeTable.$refs.refThumbXElem as HTMLDivElement
-    if (thumbXElem) {
-      thumbXElem.style.width = xThumbWidth + 'px'
-    }
-    reactData.xThumbWidth = xThumbWidth
-
-    const trackYEl = $xeTable.$refs.refTrackYElem as HTMLDivElement
-
-    const yThumbHeight = trackYEl ? getThumbSize(viewEl.clientHeight, viewEl.scrollHeight, trackYEl.clientHeight) : 0
-    const thumbYElem = $xeTable.$refs.refThumbYElem as HTMLDivElement
-    if (thumbYElem) {
-      thumbYElem.style.height = yThumbHeight + 'px'
-    }
-    reactData.yThumbHeight = yThumbHeight
-  },
-  updateThumbOffset () {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const reactData = $xeTable as unknown as TableReactData
-    const internalData = $xeTable as unknown as TableInternalData
-
-    const { elemStore } = internalData
-    const viewEl = getRefElem(elemStore['main-body-scroll'])
-    if (!viewEl) {
-      return
-    }
-    if (!viewEl.clientHeight || !viewEl.clientHeight) {
-      return
-    }
-    const { xThumbWidth, yThumbHeight } = reactData
-    const trackXEl = $xeTable.$refs.refTrackXElem as HTMLDivElement
-    const thumbXElem = $xeTable.$refs.refThumbXElem as HTMLDivElement
-    const xThumbLeft = trackXEl && xThumbWidth ? getThumbOffsetSize(viewEl.scrollLeft, viewEl.clientWidth, viewEl.scrollWidth, trackXEl.clientWidth, xThumbWidth) : 0
-    internalData.xThumbLeft = xThumbLeft
-    if (thumbXElem && xThumbWidth) {
-      thumbXElem.style.width = xThumbWidth + 'px'
-      thumbXElem.style.transform = `translateX(${xThumbLeft}px)`
-    }
-
-    const trackYEl = $xeTable.$refs.refTrackYElem as HTMLDivElement
-    const thumbYElem = $xeTable.$refs.refThumbYElem as HTMLDivElement
-    const yThumbTop = trackYEl && yThumbHeight ? getThumbOffsetSize(viewEl.scrollTop, viewEl.clientHeight, viewEl.scrollHeight, trackYEl.clientHeight, yThumbHeight) : 0
-    internalData.yThumbTop = yThumbTop
-    if (thumbYElem && yThumbHeight) {
-      thumbYElem.style.height = yThumbHeight + 'px'
-      thumbYElem.style.transform = `translateY(${yThumbTop}px)`
-    }
-  },
-  clickTrackXEvent (evnt: MouseEvent) {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const reactData = $xeTable as unknown as TableReactData
-    const internalData = $xeTable as unknown as TableInternalData
-
-    const { elemStore } = internalData
-    const trackEl = evnt.currentTarget as HTMLDivElement
-    if (trackEl !== evnt.target) {
-      return
-    }
-    const viewEl = getRefElem(elemStore['main-body-scroll'])
-    if (!viewEl) {
-      return
-    }
-    const { xThumbWidth } = reactData
-    const trackRect = trackEl.getBoundingClientRect()
-    viewEl.scrollTo({
-      left: getScrollFromClick(evnt.clientX - trackRect.left, viewEl.clientWidth, viewEl.scrollWidth, trackEl.clientWidth, xThumbWidth),
-      behavior: 'auto'
-    })
-  },
-  clickTrackYEvent (evnt: MouseEvent) {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const reactData = $xeTable as unknown as TableReactData
-    const internalData = $xeTable as unknown as TableInternalData
-
-    const trackEl = evnt.currentTarget as HTMLDivElement
-    if (trackEl !== evnt.target) {
-      return
-    }
-    const { elemStore } = internalData
-    const viewEl = getRefElem(elemStore['main-body-scroll'])
-    if (!viewEl) {
-      return
-    }
-    const { yThumbHeight } = reactData
-    const trackRect = trackEl.getBoundingClientRect()
-    viewEl.scrollTo({
-      top: getScrollFromClick(evnt.clientY - trackRect.top, viewEl.clientHeight, viewEl.scrollHeight, trackEl.clientHeight, yThumbHeight),
-      behavior: 'auto'
-    })
-  },
-  pointerdownThumbXEvent (evnt: PointerEvent) {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const reactData = $xeTable as unknown as TableReactData
-    const internalData = $xeTable as unknown as TableInternalData
-
-    const { elemStore } = internalData
-    const thumbEl = evnt.currentTarget as HTMLDivElement
-    internalData.isThumbDrag = true
-    thumbEl.setPointerCapture(evnt.pointerId)
-
-    const viewEl = getRefElem(elemStore['main-body-scroll'])
-    if (!viewEl) {
-      return
-    }
-    const { xThumbWidth } = reactData
-    const trackEl = thumbEl.parentElement as HTMLDivElement
-    const trackRect = trackEl.getBoundingClientRect()
-    const pointerPosition = evnt.clientX - trackRect.left
-    // 记录 thumb 的偏移
-    const thumbOffset = getThumbOffsetSize(viewEl.scrollLeft, viewEl.clientWidth, viewEl.scrollWidth, trackEl.clientWidth, xThumbWidth)
-    internalData.thumbDragOffset = pointerPosition - thumbOffset
-  },
-  pointermoveThumbXEvent (evnt: PointerEvent) {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const reactData = $xeTable as unknown as TableReactData
-    const internalData = $xeTable as unknown as TableInternalData
-
-    const thumbEl = evnt.currentTarget as HTMLDivElement
-    if (!thumbEl.hasPointerCapture(evnt.pointerId)) {
-      return
-    }
-    const { elemStore, isThumbDrag, thumbDragOffset } = internalData
-    if (isThumbDrag) {
-      const viewEl = getRefElem(elemStore['main-body-scroll'])
-      if (!viewEl) {
-        return
-      }
-      const { xThumbWidth } = reactData
-      const thumbEl = evnt.currentTarget as HTMLDivElement
-      const trackEl = thumbEl.parentElement as HTMLDivElement
-      const trackRect = trackEl.getBoundingClientRect()
-      // 更新偏移
-      viewEl.scrollLeft = getScrollFromDrag(evnt.clientX - trackRect.left, thumbDragOffset, viewEl.clientWidth, viewEl.scrollWidth, trackEl.clientWidth, xThumbWidth)
-    }
-  },
-  cleatPointerThumbEvent (evnt: PointerEvent) {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const internalData = $xeTable as unknown as TableInternalData
-
-    const thumbEl = evnt.currentTarget as HTMLDivElement
-    thumbEl.releasePointerCapture(evnt.pointerId)
-    internalData.isThumbDrag = false
-  },
-  pointerdownThumbYEvent (evnt: PointerEvent) {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const reactData = $xeTable as unknown as TableReactData
-    const internalData = $xeTable as unknown as TableInternalData
-
-    const { elemStore } = internalData
-    const thumbEl = evnt.currentTarget as HTMLDivElement
-    internalData.isThumbDrag = true
-    thumbEl.setPointerCapture(evnt.pointerId)
-    const viewEl = getRefElem(elemStore['main-body-scroll'])
-    if (!viewEl) {
-      return
-    }
-    const { yThumbHeight } = reactData
-    const trackEl = thumbEl.parentElement as HTMLDivElement
-    const trackRect = trackEl.getBoundingClientRect()
-    const pointerPosition = evnt.clientY - trackRect.top
-    // 记录 thumb 的偏移
-    const thumbOffset = getThumbOffsetSize(viewEl.scrollTop, viewEl.clientHeight, viewEl.scrollHeight, trackEl.clientHeight, yThumbHeight)
-    internalData.thumbDragOffset = pointerPosition - thumbOffset
-  },
-  pointermoveThumbYEvent (evnt: PointerEvent) {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const reactData = $xeTable as unknown as TableReactData
-    const internalData = $xeTable as unknown as TableInternalData
-
-    const thumbEl = evnt.currentTarget as HTMLDivElement
-    if (!thumbEl.hasPointerCapture(evnt.pointerId)) {
-      return
-    }
-    const { elemStore, isThumbDrag, thumbDragOffset } = internalData
-    if (isThumbDrag) {
-      const viewEl = getRefElem(elemStore['main-body-scroll'])
-      if (!viewEl) {
-        return
-      }
-      const { yThumbHeight } = reactData
-      const thumbEl = evnt.currentTarget as HTMLDivElement
-      const trackEl = thumbEl.parentElement as HTMLDivElement
-      const trackRect = trackEl.getBoundingClientRect()
-      // 更新偏移
-      viewEl.scrollTop = getScrollFromDrag(evnt.clientY - trackRect.top, thumbDragOffset, viewEl.clientHeight, viewEl.scrollHeight, trackEl.clientHeight, yThumbHeight)
-    }
-  },
-  // 滚动条
   dispatchEvent (type: ValueOf<VxeTableEmits>, params: Record<string, any>, evnt: Event | null) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const $xeGrid = $xeTable.$xeGrid
@@ -14316,6 +14149,16 @@ const tableMethods: any = {
       internalData.xeGanttView = $ganttView
     }
     return $xeTable.$nextTick()
+  },
+  getInternalData () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const internalData = $xeTable as unknown as TableInternalData
+    return internalData
+  },
+  getReactData () {
+    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+    const reactData = $xeTable as unknown as TableReactData
+    return reactData
   },
 
   /*************************

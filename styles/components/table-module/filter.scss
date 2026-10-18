@@ -31,6 +31,7 @@
 .vxe-table--filter-wrapper {
   display: none;
   position: absolute;
+  flex-direction: column;
   top: 0;
   min-width: 100px;
   font-size: var(--vxe-ui-font-size-default);
@@ -40,6 +41,7 @@
   color: var(--vxe-ui-font-color);
   box-shadow: var(--vxe-ui-base-popup-box-shadow);
   z-index: 15;
+  max-height: var(--vxe-ui-vxe-table-filter-default-max-height);
   &:not(.is--multiple) {
     .vxe-table--filter-header,
     .vxe-table--filter-body {
@@ -47,11 +49,24 @@
     }
   }
   &.is--active {
-    display: block;
+    display: flex;
+  }
+  .vxe-table--filter-body,
+  .vxe-table--scrollbar-filter-body {
+    overflow: auto;
+    flex-grow: 1;
+  }
+  .vxe-table--scrollbar-filter-body {
+    display: flex;
+    flex-direction: column;
+    .vxe-table--scrollbar-filter-body-view {
+      flex-grow: 1;
+    }
   }
   .vxe-table--filter-header,
-  .vxe-table--filter-body {
-    & > li {
+  .vxe-table--filter-body,
+  .vxe-table--scrollbar-filter-body {
+    .vxe-table--filter-option {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -69,11 +84,12 @@
   .vxe-table--filter-header {
     padding-top: 0.2em;
   }
-  .vxe-table--filter-body {
-    max-height: var(--vxe-ui-vxe-table-filter-default-max-height);
+  .vxe-table--filter-body,
+  .vxe-table--scrollbar-filter-body {
     padding-bottom: 0.2em;
   }
-  & > ul {
+  .vxe-table--filter-header,
+  .vxe-table--filter-body {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -81,12 +97,9 @@
     overflow: auto;
     user-select: none;
   }
-  &.is--multiple {
-    & > ul {
-      & > li {
-        padding: 0.25em 0.8em 0.25em 1em;
-      }
-    }
+  .vxe-table--filter-header,
+  .vxe-table--filter-footer {
+    flex-shrink: 0;
   }
   .vxe-table--filter-footer {
     border-top: 1px solid var(--vxe-ui-base-popup-border-color);
@@ -115,8 +128,6 @@
 .vxe-table--filter-option {
   @include baseMixin.createCheckboxIcon();
 }
-
-
 
 .vxe-table--filter-wrapper {
   &.size--medium {

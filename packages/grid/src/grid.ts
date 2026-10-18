@@ -10,7 +10,7 @@ import { tableProps } from '../../table/src/props'
 import VxeTableComponent from '../../table'
 import VxeToolbarComponent from '../../toolbar'
 
-import type { VxeFormItemProps, VxeFormDefines, VxeComponentStyleType, VxeComponentSizeType, ValueOf, VxeFormInstance, VxeFormItemPropTypes, VxePagerInstance } from 'vxe-pc-ui'
+import type { VxeFormItemProps, VxeFormDefines, VxeComponentStyleType, VxeComponentSizeType, VxeComponentIsVScrollbar, ValueOf, VxeFormInstance, VxeFormItemPropTypes, VxePagerInstance } from 'vxe-pc-ui'
 import type { GridReactData, VxeTablePropTypes, VxeGridConstructor, VxeToolbarPropTypes, VxeToolbarInstance, VxeGridPropTypes, VxeTableMethods, GridInternalData, VxeGridEmits, VxePagerDefines, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, TableInternalData, VxeTableProps, VxeGridDefines } from '../../../types'
 
 const { warnLog, errLog } = createComponentLog('grid')
@@ -139,6 +139,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
   computed: {
     ...({} as {
       computeSize(): VxeComponentSizeType
+      computeIsVScrollbar(): VxeComponentIsVScrollbar
     }),
     isRespMsg () {
       const $xeGrid = this

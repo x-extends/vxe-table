@@ -26,12 +26,33 @@ import keyboardMixin from '../module/keyboard/mixin'
 import validatorMixin from '../module/validator/mixin'
 import customMixin from '../module/custom/mixin'
 
-import type { VxeTabsConstructor, VxeTabsPrivateMethods, VxeComponentStyleType, VxeModalConstructor, VxeModalMethods } from 'vxe-pc-ui'
+import type { VxeTabsConstructor, VxeTabsPrivateMethods, VxeComponentStyleType, VxeModalConstructor, VxeModalMethods, VxeUseSizeComputed, VxeUseVScrollbarComputed, VxeUseInitVScrollbarComputed } from 'vxe-pc-ui'
 import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes, TableInternalData, TableReactData, VxeTableDefines } from '../../../types'
 
 const { warnLog, errLog } = createComponentLog('table')
 
 const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, domUtils, globalMixins, renderEmptyElement } = VxeUI
+
+function bindScrollbarResize ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const internalData = $xeTable as unknown as TableInternalData
+
+  const { elemStore } = internalData
+  const isVScrollbar = $xeTable.computeIsVScrollbar
+  if (isVScrollbar) {
+    const el = $xeTable.$refs.refElem as HTMLDivElement
+    const viewInnerEl = getRefElem(elemStore['main-body-table'])
+    const scrollObserver = globalResize.create(() => {
+      ($xeTable as any).reScrollFlag++
+    })
+    if (el) {
+      scrollObserver.observe(el)
+    }
+    if (viewInnerEl) {
+      scrollObserver.observe(viewInnerEl)
+    }
+    internalData.scrollObserver = scrollObserver
+  }
+}
 
 function handleUpdateMergeBodyCells ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
   const internalData = $xeTable as unknown as TableInternalData
@@ -564,14 +585,13 @@ function renderNativeBody (h: CreateElement, $xeTable: VxeTableConstructor & Vxe
 }
 
 function renderVirtualBody (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
-  const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
   const $xeGantt = $xeTable.$xeGantt
   const $xeGanttView = internalData.xeGanttView
 
-  const { useScrollbar } = props
   const { xThumbWidth, yThumbHeight } = reactData
+  const isVScrollbar = $xeTable.computeIsVScrollbar
   const scrollbarOpts = $xeTable.computeScrollbarOpts
   const scrollXAutoHide = $xeTable.computeScrollXAutoHide
   const scrollYAutoHide = $xeTable.computeScrollYAutoHide
@@ -586,10 +606,10 @@ function renderVirtualBody (h: CreateElement, $xeTable: VxeTableConstructor & Vx
   return h('div', {
     key: 'lvb',
     class: ['vxe-table--layout-wrapper', `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`, `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`, {
-      'is--virtual-scrollbar': useScrollbar,
-      'ov-padding': useScrollbar && scrollbarOpts.padding,
-      'ov-x--auto-hide': useScrollbar && scrollXAutoHide,
-      'ov-y--auto-hide': useScrollbar && scrollYAutoHide,
+      'is--virtual-scrollbar': isVScrollbar,
+      'ov-padding': isVScrollbar && scrollbarOpts.padding,
+      'ov-x--auto-hide': isVScrollbar && scrollXAutoHide,
+      'ov-y--auto-hide': isVScrollbar && scrollYAutoHide,
       'overflow-y': yThumbHeight,
       'overflow-x': xThumbWidth
     }]
@@ -604,18 +624,18 @@ function renderVirtualBody (h: CreateElement, $xeTable: VxeTableConstructor & Vx
           ref: 'refTrackXElem',
           class: 'vxe-scrollbar--track-x',
           on: {
-            click: ($xeTable as any).clickTrackXEvent
+            click: $xeTable.clickTrackXEvent
           }
         }, [
           h('div', {
             ref: 'refThumbXElem',
             class: 'vxe-scrollbar--thumb-x',
             on: {
-              pointerdown: ($xeTable as any).pointerdownThumbXEvent,
-              pointermove: ($xeTable as any).pointermoveThumbXEvent,
-              pointerup: ($xeTable as any).cleatPointerThumbEvent,
-              pointercancel: ($xeTable as any).cleatPointerThumbEvent,
-              lostpointercapture: ($xeTable as any).cleatPointerThumbEvent
+              pointerdown: $xeTable.pointerdownThumbXEvent,
+              pointermove: $xeTable.pointermoveThumbXEvent,
+              pointerup: $xeTable.cleatPointerThumbEvent,
+              pointercancel: $xeTable.cleatPointerThumbEvent,
+              lostpointercapture: $xeTable.cleatPointerThumbEvent
             }
           })
         ]),
@@ -625,18 +645,18 @@ function renderVirtualBody (h: CreateElement, $xeTable: VxeTableConstructor & Vx
           ref: 'refTrackYElem',
           class: 'vxe-scrollbar--track-y',
           on: {
-            click: ($xeTable as any).clickTrackYEvent
+            click: $xeTable.clickTrackYEvent
           }
         }, [
           h('div', {
             ref: 'refThumbYElem',
             class: 'vxe-scrollbar--thumb-y',
             on: {
-              pointerdown: ($xeTable as any).pointerdownThumbYEvent,
-              pointermove: ($xeTable as any).pointermoveThumbYEvent,
-              pointerup: ($xeTable as any).cleatPointerThumbEvent,
-              pointercancel: ($xeTable as any).cleatPointerThumbEvent,
-              lostpointercapture: ($xeTable as any).cleatPointerThumbEvent
+              pointerdown: $xeTable.pointerdownThumbYEvent,
+              pointermove: $xeTable.pointermoveThumbYEvent,
+              pointerup: $xeTable.cleatPointerThumbEvent,
+              pointercancel: $xeTable.cleatPointerThumbEvent,
+              lostpointercapture: $xeTable.cleatPointerThumbEvent
             }
           })
         ])
@@ -648,6 +668,8 @@ export default {
   name: 'VxeTable',
   mixins: [
     globalMixins.sizeMixin,
+    globalMixins.vScrollbarMixin,
+    globalMixins.initVScrollbarMixin,
     filterMixin,
     menuMixin,
     editMixin,
@@ -703,7 +725,7 @@ export default {
     }
   },
   computed: {
-    ...({} as {
+    ...({} as VxeUseSizeComputed & VxeUseVScrollbarComputed & VxeUseInitVScrollbarComputed & {
       $xeModal(): (VxeModalConstructor & VxeModalMethods)| null
       $xeTabs(): (VxeTabsConstructor & VxeTabsPrivateMethods) | null
     }),
@@ -1091,8 +1113,8 @@ export default {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
-      const { useScrollbar } = props
-      return Object.assign({ useScrollbar }, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
+      const isVScrollbar = $xeTable.computeIsVScrollbar
+      return Object.assign({ useScrollbar: isVScrollbar }, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
     },
     tipConfig () {
       return { ...this.tooltipOpts }
@@ -1162,7 +1184,8 @@ export default {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
-      return Object.assign({}, getConfig().table.filterConfig, props.filterConfig)
+      const isVScrollbar = $xeTable.computeIsVScrollbar
+      return Object.assign({ useScrollbar: isVScrollbar }, getConfig().table.filterConfig, props.filterConfig)
     },
     computeFloatingFilterOpts () {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -1783,40 +1806,44 @@ export default {
 
       $xeTable.reLayoutFlag++
     },
+    computeIsVScrollbar () {
+      const $xeTable = this
+
+      $xeTable.$nextTick(() => {
+        bindScrollbarResize($xeTable)
+        $xeTable.$nextTick(() => {
+          $xeTable.reLayoutFlag++
+        })
+      })
+    },
     computeScrollbarXToTop () {
       const $xeTable = this
 
-      $xeTable.reScrollFlag++
       $xeTable.reLayoutFlag++
     },
     computeScrollbarYToLeft () {
       const $xeTable = this
 
-      $xeTable.reScrollFlag++
       $xeTable.reLayoutFlag++
     },
     computeScrollXVisible () {
       const $xeTable = this
 
-      $xeTable.reScrollFlag++
       $xeTable.reLayoutFlag++
     },
     computeScrollYVisible () {
       const $xeTable = this
 
-      $xeTable.reScrollFlag++
       $xeTable.reLayoutFlag++
     },
     computeScrollXHeight () {
       const $xeTable = this
 
-      $xeTable.reScrollFlag++
       $xeTable.reLayoutFlag++
     },
     computeScrollYWidth () {
       const $xeTable = this
 
-      $xeTable.reScrollFlag++
       $xeTable.reLayoutFlag++
     },
     computeCellHeitht () {
@@ -1827,18 +1854,15 @@ export default {
     reLayoutFlag () {
       const $xeTable = this
 
-      $xeTable.$nextTick(() => {
+      $xeTable.$nextTick().then(() => {
         $xeTable.recalculate(true)
       })
     },
     reScrollFlag () {
       const $xeTable = this
 
-      $xeTable.$nextTick(() => {
+      $xeTable.updateScrollbar().then(() => {
         $xeTable.updateScrollbar()
-        $xeTable.$nextTick(() => {
-          $xeTable.updateScrollbar()
-        })
       })
     },
 
@@ -2319,7 +2343,7 @@ export default {
     }
 
     $xeTable.$nextTick(() => {
-      const { useScrollbar, autoResize } = props
+      const { autoResize } = props
       const { elemStore } = internalData
 
       // 使用已安装的组件，如果未安装则不渲染
@@ -2327,6 +2351,7 @@ export default {
       const VxeUITooltipComponent = VxeUI.getComponent('VxeTooltip')
 
       const { showOverflow, showHeaderOverflow, showFooterOverflow } = props
+      const isVScrollbar = $xeTable.computeIsVScrollbar
       const tooltipOpts = $xeTable.computeTooltipOpts
       const headerTooltipOpts = $xeTable.computeHeaderTooltipOpts
       const footerTooltipOpts = $xeTable.computeFooterTooltipOpts
@@ -2368,7 +2393,7 @@ export default {
       }
 
       const el = $xeTable.$refs.refElem as HTMLDivElement
-      if (useScrollbar) {
+      if (isVScrollbar) {
         const viewInnerEl = getRefElem(elemStore['main-body-table'])
         const scrollObserver = globalResize.create(() => {
           $xeTable.reScrollFlag++
@@ -2498,9 +2523,10 @@ export default {
 
     const { xID } = $xeTable
 
-    const { loading, stripe, useScrollbar, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules, importConfig, exportConfig, printConfig } = props
+    const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules, importConfig, exportConfig, printConfig } = props
     const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, tableData, initStore, isRowGroupStatus, columnStore, filterStore, customStore, tooltipStore } = reactData
     const { leftList, rightList } = columnStore
+    const isVScrollbar = $xeTable.computeIsVScrollbar
     const loadingSlot = slots.loading
     const tipSlots = {
       header: slots.headerTooltip || slots['header-tooltip'],
@@ -2508,7 +2534,7 @@ export default {
       footer: slots.footerTooltip || slots['footer-tooltip']
     }
     const currTooltipSlot = tooltipStore.visible && tooltipStore.type ? tipSlots[tooltipStore.type] : null
-    const tableStyle = ($xeTable as any).computeTableStyle as VxeComponentStyleType
+    const tableStyle = $xeTable.computeTableStyle
     const rowDragOpts = $xeTable.computeRowDragOpts
     const tableTipConfig = $xeTable.computeTableTipConfig
     const validTipConfig = $xeTable.computeValidTipConfig
@@ -2546,7 +2572,7 @@ export default {
     }
     return h('div', {
       ref: 'refElem',
-      class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, useScrollbar ? 'is--virtual-scrollbar' : 'is--native-scrollbar', `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`, `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`, {
+      class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, isVScrollbar ? 'is--virtual-scrollbar' : 'is--native-scrollbar', `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`, `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`, {
         [`size--${vSize}`]: vSize,
         [`valid-msg--${validOpts.msgMode}`]: !!editRules,
         'vxe-editable': !!editConfig,
@@ -2614,7 +2640,7 @@ export default {
       h('div', {
         key: 'tw',
         class: 'vxe-table--render-wrapper'
-      }, useScrollbar
+      }, isVScrollbar
         ? [renderVirtualBody(h, $xeTable)]
         : (
             scrollbarXToTop
@@ -2805,7 +2831,7 @@ export default {
             props: {
               isArrow: false,
               enterable: false,
-              useScrollbar
+              useScrollbar: isVScrollbar
             }
           })
           : renderEmptyElement($xeTable),
@@ -2877,7 +2903,7 @@ export default {
               enterable: validTipConfig.enterable,
               enterDelay: validTipConfig.enterDelay,
               leaveDelay: validTipConfig.leaveDelay,
-              useScrollbar
+              useScrollbar: validTipConfig.useScrollbar
             }
           })
           : renderEmptyElement($xeTable)

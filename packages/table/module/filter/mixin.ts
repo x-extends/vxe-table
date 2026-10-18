@@ -17,7 +17,7 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   const internalData = $xeTable as unknown as TableInternalData
   const $xeGGWrapper = $xeGrid || $xeGantt
 
-  const { filterStore } = reactData
+  const { filterStore, scrollbarHeight } = reactData
   const { elemStore } = internalData
   const { column, targetEl } = filterStore
   if (!column) {
@@ -39,8 +39,6 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   if (!filterWrapperElem) {
     return $xeTable.$nextTick()
   }
-  const filterHeadElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-header')
-  const filterFootElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-footer')
 
   /**
    * 是否显示筛选按钮图标
@@ -80,9 +78,9 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
     } else {
       const filterWidth = filterWrapperElem.offsetWidth
       const centerWidth = targetEl ? filterWidth / 2 : ((filterWidth - column.renderWidth) / 2)
-      maxHeight = Math.max(40, tableEl.clientHeight - top - (filterHeadElem ? filterHeadElem.clientHeight : 0) - (filterFootElem ? filterFootElem.clientHeight : 0) - 14)
       left = btnRect.left - tableRect.left - centerWidth
       top = btnRect.top - tableRect.top + currEl.clientHeight
+      maxHeight = Math.max(40, tableEl.clientHeight - top - scrollbarHeight)
       if (left < 1) {
         left = 1
       } else if (left > (tableEl.clientWidth - filterWidth - 1)) {
@@ -104,7 +102,6 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
     if (zIndex) {
       panelStyle.zIndex = zIndex
     }
-    filterStore.style = panelStyle
     // 筛选面板是自适应表格高度
     if (compConf ? !compConf.tableFilterAutoHeight : false) {
       maxHeight = 0
@@ -113,8 +110,8 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
         maxHeight = customMaxHeight > maxHeight ? maxHeight : customMaxHeight
       }
     }
-    // 判断面板不能大于表格高度
-    filterStore.maxHeight = maxHeight
+    panelStyle['--vxe-ui-vxe-table-filter-default-max-height'] = maxHeight ? toCssUnit(maxHeight) : 'none'
+    filterStore.style = panelStyle
   }
   handleStyle()
   return $xeTable.$nextTick().then(() => {

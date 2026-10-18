@@ -176,9 +176,43 @@ export function createInternalData (): TableInternalData {
     initStatus: false,
     isActivated: false,
 
+    // keyCtxTimeout: undefined,
+
+    // 刷新布局
     // rceTimeout: undefined,
     // rceRunTime: undefined,
     rceDelay: 0
+
+    // rsePending: false,
+
+    // 滚动属性
+    // intoRunScroll: false,
+    // inVirtualScroll: false,
+    // inWheelScroll: false,
+
+    // inHeaderScroll: false,
+    // inBodyScroll: false,
+    // inFooterScroll: false,
+    // scrollRenderType?: '',
+
+    // isSyncGanttScrollTop: false,
+
+    // 同步滚动
+    // lcsTimeout: undefined,
+    // lcsRunTime: undefined,
+
+    // 横向虚拟
+    // lxRunTime: undefined,
+    // lxTimeout: undefined,
+    // 纵向虚拟
+    // lyRunTime: undefined,
+    // lyTimeout: undefined,
+
+    // 动态高度
+    // chRunTime: undefined,
+    // chTimeout: undefined,
+
+    // isResizeCellHeight: false,
 
     // _sToTime: null
   }
@@ -270,8 +304,7 @@ export function createReactData (): TableReactData {
       isIndeterminate: false,
       style: null,
       column: null,
-      visible: false,
-      maxHeight: null
+      visible: false
     },
     // 存放列相关的信息
     columnStore: {
