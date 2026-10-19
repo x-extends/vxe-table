@@ -41,6 +41,8 @@ function bindScrollbarResize ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   if (isVScrollbar) {
     const el = $xeTable.$refs.refElem as HTMLDivElement
     const viewInnerEl = getRefElem(elemStore['main-body-table'])
+    const viewXSpaceEl = getRefElem(elemStore['main-body-xSpace'])
+    const viewYSpaceEl = getRefElem(elemStore['main-body-ySpace'])
     const scrollObserver = globalResize.create(() => {
       ($xeTable as any).reScrollFlag++
     })
@@ -49,6 +51,12 @@ function bindScrollbarResize ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     }
     if (viewInnerEl) {
       scrollObserver.observe(viewInnerEl)
+    }
+    if (viewXSpaceEl) {
+      scrollObserver.observe(viewXSpaceEl)
+    }
+    if (viewYSpaceEl) {
+      scrollObserver.observe(viewYSpaceEl)
     }
     internalData.scrollObserver = scrollObserver
   }
@@ -605,14 +613,18 @@ function renderVirtualBody (h: CreateElement, $xeTable: VxeTableConstructor & Vx
 
   return h('div', {
     key: 'lvb',
-    class: ['vxe-table--layout-wrapper', `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`, `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`, {
-      'is--virtual-scrollbar': isVScrollbar,
-      'ov-padding': isVScrollbar && scrollbarOpts.padding,
-      'ov-x--auto-hide': isVScrollbar && scrollXAutoHide,
-      'ov-y--auto-hide': isVScrollbar && scrollYAutoHide,
-      'overflow-y': yThumbHeight,
-      'overflow-x': xThumbWidth
-    }]
+    class: [
+      'vxe-table--layout-wrapper',
+      `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`,
+      `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`,
+      {
+        'is--virtual-scrollbar': isVScrollbar,
+        'ov-padding': isVScrollbar && scrollbarOpts.padding,
+        'ov-x--auto-hide': isVScrollbar && scrollXAutoHide,
+        'ov-y--auto-hide': isVScrollbar && scrollYAutoHide,
+        'overflow-y': yThumbHeight,
+        'overflow-x': xThumbWidth
+      }]
   }, [
     renderViewport(h, $xeTable),
     h('div', {
@@ -911,12 +923,14 @@ export default {
       const reactData = $xeTable as unknown as TableReactData
 
       const { yThumbHeight, xThumbWidth } = reactData
+      const scrollbarOpts = $xeTable.computeScrollbarOpts
       const scrollbarXToTop = $xeTable.computeScrollbarXToTop
       const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
       const scrollXVisible = $xeTable.computeScrollXVisible
       const scrollYVisible = $xeTable.computeScrollYVisible
       return domUtils.buildClass([
         'vxe-scrollbar is--virtual',
+        scrollbarOpts.fluentOverlay ? 'is--fluent-overlay' : 'is--default-mode',
         `ov-x--${scrollXVisible === false ? 'hidden' : 'visible'}`,
         `ov-y--${scrollYVisible === false ? 'hidden' : 'visible'}`,
         `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`,
