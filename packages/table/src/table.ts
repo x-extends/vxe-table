@@ -283,12 +283,14 @@ export default defineVxeComponent({
 
     const computeScrollbarWrapperClss = computed(() => {
       const { yThumbHeight, xThumbWidth } = reactData
+      const scrollbarOpts = computeScrollbarOpts.value
       const scrollbarXToTop = computeScrollbarXToTop.value
       const scrollbarYToLeft = computeScrollbarYToLeft.value
       const scrollXVisible = computeScrollXVisible.value
       const scrollYVisible = computeScrollYVisible.value
       return domUtils.buildClass([
         'vxe-scrollbar is--virtual',
+        scrollbarOpts.fluentOverlay ? 'is--fluent-overlay' : 'is--default-mode',
         `ov-x--${scrollXVisible === false ? 'hidden' : 'visible'}`,
         `ov-y--${scrollYVisible === false ? 'hidden' : 'visible'}`,
         `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`,
@@ -13791,6 +13793,8 @@ export default defineVxeComponent({
       if (isVScrollbar) {
         const el = refElem.value
         const viewInnerEl = getRefElem(elemStore['main-body-table'])
+        const viewXSpaceEl = getRefElem(elemStore['main-body-xSpace'])
+        const viewYSpaceEl = getRefElem(elemStore['main-body-ySpace'])
         const scrollObserver = globalResize.create(() => {
           reScrollFlag.value++
         })
@@ -13799,6 +13803,12 @@ export default defineVxeComponent({
         }
         if (viewInnerEl) {
           scrollObserver.observe(viewInnerEl)
+        }
+        if (viewXSpaceEl) {
+          scrollObserver.observe(viewXSpaceEl)
+        }
+        if (viewYSpaceEl) {
+          scrollObserver.observe(viewYSpaceEl)
         }
         internalData.scrollObserver = scrollObserver
       }
