@@ -1,22 +1,38 @@
 <template>
   <div>
-    X：<vxe-radio-group v-model="scrollbarConfig.xConfig.position">
-      <vxe-radio-button checked-value="top" content="top"></vxe-radio-button>
-      <vxe-radio-button checked-value="bottom" content="bottom"></vxe-radio-button>
-    </vxe-radio-group>
-    Y：<vxe-radio-group v-model="scrollbarConfig.yConfig.position">
-      <vxe-radio-button checked-value="left" content="left"></vxe-radio-button>
-      <vxe-radio-button checked-value="right" content="right"></vxe-radio-button>
-    </vxe-radio-group>
-    边距：<vxe-switch v-model="scrollbarConfig.padding"></vxe-switch>
+    <vxe-button status="primary" @click="addEvent">新增</vxe-button>
+    <vxe-button status="success" @click="saveEvent">保存</vxe-button>
 
-    <vxe-grid v-bind="gridOptions"></vxe-grid>
+    <vxe-grid ref="gridRef" v-bind="gridOptions">
+      <template #name_default="slotParams">
+        <vxe-input v-if="slotParams.row.isEdit" v-model="slotParams.row.name" @change="changeEditEvent(slotParams)"></vxe-input>
+        <span v-else>{{ slotParams.row.name }}</span>
+      </template>
+
+      <template #sex_default="slotParams">
+        <vxe-select v-if="slotParams.row.isEdit" v-model="slotParams.row.sex" :options="sexList" @change="changeEditEvent(slotParams)"></vxe-select>
+        <span v-else>{{ slotParams.row.sex }}</span>
+      </template>
+
+      <template #age_default="slotParams">
+        <vxe-input v-if="slotParams.row.isEdit" v-model="slotParams.row.age" @change="changeEditEvent(slotParams)"></vxe-input>
+        <span v-else>{{ slotParams.row.age }}</span>
+      </template>
+
+      <template #action="{ row }">
+        <vxe-button v-if="row.isEdit" mode="text" status="success" :loading="row.isLoading" @click.stop="handleRowSave(row)">保存</vxe-button>
+        <vxe-button v-else mode="text" status="primary" @click.stop="handleRowEdit(row)">编辑</vxe-button>
+        <vxe-button v-if="row.isEdit" mode="text" @click.stop="cancelRowEdit(row)">取消</vxe-button>
+      </template>
+    </vxe-grid>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue'
-import { VxeGridProps, VxeTablePropTypes, VxeWithRequired } from '../../../types'
+import { ref, reactive } from 'vue'
+import { VxeUI } from 'vxe-pc-ui'
+import type { VxeGridInstance, VxeGridProps } from '../../../types'
+import XEUtils from 'xe-utils'
 
 interface RowVO {
   id: number
@@ -25,41 +41,155 @@ interface RowVO {
   sex: string
   age: number
   address: string
+  isEdit: boolean
+  isLoading: boolean
 }
 
-const scrollbarConfig = reactive<VxeWithRequired<VxeTablePropTypes.ScrollbarConfig, 'xConfig' | 'yConfig'>>({
-  padding: false,
-  xConfig: {
-    position: 'top'
-  },
-  yConfig: {
-    position: 'left'
-  }
-})
+const gridRef = ref<VxeGridInstance<RowVO>>()
+
+const sexList = ref([
+  { label: '男', value: 'Man' },
+  { label: '女', value: 'Women' }
+])
 
 const gridOptions = reactive<VxeGridProps<RowVO>>({
   border: true,
-  height: 300,
-  useScrollbar: true,
-  scrollbarConfig,
+  showOverflow: true,
+  keepSource: true,
+  rowConfig: {
+    keyField: 'id'
+  },
+  editConfig: {
+    trigger: 'manual',
+    mode: 'row',
+    showStatus: true
+  },
+  validConfig: {
+    msgMode: 'full'
+  },
+  editRules: {
+    name: [
+      { required: true, message: '必须填写' }
+    ],
+    sex: [
+      { required: true, message: '必须填写' }
+    ]
+  },
   columns: [
-    { field: 'seq', type: 'seq', width: 70 },
-    { field: 'name', title: 'Name', minWidth: 300 },
-    { field: 'sex', title: 'Sex', minWidth: 300 },
-    { field: 'age', title: 'Age', minWidth: 300 },
-    { field: 'address', title: 'Address', minWidth: 400 }
+    { type: 'seq', width: 70 },
+    { field: 'name', title: 'Name', editRender: { name: 'VxeInput' }, slots: { default: 'name_default' } },
+    { field: 'sex', title: 'Sex', editRender: { name: 'VxeSelect', options: sexList.value }, slots: { default: 'sex_default' } },
+    { field: 'age', title: 'Age', editRender: { name: 'VxeInput' }, slots: { default: 'age_default' } },
+    { field: 'action', title: '操作', width: 140, slots: { default: 'action' } }
   ],
-  data: [
-    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
-    { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-    { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 24, address: 'Shanghai' },
-    { id: 10004, name: 'Test4', role: 'PM', sex: 'Man', age: 19, address: 'Shanghai' },
-    { id: 10005, name: 'Test5', role: 'Test', sex: 'Man', age: 18, address: 'Guangzhou' },
-    { id: 10006, name: 'Test6', role: 'Develop', sex: 'Man', age: 32, address: 'Guangzhou' },
-    { id: 10007, name: 'Test7', role: 'Test', sex: 'Women', age: 22, address: 'Shanghai' },
-    { id: 10008, name: 'Test8', role: 'PM', sex: 'Women', age: 32, address: 'Shanghai' },
-    { id: 10009, name: 'Test9', role: 'Develop', sex: 'Women', age: 44, address: 'Shanghai' },
-    { id: 10010, name: 'Test10', role: 'Develop', sex: 'Man', age: 39, address: 'Shanghai' }
-  ]
+  data: []
 })
+
+const loadList = () => {
+  // 模拟后端接口
+  gridOptions.loading = true
+  setTimeout(() => {
+    gridOptions.data = [
+      { id: 10001, name: '', role: 'Develop', sex: 'Man', age: 28, address: 'test abc', isEdit: false, isLoading: false },
+      { id: 10002, name: 'Test2', role: 'Test', sex: '', age: 22, address: 'Guangzhou', isEdit: false, isLoading: false },
+      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', isEdit: false, isLoading: false },
+      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai', isEdit: false, isLoading: false }
+    ]
+    gridOptions.loading = false
+  }, 200)
+}
+
+const handleRowEdit = (row: RowVO) => {
+  row.isEdit = true
+}
+
+const cancelRowEdit = (row: RowVO) => {
+  const $grid = gridRef.value
+  if (!$grid) {
+    return
+  }
+  row.isEdit = false
+  $grid.clearValidate(row)
+}
+
+const handleRowSave = async (row: RowVO) => {
+  const $grid = gridRef.value
+  if (!$grid) {
+    return
+  }
+  const errMap = await $grid.fullValidate(row)
+  if (errMap) {
+    // 将校验不通过行显示编辑状态
+    XEUtils.each(errMap, errRules => {
+      errRules.forEach(errRule => {
+        handleRowEdit(errRule.row)
+      })
+    })
+    VxeUI.modal.message({
+      status: 'error',
+      content: '校验不通过！'
+    })
+    return
+  }
+  row.isLoading = true
+  // 模拟后端接口
+  setTimeout(() => {
+    row.isEdit = false
+    row.isLoading = false
+  }, 300)
+}
+
+const addEvent = async () => {
+  const $grid = gridRef.value
+  if (!$grid) {
+    return
+  }
+  const record = {}
+  const { row: newRow } = await $grid.insert(record)
+  handleRowEdit(newRow)
+}
+
+const saveEvent = async () => {
+  const $grid = gridRef.value
+  if (!$grid) {
+    return
+  }
+  const errMap = await $grid.fullValidate(true)
+  if (errMap) {
+    // 将校验不通过行显示编辑状态
+    XEUtils.each(errMap, errRules => {
+      errRules.forEach(errRule => {
+        handleRowEdit(errRule.row)
+      })
+    })
+    VxeUI.modal.message({
+      status: 'error',
+      content: '校验不通过！'
+    })
+    return
+  }
+  const updateRecords = $grid.getUpdateRecords()
+  if (updateRecords.length > 0) {
+    console.log('保存数据', updateRecords)
+    loadList()
+    VxeUI.modal.message({
+      content: '保存成功',
+      status: 'success'
+    })
+  } else {
+    VxeUI.modal.message({
+      content: '数据未改动',
+      status: 'warning'
+    })
+  }
+}
+
+const changeEditEvent = (slotParams: any) => {
+  const $grid = gridRef.value
+  if ($grid) {
+    $grid.updateStatus(slotParams)
+  }
+}
+
+loadList()
 </script>
