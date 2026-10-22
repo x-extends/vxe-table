@@ -145,6 +145,50 @@ function checkRuleStatus (rule: VxeTableDefines.ValidatorRule, row: any, val: an
   return true
 }
 
+function handleClearValid ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, rows: any, fieldOrColumn: string | string[] | VxeTableDefines.ColumnInfo | VxeTableDefines.ColumnInfo[] | undefined) {
+  const reactData = $xeTable as unknown as TableReactData
+
+  const { validErrorMaps } = reactData
+  const validOpts = $xeTable.computeValidOpts
+  const rowList = XEUtils.isArray(rows) ? rows : (rows ? [rows] : [])
+  const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : [])).map(column => handleFieldOrColumn($xeTable, column)) as VxeTableDefines.ColumnInfo<any>[]
+  let validErrMaps: Record<string, {
+    row: any;
+    column: any;
+    rule: any;
+    content: any;
+  }> = {}
+  // 如果是多个提示模式
+  if (validOpts.msgMode === 'full') {
+    validErrMaps = Object.assign({}, validErrorMaps)
+    if (rowList.length && colList.length) {
+      rowList.forEach(row => {
+        colList.forEach((column) => {
+          const validKey = `${getRowid($xeTable, row)}:${column.id}`
+          if (validErrMaps[validKey]) {
+            delete validErrMaps[validKey]
+          }
+        })
+      })
+    } else if (rowList.length) {
+      const rowIdList = rowList.map(row => `${getRowid($xeTable, row)}`)
+      XEUtils.each(validErrorMaps, (item, key) => {
+        if (rowIdList.indexOf(key.split(':')[0]) > -1) {
+          delete validErrMaps[key]
+        }
+      })
+    } else if (colList.length) {
+      const colidList = colList.map(column => `${column.id}`)
+      XEUtils.each(validErrorMaps, (item, key) => {
+        if (colidList.indexOf(key.split(':')[1]) > -1) {
+          delete validErrMaps[key]
+        }
+      })
+    }
+  }
+  return validErrMaps
+}
+
 /**
  * 聚焦到校验通过的单元格并弹出校验错误提示
  */
@@ -291,7 +335,7 @@ function beginValidate ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
     }
     return Promise.all(rowValidErrs).then(() => {
       const ruleProps = Object.keys(validRest)
-      reactData.validErrorMaps = handleErrMsgMode($xeTable, validErrMaps)
+      reactData.validErrorMaps = Object.assign(handleClearValid($xeTable, rows, columns), handleErrMsgMode($xeTable, validErrMaps))
       return $xeTable.$nextTick().then(() => {
         if (ruleProps.length) {
           return Promise.reject(validRest[ruleProps[0]][0])
@@ -496,51 +540,11 @@ export default {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
-      const { validErrorMaps } = reactData
       const validTip = $xeTable.$refs.refValidTooltip as VxeTooltipInstance
-      const validOpts = $xeTable.computeValidOpts
-      const rowList = XEUtils.isArray(rows) ? rows : (rows ? [rows] : [])
-      const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : [])).map(column => handleFieldOrColumn($xeTable, column)) as VxeTableDefines.ColumnInfo<any>[]
-      let validErrMaps: Record<string, {
-          row: any;
-          column: any;
-          rule: any;
-          content: any;
-        }> = {}
       if (validTip && validTip.reactData.visible) {
         validTip.close()
       }
-      // 如果是单个提示模式
-      if (validOpts.msgMode === 'single') {
-        reactData.validErrorMaps = {}
-        return $xeTable.$nextTick()
-      }
-      if (rowList.length && colList.length) {
-        validErrMaps = Object.assign({}, validErrorMaps)
-        rowList.forEach(row => {
-          colList.forEach((column) => {
-            const validKey = `${getRowid($xeTable, row)}:${column.id}`
-            if (validErrMaps[validKey]) {
-              delete validErrMaps[validKey]
-            }
-          })
-        })
-      } else if (rowList.length) {
-        const rowIdList = rowList.map(row => `${getRowid($xeTable, row)}`)
-        XEUtils.each(validErrorMaps, (item, key) => {
-          if (rowIdList.indexOf(key.split(':')[0]) > -1) {
-            validErrMaps[key] = item
-          }
-        })
-      } else if (colList.length) {
-        const colidList = colList.map(column => `${column.id}`)
-        XEUtils.each(validErrorMaps, (item, key) => {
-          if (colidList.indexOf(key.split(':')[1]) > -1) {
-            validErrMaps[key] = item
-          }
-        })
-      }
-      reactData.validErrorMaps = validErrMaps
+      reactData.validErrorMaps = handleClearValid($xeTable, rows, fieldOrColumn)
       return $xeTable.$nextTick()
     },
     /**
