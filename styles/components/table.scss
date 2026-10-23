@@ -71,6 +71,12 @@ $btnThemeList: (
   overflow: hidden;
   user-select: none;
   pointer-events: none;
+  .vxe-table-var-xlarge {
+    height: var(--vxe-ui-table-row-height-xlarge);
+  }
+  .vxe-table-var-large {
+    height: var(--vxe-ui-table-row-height-large);
+  }
   .vxe-table-var-default {
     height: var(--vxe-ui-table-row-height-default);
   }

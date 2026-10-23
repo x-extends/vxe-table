@@ -2631,13 +2631,21 @@ export default {
        * 隐藏列
        */
       h('div', {
+        key: 'tss',
         class: 'vxe-table-slots',
         ref: 'hideColumn'
       }, this.$slots.default),
       h('div', {
+        key: 'tvr',
         ref: 'refVarElem',
         class: 'vxe-table-vars'
       }, [
+        h('div', {
+          class: 'vxe-table-var-xlarge'
+        }),
+        h('div', {
+          class: 'vxe-table-var-large'
+        }),
         h('div', {
           class: 'vxe-table-var-default'
         }),

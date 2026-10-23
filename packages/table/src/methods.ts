@@ -9,7 +9,7 @@ import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimat
 import { createComponentLog } from '../../ui/src/log'
 import { getCrossTableDragRowInfo } from './store'
 
-import type { VxeTooltipInstance, ValueOf } from 'vxe-pc-ui'
+import type { VxeTooltipInstance, ValueOf, VxeComponentSizeType } from 'vxe-pc-ui'
 import type { VxeTableDefines, VxeColumnPropTypes, VxeTableEmits, TableReactData, VxeTableConstructor, VxeToolbarConstructor, VxeToolbarInstance, TableInternalData, VxeGridConstructor, VxeTablePrivateMethods, VxeTablePropTypes, VxeGridPrivateMethods } from '../../../types'
 
 const { warnLog, errLog } = createComponentLog('table')
@@ -1855,11 +1855,11 @@ const handleAsyncRowExpand = ($xeTable: VxeTableConstructor, row: any): Promise<
   })
 }
 
-function calcVarRowHeightConfig ($xeTable: VxeTableConstructor, sizeKey: 'default' | 'medium' | 'small' | 'mini', sizeEl: Element) {
+function calcVarRowHeightConfig ($xeTable: VxeTableConstructor, sizeKey: VxeComponentSizeType, sizeEl: Element) {
   const reactData = $xeTable as unknown as TableReactData
 
   const { rowHeightStore } = reactData
-  if (sizeEl && sizeEl.clientHeight) {
+  if (sizeKey && sizeEl && sizeEl.clientHeight) {
     rowHeightStore[sizeKey] = sizeEl.clientHeight
   }
 }
@@ -3201,7 +3201,9 @@ function handleRecalculateStyle ($xeTable: VxeTableConstructor & VxeTablePrivate
   }
   const varEl = $xeTable.$refs.refVarElem as HTMLDivElement
   if (varEl) {
-    const [defEl, mediumEl, smallEl, miniEl] = varEl.children
+    const [dxlargeEl, largeEl, defEl, mediumEl, smallEl, miniEl] = varEl.children
+    calcVarRowHeightConfig($xeTable, 'xlarge', dxlargeEl)
+    calcVarRowHeightConfig($xeTable, 'large', largeEl)
     calcVarRowHeightConfig($xeTable, 'default', defEl)
     calcVarRowHeightConfig($xeTable, 'medium', mediumEl)
     calcVarRowHeightConfig($xeTable, 'small', smallEl)
