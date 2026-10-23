@@ -30,6 +30,8 @@ const collapsed = ref(false)
 
 const componentsSize = ref<VxeLayoutContainerPropTypes.Size>('')
 const sizeOptions = ref([
+  { label: '特大', value: 'xlarge' },
+  { label: '大', value: 'large' },
   { label: '默认', value: '' },
   { label: '中', value: 'medium' },
   { label: '小', value: 'small' },

@@ -1,5 +1,25 @@
 @use '../../helpers/baseMixin.scss';
 
+
+.vxe-table--filter-wrapper {
+  --vxe-ui-table-filter-current-font-size: var(--vxe-ui-font-size-default);
+  &.size--xlarge {
+    --vxe-ui-table-filter-current-font-size: var(--vxe-ui-font-size-xlarge);
+  }
+  &.size--large {
+    --vxe-ui-table-filter-current-font-size: var(--vxe-ui-font-size-large);
+  }
+  &.size--medium {
+    --vxe-ui-table-filter-current-font-size: var(--vxe-ui-font-size-medium);
+  }
+  &.size--small {
+    --vxe-ui-table-filter-current-font-size: var(--vxe-ui-font-size-small);
+  }
+  &.size--mini {
+    --vxe-ui-table-filter-current-font-size: var(--vxe-ui-font-size-mini);
+  }
+}
+
 .vxe-cell--filter {
   padding: 0 0.1em 0 0.2em;
   text-align: center;
@@ -42,9 +62,14 @@
   box-shadow: var(--vxe-ui-base-popup-box-shadow);
   z-index: 15;
   max-height: var(--vxe-ui-vxe-table-filter-default-max-height);
+  &[class^="size--"],
+  &[class*=" size--"] {
+    font-size: var(--vxe-ui-table-filter-current-font-size);
+  }
   &:not(.is--multiple) {
     .vxe-table--filter-header,
-    .vxe-table--filter-body {
+    .vxe-table--filter-body,
+    .vxe-table--scrollbar-filter-body {
       text-align: center;
     }
   }
@@ -127,16 +152,4 @@
 
 .vxe-table--filter-option {
   @include baseMixin.createCheckboxIcon();
-}
-
-.vxe-table--filter-wrapper {
-  &.size--medium {
-    font-size: var(--vxe-ui-font-size-medium);
-  }
-  &.size--small {
-    font-size: var(--vxe-ui-font-size-small);
-  }
-  &.size--mini {
-    font-size: var(--vxe-ui-font-size-mini);
-  }
 }

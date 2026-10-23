@@ -30,7 +30,7 @@ import '../module/validator/hook'
 import '../module/custom/hook'
 import '../render'
 
-import type { VxeTooltipInstance, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType, VxeComponentStyleType, VxeModalConstructor, VxeModalMethods, VxeSplitterConstructor, VxeSplitterMethods } from 'vxe-pc-ui'
+import type { VxeTooltipInstance, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType, VxeComponentStyleType, VxeModalConstructor, VxeModalMethods, VxeSplitterConstructor, VxeSplitterMethods, VxeComponentSizeType } from 'vxe-pc-ui'
 import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableEmits, VxeTableProps, VxeColumnPropTypes, VxeTableCustomPanelConstructor } from '../../../types'
 
 const { warnLog, errLog } = createComponentLog('table')
@@ -1141,9 +1141,9 @@ export default defineVxeComponent({
       return { toVisibleIndex: 0, visibleSize: 6 }
     }
 
-    const calcVarRowHeightConfig = (sizeKey: 'default' | 'medium' | 'small' | 'mini', sizeEl: Element) => {
+    const calcVarRowHeightConfig = (sizeKey: VxeComponentSizeType, sizeEl: Element) => {
       const { rowHeightStore } = reactData
-      if (sizeEl && sizeEl.clientHeight) {
+      if (sizeKey && sizeEl && sizeEl.clientHeight) {
         rowHeightStore[sizeKey] = sizeEl.clientHeight
       }
     }
@@ -3591,7 +3591,9 @@ export default defineVxeComponent({
       }
       const varEl = refVarElem.value
       if (varEl) {
-        const [defEl, mediumEl, smallEl, miniEl] = varEl.children
+        const [dxlargeEl, largeEl, defEl, mediumEl, smallEl, miniEl] = varEl.children
+        calcVarRowHeightConfig('xlarge', dxlargeEl)
+        calcVarRowHeightConfig('large', largeEl)
         calcVarRowHeightConfig('default', defEl)
         calcVarRowHeightConfig('medium', mediumEl)
         calcVarRowHeightConfig('small', smallEl)
@@ -14407,12 +14409,20 @@ export default defineVxeComponent({
          * 隐藏列
          */
         h('div', {
+          key: 'tss',
           class: 'vxe-table-slots'
         }, slots.default ? slots.default({}) : []),
         h('div', {
+          key: 'tvr',
           ref: refVarElem,
           class: 'vxe-table-vars'
         }, [
+          h('div', {
+            class: 'vxe-table-var-xlarge'
+          }),
+          h('div', {
+            class: 'vxe-table-var-large'
+          }),
           h('div', {
             class: 'vxe-table-var-default'
           }),
