@@ -129,9 +129,13 @@ export default {
       allExpand: 'すべて拡張します',
       clearExpand: 'すべてを閉じます',
       total: '已选 {0} 项',
+      filterCount: '共找到 {0} 条记录',
       close: '关闭',
       search: '検索',
       emptyText: 'まだデータはありません'
+    },
+    tableSelect: {
+      filterCount: '共找到 {0} 条记录'
     },
     pager: {
       goto: '行く',
