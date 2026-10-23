@@ -129,9 +129,13 @@ export default {
       allExpand: 'Mở rộng tất cả',
       clearExpand: 'Đóng tất cả',
       total: '已选 {0} 项',
+      filterCount: '共找到 {0} 条记录',
       close: '关闭',
       search: 'tìm kiếm',
       emptyText: 'Chưa có dữ liệu'
+    },
+    tableSelect: {
+      filterCount: '共找到 {0} 条记录'
     },
     pager: {
       goto: 'Đi',

@@ -22,6 +22,7 @@ export function getModelEvent (renderOpts: VxeGlobalRendererHandles.RenderOption
     case 'VxeColorPicker':
     case 'VxeSlider':
     case 'VxeUpload':
+    case 'VxeCascader':
       return 'modelValue'
     case 'select':
       return 'change'

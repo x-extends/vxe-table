@@ -129,9 +129,13 @@ export default {
       allExpand: '全部展开',
       clearExpand: '全部收起',
       total: '已选 {0} 项',
+      filterCount: '共找到 {0} 条记录',
       close: '关闭',
       search: '搜索',
       emptyText: '暂无数据'
+    },
+    tableSelect: {
+      filterCount: '共找到 {0} 条记录'
     },
     pager: {
       goto: 'Aller',
@@ -709,7 +713,7 @@ export default {
           groupPlaceholder: '拖至此处进行分组',
           valuesPlaceholder: '拖至此处进行聚合',
           dragExistCol: '该列已存在',
-          sortHelpTip: "Cliquez sur l'icône pour commencer à faire glisser",
+          sortHelpTip: "Cliquez sur l'icône pour commencer à faire glisser"
         },
         aggFuncs: {
           sum: '求和',
@@ -753,7 +757,7 @@ export default {
           clearFilter: 'Filtre effacer',
           textOption: 'Filtre à texte',
           numberOption: 'Filtre numérique',
-          dateOption: 'Filtre par date',
+          dateOption: 'Filtre par date'
         },
         popup: {
           title: 'Méthodes de filtrage personnalisées',
@@ -886,7 +890,7 @@ export default {
           clearFilter: 'Filtre effacer',
           textOption: 'Filtrage de texte',
           numberOption: 'Filtrage numérique',
-          dateOption: 'Filtre par date',
+          dateOption: 'Filtre par date'
         },
         popup: {
           title: 'Méthodes de filtrage personnalisées',
