@@ -216,7 +216,7 @@ function handleCustomRestore ($xeTable: VxeTableConstructor & VxeTablePrivateMet
       internalData.tableFullGroupData = groupRest.treeData
       reactData.isRowGroupStatus = true
       reactData.rowGroupList = aggGroupConfs
-      $xeTable.cacheRowMap(false)
+      $xeTable.cacheRowMap(false, false)
     }
     // 如果自定义了顺序
     if (isCustomSort && sortData) {
@@ -516,7 +516,7 @@ function handleBaseTreeExpand ($xeTable: VxeTableConstructor & VxeTablePrivateMe
           const isLoad = lazy && row[hasChildField] && !rowRest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
           // 是否使用懒加载
           if (isLoad) {
-            result.push(handleAsyncTreeExpandChilds($xeTable, row))
+            result.push(handleAsyncTreeExpandChilds($xeTable, row, true))
           } else {
             if (row[childrenField] && row[childrenField].length) {
               treeExpandedMaps[rowid] = row
@@ -1736,7 +1736,7 @@ const handleDefaultTreeExpand = ($xeTable: VxeTableConstructor) => {
   }
 }
 
-const handleAsyncTreeExpandChilds = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any): Promise<void> => {
+const handleAsyncTreeExpandChilds = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any, autoExpand: boolean): Promise<void> => {
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -1765,7 +1765,7 @@ const handleAsyncTreeExpandChilds = ($xeTable: VxeTableConstructor & VxeTablePri
         if (childRecords) {
           return $xeTable.loadTreeChildren(row, childRecords).then(childRows => {
             const { treeExpandedMaps } = internalData
-            if (childRows.length && !treeExpandedMaps[rowid]) {
+            if (autoExpand && childRows.length && !treeExpandedMaps[rowid]) {
               treeExpandedMaps[rowid] = row
             }
             reactData.treeExpandedFlag++
@@ -3691,7 +3691,7 @@ function loadTableData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   internalData.tableFullTreeData = isRGroup ? [] : treeData
   internalData.tableFullGroupData = isRGroup ? treeData : []
   // 缓存数据
-  $xeTable.cacheRowMap(isReset)
+  $xeTable.cacheRowMap(isReset, true)
   // 原始数据
   internalData.tableSynchData = datas
   if (isReset) {
@@ -4821,7 +4821,7 @@ function handleUpdateSnapshotStackData ($xeTable: VxeTableConstructor & VxeTable
   internalData.removeRowMaps = rRowMaps
   internalData.afterFullData = afterFullList
 
-  $xeTable.cacheRowMap(false)
+  $xeTable.cacheRowMap(false, false)
   $xeTable.handleTableData(treeConfig && transform)
   $xeTable.updateFooter()
   $xeTable.handleUpdateBodyMerge()
@@ -5245,7 +5245,7 @@ const tableMethods: any = {
   /**
    * 更新数据行的 Map
    */
-  cacheRowMap (isReset: boolean) {
+  cacheRowMap (isReset: boolean, isReLoaded: boolean) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
     const reactData = $xeTable as unknown as TableReactData
@@ -5268,8 +5268,10 @@ const tableMethods: any = {
       if (!rowRest) {
         rowRest = { row, rowid, _seq: -1, seq, index: -1, _index: -1, $index: -1, treeIndex: index, _tIndex: -1, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
       }
-      rowRest.treeLoaded = false
-      rowRest.expandLoaded = false
+      if (isReset || isReLoaded) {
+        rowRest.treeLoaded = false
+        rowRest.expandLoaded = false
+      }
 
       rowRest._seq = rowNum++
       rowRest.row = row
@@ -5659,7 +5661,7 @@ const tableMethods: any = {
       if (reDelFlag) {
         reactData.removeRowFlag++
         $xeTable.updateFooter()
-        $xeTable.cacheRowMap(false)
+        $xeTable.cacheRowMap(false, true)
         $xeTable.handleTableData(treeConfig && transform)
         if (!(treeConfig && transform)) {
           $xeTable.updateAfterDataIndex()
@@ -10393,7 +10395,9 @@ const tableMethods: any = {
     }
     $xeTable.closeTooltip()
   },
-  handleRowDragSwapEvent (evnt: DragEvent | null, isSyncRow: boolean | undefined, dragRow: any, prevDragRow: any, prevDragPos: '' | 'top' | 'bottom' | 'left' | 'right' | undefined, prevDragToChild: boolean | undefined) {
+  handleRowDragSwapEvent (evnt: DragEvent | null, isSyncRow: boolean | undefined, dragRow: any, prevDragRow: any, prevDragPos: '' | 'top' | 'bottom' | 'left' | 'right' | undefined, prevDragToChild: boolean | undefined): Promise<{
+    status: boolean
+  }> {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const $xeGantt = $xeTable.$xeGantt
     const props = $xeTable
@@ -10588,7 +10592,7 @@ const tableMethods: any = {
 
         $xeTable.handleClearStack()
         $xeTable.handleTableData(treeConfig && transform)
-        $xeTable.cacheRowMap(false)
+        $xeTable.cacheRowMap(false, false)
         updateScrollYStatus($xeTable)
         if (!(treeConfig && transform)) {
           updateAfterDataIndex($xeTable)
@@ -10968,31 +10972,62 @@ const tableMethods: any = {
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const { prevDragRow, prevDragPos } = internalData
     const rowDragOpts = $xeTable.computeRowDragOpts
-    const { isCrossTableDrag, isCrossDrag } = rowDragOpts
+    const { isCrossDrag, isCrossTableDrag, isAutoExpandToChild, isAutoLazyLoadToChild } = rowDragOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
     // 跨表拖拽
-    if (isCrossTableDrag && crossTableDragRowObj) {
+    if (isCrossTableDrag && (!treeConfig || isCrossDrag) && crossTableDragRowObj) {
       const { $newTable } = crossTableDragRowObj
       if ($newTable && $newTable.xID !== $xeTable.xID) {
-        if (!treeConfig || isCrossDrag) {
-          $newTable.handleCrossTableRowDragInsertEvent(evnt)
-        }
+        $newTable.handleCrossTableRowDragInsertEvent(evnt)
         return
       }
     }
-    if (treeConfig && lazy && prevDragToChild) {
+    if (treeConfig && prevDragToChild) {
       // 懒加载
-      const newRowid = getRowid($xeTable, prevDragRow)
-      const rowRest = fullAllDataRowIdData[newRowid]
-      if (prevDragRow[hasChildField]) {
-        if (rowRest && rowRest.treeLoaded) {
-          $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
-        }
-      } else {
-        $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
+      const prevRowid = getRowid($xeTable, prevDragRow)
+      const rowRest = fullAllDataRowIdData[prevRowid]
+      if (!rowRest) {
+        handleRowDragEndClearStatus($xeTable)
+        return
       }
-    } else {
-      $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
+      const hasLazyChilds = prevDragRow[hasChildField]
+      const rowChilds = prevDragRow[childrenField]
+      // 如果懒加载节点未被加载
+      if (isAutoExpandToChild) {
+        // 判断目标节点是否有树子级
+        if ((lazy && hasLazyChilds) || (rowChilds && rowChilds.length)) {
+          hideDropTip($xeTable)
+          $xeTable.setTreeExpand(prevDragRow, true).then(() => {
+            $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
+          })
+          return
+        }
+        $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild).then(() => {
+          if (!$xeTable.isTreeExpandByRow(prevDragRow)) {
+            $xeTable.setTreeExpand(prevDragRow, true)
+          }
+        })
+        return
+      }
+      // 如果是懒加载节点。只加载不自动展开
+      if ((lazy && hasLazyChilds) && isAutoLazyLoadToChild) {
+        if (rowChilds && rowChilds.length) {
+          $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
+          return
+        }
+        hideDropTip($xeTable)
+        $xeTable.reloadTreeExpand(prevDragRow, false).then(() => {
+          $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
+        })
+        return
+      }
+      // 懒加载的行默认需要先展开过后才允许拖拽，除非启用 isAutoExpandToChild | isAutoLazyLoadToChild
+      if (lazy && hasLazyChilds && !rowRest.treeLoaded) {
+        handleRowDragEndClearStatus($xeTable)
+        return
+      }
     }
+    $xeTable.handleRowDragSwapEvent(evnt, true, dragRow, prevDragRow, prevDragPos, prevDragToChild)
   },
   handleRowDragDragoverEvent (evnt: DragEvent) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -11007,7 +11042,7 @@ const tableMethods: any = {
     const { lazy, transform, parentField } = treeOpts
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowDragOpts = $xeTable.computeRowDragOpts
-    const { isPeerDrag, isCrossDrag, isToChildDrag, isCrossTableDrag } = rowDragOpts
+    const { isPeerDrag, isCrossDrag, isToChildDrag, isCrossTableDrag, isAutoLazyLoadToChild, isAutoExpandToChild } = rowDragOpts
     if (!dragRow && !(isCrossTableDrag && (!treeConfig || isCrossDrag) && crossTableDragRowObj)) {
       evnt.preventDefault()
       return
@@ -11050,8 +11085,8 @@ const tableMethods: any = {
         }
       }
       if ($xeTable.eqRow(dragRow, row) ||
-            (isControlKey && treeConfig && lazy && row[hasChildField] && rowRest && !rowRest.treeLoaded) ||
-            (!isCrossDrag && treeConfig && transform && (isPeerDrag ? dragRow[parentField] !== row[parentField] : rowRest.level))
+        (isControlKey && treeConfig && lazy && row[hasChildField] && (rowRest && !rowRest.treeLoaded) && !isAutoLazyLoadToChild && !isAutoExpandToChild) ||
+        (!isCrossDrag && treeConfig && transform && (isPeerDrag ? dragRow[parentField] !== row[parentField] : rowRest.level))
       ) {
         showDropTip($xeTable, evnt, trEl, null, false, dragPos)
         return
@@ -12465,7 +12500,7 @@ const tableMethods: any = {
    * 重新懒加载树节点，并展开该节点
    * @param {Row} row 行对象
    */
-  reloadTreeExpand (row: any) {
+  reloadTreeExpand (row: any, autoExpand = true) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
@@ -12477,7 +12512,7 @@ const tableMethods: any = {
     const rowid = getRowid($xeTable, row)
     if (lazy && row[hasChildField] && !treeExpandLazyLoadedMaps[rowid]) {
       return $xeTable.clearTreeExpandLoaded(row).then(() => {
-        return handleAsyncTreeExpandChilds($xeTable, row)
+        return handleAsyncTreeExpandChilds($xeTable, row, autoExpand)
       }).then(() => {
         if (transform) {
           handleVirtualTreeToList($xeTable)

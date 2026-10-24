@@ -301,7 +301,7 @@ function handleInsertRowAt ($xeTable: VxeTableConstructor & VxeTablePrivateMetho
 
   reactData.removeRowFlag++
   reactData.insertRowFlag++
-  $xeTable.cacheRowMap(false)
+  $xeTable.cacheRowMap(false, false)
   $xeTable.updateScrollYStatus()
   $xeTable.handleTableData(treeConfig && transform)
   if (!(treeConfig && transform)) {
@@ -712,7 +712,7 @@ export default {
       reactData.removeRowFlag++
       reactData.insertRowFlag++
       reactData.pendingRowFlag++
-      $xeTable.cacheRowMap(false)
+      $xeTable.cacheRowMap(false, false)
       $xeTable.handleTableData(treeConfig && transform)
       $xeTable.updateFooter()
       $xeTable.handleUpdateBodyMerge()
