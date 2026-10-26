@@ -401,30 +401,6 @@ VxeUI.setIcon({
   TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVE: iconPrefix + 'fixed-right-fill'
 })
 
-export const setTheme = VxeUI.setTheme
-export const getTheme = VxeUI.getTheme
-export const setConfig = VxeUI.setConfig
-export const getConfig = VxeUI.getConfig
-export const setIcon = VxeUI.setIcon
-export const getIcon = VxeUI.getIcon
-export const setLanguage = VxeUI.setLanguage
-export const setI18n = VxeUI.setI18n
-export const getI18n = VxeUI.getI18n
-
-export const globalEvents = VxeUI.globalEvents
-export const globalResize = VxeUI.globalResize
-export const renderer = VxeUI.renderer
-export const validators = VxeUI.validators
-export const menus = VxeUI.menus
-export const formats = VxeUI.formats
-export const commands = VxeUI.commands
-export const interceptor = VxeUI.interceptor
-export const clipboard = VxeUI.clipboard
-export const log = VxeUI.log
-
-export const hooks = VxeUI.hooks
-export const use = VxeUI.use
-
 /**
  * 已废弃
  * @deprecated
@@ -541,8 +517,5 @@ export const modal = {
   }
 }
 
-export {
-  VxeUI
-}
-
+export * from '@vxe-ui/core'
 export default VxeUI

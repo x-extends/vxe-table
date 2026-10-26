@@ -1,15 +1,17 @@
 {
   "name": "vxe-table",
-  "version": "4.23.5",
+  "version": "4.23.6",
   "description": "A PC-end table component based on Vxe UI, supporting copy-paste, data pivot table, and high-performance virtual list table solution.",
   "scripts": {
     "update": "npm install --legacy-peer-deps",
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
     "build": "vue-cli-service build",
-    "lib:modules": "gulp build",
     "lib:pack": "vue-cli-service build --target lib --name index --dest lib_temp index.ts",
-    "lib": "npm run lib:pack && npm run lib:modules",
+    "lib:modules": "gulp build",
+    "lib:old": "npm run lib:pack && npm run lib:modules",
+    "lib:new": "node scripts/build-modules.js",
+    "lib": "npm run lib:new",
     "format": "eslint --fix examples/**/*.{js,ts,vue}"
   },
   "files": [
@@ -48,6 +50,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^8.0.3",
+    "esbuild": "~0.28.2",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-babel": "^8.0.0",
@@ -63,10 +66,11 @@
     "rollup": "^4.53.3",
     "sass": "~1.101.7",
     "sass-loader": "^14.2.0",
+    "sass-embedded": "^1.106.1",
     "typescript": "~5.9.3",
     "vue": "3.4.27",
     "vue-router": "~4.5.1",
-    "vxe-pc-ui": "4.20.19"
+    "vxe-pc-ui": "4.20.36"
   },
   "vetur": {
     "tags": "helper/vetur/tags.json",
