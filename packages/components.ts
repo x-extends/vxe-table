@@ -30,6 +30,9 @@ VxeUI.setTheme('light')
 
 export { VxeUI }
 
+// 兼容老版本
+export * from './ui'
+
 // Components
 export * from './table'
 export * from './column'
