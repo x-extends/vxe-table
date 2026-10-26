@@ -1,5 +1,6 @@
 .DS_Store
 .history
+.tsconfig.build-dts.json
 node_modules
 /lib_temp
 /packages_temp

@@ -1,16 +1,17 @@
 {
   "name": "vxe-table",
-  "version": "3.25.5",
+  "version": "3.25.6",
   "description": "A PC-end table component based on Vxe UI, supporting copy-paste, data pivot table, and high-performance virtual list table solution.",
   "scripts": {
     "update": "npm install --legacy-peer-deps",
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
     "build": "vue-cli-service build",
-    "lib:modules": "gulp build",
     "lib:pack": "vue-cli-service build --target lib --name index --dest lib_temp index.ts",
-    "lib": "npm run lib:pack && npm run lib:modules",
-    "format": "eslint --fix examples/**/*.{js,ts,vue}"
+    "lib:modules": "gulp build",
+    "lib:old": "npm run lib:pack && npm run lib:modules",
+    "lib:new": "node scripts/build-modules.js",
+    "lib": "npm run lib:new"
   },
   "files": [
     "lib",
@@ -47,6 +48,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^8.0.3",
+    "esbuild": "~0.28.2",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-babel": "^8.0.0",
@@ -60,12 +62,13 @@
     "gulp-uglify": "^3.0.2",
     "sass": "~1.101.7",
     "sass-loader": "^14.2.1",
+    "sass-embedded": "^1.106.1",
     "typescript": "~5.9.3",
     "vue": "~2.6.14",
     "vue-i18n": "^8.15.1",
     "vue-router": "^3.5.1",
     "vue-template-compiler": "2.6.14",
-    "vxe-pc-ui": "3.20.19"
+    "vxe-pc-ui": "3.20.23"
   },
   "vetur": {
     "tags": "helper/vetur/tags.json",
