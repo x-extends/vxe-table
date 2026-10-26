@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { VxeUI } from '../../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { eqEmptyValue, getFuncText } from '../../../ui/src/utils'
 import { scrollToView } from '../../../ui/src/dom'
 import { handleFieldOrColumn, getRowid } from '../../src/util'
@@ -17,7 +17,7 @@ const { getConfig, validators } = VxeUI
  */
 class Rule {
   $options: any
-  constructor (rule: any) {
+  constructor(rule: any) {
     Object.assign(this, {
       $options: rule,
       required: rule.required,
@@ -35,17 +35,17 @@ class Rule {
    * 获取校验不通过的消息
    * 支持国际化翻译
    */
-  get content () {
+  get content() {
     return getFuncText(this.$options.content || this.$options.message)
   }
 
-  get message () {
+  get message() {
     return this.content
   }
 }
 
 // 如果存在 pattern，判断正则
-function validREValue (pattern: string | RegExp | undefined, val: string) {
+function validREValue(pattern: string | RegExp | undefined, val: string) {
   if (pattern && !(XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(val)) {
     return false
   }
@@ -53,7 +53,7 @@ function validREValue (pattern: string | RegExp | undefined, val: string) {
 }
 
 // 如果存在 max，判断最大值
-function validMaxValue (max: string | number | undefined, num: number) {
+function validMaxValue(max: string | number | undefined, num: number) {
   if (!XEUtils.eqNull(max) && num > XEUtils.toNumber(max)) {
     return false
   }
@@ -61,14 +61,14 @@ function validMaxValue (max: string | number | undefined, num: number) {
 }
 
 // 如果存在 min，判断最小值
-function validMinValue (min: string | number | undefined, num: number) {
+function validMinValue(min: string | number | undefined, num: number) {
   if (!XEUtils.eqNull(min) && num < XEUtils.toNumber(min)) {
     return false
   }
   return true
 }
 
-function validRuleValue (rule: VxeTableDefines.ValidatorRule, val: any, required: boolean | undefined) {
+function validRuleValue(rule: VxeTableDefines.ValidatorRule, val: any, required: boolean | undefined) {
   const { type, min, max, pattern } = rule
   const isArrType = type === 'array'
   const isNumType = type === 'number'
@@ -124,7 +124,7 @@ function validRuleValue (rule: VxeTableDefines.ValidatorRule, val: any, required
   return true
 }
 
-function checkRuleStatus (rule: VxeTableDefines.ValidatorRule, row: any, val: any) {
+function checkRuleStatus(rule: VxeTableDefines.ValidatorRule, row: any, val: any) {
   const { required, field } = rule
   const currVal = field ? XEUtils.get(row, field) : val
   const isEmptyVal = XEUtils.isArray(currVal) ? !currVal.length : eqEmptyValue(currVal)
@@ -145,24 +145,27 @@ function checkRuleStatus (rule: VxeTableDefines.ValidatorRule, row: any, val: an
   return true
 }
 
-function handleClearValid ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, rows: any, fieldOrColumn: string | string[] | VxeTableDefines.ColumnInfo | VxeTableDefines.ColumnInfo[] | undefined) {
+function handleClearValid($xeTable: VxeTableConstructor & VxeTablePrivateMethods, rows: any, fieldOrColumn: string | string[] | VxeTableDefines.ColumnInfo | VxeTableDefines.ColumnInfo[] | undefined) {
   const reactData = $xeTable as unknown as TableReactData
 
   const { validErrorMaps } = reactData
   const validOpts = $xeTable.computeValidOpts
-  const rowList = XEUtils.isArray(rows) ? rows : (rows ? [rows] : [])
-  const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : [])).map(column => handleFieldOrColumn($xeTable, column)) as VxeTableDefines.ColumnInfo<any>[]
-  let validErrMaps: Record<string, {
-    row: any;
-    column: any;
-    rule: any;
-    content: any;
-  }> = {}
+  const rowList = XEUtils.isArray(rows) ? rows : rows ? [rows] : []
+  const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : fieldOrColumn ? [fieldOrColumn] : []).map((column) => handleFieldOrColumn($xeTable, column)) as VxeTableDefines.ColumnInfo<any>[]
+  let validErrMaps: Record<
+    string,
+    {
+      row: any
+      column: any
+      rule: any
+      content: any
+    }
+  > = {}
   // 如果是多个提示模式
   if (validOpts.msgMode === 'full') {
     validErrMaps = Object.assign({}, validErrorMaps)
     if (rowList.length && colList.length) {
-      rowList.forEach(row => {
+      rowList.forEach((row) => {
         colList.forEach((column) => {
           const validKey = `${getRowid($xeTable, row)}:${column.id}`
           if (validErrMaps[validKey]) {
@@ -171,14 +174,14 @@ function handleClearValid ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
         })
       })
     } else if (rowList.length) {
-      const rowIdList = rowList.map(row => `${getRowid($xeTable, row)}`)
+      const rowIdList = rowList.map((row) => `${getRowid($xeTable, row)}`)
       XEUtils.each(validErrorMaps, (item, key) => {
         if (rowIdList.indexOf(key.split(':')[0]) > -1) {
           delete validErrMaps[key]
         }
       })
     } else if (colList.length) {
-      const colidList = colList.map(column => `${column.id}`)
+      const colidList = colList.map((column) => `${column.id}`)
       XEUtils.each(validErrorMaps, (item, key) => {
         if (colidList.indexOf(key.split(':')[1]) > -1) {
           delete validErrMaps[key]
@@ -192,8 +195,8 @@ function handleClearValid ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
 /**
  * 聚焦到校验通过的单元格并弹出校验错误提示
  */
-function handleValidError ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, params: any) {
-  return new Promise<void>(resolve => {
+function handleValidError($xeTable: VxeTableConstructor & VxeTablePrivateMethods, params: any) {
+  return new Promise<void>((resolve) => {
     const validOpts = $xeTable.computeValidOpts
     if (validOpts.autoPos === false) {
       $xeTable.dispatchEvent('valid-error', params, null)
@@ -208,16 +211,19 @@ function handleValidError ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   })
 }
 
-function handleErrMsgMode ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, validErrMaps: any) {
+function handleErrMsgMode($xeTable: VxeTableConstructor & VxeTablePrivateMethods, validErrMaps: any) {
   const validOpts = $xeTable.computeValidOpts
   if (validOpts.msgMode === 'single') {
     const keys = Object.keys(validErrMaps)
-    const resMaps: Record<string, {
-      row: any;
-      column: any;
-      rule: any;
-      content: any;
-    }> = {}
+    const resMaps: Record<
+      string,
+      {
+        row: any
+        column: any
+        rule: any
+        content: any
+      }
+    > = {}
     if (keys.length) {
       const firstKey = keys[0]
       resMaps[firstKey] = validErrMaps[firstKey]
@@ -236,7 +242,7 @@ function handleErrMsgMode ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
  * 如果只传 callback 否则默认验证整个表格数据
  * 返回 Promise 对象，或者使用回调方式
  */
-function beginValidate ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, rows: any, cols: VxeTableDefines.ColumnInfo[] | null, cb: any, isFull?: boolean) {
+function beginValidate($xeTable: VxeTableConstructor & VxeTablePrivateMethods, rows: any, cols: VxeTableDefines.ColumnInfo[] | null, cb: any, isFull?: boolean) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -265,12 +271,15 @@ function beginValidate ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   internalData._lastCallTime = Date.now()
   internalData.validRuleErr = false // 如果为快速校验，当存在某列校验不通过时将终止执行
   $xeTable.clearValidate()
-  const validErrMaps: Record<string, {
-    row: any;
-    column: any;
-    rule: any;
-    content: any;
-  }> = {}
+  const validErrMaps: Record<
+    string,
+    {
+      row: any
+      column: any
+      rule: any
+      content: any
+    }
+  > = {}
   if (editRules) {
     const columns = cols && cols.length ? cols : $xeTable.getColumns()
     const handleVaild = (row: any) => {
@@ -292,33 +301,32 @@ function beginValidate ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
           const field = XEUtils.isString(column) ? column : column.field
           if ((isFull || !internalData.validRuleErr) && XEUtils.has(editRules, field)) {
             colVailds.push(
-              $xeTable.validCellRules('all', row, column)
-                .catch(({ rule, rules }: any) => {
-                  const rest = {
-                    rule,
-                    rules,
-                    rowIndex: $xeTable.getRowIndex(row),
-                    row,
-                    columnIndex: $xeTable.getColumnIndex(column),
-                    column,
-                    field,
-                    $table: $xeTable
-                  }
-                  if (!validRest[field]) {
-                    validRest[field] = []
-                  }
-                  validErrMaps[`${getRowid($xeTable, row)}:${column.id}`] = {
-                    column,
-                    row,
-                    rule,
-                    content: rule.content
-                  }
-                  validRest[field].push(rest)
-                  if (!isFull) {
-                    internalData.validRuleErr = true
-                    return Promise.reject(rest)
-                  }
-                })
+              $xeTable.validCellRules('all', row, column).catch(({ rule, rules }: any) => {
+                const rest = {
+                  rule,
+                  rules,
+                  rowIndex: $xeTable.getRowIndex(row),
+                  row,
+                  columnIndex: $xeTable.getColumnIndex(column),
+                  column,
+                  field,
+                  $table: $xeTable
+                }
+                if (!validRest[field]) {
+                  validRest[field] = []
+                }
+                validErrMaps[`${getRowid($xeTable, row)}:${column.id}`] = {
+                  column,
+                  row,
+                  rule,
+                  content: rule.content
+                }
+                validRest[field].push(rest)
+                if (!isFull) {
+                  internalData.validRuleErr = true
+                  return Promise.reject(rest)
+                }
+              })
             )
           }
         })
@@ -333,53 +341,55 @@ function beginValidate ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
     } else {
       validList.forEach(handleVaild)
     }
-    return Promise.all(rowValidErrs).then(() => {
-      const ruleProps = Object.keys(validRest)
-      reactData.validErrorMaps = Object.assign(handleClearValid($xeTable, rows, columns), handleErrMsgMode($xeTable, validErrMaps))
-      return $xeTable.$nextTick().then(() => {
-        if (ruleProps.length) {
-          return Promise.reject(validRest[ruleProps[0]][0])
-        }
-        if (cb) {
-          cb()
-        }
+    return Promise.all(rowValidErrs)
+      .then(() => {
+        const ruleProps = Object.keys(validRest)
+        reactData.validErrorMaps = Object.assign(handleClearValid($xeTable, rows, columns), handleErrMsgMode($xeTable, validErrMaps))
+        return $xeTable.$nextTick().then(() => {
+          if (ruleProps.length) {
+            return Promise.reject(validRest[ruleProps[0]][0])
+          }
+          if (cb) {
+            cb()
+          }
+        })
       })
-    }).catch(firstErrParams => {
-      return new Promise<void>((resolve, reject) => {
-        const finish = () => {
-          $xeTable.$nextTick(() => {
-            if (cb) {
-              cb(validRest)
-              resolve()
-            } else {
-              if (getConfig().validToReject === 'obsolete') {
-                // 已废弃，校验失败将不会执行catch
-                reject(validRest)
+      .catch((firstErrParams) => {
+        return new Promise<void>((resolve, reject) => {
+          const finish = () => {
+            $xeTable.$nextTick(() => {
+              if (cb) {
+                cb(validRest)
+                resolve()
               } else {
-                resolve(validRest)
+                if (getConfig().validToReject === 'obsolete') {
+                  // 已废弃，校验失败将不会执行catch
+                  reject(validRest)
+                } else {
+                  resolve(validRest)
+                }
               }
-            }
-          })
-        }
-        const posAndFinish = () => {
-          firstErrParams.cell = $xeTable.getCellElement(firstErrParams.row, firstErrParams.column)
-          scrollToView(firstErrParams.cell)
-          handleValidError($xeTable, firstErrParams).then(finish)
-        }
-        /**
-         * 当校验不通过时
-         * 将表格滚动到可视区
-         * 由于提示信息至少需要占一行，定位向上偏移一行
-         */
-        if (validOpts.autoPos === false) {
-          finish()
-        } else {
-          const row = firstErrParams.row
-          const column = firstErrParams.column
-          $xeTable.scrollToRow(row, column).then(posAndFinish)
-        }
+            })
+          }
+          const posAndFinish = () => {
+            firstErrParams.cell = $xeTable.getCellElement(firstErrParams.row, firstErrParams.column)
+            scrollToView(firstErrParams.cell)
+            handleValidError($xeTable, firstErrParams).then(finish)
+          }
+          /**
+           * 当校验不通过时
+           * 将表格滚动到可视区
+           * 由于提示信息至少需要占一行，定位向上偏移一行
+           */
+          if (validOpts.autoPos === false) {
+            finish()
+          } else {
+            const row = firstErrParams.row
+            const column = firstErrParams.column
+            $xeTable.scrollToRow(row, column).then(posAndFinish)
+          }
+        })
       })
-    })
   } else {
     reactData.validErrorMaps = {}
   }
@@ -395,7 +405,7 @@ export default {
     /**
      * 完整校验，和 validate 的区别就是会给有效数据中的每一行进行校验
      */
-    _fullValidate (rows: any, cb: any) {
+    _fullValidate(rows: any, cb: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       if (XEUtils.isFunction(cb)) {
@@ -406,7 +416,7 @@ export default {
     /**
      * 快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）
      */
-    _validate (rows: any, cb: any) {
+    _validate(rows: any, cb: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       if (XEUtils.isFunction(cb)) {
@@ -417,10 +427,10 @@ export default {
     /**
      * 完整校验单元格，和 validateField 的区别就是会给有效数据中的每一行进行校验
      */
-    _fullValidateField (rows: any, fieldOrColumn: any) {
+    _fullValidateField(rows: any, fieldOrColumn: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : [])).map(column => handleFieldOrColumn(this, column))
+      const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : fieldOrColumn ? [fieldOrColumn] : []).map((column) => handleFieldOrColumn(this, column))
       if (colList.length) {
         return beginValidate($xeTable, rows, colList, null, true)
       }
@@ -429,21 +439,21 @@ export default {
     /**
      * 快速校验单元格，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）
      */
-    _validateField (rows: any, fieldOrColumn: any) {
+    _validateField(rows: any, fieldOrColumn: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-      const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : [])).map(column => handleFieldOrColumn(this, column))
+      const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : fieldOrColumn ? [fieldOrColumn] : []).map((column) => handleFieldOrColumn(this, column))
       if (colList.length) {
         return beginValidate($xeTable, rows, colList, null)
       }
       return $xeTable.$nextTick()
     },
-    hasCellRules (type: any, row: any, column: any) {
+    hasCellRules(type: any, row: any, column: any) {
       const { editRules } = this
       const { field } = column
       if (field && editRules) {
         const rules = column.rules ? column.rules : XEUtils.get(editRules, field)
-        return rules && XEUtils.find(rules, rule => type === 'all' || !rule.trigger || type === rule.trigger)
+        return rules && XEUtils.find(rules, (rule) => type === 'all' || !rule.trigger || type === rule.trigger)
       }
       return false
     },
@@ -461,7 +471,7 @@ export default {
      *  validator=Function({ cellValue, rule, rules, row, column, rowIndex, columnIndex }) 自定义校验，接收一个 Promise
      *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
      */
-    validCellRules (validType: any, row: any, column: any, val: any) {
+    validCellRules(validType: any, row: any, column: any, val: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
       const internalData = $xeTable as unknown as TableInternalData
@@ -514,7 +524,7 @@ export default {
                     syncValidList.push(
                       customValid.catch((e: any) => {
                         internalData.validRuleErr = true
-                        errorRules.push(new Rule({ type: 'custom', trigger, content: e && e.message ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
+                        errorRules.push(new Rule({ type: 'custom', trigger, content: e && e.message ? e.message : rule.content || rule.message, rule: new Rule(rule) }))
                       })
                     )
                   }
@@ -536,7 +546,7 @@ export default {
         }
       })
     },
-    _clearValidate (rows: any, fieldOrColumn: any) {
+    _clearValidate(rows: any, fieldOrColumn: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -550,7 +560,7 @@ export default {
     /**
      * 触发校验
      */
-    triggerValidate (type: any) {
+    triggerValidate(type: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
       const reactData = $xeTable as unknown as TableReactData
@@ -569,19 +579,22 @@ export default {
       if (editConfig && editRules && actived.row) {
         const { row, column, cell } = actived.args
         if ($xeTable.hasCellRules(type, row, column)) {
-          return $xeTable.validCellRules(type, row, column).then(() => {
-            if (editOpts.mode === 'row') {
-              $xeTable.clearValidate(row, column)
-            }
-          }).catch(({ rule }: any) => {
-            // 如果校验不通过与触发方式一致，则聚焦提示错误，否则跳过并不作任何处理
-            if (!rule.trigger || type === rule.trigger) {
-              const rest = { rule, row, column, cell }
-              $xeTable.showValidTooltip(rest)
-              return Promise.reject(rest)
-            }
-            return Promise.resolve()
-          })
+          return $xeTable
+            .validCellRules(type, row, column)
+            .then(() => {
+              if (editOpts.mode === 'row') {
+                $xeTable.clearValidate(row, column)
+              }
+            })
+            .catch(({ rule }: any) => {
+              // 如果校验不通过与触发方式一致，则聚焦提示错误，否则跳过并不作任何处理
+              if (!rule.trigger || type === rule.trigger) {
+                const rest = { rule, row, column, cell }
+                $xeTable.showValidTooltip(rest)
+                return Promise.reject(rest)
+              }
+              return Promise.resolve()
+            })
         }
       }
       return Promise.resolve()
@@ -589,7 +602,7 @@ export default {
     /**
      * 弹出校验错误提示
      */
-    showValidTooltip (params: any) {
+    showValidTooltip(params: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
       const reactData = $xeTable as unknown as TableReactData

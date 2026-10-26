@@ -6,7 +6,7 @@ import type { VxeColumnPropTypes, VxeTableConstructor, VxeTablePrivateMethods, V
 
 const customColumnCssKeys = ['checkbox', 'sort', 'title', 'width', 'fixed', 'align', 'header-align', 'footer-align']
 
-function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+function updatePopupStyle($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const $xeGrid = $xeTable.$xeGrid
   const $xeGantt = $xeTable.$xeGantt
   const $xeGGWrapper = $xeGrid || $xeGantt
@@ -52,7 +52,7 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   if (!(placement === 'left' || placement === 'right')) {
     popupMxHeight = XEUtils.eqNull(maxHeight) ? popupMaxHeight : maxHeight
   }
-  if (!placement || !(['left', 'right', 'bottom-left', 'bottom-right'].includes(placement))) {
+  if (!placement || !['left', 'right', 'bottom-left', 'bottom-right'].includes(placement)) {
     if (popupTop) {
       defPupStys.top = toCssUnit(popupTop)
     }
@@ -72,7 +72,7 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   // 同步表格的css变量到弹窗中
   const bodyComputeStyle = getComputedStyle(bodyEl)
   const tableComputeStyle = getComputedStyle(wrapperEl)
-  customColumnCssKeys.forEach(key => {
+  customColumnCssKeys.forEach((key) => {
     const currCssKey = `--vxe-ui-vxe-table-custom-column-${key}-${key === 'title' ? 'min-' : ''}width`
     const currCssVal = tableComputeStyle.getPropertyValue(currCssKey)
     if (currCssVal && currCssVal !== bodyComputeStyle.getPropertyValue(currCssKey)) {
@@ -94,7 +94,7 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   return $xeTable.$nextTick()
 }
 
-function emitCustomEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, type: VxeTableDefines.CustomType, evnt: Event) {
+function emitCustomEvent($xeTable: VxeTableConstructor & VxeTablePrivateMethods, type: VxeTableDefines.CustomType, evnt: Event) {
   const $xeGrid = $xeTable.$xeGrid
   const $xeGantt = $xeTable.$xeGantt
 
@@ -104,14 +104,14 @@ function emitCustomEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods
 
 export default {
   methods: {
-    _getCustomVisible () {
+    _getCustomVisible() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
       const { customStore } = reactData
       return customStore.visible
     },
-    _openCustom () {
+    _openCustom() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -155,7 +155,7 @@ export default {
       updatePopupStyle($xeTable)
       return $xeTable.$nextTick().then(() => updatePopupStyle($xeTable))
     },
-    _closeCustom () {
+    _closeCustom() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -169,7 +169,7 @@ export default {
       }
       return $xeTable.$nextTick()
     },
-    _toggleCustom () {
+    _toggleCustom() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -179,7 +179,7 @@ export default {
       }
       return $xeTable.openCustom()
     },
-    _saveCustom (isDirectly?: boolean) {
+    _saveCustom(isDirectly?: boolean) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -198,7 +198,7 @@ export default {
       } else {
         XEUtils.eachTree(customColumnList, (column, index, items, path, parentColumn) => {
           if (parentColumn) {
-          // 更新子列信息
+            // 更新子列信息
             column.fixed = parentColumn.fixed
           } else {
             if (allowSort) {
@@ -253,7 +253,7 @@ export default {
       }
       return $xeTable.saveCustomStore('confirm')
     },
-    _cancelCustom () {
+    _cancelCustom() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -261,43 +261,47 @@ export default {
       const { oldSortMaps, oldFixedMaps, oldVisibleMaps } = customStore
       const customOpts = $xeTable.computeCustomOpts
       const { allowVisible, allowSort, allowFixed, allowAlign, allowHeaderAlign, allowFooterAlign, allowResizable, allowGroup, allowValues } = customOpts
-      XEUtils.eachTree(customColumnList, column => {
-        const colid = column.getKey()
-        const visible = !!oldVisibleMaps[colid]
-        const fixed = oldFixedMaps[colid] || ''
-        if (allowVisible) {
-          column.renderVisible = visible
-          column.visible = visible
-        }
-        if (allowFixed) {
-          column.renderFixed = fixed
-          column.fixed = fixed
-        }
-        if (allowSort) {
-          column.renderSortNumber = oldSortMaps[colid] || 0
-        }
-        if (allowResizable) {
-          column.renderResizeWidth = column.renderWidth
-        }
-        if (allowAlign) {
-          column.align = column.renderAlign
-        }
-        if (allowHeaderAlign) {
-          column.headerAlign = column.renderHeaderAlign
-        }
-        if (allowFooterAlign) {
-          column.footerAlign = column.renderFooterAlign
-        }
-        if (allowGroup) {
-          // 无
-        }
-        if (allowValues) {
-          // 无
-        }
-      }, { children: 'children' })
+      XEUtils.eachTree(
+        customColumnList,
+        (column) => {
+          const colid = column.getKey()
+          const visible = !!oldVisibleMaps[colid]
+          const fixed = oldFixedMaps[colid] || ''
+          if (allowVisible) {
+            column.renderVisible = visible
+            column.visible = visible
+          }
+          if (allowFixed) {
+            column.renderFixed = fixed
+            column.fixed = fixed
+          }
+          if (allowSort) {
+            column.renderSortNumber = oldSortMaps[colid] || 0
+          }
+          if (allowResizable) {
+            column.renderResizeWidth = column.renderWidth
+          }
+          if (allowAlign) {
+            column.align = column.renderAlign
+          }
+          if (allowHeaderAlign) {
+            column.headerAlign = column.renderHeaderAlign
+          }
+          if (allowFooterAlign) {
+            column.footerAlign = column.renderFooterAlign
+          }
+          if (allowGroup) {
+            // 无
+          }
+          if (allowValues) {
+            // 无
+          }
+        },
+        { children: 'children' }
+      )
       return $xeTable.$nextTick()
     },
-    _resetCustom (options: any) {
+    _resetCustom(options: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -306,16 +310,19 @@ export default {
       const { collectColumn } = internalData
       const customOpts = $xeTable.computeCustomOpts
       const { checkMethod } = customOpts
-      const opts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign({
-        visible: true,
-        resizable: options === true,
-        fixed: options === true,
-        sort: options === true,
-        aggFunc: options === true,
-        align: options === true,
-        headerAlign: options === true,
-        footerAlign: options === true
-      }, options)
+      const opts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign(
+        {
+          visible: true,
+          resizable: options === true,
+          fixed: options === true,
+          sort: options === true,
+          aggFunc: options === true,
+          align: options === true,
+          headerAlign: options === true,
+          footerAlign: options === true
+        },
+        options
+      )
       const allCols: VxeTableDefines.ColumnInfo[] = []
       XEUtils.eachTree(collectColumn, (column) => {
         if (opts.resizable) {
@@ -373,7 +380,7 @@ export default {
         $xeTable.saveCustomStore('reset')
       })
     },
-    _toggleCustomAllCheckbox () {
+    _toggleCustomAllCheckbox() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -381,7 +388,7 @@ export default {
       const isAll = !customStore.isAll
       return $xeTable.setCustomAllCheckbox(isAll)
     },
-    _setCustomAllCheckbox (checked: boolean) {
+    _setCustomAllCheckbox(checked: boolean) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -421,7 +428,7 @@ export default {
       }
       $xeTable.checkCustomStatus()
     },
-    checkCustomStatus () {
+    checkCustomStatus() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -433,12 +440,12 @@ export default {
       customStore.isAll = collectColumn.every((column) => (checkMethod ? !checkMethod({ $table: $xeTable, column }) : false) || column.renderVisible)
       customStore.isIndeterminate = !customStore.isAll && collectColumn.some((column) => (!checkMethod || checkMethod({ $table: $xeTable, column })) && (column.renderVisible || column.halfVisible))
     },
-    emitCustomEvent (type: any, evnt: any) {
+    emitCustomEvent(type: any, evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       $xeTable.dispatchEvent('custom', { type }, evnt)
     },
-    triggerCustomEvent (evnt: any) {
+    triggerCustomEvent(evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -454,7 +461,7 @@ export default {
         $xeTable.dispatchEvent('custom-open', {}, evnt)
       }
     },
-    customOpenEvent (evnt: any) {
+    customOpenEvent(evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -467,7 +474,7 @@ export default {
         $xeTable.dispatchEvent('custom-open', {}, evnt)
       }
     },
-    customCloseEvent (evnt: any) {
+    customCloseEvent(evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -479,7 +486,7 @@ export default {
         $xeTable.dispatchEvent('custom-close', {}, evnt)
       }
     },
-    handleUpdateCustomColumn () {
+    handleUpdateCustomColumn() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -490,7 +497,7 @@ export default {
         const sortMaps: Record<string, number> = {}
         const fixedMaps: Record<string, VxeColumnPropTypes.Fixed> = {}
         const visibleMaps: Record<string, boolean> = {}
-        XEUtils.eachTree(collectColumn, column => {
+        XEUtils.eachTree(collectColumn, (column) => {
           const colid = column.getKey()
           column.renderFixed = column.fixed
           column.renderVisible = column.visible
@@ -508,7 +515,7 @@ export default {
         reactData.customColumnList = collectColumn.slice(0)
       }
     },
-    handleCustomStyle () {
+    handleCustomStyle() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 

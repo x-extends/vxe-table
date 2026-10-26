@@ -1,9 +1,9 @@
 import { VueConstructor } from 'vue'
-import { VxeUI } from '../ui'
+import { VxeUI } from '@vxe-ui/core'
 import VxeColumnComponent from '../table/src/column'
 
 export const VxeColumn = Object.assign({}, VxeColumnComponent, {
-  install (app: VueConstructor) {
+  install(app: VueConstructor) {
     app.component(VxeColumnComponent.name as string, VxeColumnComponent)
     // 兼容旧用法
     app.component('VxeTableColumn', VxeColumnComponent)

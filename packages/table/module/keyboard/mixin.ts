@@ -5,7 +5,7 @@ import { hasEnableConf } from '../../../ui/src/utils'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, TableReactData, TableInternalData } from '../../../../types'
 
-function getCheckboxRangeRows ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: MouseEvent, params: any, targetTrElem: HTMLElement, trRect: DOMRect, offsetClientTop: number, moveRange: number) {
+function getCheckboxRangeRows($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: MouseEvent, params: any, targetTrElem: HTMLElement, trRect: DOMRect, offsetClientTop: number, moveRange: number) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -25,7 +25,7 @@ function getCheckboxRangeRows ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   if (isDown) {
     moveSize = offsetClientTop + moveRange
   } else {
-    moveSize = (trRect.height - offsetClientTop) + Math.abs(moveRange)
+    moveSize = trRect.height - offsetClientTop + Math.abs(moveRange)
   }
   if (scrollYLoad) {
     const _rowIndex = $xeTable.getVTRowIndex(row)
@@ -75,7 +75,7 @@ function getCheckboxRangeRows ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   return rangeRows
 }
 
-function handleMoveSelected ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: any, args: any, isLeftArrow: boolean, isUpArrow: boolean, isRightArrow: boolean, isDwArrow: boolean) {
+function handleMoveSelected($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: any, args: any, isLeftArrow: boolean, isUpArrow: boolean, isRightArrow: boolean, isDwArrow: boolean) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { afterFullData, visibleColumn } = internalData
@@ -84,9 +84,9 @@ function handleMoveSelected ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
   const _rowIndex = $xeTable.getVTRowIndex(row)
   const _columnIndex = $xeTable.getVTColumnIndex(column)
   const refTableBody = $xeTable.$refs.refTableBody
-  const tableBodyElem = refTableBody ? (refTableBody as any).$el as HTMLDivElement : null
+  const tableBodyElem = refTableBody ? ((refTableBody as any).$el as HTMLDivElement) : null
   const tableWidth = tableBodyElem ? tableBodyElem.clientWidth : 0
-  let colAlign = isLeftArrow || isRightArrow || (column.renderWidth < tableWidth)
+  let colAlign = isLeftArrow || isRightArrow || column.renderWidth < tableWidth
   if ((isLeftArrow && _columnIndex >= 0) || (isRightArrow && _columnIndex <= visibleColumn.length - 1)) {
     colAlign = false
   } else {
@@ -109,16 +109,18 @@ function handleMoveSelected ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
     params.columnIndex = _columnIndex + 1
     params.column = visibleColumn[params.columnIndex]
   }
-  $xeTable.scrollToRow(params.row, params.column, {
-    colAlign
-  }).then(() => {
-    params.cell = $xeTable.getCellElement(params.row, params.column)
-    $xeTable.handleSelected(params, evnt)
-  })
+  $xeTable
+    .scrollToRow(params.row, params.column, {
+      colAlign
+    })
+    .then(() => {
+      params.cell = $xeTable.getCellElement(params.row, params.column)
+      $xeTable.handleSelected(params, evnt)
+    })
   return params
 }
 
-function handleCheckboxRangeEvent ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: any, params: any) {
+function handleCheckboxRangeEvent($xeTable: VxeTableConstructor & VxeTablePrivateMethods, evnt: any, params: any) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { elemStore } = internalData
@@ -155,10 +157,14 @@ function handleCheckboxRangeEvent ($xeTable: VxeTableConstructor & VxeTablePriva
     let isMouseScrollDown: any = false
     let mouseScrollSpaceSize = 1
     const triggerEvent = (type: 'change' | 'start' | 'end', evnt: Event) => {
-      $xeTable.dispatchEvent(`checkbox-range-${type}`, {
-        records: () => $xeTable.getCheckboxRecords(),
-        reserves: () => $xeTable.getCheckboxReserveRecords()
-      }, evnt)
+      $xeTable.dispatchEvent(
+        `checkbox-range-${type}`,
+        {
+          records: () => $xeTable.getCheckboxRecords(),
+          reserves: () => $xeTable.getCheckboxReserveRecords()
+        },
+        evnt
+      )
     }
     const handleChecked = (evnt: any) => {
       const { clientX, clientY } = evnt
@@ -222,7 +228,7 @@ function handleCheckboxRangeEvent ($xeTable: VxeTableConstructor & VxeTablePriva
       mouseScrollTimeout = setTimeout(() => {
         if (mouseScrollTimeout) {
           const { scrollLeft, scrollTop, clientHeight, scrollHeight } = bodyWrapperElem
-          const topSize = Math.ceil(mouseScrollSpaceSize * 50 / rowHeight)
+          const topSize = Math.ceil((mouseScrollSpaceSize * 50) / rowHeight)
           if (isMouseScrollDown) {
             if (scrollTop + clientHeight < scrollHeight) {
               $xeTable.scrollTo(scrollLeft, scrollTop + topSize)
@@ -244,7 +250,7 @@ function handleCheckboxRangeEvent ($xeTable: VxeTableConstructor & VxeTablePriva
       }, 50)
     }
     addClass(el, 'drag--range')
-    document.onmousemove = evnt => {
+    document.onmousemove = (evnt) => {
       evnt.preventDefault()
       evnt.stopPropagation()
       const { clientY } = evnt
@@ -282,7 +288,7 @@ function handleCheckboxRangeEvent ($xeTable: VxeTableConstructor & VxeTablePriva
 export default {
   methods: {
     // 处理 Tab 键移动
-    moveTabSelected (args: any, isLeft: any, evnt: any) {
+    moveTabSelected(args: any, isLeft: any, evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
       const internalData = $xeTable as unknown as TableInternalData
@@ -360,7 +366,7 @@ export default {
       }
     },
     // 处理当前行方向键移动
-    moveCurrentRow (isUpArrow: boolean, isDwArrow: boolean, evnt: any) {
+    moveCurrentRow(isUpArrow: boolean, isDwArrow: boolean, evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
       const internalData = $xeTable as unknown as TableInternalData
@@ -372,7 +378,7 @@ export default {
       let targetRow
       if (currentRow) {
         if (treeConfig) {
-          const { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, { children: childrenField })
+          const { index, items } = XEUtils.findTree(afterFullData, (item) => item === currentRow, { children: childrenField })
           if (isUpArrow && index > 0) {
             targetRow = items[index - 1]
           } else if (isDwArrow && index < items.length - 1) {
@@ -397,12 +403,11 @@ export default {
           rowIndex: $xeTable.getRowIndex(targetRow),
           $rowIndex: $xeTable.getVMRowIndex(targetRow)
         }
-        $xeTable.scrollToRow(targetRow)
-          .then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
+        $xeTable.scrollToRow(targetRow).then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
       }
     },
     // 处理当前列方向键移动
-    moveCurrentColumn (isLeftArrow: boolean, isRightArrow: boolean, evnt: any) {
+    moveCurrentColumn(isLeftArrow: boolean, isRightArrow: boolean, evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const internalData = $xeTable as unknown as TableInternalData
 
@@ -426,12 +431,11 @@ export default {
           columnIndex: $xeTable.getColumnIndex(targetCol),
           $columnIndex: $xeTable.getVMColumnIndex(targetCol)
         }
-        $xeTable.scrollToColumn(targetCol)
-          .then(() => $xeTable.triggerCurrentColumnEvent(evnt, params))
+        $xeTable.scrollToColumn(targetCol).then(() => $xeTable.triggerCurrentColumnEvent(evnt, params))
       }
     },
     // 处理可编辑方向键移动
-    moveArrowSelected (args: any, isLeftArrow: boolean, isUpArrow: boolean, isRightArrow: boolean, isDwArrow: boolean, evnt: any) {
+    moveArrowSelected(args: any, isLeftArrow: boolean, isUpArrow: boolean, isRightArrow: boolean, isDwArrow: boolean, evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
@@ -462,7 +466,7 @@ export default {
         }
       }
     },
-    moveEnterSelected (args: any, isLeftArrow: boolean, isUpArrow: boolean, isRightArrow: boolean, isDwArrow: boolean, evnt: any) {
+    moveEnterSelected(args: any, isLeftArrow: boolean, isUpArrow: boolean, isRightArrow: boolean, isDwArrow: boolean, evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
@@ -472,7 +476,7 @@ export default {
       const columnOpts = $xeTable.computeColumnOpts
       const currentColumnOpts = $xeTable.computeCurrentColumnOpts
       const params = handleMoveSelected($xeTable, evnt, args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow)
-      if (((rowOpts.isCurrent || highlightCurrentRow) && currentRowOpts.isFollowSelected)) {
+      if ((rowOpts.isCurrent || highlightCurrentRow) && currentRowOpts.isFollowSelected) {
         $xeTable.triggerCurrentRowEvent(evnt, params)
       }
       if ((columnOpts.isCurrent || highlightCurrentColumn) && currentColumnOpts.isFollowSelected) {
@@ -480,12 +484,12 @@ export default {
       }
     },
     // 处理可编辑方向键移动
-    moveSelected (args: any, isLeftArrow: boolean, isUpArrow: boolean, isRightArrow: boolean, isDwArrow: boolean, evnt: any) {
+    moveSelected(args: any, isLeftArrow: boolean, isUpArrow: boolean, isRightArrow: boolean, isDwArrow: boolean, evnt: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       handleMoveSelected($xeTable, evnt, args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow)
     },
-    handleCellMousedownEvent (evnt: any, params: any) {
+    handleCellMousedownEvent(evnt: any, params: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 

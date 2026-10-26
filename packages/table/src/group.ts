@@ -9,7 +9,7 @@ import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types
 export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeColgroup',
   props: columnProps,
-  provide () {
+  provide() {
     const $xeColgroup = this
     return {
       $xeColumn: $xeColgroup,
@@ -26,14 +26,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
     }
   },
   watch: columnWatch,
-  created () {
+  created() {
     const $xeColgroup = this
     const props = $xeColgroup
     const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
 
     this.columnConfig = Cell.createColumn($xeTable, props)
   },
-  mounted () {
+  mounted() {
     const $xeColgroup = this
 
     const { $scopedSlots } = this
@@ -51,12 +51,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
     this.columnConfig.slots = columnSlots
     assembleColumn($xeColgroup)
   },
-  destroyed () {
+  destroyed() {
     const $xeColgroup = this
 
     destroyColumn($xeColgroup)
   },
-  render (h: CreateElement) {
+  render(h: CreateElement) {
     return h('div', this.$slots.default)
   },
   methods: Cell as any

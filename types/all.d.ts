@@ -31,7 +31,7 @@ export const VXETable: VxeUIExport
  */
 export type VXETableCore = VxeUIExport
 
-export function install (app: VueConstructor, options?: VxeGlobalConfig): void
+export function install(app: VueConstructor, options?: VxeGlobalConfig): void
 
 interface AllComponents {
   // Vxe Table

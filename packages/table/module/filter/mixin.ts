@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { VxeUI } from '../../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { toFilters, handleFieldOrColumn, getRefElem } from '../../src/util'
 import { toCssUnit, triggerEvent, updatePanelPlacement } from '../../../ui/src/dom'
 import { hasEnableConf, isEnableConf } from '../../../ui/src/utils'
@@ -10,7 +10,7 @@ const { renderer } = VxeUI
 
 const sourceType = 'table'
 
-function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+function updatePopupStyle($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const $xeGrid = $xeTable.$xeGrid
   const $xeGantt = $xeTable.$xeGantt
   const reactData = $xeTable as unknown as TableReactData
@@ -28,14 +28,14 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   const rendererOpts = $xeTable.computeRendererOpts
   const { maxHeight: customMaxHeight, transfer, zIndex } = filterOpts
   const filterRender = column ? column.filterRender : null
-  const compConf = filterRender && isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
+  const compConf = filterRender && isEnableConf(filterRender) && filterRender.name ? rendererOpts[filterRender.name] || renderer.get(filterRender.name) : null
 
   const headerScrollElem = getRefElem(elemStore['main-header-scroll'])
   if (!headerScrollElem) {
     return $xeTable.$nextTick()
   }
   const tableFilter = $xeTable.$refs.refTableFilter
-  const filterWrapperElem = tableFilter ? (tableFilter as any).$el as HTMLDivElement : null
+  const filterWrapperElem = tableFilter ? ((tableFilter as any).$el as HTMLDivElement) : null
   if (!filterWrapperElem) {
     return $xeTable.$nextTick()
   }
@@ -45,10 +45,10 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
    * 如果不存在图标，则相对单元格居中显示
    */
   const handleStyle = () => {
-  /**
-   * 是否显示筛选按钮图标
-   * 如果不存在图标，则相对单元格居中显示
-   */
+    /**
+     * 是否显示筛选按钮图标
+     * 如果不存在图标，则相对单元格居中显示
+     */
     let currEl = targetEl
     if (!targetEl) {
       const headerWrapperElem = getRefElem(elemStore[`${column.fixed || 'main'}-header-wrapper`] || elemStore['main-header-wrapper'])
@@ -77,13 +77,13 @@ function updatePopupStyle ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
       panelStyle = ppObj.style
     } else {
       const filterWidth = filterWrapperElem.offsetWidth
-      const centerWidth = targetEl ? filterWidth / 2 : ((filterWidth - column.renderWidth) / 2)
+      const centerWidth = targetEl ? filterWidth / 2 : (filterWidth - column.renderWidth) / 2
       left = btnRect.left - tableRect.left - centerWidth
       top = btnRect.top - tableRect.top + currEl.clientHeight
       maxHeight = Math.max(40, tableEl.clientHeight - top - scrollbarHeight)
       if (left < 1) {
         left = 1
-      } else if (left > (tableEl.clientWidth - filterWidth - 1)) {
+      } else if (left > tableEl.clientWidth - filterWidth - 1) {
         left = tableEl.clientWidth - filterWidth - 1
       }
       if ($xeGGWrapper) {
@@ -125,7 +125,7 @@ export default {
      * 手动弹出筛选面板
      * @param column
      */
-    _openFilter (fieldOrColumn: any) {
+    _openFilter(fieldOrColumn: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const $xeGrid = $xeTable.$xeGrid
       const $xeGantt = $xeTable.$xeGantt
@@ -176,7 +176,7 @@ export default {
      * @param {ColumnInfo} fieldOrColumn 列
      * @param {Array} options 选项
      */
-    _setFilter (fieldOrColumn: any, options: any, isUpdate: any) {
+    _setFilter(fieldOrColumn: any, options: any, isUpdate: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -194,7 +194,7 @@ export default {
       }
       return $xeTable.$nextTick()
     },
-    checkFilterOptions () {
+    checkFilterOptions() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -206,7 +206,7 @@ export default {
         filterStore.isIndeterminate = !filterStore.isAllSelected && filterOptions.some((item) => item._checked)
       }
     },
-    handleOpenFilterColumn (evnt: MouseEvent, btnEl: HTMLDivElement | null, colEl: HTMLDivElement, column: VxeTableDefines.ColumnInfo, params: any) {
+    handleOpenFilterColumn(evnt: MouseEvent, btnEl: HTMLDivElement | null, colEl: HTMLDivElement, column: VxeTableDefines.ColumnInfo, params: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -236,7 +236,7 @@ export default {
      * @param {ColumnInfo} column 列配置
      * @param {Object} params 参数
      */
-    triggerFilterEvent (evnt: MouseEvent, column: VxeTableDefines.ColumnInfo, params: any) {
+    triggerFilterEvent(evnt: MouseEvent, column: VxeTableDefines.ColumnInfo, params: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const internalData = $xeTable as unknown as TableInternalData
 
@@ -248,7 +248,7 @@ export default {
       $xeTable.handleOpenFilterColumn(evnt, btnElem, colEl || btnElem, column, params)
     },
     // （单选）筛选发生改变
-    handleFilterChangeRadioOption (evnt: Event, checked: boolean, item: any) {
+    handleFilterChangeRadioOption(evnt: Event, checked: boolean, item: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -265,14 +265,14 @@ export default {
       }
     },
     // （多选）筛选发生改变
-    handleFilterChangeMultipleOption (evnt: Event, checked: boolean, item: any) {
+    handleFilterChangeMultipleOption(evnt: Event, checked: boolean, item: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       item._checked = checked
       $xeTable.checkFilterOptions()
     },
     // 筛选发生改变
-    handleFilterChangeOption (evnt: Event, checked: boolean, item: any) {
+    handleFilterChangeOption(evnt: Event, checked: boolean, item: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -296,7 +296,7 @@ export default {
       }
     },
     // 确认筛选
-    handleFilterConfirmFilter (evnt: Event | null, column: VxeTableDefines.ColumnInfo) {
+    handleFilterConfirmFilter(evnt: Event | null, column: VxeTableDefines.ColumnInfo) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       if (column) {
@@ -307,7 +307,7 @@ export default {
         $xeTable.confirmFilterEvent(evnt, column)
       }
     },
-    _saveFilter (fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null) {
+    _saveFilter(fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       if (fieldOrColumn) {
@@ -316,7 +316,7 @@ export default {
       }
       return $xeTable.$nextTick()
     },
-    _saveFilterByEvent (evnt: Event, fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null) {
+    _saveFilterByEvent(evnt: Event, fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       if (fieldOrColumn) {
@@ -325,7 +325,7 @@ export default {
       }
       return $xeTable.$nextTick()
     },
-    _resetFilter (fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null) {
+    _resetFilter(fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       if (fieldOrColumn) {
@@ -334,7 +334,7 @@ export default {
       }
       return $xeTable.$nextTick()
     },
-    _resetFilterByEvent (evnt: Event, fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null) {
+    _resetFilterByEvent(evnt: Event, fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       if (fieldOrColumn) {
@@ -343,7 +343,7 @@ export default {
       }
       return $xeTable.$nextTick()
     },
-    _saveFilterPanel () {
+    _saveFilterPanel() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -351,7 +351,7 @@ export default {
       $xeTable.handleFilterConfirmFilter(null, filterStore.column || null)
       return $xeTable.$nextTick()
     },
-    _saveFilterPanelByEvent (evnt: Event) {
+    _saveFilterPanelByEvent(evnt: Event) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -359,7 +359,7 @@ export default {
       $xeTable.handleFilterConfirmFilter(evnt, filterStore.column || null)
       return $xeTable.$nextTick()
     },
-    _resetFilterPanel () {
+    _resetFilterPanel() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -367,7 +367,7 @@ export default {
       $xeTable.handleFilterResetFilter(null, filterStore.column || null)
       return $xeTable.$nextTick()
     },
-    _resetFilterPanelByEvent (evnt: Event) {
+    _resetFilterPanelByEvent(evnt: Event) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -375,7 +375,7 @@ export default {
       $xeTable.handleFilterResetFilter(evnt, filterStore.column || null)
       return $xeTable.$nextTick()
     },
-    _getCheckedFilters () {
+    _getCheckedFilters() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const internalData = $xeTable as unknown as TableInternalData
 
@@ -400,7 +400,7 @@ export default {
       })
       return filterList
     },
-    handleColumnConfirmFilter (column: VxeTableDefines.ColumnInfo, evnt: Event | null) {
+    handleColumnConfirmFilter(column: VxeTableDefines.ColumnInfo, evnt: Event | null) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
       const reactData = $xeTable as unknown as TableReactData
@@ -433,45 +433,49 @@ export default {
         $xeTable.dispatchEvent('filter-change', params, evnt)
       }
       $xeTable.closeFilter()
-      return $xeTable.updateFooter().then(() => {
-        const { scrollXLoad, scrollYLoad } = reactData
-        if ((oldScrollXLoad || scrollXLoad) || (oldScrollYLoad || scrollYLoad)) {
-          if ((oldScrollXLoad || scrollXLoad)) {
-            $xeTable.updateScrollXSpace()
+      return $xeTable
+        .updateFooter()
+        .then(() => {
+          const { scrollXLoad, scrollYLoad } = reactData
+          if (oldScrollXLoad || scrollXLoad || oldScrollYLoad || scrollYLoad) {
+            if (oldScrollXLoad || scrollXLoad) {
+              $xeTable.updateScrollXSpace()
+            }
+            if (oldScrollYLoad || scrollYLoad) {
+              $xeTable.updateScrollYSpace()
+            }
+            return $xeTable.refreshScroll()
           }
-          if ((oldScrollYLoad || scrollYLoad)) {
-            $xeTable.updateScrollYSpace()
-          }
-          return $xeTable.refreshScroll()
-        }
-      }).then(() => {
-        $xeTable.updateCellAreas()
-        return $xeTable.recalculate(true)
-      }).then(() => {
-        // 存在滚动行为未结束情况
-        setTimeout(() => $xeTable.recalculate(), 50)
-      })
+        })
+        .then(() => {
+          $xeTable.updateCellAreas()
+          return $xeTable.recalculate(true)
+        })
+        .then(() => {
+          // 存在滚动行为未结束情况
+          setTimeout(() => $xeTable.recalculate(), 50)
+        })
     },
     /**
      * 确认筛选
      * 当筛选面板中的确定按钮被按下时触发
      */
-    confirmFilterEvent (evnt: Event, column: VxeTableDefines.ColumnInfo) {
+    confirmFilterEvent(evnt: Event, column: VxeTableDefines.ColumnInfo) {
       const $xeTable = this
 
       if (column) {
         $xeTable.handleColumnConfirmFilter(column, evnt)
       }
     },
-    handleClearFilter (column: VxeTableDefines.ColumnInfo) {
+    handleClearFilter(column: VxeTableDefines.ColumnInfo) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       if (column) {
         const { filters, filterRender } = column
         if (filters) {
           const rendererOpts = $xeTable.computeRendererOpts
-          const compConf = isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
-          const filterResetMethod = column.filterResetMethod || (compConf ? (compConf.tableFilterResetMethod || compConf.filterResetMethod) : null)
+          const compConf = isEnableConf(filterRender) && filterRender.name ? rendererOpts[filterRender.name] || renderer.get(filterRender.name) : null
+          const filterResetMethod = column.filterResetMethod || (compConf ? compConf.tableFilterResetMethod || compConf.filterResetMethod : null)
           filters.forEach((item: any) => {
             item._checked = false
             item.checked = false
@@ -490,7 +494,7 @@ export default {
      * 当筛选面板中的重置按钮被按下时触发
      * @param {Event} evnt 事件
      */
-    handleFilterResetFilter (evnt: Event, column: VxeTableDefines.ColumnInfo) {
+    handleFilterResetFilter(evnt: Event, column: VxeTableDefines.ColumnInfo) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       if (column) {
@@ -501,7 +505,7 @@ export default {
         }
       }
     },
-    handleFilterStyle () {
+    handleFilterStyle() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -516,7 +520,7 @@ export default {
      * 如果为空则清空所有列的筛选条件
      * @param {String} fieldOrColumn 列
      */
-    _clearFilter (fieldOrColumn: string | VxeTableDefines.ColumnInfo<any> | null | undefined) {
+    _clearFilter(fieldOrColumn: string | VxeTableDefines.ColumnInfo<any> | null | undefined) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -545,7 +549,7 @@ export default {
       }
       return $xeTable.updateData()
     },
-    _updateFilterOptionStatus (item: any, checked: boolean) {
+    _updateFilterOptionStatus(item: any, checked: boolean) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       item._checked = checked

@@ -8,7 +8,7 @@ import type { VxeTableDefines, VxeTableConstructor, TableReactData, TableInterna
 
 const { warnLog, errLog } = createComponentLog('table')
 
-export function createInternalData (): TableInternalData {
+export function createInternalData(): TableInternalData {
   return {
     tZindex: 0,
     currKeyField: '',
@@ -218,7 +218,7 @@ export function createInternalData (): TableInternalData {
   }
 }
 
-export function createReactData (): TableReactData {
+export function createReactData(): TableReactData {
   return {
     updateColFlag: 0,
     // 低性能的静态列
@@ -483,7 +483,7 @@ export function createReactData (): TableReactData {
 
 const maxKey = '__max'
 
-export function getRowMaxHeight (chRest: Record<string, number>, isForce: boolean) {
+export function getRowMaxHeight(chRest: Record<string, number>, isForce: boolean) {
   if (isForce || !chRest[maxKey]) {
     let max = 0
     for (const key in chRest) {
@@ -561,7 +561,7 @@ export const convertHeaderColumnToRows = (originColumns: any) => {
   return rows
 }
 
-export function convertHeaderToGridRows (spanColumns: VxeTableDefines.ColumnInfo[][]) {
+export function convertHeaderToGridRows(spanColumns: VxeTableDefines.ColumnInfo[][]) {
   const rSize = spanColumns.length
   const cSize = spanColumns[0].reduce((sum, cell) => sum + cell.colSpan, 0)
 
@@ -628,7 +628,7 @@ export function convertHeaderToGridRows (spanColumns: VxeTableDefines.ColumnInfo
   return fullRows
 }
 
-export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft: number, scrollTop: number) {
+export function restoreScrollLocation($xeTable: VxeTableConstructor, scrollLeft: number, scrollTop: number) {
   const internalData = $xeTable as unknown as TableInternalData
 
   if (scrollLeft || scrollTop) {
@@ -645,18 +645,18 @@ export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft
   return $xeTable.clearScroll()
 }
 
-export function toTreePathSeq (path: any) {
-  return path.map((num: any, i: any) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+export function toTreePathSeq(path: any) {
+  return path.map((num: any, i: any) => (i % 2 === 0 ? Number(num) + 1 : '.')).join('')
 }
 
-export function getRowUniqueId () {
+export function getRowUniqueId() {
   return XEUtils.uniqueId('row_')
 }
 
 /**
  * 生成行的唯一主键
  */
-export function createRowId (rowOpts: VxeTablePropTypes.RowConfig, row: any, keyField: string) {
+export function createRowId(rowOpts: VxeTablePropTypes.RowConfig, row: any, keyField: string) {
   const { createKeyMethod } = rowOpts
   if (createKeyMethod) {
     return '' + createKeyMethod({ row, keyField })
@@ -664,59 +664,59 @@ export function createRowId (rowOpts: VxeTablePropTypes.RowConfig, row: any, key
   return getRowUniqueId()
 }
 
-export function hasDeepKey (rowKey: string) {
+export function hasDeepKey(rowKey: string) {
   return rowKey.indexOf('.') > -1
 }
 
 // 行主键 key
-export function getRowkey ($xeTable: VxeTableConstructor) {
+export function getRowkey($xeTable: VxeTableConstructor) {
   const internalData = $xeTable as unknown as TableInternalData
   const { currKeyField } = internalData
   return currKeyField
 }
 
 // 行主键 value
-export function getRowid ($xeTable: VxeTableConstructor, row: any) {
+export function getRowid($xeTable: VxeTableConstructor, row: any) {
   const internalData = $xeTable as unknown as TableInternalData
   const { isCurrDeepKey, currKeyField } = internalData
   return row ? encodeRowid((isCurrDeepKey ? getDeepRowIdByKey : getFastRowIdByKey)(row, currKeyField)) : ''
 }
 
-export function createHandleUpdateRowId ($xeTable: VxeTableConstructor) {
+export function createHandleUpdateRowId($xeTable: VxeTableConstructor) {
   const internalData = $xeTable as unknown as TableInternalData
   const { isCurrDeepKey, currKeyField } = internalData
   const rowOpts = $xeTable.computeRowOpts
   const updateRId = isCurrDeepKey ? updateDeepRowKey : updateFastRowKey
   return {
     rowKey: currKeyField,
-    handleUpdateRowId (row: any) {
+    handleUpdateRowId(row: any) {
       return row ? updateRId(rowOpts, row, currKeyField) : ''
     }
   }
 }
 
-export function createHandleGetRowId ($xeTable: VxeTableConstructor) {
+export function createHandleGetRowId($xeTable: VxeTableConstructor) {
   const internalData = $xeTable as unknown as TableInternalData
   const { isCurrDeepKey, currKeyField } = internalData
   const getRId = isCurrDeepKey ? getDeepRowIdByKey : getFastRowIdByKey
   return {
     rowKey: currKeyField,
-    handleGetRowId (row: any) {
+    handleGetRowId(row: any) {
       return row ? encodeRowid(getRId(row, currKeyField)) : ''
     }
   }
 }
 
 // 编码行主键
-export function encodeRowid (rowVal: string | number) {
+export function encodeRowid(rowVal: string | number) {
   return XEUtils.eqNull(rowVal) ? '' : encodeURIComponent(rowVal)
 }
 
-function getDeepRowIdByKey (row: any, rowKey: string | number) {
+function getDeepRowIdByKey(row: any, rowKey: string | number) {
   return XEUtils.get(row, rowKey)
 }
 
-function updateDeepRowKey (rowOpts: VxeTablePropTypes.RowConfig, row: any, rowKey: string) {
+function updateDeepRowKey(rowOpts: VxeTablePropTypes.RowConfig, row: any, rowKey: string) {
   let rowid = encodeRowid(getDeepRowIdByKey(row, rowKey))
   if (eqEmptyValue(rowid)) {
     const newRowid = createRowId(rowOpts, row, rowKey)
@@ -726,11 +726,11 @@ function updateDeepRowKey (rowOpts: VxeTablePropTypes.RowConfig, row: any, rowKe
   return rowid
 }
 
-function getFastRowIdByKey (row: any, rowKey: string) {
+function getFastRowIdByKey(row: any, rowKey: string) {
   return row[rowKey]
 }
 
-function updateFastRowKey (rowOpts: VxeTablePropTypes.RowConfig, row: any, rowKey: string) {
+function updateFastRowKey(rowOpts: VxeTablePropTypes.RowConfig, row: any, rowKey: string) {
   let rowid = encodeRowid(getFastRowIdByKey(row, rowKey))
   if (eqEmptyValue(rowid)) {
     const newRowid = createRowId(rowOpts, row, rowKey)
@@ -740,7 +740,7 @@ function updateFastRowKey (rowOpts: VxeTablePropTypes.RowConfig, row: any, rowKe
   return rowid
 }
 
-function getPaddingLeftRightSize (elem: HTMLElement | null) {
+function getPaddingLeftRightSize(elem: HTMLElement | null) {
   if (elem) {
     const computedStyle = getComputedStyle(elem)
     const paddingLeft = XEUtils.toNumber(computedStyle.paddingLeft)
@@ -750,7 +750,7 @@ function getPaddingLeftRightSize (elem: HTMLElement | null) {
   return 0
 }
 
-function getElementMarginAndWidth (elem: HTMLElement | null) {
+function getElementMarginAndWidth(elem: HTMLElement | null) {
   if (elem) {
     const computedStyle = getComputedStyle(elem)
     const marginLeft = XEUtils.toNumber(computedStyle.marginLeft)
@@ -760,21 +760,21 @@ function getElementMarginAndWidth (elem: HTMLElement | null) {
   return 0
 }
 
-export function getCalcHeight (height: number | 'unset' | undefined | null) {
+export function getCalcHeight(height: number | 'unset' | undefined | null) {
   if (height === 'unset') {
     return 0
   }
   return height || 0
 }
 
-export function handleFieldOrColumn ($xeTable: VxeTableConstructor, fieldOrColumn: any) {
+export function handleFieldOrColumn($xeTable: VxeTableConstructor, fieldOrColumn: any) {
   if (fieldOrColumn) {
     return XEUtils.isString(fieldOrColumn) || XEUtils.isNumber(fieldOrColumn) ? $xeTable.getColumnByField(`${fieldOrColumn}`) : fieldOrColumn
   }
   return null
 }
 
-export function handleRowidOrRow ($xeTable: VxeTableConstructor, rowidOrRow: any) {
+export function handleRowidOrRow($xeTable: VxeTableConstructor, rowidOrRow: any) {
   if (rowidOrRow) {
     const rowid = XEUtils.isString(rowidOrRow) || XEUtils.isNumber(rowidOrRow) ? rowidOrRow : getRowid($xeTable, rowidOrRow)
     return $xeTable.getRowById(rowid)
@@ -782,7 +782,7 @@ export function handleRowidOrRow ($xeTable: VxeTableConstructor, rowidOrRow: any
   return null
 }
 
-export function getCellRestHeight (rowRest: VxeTableDefines.RowCacheItem, cellOpts: VxeTablePropTypes.CellConfig, rowOpts: VxeTablePropTypes.RowConfig, defaultRowHeight: number) {
+export function getCellRestHeight(rowRest: VxeTableDefines.RowCacheItem, cellOpts: VxeTablePropTypes.CellConfig, rowOpts: VxeTablePropTypes.RowConfig, defaultRowHeight: number) {
   const { height, minHeight, maxHeight } = cellOpts
   let cellHeight = rowRest.resizeHeight || height || rowOpts.height || rowRest.height || defaultRowHeight
   if (maxHeight && maxHeight <= cellHeight) {
@@ -795,7 +795,7 @@ export function getCellRestHeight (rowRest: VxeTableDefines.RowCacheItem, cellOp
 }
 
 // 组装列配置
-export function assembleColumn (_vm: any) {
+export function assembleColumn(_vm: any) {
   const $xeTable = _vm.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
   const reactData = $xeTable as unknown as TableReactData
   const { staticColumns } = reactData
@@ -819,19 +819,19 @@ export function assembleColumn (_vm: any) {
 }
 
 // 销毁列
-export function destroyColumn (_vm: any) {
+export function destroyColumn(_vm: any) {
   const $xeTable = _vm.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
   const reactData = $xeTable as unknown as TableReactData
   const { staticColumns } = reactData
 
   const { columnConfig } = _vm
-  const matchObj = XEUtils.findTree(staticColumns, column => column === columnConfig)
+  const matchObj = XEUtils.findTree(staticColumns, (column) => column === columnConfig)
   if (matchObj) {
     matchObj.items.splice(matchObj.index, 1)
   }
 }
 
-export function getRootColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: any) {
+export function getRootColumn($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: any) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { fullColumnIdData } = internalData
@@ -849,7 +849,7 @@ export function getRootColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMe
   return column
 }
 
-export function toFilters (filters: any, colid?: string | number) {
+export function toFilters(filters: any, colid?: string | number) {
   if (filters) {
     if (XEUtils.isArray(filters)) {
       return filters.map(({ label, value, data, resetValue, checked }) => {
@@ -864,7 +864,7 @@ export function toFilters (filters: any, colid?: string | number) {
 /**
  * 列宽拖动最大宽度
  */
-export function getColReMaxWidth (params: (VxeTableDefines.CellRenderHeaderParams| VxeTableDefines.CellRenderBodyParams | VxeTableDefines.CellRenderFooterParams) & { cell: HTMLTableCellElement }) {
+export function getColReMaxWidth(params: (VxeTableDefines.CellRenderHeaderParams | VxeTableDefines.CellRenderBodyParams | VxeTableDefines.CellRenderFooterParams) & { cell: HTMLTableCellElement }) {
   const { $table, column, cell } = params
   const internalData = $table as unknown as TableInternalData
   const { elemStore } = internalData
@@ -901,7 +901,7 @@ export function getColReMaxWidth (params: (VxeTableDefines.CellRenderHeaderParam
 /**
  * 列宽拖动最小宽度
  */
-export function getColReMinWidth (params: (VxeTableDefines.CellRenderHeaderParams| VxeTableDefines.CellRenderBodyParams | VxeTableDefines.CellRenderFooterParams) & { cell: HTMLTableCellElement }) {
+export function getColReMinWidth(params: (VxeTableDefines.CellRenderHeaderParams | VxeTableDefines.CellRenderBodyParams | VxeTableDefines.CellRenderFooterParams) & { cell: HTMLTableCellElement }) {
   const { $table, column, cell } = params
   const tableProps = $table
   const internalData = $table as unknown as TableInternalData
@@ -955,7 +955,7 @@ export function getColReMinWidth (params: (VxeTableDefines.CellRenderHeaderParam
   return mWidth
 }
 
-export function getFirstChildColumn (column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
+export function getFirstChildColumn(column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
   const { children } = column
   if (children && children.length) {
     return getFirstChildColumn(XEUtils.first(children))
@@ -963,7 +963,7 @@ export function getFirstChildColumn (column: VxeTableDefines.ColumnInfo): VxeTab
   return column
 }
 
-export function getLastChildColumn (column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
+export function getLastChildColumn(column: VxeTableDefines.ColumnInfo): VxeTableDefines.ColumnInfo {
   const { children } = column
   if (children && children.length) {
     return getFirstChildColumn(XEUtils.last(children))
@@ -971,27 +971,27 @@ export function getLastChildColumn (column: VxeTableDefines.ColumnInfo): VxeTabl
   return column
 }
 
-export function getCellValue (row: any, column: VxeTableDefines.ColumnInfo | null) {
+export function getCellValue(row: any, column: VxeTableDefines.ColumnInfo | null) {
   if (column) {
     return XEUtils.get(row, column.field)
   }
   return null
 }
 
-export function setCellValue (row: any, column: VxeTableDefines.ColumnInfo | null, value: any) {
+export function setCellValue(row: any, column: VxeTableDefines.ColumnInfo | null, value: any) {
   if (column) {
     XEUtils.set(row, column.field, value)
   }
 }
 
-export function getRefElem (refEl: any) {
+export function getRefElem(refEl: any) {
   if (refEl) {
     return (refEl.$el || refEl) as HTMLElement
   }
   return null
 }
 
-export function clearTableDefaultStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+export function clearTableDefaultStatus($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const props = $xeTable
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -1013,39 +1013,32 @@ export function clearTableDefaultStatus ($xeTable: VxeTableConstructor & VxeTabl
     $xeTable.clearPendingRow()
   ]
   if ($xeTable.clearFilter) {
-    actionList.push(
-      $xeTable.clearFilter()
-    )
+    actionList.push($xeTable.clearFilter())
   }
   if ($xeTable.clearSelected && (hasEnableConf(keyboardConfig, keyboardOpts) || hasEnableConf(mouseConfig, mouseOpts))) {
-    actionList.push(
-      $xeTable.clearSelected()
-    )
+    actionList.push($xeTable.clearSelected())
   }
   if ($xeTable.clearCellAreas && hasEnableConf(mouseConfig, mouseOpts)) {
-    actionList.push(
-      $xeTable.clearCellAreas(),
-      $xeTable.clearCopyCellArea()
-    )
+    actionList.push($xeTable.clearCellAreas(), $xeTable.clearCopyCellArea())
   }
   return Promise.all(actionList).then(() => {
     return $xeTable.clearScroll()
   })
 }
 
-export function clearTableAllStatus (_vm: any) {
+export function clearTableAllStatus(_vm: any) {
   if (_vm.clearFilter) {
     _vm.clearFilter()
   }
   return clearTableDefaultStatus(_vm)
 }
 
-export function isColumnInfo (column: any) {
+export function isColumnInfo(column: any) {
   return column instanceof ColumnInfo
 }
 
 // 获取所有的列，排除分组
-export function getColumnList (columns: VxeTableDefines.ColumnInfo[]) {
+export function getColumnList(columns: VxeTableDefines.ColumnInfo[]) {
   const result: VxeTableDefines.ColumnInfo[] = []
   columns.forEach((column) => {
     result.push(...(column.children && column.children.length ? getColumnList(column.children) : [column]))
@@ -1053,11 +1046,11 @@ export function getColumnList (columns: VxeTableDefines.ColumnInfo[]) {
   return result
 }
 
-export function createColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, options: VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo, renderOptions: any): any {
+export function createColumn($xeTable: VxeTableConstructor & VxeTablePrivateMethods, options: VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo, renderOptions: any): any {
   return isColumnInfo(options) ? options : new ColumnInfo($xeTable, options, renderOptions)
 }
 
-export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any) {
+export function rowToVisible($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any) {
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -1096,14 +1089,14 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
         if (scrollTop < bodyScrollTop) {
           return $xeTable.scrollTo(null, scrollTop - leftFixedWidth - 1)
         }
-        return $xeTable.scrollTo(null, (scrollTop + rHeight) - (bodyHeight - rightFixedWidth - 1))
+        return $xeTable.scrollTo(null, scrollTop + rHeight - (bodyHeight - rightFixedWidth - 1))
       }
     }
   }
   return Promise.resolve()
 }
 
-export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, isForce: boolean, column: VxeTableDefines.ColumnInfo, row?: any) {
+export function colToVisible($xeTable: VxeTableConstructor & VxeTablePrivateMethods, isForce: boolean, column: VxeTableDefines.ColumnInfo, row?: any) {
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -1130,14 +1123,11 @@ export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
       const tdOffsetLeft = tdElem.offsetLeft + (scrollXLoad ? scrollXLeft : 0)
       const cellWidth = tdElem.clientWidth
       // 检测是否在可视区中
-      if (isForce || (
-        !(tdOffsetLeft <= (bodyScrollLeft + leftFixedWidth) && (tdOffsetLeft + cellWidth) > (bodyScrollLeft + leftFixedWidth)) &&
-        !(tdOffsetLeft >= (bodyScrollLeft + leftFixedWidth) && tdOffsetLeft < (bodyScrollLeft + bodyWidth - rightFixedWidth))
-      )) {
-        if (tdOffsetLeft < (bodyScrollLeft + leftFixedWidth)) {
+      if (isForce || (!(tdOffsetLeft <= bodyScrollLeft + leftFixedWidth && tdOffsetLeft + cellWidth > bodyScrollLeft + leftFixedWidth) && !(tdOffsetLeft >= bodyScrollLeft + leftFixedWidth && tdOffsetLeft < bodyScrollLeft + bodyWidth - rightFixedWidth))) {
+        if (tdOffsetLeft < bodyScrollLeft + leftFixedWidth) {
           return $xeTable.scrollTo(tdOffsetLeft - leftFixedWidth - 1)
-        } else if ((tdOffsetLeft + cellWidth - bodyScrollLeft) > (bodyWidth - rightFixedWidth)) {
-          return $xeTable.scrollTo((tdOffsetLeft + cellWidth) - (bodyWidth - rightFixedWidth - 1))
+        } else if (tdOffsetLeft + cellWidth - bodyScrollLeft > bodyWidth - rightFixedWidth) {
+          return $xeTable.scrollTo(tdOffsetLeft + cellWidth - (bodyWidth - rightFixedWidth - 1))
         }
       }
     } else {
@@ -1152,14 +1142,11 @@ export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
           tdOffsetLeft += currCol.renderWidth
         }
         // 检测是否在可视区中
-        if (isForce || (
-          !(tdOffsetLeft <= (bodyScrollLeft + leftFixedWidth) && (tdOffsetLeft + cellWidth) > (bodyScrollLeft + leftFixedWidth)) &&
-          !(tdOffsetLeft >= (bodyScrollLeft + leftFixedWidth) && tdOffsetLeft < (bodyScrollLeft + bodyWidth - rightFixedWidth))
-        )) {
+        if (isForce || (!(tdOffsetLeft <= bodyScrollLeft + leftFixedWidth && tdOffsetLeft + cellWidth > bodyScrollLeft + leftFixedWidth) && !(tdOffsetLeft >= bodyScrollLeft + leftFixedWidth && tdOffsetLeft < bodyScrollLeft + bodyWidth - rightFixedWidth))) {
           if (tdOffsetLeft < bodyScrollLeft) {
             return $xeTable.scrollTo(tdOffsetLeft - leftFixedWidth - 1)
           }
-          return $xeTable.scrollTo((tdOffsetLeft + cellWidth) - (bodyWidth - rightFixedWidth - 1))
+          return $xeTable.scrollTo(tdOffsetLeft + cellWidth - (bodyWidth - rightFixedWidth - 1))
         }
       }
     }
@@ -1167,11 +1154,11 @@ export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   return Promise.resolve()
 }
 
-function hangleBolleanDefaultValue (currVal: boolean | null | undefined, defVal: boolean | null | undefined) {
+function hangleBolleanDefaultValue(currVal: boolean | null | undefined, defVal: boolean | null | undefined) {
   return XEUtils.isBoolean(currVal) ? currVal : defVal
 }
 
-export function handleCustomStoreConfig ($xeTable: VxeTableConstructor) {
+export function handleCustomStoreConfig($xeTable: VxeTableConstructor) {
   const customOpts = $xeTable.computeCustomOpts
   const { storage, storeOptions } = customOpts
 

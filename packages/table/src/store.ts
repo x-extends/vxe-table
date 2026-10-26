@@ -9,7 +9,7 @@ export const crossTableDragRowGlobal: CrossTableDragRowObj = {
   row: null
 }
 
-export function getCrossTableDragRowInfo ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+export function getCrossTableDragRowInfo($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const crossTableDragRowInfo = ($xeTable as any).crossTableDragRowInfo as CrossTableDragRowObj
   return crossTableDragRowInfo
 }

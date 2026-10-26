@@ -1,5 +1,4 @@
 const fs = require('fs')
-const path = require('path')
 const gulp = require('gulp')
 const XEUtils = require('xe-utils')
 const del = require('del')
@@ -23,7 +22,7 @@ const tsSettings = {
   target: 'es2015'
 }
 
-const exportModuleName = 'VxeUITable'
+// const exportModuleName = 'VxeUITable'
 const esmOutDir = 'es'
 const commOutDir = 'lib'
 
@@ -67,20 +66,6 @@ const languages = [
 ]
 
 const styleCode = 'require(\'./style.css\')'
-
-const delDir = (directory) => {
-  if (fs.existsSync(directory)) {
-    fs.readdirSync(directory).forEach(file => {
-      const currentPath = path.join(directory, file)
-      if (fs.lstatSync(currentPath).isDirectory()) {
-        delDir(currentPath)
-      } else {
-        fs.unlinkSync(currentPath)
-      }
-    })
-    fs.rmdirSync(directory)
-  }
-}
 
 function toExportName (name) {
   const str = XEUtils.camelCase(name)

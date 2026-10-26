@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { VxeUI } from '../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { toFilters } from './util'
 import { isEnableConf, getFuncText } from '../../ui/src/utils'
 import { isPx } from '../../ui/src/dom'
@@ -13,7 +13,7 @@ const { getI18n, formats, renderer } = VxeUI
 
 export class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
-  constructor ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, colConfs: VxeColumnProps & { renderHeader?: any, renderCell?: any, renderFooter?: any, slots?: any }, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
+  constructor($xeTable: VxeTableConstructor & VxeTablePrivateMethods, colConfs: VxeColumnProps & { renderHeader?: any; renderCell?: any; renderFooter?: any; slots?: any }, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
     const tableProps = $xeTable
     const $xeGrid = $xeTable.$xeGrid
     const $xeGantt = $xeTable.$xeGantt
@@ -28,7 +28,7 @@ export class ColumnInfo {
     const defaultRenderWidth = width && isPx(width) && width !== 'auto' ? Math.max(0, XEUtils.toInteger(width)) : 0
 
     const rendererOpts = $xeTable.computeRendererOpts
-    const flCompConf = filterRender && isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
+    const flCompConf = filterRender && isEnableConf(filterRender) && filterRender.name ? rendererOpts[filterRender.name] || renderer.get(filterRender.name) : null
     const ctFilterOptions = flCompConf ? flCompConf.createTableFilterOptions : null
 
     const filters = toFilters(colConfs.filters, colId)
@@ -209,7 +209,7 @@ export class ColumnInfo {
       slots: colConfs.slots
     })
     if (ctFilterOptions && (!filters || !filters.length)) {
-      (this as any).filters = toFilters(ctFilterOptions({ $table: $xeTable, column: this as unknown as VxeTableDefines.ColumnInfo }), colId)
+      ;(this as any).filters = toFilters(ctFilterOptions({ $table: $xeTable, column: this as unknown as VxeTableDefines.ColumnInfo }), colId)
     }
     if ($xeGGWrapper) {
       if (proxyOpts && proxyOpts.beforeColumn) {
@@ -218,16 +218,16 @@ export class ColumnInfo {
     }
   }
 
-  getTitle (this: any) {
+  getTitle(this: any) {
     return getFuncText(this.title || (this.type === 'seq' ? getI18n('vxe.table.seqTitle') : ''))
   }
 
-  getKey (this: any) {
+  getKey(this: any) {
     const { type, field } = this
     return field || (type ? `type=${type}` : null)
   }
 
-  update (this: any, name: any, value: any) {
+  update(this: any, name: any, value: any) {
     // 不支持直接修改的属性
     if (name !== 'filters') {
       if (name === 'field') {

@@ -1,11 +1,11 @@
 import { VueConstructor } from 'vue'
-import { VxeUI } from '../ui'
+import { VxeUI } from '@vxe-ui/core'
 import VxeGridComponent from './src/grid'
 
 let isReg = false
 
 export const VxeGrid = Object.assign({}, VxeGridComponent, {
-  install (app: VueConstructor) {
+  install(app: VueConstructor) {
     if (!isReg) {
       isReg = true
       if (VxeUI.dynamicApp) {

@@ -1,9 +1,9 @@
 import { CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
+import { VxeUI } from '@vxe-ui/core'
 import { getDefaultConfig, getFuncText, hasEnableConf, isEnableConf } from '../../ui/src/utils'
 import { initTpImg, toCssUnit } from '../../ui/src/dom'
 import { createReactData, createInternalData, createHandleGetRowId, getCalcHeight, hasDeepKey, getRefElem } from './util'
-import { VxeUI } from '../../ui'
 import methods from './methods'
 import TableBodyComponent from './body'
 import TableHeaderComponent from './header'
@@ -33,7 +33,7 @@ const { warnLog, errLog } = createComponentLog('table')
 
 const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, domUtils, globalMixins, renderEmptyElement } = VxeUI
 
-function bindScrollbarResize ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+function bindScrollbarResize($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { elemStore } = internalData
@@ -44,7 +44,7 @@ function bindScrollbarResize ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     const viewXSpaceEl = getRefElem(elemStore['main-body-xSpace'])
     const viewYSpaceEl = getRefElem(elemStore['main-body-ySpace'])
     const scrollObserver = globalResize.create(() => {
-      ($xeTable as any).reScrollFlag++
+      ;($xeTable as any).reScrollFlag++
     })
     if (el) {
       scrollObserver.observe(el)
@@ -62,7 +62,7 @@ function bindScrollbarResize ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   }
 }
 
-function handleUpdateMergeBodyCells ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
+function handleUpdateMergeBodyCells($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
   const internalData = $xeTable as unknown as TableInternalData
 
   internalData.mergeBodyList = []
@@ -73,7 +73,7 @@ function handleUpdateMergeBodyCells ($xeTable: VxeTableConstructor & VxeTablePri
   $xeTable.setMergeCells(merges)
 }
 
-function handleUpdateMergeHeaderCells ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
+function handleUpdateMergeHeaderCells($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
   const internalData = $xeTable as unknown as TableInternalData
 
   internalData.mergeHeaderList = []
@@ -84,7 +84,7 @@ function handleUpdateMergeHeaderCells ($xeTable: VxeTableConstructor & VxeTableP
   $xeTable.setMergeHeaderCells(merges)
 }
 
-function handleUpdateMergeFooterCells ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
+function handleUpdateMergeFooterCells($xeTable: VxeTableConstructor & VxeTablePrivateMethods, merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]) {
   const internalData = $xeTable as unknown as TableInternalData
 
   internalData.mergeFooterList = []
@@ -95,7 +95,7 @@ function handleUpdateMergeFooterCells ($xeTable: VxeTableConstructor & VxeTableP
   $xeTable.setMergeFooterCells(merges)
 }
 
-function handleKeyField ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+function handleKeyField($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const keyField = $xeTable.computeRowField
@@ -103,7 +103,7 @@ function handleKeyField ($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
   internalData.isCurrDeepKey = hasDeepKey(keyField)
 }
 
-function updateColumnAllOverflow ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+function updateColumnAllOverflow($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -133,7 +133,7 @@ function updateColumnAllOverflow ($xeTable: VxeTableConstructor & VxeTablePrivat
  * 分别渲染左边固定列和右边固定列
  * 如果宽度足够情况下，则不需要渲染固定列
  */
-function renderViewFixed (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods, fixedType: any) {
+function renderViewFixed(h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods, fixedType: any) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
 
@@ -150,54 +150,58 @@ function renderViewFixed (h: CreateElement, $xeTable: VxeTableConstructor & VxeT
   const fixedColumn = isFixedLeft ? columnStore.leftList : columnStore.rightList
   const osXBehavior = XEUtils.eqNull(overscrollXBehavior) ? scrollbarOpts.overscrollBehavior : overscrollXBehavior
   const osYBehavior = XEUtils.eqNull(overscrollYBehavior) ? scrollbarOpts.overscrollBehavior : overscrollYBehavior
-  return h('div', {
-    ref: isFixedLeft ? 'refLeftContainer' : 'refRightContainer',
-    class: [
-      `vxe-table--fixed-${fixedType}-wrapper`,
-      `sx--${(scrollXVisible === false || scrollXVisible === 'hidden') ? 'hidden' : 'visible'}`,
-      `sy--${(scrollYVisible === false || scrollYVisible === 'hidden') ? 'hidden' : 'visible'}`,
-      {
-        [`x-ob--${osXBehavior}`]: osXBehavior,
-        [`y-ob--${osYBehavior}`]: osYBehavior
-      }
-    ]
-  }, [
-    showHeader
-      ? h(TableHeaderComponent, {
+  return h(
+    'div',
+    {
+      ref: isFixedLeft ? 'refLeftContainer' : 'refRightContainer',
+      class: [
+        `vxe-table--fixed-${fixedType}-wrapper`,
+        `sx--${scrollXVisible === false || scrollXVisible === 'hidden' ? 'hidden' : 'visible'}`,
+        `sy--${scrollYVisible === false || scrollYVisible === 'hidden' ? 'hidden' : 'visible'}`,
+        {
+          [`x-ob--${osXBehavior}`]: osXBehavior,
+          [`y-ob--${osYBehavior}`]: osYBehavior
+        }
+      ]
+    },
+    [
+      showHeader
+        ? h(TableHeaderComponent, {
+          props: {
+            fixedType,
+            tableData,
+            tableColumn,
+            tableGroupColumn,
+            fixedColumn
+          },
+          ref: `${fixedType}Header`
+        })
+        : renderEmptyElement($xeTable),
+      h(TableBodyComponent, {
         props: {
           fixedType,
           tableData,
           tableColumn,
-          tableGroupColumn,
           fixedColumn
         },
-        ref: `${fixedType}Header`
-      })
-      : renderEmptyElement($xeTable),
-    h(TableBodyComponent, {
-      props: {
-        fixedType,
-        tableData,
-        tableColumn,
-        fixedColumn
-      },
-      ref: `${fixedType}Body`
-    }),
-    showFooter
-      ? h(TableFooterComponent, {
-        props: {
-          footerTableData,
-          tableColumn,
-          fixedColumn,
-          fixedType
-        },
-        ref: `${fixedType}Footer`
-      })
-      : renderEmptyElement($xeTable)
-  ])
+        ref: `${fixedType}Body`
+      }),
+      showFooter
+        ? h(TableFooterComponent, {
+          props: {
+            footerTableData,
+            tableColumn,
+            fixedColumn,
+            fixedType
+          },
+          ref: `${fixedType}Footer`
+        })
+        : renderEmptyElement($xeTable)
+    ]
+  )
 }
 
-function renderEmptyBody (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+function renderEmptyBody(h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const slots = $xeTable.$scopedSlots
   const $xeGrid = $xeTable.$xeGrid
   const $xeGantt = $xeTable.$xeGantt
@@ -210,8 +214,8 @@ function renderEmptyBody (h: CreateElement, $xeTable: VxeTableConstructor & VxeT
     emptyContent = emptySlot.call($xeTable, emptyParams)
   } else {
     const rendererOpts = $xeTable.computeRendererOpts
-    const compConf = emptyOpts.name ? (rendererOpts[emptyOpts.name] || renderer.get(emptyOpts.name)) : null
-    const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
+    const compConf = emptyOpts.name ? rendererOpts[emptyOpts.name] || renderer.get(emptyOpts.name) : null
+    const rtEmptyView = compConf ? compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty : null
     if (rtEmptyView) {
       emptyContent = getSlotVNs(rtEmptyView.call($xeTable, h, emptyOpts, emptyParams))
     } else {
@@ -257,61 +261,87 @@ const renderDragTip = (h: CreateElement, $xeTable: VxeTableConstructor & VxeTabl
   const dRow = dragRow || (rowDragOpts.isCrossTableDrag ? crossTableDragRowInfo.row : null)
 
   if (rowOpts.drag || columnOpts.drag) {
-    return h('div', {
-      class: 'vxe-table--drag-wrapper'
-    }, [
-      h('div', {
-        ref: 'refDragRowLineElem',
-        class: ['vxe-table--drag-row-line', {
-          'is--guides': rowDragOpts.showGuidesStatus
-        }]
-      }),
-      h('div', {
-        ref: 'refDragColLineElem',
-        class: ['vxe-table--drag-col-line', {
-          'is--guides': columnDragOpts.showGuidesStatus
-        }]
-      }),
-      (dRow && rowDragOpts.showDragTip) || (dragCol && columnDragOpts.showDragTip)
-        ? h('div', {
-          ref: 'refDragTipElem',
-          class: 'vxe-table--drag-sort-tip'
-        }, [
-          h('div', {
-            class: 'vxe-table--drag-sort-tip-wrapper'
-          }, [
-            h('div', {
-              class: 'vxe-table--drag-sort-tip-status'
-            }, [
-              h('span', {
-                class: ['vxe-table--drag-sort-tip-normal-status', dRow ? getIcon().TABLE_DRAG_STATUS_ROW : getIcon().TABLE_DRAG_STATUS_COLUMN]
-              }),
-              h('span', {
-                class: ['vxe-table--drag-sort-tip-sub-status', getIcon().TABLE_DRAG_STATUS_SUB_ROW]
-              }),
-              h('span', {
-                class: ['vxe-table--drag-sort-tip-disabled-status', getIcon().TABLE_DRAG_DISABLED]
-              })
-            ]),
-            h('div', {
-              class: 'vxe-table--drag-sort-tip-content'
-            }, renderDragTipContents(h, $xeTable))
-          ])
-        ])
-        : renderEmptyElement($xeTable)
-    ])
+    return h(
+      'div',
+      {
+        class: 'vxe-table--drag-wrapper'
+      },
+      [
+        h('div', {
+          ref: 'refDragRowLineElem',
+          class: [
+            'vxe-table--drag-row-line',
+            {
+              'is--guides': rowDragOpts.showGuidesStatus
+            }
+          ]
+        }),
+        h('div', {
+          ref: 'refDragColLineElem',
+          class: [
+            'vxe-table--drag-col-line',
+            {
+              'is--guides': columnDragOpts.showGuidesStatus
+            }
+          ]
+        }),
+        (dRow && rowDragOpts.showDragTip) || (dragCol && columnDragOpts.showDragTip)
+          ? h(
+            'div',
+            {
+              ref: 'refDragTipElem',
+              class: 'vxe-table--drag-sort-tip'
+            },
+            [
+              h(
+                'div',
+                {
+                  class: 'vxe-table--drag-sort-tip-wrapper'
+                },
+                [
+                  h(
+                    'div',
+                    {
+                      class: 'vxe-table--drag-sort-tip-status'
+                    },
+                    [
+                      h('span', {
+                        class: ['vxe-table--drag-sort-tip-normal-status', dRow ? getIcon().TABLE_DRAG_STATUS_ROW : getIcon().TABLE_DRAG_STATUS_COLUMN]
+                      }),
+                      h('span', {
+                        class: ['vxe-table--drag-sort-tip-sub-status', getIcon().TABLE_DRAG_STATUS_SUB_ROW]
+                      }),
+                      h('span', {
+                        class: ['vxe-table--drag-sort-tip-disabled-status', getIcon().TABLE_DRAG_DISABLED]
+                      })
+                    ]
+                  ),
+                  h(
+                    'div',
+                    {
+                      class: 'vxe-table--drag-sort-tip-content'
+                    },
+                    renderDragTipContents(h, $xeTable)
+                  )
+                ]
+              )
+            ]
+          )
+          : renderEmptyElement($xeTable)
+      ]
+    )
   }
   return renderEmptyElement($xeTable)
 }
 
-function handleUpdateResize ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+function handleUpdateResize($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const el = $xeTable.$refs.refElem as HTMLDivElement
   if (el && el.clientWidth && el.clientHeight) {
     $xeTable.recalculate()
   }
 }
 
-function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+function renderRowExpandedVNs(h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -359,7 +389,7 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
         seq = rowRest.seq
         if (isRowGroupStatus || (treeConfig && transform && seqMode === 'increasing')) {
           seq = rowRest._index + 1
-        } else if ((treeConfig && seqMode === 'fixed')) {
+        } else if (treeConfig && seqMode === 'fixed') {
           seq = rowRest._tIndex + 1
         }
       }
@@ -367,7 +397,7 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
         cellStyle.height = `${expandHeight}px`
       }
       if (isRowGroupStatus || treeConfig) {
-        cellStyle.paddingLeft = `${(rowLevel * (XEUtils.isNumber(indent) ? indent : treeOpts.indent)) + 30}px`
+        cellStyle.paddingLeft = `${rowLevel * (XEUtils.isNumber(indent) ? indent : treeOpts.indent) + 30}px`
       }
       let columnIndex = -1
       let $columnIndex = -1
@@ -402,103 +432,142 @@ function renderRowExpandedVNs (h: CreateElement, $xeTable: VxeTableConstructor &
         items: []
       }
       expandVNs.push(
-        h('div', {
-          key: rowid,
-          class: ['vxe-body--row-expanded-cell', {
-            'is--padding': padding,
-            'is--ellipsis': expandHeight
-          }],
-          attrs: {
-            rowid
+        h(
+          'div',
+          {
+            key: rowid,
+            class: [
+              'vxe-body--row-expanded-cell',
+              {
+                'is--padding': padding,
+                'is--ellipsis': expandHeight
+              }
+            ],
+            attrs: {
+              rowid
+            },
+            style: cellStyle
           },
-          style: cellStyle
-        }, [
-          h('div', {
-            class: 'vxe-body--row-expanded-content'
-          }, expandColumn.renderData(h, expandParams))
-        ])
+          [
+            h(
+              'div',
+              {
+                class: 'vxe-body--row-expanded-content'
+              },
+              expandColumn.renderData(h, expandParams)
+            )
+          ]
+        )
       )
     })
   }
 
-  return h('div', {
-    ref: 'refRowExpandElem',
-    class: 'vxe-table--row-expanded-wrapper'
-  }, expandVNs)
+  return h(
+    'div',
+    {
+      ref: 'refRowExpandElem',
+      class: 'vxe-table--row-expanded-wrapper'
+    },
+    expandVNs
+  )
 }
 
-function renderScrollX (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
-  return h('div', {
-    key: 'vsx',
-    ref: 'refScrollXVirtualElem',
-    class: 'vxe-table--scroll-x-virtual'
-  }, [
-    h('div', {
-      ref: 'refScrollXLeftCornerElem',
-      class: 'vxe-table--scroll-x-left-corner'
-    }),
-    h('div', {
-      ref: 'refScrollXWrapperElem',
-      class: 'vxe-table--scroll-x-wrapper'
-    }, [
+function renderScrollX(h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  return h(
+    'div',
+    {
+      key: 'vsx',
+      ref: 'refScrollXVirtualElem',
+      class: 'vxe-table--scroll-x-virtual'
+    },
+    [
       h('div', {
-        ref: 'refScrollXHandleElem',
-        class: 'vxe-table--scroll-x-handle',
-        on: {
-          scroll: $xeTable.triggerVirtualScrollXEvent
-        }
-      }, [
-        h('div', {
-          ref: 'refScrollXSpaceElem',
-          class: 'vxe-table--scroll-x-space'
-        })
-      ]),
+        ref: 'refScrollXLeftCornerElem',
+        class: 'vxe-table--scroll-x-left-corner'
+      }),
+      h(
+        'div',
+        {
+          ref: 'refScrollXWrapperElem',
+          class: 'vxe-table--scroll-x-wrapper'
+        },
+        [
+          h(
+            'div',
+            {
+              ref: 'refScrollXHandleElem',
+              class: 'vxe-table--scroll-x-handle',
+              on: {
+                scroll: $xeTable.triggerVirtualScrollXEvent
+              }
+            },
+            [
+              h('div', {
+                ref: 'refScrollXSpaceElem',
+                class: 'vxe-table--scroll-x-space'
+              })
+            ]
+          ),
+          h('div', {
+            class: 'vxe-table--scroll-x-handle-appearance'
+          })
+        ]
+      ),
       h('div', {
-        class: 'vxe-table--scroll-x-handle-appearance'
+        ref: 'refScrollXRightCornerElem',
+        class: 'vxe-table--scroll-x-right-corner'
       })
-    ]),
-    h('div', {
-      ref: 'refScrollXRightCornerElem',
-      class: 'vxe-table--scroll-x-right-corner'
-    })
-  ])
+    ]
+  )
 }
 
-function renderScrollY (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
-  return h('div', {
-    key: 'vsy',
-    ref: 'refScrollYVirtualElem',
-    class: 'vxe-table--scroll-y-virtual'
-  }, [
-    h('div', {
-      ref: 'refScrollYTopCornerElem',
-      class: 'vxe-table--scroll-y-top-corner'
-    }),
-    h('div', {
-      ref: 'refScrollYWrapperElem',
-      class: 'vxe-table--scroll-y-wrapper'
-    }, [
+function renderScrollY(h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  return h(
+    'div',
+    {
+      key: 'vsy',
+      ref: 'refScrollYVirtualElem',
+      class: 'vxe-table--scroll-y-virtual'
+    },
+    [
       h('div', {
-        ref: 'refScrollYHandleElem',
-        class: 'vxe-table--scroll-y-handle',
-        on: {
-          scroll: $xeTable.triggerVirtualScrollYEvent
-        }
-      }, [
-        h('div', {
-          ref: 'refScrollYSpaceElem',
-          class: 'vxe-table--scroll-y-space'
-        })
-      ])
-    ]),
-    h('div', {
-      ref: 'refScrollYBottomCornerElem',
-      class: 'vxe-table--scroll-y-bottom-corner'
-    })
-  ])
+        ref: 'refScrollYTopCornerElem',
+        class: 'vxe-table--scroll-y-top-corner'
+      }),
+      h(
+        'div',
+        {
+          ref: 'refScrollYWrapperElem',
+          class: 'vxe-table--scroll-y-wrapper'
+        },
+        [
+          h(
+            'div',
+            {
+              ref: 'refScrollYHandleElem',
+              class: 'vxe-table--scroll-y-handle',
+              on: {
+                scroll: $xeTable.triggerVirtualScrollYEvent
+              }
+            },
+            [
+              h('div', {
+                ref: 'refScrollYSpaceElem',
+                class: 'vxe-table--scroll-y-space'
+              })
+            ]
+          )
+        ]
+      ),
+      h('div', {
+        ref: 'refScrollYBottomCornerElem',
+        class: 'vxe-table--scroll-y-bottom-corner'
+      })
+    ]
+  )
 }
 
-function renderViewport (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+function renderViewport(h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
 
@@ -515,84 +584,88 @@ function renderViewport (h: CreateElement, $xeTable: VxeTableConstructor & VxeTa
   const osXBehavior = XEUtils.eqNull(overscrollXBehavior) ? scrollbarOpts.overscrollBehavior : overscrollXBehavior
   const osYBehavior = XEUtils.eqNull(overscrollYBehavior) ? scrollbarOpts.overscrollBehavior : overscrollYBehavior
 
-  return h('div', {
-    key: 'tvw',
-    ref: 'refTableViewportElem',
-    class: ['vxe-table--viewport-wrapper', {
-      [`x-ob--${osXBehavior}`]: osXBehavior,
-      [`y-ob--${osYBehavior}`]: osYBehavior
-    }]
-  }, [
-    h('div', {
+  return h(
+    'div',
+    {
+      key: 'tvw',
+      ref: 'refTableViewportElem',
       class: [
-        'vxe-table--main-wrapper',
-        `sx--${(scrollXVisible === false || scrollXVisible === 'hidden') ? 'hidden' : 'visible'}`,
-        `sy--${(scrollYVisible === false || scrollYVisible === 'hidden') ? 'hidden' : 'visible'}`
-      ]
-    }, [
-      /**
-         * 表头
-         */
-      showHeader
-        ? h(TableHeaderComponent, {
-          ref: 'refTableHeader',
-          props: {
-            tableData,
-            tableColumn,
-            tableGroupColumn
-          }
-        })
-        : renderEmptyElement($xeTable),
-      /**
-         * 表体
-         */
-      h(TableBodyComponent, {
-        ref: 'refTableBody',
-        props: {
-          tableData,
-          tableColumn
+        'vxe-table--viewport-wrapper',
+        {
+          [`x-ob--${osXBehavior}`]: osXBehavior,
+          [`y-ob--${osYBehavior}`]: osYBehavior
         }
-      }),
-      /**
-         * 表尾
-         */
-      showFooter
-        ? h(TableFooterComponent, {
-          ref: 'refTableFooter',
-          props: {
-            footerTableData,
-            tableColumn
-          }
-        })
-        : renderEmptyElement($xeTable)
-    ]),
-    h('div', {
-      class: 'vxe-table--fixed-wrapper'
-    }, [
-      leftList && leftList.length && overflowX ? renderViewFixed(h, $xeTable, 'left') : renderEmptyElement($xeTable),
-      rightList && rightList.length && overflowX ? renderViewFixed(h, $xeTable, 'right') : renderEmptyElement($xeTable)
-    ]),
-    renderRowExpandedVNs(h, $xeTable)
-  ])
-}
-
-function renderNativeBody (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
-  const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
-  return h('div', {
-    key: 'lnb',
-    class: 'vxe-table--layout-wrapper'
-  }, scrollbarYToLeft
-    ? [
-        renderScrollY(h, $xeTable),
-        renderViewport(h, $xeTable)
       ]
-    : [
-        renderViewport(h, $xeTable),
-        renderScrollY(h, $xeTable)
-      ])
+    },
+    [
+      h(
+        'div',
+        {
+          class: ['vxe-table--main-wrapper', `sx--${scrollXVisible === false || scrollXVisible === 'hidden' ? 'hidden' : 'visible'}`, `sy--${scrollYVisible === false || scrollYVisible === 'hidden' ? 'hidden' : 'visible'}`]
+        },
+        [
+          /**
+           * 表头
+           */
+          showHeader
+            ? h(TableHeaderComponent, {
+              ref: 'refTableHeader',
+              props: {
+                tableData,
+                tableColumn,
+                tableGroupColumn
+              }
+            })
+            : renderEmptyElement($xeTable),
+          /**
+           * 表体
+           */
+          h(TableBodyComponent, {
+            ref: 'refTableBody',
+            props: {
+              tableData,
+              tableColumn
+            }
+          }),
+          /**
+           * 表尾
+           */
+          showFooter
+            ? h(TableFooterComponent, {
+              ref: 'refTableFooter',
+              props: {
+                footerTableData,
+                tableColumn
+              }
+            })
+            : renderEmptyElement($xeTable)
+        ]
+      ),
+      h(
+        'div',
+        {
+          class: 'vxe-table--fixed-wrapper'
+        },
+        [leftList && leftList.length && overflowX ? renderViewFixed(h, $xeTable, 'left') : renderEmptyElement($xeTable), rightList && rightList.length && overflowX ? renderViewFixed(h, $xeTable, 'right') : renderEmptyElement($xeTable)]
+      ),
+      renderRowExpandedVNs(h, $xeTable)
+    ]
+  )
 }
 
-function renderVirtualBody (h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+function renderNativeBody(h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
+  return h(
+    'div',
+    {
+      key: 'lnb',
+      class: 'vxe-table--layout-wrapper'
+    },
+    scrollbarYToLeft ? [renderScrollY(h, $xeTable), renderViewport(h, $xeTable)] : [renderViewport(h, $xeTable), renderScrollY(h, $xeTable)]
+  )
+}
+
+function renderVirtualBody(h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
   const $xeGantt = $xeTable.$xeGantt
@@ -611,87 +684,93 @@ function renderVirtualBody (h: CreateElement, $xeTable: VxeTableConstructor & Vx
   const hideXScroll = scrollXVisible === false || scrollXVisible === 'hidden'
   const hideYScroll = scrollYVisible === false || scrollYVisible === 'hidden'
 
-  return h('div', {
-    key: 'lvb',
-    class: [
-      'vxe-table--layout-wrapper',
-      `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`,
-      `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`,
-      {
-        'is--virtual-scrollbar': isVScrollbar,
-        'ov-padding': isVScrollbar && scrollbarOpts.padding,
-        'ov-x--auto-hide': isVScrollbar && scrollXAutoHide,
-        'ov-y--auto-hide': isVScrollbar && scrollYAutoHide,
-        'overflow-y': yThumbHeight,
-        'overflow-x': xThumbWidth
-      }]
-  }, [
-    renderViewport(h, $xeTable),
-    h('div', {
-      class: scrollbarWrapperClss
-    }, [
-      hideXScroll
-        ? renderEmptyElement($xeTable)
-        : h('div', {
-          ref: 'refTrackXElem',
-          class: 'vxe-scrollbar--track-x',
-          on: {
-            click: $xeTable.clickTrackXEvent
-          }
-        }, [
-          h('div', {
-            ref: 'refThumbXElem',
-            class: 'vxe-scrollbar--thumb-x',
-            on: {
-              pointerdown: $xeTable.pointerdownThumbXEvent,
-              pointermove: $xeTable.pointermoveThumbXEvent,
-              pointerup: $xeTable.cleatPointerThumbEvent,
-              pointercancel: $xeTable.cleatPointerThumbEvent,
-              lostpointercapture: $xeTable.cleatPointerThumbEvent
-            }
-          })
-        ]),
-      hideYScroll || (($xeGantt && $xeGanttView && $xeGantt.reactData.showRightView) && !scrollbarYToLeft)
-        ? renderEmptyElement($xeTable)
-        : h('div', {
-          ref: 'refTrackYElem',
-          class: 'vxe-scrollbar--track-y',
-          on: {
-            click: $xeTable.clickTrackYEvent
-          }
-        }, [
-          h('div', {
-            ref: 'refThumbYElem',
-            class: 'vxe-scrollbar--thumb-y',
-            on: {
-              pointerdown: $xeTable.pointerdownThumbYEvent,
-              pointermove: $xeTable.pointermoveThumbYEvent,
-              pointerup: $xeTable.cleatPointerThumbEvent,
-              pointercancel: $xeTable.cleatPointerThumbEvent,
-              lostpointercapture: $xeTable.cleatPointerThumbEvent
-            }
-          })
-        ])
-    ])
-  ])
+  return h(
+    'div',
+    {
+      key: 'lvb',
+      class: [
+        'vxe-table--layout-wrapper',
+        `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`,
+        `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`,
+        {
+          'is--virtual-scrollbar': isVScrollbar,
+          'ov-padding': isVScrollbar && scrollbarOpts.padding,
+          'ov-x--auto-hide': isVScrollbar && scrollXAutoHide,
+          'ov-y--auto-hide': isVScrollbar && scrollYAutoHide,
+          'overflow-y': yThumbHeight,
+          'overflow-x': xThumbWidth
+        }
+      ]
+    },
+    [
+      renderViewport(h, $xeTable),
+      h(
+        'div',
+        {
+          class: scrollbarWrapperClss
+        },
+        [
+          hideXScroll
+            ? renderEmptyElement($xeTable)
+            : h(
+              'div',
+              {
+                ref: 'refTrackXElem',
+                class: 'vxe-scrollbar--track-x',
+                on: {
+                  click: $xeTable.clickTrackXEvent
+                }
+              },
+              [
+                h('div', {
+                  ref: 'refThumbXElem',
+                  class: 'vxe-scrollbar--thumb-x',
+                  on: {
+                    pointerdown: $xeTable.pointerdownThumbXEvent,
+                    pointermove: $xeTable.pointermoveThumbXEvent,
+                    pointerup: $xeTable.cleatPointerThumbEvent,
+                    pointercancel: $xeTable.cleatPointerThumbEvent,
+                    lostpointercapture: $xeTable.cleatPointerThumbEvent
+                  }
+                })
+              ]
+            ),
+          hideYScroll || ($xeGantt && $xeGanttView && $xeGantt.reactData.showRightView && !scrollbarYToLeft)
+            ? renderEmptyElement($xeTable)
+            : h(
+              'div',
+              {
+                ref: 'refTrackYElem',
+                class: 'vxe-scrollbar--track-y',
+                on: {
+                  click: $xeTable.clickTrackYEvent
+                }
+              },
+              [
+                h('div', {
+                  ref: 'refThumbYElem',
+                  class: 'vxe-scrollbar--thumb-y',
+                  on: {
+                    pointerdown: $xeTable.pointerdownThumbYEvent,
+                    pointermove: $xeTable.pointermoveThumbYEvent,
+                    pointerup: $xeTable.cleatPointerThumbEvent,
+                    pointercancel: $xeTable.cleatPointerThumbEvent,
+                    lostpointercapture: $xeTable.cleatPointerThumbEvent
+                  }
+                })
+              ]
+            )
+        ]
+      )
+    ]
+  )
 }
 
 export default {
   name: 'VxeTable',
-  mixins: [
-    globalMixins.sizeMixin,
-    globalMixins.vScrollbarMixin,
-    globalMixins.initVScrollbarMixin,
-    filterMixin,
-    menuMixin,
-    editMixin,
-    exportMixin,
-    keyboardMixin,
-    validatorMixin,
-    customMixin
-  ],
+  mixins: [globalMixins.sizeMixin, globalMixins.vScrollbarMixin, globalMixins.initVScrollbarMixin, filterMixin, menuMixin, editMixin, exportMixin, keyboardMixin, validatorMixin, customMixin],
   props: tableProps,
-  provide () {
+  provide() {
     const $xeTable = this
     return {
       $xeTable,
@@ -716,7 +795,7 @@ export default {
       default: null
     }
   },
-  data () {
+  data() {
     const xID = XEUtils.uniqueId()
 
     const reactData = createReactData()
@@ -737,14 +816,16 @@ export default {
     }
   },
   computed: {
-    ...({} as VxeUseSizeComputed & VxeUseVScrollbarComputed & VxeUseInitVScrollbarComputed & {
-      $xeModal(): (VxeModalConstructor & VxeModalMethods)| null
-      $xeTabs(): (VxeTabsConstructor & VxeTabsPrivateMethods) | null
-    }),
-    tableId () {
+    ...({} as VxeUseSizeComputed &
+      VxeUseVScrollbarComputed &
+      VxeUseInitVScrollbarComputed & {
+        $xeModal(): (VxeModalConstructor & VxeModalMethods) | null
+        $xeTabs(): (VxeTabsConstructor & VxeTabsPrivateMethods) | null
+      }),
+    tableId() {
       return this.computeTableId
     },
-    computeTableId () {
+    computeTableId() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
       const $xeGrid = $xeTable.$xeGrid
@@ -759,17 +840,17 @@ export default {
       }
       return ''
     },
-    computeRowField () {
+    computeRowField() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       const rowOpts = $xeTable.computeRowOpts
       return `${props.rowId || rowOpts.keyField || '_X_ROW_KEY'}`
     },
-    validOpts () {
+    validOpts() {
       return this.computeValidOpts
     },
-    computeValidOpts () {
+    computeValidOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
@@ -780,13 +861,13 @@ export default {
       }
       return opts
     },
-    sXOpts () {
+    sXOpts() {
       return this.computeVirtualXOpts
     },
-    computeSXOpts () {
+    computeSXOpts() {
       return this.computeVirtualXOpts
     },
-    computeScrollXThreshold () {
+    computeScrollXThreshold() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const virtualXOpts = $xeTable.computeVirtualXOpts
@@ -796,13 +877,13 @@ export default {
       }
       return 0
     },
-    sYOpts () {
+    sYOpts() {
       return this.computeVirtualYOpts
     },
-    computeSYOpts () {
+    computeSYOpts() {
       return this.computeVirtualYOpts
     },
-    computeVirtualXOpts () {
+    computeVirtualXOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
@@ -822,7 +903,7 @@ export default {
       // 已废弃，保留兼容
       return Object.assign({}, globalScrollX, scrollX) as VxeTablePropTypes.VirtualXConfig & { gt: number }
     },
-    computeVirtualYOpts () {
+    computeVirtualYOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
@@ -842,25 +923,25 @@ export default {
       // 已废弃，保留兼容
       return Object.assign({}, globalScrollY, scrollY) as VxeTablePropTypes.VirtualYConfig & { gt: number }
     },
-    computeScrollbarOpts () {
+    computeScrollbarOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.scrollbarConfig, props.scrollbarConfig)
     },
-    computeScrollbarXOpts () {
+    computeScrollbarXOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const scrollbarOpts = $xeTable.computeScrollbarOpts
-      return scrollbarOpts.x ? Object.assign({}, scrollbarOpts.x, scrollbarOpts.xConfig) : (scrollbarOpts.xConfig || {})
+      return scrollbarOpts.x ? Object.assign({}, scrollbarOpts.x, scrollbarOpts.xConfig) : scrollbarOpts.xConfig || {}
     },
-    computeScrollbarYOpts () {
+    computeScrollbarYOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const scrollbarOpts = $xeTable.computeScrollbarOpts
-      return scrollbarOpts.y ? Object.assign({}, scrollbarOpts.y, scrollbarOpts.yConfig) : (scrollbarOpts.yConfig || {})
+      return scrollbarOpts.y ? Object.assign({}, scrollbarOpts.y, scrollbarOpts.yConfig) : scrollbarOpts.yConfig || {}
     },
-    computeScrollXHeight () {
+    computeScrollXHeight() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const scrollDefaultConf = ($xeTable as any).scrollDefaultConf
 
@@ -868,7 +949,7 @@ export default {
       const scrollbarXOpts = $xeTable.computeScrollbarXOpts
       return XEUtils.toNumber(getDefaultConfig(getDefaultConfig(scrollbarXOpts.height, scrollbarOpts.height), scrollDefaultConf.height))
     },
-    computeScrollYWidth () {
+    computeScrollYWidth() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const scrollDefaultConf = ($xeTable as any).scrollDefaultConf
 
@@ -876,21 +957,21 @@ export default {
       const scrollbarYOpts = $xeTable.computeScrollbarYOpts
       return XEUtils.toNumber(getDefaultConfig(getDefaultConfig(scrollbarYOpts.width, scrollbarOpts.width), scrollDefaultConf.width))
     },
-    computeScrollXVisible () {
+    computeScrollXVisible() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const scrollbarOpts = $xeTable.computeScrollbarOpts
       const scrollbarXOpts = $xeTable.computeScrollbarXOpts
       return getDefaultConfig(scrollbarXOpts.visible, scrollbarOpts.visible)
     },
-    computeScrollYVisible () {
+    computeScrollYVisible() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const scrollbarOpts = $xeTable.computeScrollbarOpts
       const scrollbarYOpts = $xeTable.computeScrollbarYOpts
       return getDefaultConfig(scrollbarYOpts.visible, scrollbarOpts.visible)
     },
-    computeScrollXAutoHide () {
+    computeScrollXAutoHide() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const scrollDefaultConf = ($xeTable as any).scrollDefaultConf
 
@@ -898,7 +979,7 @@ export default {
       const scrollbarXOpts = $xeTable.computeScrollbarXOpts
       return getDefaultConfig(getDefaultConfig(scrollbarXOpts.autoHide, scrollbarOpts.autoHide), scrollDefaultConf.autoHide)
     },
-    computeScrollYAutoHide () {
+    computeScrollYAutoHide() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const scrollDefaultConf = ($xeTable as any).scrollDefaultConf
 
@@ -906,19 +987,19 @@ export default {
       const scrollbarYOpts = $xeTable.computeScrollbarYOpts
       return getDefaultConfig(getDefaultConfig(scrollbarYOpts.autoHide, scrollbarOpts.autoHide), scrollDefaultConf.autoHide)
     },
-    computeScrollbarXToTop () {
+    computeScrollbarXToTop() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const scrollbarXOpts = $xeTable.computeScrollbarXOpts
       return scrollbarXOpts.position === 'top'
     },
-    computeScrollbarYToLeft () {
+    computeScrollbarYToLeft() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const scrollbarYOpts = $xeTable.computeScrollbarYOpts
       return scrollbarYOpts.position === 'left'
     },
-    computeScrollbarWrapperClss () {
+    computeScrollbarWrapperClss() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -928,19 +1009,22 @@ export default {
       const scrollbarYToLeft = $xeTable.computeScrollbarYToLeft
       const scrollXVisible = $xeTable.computeScrollXVisible
       const scrollYVisible = $xeTable.computeScrollYVisible
-      return domUtils.buildClass([
-        'vxe-scrollbar is--virtual',
-        scrollbarOpts.fluentOverlay ? 'is--fluent-overlay' : 'is--default-mode',
-        `ov-x--${scrollXVisible === false ? 'hidden' : 'visible'}`,
-        `ov-y--${scrollYVisible === false ? 'hidden' : 'visible'}`,
-        `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`,
-        `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`
-      ], {
-        'overflow-y': yThumbHeight,
-        'overflow-x': xThumbWidth
-      })
+      return domUtils.buildClass(
+        [
+          'vxe-scrollbar is--virtual',
+          scrollbarOpts.fluentOverlay ? 'is--fluent-overlay' : 'is--default-mode',
+          `ov-x--${scrollXVisible === false ? 'hidden' : 'visible'}`,
+          `ov-y--${scrollYVisible === false ? 'hidden' : 'visible'}`,
+          `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`,
+          `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`
+        ],
+        {
+          'overflow-y': yThumbHeight,
+          'overflow-x': xThumbWidth
+        }
+      )
     },
-    computeScrollYThreshold () {
+    computeScrollYThreshold() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const virtualYOpts = $xeTable.computeVirtualYOpts
@@ -950,38 +1034,38 @@ export default {
       }
       return 0
     },
-    rowHeightMaps () {
+    rowHeightMaps() {
       return this.computeRowHeightMaps
     },
-    computeRowHeightMaps () {
+    computeRowHeightMaps() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
       return reactData.rowHeightStore
     },
-    computeDefaultRowHeight () {
+    computeDefaultRowHeight() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const vSize = $xeTable.computeSize
       const rowHeightMaps = $xeTable.computeRowHeightMaps
       return rowHeightMaps[vSize || 'default'] || 18
     },
-    columnOpts () {
+    columnOpts() {
       return this.computeColumnOpts
     },
-    computeColumnOpts () {
+    computeColumnOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.columnConfig, props.columnConfig)
     },
-    computeCurrentColumnOpts () {
+    computeCurrentColumnOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.currentColumnConfig, props.currentColumnConfig)
     },
-    computeCellOpts () {
+    computeCellOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
@@ -991,13 +1075,13 @@ export default {
       }
       return cellOpts
     },
-    computeCellHeitht () {
+    computeCellHeitht() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const cellOpts = $xeTable.computeCellOpts
       return cellOpts.height
     },
-    computeHeaderCellOpts () {
+    computeHeaderCellOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const $xeGantt = $xeTable.$xeGantt
       const props = $xeTable
@@ -1009,14 +1093,14 @@ export default {
       if ($xeGantt) {
         const taskViewScales = $xeGantt.computeTaskViewScales
         if (taskViewScales && taskViewScales.length > 2) {
-          const ganttMinHeadCellHeight = defaultRowHeight / 2 * taskViewScales.length
+          const ganttMinHeadCellHeight = (defaultRowHeight / 2) * taskViewScales.length
           headCellHeight = Math.max(ganttMinHeadCellHeight, headCellHeight)
         }
       }
       headerCellOpts.height = headCellHeight
       return headerCellOpts
     },
-    computeFooterCellOpts () {
+    computeFooterCellOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
@@ -1025,135 +1109,147 @@ export default {
       footerCellOpts.height = XEUtils.toNumber(getCalcHeight(footerCellOpts.height || cellOpts.height))
       return footerCellOpts
     },
-    rowOpts () {
+    rowOpts() {
       return this.computeRowOpts
     },
-    computeRowOpts () {
+    computeRowOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.rowConfig, props.rowConfig)
     },
-    computeAggregateOpts () {
+    computeAggregateOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.aggregateConfig || getConfig().table.rowGroupConfig, props.aggregateConfig || props.rowGroupConfig)
     },
-    computeAggregateMode () {
+    computeAggregateMode() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const aggregateOpts = $xeTable.computeAggregateOpts
       return aggregateOpts.mode
     },
-    computeAggregateAccuracyOpts () {
+    computeAggregateAccuracyOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.aggregateAccuracyConfig, props.aggregateAccuracyConfig)
     },
-    computeRowGroupOpts () {
+    computeRowGroupOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       return $xeTable.computeAggregateOpts
     },
-    computeCurrentRowOpts () {
+    computeCurrentRowOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.currentRowConfig, props.currentRowConfig)
     },
-    computeRowDragOpts () {
+    computeRowDragOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.rowDragConfig, props.rowDragConfig)
     },
-    computeColumnDragOpts () {
+    computeColumnDragOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.columnDragConfig, props.columnDragConfig)
     },
-    resizeOpts () {
+    resizeOpts() {
       return this.computeResizeOpts
     },
-    computeResizeOpts () {
+    computeResizeOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.resizeConfig, props.resizeConfig)
     },
-    resizableOpts () {
+    resizableOpts() {
       return this.computeResizableOpts
     },
-    computeResizableOpts () {
+    computeResizableOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.resizableConfig, props.resizableConfig)
     },
-    seqOpts () {
+    seqOpts() {
       return this.computeSeqOpts
     },
-    computeSeqOpts () {
+    computeSeqOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({ startIndex: 0 }, getConfig().table.seqConfig, props.seqConfig)
     },
-    radioOpts () {
+    radioOpts() {
       return this.computeRadioOpts
     },
-    computeRadioOpts () {
+    computeRadioOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.radioConfig, props.radioConfig)
     },
-    checkboxOpts () {
+    checkboxOpts() {
       return this.computeCheckboxOpts
     },
-    computeCheckboxOpts () {
+    computeCheckboxOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.checkboxConfig, props.checkboxConfig)
     },
-    tooltipOpts () {
+    tooltipOpts() {
       return this.computeTooltipOpts
     },
-    computeTooltipOpts () {
+    computeTooltipOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       const isVScrollbar = $xeTable.computeIsVScrollbar
       return Object.assign({ useScrollbar: isVScrollbar }, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
     },
-    tipConfig () {
+    tipConfig() {
       return { ...this.tooltipOpts }
     },
-    computeHeaderTooltipOpts () {
+    computeHeaderTooltipOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       const tooltipOpts = $xeTable.computeTooltipOpts
-      return Object.assign({}, getConfig().tooltip, {
-        enterable: tooltipOpts.enterable,
-        defaultPlacement: tooltipOpts.defaultPlacement
-      }, getConfig().table.headerTooltipConfig, props.headerTooltipConfig)
+      return Object.assign(
+        {},
+        getConfig().tooltip,
+        {
+          enterable: tooltipOpts.enterable,
+          defaultPlacement: tooltipOpts.defaultPlacement
+        },
+        getConfig().table.headerTooltipConfig,
+        props.headerTooltipConfig
+      )
     },
-    computeFooterTooltipOpts () {
+    computeFooterTooltipOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       const tooltipOpts = $xeTable.computeTooltipOpts
-      return Object.assign({}, getConfig().tooltip, {
-        enterable: tooltipOpts.enterable,
-        defaultPlacement: tooltipOpts.defaultPlacement
-      }, getConfig().table.footerTooltipConfig, props.footerTooltipConfig)
+      return Object.assign(
+        {},
+        getConfig().tooltip,
+        {
+          enterable: tooltipOpts.enterable,
+          defaultPlacement: tooltipOpts.defaultPlacement
+        },
+        getConfig().table.footerTooltipConfig,
+        props.footerTooltipConfig
+      )
     },
-    computeTableTipConfig () {
+    computeTableTipConfig() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -1161,122 +1257,122 @@ export default {
       const tooltipOpts = $xeTable.computeTooltipOpts
       return Object.assign({}, tooltipOpts, tooltipStore.currOpts)
     },
-    computeValidTipConfig () {
+    computeValidTipConfig() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const tooltipOpts = $xeTable.computeTooltipOpts
       return Object.assign({}, tooltipOpts)
     },
-    validTipOpts () {
+    validTipOpts() {
       return Object.assign({ isArrow: false }, this.tooltipOpts)
     },
-    editOpts () {
+    editOpts() {
       return this.computeEditOpts
     },
-    computeEditOpts () {
+    computeEditOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.editConfig, props.editConfig)
     },
-    computeEditDirtyOpts () {
+    computeEditDirtyOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.editDirtyConfig, props.editDirtyConfig)
     },
-    sortOpts () {
+    sortOpts() {
       return this.computeSortOpts
     },
-    computeSortOpts () {
+    computeSortOpts() {
       return Object.assign({ orders: ['asc', 'desc', null] }, getConfig().table.sortConfig, this.sortConfig)
     },
-    filterOpts () {
+    filterOpts() {
       return this.computeFilterOpts
     },
-    computeFilterOpts () {
+    computeFilterOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       const isVScrollbar = $xeTable.computeIsVScrollbar
       return Object.assign({ useScrollbar: isVScrollbar }, getConfig().table.filterConfig, props.filterConfig)
     },
-    computeFloatingFilterOpts () {
+    computeFloatingFilterOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.floatingFilterConfig, props.floatingFilterConfig)
     },
-    mouseOpts () {
+    mouseOpts() {
       return this.computeMouseOpts
     },
-    computeMouseOpts () {
+    computeMouseOpts() {
       return Object.assign({}, getConfig().table.mouseConfig, this.mouseConfig)
     },
-    areaOpts () {
+    areaOpts() {
       return this.computeAreaOpts
     },
-    computeAreaOpts () {
+    computeAreaOpts() {
       return Object.assign({}, getConfig().table.areaConfig, this.areaConfig)
     },
-    keyboardOpts () {
+    keyboardOpts() {
       return this.computeKeyboardOpts
     },
-    computeKeyboardOpts () {
+    computeKeyboardOpts() {
       return Object.assign({}, getConfig().table.keyboardConfig, this.keyboardConfig)
     },
-    clipOpts () {
+    clipOpts() {
       return this.computeClipOpts
     },
-    computeClipOpts () {
+    computeClipOpts() {
       return Object.assign({}, getConfig().table.clipConfig, this.clipConfig)
     },
-    fnrOpts () {
+    fnrOpts() {
       return this.computeFnrOpts
     },
-    computeFNROpts () {
+    computeFNROpts() {
       return this.computeFnrOpts
     },
-    computeFnrOpts () {
+    computeFnrOpts() {
       return Object.assign({}, getConfig().table.fnrConfig, this.fnrConfig)
     },
-    headerCtxMenu () {
+    headerCtxMenu() {
       return this.computeHeaderMenu
     },
-    computeHeaderMenu () {
+    computeHeaderMenu() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const menuOpts = $xeTable.computeMenuOpts
       const headerOpts = menuOpts.header
       return headerOpts && headerOpts.options ? headerOpts.options : []
     },
-    bodyCtxMenu () {
+    bodyCtxMenu() {
       return this.computeBodyMenu
     },
-    computeBodyMenu () {
+    computeBodyMenu() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const menuOpts = $xeTable.computeMenuOpts
       const bodyOpts = menuOpts.body
       return bodyOpts && bodyOpts.options ? bodyOpts.options : []
     },
-    footerCtxMenu () {
+    footerCtxMenu() {
       return this.computeFooterMenu
     },
-    computeFooterMenu () {
+    computeFooterMenu() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const menuOpts = $xeTable.computeMenuOpts
       const footerOpts = menuOpts.footer
       return footerOpts && footerOpts.options ? footerOpts.options : []
     },
-    isCtxMenu () {
+    isCtxMenu() {
       return this.computeIsContentMenu
     },
-    computeIsMenu () {
+    computeIsMenu() {
       return this.computeIsContentMenu
     },
-    computeIsContentMenu () {
+    computeIsContentMenu() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
@@ -1286,10 +1382,10 @@ export default {
       const footerMenu = $xeTable.computeFooterMenu
       return !!(((props as any).contextMenu || props.menuConfig) && isEnableConf(menuOpts) && (headerMenu.length || bodyMenu.length || footerMenu.length))
     },
-    ctxMenuList () {
+    ctxMenuList() {
       return this.computeMenuList
     },
-    computeMenuList () {
+    computeMenuList() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -1302,13 +1398,13 @@ export default {
       })
       return rest
     },
-    ctxMenuOpts () {
+    ctxMenuOpts() {
       return this.computeMenuOpts
     },
-    computeMenuOpts () {
+    computeMenuOpts() {
       return Object.assign({}, getConfig().table.menuConfig, this.contextMenu, this.menuConfig)
     },
-    computeLeftFixedWidth () {
+    computeLeftFixedWidth() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -1321,7 +1417,7 @@ export default {
       }
       return leftWidth
     },
-    computeRightFixedWidth () {
+    computeRightFixedWidth() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -1334,7 +1430,7 @@ export default {
       }
       return leftWidth
     },
-    computeBodyMergeCoverFixed () {
+    computeBodyMergeCoverFixed() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -1356,7 +1452,7 @@ export default {
       }
       return false
     },
-    computeIsHeaderRenderOptimize () {
+    computeIsHeaderRenderOptimize() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
       const reactData = $xeTable as unknown as TableReactData
@@ -1378,7 +1474,7 @@ export default {
       }
       return isOptimizeMode
     },
-    computeIsBodyRenderOptimize () {
+    computeIsBodyRenderOptimize() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
       const reactData = $xeTable as unknown as TableReactData
@@ -1401,7 +1497,7 @@ export default {
       }
       return isOptimizeMode
     },
-    computeIsFooterRenderOptimize () {
+    computeIsFooterRenderOptimize() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
       const reactData = $xeTable as unknown as TableReactData
@@ -1419,58 +1515,58 @@ export default {
       }
       return isOptimizeMode
     },
-    exportOpts () {
+    exportOpts() {
       return this.computeExportOpts
     },
-    computeExportOpts () {
+    computeExportOpts() {
       return Object.assign({}, getConfig().table.exportConfig, this.exportConfig)
     },
-    importOpts () {
+    importOpts() {
       return this.computeImportOpts
     },
-    computeImportOpts () {
+    computeImportOpts() {
       return Object.assign({}, getConfig().table.importConfig, this.importConfig)
     },
-    printOpts () {
+    printOpts() {
       return this.computePrintOpts
     },
-    computePrintOpts () {
+    computePrintOpts() {
       return Object.assign({}, getConfig().table.printConfig, this.printConfig)
     },
-    expandOpts () {
+    expandOpts() {
       return this.computeExpandOpts
     },
-    computeExpandOpts () {
+    computeExpandOpts() {
       return Object.assign({}, getConfig().table.expandConfig, this.expandConfig)
     },
-    treeOpts () {
+    treeOpts() {
       return this.computeTreeOpts
     },
-    computeTreeOpts () {
+    computeTreeOpts() {
       return Object.assign({}, getConfig().table.treeConfig, this.treeConfig)
     },
-    emptyOpts () {
+    emptyOpts() {
       return this.computeEmptyOpts
     },
-    computeEmptyOpts () {
+    computeEmptyOpts() {
       return Object.assign({}, getConfig().table.emptyRender, this.emptyRender)
     },
-    loadingOpts () {
+    loadingOpts() {
       return this.computeLoadingOpts
     },
-    computeLoadingOpts () {
+    computeLoadingOpts() {
       return Object.assign({}, getConfig().table.loadingConfig, this.loadingConfig)
     },
-    computeCellOffsetWidth () {
+    computeCellOffsetWidth() {
       return this.border ? Math.max(2, Math.ceil(this.scrollbarWidth / this.tableColumn.length)) : 1
     },
-    customOpts () {
+    customOpts() {
       return this.computeCustomOpts
     },
-    computeCustomOpts () {
+    computeCustomOpts() {
       return Object.assign({}, getConfig().table.customConfig, this.customConfig)
     },
-    computeCustomSimpleMode () {
+    computeCustomSimpleMode() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
@@ -1493,7 +1589,7 @@ export default {
       }
       return ''
     },
-    computeTableStyle () {
+    computeTableStyle() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const barWidth = $xeTable.computeScrollYWidth
@@ -1507,7 +1603,7 @@ export default {
       }
       return stys
     },
-    computeTableRowExpandedList () {
+    computeTableRowExpandedList() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -1524,11 +1620,11 @@ export default {
       }
       return expandList
     },
-    computeAutoWidthColumnList () {
+    computeAutoWidthColumnList() {
       const { tableColumn, visibleColumn } = this
       return tableColumn.length || visibleColumn.length ? visibleColumn.filter((column: any) => column.width === 'auto' || column.minWidth === 'auto') : []
     },
-    computeFixedColumnSize () {
+    computeFixedColumnSize() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -1546,12 +1642,12 @@ export default {
       }
       return fixedSize
     },
-    fixedColumnSize () {
+    fixedColumnSize() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       return $xeTable.computeFixedColumnSize
     },
-    computeIsMaxFixedColumn () {
+    computeIsMaxFixedColumn() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const fixedColumnSize = $xeTable.computeFixedColumnSize
@@ -1562,7 +1658,7 @@ export default {
       }
       return false
     },
-    computeKeepFields () {
+    computeKeepFields() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -1576,16 +1672,16 @@ export default {
         // 优先级 excludeFields > (includeFields || extraFields)
         const excludeFdMaps: Record<string, number> = {}
         if (excludeFields && excludeFields.length) {
-          excludeFields.forEach(field => {
+          excludeFields.forEach((field) => {
             excludeFdMaps[field] = 1
           })
         }
         if (includeFields && includeFields.length) {
-          return excludeFields && excludeFields.length ? includeFields.filter(field => !excludeFdMaps[field]) : includeFields
+          return excludeFields && excludeFields.length ? includeFields.filter((field) => !excludeFdMaps[field]) : includeFields
         }
         const addFdMaps: Record<string, number> = {}
         if (extraFields && extraFields.length) {
-          extraFields.forEach(field => {
+          extraFields.forEach((field) => {
             if (!addFdMaps[field]) {
               addFdMaps[field] = 1
               kpFields.push(field)
@@ -1603,7 +1699,7 @@ export default {
       }
       return kpFields
     },
-    computeTableBorder () {
+    computeTableBorder() {
       const $xeTable = this
       const props = $xeTable
 
@@ -1619,7 +1715,7 @@ export default {
     /**
      * 判断列全选的复选框是否禁用
      */
-    computeIsAllCheckboxDisabled () {
+    computeIsAllCheckboxDisabled() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
       const reactData = $xeTable as unknown as TableReactData
@@ -1645,10 +1741,10 @@ export default {
       }
       return false
     },
-    isAllCheckboxDisabled () {
+    isAllCheckboxDisabled() {
       return this.computeIsAllCheckboxDisabled
     },
-    computeVirtualScrollBars () {
+    computeVirtualScrollBars() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -1658,13 +1754,13 @@ export default {
         y: overflowY && scrollYLoad
       }
     },
-    computeRowGroupFields () {
+    computeRowGroupFields() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       const aggregateOpts = $xeTable.computeAggregateOpts
       return aggregateOpts.groupFields
     },
-    computeRowGroupColumns () {
+    computeRowGroupColumns() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -1672,7 +1768,7 @@ export default {
       const { rowGroupList } = reactData
       const { fullColumnFieldData } = internalData
       const rgColumns: VxeTableDefines.ColumnInfo[] = []
-      rowGroupList.forEach(aggConf => {
+      rowGroupList.forEach((aggConf) => {
         const colRest = fullColumnFieldData[aggConf.field]
         if (colRest) {
           rgColumns.push(colRest.column)
@@ -1680,52 +1776,52 @@ export default {
       })
       return rgColumns
     },
-    computeAggFuncColumns () {
+    computeAggFuncColumns() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
       const { rowGroupList, tableColumn } = reactData
       if (rowGroupList.length) {
-        return tableColumn.filter(column => column.field && column.aggFunc)
+        return tableColumn.filter((column) => column.field && column.aggFunc)
       }
       return []
     },
-    computeUndoRedoHistoryOpts () {
+    computeUndoRedoHistoryOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.undoRedoHistoryConfig, props.undoRedoHistoryConfig)
     },
-    computeRendererOpts () {
+    computeRendererOpts() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
       return Object.assign({}, getConfig().table.rendererConfig, props.rendererConfig)
     },
-    combineTabsResizeFlag () {
+    combineTabsResizeFlag() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const $xeTabs = $xeTable.$xeTabs
 
       return $xeTabs ? $xeTabs.reactData.resizeFlag : null
     },
-    combineModalResizeFlag () {
+    combineModalResizeFlag() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const $xeModal = $xeTable.$xeModal
 
       return $xeModal ? $xeModal.reactData.resizeFlag : null
     },
-    combineSplitterResizeFlag () {
+    combineSplitterResizeFlag() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const $xeSplitter = $xeTable.$xeSplitter
 
       return $xeSplitter ? $xeSplitter.reactData.resizeFlag : null
     },
-    computeVxeLanguage () {
+    computeVxeLanguage() {
       return VxeUI.getLanguage()
     }
   } as any,
   watch: {
-    data (value: any) {
+    data(value: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -1745,82 +1841,82 @@ export default {
         // if (checkboxColumn && this.tableFullData.length > 300 && !this.checkboxOpts.checkField) {
         //   warnLog('vxe.error.checkProp', ['checkbox-config.checkField'])
         // }
-        if ((scrollXLoad || scrollYLoad) && (expandColumn && expandOpts.mode !== 'fixed')) {
+        if ((scrollXLoad || scrollYLoad) && expandColumn && expandOpts.mode !== 'fixed') {
           warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
         }
         this.recalculate()
       })
     },
-    staticColumns (value: any) {
+    staticColumns(value: any) {
       this.$nextTick(() => this.handleInitColumn(XEUtils.clone(value)))
     },
-    tableColumn () {
+    tableColumn() {
       this.analyColumnWidth()
     },
-    upDataFlag () {
+    upDataFlag() {
       this.$nextTick().then(() => this.updateData())
     },
-    reColumnFlag () {
+    reColumnFlag() {
       this.$nextTick().then(() => this.refreshColumn())
     },
 
-    computeSize () {
+    computeSize() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    showHeader () {
+    showHeader() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    showFooter () {
+    showFooter() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    showHeaderOverflow () {
+    showHeaderOverflow() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    showOverflow () {
+    showOverflow() {
       const $xeTable = this
 
       updateColumnAllOverflow($xeTable)
       $xeTable.reLayoutFlag++
     },
-    showFooterOverflow () {
+    showFooterOverflow() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    overflowX () {
+    overflowX() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    overflowY () {
+    overflowY() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    height () {
+    height() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    maxHeight () {
+    maxHeight() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    computeVxeLanguage () {
+    computeVxeLanguage() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    computeIsVScrollbar () {
+    computeIsVScrollbar() {
       const $xeTable = this
 
       $xeTable.$nextTick(() => {
@@ -1830,49 +1926,49 @@ export default {
         })
       })
     },
-    computeScrollbarXToTop () {
+    computeScrollbarXToTop() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    computeScrollbarYToLeft () {
+    computeScrollbarYToLeft() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    computeScrollXVisible () {
+    computeScrollXVisible() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    computeScrollYVisible () {
+    computeScrollYVisible() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    computeScrollXHeight () {
+    computeScrollXHeight() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    computeScrollYWidth () {
+    computeScrollYWidth() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    computeCellHeitht () {
+    computeCellHeitht() {
       const $xeTable = this
 
       $xeTable.reLayoutFlag++
     },
-    reLayoutFlag () {
+    reLayoutFlag() {
       const $xeTable = this
 
       $xeTable.$nextTick().then(() => {
         $xeTable.recalculate(true)
       })
     },
-    reScrollFlag () {
+    reScrollFlag() {
       const $xeTable = this
 
       $xeTable.updateScrollbar().then(() => {
@@ -1880,10 +1976,10 @@ export default {
       })
     },
 
-    footerData () {
+    footerData() {
       this.footFlag++
     },
-    footFlag () {
+    footFlag() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const internalData = $xeTable as unknown as TableInternalData
 
@@ -1891,25 +1987,25 @@ export default {
       $xeTable.updateFooter()
     },
 
-    updateColFlag () {
+    updateColFlag() {
       this.kfFlag++
     },
-    computeKeepFields () {
+    computeKeepFields() {
       this.kfFlag++
     },
-    kfFlag () {
+    kfFlag() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const internalData = $xeTable as unknown as TableInternalData
 
       const keepFields = $xeTable.computeKeepFields
       const kpfMaps: Record<string, number> = {}
-      keepFields.forEach(field => {
+      keepFields.forEach((field) => {
         kpfMaps[field] = 1
       })
       internalData.keepUpdateFieldMaps = kpfMaps
     },
 
-    syncResize (value: any) {
+    syncResize(value: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       if (value) {
@@ -1921,36 +2017,36 @@ export default {
       }
     },
 
-    combineTabsResizeFlag () {
+    combineTabsResizeFlag() {
       this.layoutReFlag++
     },
-    combineModalResizeFlag () {
+    combineModalResizeFlag() {
       this.layoutReFlag++
     },
-    combineSplitterResizeFlag () {
+    combineSplitterResizeFlag() {
       this.layoutReFlag++
     },
-    layoutReFlag () {
+    layoutReFlag() {
       this.handleGlobalResizeEvent()
     },
 
-    mergeCells (value: any) {
+    mergeCells(value: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       handleUpdateMergeBodyCells($xeTable, value)
     },
-    mergeHeaderCells (value: any) {
+    mergeHeaderCells(value: any) {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
       handleUpdateMergeHeaderCells($xeTable, value)
     },
-    mergeFooterCells () {
+    mergeFooterCells() {
       this.mergeFooteCellFlag++
     },
-    mergeFooterItems () {
+    mergeFooterItems() {
       this.mergeFooteCellFlag++
     },
-    mergeFooteCellFlag () {
+    mergeFooteCellFlag() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const props = $xeTable
 
@@ -1958,12 +2054,12 @@ export default {
       handleUpdateMergeFooterCells($xeTable, mFooterCells || [])
     },
 
-    computeRowGroupFields (val: any) {
+    computeRowGroupFields(val: any) {
       const $xeTable = this
 
       $xeTable.handleUpdateRowGroup(val)
     },
-    computeRowField () {
+    computeRowField() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -1978,7 +2074,7 @@ export default {
         })
       }
     },
-    computeAggregateMode () {
+    computeAggregateMode() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
       const internalData = $xeTable as unknown as TableInternalData
@@ -1988,7 +2084,7 @@ export default {
       }
     }
   } as any,
-  created () {
+  created() {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const props = $xeTable
     const internalData = $xeTable as unknown as TableInternalData
@@ -2180,7 +2276,7 @@ export default {
     if (mouseOpts.area && mouseOpts.selected) {
       warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
     }
-    if (mouseOpts.area && (props.treeConfig && !treeOpts.transform)) {
+    if (mouseOpts.area && props.treeConfig && !treeOpts.transform) {
       errLog('vxe.error.notSupportProp', ['mouse-config.area', 'tree-config.transform=false', 'tree-config.transform=true'])
     }
     if (props.editConfig && editOpts.activeMethod) {
@@ -2194,7 +2290,7 @@ export default {
     }
 
     if (treeConfig) {
-      XEUtils.arrayEach(['rowField', 'parentField', 'childrenField', 'hasChildField', 'mapChildrenField'], key => {
+      XEUtils.arrayEach(['rowField', 'parentField', 'childrenField', 'hasChildField', 'mapChildrenField'], (key) => {
         const val = treeOpts[key as 'rowField']
         if (val && val.indexOf('.') > -1) {
           errLog('vxe.error.errProp', [`${key}=${val}`, `${key}=${val.split('.')[0]}`])
@@ -2310,7 +2406,7 @@ export default {
     globalEvents.on($xeTable, 'contextmenu', this.handleGlobalContextmenuEvent)
     $xeTable.preventEvent(null, 'created')
   },
-  mounted () {
+  mounted() {
     const $xeTable = this
     const props = $xeTable
     const internalData = $xeTable as unknown as TableInternalData
@@ -2446,11 +2542,11 @@ export default {
 
     $xeTable.preventEvent(null, 'mounted')
   },
-  activated () {
+  activated() {
     this.recalculate().then(() => this.refreshScroll())
     this.preventEvent(null, 'activated')
   },
-  deactivated () {
+  deactivated() {
     const $xeTable = this
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
@@ -2463,7 +2559,7 @@ export default {
     internalData.isActivated = false
     this.preventEvent(null, 'deactivated')
   },
-  beforeDestroy () {
+  beforeDestroy() {
     const $xeTable = this
     const reactData = $xeTable as unknown as TableReactData
     const internalData = $xeTable as unknown as TableInternalData
@@ -2518,12 +2614,12 @@ export default {
     XEUtils.assign(reactData, createReactData())
     XEUtils.assign(internalData, createInternalData())
   },
-  destroyed () {
+  destroyed() {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
     $xeTable.preventEvent(null, 'destroyed')
   },
-  render (h: CreateElement) {
+  render(h: CreateElement) {
     // 使用已安装的组件，如果未安装则不渲染
     const VxeUILoadingComponent = VxeUI.getComponent('VxeLoading')
     const VxeUITooltipComponent = VxeUI.getComponent('VxeTooltip')
@@ -2584,353 +2680,431 @@ export default {
     if (isCrossTableDrag && !tableData.length) {
       tbOns.dragover = $xeTable.handleCrossTableRowDragoverEmptyEvent
     }
-    return h('div', {
-      ref: 'refElem',
-      class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, isVScrollbar ? 'is--virtual-scrollbar' : 'is--native-scrollbar', `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`, `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`, {
-        [`size--${vSize}`]: vSize,
-        [`valid-msg--${validOpts.msgMode}`]: !!editRules,
-        'vxe-editable': !!editConfig,
-        'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete',
-        'cell--highlight': highlightCell,
-        'cell--selected': hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected,
-        'cell--area': isArea,
-        'header-cell--area': isArea && areaOpts.selectCellByHeader,
-        'body-cell--area': isArea && areaOpts.selectCellByBody,
-        'row--highlight': rowOpts.isHover || highlightHoverRow,
-        'column--highlight': columnOpts.isHover || highlightHoverColumn,
-        'checkbox--range': checkboxOpts.range,
-        'col--drag-cell': columnOpts.drag && columnDragOpts.trigger === 'cell',
-        'is--header': showHeader,
-        'not--header': !showHeader,
-        'is--footer': showFooter,
-        'not--footer': !showFooter,
-        'is--group': isGroup,
-        'is-row-group': isRowGroupStatus,
-        'is--tree-line': treeConfig && (treeOpts.showLine || treeOpts.line),
-        'is--fixed-left': leftList.length,
-        'is--fixed-right': rightList.length,
-        'is--animat': !!props.animat,
-        'is--round': props.round,
-        'is--stripe': !treeConfig && stripe,
-        'is--loading': currLoading,
-        'is--empty': !currLoading && !tableData.length,
-        'is--scroll-y': overflowY,
-        'not--scroll-y': !overflowY,
-        'is--scroll-x': overflowX,
-        'not--scroll-x': !overflowX,
-        'is--virtual-x': scrollXLoad,
-        'is--virtual-y': scrollYLoad
-      }],
-      style: tableStyle,
-      attrs: {
-        spellcheck: false
-      },
-      on: tbOns
-    }, [
-      /**
-       * 隐藏列
-       */
-      h('div', {
-        key: 'tss',
-        class: 'vxe-table-slots',
-        ref: 'hideColumn'
-      }, this.$slots.default),
-      h('div', {
-        key: 'tvr',
-        ref: 'refVarElem',
-        class: 'vxe-table-vars'
-      }, [
-        h('div', {
-          class: 'vxe-table-var-xlarge'
-        }),
-        h('div', {
-          class: 'vxe-table-var-large'
-        }),
-        h('div', {
-          class: 'vxe-table-var-default'
-        }),
-        h('div', {
-          class: 'vxe-table-var-medium'
-        }),
-        h('div', {
-          class: 'vxe-table-var-small'
-        }),
-        h('div', {
-          class: 'vxe-table-var-mini'
-        })
-      ]),
-      h('div', {
-        key: 'tw',
-        class: 'vxe-table--render-wrapper'
-      }, isVScrollbar
-        ? [renderVirtualBody(h, $xeTable)]
-        : (
-            scrollbarXToTop
-              ? [
-                  renderScrollX(h, $xeTable),
-                  renderNativeBody(h, $xeTable)
-                ]
-              : [
-                  renderNativeBody(h, $xeTable),
-                  renderScrollX(h, $xeTable)
-                ]
-          )
-      ),
-      /**
-       * 空数据
-       */
-      h('div', {
-        key: 'tn',
-        ref: 'refEmptyPlaceholder',
-        class: 'vxe-table--empty-place-wrapper',
+    return h(
+      'div',
+      {
+        ref: 'refElem',
+        class: [
+          'vxe-table',
+          'vxe-table--render-default',
+          `tid_${xID}`,
+          `border--${tableBorder}`,
+          isVScrollbar ? 'is--virtual-scrollbar' : 'is--native-scrollbar',
+          `sx-pos--${scrollbarXToTop ? 'top' : 'bottom'}`,
+          `sy-pos--${scrollbarYToLeft ? 'left' : 'right'}`,
+          {
+            [`size--${vSize}`]: vSize,
+            [`valid-msg--${validOpts.msgMode}`]: !!editRules,
+            'vxe-editable': !!editConfig,
+            'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete',
+            'cell--highlight': highlightCell,
+            'cell--selected': hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.selected,
+            'cell--area': isArea,
+            'header-cell--area': isArea && areaOpts.selectCellByHeader,
+            'body-cell--area': isArea && areaOpts.selectCellByBody,
+            'row--highlight': rowOpts.isHover || highlightHoverRow,
+            'column--highlight': columnOpts.isHover || highlightHoverColumn,
+            'checkbox--range': checkboxOpts.range,
+            'col--drag-cell': columnOpts.drag && columnDragOpts.trigger === 'cell',
+            'is--header': showHeader,
+            'not--header': !showHeader,
+            'is--footer': showFooter,
+            'not--footer': !showFooter,
+            'is--group': isGroup,
+            'is-row-group': isRowGroupStatus,
+            'is--tree-line': treeConfig && (treeOpts.showLine || treeOpts.line),
+            'is--fixed-left': leftList.length,
+            'is--fixed-right': rightList.length,
+            'is--animat': !!props.animat,
+            'is--round': props.round,
+            'is--stripe': !treeConfig && stripe,
+            'is--loading': currLoading,
+            'is--empty': !currLoading && !tableData.length,
+            'is--scroll-y': overflowY,
+            'not--scroll-y': !overflowY,
+            'is--scroll-x': overflowX,
+            'not--scroll-x': !overflowX,
+            'is--virtual-x': scrollXLoad,
+            'is--virtual-y': scrollYLoad
+          }
+        ],
+        style: tableStyle,
         attrs: {
-          xid: xID
-        }
-      }, [
-        h('div', {
-          class: 'vxe-table--empty-placeholder'
-        }, [
-          h('div', {
-            class: 'vxe-table--empty-content'
-          }, renderEmptyBody(h, $xeTable))
-        ])
-      ]),
-      /**
-       * 边框线
-       */
-      h('div', {
-        key: 'tl',
-        class: 'vxe-table--border-line'
-      }),
-      /**
-       * 列宽线
-       */
-      h('div', {
-        key: 'tcl',
-        ref: 'refColResizeBar',
-        class: 'vxe-table--resizable-col-bar'
-      }, resizableOpts.showDragTip
-        ? [
+          spellcheck: false
+        },
+        on: tbOns
+      },
+      [
+        /**
+         * 隐藏列
+         */
+        h(
+          'div',
+          {
+            key: 'tss',
+            class: 'vxe-table-slots',
+            ref: 'hideColumn'
+          },
+          this.$slots.default
+        ),
+        h(
+          'div',
+          {
+            key: 'tvr',
+            ref: 'refVarElem',
+            class: 'vxe-table-vars'
+          },
+          [
             h('div', {
-              ref: 'refColResizeTip',
-              class: 'vxe-table--resizable-number-tip'
+              class: 'vxe-table-var-xlarge'
+            }),
+            h('div', {
+              class: 'vxe-table-var-large'
+            }),
+            h('div', {
+              class: 'vxe-table-var-default'
+            }),
+            h('div', {
+              class: 'vxe-table-var-medium'
+            }),
+            h('div', {
+              class: 'vxe-table-var-small'
+            }),
+            h('div', {
+              class: 'vxe-table-var-mini'
             })
           ]
-        : []),
-      h('div', {
-        key: 'ttw'
-      }, [
+        ),
+        h(
+          'div',
+          {
+            key: 'tw',
+            class: 'vxe-table--render-wrapper'
+          },
+          isVScrollbar ? [renderVirtualBody(h, $xeTable)] : scrollbarXToTop ? [renderScrollX(h, $xeTable), renderNativeBody(h, $xeTable)] : [renderNativeBody(h, $xeTable), renderScrollX(h, $xeTable)]
+        ),
+        /**
+         * 空数据
+         */
+        h(
+          'div',
+          {
+            key: 'tn',
+            ref: 'refEmptyPlaceholder',
+            class: 'vxe-table--empty-place-wrapper',
+            attrs: {
+              xid: xID
+            }
+          },
+          [
+            h(
+              'div',
+              {
+                class: 'vxe-table--empty-placeholder'
+              },
+              [
+                h(
+                  'div',
+                  {
+                    class: 'vxe-table--empty-content'
+                  },
+                  renderEmptyBody(h, $xeTable)
+                )
+              ]
+            )
+          ]
+        ),
+        /**
+         * 边框线
+         */
         h('div', {
-          ref: 'refTeleportWrapper'
-        }, [
-          /**
-           * 行高线
-           */
-          h('div', {
-            key: 'trl',
-            ref: 'refRowResizeBar',
-            class: 'vxe-table--resizable-row-bar'
-          }, resizableOpts.showDragTip
+          key: 'tl',
+          class: 'vxe-table--border-line'
+        }),
+        /**
+         * 列宽线
+         */
+        h(
+          'div',
+          {
+            key: 'tcl',
+            ref: 'refColResizeBar',
+            class: 'vxe-table--resizable-col-bar'
+          },
+          resizableOpts.showDragTip
             ? [
                 h('div', {
+                  ref: 'refColResizeTip',
                   class: 'vxe-table--resizable-number-tip'
                 })
               ]
-            : []),
-          /**
-           * 加载中
-           */
-          VxeUILoadingComponent
-            ? h(VxeUILoadingComponent, {
-              key: 'lg',
-              class: 'vxe-table--loading',
-              props: {
-                value: currLoading,
-                icon: loadingOpts.icon,
-                text: loadingOpts.text
+            : []
+        ),
+        h(
+          'div',
+          {
+            key: 'ttw'
+          },
+          [
+            h(
+              'div',
+              {
+                ref: 'refTeleportWrapper'
               },
-              scopedSlots: loadingSlot
-                ? {
-                    default: () => $xeTable.callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, loading: currLoading }, h)
-                  }
-                : {}
-            })
-            : loadingSlot
-              ? h('div', {
-                class: ['vxe-loading--custom-wrapper', {
-                  'is--visible': currLoading
-                }]
-              }, $xeTable.callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, loading: currLoading }, h))
-              : renderEmptyElement($xeTable),
+              [
+                /**
+                 * 行高线
+                 */
+                h(
+                  'div',
+                  {
+                    key: 'trl',
+                    ref: 'refRowResizeBar',
+                    class: 'vxe-table--resizable-row-bar'
+                  },
+                  resizableOpts.showDragTip
+                    ? [
+                        h('div', {
+                          class: 'vxe-table--resizable-number-tip'
+                        })
+                      ]
+                    : []
+                ),
+                /**
+                 * 加载中
+                 */
+                VxeUILoadingComponent
+                  ? h(VxeUILoadingComponent, {
+                    key: 'lg',
+                    class: 'vxe-table--loading',
+                    props: {
+                      value: currLoading,
+                      icon: loadingOpts.icon,
+                      text: loadingOpts.text
+                    },
+                    scopedSlots: loadingSlot
+                      ? {
+                          default: () => $xeTable.callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, loading: currLoading }, h)
+                        }
+                      : {}
+                  })
+                  : loadingSlot
+                    ? h(
+                      'div',
+                      {
+                        class: [
+                          'vxe-loading--custom-wrapper',
+                          {
+                            'is--visible': currLoading
+                          }
+                        ]
+                      },
+                      $xeTable.callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, loading: currLoading }, h)
+                    )
+                    : renderEmptyElement($xeTable),
+                /**
+                 * 拖拽提示
+                 */
+                renderDragTip(h, this)
+              ]
+            )
+          ]
+        ),
+        h(
+          'div',
+          {
+            key: 'fpw',
+            ref: 'refCustomContainerElem'
+          },
+          [
+            h(
+              'div',
+              {
+                ref: 'refCustomPopupToElem'
+              },
+              [
+                /**
+                 * 自定义列
+                 */
+                initStore.custom
+                  ? h(TableCustomPanelComponent, {
+                    key: 'cs',
+                    ref: 'refTableCustom',
+                    props: {
+                      customStore
+                    }
+                  })
+                  : renderEmptyElement($xeTable)
+              ]
+            )
+          ]
+        ),
+        h(
+          'div',
+          {
+            key: 'tpw'
+          },
+          [
+            h(
+              'div',
+              {
+                ref: 'refPopupWrapperElem'
+              },
+              [
+                /**
+                 * 筛选
+                 */
+                initStore.filter
+                  ? h(TableFilterPanelComponent, {
+                    key: 'tf',
+                    ref: 'refTableFilter',
+                    props: {
+                      filterStore
+                    }
+                  })
+                  : renderEmptyElement($xeTable),
+                /**
+                 * 快捷菜单
+                 */
+                isContentMenu
+                  ? h(TableMenuPanelComponent, {
+                    key: 'tm',
+                    ref: 'refTableMenu'
+                  })
+                  : renderEmptyElement($xeTable)
+              ]
+            )
+          ]
+        ),
+        /**
+         * 导入
+         */
+        initStore.import && hasEnableConf(importConfig, importOpts)
+          ? h(TableImportPanelComponent, {
+            key: 'it',
+            props: {
+              defaultOptions: this.importParams,
+              storeData: this.importStore
+            }
+          })
+          : renderEmptyElement($xeTable),
+        /**
+         * 导出
+         */
+        initStore.export && (hasEnableConf(exportConfig, exportOpts) || hasEnableConf(printConfig, printOpts))
+          ? h(TableExportPanelComponent, {
+            key: 'et',
+            props: {
+              defaultOptions: this.exportParams,
+              storeData: this.exportStore
+            }
+          })
+          : renderEmptyElement($xeTable),
+        h('div', {}, [
           /**
-           * 拖拽提示
+           * 提示相关
            */
-          renderDragTip(h, this)
-        ])
-      ]),
-      h('div', {
-        key: 'fpw',
-        ref: 'refCustomContainerElem'
-      }, [
-        h('div', {
-          ref: 'refCustomPopupToElem'
-        }, [
-          /**
-           * 自定义列
-           */
-          initStore.custom
-            ? h(TableCustomPanelComponent, {
-              key: 'cs',
-              ref: 'refTableCustom',
+          VxeUITooltipComponent
+            ? h(VxeUITooltipComponent, {
+              key: 'ctp',
+              ref: 'refCommTooltip',
               props: {
-                customStore
-              }
-            })
-            : renderEmptyElement($xeTable)
-        ])
-      ]),
-      h('div', {
-        key: 'tpw'
-      }, [
-        h('div', {
-          ref: 'refPopupWrapperElem'
-        }, [
-          /**
-           * 筛选
-           */
-          initStore.filter
-            ? h(TableFilterPanelComponent, {
-              key: 'tf',
-              ref: 'refTableFilter',
-              props: {
-                filterStore
+                isArrow: false,
+                enterable: false,
+                useScrollbar: isVScrollbar
               }
             })
             : renderEmptyElement($xeTable),
           /**
-           * 快捷菜单
+           * 工具提示
            */
-          isContentMenu
-            ? h(TableMenuPanelComponent, {
-              key: 'tm',
-              ref: 'refTableMenu'
+          VxeUITooltipComponent
+            ? h(VxeUITooltipComponent, {
+              key: 'btp',
+              ref: 'refTooltip',
+              props: {
+                theme: tableTipConfig.theme,
+                enterable: tableTipConfig.enterable,
+                enterDelay: tableTipConfig.enterDelay,
+                leaveDelay: tableTipConfig.leaveDelay,
+                useHtml: XEUtils.isBoolean(tableTipConfig.useHtml) ? tableTipConfig.useHtml : undefined,
+                // 已废弃
+                useHTML: XEUtils.isBoolean(tableTipConfig.useHTML) ? tableTipConfig.useHTML : undefined,
+                width: tableTipConfig.width,
+                height: tableTipConfig.height,
+                minWidth: tableTipConfig.minWidth,
+                minHeight: tableTipConfig.minHeight,
+                maxWidth: tableTipConfig.maxWidth,
+                maxHeight: tableTipConfig.maxHeight,
+                placement: tableTipConfig.placement,
+                defaultPlacement: tableTipConfig.defaultPlacement,
+                popupClassName: tableTipConfig.popupClassName,
+                useScrollbar: tableTipConfig.useScrollbar
+              },
+              scopedSlots: currTooltipSlot
+                ? {
+                    content: () => {
+                      const { type, row, column, content: tooltipContent } = tooltipStore
+                      if (currTooltipSlot) {
+                        if (column && type === 'header') {
+                          return h(
+                            'div',
+                            {
+                              key: type
+                            },
+                            currTooltipSlot({ column, tooltipContent, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
+                          )
+                        }
+                        if (row && column && type === 'body') {
+                          return h(
+                            'div',
+                            {
+                              key: type
+                            },
+                            currTooltipSlot({ row, column, tooltipContent, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
+                          )
+                        }
+                        if (row && column && type === 'footer') {
+                          return h(
+                            'div',
+                            {
+                              key: type
+                            },
+                            currTooltipSlot({ row, column, tooltipContent, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
+                          )
+                        }
+                      }
+                      return renderEmptyElement($xeTable)
+                    }
+                  }
+                : {}
+            })
+            : renderEmptyElement($xeTable),
+          /**
+           * 校验提示
+           */
+          VxeUITooltipComponent && this.editRules && validOpts.showErrorMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
+            ? h(VxeUITooltipComponent, {
+              key: 'vtp',
+              ref: 'refValidTooltip',
+              class: [
+                {
+                  'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete'
+                },
+                'vxe-table--valid-error'
+              ],
+              props: {
+                theme: validTipConfig.theme,
+                enterable: validTipConfig.enterable,
+                enterDelay: validTipConfig.enterDelay,
+                leaveDelay: validTipConfig.leaveDelay,
+                useScrollbar: validTipConfig.useScrollbar
+              }
             })
             : renderEmptyElement($xeTable)
         ])
-      ]),
-      /**
-       * 导入
-       */
-      initStore.import && hasEnableConf(importConfig, importOpts)
-        ? h(TableImportPanelComponent, {
-          key: 'it',
-          props: {
-            defaultOptions: this.importParams,
-            storeData: this.importStore
-          }
-        })
-        : renderEmptyElement($xeTable),
-      /**
-       * 导出
-       */
-      initStore.export && (hasEnableConf(exportConfig, exportOpts) || hasEnableConf(printConfig, printOpts))
-        ? h(TableExportPanelComponent, {
-          key: 'et',
-          props: {
-            defaultOptions: this.exportParams,
-            storeData: this.exportStore
-          }
-        })
-        : renderEmptyElement($xeTable),
-      h('div', {}, [
-        /**
-         * 提示相关
-         */
-        VxeUITooltipComponent
-          ? h(VxeUITooltipComponent, {
-            key: 'ctp',
-            ref: 'refCommTooltip',
-            props: {
-              isArrow: false,
-              enterable: false,
-              useScrollbar: isVScrollbar
-            }
-          })
-          : renderEmptyElement($xeTable),
-        /**
-         * 工具提示
-         */
-        VxeUITooltipComponent
-          ? h(VxeUITooltipComponent, {
-            key: 'btp',
-            ref: 'refTooltip',
-            props: {
-              theme: tableTipConfig.theme,
-              enterable: tableTipConfig.enterable,
-              enterDelay: tableTipConfig.enterDelay,
-              leaveDelay: tableTipConfig.leaveDelay,
-              useHtml: XEUtils.isBoolean(tableTipConfig.useHtml) ? tableTipConfig.useHtml : undefined,
-              // 已废弃
-              useHTML: XEUtils.isBoolean(tableTipConfig.useHTML) ? tableTipConfig.useHTML : undefined,
-              width: tableTipConfig.width,
-              height: tableTipConfig.height,
-              minWidth: tableTipConfig.minWidth,
-              minHeight: tableTipConfig.minHeight,
-              maxWidth: tableTipConfig.maxWidth,
-              maxHeight: tableTipConfig.maxHeight,
-              placement: tableTipConfig.placement,
-              defaultPlacement: tableTipConfig.defaultPlacement,
-              popupClassName: tableTipConfig.popupClassName,
-              useScrollbar: tableTipConfig.useScrollbar
-            },
-            scopedSlots: currTooltipSlot
-              ? {
-                  content: () => {
-                    const { type, row, column, content: tooltipContent } = tooltipStore
-                    if (currTooltipSlot) {
-                      if (column && type === 'header') {
-                        return h('div', {
-                          key: type
-                        }, currTooltipSlot({ column, tooltipContent, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }))
-                      }
-                      if (row && column && type === 'body') {
-                        return h('div', {
-                          key: type
-                        }, currTooltipSlot({ row, column, tooltipContent, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }))
-                      }
-                      if (row && column && type === 'footer') {
-                        return h('div', {
-                          key: type
-                        }, currTooltipSlot({ row, column, tooltipContent, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }))
-                      }
-                    }
-                    return renderEmptyElement($xeTable)
-                  }
-                }
-              : {}
-          })
-          : renderEmptyElement($xeTable),
-        /**
-         * 校验提示
-         */
-        VxeUITooltipComponent && this.editRules && validOpts.showErrorMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
-          ? h(VxeUITooltipComponent, {
-            key: 'vtp',
-            ref: 'refValidTooltip',
-            class: [{
-              'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete'
-            }, 'vxe-table--valid-error'],
-            props: {
-              theme: validTipConfig.theme,
-              enterable: validTipConfig.enterable,
-              enterDelay: validTipConfig.enterDelay,
-              leaveDelay: validTipConfig.leaveDelay,
-              useScrollbar: validTipConfig.useScrollbar
-            }
-          })
-          : renderEmptyElement($xeTable)
-      ])
-    ])
+      ]
+    )
   },
   methods
 } as any

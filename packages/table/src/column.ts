@@ -153,7 +153,7 @@ export const columnProps = {
 }
 
 export const columnWatch: Record<string, any> = {}
-Object.keys(columnProps).forEach(name => {
+Object.keys(columnProps).forEach((name) => {
   columnWatch[name] = function (value: any) {
     const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
 
@@ -172,7 +172,7 @@ Object.keys(columnProps).forEach(name => {
 export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeColumn',
   props: columnProps,
-  provide () {
+  provide() {
     const $xeColumn = this
     return {
       $xeColumn,
@@ -189,25 +189,25 @@ export default /* define-vxe-component start */ defineVxeComponent({
     }
   },
   watch: columnWatch,
-  created () {
+  created() {
     const $xeColumn = this
     const props = $xeColumn
     const $xeTable = this.$xeTable as VxeTableConstructor & VxeTablePrivateMethods
 
     this.columnConfig = Cell.createColumn($xeTable, props)
   },
-  mounted () {
+  mounted() {
     const $xeColumn = this
 
     this.columnConfig.slots = this.$scopedSlots
     assembleColumn($xeColumn)
   },
-  destroyed () {
+  destroyed() {
     const $xeColumn = this
 
     destroyColumn($xeColumn)
   },
-  render (h: CreateElement) {
+  render(h: CreateElement) {
     return h('div', this.$slots.default)
   },
   methods: Cell as any

@@ -4,7 +4,7 @@ import DomZIndex from 'dom-zindex'
 
 const { getConfig } = VxeUI
 
-export function isEnableConf (conf: any): boolean {
+export function isEnableConf(conf: any): boolean {
   return conf && conf.enabled !== false
 }
 
@@ -14,15 +14,15 @@ export function isEnableConf (conf: any): boolean {
  * 局部禁用规则：conf={enabled:false}
  * 全局默认启用规则：conf.enabled=true
  */
-export function hasEnableConf (conf: any, opts: any): boolean {
+export function hasEnableConf(conf: any, opts: any): boolean {
   return opts && (conf ? opts.enabled !== false : opts.enabled)
 }
 
-export function isEmptyValue (cellValue: any) {
+export function isEmptyValue(cellValue: any) {
   return cellValue === null || cellValue === undefined || cellValue === ''
 }
 
-export function parseFile (file: File) {
+export function parseFile(file: File) {
   const name = file.name
   const tIndex = XEUtils.lastIndexOf(name, '.')
   const type = name.substring(tIndex + 1, name.length).toLowerCase()
@@ -30,19 +30,19 @@ export function parseFile (file: File) {
   return { filename, type }
 }
 
-export function nextZIndex () {
+export function nextZIndex() {
   return DomZIndex.getNext()
 }
 
-export function getLastZIndex () {
+export function getLastZIndex() {
   return DomZIndex.getCurrent()
 }
 
-export function hasChildrenList (item: any) {
+export function hasChildrenList(item: any) {
   return item && item.children && item.children.length > 0
 }
 
-export function getFuncText (content?: string | number | boolean | null, args?: any) {
+export function getFuncText(content?: string | number | boolean | null, args?: any) {
   if (XEUtils.eqNull(content)) {
     return ''
   }
@@ -50,21 +50,21 @@ export function getFuncText (content?: string | number | boolean | null, args?: 
   return `${translate ? translate('' + content, args) : content}`
 }
 
-export function formatText (value: any, placeholder?: any) {
+export function formatText(value: any, placeholder?: any) {
   return '' + (isEmptyValue(value) ? (placeholder ? getConfig().emptyCell : '') : value)
 }
 
 /**
  * 判断值为：'' | null | undefined 时都属于空值
  */
-export function eqEmptyValue (cellValue: any) {
+export function eqEmptyValue(cellValue: any) {
   return cellValue === '' || XEUtils.eqNull(cellValue)
 }
 
-export function getClass (property: any, params: any) {
-  return property ? XEUtils.isFunction(property) ? property(params) : property : ''
+export function getClass(property: any, params: any) {
+  return property ? (XEUtils.isFunction(property) ? property(params) : property) : ''
 }
 
-export function getDefaultConfig <T = any, D = any> (val1: T, def1: D): (T | D) {
+export function getDefaultConfig<T = any, D = any>(val1: T, def1: D): T | D {
   return XEUtils.eqNull(val1) ? def1 : val1
 }

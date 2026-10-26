@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { VxeUI } from '../../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { getDomNode, getAbsolutePos, getEventTargetNode, toCssUnit } from '../../../ui/src/dom'
 import { isEnableConf, hasChildrenList, hasEnableConf } from '../../../ui/src/utils'
 import { createComponentLog } from '../../../ui/src/log'
@@ -16,7 +16,7 @@ export default {
     /**
      * 关闭快捷菜单
      */
-    _closeMenu () {
+    _closeMenu() {
       const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -29,11 +29,11 @@ export default {
       return $xeTable.$nextTick()
     },
     // 处理菜单的移动
-    moveCtxMenu (evnt: KeyboardEvent, ctxMenuStore: any, property: 'selectChild' | 'selected', hasOper: boolean, operRest: any, menuList: any[]) {
+    moveCtxMenu(evnt: KeyboardEvent, ctxMenuStore: any, property: 'selectChild' | 'selected', hasOper: boolean, operRest: any, menuList: any[]) {
       const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
 
       let selectItem
-      const selectIndex = XEUtils.findIndexOf(menuList, item => ctxMenuStore[property] === item)
+      const selectIndex = XEUtils.findIndexOf(menuList, (item) => ctxMenuStore[property] === item)
       if (hasOper) {
         if (operRest && hasChildrenList(ctxMenuStore.selected)) {
           ctxMenuStore.showChild = true
@@ -64,7 +64,7 @@ export default {
     /**
      * 快捷菜单事件处理
      */
-    handleGlobalContextmenuEvent (evnt: any) {
+    handleGlobalContextmenuEvent(evnt: any) {
       const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
       const $xeGrid = $xeTable.$xeGrid
       const $xeGantt = $xeTable.$xeGantt
@@ -146,7 +146,7 @@ export default {
               $xeTable.dispatchEvent(eventType, params, evnt)
             }
             return
-          } else if (getEventTargetNode(evnt, el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('xid') === xID).flag || (layout === 'body' && getEventTargetNode(evnt, el, 'vxe-table--empty-place-wrapper', target => target.getAttribute('xid') === xID).flag)) {
+          } else if (getEventTargetNode(evnt, el, `vxe-table--${layout}-wrapper`, (target) => target.getAttribute('xid') === xID).flag || (layout === 'body' && getEventTargetNode(evnt, el, 'vxe-table--empty-place-wrapper', (target) => target.getAttribute('xid') === xID).flag)) {
             if (menuOpts.trigger === 'cell') {
               evnt.preventDefault()
             } else {
@@ -164,7 +164,7 @@ export default {
     /**
      * 显示快捷菜单
      */
-    handleOpenMenuEvent (evnt: any, type: 'header' | 'body' | 'footer', params: any) {
+    handleOpenMenuEvent(evnt: any, type: 'header' | 'body' | 'footer', params: any) {
       const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
       const $xeGrid = $xeTable.$xeGrid
       const $xeGantt = $xeTable.$xeGantt
@@ -187,7 +187,7 @@ export default {
             if (!visibleMethod || visibleMethod(params)) {
               evnt.preventDefault()
               $xeTable.updateZindex()
-              const el = $xeGGWrapper ? $xeGGWrapper.$refs.refElem as HTMLDivElement : $xeTable.$refs.refElem as HTMLDivElement
+              const el = $xeGGWrapper ? ($xeGGWrapper.$refs.refElem as HTMLDivElement) : ($xeTable.$refs.refElem as HTMLDivElement)
               const tableRect = el.getBoundingClientRect()
               const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
 
@@ -254,7 +254,7 @@ export default {
       }
       $xeTable.closeFilter()
     },
-    ctxMenuMouseoverEvent (evnt: Event, item: any, child: any) {
+    ctxMenuMouseoverEvent(evnt: Event, item: any, child: any) {
       const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -296,7 +296,7 @@ export default {
         }
       }
     },
-    ctxMenuMouseoutEvent (evnt: Event, item: VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption) {
+    ctxMenuMouseoutEvent(evnt: Event, item: VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption) {
       const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
       const reactData = $xeTable as unknown as TableReactData
 
@@ -309,7 +309,7 @@ export default {
     /**
      * 快捷菜单点击事件
      */
-    ctxMenuLinkEvent (evnt: Event, menu: VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption) {
+    ctxMenuLinkEvent(evnt: Event, menu: VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption) {
       const $xeTable = this as unknown as VxeTableConstructor & VxeTablePrivateMethods
       const $xeGrid = $xeTable.$xeGrid
       const $xeGantt = $xeTable.$xeGantt
@@ -319,7 +319,7 @@ export default {
       if (!menu.loading && !menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
         const gMenuOpts = menus.get(menu.code)
         const params = Object.assign({}, internalData._currMenuParams, { menu, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, $event: evnt })
-        const tmMethod = gMenuOpts ? (gMenuOpts.tableMenuMethod || gMenuOpts.menuMethod) : null
+        const tmMethod = gMenuOpts ? gMenuOpts.tableMenuMethod || gMenuOpts.menuMethod : null
         if (tmMethod) {
           tmMethod(params, evnt)
         }

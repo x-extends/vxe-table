@@ -1,6 +1,6 @@
 import { CreateElement, PropType } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
-import { VxeUI } from '../../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import XEUtils from 'xe-utils'
 import { getDefaultConfig, parseFile } from '../../../ui/src/utils'
 import { createComponentLog } from '../../../ui/src/log'
@@ -14,17 +14,15 @@ const { getI18n, getIcon, globalMixins, renderEmptyElement } = VxeUI
 
 export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeTableImportPanel',
-  mixins: [
-    globalMixins.sizeMixin
-  ],
+  mixins: [globalMixins.sizeMixin],
   props: {
     defaultOptions: {
       type: Object as PropType<VxeTableDefines.ImportParamsObj>,
-      default: () => ({} as VxeTableDefines.ImportParamsObj)
+      default: () => ({}) as VxeTableDefines.ImportParamsObj
     },
     storeData: {
       type: Object as PropType<VxeTableDefines.ImportStoreObj>,
-      default: () => ({} as VxeTableDefines.ImportStoreObj)
+      default: () => ({}) as VxeTableDefines.ImportStoreObj
     }
   },
   inject: {
@@ -32,7 +30,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       default: null
     }
   },
-  data () {
+  data() {
     const reactData = {
       loading: false
     }
@@ -46,34 +44,34 @@ export default /* define-vxe-component start */ defineVxeComponent({
       computeSize(): VxeComponentSizeType
       $xeTable(): VxeTableConstructor & VxeTablePrivateMethods
     }),
-    computeSelectName () {
+    computeSelectName() {
       const $xeImportPanel = this
       const props = $xeImportPanel
 
       const { storeData } = props
       return `${storeData.filename}.${storeData.type}`
     },
-    computeHasFile () {
+    computeHasFile() {
       const $xeImportPanel = this
       const props = $xeImportPanel
 
       const { storeData } = props
       return storeData.file && storeData.type
     },
-    computeParseTypeLabel () {
+    computeParseTypeLabel() {
       const $xeImportPanel = this
       const props = $xeImportPanel
 
       const { storeData } = props
       const { type, typeList } = storeData
       if (type) {
-        const selectItem = XEUtils.find(typeList, item => type === item.value)
+        const selectItem = XEUtils.find(typeList, (item) => type === item.value)
         return `${selectItem ? selectItem.label : '*.*'}`
       }
       return `*.${typeList.map((item) => item.value).join(', *.')}`
     }
   },
-  created () {
+  created() {
     const $xeTableImportPanel = this
 
     const VxeUIModalComponent = VxeUI.getComponent('VxeModal')
@@ -93,25 +91,28 @@ export default /* define-vxe-component start */ defineVxeComponent({
     })
   },
   methods: {
-    clearFileEvent () {
+    clearFileEvent() {
       Object.assign(this.storeData, {
         filename: '',
         sheetName: '',
         type: ''
       })
     },
-    selectFileEvent () {
+    selectFileEvent() {
       const $xeImportPanel = this
       const props = $xeImportPanel
       const $xeTable = $xeImportPanel.$xeTable
 
       const { storeData, defaultOptions } = props
-      $xeTable.readFile(defaultOptions).then((params) => {
-        const { file } = params
-        Object.assign(storeData, parseFile(file), { file })
-      }).catch(() => {})
+      $xeTable
+        .readFile(defaultOptions)
+        .then((params) => {
+          const { file } = params
+          Object.assign(storeData, parseFile(file), { file })
+        })
+        .catch(() => {})
     },
-    showEvent () {
+    showEvent() {
       const $xeImportPanel = this
       $xeImportPanel.$nextTick(() => {
         const targetElem = $xeImportPanel.$refs.fileBtn as HTMLButtonElement
@@ -120,14 +121,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
         }
       })
     },
-    cancelEvent () {
+    cancelEvent() {
       const $xeImportPanel = this
       const props = $xeImportPanel
 
       const { storeData } = props
       storeData.visible = false
     },
-    importEvent () {
+    importEvent() {
       const $xeImportPanel = this
       const props = $xeImportPanel
       const reactData = $xeImportPanel.reactData
@@ -136,14 +137,17 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const { storeData, defaultOptions } = props
       const importOpts = $xeTable.computeImportOpts
       reactData.loading = true
-      $xeTable.importByFile(storeData.file, Object.assign({}, importOpts, defaultOptions)).then(() => {
-        reactData.loading = false
-        storeData.visible = false
-      }).catch(() => {
-        reactData.loading = false
-      })
+      $xeTable
+        .importByFile(storeData.file, Object.assign({}, importOpts, defaultOptions))
+        .then(() => {
+          reactData.loading = false
+          storeData.visible = false
+        })
+        .catch(() => {
+          reactData.loading = false
+        })
     },
-    renderVN (h: CreateElement) {
+    renderVN(h: CreateElement) {
       const $xeImportPanel = this
       const props = $xeImportPanel
       const reactData = $xeImportPanel.reactData
@@ -187,7 +191,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           loading: reactData.loading
         },
         on: {
-          input (value: any) {
+          input(value: any) {
             storeData.visible = value
           },
           show: $xeImportPanel.showEvent
@@ -202,90 +206,114 @@ export default /* define-vxe-component start */ defineVxeComponent({
               params: defaultOptions.params as any
             }
 
-            return h('div', {
-              class: 'vxe-table-export--panel'
-            }, [
-              topSlot
-                ? h('div', {
-                  class: 'vxe-table-export--panel-top'
-                }, $xeTable.callSlot(topSlot, params, h))
-                : renderEmptyElement($xeTable),
-              h('div', {
-                class: 'vxe-table-export--panel-body'
-              }, defaultSlot
-                ? $xeTable.callSlot(defaultSlot, params, h)
-                : [
-                    h('table', {
-                      class: 'vxe-table-export--panel-table',
-                      attrs: {
-                        cellspacing: 0,
-                        cellpadding: 0,
-                        border: 0
-                      }
-                    }, [
-                      h('tbody', [
-                        h('tr', [
-                          h('td', getI18n('vxe.import.impFile')),
-                          h('td', [
-                            hasFile
-                              ? h('div', {
-                                class: 'vxe-table-export--selected--file',
-                                attrs: {
-                                  title: selectName
-                                }
-                              }, [
-                                h('span', selectName),
-                                h('i', {
-                                  class: getIcon().INPUT_CLEAR,
-                                  on: {
-                                    click: $xeImportPanel.clearFileEvent
-                                  }
-                                })
-                              ])
-                              : h('button', {
-                                ref: 'fileBtn',
-                                class: 'vxe-table-export--select--file',
-                                attrs: {
-                                  type: 'button'
-                                },
-                                on: {
-                                  click: $xeImportPanel.selectFileEvent
-                                }
-                              }, getI18n('vxe.import.impSelect'))
-                          ])
-                        ]),
-                        h('tr', [
-                          h('td', getI18n('vxe.import.impType')),
-                          h('td', parseTypeLabel)
-                        ]),
-                        settingOptions.showMode === false
-                          ? renderEmptyElement($xeTable)
-                          : h('tr', [
-                            h('td', getI18n('vxe.import.impMode')),
-                            h('td', [
-                              h('vxe-select', {
-                                props: {
-                                  value: defaultOptions.mode,
-                                  options: storeData.modeList
-                                },
-                                on: {
-                                  modelValue (value: any) {
-                                    defaultOptions.mode = value
-                                  }
-                                }
-                              })
+            return h(
+              'div',
+              {
+                class: 'vxe-table-export--panel'
+              },
+              [
+                topSlot
+                  ? h(
+                    'div',
+                    {
+                      class: 'vxe-table-export--panel-top'
+                    },
+                    $xeTable.callSlot(topSlot, params, h)
+                  )
+                  : renderEmptyElement($xeTable),
+                h(
+                  'div',
+                  {
+                    class: 'vxe-table-export--panel-body'
+                  },
+                  defaultSlot
+                    ? $xeTable.callSlot(defaultSlot, params, h)
+                    : [
+                        h(
+                          'table',
+                          {
+                            class: 'vxe-table-export--panel-table',
+                            attrs: {
+                              cellspacing: 0,
+                              cellpadding: 0,
+                              border: 0
+                            }
+                          },
+                          [
+                            h('tbody', [
+                              h('tr', [
+                                h('td', getI18n('vxe.import.impFile')),
+                                h('td', [
+                                  hasFile
+                                    ? h(
+                                      'div',
+                                      {
+                                        class: 'vxe-table-export--selected--file',
+                                        attrs: {
+                                          title: selectName
+                                        }
+                                      },
+                                      [
+                                        h('span', selectName),
+                                        h('i', {
+                                          class: getIcon().INPUT_CLEAR,
+                                          on: {
+                                            click: $xeImportPanel.clearFileEvent
+                                          }
+                                        })
+                                      ]
+                                    )
+                                    : h(
+                                      'button',
+                                      {
+                                        ref: 'fileBtn',
+                                        class: 'vxe-table-export--select--file',
+                                        attrs: {
+                                          type: 'button'
+                                        },
+                                        on: {
+                                          click: $xeImportPanel.selectFileEvent
+                                        }
+                                      },
+                                      getI18n('vxe.import.impSelect')
+                                    )
+                                ])
+                              ]),
+                              h('tr', [h('td', getI18n('vxe.import.impType')), h('td', parseTypeLabel)]),
+                              settingOptions.showMode === false
+                                ? renderEmptyElement($xeTable)
+                                : h('tr', [
+                                  h('td', getI18n('vxe.import.impMode')),
+                                  h('td', [
+                                    h('vxe-select', {
+                                      props: {
+                                        value: defaultOptions.mode,
+                                        options: storeData.modeList
+                                      },
+                                      on: {
+                                        modelValue(value: any) {
+                                          defaultOptions.mode = value
+                                        }
+                                      }
+                                    })
+                                  ])
+                                ])
                             ])
-                          ])
-                      ])
-                    ])
-                  ]
-              ),
-              bottomSlot
-                ? h('div', {
-                  class: 'vxe-table-export--panel-bottom'
-                }, $xeTable.callSlot(bottomSlot, params, h))
-                : renderEmptyElement($xeTable)
-            ])
+                          ]
+                        )
+                      ]
+                ),
+                bottomSlot
+                  ? h(
+                    'div',
+                    {
+                      class: 'vxe-table-export--panel-bottom'
+                    },
+                    $xeTable.callSlot(bottomSlot, params, h)
+                  )
+                  : renderEmptyElement($xeTable)
+              ]
+            )
           },
           footer: () => {
             const params = {
@@ -295,37 +323,52 @@ export default /* define-vxe-component start */ defineVxeComponent({
               options: defaultOptions,
               params: defaultOptions.params as any
             }
-            return h('div', {
-              class: 'vxe-table-export--panel-footer'
-            }, footerSlot
-              ? $xeTable.callSlot(footerSlot, params, h)
-              : [
-                  h('div', {
-                    class: 'vxe-table-export--panel-btns'
-                  }, [
-                    h('vxe-button', {
-                      on: {
-                        click: $xeImportPanel.cancelEvent
-                      }
-                    }, getI18n('vxe.import.impCancel')),
-                    h('vxe-button', {
-                      props: {
-                        status: 'primary',
-                        disabled: !hasFile || reactData.loading
+            return h(
+              'div',
+              {
+                class: 'vxe-table-export--panel-footer'
+              },
+              footerSlot
+                ? $xeTable.callSlot(footerSlot, params, h)
+                : [
+                    h(
+                      'div',
+                      {
+                        class: 'vxe-table-export--panel-btns'
                       },
-                      on: {
-                        click: $xeImportPanel.importEvent
-                      }
-                    }, getI18n('vxe.import.impConfirm'))
-                  ])
-                ]
+                      [
+                        h(
+                          'vxe-button',
+                          {
+                            on: {
+                              click: $xeImportPanel.cancelEvent
+                            }
+                          },
+                          getI18n('vxe.import.impCancel')
+                        ),
+                        h(
+                          'vxe-button',
+                          {
+                            props: {
+                              status: 'primary',
+                              disabled: !hasFile || reactData.loading
+                            },
+                            on: {
+                              click: $xeImportPanel.importEvent
+                            }
+                          },
+                          getI18n('vxe.import.impConfirm')
+                        )
+                      ]
+                    )
+                  ]
             )
           }
         }
       })
     }
   },
-  render (h: CreateElement) {
+  render(h: CreateElement) {
     return (this as any).renderVN(h)
   }
 }) /* define-vxe-component end */

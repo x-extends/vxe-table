@@ -4,7 +4,7 @@ const reClsMap: { [key: string]: any } = {}
 
 let tpImgEl: HTMLImageElement | undefined
 
-export function initTpImg () {
+export function initTpImg() {
   if (!tpImgEl) {
     tpImgEl = new Image()
     tpImgEl.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
@@ -12,25 +12,25 @@ export function initTpImg () {
   return tpImgEl
 }
 
-export function getTpImg () {
+export function getTpImg() {
   if (!tpImgEl) {
     return initTpImg()
   }
   return tpImgEl
 }
 
-export function getPropClass (property: any, params: any) {
+export function getPropClass(property: any, params: any) {
   return property ? (XEUtils.isFunction(property) ? property(params) : property) || '' : ''
 }
 
-function getClsRE (cls: any) {
+function getClsRE(cls: any) {
   if (!reClsMap[cls]) {
     reClsMap[cls] = new RegExp(`(?:^|\\s)${cls}(?!\\S)`, 'g')
   }
   return reClsMap[cls]
 }
 
-function getNodeOffset (elem: any, container: any, rest: any): any {
+function getNodeOffset(elem: any, container: any, rest: any): any {
   if (elem) {
     const parentElem = elem.parentNode
     rest.top += elem.offsetTop
@@ -46,15 +46,15 @@ function getNodeOffset (elem: any, container: any, rest: any): any {
   return rest
 }
 
-export function isPx (val: any) {
+export function isPx(val: any) {
   return val && /^\d+(\.\d+)?(px)?$/.test(val)
 }
 
-export function isScale (val: any) {
+export function isScale(val: any) {
   return val && /^\d+(\.\d+)?%$/.test(val)
 }
 
-export function hasClass (elem: any, cls: any) {
+export function hasClass(elem: any, cls: any) {
   if (elem) {
     if (elem.classList) {
       return elem.classList.contains(cls)
@@ -64,38 +64,38 @@ export function hasClass (elem: any, cls: any) {
   return false
 }
 
-export function removeClass (elem: any, cls: any) {
+export function removeClass(elem: any, cls: any) {
   if (elem && hasClass(elem, cls)) {
     elem.className = elem.className.replace(getClsRE(cls), '')
   }
 }
 
-export function addClass (elem: any, cls: string) {
+export function addClass(elem: any, cls: string) {
   if (elem && !hasClass(elem, cls)) {
     removeClass(elem, cls)
     elem.className = `${elem.className} ${cls}`
   }
 }
 
-export function hasControlKey (evnt: KeyboardEvent | MouseEvent | DragEvent) {
+export function hasControlKey(evnt: KeyboardEvent | MouseEvent | DragEvent) {
   return evnt.ctrlKey || evnt.metaKey
 }
 
-export function toCssUnit (val?: number | string, unit = 'px') {
+export function toCssUnit(val?: number | string, unit = 'px') {
   if (XEUtils.isNumber(val) || /^\d+$/.test(`${val}`)) {
     return `${val}${unit}`
   }
   return `${val || ''}`
 }
 
-export function queryElement (elem: HTMLTableCellElement, selector: string) {
+export function queryElement(elem: HTMLTableCellElement, selector: string) {
   if (elem) {
     return elem.querySelector<HTMLElement>(selector)
   }
   return null
 }
 
-export function getDomNode () {
+export function getDomNode() {
   const documentElement = document.documentElement
   const bodyElem = document.body
   return {
@@ -106,11 +106,11 @@ export function getDomNode () {
   }
 }
 
-export function getOffsetHeight (elem?: HTMLElement) {
+export function getOffsetHeight(elem?: HTMLElement) {
   return elem ? elem.offsetHeight : 0
 }
 
-export function getPaddingTopBottomSize (elem: HTMLElement) {
+export function getPaddingTopBottomSize(elem: HTMLElement) {
   if (elem) {
     const computedStyle = getComputedStyle(elem)
     const paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
@@ -120,13 +120,13 @@ export function getPaddingTopBottomSize (elem: HTMLElement) {
   return 0
 }
 
-export function setScrollTop (elem: HTMLElement | null | undefined, scrollTop: number) {
+export function setScrollTop(elem: HTMLElement | null | undefined, scrollTop: number) {
   if (elem) {
     elem.scrollTop = scrollTop
   }
 }
 
-export function setScrollLeft (elem: HTMLElement | null | undefined, scrollLeft: number) {
+export function setScrollLeft(elem: HTMLElement | null | undefined, scrollLeft: number) {
   if (elem) {
     elem.scrollLeft = scrollLeft
   }
@@ -139,14 +139,14 @@ export function setScrollLeft (elem: HTMLElement | null | undefined, scrollLeft:
 //   }
 // }
 
-export function updateCellTitle (overflowElem: any, column: any) {
+export function updateCellTitle(overflowElem: any, column: any) {
   const content = column.type === 'html' ? overflowElem.innerText : overflowElem.textContent
   if (overflowElem.getAttribute('title') !== content) {
     overflowElem.setAttribute('title', content)
   }
 }
 
-export function checkTargetElement (target: HTMLElement | EventTarget | null, exEls: (HTMLElement | null)[], endEl?: HTMLElement | EventTarget | null) {
+export function checkTargetElement(target: HTMLElement | EventTarget | null, exEls: (HTMLElement | null)[], endEl?: HTMLElement | EventTarget | null) {
   let targetEl = target
   if (!exEls || !exEls.length) {
     return false
@@ -167,9 +167,9 @@ export function checkTargetElement (target: HTMLElement | EventTarget | null, ex
 /**
  * 检查触发源是否属于目标节点
  */
-export function getEventTargetNode (evnt: any, container: any, queryCls?: string, queryMethod?: (target: Element) => boolean) {
+export function getEventTargetNode(evnt: any, container: any, queryCls?: string, queryMethod?: (target: Element) => boolean) {
   let targetElem
-  let target = (evnt.target.shadowRoot && evnt.composed) ? (evnt.composedPath()[0] || evnt.target) : evnt.target
+  let target = evnt.target.shadowRoot && evnt.composed ? evnt.composedPath()[0] || evnt.target : evnt.target
   while (target && target.nodeType && target !== document) {
     if (queryCls && hasClass(target, queryCls) && (!queryMethod || queryMethod(target))) {
       targetElem = target
@@ -184,11 +184,11 @@ export function getEventTargetNode (evnt: any, container: any, queryCls?: string
 /**
  * 获取元素相对于 document 的位置
  */
-export function getOffsetPos (elem: any, container: any) {
+export function getOffsetPos(elem: any, container: any) {
   return getNodeOffset(elem, container, { left: 0, top: 0 })
 }
 
-export function getAbsolutePos (elem: any) {
+export function getAbsolutePos(elem: any) {
   const bounding = elem.getBoundingClientRect()
   const boundingTop = bounding.top
   const boundingLeft = bounding.left
@@ -196,29 +196,29 @@ export function getAbsolutePos (elem: any) {
   return { boundingTop, top: scrollTop + boundingTop, boundingLeft, left: scrollLeft + boundingLeft, visibleHeight, visibleWidth }
 }
 
-export function hasEventInputTarget (target: EventTarget | Element | null) {
+export function hasEventInputTarget(target: EventTarget | Element | null) {
   const tagName = target ? (target as Element).tagName : ''
-  return tagName && ['input', 'textarea'].includes((tagName.toLowerCase()))
+  return tagName && ['input', 'textarea'].includes(tagName.toLowerCase())
 }
 
 /**
  * 判断是否由内部可复用控件触发，输入框带有 vxe-reusekeep-contro
  */
-function hasReusekeepControl (elem: EventTarget | HTMLElement | null) {
+function hasReusekeepControl(elem: EventTarget | HTMLElement | null) {
   if (elem) {
     return hasClass(elem as HTMLElement, 'vxe-reusekeep-contro')
   }
   return false
 }
 
-export function hasAxternalInputTarget (target: EventTarget | Element | null) {
+export function hasAxternalInputTarget(target: EventTarget | Element | null) {
   return hasEventInputTarget(target) ? !hasReusekeepControl(target) : false
 }
 
 const scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
 const scrollIntoView = 'scrollIntoView'
 
-export function scrollToView (elem: any) {
+export function scrollToView(elem: any) {
   if (elem) {
     if (elem[scrollIntoViewIfNeeded]) {
       elem[scrollIntoViewIfNeeded]()
@@ -228,18 +228,18 @@ export function scrollToView (elem: any) {
   }
 }
 
-export function triggerEvent (targetElem: Element, type: string) {
+export function triggerEvent(targetElem: Element, type: string) {
   if (targetElem) {
     targetElem.dispatchEvent(new Event(type))
   }
 }
 
-export function isNodeElement (elem: any): elem is HTMLElement {
+export function isNodeElement(elem: any): elem is HTMLElement {
   return elem && elem.nodeType === 1
 }
 
 let wtlFrame: any
-export function wheelScrollLeftTo (scrollLeft: number, cb: (offsetLeft: number) => void) {
+export function wheelScrollLeftTo(scrollLeft: number, cb: (offsetLeft: number) => void) {
   if (wtlFrame) {
     cancelAnimationFrame(wtlFrame)
   }
@@ -250,7 +250,7 @@ export function wheelScrollLeftTo (scrollLeft: number, cb: (offsetLeft: number) 
 }
 
 let wtaFrame: any
-export function wheelScrollTopTo (diffNum: number, cb: (progress: number) => void) {
+export function wheelScrollTopTo(diffNum: number, cb: (progress: number) => void) {
   if (wtaFrame) {
     cancelAnimationFrame(wtaFrame)
   }
@@ -275,13 +275,16 @@ interface PanelPlacementOptions {
 /**
  * 通用定位计算
  */
-export function updatePanelPlacement (targetElem: HTMLElement | null | undefined, panelElem: HTMLElement | null | undefined, options: PanelPlacementOptions) {
-  const { defaultTop, defaultLeft, placement, defaultPlacement, appendTo, teleportTo, marginSize, isMinWidth } = Object.assign({
-    appendTo: '',
-    teleportTo: false,
-    marginSize: 18,
-    isMinWidth: true
-  }, options)
+export function updatePanelPlacement(targetElem: HTMLElement | null | undefined, panelElem: HTMLElement | null | undefined, options: PanelPlacementOptions) {
+  const { defaultTop, defaultLeft, placement, defaultPlacement, appendTo, teleportTo, marginSize, isMinWidth } = Object.assign(
+    {
+      appendTo: '',
+      teleportTo: false,
+      marginSize: 18,
+      isMinWidth: true
+    },
+    options
+  )
   let panelPlacement: 'top' | 'bottom' = 'bottom'
   let top: number | '' = ''
   let bottom: number | '' = ''
@@ -314,8 +317,8 @@ export function updatePanelPlacement (targetElem: HTMLElement | null | undefined
       minWidth = targetElem.offsetWidth
 
       if (teleportTo) {
-        left = (defaultLeft || (targetLeft - (panelWidth - targetWidth) / 2)) - parentWrapperScrollLeft
-        top = (defaultTop || (targetTop + targetHeight)) - parentWrapperScrollTop
+        left = (defaultLeft || targetLeft - (panelWidth - targetWidth) / 2) - parentWrapperScrollLeft
+        top = (defaultTop || targetTop + targetHeight) - parentWrapperScrollTop
         if (placement === 'top') {
           panelPlacement = 'top'
           top = targetTop - panelHeight
@@ -401,9 +404,9 @@ export function updatePanelPlacement (targetElem: HTMLElement | null | undefined
         }
       } else if (left < targetLeft) {
         if (left + panelWidth > targetLeft + targetWidth) {
-          arrowLeft = (targetLeft - left) + targetWidth / 2
+          arrowLeft = targetLeft - left + targetWidth / 2
         } else {
-          arrowLeft = (targetLeft - left) + (panelWidth - (targetLeft - left)) / 2
+          arrowLeft = targetLeft - left + (panelWidth - (targetLeft - left)) / 2
         }
       }
     }
@@ -418,7 +421,7 @@ export function updatePanelPlacement (targetElem: HTMLElement | null | undefined
   }
 }
 
-export function getPopupWrapperElement (panelElem: HTMLElement | null | undefined) {
+export function getPopupWrapperElement(panelElem: HTMLElement | null | undefined) {
   if (!panelElem) {
     return null
   }
@@ -427,12 +430,12 @@ export function getPopupWrapperElement (panelElem: HTMLElement | null | undefine
   return (parentEl === bodyEl ? document.documentElement : parentEl) || null
 }
 
-export function getPopupContainer (appendTo: string | HTMLElement | ((params: any) => string | HTMLElement) | undefined) {
+export function getPopupContainer(appendTo: string | HTMLElement | ((params: any) => string | HTMLElement) | undefined) {
   const selectElem = appendTo && XEUtils.isFunction(appendTo) ? appendTo({}) : appendTo
   return selectElem || 'body'
 }
 
-export function getPopupAppendElement (appendTo: string | HTMLElement | ((params: any) => string | HTMLElement) | undefined) {
+export function getPopupAppendElement(appendTo: string | HTMLElement | ((params: any) => string | HTMLElement) | undefined) {
   const selectElem = getPopupContainer(appendTo)
   if (XEUtils.isString(selectElem)) {
     return document.querySelector<HTMLElement>(selectElem) || document.body

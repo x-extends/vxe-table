@@ -1,6 +1,6 @@
 import { PropType, CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
-import { VxeUI } from '../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { defineVxeComponent } from '../../ui/src/comp'
 import { getClass, getDefaultConfig } from '../../ui/src/utils'
 import { updateCellTitle } from '../../ui/src/dom'
@@ -13,7 +13,7 @@ const renderType = 'footer'
 
 const { renderer, renderEmptyElement } = VxeUI
 
-function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) {
+function renderRows(h: CreateElement, _vm: any, isOptimizeMode: boolean, tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) {
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
@@ -42,16 +42,16 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
     const colid = column.id
     const colRest = fullColumnIdData[colid] || {}
     const renderOpts = editRender || cellRender
-    const compConf = renderOpts && renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
+    const compConf = renderOpts && renderOpts.name ? rendererOpts[renderOpts.name] || renderer.get(renderOpts.name) : null
     const showAllTip = footerTooltipOpts.showAll
     const fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
 
     const cellPadding = getDefaultConfig(footerCellOpts.padding, cellOpts.padding)
     const isAllCellPadding = cellPadding === true
-    const isCellPaddingTop = cellPadding ? (isAllCellPadding || cellPadding.top !== false) : false
-    const isCellPaddingBottom = cellPadding ? (isAllCellPadding || cellPadding.bottom !== false) : false
-    const isCellPaddingLeft = cellPadding ? (isAllCellPadding || cellPadding.left !== false) : false
-    const isCellPaddingRight = cellPadding ? (isAllCellPadding || cellPadding.right !== false) : false
+    const isCellPaddingTop = cellPadding ? isAllCellPadding || cellPadding.top !== false : false
+    const isCellPaddingBottom = cellPadding ? isAllCellPadding || cellPadding.bottom !== false : false
+    const isCellPaddingLeft = cellPadding ? isAllCellPadding || cellPadding.left !== false : false
+    const isCellPaddingRight = cellPadding ? isAllCellPadding || cellPadding.right !== false : false
 
     const footOverflow = getDefaultConfig(showFooterOverflow, allColumnFooterOverflow)
     const footAlign = footerAlign || (compConf ? compConf.tableFooterCellAlign : '') || allFooterAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
@@ -59,7 +59,7 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
     const showTitle = (footOverflow === true ? footerTooltipOpts.mode : footOverflow) === 'title'
     const showTooltip = (footOverflow === true ? footerTooltipOpts.mode : footOverflow) === 'tooltip'
     const hasEllipsis = showTitle || showTooltip || showEllipsis
-    const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
+    const showResizable = XEUtils.isBoolean(column.resizable) ? column.resizable : columnOpts.resizable || allResizable
     const attrs: any = { colid }
     const tfOns: any = {}
     const columnIndex = colRest.index
@@ -156,61 +156,85 @@ function renderRows (h: CreateElement, _vm: any, isOptimizeMode: boolean, tableC
       tcStyle.minHeight = `${currCellHeight}px`
     }
 
-    return h('td', {
-      class: ['vxe-table--column vxe-footer--column', column.id, {
-        [`col--${footAlign}`]: footAlign,
-        [`col--${type}`]: type,
-        'col--last': isLastColumn,
-        'fixed--width': !isAutoCellWidth,
-        'fixed--hidden': fixedHiddenColumn,
-        'is--pg-top': isCellPaddingTop,
-        'is--pg-bottom': isCellPaddingBottom,
-        'is--pg-left': isCellPaddingLeft,
-        'is--pg-right': isCellPaddingRight,
-        'col--ellipsis': hasEllipsis,
-        'col--current': currColFlag && currentCol === column
-      }, getClass(footerClassName, cellParams), getClass(footerCellClassName, cellParams)],
-      attrs,
-      style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(cellParams) : footerCellStyle) as VxeComponentStyleType : undefined,
-      on: tfOns,
-      key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag ? column.id : $columnIndex
-    }, [
-      h('div', {
-        class: ['vxe-cell', {
-          'c--title': showTitle,
-          'c--tooltip': showTooltip,
-          'c--ellipsis': showEllipsis
-        }],
-        style: tcStyle
-      }, isVNPreEmptyStatus
-        ? []
-        : [
-            h('div', {
-              attrs: {
-                colid
-              },
-              class: 'vxe-cell--wrapper vxe-footer-cell--wrapper'
-            }, column.renderFooter(h, cellParams))
-          ]),
-      /**
-       * 列宽拖动
-       */
-      !fixedHiddenColumn && showResizable && isAllColumnDrag
-        ? h('div', {
-          class: ['vxe-cell--col-resizable', {
-            'is--line': !border || border === 'none'
-          }],
-          on: {
-            mousedown: (evnt: MouseEvent) => $xeTable.handleColResizeMousedownEvent(evnt, fixedType, cellParams),
-            dblclick: (evnt: MouseEvent) => $xeTable.handleColResizeDblclickEvent(evnt, cellParams)
-          }
-        })
-        : renderEmptyElement($xeTable)
-    ])
+    return h(
+      'td',
+      {
+        class: [
+          'vxe-table--column vxe-footer--column',
+          column.id,
+          {
+            [`col--${footAlign}`]: footAlign,
+            [`col--${type}`]: type,
+            'col--last': isLastColumn,
+            'fixed--width': !isAutoCellWidth,
+            'fixed--hidden': fixedHiddenColumn,
+            'is--pg-top': isCellPaddingTop,
+            'is--pg-bottom': isCellPaddingBottom,
+            'is--pg-left': isCellPaddingLeft,
+            'is--pg-right': isCellPaddingRight,
+            'col--ellipsis': hasEllipsis,
+            'col--current': currColFlag && currentCol === column
+          },
+          getClass(footerClassName, cellParams),
+          getClass(footerCellClassName, cellParams)
+        ],
+        attrs,
+        style: footerCellStyle ? ((XEUtils.isFunction(footerCellStyle) ? footerCellStyle(cellParams) : footerCellStyle) as VxeComponentStyleType) : undefined,
+        on: tfOns,
+        key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag ? column.id : $columnIndex
+      },
+      [
+        h(
+          'div',
+          {
+            class: [
+              'vxe-cell',
+              {
+                'c--title': showTitle,
+                'c--tooltip': showTooltip,
+                'c--ellipsis': showEllipsis
+              }
+            ],
+            style: tcStyle
+          },
+          isVNPreEmptyStatus
+            ? []
+            : [
+                h(
+                  'div',
+                  {
+                    attrs: {
+                      colid
+                    },
+                    class: 'vxe-cell--wrapper vxe-footer-cell--wrapper'
+                  },
+                  column.renderFooter(h, cellParams)
+                )
+              ]
+        ),
+        /**
+         * 列宽拖动
+         */
+        !fixedHiddenColumn && showResizable && isAllColumnDrag
+          ? h('div', {
+            class: [
+              'vxe-cell--col-resizable',
+              {
+                'is--line': !border || border === 'none'
+              }
+            ],
+            on: {
+              mousedown: (evnt: MouseEvent) => $xeTable.handleColResizeMousedownEvent(evnt, fixedType, cellParams),
+              dblclick: (evnt: MouseEvent) => $xeTable.handleColResizeDblclickEvent(evnt, cellParams)
+            }
+          })
+          : renderEmptyElement($xeTable)
+      ]
+    )
   })
 }
 
-function renderHeads (h: CreateElement, _vm: any, isOptimizeMode: boolean, renderColumnList: VxeTableDefines.ColumnInfo[]) {
+function renderHeads(h: CreateElement, _vm: any, isOptimizeMode: boolean, renderColumnList: VxeTableDefines.ColumnInfo[]) {
   const props = _vm
   const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
   const tableProps = $xeTable
@@ -223,14 +247,15 @@ function renderHeads (h: CreateElement, _vm: any, isOptimizeMode: boolean, rende
     const $rowIndex = _rowIndex
     const rowParams = { $table: $xeTable, row, rowIndex: _rowIndex, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
 
-    return h('tr', {
-      key: _rowIndex,
-      class: [
-        'vxe-footer--row',
-        footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''
-      ],
-      style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) as VxeComponentStyleType : undefined
-    }, renderRows(h, _vm, isOptimizeMode, renderColumnList, footerTableData, row, _rowIndex, _rowIndex))
+    return h(
+      'tr',
+      {
+        key: _rowIndex,
+        class: ['vxe-footer--row', footerRowClassName ? (XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName) : ''],
+        style: footerRowStyle ? ((XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) as VxeComponentStyleType) : undefined
+      },
+      renderRows(h, _vm, isOptimizeMode, renderColumnList, footerTableData, row, _rowIndex, _rowIndex)
+    )
   })
 }
 
@@ -254,7 +279,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       default: null
     }
   },
-  mounted () {
+  mounted() {
     const _vm = this
     const props = _vm
     const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
@@ -270,7 +295,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     elemStore[`${prefix}list`] = _vm.$refs.refFooterTFoot
     elemStore[`${prefix}xSpace`] = _vm.$refs.refFooterXSpace
   },
-  destroyed () {
+  destroyed() {
     const _vm = this
     const props = _vm
     const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
@@ -286,7 +311,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     elemStore[`${prefix}list`] = null
     elemStore[`${prefix}xSpace`] = null
   },
-  render (h: CreateElement) {
+  render(h: CreateElement) {
     const _vm = this as any
     const props = _vm
     const $xeTable = _vm.$parent as VxeTableConstructor & VxeTablePrivateMethods
@@ -338,63 +363,83 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }
     }
 
-    return h('div', {
-      ref: 'refElem',
-      class: ['vxe-table--footer-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
-      attrs: {
-        xid: xID
-      }
-    }, [
-      h('div', {
-        ref: 'refFooterScroll',
-        class: 'vxe-table--footer-inner-wrapper',
-        on: {
-          scroll (evnt: Event) {
-            $xeTable.triggerFooterScrollEvent(evnt, fixedType)
-          }
+    return h(
+      'div',
+      {
+        ref: 'refElem',
+        class: ['vxe-table--footer-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
+        attrs: {
+          xid: xID
         }
-      }, [
-        fixedType
-          ? renderEmptyElement($xeTable)
-          : h('div', {
-            ref: 'refFooterXSpace',
-            class: 'vxe-body--x-space'
-          }),
-        h('table', {
-          ref: 'refFooterTable',
-          class: 'vxe-table--footer',
-          attrs: {
-            xid: xID,
-            cellspacing: 0,
-            cellpadding: 0,
-            border: 0,
-            xvm: isOptimizeMode ? '1' : null
-          }
-        }, [
-        /**
-         * 列宽
-         */
-          h('colgroup', {
-            ref: 'refFooterColgroup'
-          }, renderColumnList.map((column, $columnIndex) => {
-            return h('col', {
-              attrs: {
-                name: column.id
-              },
-              key: $columnIndex,
-              style: {
-                width: `${column.renderWidth}px`
+      },
+      [
+        h(
+          'div',
+          {
+            ref: 'refFooterScroll',
+            class: 'vxe-table--footer-inner-wrapper',
+            on: {
+              scroll(evnt: Event) {
+                $xeTable.triggerFooterScrollEvent(evnt, fixedType)
               }
-            })
-          })),
-          /**
-         * 底部
-         */
-          h('tfoot', {
-            ref: 'refFooterTFoot'
-          }, renderHeads(h, _vm, isOptimizeMode, renderColumnList))
-        ])
-      ])
-    ])
+            }
+          },
+          [
+            fixedType
+              ? renderEmptyElement($xeTable)
+              : h('div', {
+                ref: 'refFooterXSpace',
+                class: 'vxe-body--x-space'
+              }),
+            h(
+              'table',
+              {
+                ref: 'refFooterTable',
+                class: 'vxe-table--footer',
+                attrs: {
+                  xid: xID,
+                  cellspacing: 0,
+                  cellpadding: 0,
+                  border: 0,
+                  xvm: isOptimizeMode ? '1' : null
+                }
+              },
+              [
+                /**
+                 * 列宽
+                 */
+                h(
+                  'colgroup',
+                  {
+                    ref: 'refFooterColgroup'
+                  },
+                  renderColumnList.map((column, $columnIndex) => {
+                    return h('col', {
+                      attrs: {
+                        name: column.id
+                      },
+                      key: $columnIndex,
+                      style: {
+                        width: `${column.renderWidth}px`
+                      }
+                    })
+                  })
+                ),
+                /**
+                 * 底部
+                 */
+                h(
+                  'tfoot',
+                  {
+                    ref: 'refFooterTFoot'
+                  },
+                  renderHeads(h, _vm, isOptimizeMode, renderColumnList)
+                )
+              ]
+            )
+          ]
+        )
+      ]
+    )
   }
 }) /* define-vxe-component end */
