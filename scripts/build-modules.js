@@ -269,11 +269,14 @@ async function buildDistStyle () {
   }
 
   await Promise.all([
+    fsp.mkdir(ES_DIR, { recursive: true }),
     fsp.mkdir(DIST_DIR, { recursive: true }),
     fsp.mkdir(LIB_DIR, { recursive: true })
   ])
 
   await Promise.all([
+    fsp.writeFile(path.join(ES_DIR, 'style.css'), css),
+    fsp.writeFile(path.join(ES_DIR, 'style.mini.css'), cssMin),
     fsp.writeFile(path.join(DIST_DIR, 'style.css'), css),
     fsp.writeFile(path.join(DIST_DIR, 'style.mini.css'), cssMin),
     fsp.writeFile(path.join(LIB_DIR, 'style.css'), css),
