@@ -1,9 +1,9 @@
 import { App } from 'vue'
-import { VxeUI } from '../ui'
+import { VxeUI } from '@vxe-ui/core'
 import VxeGridComponent from './src/grid'
 
 export const VxeGrid = Object.assign({}, VxeGridComponent, {
-  install (app: App) {
+  install(app: App) {
     app.component(VxeGridComponent.name as string, VxeGridComponent)
   }
 })

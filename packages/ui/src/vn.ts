@@ -3,11 +3,11 @@ import XEUtils from 'xe-utils'
 import type { VxeGlobalRendererHandles } from 'vxe-pc-ui'
 import type { VxeComponentSlotType } from '../../../types'
 
-export function getOnName (type: string) {
+export function getOnName(type: string) {
   return 'on' + type.substring(0, 1).toLocaleUpperCase() + type.substring(1)
 }
 
-export function getModelEvent (renderOpts: VxeGlobalRendererHandles.RenderOptions) {
+export function getModelEvent(renderOpts: VxeGlobalRendererHandles.RenderOptions) {
   switch (renderOpts.name) {
     case 'input':
     case 'textarea':
@@ -18,7 +18,7 @@ export function getModelEvent (renderOpts: VxeGlobalRendererHandles.RenderOption
   return 'update:modelValue'
 }
 
-export function getChangeEvent (renderOpts: VxeGlobalRendererHandles.RenderOptions) {
+export function getChangeEvent(renderOpts: VxeGlobalRendererHandles.RenderOptions) {
   switch (renderOpts.name) {
     case 'input':
     case 'textarea':
@@ -32,7 +32,7 @@ export function getChangeEvent (renderOpts: VxeGlobalRendererHandles.RenderOptio
   return 'change'
 }
 
-export function hasInputType (renderOpts: VxeGlobalRendererHandles.RenderOptions) {
+export function hasInputType(renderOpts: VxeGlobalRendererHandles.RenderOptions) {
   switch (renderOpts.name) {
     case 'VxeInput':
     case 'VxeNumberInput':
@@ -44,7 +44,7 @@ export function hasInputType (renderOpts: VxeGlobalRendererHandles.RenderOptions
   return false
 }
 
-export function getSlotVNs (vns: VxeComponentSlotType | VxeComponentSlotType[]) {
+export function getSlotVNs(vns: VxeComponentSlotType | VxeComponentSlotType[]) {
   if (vns === null || vns === undefined) {
     return []
   }

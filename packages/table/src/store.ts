@@ -9,6 +9,6 @@ export const crossTableDragRowInfo: CrossTableDragRowObj = reactive({
   row: null
 })
 
-export function getCrossTableDragRowInfo () {
+export function getCrossTableDragRowInfo() {
   return crossTableDragRowInfo
 }

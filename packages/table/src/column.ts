@@ -148,7 +148,7 @@ export const columnProps = {
 export default defineVxeComponent({
   name: 'VxeColumn',
   props: columnProps,
-  setup (props, { slots }) {
+  setup(props, { slots }) {
     const refElem = ref<HTMLDivElement>()
     const $xeTable = inject<(VxeTableConstructor & VxeTablePrivateMethods) | null>('$xeTable', null)
     const $xeColgroup = inject<XEColumnInstance | null>('$xeColgroup', null)

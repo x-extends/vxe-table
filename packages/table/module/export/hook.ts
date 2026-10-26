@@ -1,6 +1,6 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { VxeUI } from '../../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { isColumnInfo, getCellValue, createHandleGetRowId } from '../../src/util'
 import { parseFile, formatText, eqEmptyValue, hasEnableConf } from '../../../ui/src/utils'
 import { hasClass, toCssUnit } from '../../../ui/src/dom'
@@ -18,7 +18,7 @@ let htmlCellElem: any
 const csvBOM = '\ufeff'
 const enterSymbol = '\r\n'
 
-function defaultFilterExportColumn (column: VxeTableDefines.ColumnInfo) {
+function defaultFilterExportColumn(column: VxeTableDefines.ColumnInfo) {
   return !!column.field || ['seq', 'checkbox', 'radio'].indexOf(column.type || '') === -1
 }
 
@@ -80,7 +80,7 @@ const convertToRows = (originColumns: any): any[][] => {
   return rows
 }
 
-function toTableBorder (border: VxeTablePropTypes.Border | undefined) {
+function toTableBorder(border: VxeTablePropTypes.Border | undefined) {
   if (border === true) {
     return 'full'
   }
@@ -90,11 +90,11 @@ function toTableBorder (border: VxeTablePropTypes.Border | undefined) {
   return 'default'
 }
 
-function getBooleanValue (cellValue: any) {
+function getBooleanValue(cellValue: any) {
   return cellValue === 'TRUE' || cellValue === 'true' || cellValue === true
 }
 
-function getFooterData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, footerTableData: any[]) {
+function getFooterData($xeTable: VxeTableConstructor & VxeTablePrivateMethods, opts: VxeTablePropTypes.ExportHandleOptions, footerTableData: any[]) {
   const $xeGrid = $xeTable.xeGrid
   const $xeGantt = $xeTable.xeGantt
 
@@ -102,7 +102,7 @@ function getFooterData ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, 
   return footerFilterMethod ? footerTableData.filter((items, index) => footerFilterMethod({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, items, $rowIndex: index })) : footerTableData
 }
 
-function getCsvCellTypeLabel (column: any, cellValue: any) {
+function getCsvCellTypeLabel(column: any, cellValue: any) {
   if (cellValue) {
     if (column.type === 'seq') {
       return `\t${cellValue}`
@@ -125,34 +125,37 @@ function getCsvCellTypeLabel (column: any, cellValue: any) {
   return cellValue
 }
 
-function toTxtCellLabel (val: any) {
+function toTxtCellLabel(val: any) {
   if (/[",\s\n]/.test(val)) {
     return `"${val.replace(/"/g, '""')}"`
   }
   return XEUtils.eqNull(val) ? '' : val
 }
 
-function getElementsByTagName (elem: any, qualifiedName: any) {
+function getElementsByTagName(elem: any, qualifiedName: any) {
   return elem.getElementsByTagName(qualifiedName) as HTMLElement[]
 }
 
-function getTxtCellKey (now: number) {
+function getTxtCellKey(now: number) {
   return `#${now}@${XEUtils.uniqueId()}`
 }
 
-function replaceTxtCell (cell: any, vMaps: any) {
-  return cell.replace(/#\d+@\d+/g, (key: any) => XEUtils.hasOwnProp(vMaps, key) ? vMaps[key] : key)
+function replaceTxtCell(cell: any, vMaps: any) {
+  return cell.replace(/#\d+@\d+/g, (key: any) => (XEUtils.hasOwnProp(vMaps, key) ? vMaps[key] : key))
 }
 
-function getTxtCellValue (val: any, vMaps: any) {
+function getTxtCellValue(val: any, vMaps: any) {
   const rest = replaceTxtCell(val, vMaps)
   return rest.replace(/^"+$/g, (qVal: any) => '"'.repeat(Math.ceil(qVal.length / 2)))
 }
 
-function toExportField (tableConf: {
-  fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
-  titleMaps: Record<string, VxeTableDefines.ColumnInfo>
-}, field: string) {
+function toExportField(
+  tableConf: {
+    fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
+    titleMaps: Record<string, VxeTableDefines.ColumnInfo>
+  },
+  field: string
+) {
   const { fieldMaps, titleMaps } = tableConf
   // title 转 field
   if (!fieldMaps[field]) {
@@ -164,10 +167,14 @@ function toExportField (tableConf: {
   return field
 }
 
-function parseCsvAndTxt (tableConf: {
-  fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
-  titleMaps: Record<string, VxeTableDefines.ColumnInfo>
-}, content: string, cellSeparator: string) {
+function parseCsvAndTxt(
+  tableConf: {
+    fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
+    titleMaps: Record<string, VxeTableDefines.ColumnInfo>
+  },
+  content: string,
+  cellSeparator: string
+) {
   const list = content.split(enterSymbol)
   const rows: any[] = []
   let fields: string[] = []
@@ -177,15 +184,17 @@ function parseCsvAndTxt (tableConf: {
     list.forEach((rVal) => {
       if (rVal) {
         const item: any = {}
-        rVal = rVal.replace(/("")|(\n)/g, (text: string, dVal: string) => {
-          const key = getTxtCellKey(now)
-          vMaps[key] = dVal ? '"' : '\n'
-          return key
-        }).replace(/"(.*?)"/g, (text: string, cVal: string) => {
-          const key = getTxtCellKey(now)
-          vMaps[key] = replaceTxtCell(cVal, vMaps)
-          return key
-        })
+        rVal = rVal
+          .replace(/("")|(\n)/g, (text: string, dVal: string) => {
+            const key = getTxtCellKey(now)
+            vMaps[key] = dVal ? '"' : '\n'
+            return key
+          })
+          .replace(/"(.*?)"/g, (text: string, cVal: string) => {
+            const key = getTxtCellKey(now)
+            vMaps[key] = replaceTxtCell(cVal, vMaps)
+            return key
+          })
         const cells: string[] = rVal.split(cellSeparator)
         if (!fields.length) {
           fields = cells.map((val: string) => toExportField(tableConf, getTxtCellValue(val.trim(), vMaps)))
@@ -203,24 +212,33 @@ function parseCsvAndTxt (tableConf: {
   return { fields, rows }
 }
 
-function parseCsv (tableConf: {
-  fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
-  titleMaps: Record<string, VxeTableDefines.ColumnInfo>
-}, content: string) {
+function parseCsv(
+  tableConf: {
+    fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
+    titleMaps: Record<string, VxeTableDefines.ColumnInfo>
+  },
+  content: string
+) {
   return parseCsvAndTxt(tableConf, content, ',')
 }
 
-function parseTxt (tableConf: {
-  fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
-  titleMaps: Record<string, VxeTableDefines.ColumnInfo>
-}, content: string) {
+function parseTxt(
+  tableConf: {
+    fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
+    titleMaps: Record<string, VxeTableDefines.ColumnInfo>
+  },
+  content: string
+) {
   return parseCsvAndTxt(tableConf, content, '\t')
 }
 
-function parseHTML (tableConf: {
-  fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
-  titleMaps: Record<string, VxeTableDefines.ColumnInfo>
-}, content: string) {
+function parseHTML(
+  tableConf: {
+    fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
+    titleMaps: Record<string, VxeTableDefines.ColumnInfo>
+  },
+  content: string
+) {
   const domParser = new DOMParser()
   const xmlDoc = domParser.parseFromString(content, 'text/html')
   const bodyNodes = getElementsByTagName(xmlDoc, 'body')
@@ -231,14 +249,14 @@ function parseHTML (tableConf: {
     if (tableNodes.length) {
       const theadNodes = getElementsByTagName(tableNodes[0], 'thead')
       if (theadNodes.length) {
-        XEUtils.arrayEach(getElementsByTagName(theadNodes[0], 'tr'), rowNode => {
-          XEUtils.arrayEach(getElementsByTagName(rowNode, 'th'), cellNode => {
+        XEUtils.arrayEach(getElementsByTagName(theadNodes[0], 'tr'), (rowNode) => {
+          XEUtils.arrayEach(getElementsByTagName(rowNode, 'th'), (cellNode) => {
             fields.push(toExportField(tableConf, cellNode.textContent || ''))
           })
         })
         const tbodyNodes = getElementsByTagName(tableNodes[0], 'tbody')
         if (tbodyNodes.length) {
-          XEUtils.arrayEach(getElementsByTagName(tbodyNodes[0], 'tr'), rowNode => {
+          XEUtils.arrayEach(getElementsByTagName(tbodyNodes[0], 'tr'), (rowNode) => {
             const item: any = {}
             XEUtils.arrayEach(getElementsByTagName(rowNode, 'td'), (cellNode, colIndex) => {
               if (fields[colIndex]) {
@@ -254,10 +272,13 @@ function parseHTML (tableConf: {
   return { fields, rows }
 }
 
-function parseXML (tableConf: {
-  fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
-  titleMaps: Record<string, VxeTableDefines.ColumnInfo>
-}, content: string) {
+function parseXML(
+  tableConf: {
+    fieldMaps: Record<string, VxeTableDefines.ColumnInfo>
+    titleMaps: Record<string, VxeTableDefines.ColumnInfo>
+  },
+  content: string
+) {
   const domParser = new DOMParser()
   const xmlDoc = domParser.parseFromString(content, 'application/xml')
   const sheetNodes = getElementsByTagName(xmlDoc, 'Worksheet')
@@ -268,7 +289,7 @@ function parseXML (tableConf: {
     if (tableNodes.length) {
       const rowNodes = getElementsByTagName(tableNodes[0], 'Row')
       if (rowNodes.length) {
-        XEUtils.arrayEach(getElementsByTagName(rowNodes[0], 'Cell'), cellNode => {
+        XEUtils.arrayEach(getElementsByTagName(rowNodes[0], 'Cell'), (cellNode) => {
           fields.push(toExportField(tableConf, cellNode.textContent || ''))
         })
         XEUtils.arrayEach(rowNodes, (rowNode, index) => {
@@ -289,20 +310,24 @@ function parseXML (tableConf: {
   return { fields, rows }
 }
 
-function clearColumnConvert (columns: any) {
-  XEUtils.eachTree(columns, (column: any) => {
-    delete column._level
-    delete column._colSpan
-    delete column._rowSpan
-    delete column._children
-    delete column.childNodes
-  }, { children: 'children' })
+function clearColumnConvert(columns: any) {
+  XEUtils.eachTree(
+    columns,
+    (column: any) => {
+      delete column._level
+      delete column._colSpan
+      delete column._rowSpan
+      delete column._children
+      delete column.childNodes
+    },
+    { children: 'children' }
+  )
 }
 
 const tableExportMethodKeys: (keyof TableExportMethods)[] = ['exportData', 'importByFile', 'importData', 'saveFile', 'readFile', 'print', 'getPrintHtml', 'openImport', 'closeImport', 'openExport', 'closeExport', 'openPrint', 'closePrint']
 
 hooks.add('tableExportModule', {
-  setupTable ($xeTable) {
+  setupTable($xeTable) {
     const { props, reactData, internalData } = $xeTable
     const { computeTreeOpts, computePrintOpts, computeExportOpts, computeImportOpts, computeSeqOpts, computeRadioOpts, computeCheckboxOpts, computeColumnOpts, computeAggregateOpts, computeRendererOpts } = $xeTable.getComputeMaps()
 
@@ -325,10 +350,10 @@ hooks.add('tableExportModule', {
       return cellValue
     }
 
-    function getHeaderTitle (opts: VxeTablePropTypes.ExportHandleOptions, column: VxeTableDefines.ColumnInfo) {
+    function getHeaderTitle(opts: VxeTablePropTypes.ExportHandleOptions, column: VxeTableDefines.ColumnInfo) {
       const columnOpts = computeColumnOpts.value
       const headExportMethod = column.headerExportMethod || columnOpts.headerExportMethod
-      return headExportMethod ? headExportMethod({ column, options: opts, $table: $xeTable }) : ((opts.isTitle ? $xeTable.getHeaderCellLabel(column) : column.field) || '')
+      return headExportMethod ? headExportMethod({ column, options: opts, $table: $xeTable }) : (opts.isTitle ? $xeTable.getHeaderCellLabel(column) : column.field) || ''
     }
 
     const toBooleanValue = (cellValue: any) => {
@@ -360,137 +385,141 @@ hooks.add('tableExportModule', {
         const rest: any[] = []
         const expandMaps: Record<string, boolean> = {}
         const useMaps: Record<string, boolean> = {}
-        XEUtils.eachTree(datas, (item, $rowIndex, items, path, parentItem, nodes) => {
-          const row = item._row || item
-          const rowid = handleGetRowId(row)
-          if (useMaps[rowid]) {
-            return
-          }
-          const parentRow = parentItem && parentItem._row ? parentItem._row : parentItem
-          const pRowid = parentRow ? handleGetRowId(parentRow) : ''
-          if ((isRowGroupAllExpanded || !parentRow || (expandMaps[pRowid] && $xeTable.isRowExpandByRow(parentRow)))) {
-            const hasRowChild = mapChildrenField && row[mapChildrenField] && row[mapChildrenField].length
-            const item: any = {
-              _row: row,
-              _level: nodes.length - 1,
-              _hasChild: hasRowChild,
-              _expand: hasRowChild && $xeTable.isRowExpandByRow(row)
+        XEUtils.eachTree(
+          datas,
+          (item, $rowIndex, items, path, parentItem, nodes) => {
+            const row = item._row || item
+            const rowid = handleGetRowId(row)
+            if (useMaps[rowid]) {
+              return
             }
-            columns.forEach((column, $columnIndex) => {
-              const { field, editRender, cellRender, aggFunc, rowGroupNode } = column
-              let cellValue: string | number | boolean | null = ''
-              const renderOpts = editRender || cellRender
-              let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
-              if (!bodyExportMethod && renderOpts && renderOpts.name) {
-                const compConf = rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)
-                if (compConf) {
-                  bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
+            const parentRow = parentItem && parentItem._row ? parentItem._row : parentItem
+            const pRowid = parentRow ? handleGetRowId(parentRow) : ''
+            if (isRowGroupAllExpanded || !parentRow || (expandMaps[pRowid] && $xeTable.isRowExpandByRow(parentRow))) {
+              const hasRowChild = mapChildrenField && row[mapChildrenField] && row[mapChildrenField].length
+              const item: any = {
+                _row: row,
+                _level: nodes.length - 1,
+                _hasChild: hasRowChild,
+                _expand: hasRowChild && $xeTable.isRowExpandByRow(row)
+              }
+              columns.forEach((column, $columnIndex) => {
+                const { field, editRender, cellRender, aggFunc, rowGroupNode } = column
+                let cellValue: string | number | boolean | null = ''
+                const renderOpts = editRender || cellRender
+                let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
+                if (!bodyExportMethod && renderOpts && renderOpts.name) {
+                  const compConf = rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)
+                  if (compConf) {
+                    bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
+                  }
                 }
-              }
-              if (!bodyExportMethod) {
-                bodyExportMethod = columnOpts.exportMethod
-              }
-              if (bodyExportMethod) {
-                cellValue = bodyExportMethod({ $table: $xeTable, row, column, options: opts })
-              } else {
-                switch (column.type) {
-                  case 'seq': {
-                    const seqVal = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
-                    cellValue = expMode === 'all' ? seqVal : getSeq(seqVal, row, $rowIndex, column, $columnIndex)
-                    break
-                  }
-                  case 'checkbox': {
-                    cellValue = toBooleanValue($xeTable.isCheckedByCheckboxRow(row))
-                    item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
-                    item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ $table: $xeTable, row })
-                    break
-                  }
-                  case 'radio': {
-                    cellValue = toBooleanValue($xeTable.isCheckedByRadioRow(row))
-                    item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
-                    item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ $table: $xeTable, row })
-                    break
-                  }
-                  default: {
-                    if (field && row.isAggregate) {
-                      const aggRow: VxeTableDefines.AggregateRowInfo = row
-                      const aggData = aggRow.aggData
-                      const currAggData = aggData ? aggData[field] : null
-                      const groupField = aggRow.groupField
-                      const groupContent = aggRow.groupContent
-                      const childList = mapChildrenField ? (aggRow[mapChildrenField] || []) : []
-                      const childCount = aggRow.childCount
-                      const colRest = fullColumnFieldData[groupField] || {}
-                      const ctParams = {
-                        $table: $xeTable,
-                        groupField,
-                        groupColumn: (colRest ? colRest.column : null) as VxeTableDefines.ColumnInfo,
-                        column,
-                        groupValue: groupContent,
-                        childList,
-                        childCount,
-                        aggValue: null as any,
-
-                        /**
-                         * 已废弃
-                         * @deprecated
-                         */
-                        children: childList,
-                        /**
-                         * 已废弃
-                         * @deprecated
-                         */
-                        totalValue: childCount
-                      }
-                      if (aggMode === 'column' ? field === aggRow.groupField : rowGroupNode) {
-                        cellValue = groupContent
-                        if (contentMethod) {
-                          cellValue = `${contentMethod(ctParams)}`
-                        }
-                        if (showTotal) {
-                          cellValue = getI18n('vxe.table.rowGroupContentTotal', [cellValue, totalMethod ? totalMethod(ctParams) : childCount, childCount])
-                        }
-                      } else if ($xeTable.getPivotTableAggregateCellAggValue) {
-                        const aggParams = {
-                          $table: $xeTable,
-                          row,
-                          column
-                        }
-                        cellValue = $xeTable.getPivotTableAggregateCellAggValue(aggParams)
-                      } else if (aggFunc === true || (countFields && countFields.includes(field))) {
-                        cellValue = currAggData ? currAggData.value : childCount
-                        ctParams.aggValue = cellValue
-                        if (formatValuesMethod) {
-                          cellValue = formatValuesMethod(ctParams)
-                        }
-                      }
-                    } else if (opts.original) {
-                      cellValue = getCellValue(row, column)
-                    } else {
-                      cellValue = $xeTable.getCellLabel(row, column)
-                      if (column.type === 'html') {
-                        htmlCellElem.innerHTML = cellValue
-                        cellValue = htmlCellElem.innerText.trim()
-                      } else {
-                        const cell = $xeTable.getCellElement(row, column)
-                        if (cell && !hasClass(cell, 'is--progress')) {
-                          cellValue = cell.innerText.trim()
-                        }
-                      }
+                if (!bodyExportMethod) {
+                  bodyExportMethod = columnOpts.exportMethod
+                }
+                if (bodyExportMethod) {
+                  cellValue = bodyExportMethod({ $table: $xeTable, row, column, options: opts })
+                } else {
+                  switch (column.type) {
+                    case 'seq': {
+                      const seqVal = path.map((num, i) => (i % 2 === 0 ? Number(num) + 1 : '.')).join('')
+                      cellValue = expMode === 'all' ? seqVal : getSeq(seqVal, row, $rowIndex, column, $columnIndex)
+                      break
                     }
-                    break
+                    case 'checkbox': {
+                      cellValue = toBooleanValue($xeTable.isCheckedByCheckboxRow(row))
+                      item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
+                      item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ $table: $xeTable, row })
+                      break
+                    }
+                    case 'radio': {
+                      cellValue = toBooleanValue($xeTable.isCheckedByRadioRow(row))
+                      item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
+                      item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ $table: $xeTable, row })
+                      break
+                    }
+                    default: {
+                      if (field && row.isAggregate) {
+                        const aggRow: VxeTableDefines.AggregateRowInfo = row
+                        const aggData = aggRow.aggData
+                        const currAggData = aggData ? aggData[field] : null
+                        const groupField = aggRow.groupField
+                        const groupContent = aggRow.groupContent
+                        const childList = mapChildrenField ? aggRow[mapChildrenField] || [] : []
+                        const childCount = aggRow.childCount
+                        const colRest = fullColumnFieldData[groupField] || {}
+                        const ctParams = {
+                          $table: $xeTable,
+                          groupField,
+                          groupColumn: (colRest ? colRest.column : null) as VxeTableDefines.ColumnInfo,
+                          column,
+                          groupValue: groupContent,
+                          childList,
+                          childCount,
+                          aggValue: null as any,
+
+                          /**
+                           * 已废弃
+                           * @deprecated
+                           */
+                          children: childList,
+                          /**
+                           * 已废弃
+                           * @deprecated
+                           */
+                          totalValue: childCount
+                        }
+                        if (aggMode === 'column' ? field === aggRow.groupField : rowGroupNode) {
+                          cellValue = groupContent
+                          if (contentMethod) {
+                            cellValue = `${contentMethod(ctParams)}`
+                          }
+                          if (showTotal) {
+                            cellValue = getI18n('vxe.table.rowGroupContentTotal', [cellValue, totalMethod ? totalMethod(ctParams) : childCount, childCount])
+                          }
+                        } else if ($xeTable.getPivotTableAggregateCellAggValue) {
+                          const aggParams = {
+                            $table: $xeTable,
+                            row,
+                            column
+                          }
+                          cellValue = $xeTable.getPivotTableAggregateCellAggValue(aggParams)
+                        } else if (aggFunc === true || (countFields && countFields.includes(field))) {
+                          cellValue = currAggData ? currAggData.value : childCount
+                          ctParams.aggValue = cellValue
+                          if (formatValuesMethod) {
+                            cellValue = formatValuesMethod(ctParams)
+                          }
+                        }
+                      } else if (opts.original) {
+                        cellValue = getCellValue(row, column)
+                      } else {
+                        cellValue = $xeTable.getCellLabel(row, column)
+                        if (column.type === 'html') {
+                          htmlCellElem.innerHTML = cellValue
+                          cellValue = htmlCellElem.innerText.trim()
+                        } else {
+                          const cell = $xeTable.getCellElement(row, column)
+                          if (cell && !hasClass(cell, 'is--progress')) {
+                            cellValue = cell.innerText.trim()
+                          }
+                        }
+                      }
+                      break
+                    }
                   }
                 }
+                item[column.id] = toStringValue(cellValue)
+              })
+              useMaps[rowid] = true
+              if (pRowid) {
+                expandMaps[pRowid] = true
               }
-              item[column.id] = toStringValue(cellValue)
-            })
-            useMaps[rowid] = true
-            if (pRowid) {
-              expandMaps[pRowid] = true
+              rest.push(Object.assign(item, row))
             }
-            rest.push(Object.assign(item, row))
-          }
-        }, { children: mapChildrenField })
+          },
+          { children: mapChildrenField }
+        )
         return rest
       }
       if (treeConfig) {
@@ -500,84 +529,88 @@ hooks.add('tableExportModule', {
         const rest: any[] = []
         const expandMaps: Record<string, boolean> = {}
         const useMaps: Record<string, boolean> = {}
-        XEUtils.eachTree(datas, (item, $rowIndex, items, path, parentItem, nodes) => {
-          const row = item._row || item
-          const rowid = handleGetRowId(row)
-          if (useMaps[rowid]) {
-            return
-          }
-          const parentRow = parentItem && parentItem._row ? parentItem._row : parentItem
-          const pRowid = parentRow ? handleGetRowId(parentRow) : ''
-          if ((isTreeAllExpanded || !parentRow || (expandMaps[pRowid] && $xeTable.isTreeExpandByRow(parentRow)))) {
-            const hasRowChild = row[childrenField] && row[childrenField].length
-            const item: any = {
-              _row: row,
-              _level: nodes.length - 1,
-              _hasChild: hasRowChild,
-              _expand: hasRowChild && $xeTable.isTreeExpandByRow(row)
+        XEUtils.eachTree(
+          datas,
+          (item, $rowIndex, items, path, parentItem, nodes) => {
+            const row = item._row || item
+            const rowid = handleGetRowId(row)
+            if (useMaps[rowid]) {
+              return
             }
-            const rowRest = fullAllDataRowIdData[rowid] || {}
-            columns.forEach((column, $columnIndex) => {
-              let cellValue: string | number | boolean | null = ''
-              const renderOpts = column.editRender || column.cellRender
-              let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
-              if (!bodyExportMethod && renderOpts && renderOpts.name) {
-                const compConf = rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)
-                if (compConf) {
-                  bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
-                }
+            const parentRow = parentItem && parentItem._row ? parentItem._row : parentItem
+            const pRowid = parentRow ? handleGetRowId(parentRow) : ''
+            if (isTreeAllExpanded || !parentRow || (expandMaps[pRowid] && $xeTable.isTreeExpandByRow(parentRow))) {
+              const hasRowChild = row[childrenField] && row[childrenField].length
+              const item: any = {
+                _row: row,
+                _level: nodes.length - 1,
+                _hasChild: hasRowChild,
+                _expand: hasRowChild && $xeTable.isTreeExpandByRow(row)
               }
-              if (!bodyExportMethod) {
-                bodyExportMethod = columnOpts.exportMethod
-              }
-              if (bodyExportMethod) {
-                cellValue = bodyExportMethod({ $table: $xeTable, row, column, options: opts })
-              } else {
-                switch (column.type) {
-                  case 'seq': {
-                    let seqVal: number | string = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
-                    if (seqMode === 'increasing') {
-                      seqVal = rowRest ? (rowRest._index + 1) : -1
-                    }
-                    cellValue = expMode === 'all' ? seqVal : getSeq(seqVal, row, $rowIndex, column, $columnIndex)
-                    break
+              const rowRest = fullAllDataRowIdData[rowid] || {}
+              columns.forEach((column, $columnIndex) => {
+                let cellValue: string | number | boolean | null = ''
+                const renderOpts = column.editRender || column.cellRender
+                let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
+                if (!bodyExportMethod && renderOpts && renderOpts.name) {
+                  const compConf = rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)
+                  if (compConf) {
+                    bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
                   }
-                  case 'checkbox':
-                    cellValue = toBooleanValue($xeTable.isCheckedByCheckboxRow(row))
-                    item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
-                    item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ $table: $xeTable, row })
-                    break
-                  case 'radio':
-                    cellValue = toBooleanValue($xeTable.isCheckedByRadioRow(row))
-                    item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
-                    item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ $table: $xeTable, row })
-                    break
-                  default:
-                    if (opts.original) {
-                      cellValue = getCellValue(row, column)
-                    } else {
-                      cellValue = $xeTable.getCellLabel(row, column)
-                      if (column.type === 'html') {
-                        htmlCellElem.innerHTML = cellValue
-                        cellValue = htmlCellElem.innerText.trim()
+                }
+                if (!bodyExportMethod) {
+                  bodyExportMethod = columnOpts.exportMethod
+                }
+                if (bodyExportMethod) {
+                  cellValue = bodyExportMethod({ $table: $xeTable, row, column, options: opts })
+                } else {
+                  switch (column.type) {
+                    case 'seq': {
+                      let seqVal: number | string = path.map((num, i) => (i % 2 === 0 ? Number(num) + 1 : '.')).join('')
+                      if (seqMode === 'increasing') {
+                        seqVal = rowRest ? rowRest._index + 1 : -1
+                      }
+                      cellValue = expMode === 'all' ? seqVal : getSeq(seqVal, row, $rowIndex, column, $columnIndex)
+                      break
+                    }
+                    case 'checkbox':
+                      cellValue = toBooleanValue($xeTable.isCheckedByCheckboxRow(row))
+                      item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
+                      item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ $table: $xeTable, row })
+                      break
+                    case 'radio':
+                      cellValue = toBooleanValue($xeTable.isCheckedByRadioRow(row))
+                      item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
+                      item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ $table: $xeTable, row })
+                      break
+                    default:
+                      if (opts.original) {
+                        cellValue = getCellValue(row, column)
                       } else {
-                        const cell = $xeTable.getCellElement(row, column)
-                        if (cell && !hasClass(cell, 'is--progress')) {
-                          cellValue = cell.innerText.trim()
+                        cellValue = $xeTable.getCellLabel(row, column)
+                        if (column.type === 'html') {
+                          htmlCellElem.innerHTML = cellValue
+                          cellValue = htmlCellElem.innerText.trim()
+                        } else {
+                          const cell = $xeTable.getCellElement(row, column)
+                          if (cell && !hasClass(cell, 'is--progress')) {
+                            cellValue = cell.innerText.trim()
+                          }
                         }
                       }
-                    }
+                  }
                 }
+                item[column.id] = toStringValue(cellValue)
+              })
+              useMaps[rowid] = true
+              if (pRowid) {
+                expandMaps[pRowid] = true
               }
-              item[column.id] = toStringValue(cellValue)
-            })
-            useMaps[rowid] = true
-            if (pRowid) {
-              expandMaps[pRowid] = true
+              rest.push(Object.assign(item, row))
             }
-            rest.push(Object.assign(item, row))
-          }
-        }, { children: childrenField })
+          },
+          { children: childrenField }
+        )
         return rest
       }
       return datas.map((row, $rowIndex) => {
@@ -737,7 +770,7 @@ hooks.add('tableExportModule', {
 
       const customWidthMaps: Record<string, number | string> = {}
       if (_columnConfs) {
-        _columnConfs.forEach(conf => {
+        _columnConfs.forEach((conf) => {
           if (!isColumnInfo(conf)) {
             if ((conf.field || conf.type) && conf.width) {
               customWidthMaps[getCustomColKey(conf)] = conf.width
@@ -751,7 +784,7 @@ hooks.add('tableExportModule', {
       const printWidthMaps: Record<string, number> = {}
       if (isPrint) {
         let tableWidth = 0
-        columns.forEach(column => {
+        columns.forEach((column) => {
           tableWidth += column.renderWidth
         })
         if (colgroups) {
@@ -762,25 +795,29 @@ hooks.add('tableExportModule', {
               }
               let childWidth = 0
               let countChild = 0
-              XEUtils.eachTree([column], item => {
-                if (!item.childNodes || !column.childNodes.length) {
-                  countChild++
-                }
-                const ptWidth = printWidthMaps[item.id]
-                childWidth += ptWidth || 0
-              }, { children: 'childNodes' })
+              XEUtils.eachTree(
+                [column],
+                (item) => {
+                  if (!item.childNodes || !column.childNodes.length) {
+                    countChild++
+                  }
+                  const ptWidth = printWidthMaps[item.id]
+                  childWidth += ptWidth || 0
+                },
+                { children: 'childNodes' }
+              )
               const colWidth = childWidth - countChild
               colWidthMaps[column.id] = colWidth
-              printWidthMaps[column.id] = XEUtils.floor(colWidth / tableWidth * 180, 2)
+              printWidthMaps[column.id] = XEUtils.floor((colWidth / tableWidth) * 180, 2)
             })
           })
         }
-        columns.forEach(column => {
+        columns.forEach((column) => {
           const colWidth = column.renderWidth
           if (column.width) {
             colWidthMaps[column.id] = colWidth
           }
-          printWidthMaps[column.id] = XEUtils.floor(colWidth / tableWidth * 180, 2)
+          printWidthMaps[column.id] = XEUtils.floor((colWidth / tableWidth) * 180, 2)
         })
       }
 
@@ -794,9 +831,9 @@ hooks.add('tableExportModule', {
           return ''
         }
         if (isScaleWidth) {
-          return printWidthMaps[column.id] ? ('width:' + printWidthMaps[column.id] + 'mm') : ''
+          return printWidthMaps[column.id] ? 'width:' + printWidthMaps[column.id] + 'mm' : ''
         }
-        return colWidthMaps[column.id] ? ('width:' + toCssUnit(colWidthMaps[column.id])) : ''
+        return colWidthMaps[column.id] ? 'width:' + toCssUnit(colWidthMaps[column.id]) : ''
       }
 
       const getCellWidthStyle = (column: VxeTableDefines.ColumnInfo) => {
@@ -809,31 +846,39 @@ hooks.add('tableExportModule', {
           return ''
         }
         if (isScaleWidth) {
-          return printWidthMaps[column.id] ? ('width:' + printWidthMaps[column.id] + 'mm') : ''
+          return printWidthMaps[column.id] ? 'width:' + printWidthMaps[column.id] + 'mm' : ''
         }
-        return colWidthMaps[column.id] ? ('width:' + toCssUnit(colWidthMaps[column.id])) : ''
+        return colWidthMaps[column.id] ? 'width:' + toCssUnit(colWidthMaps[column.id]) : ''
       }
 
       const allCls = 'check-all'
-      const clss = [
-        'vxe-table',
-        `border--${toTableBorder(border)}`,
-        isPrint ? 'is--print' : '',
-        isAutoWidth ? 'is--auto-width' : '',
-        isScaleWidth ? 'is--scale-width' : '',
-        isDefaultWidth ? 'is--default-width' : '',
-        isHeader ? 'is--header' : ''
-      ].filter(cls => cls)
-      const tables = [
-        `<table class="${clss.join(' ')}" border="0" cellspacing="0" cellpadding="0">`,
-        `<colgroup>${columns.map((column) => `<col style="${getHeaderWidthStyle(column)}">`).join('')}</colgroup>`
-      ]
+      const clss = ['vxe-table', `border--${toTableBorder(border)}`, isPrint ? 'is--print' : '', isAutoWidth ? 'is--auto-width' : '', isScaleWidth ? 'is--scale-width' : '', isDefaultWidth ? 'is--default-width' : '', isHeader ? 'is--header' : ''].filter((cls) => cls)
+      const tables = [`<table class="${clss.join(' ')}" border="0" cellspacing="0" cellpadding="0">`, `<colgroup>${columns.map((column) => `<col style="${getHeaderWidthStyle(column)}">`).join('')}</colgroup>`]
       if (isHeader) {
         tables.push('<thead>')
         if (isColgroup && !original) {
           colgroups.forEach((cols) => {
             tables.push(
-              `<tr>${cols.map((column: any) => {
+              `<tr>${cols
+                .map((column: any) => {
+                  const headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
+                  const classNames = hasEllipsis(column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
+                  const cellTitle = getHeaderTitle(opts, column)
+                  if (headAlign) {
+                    classNames.push(`col--${headAlign}`)
+                  }
+                  if (column.type === 'checkbox') {
+                    return `<th class="${classNames.join(' ')}" colspan="${column._colSpan}" rowspan="${column._rowSpan}"><div style="${getCellWidthStyle(column)}"><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></th>`
+                  }
+                  return `<th class="${classNames.join(' ')}" colspan="${column._colSpan}" rowspan="${column._rowSpan}" title="${cellTitle}"><div style="${getCellWidthStyle(column)}"><span>${formatText(cellTitle, true)}</span></div></th>`
+                })
+                .join('')}</tr>`
+            )
+          })
+        } else {
+          tables.push(
+            `<tr>${columns
+              .map((column: any) => {
                 const headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
                 const classNames = hasEllipsis(column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
                 const cellTitle = getHeaderTitle(opts, column)
@@ -841,26 +886,11 @@ hooks.add('tableExportModule', {
                   classNames.push(`col--${headAlign}`)
                 }
                 if (column.type === 'checkbox') {
-                  return `<th class="${classNames.join(' ')}" colspan="${column._colSpan}" rowspan="${column._rowSpan}"><div style="${getCellWidthStyle(column)}"><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></th>`
+                  return `<th class="${classNames.join(' ')}"><div style="${getCellWidthStyle(column)}"><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></th>`
                 }
-                return `<th class="${classNames.join(' ')}" colspan="${column._colSpan}" rowspan="${column._rowSpan}" title="${cellTitle}"><div style="${getCellWidthStyle(column)}"><span>${formatText(cellTitle, true)}</span></div></th>`
-              }).join('')}</tr>`
-            )
-          })
-        } else {
-          tables.push(
-            `<tr>${columns.map((column: any) => {
-              const headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
-              const classNames = hasEllipsis(column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
-              const cellTitle = getHeaderTitle(opts, column)
-              if (headAlign) {
-                classNames.push(`col--${headAlign}`)
-              }
-              if (column.type === 'checkbox') {
-                return `<th class="${classNames.join(' ')}"><div style="${getCellWidthStyle(column)}"><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></th>`
-              }
-              return `<th class="${classNames.join(' ')}" title="${cellTitle}"><div style="${getCellWidthStyle(column)}"><span>${formatText(cellTitle, true)}</span></div></th>`
-            }).join('')}</tr>`
+                return `<th class="${classNames.join(' ')}" title="${cellTitle}"><div style="${getCellWidthStyle(column)}"><span>${formatText(cellTitle, true)}</span></div></th>`
+              })
+              .join('')}</tr>`
           )
         }
         tables.push('</thead>')
@@ -870,72 +900,80 @@ hooks.add('tableExportModule', {
         if (treeConfig) {
           datas.forEach((item: any) => {
             tables.push(
-              '<tr>' + columns.map((column: any) => {
-                const colid = column.id
-                const cellAlign = column.align || allAlign
-                const classNames = hasEllipsis(column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-                const cellValue = item[colid]
-                if (cellAlign) {
-                  classNames.push(`col--${cellAlign}`)
-                }
-                if (column.treeNode) {
-                  let treeIcon = ''
-                  if (item._hasChild) {
-                    treeIcon = `<i class="${item._expand ? 'vxe-table--tree-fold-icon' : 'vxe-table--tree-unfold-icon'}"></i>`
-                  }
-                  classNames.push('vxe-table--tree-node')
-                  if (column.type === 'radio') {
-                    return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></div></div></td>`
-                  } else if (column.type === 'checkbox') {
-                    return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></div></div></td>`
-                  }
-                  return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell">${cellValue}</div></div></div></td>`
-                }
-                if (column.type === 'radio') {
-                  return `<td class="${classNames.join(' ')}"><div style="${getCellWidthStyle(column)}"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></td>`
-                } else if (column.type === 'checkbox') {
-                  return `<td class="${classNames.join(' ')}"><div style="${getCellWidthStyle(column)}"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
-                }
-                return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}">${formatText(cellValue, true)}</div></td>`
-              }).join('') + '</tr>'
+              '<tr>' +
+                columns
+                  .map((column: any) => {
+                    const colid = column.id
+                    const cellAlign = column.align || allAlign
+                    const classNames = hasEllipsis(column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+                    const cellValue = item[colid]
+                    if (cellAlign) {
+                      classNames.push(`col--${cellAlign}`)
+                    }
+                    if (column.treeNode) {
+                      let treeIcon = ''
+                      if (item._hasChild) {
+                        treeIcon = `<i class="${item._expand ? 'vxe-table--tree-fold-icon' : 'vxe-table--tree-unfold-icon'}"></i>`
+                      }
+                      classNames.push('vxe-table--tree-node')
+                      if (column.type === 'radio') {
+                        return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></div></div></td>`
+                      } else if (column.type === 'checkbox') {
+                        return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></div></div></td>`
+                      }
+                      return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell">${cellValue}</div></div></div></td>`
+                    }
+                    if (column.type === 'radio') {
+                      return `<td class="${classNames.join(' ')}"><div style="${getCellWidthStyle(column)}"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></td>`
+                    } else if (column.type === 'checkbox') {
+                      return `<td class="${classNames.join(' ')}"><div style="${getCellWidthStyle(column)}"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
+                    }
+                    return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}">${formatText(cellValue, true)}</div></td>`
+                  })
+                  .join('') +
+                '</tr>'
             )
           })
         } else {
           datas.forEach((item) => {
             tables.push(
-              '<tr>' + columns.map((column) => {
-                const cellAlign = column.align || allAlign
-                const classNames = hasEllipsis(column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-                const cellValue = item[column.id]
-                let rowSpan = 1
-                let colSpan = 1
-                if (isMerge) {
-                  const _rowIndex = $xeTable.getVTRowIndex(item._row)
-                  const _columnIndex = $xeTable.getVTColumnIndex(column)
-                  const spanRest = mergeBodyCellMaps[`${_rowIndex}:${_columnIndex}`]
-                  if (spanRest) {
-                    const { rowspan, colspan } = spanRest
-                    if (!rowspan || !colspan) {
-                      return ''
+              '<tr>' +
+                columns
+                  .map((column) => {
+                    const cellAlign = column.align || allAlign
+                    const classNames = hasEllipsis(column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+                    const cellValue = item[column.id]
+                    let rowSpan = 1
+                    let colSpan = 1
+                    if (isMerge) {
+                      const _rowIndex = $xeTable.getVTRowIndex(item._row)
+                      const _columnIndex = $xeTable.getVTColumnIndex(column)
+                      const spanRest = mergeBodyCellMaps[`${_rowIndex}:${_columnIndex}`]
+                      if (spanRest) {
+                        const { rowspan, colspan } = spanRest
+                        if (!rowspan || !colspan) {
+                          return ''
+                        }
+                        if (rowspan > 1) {
+                          rowSpan = rowspan
+                        }
+                        if (colspan > 1) {
+                          colSpan = colspan
+                        }
+                      }
                     }
-                    if (rowspan > 1) {
-                      rowSpan = rowspan
+                    if (cellAlign) {
+                      classNames.push(`col--${cellAlign}`)
                     }
-                    if (colspan > 1) {
-                      colSpan = colspan
+                    if (column.type === 'radio') {
+                      return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}"><div style="${getCellWidthStyle(column)}"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></td>`
+                    } else if (column.type === 'checkbox') {
+                      return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}"><div style="${getCellWidthStyle(column)}"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
                     }
-                  }
-                }
-                if (cellAlign) {
-                  classNames.push(`col--${cellAlign}`)
-                }
-                if (column.type === 'radio') {
-                  return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}"><div style="${getCellWidthStyle(column)}"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></td>`
-                } else if (column.type === 'checkbox') {
-                  return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}"><div style="${getCellWidthStyle(column)}"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
-                }
-                return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}" title="${cellValue}"><div style="${getCellWidthStyle(column)}">${formatText(cellValue, true)}</div></td>`
-              }).join('') + '</tr>'
+                    return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}" title="${cellValue}"><div style="${getCellWidthStyle(column)}">${formatText(cellValue, true)}</div></td>`
+                  })
+                  .join('') +
+                '</tr>'
             )
           })
         }
@@ -948,34 +986,36 @@ hooks.add('tableExportModule', {
           tables.push('<tfoot>')
           footers.forEach((row, rIndex) => {
             tables.push(
-              `<tr>${columns.map((column) => {
-                const footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
-                const classNames = hasEllipsis(column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-                const cellValue = getFooterCellValue(opts, row, column)
-                let rowSpan = 1
-                let colSpan = 1
-                if (isMerge) {
-                  const _rowIndex = rIndex
-                  const _columnIndex = $xeTable.getVTColumnIndex(column)
-                  const spanRest = mergeFooterCellMaps[`${_rowIndex}:${_columnIndex}`]
-                  if (spanRest) {
-                    const { rowspan, colspan } = spanRest
-                    if (!rowspan || !colspan) {
-                      return ''
-                    }
-                    if (rowspan > 1) {
-                      rowSpan = rowspan
-                    }
-                    if (colspan > 1) {
-                      colSpan = colspan
+              `<tr>${columns
+                .map((column) => {
+                  const footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
+                  const classNames = hasEllipsis(column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+                  const cellValue = getFooterCellValue(opts, row, column)
+                  let rowSpan = 1
+                  let colSpan = 1
+                  if (isMerge) {
+                    const _rowIndex = rIndex
+                    const _columnIndex = $xeTable.getVTColumnIndex(column)
+                    const spanRest = mergeFooterCellMaps[`${_rowIndex}:${_columnIndex}`]
+                    if (spanRest) {
+                      const { rowspan, colspan } = spanRest
+                      if (!rowspan || !colspan) {
+                        return ''
+                      }
+                      if (rowspan > 1) {
+                        rowSpan = rowspan
+                      }
+                      if (colspan > 1) {
+                        colSpan = colspan
+                      }
                     }
                   }
-                }
-                if (footAlign) {
-                  classNames.push(`col--${footAlign}`)
-                }
-                return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}" title="${cellValue}"><div style="${getCellWidthStyle(column)}">${formatText(cellValue, true)}</div></td>`
-              }).join('')}</tr>`
+                  if (footAlign) {
+                    classNames.push(`col--${footAlign}`)
+                  }
+                  return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}" title="${cellValue}"><div style="${getCellWidthStyle(column)}">${formatText(cellValue, true)}</div></td>`
+                })
+                .join('')}</tr>`
             )
           })
           tables.push('</tfoot>')
@@ -1061,7 +1101,7 @@ hooks.add('tableExportModule', {
       const $xeGantt = $xeTable.xeGantt
 
       const { remote, columns, colgroups, exportMethod, afterExportMethod } = opts
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         if (remote) {
           const params = { options: opts, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt }
           resolve(exportMethod ? exportMethod(params) : params)
@@ -1073,31 +1113,33 @@ hooks.add('tableExportModule', {
             })
           )
         }
-      }).then((params: any) => {
-        clearColumnConvert(columns)
-        if (!opts.print) {
-          if (afterExportMethod) {
-            afterExportMethod({ status: true, options: opts, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
-          }
-        }
-        return Object.assign({ status: true }, params)
-      }).catch(() => {
-        clearColumnConvert(columns)
-        if (!opts.print) {
-          if (afterExportMethod) {
-            afterExportMethod({ status: false, options: opts, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
-          }
-        }
-        const params = { status: false }
-        return Promise.reject(params)
       })
+        .then((params: any) => {
+          clearColumnConvert(columns)
+          if (!opts.print) {
+            if (afterExportMethod) {
+              afterExportMethod({ status: true, options: opts, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
+            }
+          }
+          return Object.assign({ status: true }, params)
+        })
+        .catch(() => {
+          clearColumnConvert(columns)
+          if (!opts.print) {
+            if (afterExportMethod) {
+              afterExportMethod({ status: false, options: opts, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt })
+            }
+          }
+          const params = { status: false }
+          return Promise.reject(params)
+        })
     }
 
     const handleImport = (content: any, opts: any) => {
       const { tableFullColumn, _importResolve, _importReject } = internalData
       let rest: {
-        fields: string[];
-        rows: any[];
+        fields: string[]
+        rows: any[]
       } = { fields: [], rows: [] }
       const tableFieldMaps: Record<string, VxeTableDefines.ColumnInfo> = {}
       const tableTitleMaps: Record<string, VxeTableDefines.ColumnInfo> = {}
@@ -1130,29 +1172,28 @@ hooks.add('tableExportModule', {
           break
       }
       const { fields, rows } = rest
-      const status = fields.some(field => tableFieldMaps[field] || tableTitleMaps[field])
+      const status = fields.some((field) => tableFieldMaps[field] || tableTitleMaps[field])
       if (status) {
-        $xeTable.createData(rows)
-          .then((data: any) => {
-            let loadRest
-            if (opts.mode === 'insert' || opts.mode === 'insertBottom') {
-              loadRest = $xeTable.insertAt(data, -1)
-            } else if (opts.mode === 'insertTop') {
-              loadRest = $xeTable.insert(data)
-            } else {
-              loadRest = $xeTable.reloadData(data)
+        $xeTable.createData(rows).then((data: any) => {
+          let loadRest
+          if (opts.mode === 'insert' || opts.mode === 'insertBottom') {
+            loadRest = $xeTable.insertAt(data, -1)
+          } else if (opts.mode === 'insertTop') {
+            loadRest = $xeTable.insert(data)
+          } else {
+            loadRest = $xeTable.reloadData(data)
+          }
+          if (opts.message !== false) {
+            if (VxeUI.modal) {
+              VxeUI.modal.message({ content: getI18n('vxe.table.impSuccess', [rows.length]), status: 'success' })
             }
-            if (opts.message !== false) {
-              if (VxeUI.modal) {
-                VxeUI.modal.message({ content: getI18n('vxe.table.impSuccess', [rows.length]), status: 'success' })
-              }
+          }
+          return loadRest.then(() => {
+            if (_importResolve) {
+              _importResolve({ status: true })
             }
-            return loadRest.then(() => {
-              if (_importResolve) {
-                _importResolve({ status: true })
-              }
-            })
           })
+        })
       } else if (opts.message !== false) {
         if (VxeUI.modal) {
           VxeUI.modal.message({ content: getI18n('vxe.error.impFields'), status: 'error' })
@@ -1196,11 +1237,13 @@ hooks.add('tableExportModule', {
           const options = Object.assign({ mode: 'insertTop' }, opts, { type, filename })
           if (options.remote) {
             if (importMethod) {
-              Promise.resolve(importMethod({ file, options, $table: $xeTable })).then(() => {
-                _importResolve({ status: true })
-              }).catch(() => {
-                _importResolve({ status: true })
-              })
+              Promise.resolve(importMethod({ file, options, $table: $xeTable }))
+                .then(() => {
+                  _importResolve({ status: true })
+                })
+                .catch(() => {
+                  _importResolve({ status: true })
+                })
             } else {
               _importResolve({ status: true })
             }
@@ -1225,16 +1268,18 @@ hooks.add('tableExportModule', {
         }
       })
 
-      return rest.then(() => {
-        if (afterImportMethod) {
-          afterImportMethod({ status: true, options: opts, $table: $xeTable })
-        }
-      }).catch((e) => {
-        if (afterImportMethod) {
-          afterImportMethod({ status: false, options: opts, $table: $xeTable })
-        }
-        return Promise.reject(e)
-      })
+      return rest
+        .then(() => {
+          if (afterImportMethod) {
+            afterImportMethod({ status: true, options: opts, $table: $xeTable })
+          }
+        })
+        .catch((e) => {
+          if (afterImportMethod) {
+            afterImportMethod({ status: false, options: opts, $table: $xeTable })
+          }
+          return Promise.reject(e)
+        })
     }
 
     const handleFilterColumns = (exportOpts: VxeTablePropTypes.ExportConfig, column: VxeTableDefines.ColumnInfo, columns: VxeTableDefines.ColumnInfo[] | VxeTablePropTypes.ExportOrPrintColumnOption[]) => {
@@ -1291,20 +1336,23 @@ hooks.add('tableExportModule', {
       const hasTree = !!treeConfig
       const hasRowGroup = rowGroupList.length > 0
       const selectRecords = $xeTable.getCheckboxRecords()
-      const proxyOpts = $xeGGWrapper ? $xeGGWrapper.getComputeMaps().computeProxyOpts.value : {} as VxeGridPropTypes.ProxyOpts
+      const proxyOpts = $xeGGWrapper ? $xeGGWrapper.getComputeMaps().computeProxyOpts.value : ({} as VxeGridPropTypes.ProxyOpts)
       const hasFooter = !!footerTableData.length
       const hasMerge = !!(mergeBodyList.length || mergeFooterList.length)
-      const defOpts = Object.assign({
-        message: true,
-        isHeader: showHeader,
-        isTitle: showHeader,
-        isFooter: showFooter,
-        isColgroup: isGroup,
-        isMerge: hasMerge,
-        useStyle: true,
-        current: 'current',
-        modes: (proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : []).concat(['current', 'selected', 'empty'])
-      }, options)
+      const defOpts = Object.assign(
+        {
+          message: true,
+          isHeader: showHeader,
+          isTitle: showHeader,
+          isFooter: showFooter,
+          isColgroup: isGroup,
+          isMerge: hasMerge,
+          useStyle: true,
+          current: 'current',
+          modes: (proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : []).concat(['current', 'selected', 'empty'])
+        },
+        options
+      )
 
       // 已废弃，参数 isAllExpand
       if (XEUtils.isBoolean((defOpts as any).isAllExpand)) {
@@ -1312,7 +1360,7 @@ hooks.add('tableExportModule', {
         defOpts.isTreeAllExpanded = (defOpts as any).isAllExpand
       }
 
-      const types: string[] = isPrint ? [] : (defOpts.types || XEUtils.keys(exportOpts._typeMaps))
+      const types: string[] = isPrint ? [] : defOpts.types || XEUtils.keys(exportOpts._typeMaps)
       const modes: string[] = defOpts.modes || []
       const checkMethod = (isPrint ? printOpts : exportOpts).checkMethod
       const exportColumns = collectColumn.slice(0)
@@ -1339,19 +1387,19 @@ hooks.add('tableExportModule', {
 
       const excludeFdMaps: Record<string, number> = {}
       if (excludeFields && excludeFields.length) {
-        excludeFields.forEach(field => {
+        excludeFields.forEach((field) => {
           excludeFdMaps[field] = 1
         })
       }
       const includeFdMaps: Record<string, number> = {}
       if (includeFields && includeFields.length) {
-        includeFields.forEach(field => {
+        includeFields.forEach((field) => {
           includeFdMaps[field] = 1
         })
       }
       const extraFdMaps: Record<string, number> = {}
       if (extraFields) {
-        extraFields.forEach(field => {
+        extraFields.forEach((field) => {
           extraFdMaps[field] = 1
         })
       }
@@ -1389,9 +1437,13 @@ hooks.add('tableExportModule', {
       exportStore.hasColgroup = isGroup
       exportStore.visible = true
       // 默认参数
-      Object.assign(exportParams, {
-        mode: selectRecords.length ? 'selected' : 'current'
-      }, defOpts)
+      Object.assign(
+        exportParams,
+        {
+          mode: selectRecords.length ? 'selected' : 'current'
+        },
+        defOpts
+      )
       const { filename, sheetName, mode, type } = exportParams
       if (filename) {
         if (XEUtils.isFunction(filename)) {
@@ -1417,10 +1469,10 @@ hooks.add('tableExportModule', {
           exportParams.sheetName = `${sheetName}`
         }
       }
-      if (!modeList.some(item => item.value === mode)) {
+      if (!modeList.some((item) => item.value === mode)) {
         exportParams.mode = modeList.length ? modeList[0].value : ''
       }
-      if (!typeList.some(item => item.value === type)) {
+      if (!typeList.some((item) => item.value === type)) {
         exportParams.type = typeList.length ? typeList[0].value : ''
       }
       if (!exportParams.widthMode) {
@@ -1444,7 +1496,7 @@ hooks.add('tableExportModule', {
        * 如果是启用了虚拟滚动，则只能导出数据源，可以配合 dataFilterMethod 函数转换数据
        * @param {Object} options 参数
        */
-      exportData (options) {
+      exportData(options) {
         const $xeGrid = $xeTable.xeGrid
         const $xeGantt = $xeTable.xeGantt
         const $xeGGWrapper = $xeGrid || $xeGantt
@@ -1454,34 +1506,38 @@ hooks.add('tableExportModule', {
         const { tableFullColumn, afterFullData, afterTreeFullData, collectColumn, mergeBodyList, mergeFooterList } = internalData
         const exportOpts = computeExportOpts.value
         const treeOpts = computeTreeOpts.value
-        const proxyOpts = $xeGGWrapper ? $xeGGWrapper.getComputeMaps().computeProxyOpts.value : {} as VxeGridPropTypes.ProxyOpts
+        const proxyOpts = $xeGGWrapper ? $xeGGWrapper.getComputeMaps().computeProxyOpts.value : ({} as VxeGridPropTypes.ProxyOpts)
         const hasMerge = !!(mergeBodyList.length || mergeFooterList.length)
-        const opts = Object.assign({
-          message: true,
-          isHeader: showHeader,
-          isTitle: showHeader,
-          isFooter: showFooter,
-          isColgroup: isGroup,
-          isMerge: hasMerge,
-          useStyle: true,
-          current: 'current',
-          modes: (proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : []).concat(['current', 'selected', 'empty']),
-          download: true,
-          type: 'csv'
-          // filename: '',
-          // sheetName: '',
-          // original: false,
-          // isTreeAllExpanded: false,
-          // isRowGroupAllExpanded: false,
-          // data: null,
-          // remote: false,
-          // dataFilterMethod: null,
-          // footerFilterMethod: null,
-          // exportMethod: null,
-          // columnFilterMethod: null,
-          // beforeExportMethod: null,
-          // afterExportMethod: null
-        }, exportOpts, options)
+        const opts = Object.assign(
+          {
+            message: true,
+            isHeader: showHeader,
+            isTitle: showHeader,
+            isFooter: showFooter,
+            isColgroup: isGroup,
+            isMerge: hasMerge,
+            useStyle: true,
+            current: 'current',
+            modes: (proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : []).concat(['current', 'selected', 'empty']),
+            download: true,
+            type: 'csv'
+            // filename: '',
+            // sheetName: '',
+            // original: false,
+            // isTreeAllExpanded: false,
+            // isRowGroupAllExpanded: false,
+            // data: null,
+            // remote: false,
+            // dataFilterMethod: null,
+            // footerFilterMethod: null,
+            // exportMethod: null,
+            // columnFilterMethod: null,
+            // beforeExportMethod: null,
+            // afterExportMethod: null
+          },
+          exportOpts,
+          options
+        )
 
         // 已废弃，参数 isAllExpand
         if (XEUtils.isBoolean((opts as any).isAllExpand)) {
@@ -1498,19 +1554,19 @@ hooks.add('tableExportModule', {
 
         const excludeFdMaps: Record<string, number> = {}
         if (excludeFields && excludeFields.length) {
-          excludeFields.forEach(field => {
+          excludeFields.forEach((field) => {
             excludeFdMaps[field] = 1
           })
         }
         const includeFdMaps: Record<string, number> = {}
         if (includeFields && includeFields.length) {
-          includeFields.forEach(field => {
+          includeFields.forEach((field) => {
             includeFdMaps[field] = 1
           })
         }
         const extraFdMaps: Record<string, number> = {}
         if (extraFields) {
-          extraFields.forEach(field => {
+          extraFields.forEach((field) => {
             extraFdMaps[field] = 1
           })
         }
@@ -1526,25 +1582,29 @@ hooks.add('tableExportModule', {
           isCustomCol = true
           customCols = XEUtils.searchTree(columns, () => true, { children: 'children', mapChildren: 'childNodes', original: true })
         } else {
-          customCols = XEUtils.searchTree(collectColumn, column => {
-            const isColGroup = column.children && column.children.length > 0
-            let isChecked = false
-            const isExtraChecked = extraFdMaps[column.field]
-            if (columns) {
-              isChecked = handleFilterColumns(opts, column, columns)
-            } else if (excludeFields || includeFields) {
-              isChecked = handleFilterFields(opts, column, includeFields, includeFdMaps, excludeFdMaps, extraFdMaps)
-            } else {
-              if (isExtraChecked) {
-                isChecked = true
+          customCols = XEUtils.searchTree(
+            collectColumn,
+            (column) => {
+              const isColGroup = column.children && column.children.length > 0
+              let isChecked = false
+              const isExtraChecked = extraFdMaps[column.field]
+              if (columns) {
+                isChecked = handleFilterColumns(opts, column, columns)
+              } else if (excludeFields || includeFields) {
+                isChecked = handleFilterFields(opts, column, includeFields, includeFdMaps, excludeFdMaps, extraFdMaps)
               } else {
-                isChecked = column.visible && (isColGroup || defaultFilterExportColumn(column))
+                if (isExtraChecked) {
+                  isChecked = true
+                } else {
+                  isChecked = column.visible && (isColGroup || defaultFilterExportColumn(column))
+                }
               }
-            }
-            return isChecked
-          }, { children: 'children', mapChildren: 'childNodes', original: true })
+              return isChecked
+            },
+            { children: 'children', mapChildren: 'childNodes', original: true }
+          )
         }
-        const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({ } as { data: any[], colgroups: any[], columns: any[] }, opts, { filename: '', sheetName: '', _columnConfs: columns })
+        const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({} as { data: any[]; colgroups: any[]; columns: any[] }, opts, { filename: '', sheetName: '', _columnConfs: columns })
         // 如果设置源数据，则默认导出设置了字段的列
         if (!isCustomCol && !columnFilterMethod) {
           columnFilterMethod = ({ column }) => handleFilterFields(handleOptions, column, includeFields, includeFdMaps, excludeFdMaps, extraFdMaps)
@@ -1553,33 +1613,37 @@ hooks.add('tableExportModule', {
         if (customCols) {
           handleOptions._isCustomColumn = true
           groups = XEUtils.searchTree(
-            XEUtils.mapTree(customCols, (item) => {
-              let targetColumn
-              if (item) {
-                if (isColumnInfo(item)) {
-                  targetColumn = item
-                } else if (XEUtils.isString(item)) {
-                  targetColumn = $xeTable.getColumnByField(item)
-                } else {
-                  const colid = item.id || item.colId
-                  const type = item.type
-                  const field = item.field
-                  if (colid) {
-                    targetColumn = $xeTable.getColumnById(colid)
-                  } else if (field && type) {
-                    targetColumn = tableFullColumn.find((column) => column.field === field && column.type === type)
-                  } else if (field) {
-                    targetColumn = $xeTable.getColumnByField(field)
-                  } else if (type) {
-                    targetColumn = tableFullColumn.find((column) => column.type === type)
+            XEUtils.mapTree(
+              customCols,
+              (item) => {
+                let targetColumn
+                if (item) {
+                  if (isColumnInfo(item)) {
+                    targetColumn = item
+                  } else if (XEUtils.isString(item)) {
+                    targetColumn = $xeTable.getColumnByField(item)
+                  } else {
+                    const colid = item.id || item.colId
+                    const type = item.type
+                    const field = item.field
+                    if (colid) {
+                      targetColumn = $xeTable.getColumnById(colid)
+                    } else if (field && type) {
+                      targetColumn = tableFullColumn.find((column) => column.field === field && column.type === type)
+                    } else if (field) {
+                      targetColumn = $xeTable.getColumnByField(field)
+                    } else if (type) {
+                      targetColumn = tableFullColumn.find((column) => column.type === type)
+                    }
                   }
+                  return targetColumn || {}
                 }
-                return targetColumn || {}
+              },
+              {
+                children: 'childNodes',
+                mapChildren: '_children'
               }
-            }, {
-              children: 'childNodes',
-              mapChildren: '_children'
-            }),
+            ),
             (column, index) => isColumnInfo(column) && (!columnFilterMethod || columnFilterMethod({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, column: column as any, $columnIndex: index })),
             {
               children: '_children',
@@ -1588,16 +1652,24 @@ hooks.add('tableExportModule', {
             }
           )
         } else {
-          groups = XEUtils.searchTree(isGroup ? collectColumn : tableFullColumn, (column, index) => column.visible && (!columnFilterMethod || columnFilterMethod({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, column, $columnIndex: index })), { children: 'children', mapChildren: 'childNodes', original: true })
+          groups = XEUtils.searchTree(isGroup ? collectColumn : tableFullColumn, (column, index) => column.visible && (!columnFilterMethod || columnFilterMethod({ $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, column, $columnIndex: index })), {
+            children: 'children',
+            mapChildren: 'childNodes',
+            original: true
+          })
         }
         // 获取所有列
         const cols: VxeTableDefines.ColumnInfo[] = []
-        XEUtils.eachTree(groups, column => {
-          const isColGroup = column.children && column.children.length
-          if (!isColGroup) {
-            cols.push(column)
-          }
-        }, { children: 'childNodes' })
+        XEUtils.eachTree(
+          groups,
+          (column) => {
+            const isColGroup = column.children && column.children.length
+            if (!isColGroup) {
+              cols.push(column)
+            }
+          },
+          { children: 'childNodes' }
+        )
         // 构建分组层级
         handleOptions.columns = cols
         handleOptions.colgroups = convertToRows(groups)
@@ -1660,7 +1732,7 @@ hooks.add('tableExportModule', {
           handleOptions.data = []
           if (mode === 'selected') {
             if (['html', 'pdf'].indexOf(type) > -1 && treeConfig) {
-              handleOptions.data = XEUtils.searchTree($xeTable.getTableData().fullData, item => $xeTable.findRowIndexOf(selectRecords, item) > -1, Object.assign({}, treeOpts, { data: '_row' }))
+              handleOptions.data = XEUtils.searchTree($xeTable.getTableData().fullData, (item) => $xeTable.findRowIndexOf(selectRecords, item) > -1, Object.assign({}, treeOpts, { data: '_row' }))
             } else {
               handleOptions.data = selectRecords
             }
@@ -1691,7 +1763,7 @@ hooks.add('tableExportModule', {
                   $table: $xeTable,
                   $grid: $xeGrid,
                   $gantt: $xeGantt,
-                  sort: sortData.length ? sortData[0] : {} as any,
+                  sort: sortData.length ? sortData[0] : ({} as any),
                   sorts: sortData as any[],
                   filters: gridReactData.filterData,
                   form: gridReactData.formData,
@@ -1738,7 +1810,7 @@ hooks.add('tableExportModule', {
                 }
 
                 if (beforeQueryAllMethod) {
-                  return Promise.resolve(beforeQueryAllMethod(params)).then(status => {
+                  return Promise.resolve(beforeQueryAllMethod(params)).then((status) => {
                     if (status !== false) {
                       return handleQueryAll()
                     }
@@ -1747,7 +1819,8 @@ hooks.add('tableExportModule', {
                 return handleQueryAll()
               }
             }
-          } if (mode === 'current') {
+          }
+          if (mode === 'current') {
             handleOptions.data = treeConfig ? afterTreeFullData : afterFullData
           }
         } else {
@@ -1755,7 +1828,7 @@ hooks.add('tableExportModule', {
         }
         return handleExport(handleOptions)
       },
-      importByFile (file, options) {
+      importByFile(file, options) {
         const opts = Object.assign({}, options)
         const { beforeImportMethod } = opts
         if (beforeImportMethod) {
@@ -1771,13 +1844,17 @@ hooks.add('tableExportModule', {
         }
         return handleFileImport(file, opts)
       },
-      importData (options) {
+      importData(options) {
         const importOpts = computeImportOpts.value
-        const opts = Object.assign({
-          types: XEUtils.keys(importOpts._typeMaps)
-          // beforeImportMethod: null,
-          // afterImportMethod: null
-        }, importOpts, options)
+        const opts = Object.assign(
+          {
+            types: XEUtils.keys(importOpts._typeMaps)
+            // beforeImportMethod: null,
+            // afterImportMethod: null
+          },
+          importOpts,
+          options
+        )
         const { beforeImportMethod, afterImportMethod } = opts
         if (beforeImportMethod) {
           const biRest = beforeImportMethod({ options: opts, $table: $xeTable })
@@ -1790,36 +1867,43 @@ hooks.add('tableExportModule', {
             warnLog('vxe.error.returnErr', ['beforeImportMethod', 'boolean', biRest])
           }
         }
-        return VxeUI.readFile(opts).catch(e => {
-          if (afterImportMethod) {
-            afterImportMethod({ status: false, options: opts, $table: $xeTable })
-          }
-          return Promise.reject(e)
-        }).then((params) => {
-          const { file } = params
-          return handleFileImport(file, opts)
-        })
+        return VxeUI.readFile(opts)
+          .catch((e) => {
+            if (afterImportMethod) {
+              afterImportMethod({ status: false, options: opts, $table: $xeTable })
+            }
+            return Promise.reject(e)
+          })
+          .then((params) => {
+            const { file } = params
+            return handleFileImport(file, opts)
+          })
       },
-      saveFile (options) {
+      saveFile(options) {
         return VxeUI.saveFile(options)
       },
-      readFile (options) {
+      readFile(options) {
         return VxeUI.readFile(options)
       },
-      print (options) {
+      print(options) {
         const $xeGrid = $xeTable.xeGrid
         const $xeGantt = $xeTable.xeGantt
 
         const printOpts = computePrintOpts.value
-        const opts = Object.assign({
-          original: false
-          // beforePrintMethod
-        }, printOpts, options, {
-          type: 'html',
-          download: false,
-          remote: false,
-          print: true
-        })
+        const opts = Object.assign(
+          {
+            original: false
+            // beforePrintMethod
+          },
+          printOpts,
+          options,
+          {
+            type: 'html',
+            download: false,
+            remote: false,
+            print: true
+          }
+        )
         const { sheetName } = opts
         let printTitle = ''
         if (sheetName) {
@@ -1941,39 +2025,48 @@ hooks.add('tableExportModule', {
           }
         })
       },
-      getPrintHtml (options) {
+      getPrintHtml(options) {
         const printOpts = computePrintOpts.value
-        const opts = Object.assign({
-          original: false
-          // beforePrintMethod
-        }, printOpts, options, {
-          type: 'html',
-          download: false,
-          remote: false,
-          print: true
-        })
+        const opts = Object.assign(
+          {
+            original: false
+            // beforePrintMethod
+          },
+          printOpts,
+          options,
+          {
+            type: 'html',
+            download: false,
+            remote: false,
+            print: true
+          }
+        )
         return $xeTable.exportData(opts).then(({ content }) => {
           return {
             html: content
           }
         })
       },
-      closeImport () {
+      closeImport() {
         if (VxeUI.modal) {
           return VxeUI.modal.close('VXE_IMPORT_MODAL')
         }
         return Promise.resolve()
       },
-      openImport (options) {
+      openImport(options) {
         const { treeConfig, importConfig } = props
         const { initStore, importStore, importParams } = reactData
         const importOpts = computeImportOpts.value
-        const defOpts = Object.assign({
-          mode: 'insertTop',
-          message: true,
-          types: XEUtils.keys(importOpts._typeMaps),
-          modes: ['insertTop', 'covering']
-        }, importOpts, options)
+        const defOpts = Object.assign(
+          {
+            mode: 'insertTop',
+            message: true,
+            types: XEUtils.keys(importOpts._typeMaps),
+            modes: ['insertTop', 'covering']
+          },
+          importOpts,
+          options
+        )
         const types = defOpts.types || []
         const modes = defOpts.modes || []
         const isTree = !!treeConfig
@@ -2016,31 +2109,39 @@ hooks.add('tableExportModule', {
           visible: true
         })
         Object.assign(importParams, defOpts)
-        if (!modeList.some(item => item.value === importParams.mode)) {
+        if (!modeList.some((item) => item.value === importParams.mode)) {
           importParams.mode = modeList[0].value
         }
         initStore.import = true
       },
       closeExport: handleCloseExport,
-      openExport (options) {
+      openExport(options) {
         const { exportConfig } = props
         const exportOpts = computeExportOpts.value
-        const defOpts = Object.assign({
-          message: true,
-          types: XEUtils.keys(exportOpts._typeMaps)
-        }, exportOpts, options)
+        const defOpts = Object.assign(
+          {
+            message: true,
+            types: XEUtils.keys(exportOpts._typeMaps)
+          },
+          exportOpts,
+          options
+        )
         if (!hasEnableConf(exportConfig, exportOpts)) {
           errLog('vxe.error.reqProp', ['export-config'])
         }
         return handleExportAndPrint(defOpts)
       },
       closePrint: handleCloseExport,
-      openPrint (options) {
+      openPrint(options) {
         const { printConfig } = props
         const printOpts = computePrintOpts.value
-        const defOpts = Object.assign({
-          message: true
-        }, printOpts, options)
+        const defOpts = Object.assign(
+          {
+            message: true
+          },
+          printOpts,
+          options
+        )
         if (!hasEnableConf(printConfig, printOpts)) {
           errLog('vxe.error.reqProp', ['print-config'])
         }
@@ -2050,10 +2151,10 @@ hooks.add('tableExportModule', {
 
     return exportMethods
   },
-  setupGrid ($xeGrid) {
+  setupGrid($xeGrid) {
     return $xeGrid.extendTableMethods(tableExportMethodKeys)
   },
-  setupGantt ($xeGantt) {
+  setupGantt($xeGantt) {
     return $xeGantt.extendTableMethods(tableExportMethodKeys)
   }
 })

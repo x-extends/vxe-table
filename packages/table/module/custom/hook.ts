@@ -1,5 +1,5 @@
 import { nextTick } from 'vue'
-import { VxeUI } from '../../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import XEUtils from 'xe-utils'
 import { getColumnList } from '../../src/util'
 import { toCssUnit } from '../../../ui/src/dom'
@@ -11,7 +11,7 @@ const tableCustomMethodKeys: (keyof TableCustomMethods)[] = ['openCustom', 'clos
 const customColumnCssKeys = ['checkbox', 'sort', 'title', 'width', 'fixed', 'align', 'header-align', 'footer-align']
 
 VxeUI.hooks.add('tableCustomModule', {
-  setupTable ($xeTable) {
+  setupTable($xeTable) {
     const { reactData, internalData } = $xeTable
     const { computeCustomOpts, computeRowGroupFields, computeCustomSimpleMode } = $xeTable.getComputeMaps()
     const { refElem } = $xeTable.getRefMaps()
@@ -62,7 +62,7 @@ VxeUI.hooks.add('tableCustomModule', {
       if (!(placement === 'left' || placement === 'right')) {
         popupMxHeight = XEUtils.eqNull(maxHeight) ? popupMaxHeight : maxHeight
       }
-      if (!placement || !(['left', 'right', 'bottom-left', 'bottom-right'].includes(placement))) {
+      if (!placement || !['left', 'right', 'bottom-left', 'bottom-right'].includes(placement)) {
         if (popupTop) {
           defPupStys.top = toCssUnit(popupTop)
         }
@@ -82,7 +82,7 @@ VxeUI.hooks.add('tableCustomModule', {
       // 同步表格的css变量到弹窗中
       const bodyComputeStyle = getComputedStyle(bodyEl)
       const tableComputeStyle = getComputedStyle(wrapperEl)
-      customColumnCssKeys.forEach(key => {
+      customColumnCssKeys.forEach((key) => {
         const currCssKey = `--vxe-ui-vxe-table-custom-column-${key}-${key === 'title' ? 'min-' : ''}width`
         const currCssVal = tableComputeStyle.getPropertyValue(currCssKey)
         if (currCssVal && currCssVal !== bodyComputeStyle.getPropertyValue(currCssKey)) {
@@ -144,7 +144,7 @@ VxeUI.hooks.add('tableCustomModule', {
         const sortMaps: Record<string, number> = {}
         const fixedMaps: Record<string, VxeColumnPropTypes.Fixed> = {}
         const visibleMaps: Record<string, boolean> = {}
-        XEUtils.eachTree(collectColumn, column => {
+        XEUtils.eachTree(collectColumn, (column) => {
           const colid = column.getKey()
           column.renderFixed = column.fixed
           column.renderVisible = column.visible
@@ -198,7 +198,7 @@ VxeUI.hooks.add('tableCustomModule', {
       } else {
         XEUtils.eachTree(customColumnList, (column, index, items, path, parentColumn) => {
           if (parentColumn) {
-          // 更新子列信息
+            // 更新子列信息
             column.fixed = parentColumn.fixed
           } else {
             if (allowSort) {
@@ -259,40 +259,44 @@ VxeUI.hooks.add('tableCustomModule', {
       const { oldSortMaps, oldFixedMaps, oldVisibleMaps } = customStore
       const customOpts = computeCustomOpts.value
       const { allowVisible, allowSort, allowFixed, allowAlign, allowHeaderAlign, allowFooterAlign, allowResizable, allowGroup, allowValues } = customOpts
-      XEUtils.eachTree(customColumnList, column => {
-        const colid = column.getKey()
-        const visible = !!oldVisibleMaps[colid]
-        const fixed = oldFixedMaps[colid] || ''
-        if (allowVisible) {
-          column.renderVisible = visible
-          column.visible = visible
-        }
-        if (allowFixed) {
-          column.renderFixed = fixed
-          column.fixed = fixed
-        }
-        if (allowSort) {
-          column.renderSortNumber = oldSortMaps[colid] || 0
-        }
-        if (allowResizable) {
-          column.renderResizeWidth = column.renderWidth
-        }
-        if (allowAlign) {
-          column.align = column.renderAlign
-        }
-        if (allowHeaderAlign) {
-          column.headerAlign = column.renderHeaderAlign
-        }
-        if (allowFooterAlign) {
-          column.footerAlign = column.renderFooterAlign
-        }
-        if (allowGroup) {
-          // 无
-        }
-        if (allowValues) {
-          // 无
-        }
-      }, { children: 'children' })
+      XEUtils.eachTree(
+        customColumnList,
+        (column) => {
+          const colid = column.getKey()
+          const visible = !!oldVisibleMaps[colid]
+          const fixed = oldFixedMaps[colid] || ''
+          if (allowVisible) {
+            column.renderVisible = visible
+            column.visible = visible
+          }
+          if (allowFixed) {
+            column.renderFixed = fixed
+            column.fixed = fixed
+          }
+          if (allowSort) {
+            column.renderSortNumber = oldSortMaps[colid] || 0
+          }
+          if (allowResizable) {
+            column.renderResizeWidth = column.renderWidth
+          }
+          if (allowAlign) {
+            column.align = column.renderAlign
+          }
+          if (allowHeaderAlign) {
+            column.headerAlign = column.renderHeaderAlign
+          }
+          if (allowFooterAlign) {
+            column.footerAlign = column.renderFooterAlign
+          }
+          if (allowGroup) {
+            // 无
+          }
+          if (allowValues) {
+            // 无
+          }
+        },
+        { children: 'children' }
+      )
       return nextTick()
     }
 
@@ -336,7 +340,7 @@ VxeUI.hooks.add('tableCustomModule', {
     }
 
     const customMethods: TableCustomMethods = {
-      getCustomVisible () {
+      getCustomVisible() {
         const { customStore } = reactData
         return customStore.visible
       },
@@ -345,21 +349,24 @@ VxeUI.hooks.add('tableCustomModule', {
       toggleCustom,
       saveCustom,
       cancelCustom,
-      resetCustom (options) {
+      resetCustom(options) {
         const { rowGroupList } = reactData
         const { collectColumn } = internalData
         const customOpts = computeCustomOpts.value
         const { checkMethod } = customOpts
-        const opts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign({
-          visible: true,
-          resizable: options === true,
-          fixed: options === true,
-          sort: options === true,
-          aggFunc: options === true,
-          align: options === true,
-          headerAlign: options === true,
-          footerAlign: options === true
-        }, options)
+        const opts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign(
+          {
+            visible: true,
+            resizable: options === true,
+            fixed: options === true,
+            sort: options === true,
+            aggFunc: options === true,
+            align: options === true,
+            headerAlign: options === true,
+            footerAlign: options === true
+          },
+          options
+        )
         const allCols: VxeTableDefines.ColumnInfo[] = []
         XEUtils.eachTree(collectColumn, (column) => {
           if (opts.resizable) {
@@ -417,7 +424,7 @@ VxeUI.hooks.add('tableCustomModule', {
           $xeTable.saveCustomStore('reset')
         })
       },
-      toggleCustomAllCheckbox () {
+      toggleCustomAllCheckbox() {
         const { customStore } = reactData
         const isAll = !customStore.isAll
         return setCustomAllCheckbox(isAll)
@@ -441,7 +448,7 @@ VxeUI.hooks.add('tableCustomModule', {
     const customPrivateMethods: TableCustomPrivateMethods = {
       checkCustomStatus,
       emitCustomEvent,
-      triggerCustomEvent (evnt) {
+      triggerCustomEvent(evnt) {
         const reactData = $xeTable.reactData
 
         const { customStore } = reactData
@@ -456,7 +463,7 @@ VxeUI.hooks.add('tableCustomModule', {
           $xeTable.dispatchEvent('custom-open', {}, evnt)
         }
       },
-      customOpenEvent (evnt) {
+      customOpenEvent(evnt) {
         const reactData = $xeTable.reactData
 
         const { customStore } = reactData
@@ -468,7 +475,7 @@ VxeUI.hooks.add('tableCustomModule', {
           $xeTable.dispatchEvent('custom-open', {}, evnt)
         }
       },
-      customCloseEvent (evnt) {
+      customCloseEvent(evnt) {
         const reactData = $xeTable.reactData
 
         const { customStore } = reactData
@@ -480,7 +487,7 @@ VxeUI.hooks.add('tableCustomModule', {
         }
       },
       handleUpdateCustomColumn,
-      handleCustomStyle () {
+      handleCustomStyle() {
         const reactData = $xeTable.reactData
 
         const { customStore } = reactData
@@ -494,10 +501,10 @@ VxeUI.hooks.add('tableCustomModule', {
 
     return { ...customMethods, ...customPrivateMethods }
   },
-  setupGrid ($xeGrid) {
+  setupGrid($xeGrid) {
     return $xeGrid.extendTableMethods(tableCustomMethodKeys)
   },
-  setupGantt ($xeGantt) {
+  setupGantt($xeGantt) {
     return $xeGantt.extendTableMethods(tableCustomMethodKeys)
   }
 })

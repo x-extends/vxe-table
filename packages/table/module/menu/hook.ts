@@ -1,6 +1,6 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { VxeUI } from '../../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { getDomNode, getAbsolutePos, getEventTargetNode, toCssUnit } from '../../../ui/src/dom'
 import { isEnableConf, hasChildrenList, hasEnableConf } from '../../../ui/src/utils'
 
@@ -12,7 +12,7 @@ const { menus, hooks, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
 const tableMenuMethodKeys: (keyof TableMenuMethods)[] = ['closeMenu']
 
 hooks.add('tableMenuModule', {
-  setupTable ($xeTable) {
+  setupTable($xeTable) {
     const { xID, props, reactData, internalData } = $xeTable
     const { refElem, refTableFilter, refTableMenu } = $xeTable.getRefMaps()
     const { computeMouseOpts, computeIsContentMenu, computeMenuOpts } = $xeTable.getComputeMaps()
@@ -118,7 +118,7 @@ hooks.add('tableMenuModule', {
       /**
        * 关闭快捷菜单
        */
-      closeMenu () {
+      closeMenu() {
         Object.assign(reactData.ctxMenuStore, {
           visible: false,
           selected: null,
@@ -133,9 +133,9 @@ hooks.add('tableMenuModule', {
       /**
        * 处理菜单的移动
        */
-      moveCtxMenu (evnt, ctxMenuStore, property, hasOper, operRest, menuList) {
+      moveCtxMenu(evnt, ctxMenuStore, property, hasOper, operRest, menuList) {
         let selectItem
-        const selectIndex = XEUtils.findIndexOf(menuList, item => ctxMenuStore[property] === item)
+        const selectIndex = XEUtils.findIndexOf(menuList, (item) => ctxMenuStore[property] === item)
         if (hasOper) {
           if (operRest && hasChildrenList(ctxMenuStore.selected)) {
             ctxMenuStore.showChild = true
@@ -167,7 +167,7 @@ hooks.add('tableMenuModule', {
       /**
        * 快捷菜单事件处理
        */
-      handleGlobalContextmenuEvent (evnt) {
+      handleGlobalContextmenuEvent(evnt) {
         const $xeGrid = $xeTable.xeGrid
         const $xeGantt = $xeTable.xeGantt
 
@@ -237,7 +237,7 @@ hooks.add('tableMenuModule', {
               handleOpenMenuEvent(evnt, layout, params)
               $xeTable.dispatchEvent(eventType, params, evnt)
               return
-            } else if (getEventTargetNode(evnt, el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('xid') === xID).flag || (layout === 'body' && getEventTargetNode(evnt, el, 'vxe-table--empty-place-wrapper', target => target.getAttribute('xid') === xID).flag)) {
+            } else if (getEventTargetNode(evnt, el, `vxe-table--${layout}-wrapper`, (target) => target.getAttribute('xid') === xID).flag || (layout === 'body' && getEventTargetNode(evnt, el, 'vxe-table--empty-place-wrapper', (target) => target.getAttribute('xid') === xID).flag)) {
               if (menuOpts.trigger === 'cell') {
                 evnt.preventDefault()
               } else {
@@ -252,7 +252,7 @@ hooks.add('tableMenuModule', {
         }
         menuMethods.closeMenu()
       },
-      ctxMenuMouseoverEvent (evnt, item, child) {
+      ctxMenuMouseoverEvent(evnt, item, child) {
         const menuElem = evnt.currentTarget as HTMLDivElement
         const { ctxMenuStore } = reactData
         evnt.preventDefault()
@@ -291,7 +291,7 @@ hooks.add('tableMenuModule', {
           }
         }
       },
-      ctxMenuMouseoutEvent (evnt, item) {
+      ctxMenuMouseoutEvent(evnt, item) {
         const { ctxMenuStore } = reactData
         if (!item.children) {
           ctxMenuStore.selected = null
@@ -301,7 +301,7 @@ hooks.add('tableMenuModule', {
       /**
        * 快捷菜单点击事件
        */
-      ctxMenuLinkEvent (evnt, menu) {
+      ctxMenuLinkEvent(evnt, menu) {
         const $xeGrid = $xeTable.xeGrid
         const $xeGantt = $xeTable.xeGantt
 
@@ -309,7 +309,7 @@ hooks.add('tableMenuModule', {
         if (!menu.loading && !menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
           const gMenuOpts = menus.get(menu.code)
           const params = Object.assign({}, internalData._currMenuParams, { menu, $table: $xeTable, $grid: $xeGrid, $gantt: $xeGantt, $event: evnt })
-          const tmMethod = gMenuOpts ? (gMenuOpts.tableMenuMethod || gMenuOpts.menuMethod) : null
+          const tmMethod = gMenuOpts ? gMenuOpts.tableMenuMethod || gMenuOpts.menuMethod : null
           if (tmMethod) {
             tmMethod(params, evnt)
           }
@@ -321,10 +321,10 @@ hooks.add('tableMenuModule', {
 
     return { ...menuMethods, ...menuPrivateMethods }
   },
-  setupGrid ($xeGrid) {
+  setupGrid($xeGrid) {
     return $xeGrid.extendTableMethods(tableMenuMethodKeys)
   },
-  setupGantt ($xeGantt) {
+  setupGantt($xeGantt) {
     return $xeGantt.extendTableMethods(tableMenuMethodKeys)
   }
 })

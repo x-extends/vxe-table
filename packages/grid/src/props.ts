@@ -1,6 +1,5 @@
-
 import { PropType } from 'vue'
-import { VxeUI } from '../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { tableProps } from '../../table/src/props'
 
 import type { VxeGridPropTypes } from '../../../types'

@@ -1,7 +1,7 @@
 import { h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
-import { VxeUI } from '../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { getDefaultConfig, hasEnableConf, isEnableConf } from '../../ui/src/utils'
 import { getCalcHeight, convertHeaderColumnToRows, convertHeaderToGridRows } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
@@ -25,7 +25,7 @@ export default defineVxeComponent({
       default: null
     }
   },
-  setup (props) {
+  setup(props) {
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
@@ -84,16 +84,16 @@ export default defineVxeComponent({
         const colid = column.id
         const colRest = fullColumnIdData[colid] || {}
         const renderOpts = editRender || cellRender
-        const compConf = renderOpts && renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
+        const compConf = renderOpts && renderOpts.name ? rendererOpts[renderOpts.name] || renderer.get(renderOpts.name) : null
         const isColGroup = column.children && column.children.length
         const fixedHiddenColumn = overflowX && !isColGroup && (fixedType ? column.fixed !== fixedType : !!column.fixed)
 
         const cellPadding = getDefaultConfig(headerCellOpts.padding, cellOpts.padding)
         const isAllCellPadding = cellPadding === true
-        const isCellPaddingTop = cellPadding ? (isAllCellPadding || cellPadding.top !== false) : false
-        const isCellPaddingBottom = cellPadding ? (isAllCellPadding || cellPadding.bottom !== false) : false
-        const isCellPaddingLeft = cellPadding ? (isAllCellPadding || cellPadding.left !== false) : false
-        const isCellPaddingRight = cellPadding ? (isAllCellPadding || cellPadding.right !== false) : false
+        const isCellPaddingTop = cellPadding ? isAllCellPadding || cellPadding.top !== false : false
+        const isCellPaddingBottom = cellPadding ? isAllCellPadding || cellPadding.bottom !== false : false
+        const isCellPaddingLeft = cellPadding ? isAllCellPadding || cellPadding.left !== false : false
+        const isCellPaddingRight = cellPadding ? isAllCellPadding || cellPadding.right !== false : false
 
         const headOverflow = getDefaultConfig(showHeaderOverflow, allColumnHeaderOverflow)
         const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
@@ -179,7 +179,7 @@ export default defineVxeComponent({
           }
         }
         const isLastColumn = $columnIndex === cols.length - 1
-        const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
+        const showResizable = XEUtils.isBoolean(column.resizable) ? column.resizable : columnOpts.resizable || allResizable
         const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
         let isVNPreEmptyStatus = false
@@ -210,60 +210,79 @@ export default defineVxeComponent({
           tcStyle.width = `${childWidth}px`
         }
 
-        return h('th', {
-          class: ['vxe-table--column vxe-header--column', colid, fixedHiddenColumn ? 'fixed--hidden' : 'fixed--visible', {
-            [`col--${headAlign}`]: headAlign,
-            [`col--${type}`]: type,
-            'col--last': isLastColumn,
-            'col--fixed': column.fixed,
-            'col--group': isColGroup,
-            'col--ellipsis': hasEllipsis,
-            'fixed--width': !isAutoCellWidth,
-            'is--pg-top': isCellPaddingTop,
-            'is--pg-bottom': isCellPaddingBottom,
-            'is--pg-left': isCellPaddingLeft,
-            'is--pg-right': isCellPaddingRight,
-            'is--sortable': column.sortable,
-            'col--filter': !!filters,
-            'is--filter-active': hasFilter,
-            'is--drag-active': columnOpts.drag && !column.fixed && !isDisabledDrag && (isCrossDrag || isPeerDrag || !column.parentId),
-            'is--drag-disabled': columnOpts.drag && isDisabledDrag,
-            'col--current': currColFlag && currentCol === column
+        return h(
+          'th',
+          {
+            class: [
+              'vxe-table--column vxe-header--column',
+              colid,
+              fixedHiddenColumn ? 'fixed--hidden' : 'fixed--visible',
+              {
+                [`col--${headAlign}`]: headAlign,
+                [`col--${type}`]: type,
+                'col--last': isLastColumn,
+                'col--fixed': column.fixed,
+                'col--group': isColGroup,
+                'col--ellipsis': hasEllipsis,
+                'fixed--width': !isAutoCellWidth,
+                'is--pg-top': isCellPaddingTop,
+                'is--pg-bottom': isCellPaddingBottom,
+                'is--pg-left': isCellPaddingLeft,
+                'is--pg-right': isCellPaddingRight,
+                'is--sortable': column.sortable,
+                'col--filter': !!filters,
+                'is--filter-active': hasFilter,
+                'is--drag-active': columnOpts.drag && !column.fixed && !isDisabledDrag && (isCrossDrag || isPeerDrag || !column.parentId),
+                'is--drag-disabled': columnOpts.drag && isDisabledDrag,
+                'col--current': currColFlag && currentCol === column
+              },
+              headerClassName ? (XEUtils.isFunction(headerClassName) ? headerClassName(cellParams) : headerClassName) : '',
+              headerCellClassName ? (XEUtils.isFunction(headerCellClassName) ? headerCellClassName(cellParams) : headerCellClassName) : ''
+            ],
+            style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(cellParams) : headerCellStyle) : null,
+            ...thAttrs,
+            ...thOns,
+            key: showCustomHeader ? `${colid}${$columnIndex}` : columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex
           },
-          headerClassName ? (XEUtils.isFunction(headerClassName) ? headerClassName(cellParams) : headerClassName) : '',
-          headerCellClassName ? (XEUtils.isFunction(headerCellClassName) ? headerCellClassName(cellParams) : headerCellClassName) : ''
-          ],
-          style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(cellParams) : headerCellStyle) : null,
-          ...thAttrs,
-          ...thOns,
-          key: showCustomHeader ? `${colid}${$columnIndex}` : (columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex)
-        }, [
-          h('div', {
-            class: ['vxe-cell', {
-              'c--title': showTitle,
-              'c--tooltip': showTooltip,
-              'c--ellipsis': showEllipsis
-            }],
-            style: tcStyle
-          }, isVNPreEmptyStatus || (isOptimizeMode && fixedHiddenColumn)
-            ? []
-            : [
-                h('div', {
-                  colid,
-                  class: 'vxe-cell--wrapper vxe-header-cell--wrapper'
-                }, column.renderHeader(cellParams))
-              ]),
-          /**
-           * 列宽拖动
-           */
-          !fixedHiddenColumn && showResizable && (!showCustomHeader || isLastRow)
-            ? h('div', {
-              class: 'vxe-cell--col-resizable',
-              onMousedown: (evnt: MouseEvent) => $xeTable.handleColResizeMousedownEvent(evnt, fixedType, cellParams),
-              onDblclick: (evnt: MouseEvent) => $xeTable.handleColResizeDblclickEvent(evnt, cellParams)
-            })
-            : renderEmptyElement($xeTable)
-        ])
+          [
+            h(
+              'div',
+              {
+                class: [
+                  'vxe-cell',
+                  {
+                    'c--title': showTitle,
+                    'c--tooltip': showTooltip,
+                    'c--ellipsis': showEllipsis
+                  }
+                ],
+                style: tcStyle
+              },
+              isVNPreEmptyStatus || (isOptimizeMode && fixedHiddenColumn)
+                ? []
+                : [
+                    h(
+                      'div',
+                      {
+                        colid,
+                        class: 'vxe-cell--wrapper vxe-header-cell--wrapper'
+                      },
+                      column.renderHeader(cellParams)
+                    )
+                  ]
+            ),
+            /**
+             * 列宽拖动
+             */
+            !fixedHiddenColumn && showResizable && (!showCustomHeader || isLastRow)
+              ? h('div', {
+                class: 'vxe-cell--col-resizable',
+                onMousedown: (evnt: MouseEvent) => $xeTable.handleColResizeMousedownEvent(evnt, fixedType, cellParams),
+                onDblclick: (evnt: MouseEvent) => $xeTable.handleColResizeDblclickEvent(evnt, cellParams)
+              })
+              : renderEmptyElement($xeTable)
+          ]
+        )
       })
     }
 
@@ -289,9 +308,9 @@ export default defineVxeComponent({
         const colid = column.id
         const colRest = fullColumnIdData[colid] || {}
         const renderOpts = editRender || cellRender
-        const flSlot = slots ? (slots.floatingFilter || slots['floating-filter']) : null
-        const compConf = renderOpts && renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
-        const flCompConf = isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
+        const flSlot = slots ? slots.floatingFilter || slots['floating-filter'] : null
+        const compConf = renderOpts && renderOpts.name ? rendererOpts[renderOpts.name] || renderer.get(renderOpts.name) : null
+        const flCompConf = isEnableConf(filterRender) && filterRender.name ? rendererOpts[filterRender.name] || renderer.get(filterRender.name) : null
         const rtFloatingFilter = flCompConf ? flCompConf.renderTableFloatingFilter : null
         const fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
         const isPadding = XEUtils.isBoolean(headerCellOpts.padding) ? headerCellOpts.padding : cellOpts.padding
@@ -340,42 +359,58 @@ export default defineVxeComponent({
           tcStyle.minHeight = `${currCellHeight}px`
         }
 
-        return h('th', {
-          class: ['vxe-table--column vxe-header--column is--floating-filters', colid, fixedHiddenColumn ? 'fixed--hidden' : 'fixed--visible', {
-            [`col--${headAlign}`]: headAlign,
-            [`col--${type}`]: type,
-            'col--last': isLastColumn,
-            'col--fixed': column.fixed,
-            'col--ellipsis': hasEllipsis,
-            'fixed--width': !isAutoCellWidth,
-            'is--padding': isPadding,
-            'is--sortable': column.sortable,
-            'col--current': currColFlag && currentCol === column
-          }
-          ],
-          key: colid,
-          ...thAttrs
-        }, [
-          h('div', {
-            class: ['vxe-cell', '' + (cellClassName || ''), {
-              'c--title': showTitle,
-              'c--tooltip': showTooltip,
-              'c--ellipsis': showEllipsis
-            }],
-            style: tcStyle
-          }, isOptimizeMode && fixedHiddenColumn && !floatingFilters
-            ? []
-            : [
-                h('div', {
-                  colid,
-                  class: 'vxe-cell--wrapper vxe-header-cell--wrapper'
-                }, flSlot
-                  ? $xeTable.callSlot(flSlot, cellParams)
-                  : (rtFloatingFilter && firstFilterOption
-                      ? getSlotVNs(rtFloatingFilter(filterRender, cellParams as unknown as VxeGlobalRendererHandles.RenderTableFloatingFilterParams))
-                      : []))
-              ])
-        ])
+        return h(
+          'th',
+          {
+            class: [
+              'vxe-table--column vxe-header--column is--floating-filters',
+              colid,
+              fixedHiddenColumn ? 'fixed--hidden' : 'fixed--visible',
+              {
+                [`col--${headAlign}`]: headAlign,
+                [`col--${type}`]: type,
+                'col--last': isLastColumn,
+                'col--fixed': column.fixed,
+                'col--ellipsis': hasEllipsis,
+                'fixed--width': !isAutoCellWidth,
+                'is--padding': isPadding,
+                'is--sortable': column.sortable,
+                'col--current': currColFlag && currentCol === column
+              }
+            ],
+            key: colid,
+            ...thAttrs
+          },
+          [
+            h(
+              'div',
+              {
+                class: [
+                  'vxe-cell',
+                  '' + (cellClassName || ''),
+                  {
+                    'c--title': showTitle,
+                    'c--tooltip': showTooltip,
+                    'c--ellipsis': showEllipsis
+                  }
+                ],
+                style: tcStyle
+              },
+              isOptimizeMode && fixedHiddenColumn && !floatingFilters
+                ? []
+                : [
+                    h(
+                      'div',
+                      {
+                        colid,
+                        class: 'vxe-cell--wrapper vxe-header-cell--wrapper'
+                      },
+                      flSlot ? $xeTable.callSlot(flSlot, cellParams) : rtFloatingFilter && firstFilterOption ? getSlotVNs(rtFloatingFilter(filterRender, cellParams as unknown as VxeGlobalRendererHandles.RenderTableFloatingFilterParams)) : []
+                    )
+                  ]
+            )
+          ]
+        )
       })
     }
 
@@ -386,25 +421,27 @@ export default defineVxeComponent({
       const floatingFilterOpts = computeFloatingFilterOpts.value
       const rowVNs = headerGroups.map((cols, _rowIndex) => {
         const params = { $table: $xeTable, rowIndex: _rowIndex, _rowIndex, $rowIndex: _rowIndex, fixed: fixedType, type: renderType }
-        return h('tr', {
-          key: _rowIndex,
-          class: [
-            'vxe-header--row',
-            headerRowClassName ? (XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName) : ''
-          ],
-          style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) : null
-        }, renderRows(isGroup, isOptimizeMode, headerGroups, _rowIndex, cols))
+        return h(
+          'tr',
+          {
+            key: _rowIndex,
+            class: ['vxe-header--row', headerRowClassName ? (XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName) : ''],
+            style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) : null
+          },
+          renderRows(isGroup, isOptimizeMode, headerGroups, _rowIndex, cols)
+        )
       })
 
       if (floatingFilterOpts.enabled) {
         rowVNs.push(
-          h('tr', {
-            key: 'ff',
-            class: [
-              'vxe-header--row is--floating-filters',
-              '' + (floatingFilterOpts.rowClassName || '')
-            ]
-          }, renderFilterRows(isOptimizeMode, renderColumnList))
+          h(
+            'tr',
+            {
+              key: 'ff',
+              class: ['vxe-header--row is--floating-filters', '' + (floatingFilterOpts.rowClassName || '')]
+            },
+            renderFilterRows(isOptimizeMode, renderColumnList)
+          )
         )
       }
 
@@ -466,81 +503,105 @@ export default defineVxeComponent({
         }
       }
 
-      return h('div', {
-        ref: refElem,
-        class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
-        xid: xID
-      }, [
-        h('div', {
-          ref: refHeaderScroll,
-          class: 'vxe-table--header-inner-wrapper',
-          onScroll (evnt) {
-            $xeTable.triggerHeaderScrollEvent(evnt, fixedType)
-          }
-        }, [
-          fixedType
-            ? renderEmptyElement($xeTable)
-            : h('div', {
-              ref: refHeaderXSpace,
-              class: 'vxe-body--x-space'
-            }),
-          h('table', {
-            ref: refHeaderTable,
-            class: 'vxe-table--header',
-            xid: xID,
-            cellspacing: 0,
-            cellpadding: 0,
-            border: 0,
-            xvm: isOptimizeMode ? '1' : null
-          }, [
-            /**
-             * 列宽
-             */
-            h('colgroup', {
-              ref: refHeaderColgroup
-            }, renderColumnList.map((column, $columnIndex) => {
-              return h('col', {
-                name: column.id,
-                key: $columnIndex,
-                style: {
-                  width: `${column.renderWidth}px`
-                }
-              })
-            })),
-            /**
-             * 头部
-             */
-            h('thead', {
-              ref: refHeaderTHead
-            }, renderHeads(isGroup, isOptimizeMode, renderHeaderList, renderColumnList))
-          ]),
-          hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area
-            ? h('div', {
-              class: 'vxe-table--cell-area',
-              xid: xID
-            }, [
-              h('span', {
-                class: 'vxe-table--cell-main-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-clip-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-extend-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-multi-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-active-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-col-status-area'
-              })
-            ])
-            : renderEmptyElement($xeTable)
-        ])
-      ])
+      return h(
+        'div',
+        {
+          ref: refElem,
+          class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
+          xid: xID
+        },
+        [
+          h(
+            'div',
+            {
+              ref: refHeaderScroll,
+              class: 'vxe-table--header-inner-wrapper',
+              onScroll(evnt) {
+                $xeTable.triggerHeaderScrollEvent(evnt, fixedType)
+              }
+            },
+            [
+              fixedType
+                ? renderEmptyElement($xeTable)
+                : h('div', {
+                  ref: refHeaderXSpace,
+                  class: 'vxe-body--x-space'
+                }),
+              h(
+                'table',
+                {
+                  ref: refHeaderTable,
+                  class: 'vxe-table--header',
+                  xid: xID,
+                  cellspacing: 0,
+                  cellpadding: 0,
+                  border: 0,
+                  xvm: isOptimizeMode ? '1' : null
+                },
+                [
+                  /**
+                   * 列宽
+                   */
+                  h(
+                    'colgroup',
+                    {
+                      ref: refHeaderColgroup
+                    },
+                    renderColumnList.map((column, $columnIndex) => {
+                      return h('col', {
+                        name: column.id,
+                        key: $columnIndex,
+                        style: {
+                          width: `${column.renderWidth}px`
+                        }
+                      })
+                    })
+                  ),
+                  /**
+                   * 头部
+                   */
+                  h(
+                    'thead',
+                    {
+                      ref: refHeaderTHead
+                    },
+                    renderHeads(isGroup, isOptimizeMode, renderHeaderList, renderColumnList)
+                  )
+                ]
+              ),
+              hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area
+                ? h(
+                  'div',
+                  {
+                    class: 'vxe-table--cell-area',
+                    xid: xID
+                  },
+                  [
+                    h('span', {
+                      class: 'vxe-table--cell-main-area'
+                    }),
+                    h('span', {
+                      class: 'vxe-table--cell-clip-area'
+                    }),
+                    h('span', {
+                      class: 'vxe-table--cell-extend-area'
+                    }),
+                    h('span', {
+                      class: 'vxe-table--cell-multi-area'
+                    }),
+                    h('span', {
+                      class: 'vxe-table--cell-active-area'
+                    }),
+                    h('span', {
+                      class: 'vxe-table--cell-col-status-area'
+                    })
+                  ]
+                )
+                : renderEmptyElement($xeTable)
+            ]
+          )
+        ]
+      )
     }
 
     watch(() => props.tableColumn, uploadColumn)

@@ -1,5 +1,5 @@
 import { PropType } from 'vue'
-import { VxeUI } from '../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { getDefaultConfig } from '../../ui/src/utils'
 
 import type { VxeTablePropTypes } from '../../../types'

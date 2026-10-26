@@ -1,7 +1,7 @@
 import { h, ref, computed, inject, createCommentVNode, VNode, reactive, nextTick, PropType, onBeforeUnmount } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
-import { VxeUI } from '../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { getSlotVNs } from '../../ui/src/vn'
 import { createComponentLog } from '../../ui/src/log'
 
@@ -12,7 +12,7 @@ const { warnLog, errLog } = createComponentLog('toolbar')
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, useFns } = VxeUI
 
-function createReactData (): ToolbarReactData {
+function createReactData(): ToolbarReactData {
   return {
     isRefresh: false,
     connectFlag: 0,
@@ -20,7 +20,7 @@ function createReactData (): ToolbarReactData {
   }
 }
 
-function createInternalData (): ToolbarInternalData {
+function createInternalData(): ToolbarInternalData {
   return {
     connectTable: null
   }
@@ -38,8 +38,8 @@ export default defineVxeComponent({
     exportOptions: Object as PropType<VxeToolbarPropTypes.ExportOptions>,
     print: [Boolean, Object] as PropType<VxeToolbarPropTypes.Print>,
     printOptions: Object as PropType<VxeToolbarPropTypes.PrintOptions>,
-    zoom: [Boolean, Object] as PropType< VxeToolbarPropTypes.Zoom>,
-    zoomOptions: Object as PropType< VxeToolbarPropTypes.ZoomOptions>,
+    zoom: [Boolean, Object] as PropType<VxeToolbarPropTypes.Zoom>,
+    zoomOptions: Object as PropType<VxeToolbarPropTypes.ZoomOptions>,
     custom: [Boolean, Object] as PropType<VxeToolbarPropTypes.Custom>,
     customOptions: Object as PropType<VxeToolbarPropTypes.CustomOptions>,
     buttons: {
@@ -60,11 +60,8 @@ export default defineVxeComponent({
     },
     className: [String, Function] as PropType<VxeToolbarPropTypes.ClassName>
   },
-  emits: [
-    'button-click',
-    'tool-click'
-  ] as VxeToolbarEmits,
-  setup (props, context) {
+  emits: ['button-click', 'tool-click'] as VxeToolbarEmits,
+  setup(props, context) {
     const { slots, emit } = context
 
     const xID = XEUtils.uniqueId()
@@ -189,17 +186,22 @@ export default defineVxeComponent({
         if (queryMethod) {
           reactData.isRefresh = true
           try {
-            Promise.resolve(queryMethod({})).catch((e) => e).then(() => {
-              reactData.isRefresh = false
-            })
+            Promise.resolve(queryMethod({}))
+              .catch((e) => e)
+              .then(() => {
+                reactData.isRefresh = false
+              })
           } catch (e) {
             reactData.isRefresh = false
           }
         } else if ($xeGGWrapper) {
           reactData.isRefresh = true
-          $xeGGWrapper.triggerToolbarCommitEvent({ code: refreshOpts.code || 'reload' }, $event).catch(() => {}).then(() => {
-            reactData.isRefresh = false
-          })
+          $xeGGWrapper
+            .triggerToolbarCommitEvent({ code: refreshOpts.code || 'reload' }, $event)
+            .catch(() => {})
+            .then(() => {
+              reactData.isRefresh = false
+            })
         }
       }
     }
@@ -365,8 +367,8 @@ export default defineVxeComponent({
 
     toolbarMethods = {
       dispatchEvent,
-      syncUpdate (params) {
-        internalData.connectTable = params.$table as (VxeTableConstructor & VxeTablePrivateMethods)
+      syncUpdate(params) {
+        internalData.connectTable = params.$table as VxeTableConstructor & VxeTablePrivateMethods
         reactData.columns = params.collectColumn
         reactData.connectFlag++
       }
@@ -389,7 +391,7 @@ export default defineVxeComponent({
                 content: child.content || child.name,
                 options: undefined
               }),
-              onClick: (eventParams) => isBtn ? btnEvent(eventParams, child) : tolEvent(eventParams, child)
+              onClick: (eventParams) => (isBtn ? btnEvent(eventParams, child) : tolEvent(eventParams, child))
             })
             : createCommentVNode()
         })
@@ -414,31 +416,39 @@ export default defineVxeComponent({
         buttons.forEach((item, index) => {
           const { dropdowns, buttonRender } = item
           if (item.visible !== false) {
-            const compConf = buttonRender && buttonRender.name ? (rendererOpts[buttonRender.name] || renderer.get(buttonRender.name)) : null
+            const compConf = buttonRender && buttonRender.name ? rendererOpts[buttonRender.name] || renderer.get(buttonRender.name) : null
             if (buttonRender && compConf && compConf.renderToolbarButton) {
               const toolbarButtonClassName = compConf.toolbarButtonClassName
               const params = { $grid: $xeGrid, $gantt: $xeGantt, $table: $table!, button: item }
               btnVNs.push(
-                h('span', {
-                  key: `br${item.code || index}`,
-                  class: ['vxe-button--item', toolbarButtonClassName ? (XEUtils.isFunction(toolbarButtonClassName) ? toolbarButtonClassName(params) : toolbarButtonClassName) : '']
-                }, getSlotVNs(compConf.renderToolbarButton(buttonRender, params)))
+                h(
+                  'span',
+                  {
+                    key: `br${item.code || index}`,
+                    class: ['vxe-button--item', toolbarButtonClassName ? (XEUtils.isFunction(toolbarButtonClassName) ? toolbarButtonClassName(params) : toolbarButtonClassName) : '']
+                  },
+                  getSlotVNs(compConf.renderToolbarButton(buttonRender, params))
+                )
               )
             } else {
               if (VxeUIButtonComponent) {
                 btnVNs.push(
-                  h(VxeUIButtonComponent, {
-                    key: `bd${item.code || index}`,
-                    ...Object.assign({}, item, {
-                      content: item.content || item.name,
-                      options: undefined
-                    }),
-                    onClick: (eventParams) => btnEvent(eventParams, item)
-                  }, dropdowns && dropdowns.length
-                    ? {
-                        dropdowns: () => renderDropdowns(item, true)
-                      }
-                    : {})
+                  h(
+                    VxeUIButtonComponent,
+                    {
+                      key: `bd${item.code || index}`,
+                      ...Object.assign({}, item, {
+                        content: item.content || item.name,
+                        options: undefined
+                      }),
+                      onClick: (eventParams) => btnEvent(eventParams, item)
+                    },
+                    dropdowns && dropdowns.length
+                      ? {
+                          dropdowns: () => renderDropdowns(item, true)
+                        }
+                      : {}
+                  )
                 )
               }
             }
@@ -446,15 +456,27 @@ export default defineVxeComponent({
         })
       }
       return [
-        h('div', {
-          class: 'vxe-button--prefix-wrapper'
-        }, buttonPrefixSlot ? getSlotVNs(buttonPrefixSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : []),
-        h('div', {
-          class: 'vxe-button--item-wrapper'
-        }, buttonsSlot ? getSlotVNs(buttonsSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : btnVNs),
-        h('div', {
-          class: 'vxe-button--suffix-wrapper'
-        }, buttonSuffixSlot ? getSlotVNs(buttonSuffixSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : [])
+        h(
+          'div',
+          {
+            class: 'vxe-button--prefix-wrapper'
+          },
+          buttonPrefixSlot ? getSlotVNs(buttonPrefixSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : []
+        ),
+        h(
+          'div',
+          {
+            class: 'vxe-button--item-wrapper'
+          },
+          buttonsSlot ? getSlotVNs(buttonsSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : btnVNs
+        ),
+        h(
+          'div',
+          {
+            class: 'vxe-button--suffix-wrapper'
+          },
+          buttonSuffixSlot ? getSlotVNs(buttonSuffixSlot({ buttons: buttons || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : []
+        )
       ]
     }
 
@@ -475,31 +497,39 @@ export default defineVxeComponent({
         tools.forEach((item, tIndex) => {
           const { dropdowns, toolRender } = item
           if (item.visible !== false) {
-            const compConf = toolRender && toolRender.name ? (rendererOpts[toolRender.name] || renderer.get(toolRender.name)) : null
+            const compConf = toolRender && toolRender.name ? rendererOpts[toolRender.name] || renderer.get(toolRender.name) : null
             if (toolRender && compConf && compConf.renderToolbarTool) {
               const toolbarToolClassName = compConf.toolbarToolClassName
               const params = { $grid: $xeGrid, $gantt: $xeGantt, $table: $table!, tool: item }
               btnVNs.push(
-                h('span', {
-                  key: tIndex,
-                  class: ['vxe-tool--item', toolbarToolClassName ? (XEUtils.isFunction(toolbarToolClassName) ? toolbarToolClassName(params) : toolbarToolClassName) : '']
-                }, getSlotVNs(compConf.renderToolbarTool(toolRender, params)))
+                h(
+                  'span',
+                  {
+                    key: tIndex,
+                    class: ['vxe-tool--item', toolbarToolClassName ? (XEUtils.isFunction(toolbarToolClassName) ? toolbarToolClassName(params) : toolbarToolClassName) : '']
+                  },
+                  getSlotVNs(compConf.renderToolbarTool(toolRender, params))
+                )
               )
             } else {
               if (VxeUIButtonComponent) {
                 btnVNs.push(
-                  h(VxeUIButtonComponent, {
-                    key: tIndex,
-                    ...Object.assign({}, item, {
-                      content: item.content || item.name,
-                      options: undefined
-                    }),
-                    onClick: (eventParams) => tolEvent(eventParams, item)
-                  }, dropdowns && dropdowns.length
-                    ? {
-                        dropdowns: () => renderDropdowns(item, false)
-                      }
-                    : {})
+                  h(
+                    VxeUIButtonComponent,
+                    {
+                      key: tIndex,
+                      ...Object.assign({}, item, {
+                        content: item.content || item.name,
+                        options: undefined
+                      }),
+                      onClick: (eventParams) => tolEvent(eventParams, item)
+                    },
+                    dropdowns && dropdowns.length
+                      ? {
+                          dropdowns: () => renderDropdowns(item, false)
+                        }
+                      : {}
+                  )
                 )
               }
             }
@@ -507,15 +537,27 @@ export default defineVxeComponent({
         })
       }
       return [
-        h('div', {
-          class: 'vxe-tool--prefix-wrapper'
-        }, toolPrefixSlot ? getSlotVNs(toolPrefixSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : []),
-        h('div', {
-          class: 'vxe-tool--item-wrapper'
-        }, toolsSlot ? getSlotVNs(toolsSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : btnVNs),
-        h('div', {
-          class: 'vxe-tool--suffix-wrapper'
-        }, toolSuffixSlot ? getSlotVNs(toolSuffixSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : [])
+        h(
+          'div',
+          {
+            class: 'vxe-tool--prefix-wrapper'
+          },
+          toolPrefixSlot ? getSlotVNs(toolPrefixSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : []
+        ),
+        h(
+          'div',
+          {
+            class: 'vxe-tool--item-wrapper'
+          },
+          toolsSlot ? getSlotVNs(toolsSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : btnVNs
+        ),
+        h(
+          'div',
+          {
+            class: 'vxe-tool--suffix-wrapper'
+          },
+          toolSuffixSlot ? getSlotVNs(toolSuffixSlot({ tools: tools || [], $grid: $xeGrid, $gantt: $xeGantt, $table: $table })) : []
+        )
       ]
     }
 
@@ -564,7 +606,7 @@ export default defineVxeComponent({
         ? h(VxeUIButtonComponent, {
           key: 'refresh',
           circle: true,
-          icon: reactData.isRefresh ? (refreshOpts.iconLoading || getIcon().TOOLBAR_TOOLS_REFRESH_LOADING) : (refreshOpts.icon || getIcon().TOOLBAR_TOOLS_REFRESH),
+          icon: reactData.isRefresh ? refreshOpts.iconLoading || getIcon().TOOLBAR_TOOLS_REFRESH_LOADING : refreshOpts.icon || getIcon().TOOLBAR_TOOLS_REFRESH,
           title: getI18n('vxe.toolbar.refresh'),
           onClick: refreshEvent
         })
@@ -577,7 +619,7 @@ export default defineVxeComponent({
         ? h(VxeUIButtonComponent, {
           key: 'zoom',
           circle: true,
-          icon: $xeGGWrapper.isMaximized() ? (zoomOpts.iconOut || getIcon().TOOLBAR_TOOLS_MINIMIZE) : (zoomOpts.iconIn || getIcon().TOOLBAR_TOOLS_FULLSCREEN),
+          icon: $xeGGWrapper.isMaximized() ? zoomOpts.iconOut || getIcon().TOOLBAR_TOOLS_MINIMIZE : zoomOpts.iconIn || getIcon().TOOLBAR_TOOLS_FULLSCREEN,
           title: getI18n(`vxe.toolbar.zoom${$xeGGWrapper.isMaximized() ? 'Out' : 'In'}`),
           onClick: zoomEvent
         })
@@ -588,9 +630,9 @@ export default defineVxeComponent({
       const customOpts = computeCustomOpts.value
       const btnTrigger = computeTrigger.value
       const customBtnOns: {
-        onClick?: typeof handleClickSettingEvent;
-        onMouseenter?: typeof handleMouseenterSettingEvent;
-        onMouseleave?: typeof handleMouseleaveSettingEvent;
+        onClick?: typeof handleClickSettingEvent
+        onMouseenter?: typeof handleMouseenterSettingEvent
+        onMouseleave?: typeof handleMouseleaveSettingEvent
       } = {}
       if (btnTrigger === 'manual') {
         // 手动触发
@@ -618,31 +660,51 @@ export default defineVxeComponent({
       const { perfect, loading, refresh, zoom, custom, className } = props
       const vSize = computeSize.value
 
-      return h('div', {
-        ref: refElem,
-        class: ['vxe-toolbar', className ? (XEUtils.isFunction(className) ? className({ $toolbar: $xeToolbar }) : className) : '', {
-          [`size--${vSize}`]: vSize,
-          'is--perfect': perfect,
-          'is--loading': loading
-        }]
-      }, [
-        h('div', {
-          class: 'vxe-buttons--wrapper'
-        }, renderLeftBtns()),
-        h('div', {
-          class: 'vxe-tools--wrapper'
-        }, renderRightTools()),
-        h('div', {
-          class: 'vxe-tools--operate'
-        }, [
-          props.import ? renderToolImport() : createCommentVNode(),
-          props.export ? renderToolExport() : createCommentVNode(),
-          props.print ? renderToolPrint() : createCommentVNode(),
-          refresh ? renderToolRefresh() : createCommentVNode(),
-          zoom && $xeGGWrapper ? renderToolZoom() : createCommentVNode(),
-          custom ? renderToolCustom() : createCommentVNode()
-        ])
-      ])
+      return h(
+        'div',
+        {
+          ref: refElem,
+          class: [
+            'vxe-toolbar',
+            className ? (XEUtils.isFunction(className) ? className({ $toolbar: $xeToolbar }) : className) : '',
+            {
+              [`size--${vSize}`]: vSize,
+              'is--perfect': perfect,
+              'is--loading': loading
+            }
+          ]
+        },
+        [
+          h(
+            'div',
+            {
+              class: 'vxe-buttons--wrapper'
+            },
+            renderLeftBtns()
+          ),
+          h(
+            'div',
+            {
+              class: 'vxe-tools--wrapper'
+            },
+            renderRightTools()
+          ),
+          h(
+            'div',
+            {
+              class: 'vxe-tools--operate'
+            },
+            [
+              props.import ? renderToolImport() : createCommentVNode(),
+              props.export ? renderToolExport() : createCommentVNode(),
+              props.print ? renderToolPrint() : createCommentVNode(),
+              refresh ? renderToolRefresh() : createCommentVNode(),
+              zoom && $xeGGWrapper ? renderToolZoom() : createCommentVNode(),
+              custom ? renderToolCustom() : createCommentVNode()
+            ]
+          )
+        ]
+      )
     }
 
     $xeToolbar.renderVN = renderVN
@@ -700,7 +762,7 @@ export default defineVxeComponent({
 
     return $xeToolbar
   },
-  render () {
+  render() {
     return this.renderVN()
   }
 })

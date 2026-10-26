@@ -1,6 +1,6 @@
 import { reactive, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { VxeUI } from '../../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { hasEnableConf, isEnableConf } from '../../../ui/src/utils'
 import { getCellValue, setCellValue, getRowid } from '../../src/util'
 import { removeClass, addClass } from '../../../ui/src/dom'
@@ -12,10 +12,39 @@ const { warnLog, errLog } = createComponentLog('table')
 
 const { getConfig, renderer, hooks, getI18n } = VxeUI
 
-const tableEditMethodKeys: (keyof TableEditMethods)[] = ['insert', 'insertAt', 'insertNextAt', 'insertChild', 'insertChildAt', 'insertChildNextAt', 'remove', 'removeCheckboxRow', 'removeRadioRow', 'removeCurrentRow', 'getRecordset', 'getInsertRecords', 'getRemoveRecords', 'getUpdateRecords', 'getEditRecord', 'getActiveRecord', 'getEditCell', 'getSelectedCell', 'clearEdit', 'clearActived', 'clearSelected', 'isEditByRow', 'isActiveByRow', 'setEditRow', 'setActiveRow', 'setEditCell', 'setActiveCell', 'setSelectCell']
+const tableEditMethodKeys: (keyof TableEditMethods)[] = [
+  'insert',
+  'insertAt',
+  'insertNextAt',
+  'insertChild',
+  'insertChildAt',
+  'insertChildNextAt',
+  'remove',
+  'removeCheckboxRow',
+  'removeRadioRow',
+  'removeCurrentRow',
+  'getRecordset',
+  'getInsertRecords',
+  'getRemoveRecords',
+  'getUpdateRecords',
+  'getEditRecord',
+  'getActiveRecord',
+  'getEditCell',
+  'getSelectedCell',
+  'clearEdit',
+  'clearActived',
+  'clearSelected',
+  'isEditByRow',
+  'isActiveByRow',
+  'setEditRow',
+  'setActiveRow',
+  'setEditCell',
+  'setActiveCell',
+  'setSelectCell'
+]
 
 hooks.add('tableEditModule', {
-  setupTable ($xeTable) {
+  setupTable($xeTable) {
     const { props, reactData, internalData } = $xeTable
     const { refElem } = $xeTable.getRefMaps()
     const { computeMouseOpts, computeEditOpts, computeCheckboxOpts, computeTreeOpts, computeValidOpts, computeRendererOpts } = $xeTable.getComputeMaps()
@@ -72,10 +101,10 @@ hooks.add('tableEditModule', {
       const { rowField, parentField, mapChildrenField } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       const funcName = isAppend ? 'push' : 'unshift'
-      newRecords.forEach(item => {
+      newRecords.forEach((item) => {
         const parentRowId = item[parentField]
         const rowid = getRowid($xeTable, item)
-        const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, item => parentRowId === item[rowField], { children: mapChildrenField }) : null
+        const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, (item) => parentRowId === item[rowField], { children: mapChildrenField }) : null
         if (matchObj) {
           const { item: parentRow } = matchObj
           const parentRest = fullAllDataRowIdData[getRowid($xeTable, parentRow)]
@@ -148,7 +177,7 @@ hooks.add('tableEditModule', {
           errLog(getI18n('vxe.error.noGroup', ['insert']))
           // insertGroupRow(newRecords, false)
         } else {
-          newRecords.forEach(item => {
+          newRecords.forEach((item) => {
             const rowid = getRowid($xeTable, item)
             const rest = { row: item, rowid, _seq: -1, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: afterFullData, parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
             fullDataRowIdData[rowid] = rest
@@ -177,7 +206,7 @@ hooks.add('tableEditModule', {
             errLog(getI18n('vxe.error.noGroup', ['insert']))
             // insertGroupRow(newRecords, true)
           } else {
-            newRecords.forEach(item => {
+            newRecords.forEach((item) => {
               const rowid = getRowid($xeTable, item)
               const rest = { row: item, rowid, _seq: -1, seq: -1, index: -1, _index: -1, treeIndex: -1, _tIndex: -1, $index: -1, items: afterFullData, parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
               fullDataRowIdData[rowid] = rest
@@ -189,7 +218,7 @@ hooks.add('tableEditModule', {
         } else {
           // 如果为虚拟树
           if (treeConfig && transform) {
-            const matchMapObj = XEUtils.findTree(tableFullTreeData, item => targetRow[rowField] === item[rowField], { children: mapChildrenField })
+            const matchMapObj = XEUtils.findTree(tableFullTreeData, (item) => targetRow[rowField] === item[rowField], { children: mapChildrenField })
             if (matchMapObj) {
               const { parent: parentRow } = matchMapObj
               const parentMapChilds = parentRow ? parentRow[mapChildrenField] : tableFullTreeData
@@ -215,18 +244,22 @@ hooks.add('tableEditModule', {
                 }
                 parentMapChilds.splice(targetIndex, 0, row)
               })
-              XEUtils.eachTree(treeRecords, (item) => {
-                const rowid = getRowid($xeTable, item)
-                const rest = { row: item, rowid, _seq: -1, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: parentMapChilds, parent: parentRow, level: parentLevel + 1, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
-                if (item[childrenField]) {
-                  item[mapChildrenField] = item[childrenField]
-                }
-                fullDataRowIdData[rowid] = rest
-                fullAllDataRowIdData[rowid] = rest
-              }, { children: childrenField })
+              XEUtils.eachTree(
+                treeRecords,
+                (item) => {
+                  const rowid = getRowid($xeTable, item)
+                  const rest = { row: item, rowid, _seq: -1, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: parentMapChilds, parent: parentRow, level: parentLevel + 1, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+                  if (item[childrenField]) {
+                    item[mapChildrenField] = item[childrenField]
+                  }
+                  fullDataRowIdData[rowid] = rest
+                  fullAllDataRowIdData[rowid] = rest
+                },
+                { children: childrenField }
+              )
               // 源
               if (parentRow) {
-                const matchObj = XEUtils.findTree(tableFullTreeData, item => targetRow[rowField] === item[rowField], { children: childrenField })
+                const matchObj = XEUtils.findTree(tableFullTreeData, (item) => targetRow[rowField] === item[rowField], { children: childrenField })
                 if (matchObj) {
                   const parentChilds = matchObj.items
                   let targetIndex = matchObj.index
@@ -278,7 +311,7 @@ hooks.add('tableEditModule', {
               const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
               if (mergeRowIndex >= afIndex) {
                 mergeItem.row = mergeRowIndex + newRecords.length
-              } else if (isInsertNextRow ? (mergeRowIndex + mergeRowspan >= afIndex) : (mergeRowIndex + mergeRowspan > afIndex)) {
+              } else if (isInsertNextRow ? mergeRowIndex + mergeRowspan >= afIndex : mergeRowIndex + mergeRowspan > afIndex) {
                 mergeItem.rowspan = mergeRowspan + newRecords.length
               }
             })
@@ -319,15 +352,17 @@ hooks.add('tableEditModule', {
       if (reactData.scrollYLoad) {
         $xeTable.updateScrollYSpace()
       }
-      return nextTick().then(() => {
-        $xeTable.updateCellAreas()
-        return $xeTable.recalculate(true)
-      }).then(() => {
-        return {
-          row: newRecords.length ? newRecords[newRecords.length - 1] : null,
-          rows: newRecords
-        }
-      })
+      return nextTick()
+        .then(() => {
+          $xeTable.updateCellAreas()
+          return $xeTable.recalculate(true)
+        })
+        .then(() => {
+          return {
+            row: newRecords.length ? newRecords[newRecords.length - 1] : null,
+            rows: newRecords
+          }
+        })
     }
 
     const handleInsertChildRowAt = (records: any, parentRowOrParentId: any, targetRow: any, isInsertNextRow?: boolean) => {
@@ -346,7 +381,11 @@ hooks.add('tableEditModule', {
             parentRow = rowRest.row
           }
         }
-        return handleInsertRowAt(records.map((item: any) => Object.assign({}, item, { [parentField]: parentRow[rowField] })), targetRow, isInsertNextRow)
+        return handleInsertRowAt(
+          records.map((item: any) => Object.assign({}, item, { [parentField]: parentRow[rowField] })),
+          targetRow,
+          isInsertNextRow
+        )
       } else {
         errLog('vxe.error.errProp', ['tree-config.transform=false', 'tree-config.transform=true'])
       }
@@ -367,14 +406,18 @@ hooks.add('tableEditModule', {
         actived.args = null
         actived.row = null
         actived.column = null
-        $xeTable.dispatchEvent('edit-closed', {
-          row,
-          rowIndex: $xeTable.getRowIndex(row),
-          $rowIndex: $xeTable.getVMRowIndex(row),
-          column,
-          columnIndex: $xeTable.getColumnIndex(column),
-          $columnIndex: $xeTable.getVMColumnIndex(column)
-        }, evnt || null)
+        $xeTable.dispatchEvent(
+          'edit-closed',
+          {
+            row,
+            rowIndex: $xeTable.getRowIndex(row),
+            $rowIndex: $xeTable.getVMRowIndex(row),
+            column,
+            columnIndex: $xeTable.getColumnIndex(column),
+            $columnIndex: $xeTable.getVMColumnIndex(column)
+          },
+          evnt || null
+        )
       }
       focused.row = null
       focused.column = null
@@ -388,22 +431,26 @@ hooks.add('tableEditModule', {
       return nextTick().then(() => $xeTable.updateCellAreas())
     }
 
-    const handleEditActive = (params: {
-      $table: VxeTableConstructor
-      column: VxeTableDefines.ColumnInfo
-      columnIndex: number
-      _columnIndex: number
-      $columnIndex: number
-      rowIndex: number
-      $rowIndex: number
-      _rowIndex: number
-      row: any
-      cell?: HTMLElement
-    }, evnt: Event | null, options: {
-      isClear?: boolean
-      isFocus?: boolean
-      isPos?: boolean
-    }) => {
+    const handleEditActive = (
+      params: {
+        $table: VxeTableConstructor
+        column: VxeTableDefines.ColumnInfo
+        columnIndex: number
+        _columnIndex: number
+        $columnIndex: number
+        rowIndex: number
+        $rowIndex: number
+        _rowIndex: number
+        row: any
+        cell?: HTMLElement
+      },
+      evnt: Event | null,
+      options: {
+        isClear?: boolean
+        isFocus?: boolean
+        isPos?: boolean
+      }
+    ) => {
       const $xeGrid = $xeTable.xeGrid
       const $xeGantt = $xeTable.xeGantt
 
@@ -461,25 +508,33 @@ hooks.add('tableEditModule', {
                 }
               })
             }
-            $xeTable.dispatchEvent(type, {
-              row,
-              rowIndex: $xeTable.getRowIndex(row),
-              $rowIndex: $xeTable.getVMRowIndex(row),
-              column,
-              columnIndex: $xeTable.getColumnIndex(column),
-              $columnIndex: $xeTable.getVMColumnIndex(column)
-            }, evnt)
-
-            // v4已废弃
-            if (type === 'edit-activated') {
-              $xeTable.dispatchEvent('edit-actived', {
+            $xeTable.dispatchEvent(
+              type,
+              {
                 row,
                 rowIndex: $xeTable.getRowIndex(row),
                 $rowIndex: $xeTable.getVMRowIndex(row),
                 column,
                 columnIndex: $xeTable.getColumnIndex(column),
                 $columnIndex: $xeTable.getVMColumnIndex(column)
-              }, evnt)
+              },
+              evnt
+            )
+
+            // v4已废弃
+            if (type === 'edit-activated') {
+              $xeTable.dispatchEvent(
+                'edit-actived',
+                {
+                  row,
+                  rowIndex: $xeTable.getRowIndex(row),
+                  $rowIndex: $xeTable.getVMRowIndex(row),
+                  column,
+                  columnIndex: $xeTable.getColumnIndex(column),
+                  $columnIndex: $xeTable.getVMColumnIndex(column)
+                },
+                evnt
+              )
             }
           } else {
             const { column: oldColumn } = actived
@@ -516,11 +571,15 @@ hooks.add('tableEditModule', {
       return nextTick()
     }
 
-    const handleEditCell = (row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null, options: {
-      isClear?: boolean | undefined;
-      isFocus?: boolean | undefined;
-      isPos?: boolean | undefined;
-    }) => {
+    const handleEditCell = (
+      row: any,
+      fieldOrColumn: string | VxeTableDefines.ColumnInfo | null,
+      options: {
+        isClear?: boolean | undefined
+        isFocus?: boolean | undefined
+        isPos?: boolean | undefined
+      }
+    ) => {
       const { editConfig } = props
       const { isPos } = options
       const column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
@@ -528,21 +587,25 @@ hooks.add('tableEditModule', {
         return Promise.resolve(isPos ? $xeTable.scrollToRow(row, column) : null).then(() => {
           const cell = $xeTable.getCellElement(row, column)
           if (cell) {
-            handleEditActive({
-              row,
-              rowIndex: $xeTable.getRowIndex(row),
-              $rowIndex: $xeTable.getVMRowIndex(row),
-              _rowIndex: $xeTable.getVTRowIndex(row),
-              column,
-              columnIndex: $xeTable.getColumnIndex(column),
-              $columnIndex: $xeTable.getVMColumnIndex(column),
-              _columnIndex: $xeTable.getVTColumnIndex(column),
-              cell,
-              $table: $xeTable
-            }, null, {
-              isFocus: isPos,
-              isPos
-            })
+            handleEditActive(
+              {
+                row,
+                rowIndex: $xeTable.getRowIndex(row),
+                $rowIndex: $xeTable.getVMRowIndex(row),
+                _rowIndex: $xeTable.getVTRowIndex(row),
+                column,
+                columnIndex: $xeTable.getColumnIndex(column),
+                $columnIndex: $xeTable.getVMColumnIndex(column),
+                _columnIndex: $xeTable.getVTColumnIndex(column),
+                cell,
+                $table: $xeTable
+              },
+              null,
+              {
+                isFocus: isPos,
+                isPos
+              }
+            )
             internalData._lastCallTime = Date.now()
           }
           return nextTick()
@@ -557,7 +620,7 @@ hooks.add('tableEditModule', {
        *
        * @param {*} records
        */
-      insert (records) {
+      insert(records) {
         return handleInsertRowAt(records, null)
       },
       /**
@@ -566,19 +629,19 @@ hooks.add('tableEditModule', {
        * 如果 row 为 -1 则从插入到底部，如果为树结构，则插入到目标节点底部
        * 如果 row 为有效行则插入到该行的位置，如果为树结构，则有插入到效的目标节点该行的位置
        */
-      insertAt (records, targetRowOrRowid) {
+      insertAt(records, targetRowOrRowid) {
         return handleInsertRowAt(records, targetRowOrRowid)
       },
-      insertNextAt (records, targetRowOrRowid) {
+      insertNextAt(records, targetRowOrRowid) {
         return handleInsertRowAt(records, targetRowOrRowid, true)
       },
-      insertChild (records, parentRowOrParentId) {
+      insertChild(records, parentRowOrParentId) {
         return handleInsertChildRowAt(records, parentRowOrParentId, null)
       },
-      insertChildAt (records, parentRowOrParentId, targetRow) {
+      insertChildAt(records, parentRowOrParentId, targetRow) {
         return handleInsertChildRowAt(records, parentRowOrParentId, targetRow)
       },
-      insertChildNextAt (records, parentRowOrParentId, targetRow) {
+      insertChildNextAt(records, parentRowOrParentId, targetRow) {
         return handleInsertChildRowAt(records, parentRowOrParentId, targetRow, true)
       },
       /**
@@ -587,7 +650,7 @@ hooks.add('tableEditModule', {
        * 如果传 rows 则删除多行
        * 如果为空则删除所有
        */
-      remove (rows: any) {
+      remove(rows: any) {
         const { treeConfig } = props
         const { editStore, isRowGroupStatus } = reactData
         const { tableFullTreeData, selectCheckboxMaps, afterFullData, mergeBodyList, tableFullData, pendingRowMaps, insertRowMaps, removeRowMaps } = internalData
@@ -635,12 +698,12 @@ hooks.add('tableEditModule', {
           if (treeConfig && transform) {
             rows.forEach((row: any) => {
               const rowid = getRowid($xeTable, row)
-              const matchMapObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid($xeTable, item), { children: mapChildrenField })
+              const matchMapObj = XEUtils.findTree(tableFullTreeData, (item) => rowid === getRowid($xeTable, item), { children: mapChildrenField })
               if (matchMapObj) {
                 const rItems = matchMapObj.items.splice(matchMapObj.index, 1)
                 delList.push(rItems[0])
               }
-              const matchObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid($xeTable, item), { children: childrenField })
+              const matchObj = XEUtils.findTree(tableFullTreeData, (item) => rowid === getRowid($xeTable, item), { children: childrenField })
               if (matchObj) {
                 matchObj.items.splice(matchObj.index, 1)
               }
@@ -703,17 +766,19 @@ hooks.add('tableEditModule', {
         if (reactData.scrollYLoad) {
           $xeTable.updateScrollYSpace()
         }
-        return nextTick().then(() => {
-          $xeTable.updateCellAreas()
-          return $xeTable.recalculate(true)
-        }).then(() => {
-          return { row: delList.length ? delList[delList.length - 1] : null, rows: delList }
-        })
+        return nextTick()
+          .then(() => {
+            $xeTable.updateCellAreas()
+            return $xeTable.recalculate(true)
+          })
+          .then(() => {
+            return { row: delList.length ? delList[delList.length - 1] : null, rows: delList }
+          })
       },
       /**
        * 删除复选框选中的数据
        */
-      removeCheckboxRow () {
+      removeCheckboxRow() {
         return editMethods.remove($xeTable.getCheckboxRecords()).then((params: any) => {
           $xeTable.clearCheckboxRow()
           return params
@@ -722,7 +787,7 @@ hooks.add('tableEditModule', {
       /**
        * 删除单选框选中的数据
        */
-      removeRadioRow () {
+      removeRadioRow() {
         const radioRecord = $xeTable.getRadioRecord()
         return editMethods.remove(radioRecord || []).then((params: any) => {
           $xeTable.clearRadioRow()
@@ -732,7 +797,7 @@ hooks.add('tableEditModule', {
       /**
        * 删除当前行选中的数据
        */
-      removeCurrentRow () {
+      removeCurrentRow() {
         const currentRecord = $xeTable.getCurrentRecord()
         return editMethods.remove(currentRecord || []).then((params: any) => {
           $xeTable.clearCurrentRow()
@@ -742,13 +807,13 @@ hooks.add('tableEditModule', {
       /**
        * 获取表格数据集，包含新增、删除、修改、标记
        */
-      getRecordset () {
+      getRecordset() {
         const removeRecords = editMethods.getRemoveRecords()
         const pendingRecords = $xeTable.getPendingRecords()
         const delRecords = removeRecords.concat(pendingRecords)
         // 如果已经被删除，则无需放到更新数组
-        const updateRecords = editMethods.getUpdateRecords().filter(row => {
-          return !delRecords.some(item => $xeTable.eqRow(item, row))
+        const updateRecords = editMethods.getUpdateRecords().filter((row) => {
+          return !delRecords.some((item) => $xeTable.eqRow(item, row))
         })
         return {
           insertRecords: editMethods.getInsertRecords(),
@@ -760,7 +825,7 @@ hooks.add('tableEditModule', {
       /**
        * 获取新增的临时数据
        */
-      getInsertRecords () {
+      getInsertRecords() {
         const { fullAllDataRowIdData, insertRowMaps } = internalData
         const insertRecords: any[] = []
         XEUtils.each(insertRowMaps, (row, rowid) => {
@@ -773,7 +838,7 @@ hooks.add('tableEditModule', {
       /**
        * 获取已删除的数据
        */
-      getRemoveRecords () {
+      getRemoveRecords() {
         const { removeRowMaps } = internalData
         const removeRecords: any[] = []
         XEUtils.each(removeRowMaps, (row) => {
@@ -786,7 +851,7 @@ hooks.add('tableEditModule', {
        * 只精准匹配 row 的更改
        * 如果是树表格，子节点更改状态不会影响父节点的更新状态
        */
-      getUpdateRecords () {
+      getUpdateRecords() {
         const { keepSource, treeConfig } = props
         const { tableFullData, tableFullTreeData } = internalData
         const treeOpts = computeTreeOpts.value
@@ -795,11 +860,15 @@ hooks.add('tableEditModule', {
           syncActivedCell()
           if (treeConfig) {
             const childrenField = treeOpts.children || treeOpts.childrenField
-            XEUtils.eachTree(tableFullTreeData, row => {
-              if ($xeTable.isUpdateByRow(row)) {
-                updateRecords.push(row)
-              }
-            }, { children: childrenField })
+            XEUtils.eachTree(
+              tableFullTreeData,
+              (row) => {
+                if ($xeTable.isUpdateByRow(row)) {
+                  updateRecords.push(row)
+                }
+              },
+              { children: childrenField }
+            )
           } else {
             tableFullData.forEach((row) => {
               if ($xeTable.isUpdateByRow(row)) {
@@ -810,7 +879,7 @@ hooks.add('tableEditModule', {
         }
         return updateRecords
       },
-      getActiveRecord () {
+      getActiveRecord() {
         warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditCell'])
         const { editStore } = reactData
         const { fullAllDataRowIdData } = internalData
@@ -820,7 +889,7 @@ hooks.add('tableEditModule', {
         }
         return null
       },
-      getEditRecord () {
+      getEditRecord() {
         warnLog('vxe.error.delFunc', ['getEditRecord', 'getEditCell'])
         const { editStore } = reactData
         const { fullAllDataRowIdData } = internalData
@@ -830,7 +899,7 @@ hooks.add('tableEditModule', {
         }
         return null
       },
-      getEditCell () {
+      getEditCell() {
         const { editStore } = reactData
         const { row, column } = editStore.actived
         if (column && row) {
@@ -846,7 +915,7 @@ hooks.add('tableEditModule', {
       /**
        * 获取选中的单元格
        */
-      getSelectedCell () {
+      getSelectedCell() {
         const { editStore } = reactData
         const { row, column } = editStore.selected
         if (row && column) {
@@ -857,7 +926,7 @@ hooks.add('tableEditModule', {
         }
         return null
       },
-      clearActived (row) {
+      clearActived(row) {
         // 即将废弃
         warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
         return $xeTable.clearEdit(row)
@@ -865,13 +934,13 @@ hooks.add('tableEditModule', {
       /**
        * 清除激活的编辑
        */
-      clearEdit (row) {
+      clearEdit(row) {
         return handleClearEdit(null, row)
       },
       /**
        * 清除所选中源状态
        */
-      clearSelected () {
+      clearSelected() {
         const { editStore } = reactData
         const { selected } = editStore
         selected.row = null
@@ -879,7 +948,7 @@ hooks.add('tableEditModule', {
         removeCellSelectedClass()
         return nextTick()
       },
-      isActiveByRow (row) {
+      isActiveByRow(row) {
         warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
         // 即将废弃
         return $xeTable.isEditByRow(row)
@@ -888,11 +957,11 @@ hooks.add('tableEditModule', {
        * 判断行是否为激活编辑状态
        * @param {Row} row 行对象
        */
-      isEditByRow (row) {
+      isEditByRow(row) {
         const { editStore } = reactData
         return editStore.actived.row === row
       },
-      setActiveRow (row) {
+      setActiveRow(row) {
         warnLog('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
         // 即将废弃
         return editMethods.setEditRow(row)
@@ -900,9 +969,9 @@ hooks.add('tableEditModule', {
       /**
        * 激活行编辑
        */
-      setEditRow (row, fieldOrColumn, options) {
+      setEditRow(row, fieldOrColumn, options) {
         const { visibleColumn } = internalData
-        let column: any = XEUtils.find(visibleColumn, column => isEnableConf(column.editRender))
+        let column: any = XEUtils.find(visibleColumn, (column) => isEnableConf(column.editRender))
         let isPos = false
         if (fieldOrColumn) {
           isPos = true
@@ -910,12 +979,19 @@ hooks.add('tableEditModule', {
             column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
           }
         }
-        return handleEditCell(row, column, Object.assign({
-          isPos,
-          isFocus: isPos
-        }, options))
+        return handleEditCell(
+          row,
+          column,
+          Object.assign(
+            {
+              isPos,
+              isFocus: isPos
+            },
+            options
+          )
+        )
       },
-      setActiveCell (row, fieldOrColumn) {
+      setActiveCell(row, fieldOrColumn) {
         warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
         // 即将废弃
         return editMethods.setEditCell(row, fieldOrColumn)
@@ -923,16 +999,23 @@ hooks.add('tableEditModule', {
       /**
        * 激活单元格编辑
        */
-      setEditCell (row, fieldOrColumn, options) {
-        return handleEditCell(row, fieldOrColumn, Object.assign({
-          isFocus: true,
-          isPos: true
-        }, options))
+      setEditCell(row, fieldOrColumn, options) {
+        return handleEditCell(
+          row,
+          fieldOrColumn,
+          Object.assign(
+            {
+              isFocus: true,
+              isPos: true
+            },
+            options
+          )
+        )
       },
       /**
        * 只对 trigger=dblclick 有效，选中单元格
        */
-      setSelectCell (row, fieldOrColumn) {
+      setSelectCell(row, fieldOrColumn) {
         const { tableData } = reactData
         const editOpts = computeEditOpts.value
         const column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
@@ -959,11 +1042,14 @@ hooks.add('tableEditModule', {
       }
     }
 
-    const handleCellFocus = (cell: HTMLElement, params: {
-      $table: VxeTableConstructor
-      column: VxeTableDefines.ColumnInfo
-      row: any
-    }) => {
+    const handleCellFocus = (
+      cell: HTMLElement,
+      params: {
+        $table: VxeTableConstructor
+        column: VxeTableDefines.ColumnInfo
+        row: any
+      }
+    ) => {
       const { editConfig } = props
       const { column } = params
       const { editRender } = column
@@ -971,7 +1057,7 @@ hooks.add('tableEditModule', {
       if (editConfig && isEnableConf(editRender)) {
         const rendererOpts = computeRendererOpts.value
         const renderName = editRender.name
-        const compRender = renderName ? (rendererOpts[renderName] || renderer.get(renderName)) : null
+        const compRender = renderName ? rendererOpts[renderName] || renderer.get(renderName) : null
         let autoFocus: boolean | string | ((params: VxeGlobalRendererHandles.TableAutoFocusParams) => HTMLElement | null) | null | undefined = editRender.autofocus || editRender.autoFocus
         let autoSelect = editRender.autoSelect || editRender.autoselect
         let inputElem: HTMLElement | null = null
@@ -1007,16 +1093,23 @@ hooks.add('tableEditModule', {
       /**
        * 处理激活编辑
        */
-      handleEdit (params, evnt, options) {
-        return handleEditActive(params, evnt, Object.assign({
-          isFocus: true,
-          isPos: true
-        }, options))
+      handleEdit(params, evnt, options) {
+        return handleEditActive(
+          params,
+          evnt,
+          Object.assign(
+            {
+              isFocus: true,
+              isPos: true
+            },
+            options
+          )
+        )
       },
       /**
        * @deprecated
        */
-      handleActived (params, evnt) {
+      handleActived(params, evnt) {
         return editPrivateMethods.handleEdit(params, evnt)
       },
       /**
@@ -1029,7 +1122,7 @@ hooks.add('tableEditModule', {
       /**
        * 处理聚焦
        */
-      handleFocus (params) {
+      handleFocus(params) {
         const { row, column, cell } = params
         const { editRender } = column
         const editOpts = computeEditOpts.value
@@ -1061,7 +1154,7 @@ hooks.add('tableEditModule', {
       /**
        * 处理选中源
        */
-      handleSelected (params, evnt) {
+      handleSelected(params, evnt) {
         const { mouseConfig, editConfig } = props
         const { editStore } = reactData
         const mouseOpts = computeMouseOpts.value
@@ -1106,7 +1199,7 @@ hooks.add('tableEditModule', {
         }
         return selectMethod()
       },
-      addCellSelectedClass () {
+      addCellSelectedClass() {
         const { editStore } = reactData
         const { selected } = editStore
         const { row, column } = selected
@@ -1122,10 +1215,10 @@ hooks.add('tableEditModule', {
 
     return { ...editMethods, ...editPrivateMethods }
   },
-  setupGrid ($xeGrid) {
+  setupGrid($xeGrid) {
     return $xeGrid.extendTableMethods(tableEditMethodKeys)
   },
-  setupGantt ($xeGantt) {
+  setupGantt($xeGantt) {
     return $xeGantt.extendTableMethods(tableEditMethodKeys)
   }
 })

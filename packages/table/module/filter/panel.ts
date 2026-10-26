@@ -1,6 +1,6 @@
 import { h, ref, computed, inject, Teleport, PropType } from 'vue'
 import { defineVxeComponent } from '../../../ui/src/comp'
-import { VxeUI } from '../../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { formatText, isEnableConf } from '../../../ui/src/utils'
 import { getPropClass } from '../../../ui/src/dom'
 import { getSlotVNs } from '../../../ui/src/vn'
@@ -19,10 +19,10 @@ export default defineVxeComponent({
   props: {
     filterStore: {
       type: Object as PropType<VxeTableDefines.FilterStoreObj>,
-      default: () => ({} as VxeTableDefines.FilterStoreObj)
+      default: () => ({}) as VxeTableDefines.FilterStoreObj
     }
   },
-  setup (props, context) {
+  setup(props, context) {
     const xID = XEUtils.uniqueId()
 
     const VxeUIScrollbarComponent = VxeUI.getComponent('VxeScrollbar')
@@ -136,18 +136,26 @@ export default defineVxeComponent({
       const filterOptions = (filters || []) as VxeTableDefines.FilterOption[]
       const filterSlot = slots ? slots.filter : null
       const params = Object.assign({}, tableInternalData._currFilterParams, { option: filterOptions[0], $panel: $xeFilterPanel, $table: $xeTable })
-      const rtFilter = compConf ? (compConf.renderTableFilter || compConf.renderFilter) : null
+      const rtFilter = compConf ? compConf.renderTableFilter || compConf.renderFilter : null
       if (filterSlot) {
         return [
-          h('div', {
-            class: 'vxe-table--filter-template'
-          }, $xeTable.callSlot(filterSlot, params))
+          h(
+            'div',
+            {
+              class: 'vxe-table--filter-template'
+            },
+            $xeTable.callSlot(filterSlot, params)
+          )
         ]
       } else if (filterRender && rtFilter) {
         return [
-          h('div', {
-            class: 'vxe-table--filter-template'
-          }, getSlotVNs(rtFilter(filterRender, params)))
+          h(
+            'div',
+            {
+              class: 'vxe-table--filter-template'
+            },
+            getSlotVNs(rtFilter(filterRender, params))
+          )
         ]
       }
       const isAllChecked = filterMultiple ? filterStore.isAllSelected : !filterOptions.some((item) => item._checked)
@@ -156,62 +164,98 @@ export default defineVxeComponent({
       const optVNs = filterOptions.map((item: any) => {
         const isChecked = item._checked
         const isIndeterminate = false
-        return h('div', {
-          class: ['vxe-table--filter-option', {
-            'is--checked': item._checked
-          }],
-          title: item.label,
-          onClick: (evnt: MouseEvent) => {
-            changeOption(evnt, !item._checked, item)
-          }
-        }, (filterMultiple
-          ? [
-              h('span', {
-                class: ['vxe-checkbox--icon', isIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
-              })
-            ]
-          : []).concat([
-          h('span', {
-            class: 'vxe-checkbox--label'
-          }, formatText(item.label, 1))
-        ]))
+        return h(
+          'div',
+          {
+            class: [
+              'vxe-table--filter-option',
+              {
+                'is--checked': item._checked
+              }
+            ],
+            title: item.label,
+            onClick: (evnt: MouseEvent) => {
+              changeOption(evnt, !item._checked, item)
+            }
+          },
+          (filterMultiple
+            ? [
+                h('span', {
+                  class: ['vxe-checkbox--icon', isIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED]
+                })
+              ]
+            : []
+          ).concat([
+            h(
+              'span',
+              {
+                class: 'vxe-checkbox--label'
+              },
+              formatText(item.label, 1)
+            )
+          ])
+        )
       })
 
       return [
-        h('div', {
-          class: 'vxe-table--filter-header'
-        }, [
-          h('div', {
-            class: ['vxe-table--filter-option', {
-              'is--checked': isAllChecked,
-              'is--indeterminate': isAllIndeterminate
-            }],
-            title: getI18n(filterMultiple ? 'vxe.table.allTitle' : 'vxe.table.allFilter'),
-            onClick: (evnt: MouseEvent) => {
-              changeAllOption(evnt, !filterStore.isAllSelected)
-            }
-          }, (filterMultiple
-            ? [
-                h('span', {
-                  class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
-                })
-              ]
-            : []).concat([
-            h('span', {
-              class: 'vxe-checkbox--label'
-            }, getI18n('vxe.table.allFilter'))
-          ]))
-        ]),
+        h(
+          'div',
+          {
+            class: 'vxe-table--filter-header'
+          },
+          [
+            h(
+              'div',
+              {
+                class: [
+                  'vxe-table--filter-option',
+                  {
+                    'is--checked': isAllChecked,
+                    'is--indeterminate': isAllIndeterminate
+                  }
+                ],
+                title: getI18n(filterMultiple ? 'vxe.table.allTitle' : 'vxe.table.allFilter'),
+                onClick: (evnt: MouseEvent) => {
+                  changeAllOption(evnt, !filterStore.isAllSelected)
+                }
+              },
+              (filterMultiple
+                ? [
+                    h('span', {
+                      class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED]
+                    })
+                  ]
+                : []
+              ).concat([
+                h(
+                  'span',
+                  {
+                    class: 'vxe-checkbox--label'
+                  },
+                  getI18n('vxe.table.allFilter')
+                )
+              ])
+            )
+          ]
+        ),
         useScrollbar
-          ? h(VxeUIScrollbarComponent, {
-            class: 'vxe-table--scrollbar-filter-body',
-            viewClassName: 'vxe-table--scrollbar-filter-body-view'
-          }, {
-            default: () => optVNs
-          })
-          : h('div', {
-            class: 'vxe-table--filter-body'
-          }, optVNs)
+          ? h(
+            VxeUIScrollbarComponent,
+            {
+              class: 'vxe-table--scrollbar-filter-body',
+              viewClassName: 'vxe-table--scrollbar-filter-body-view'
+            },
+            {
+              default: () => optVNs
+            }
+          )
+          : h(
+            'div',
+            {
+              class: 'vxe-table--filter-body'
+            },
+            optVNs
+          )
       ]
     }
 
@@ -226,7 +270,7 @@ export default defineVxeComponent({
       const hasCheckOption = computeHasCheckOption.value
       const { filterRender, filterMultiple } = column
       const { confirmButtonText, resetButtonText, showFooter } = filterOpts
-      const compConf = filterRender && isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
+      const compConf = filterRender && isEnableConf(filterRender) && filterRender.name ? rendererOpts[filterRender.name] || renderer.get(filterRender.name) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
       let showFlFoot = !!filterMultiple
       if (XEUtils.isBoolean(showFooter)) {
@@ -236,20 +280,32 @@ export default defineVxeComponent({
       }
       return showFlFoot
         ? [
-            h('div', {
-              class: 'vxe-table--filter-footer'
-            }, [
-              h('button', {
-                class: {
-                  'is--disabled': isDisabled
-                },
-                disabled: isDisabled,
-                onClick: confirmFilter
-              }, confirmButtonText || getI18n('vxe.table.confirmFilter')),
-              h('button', {
-                onClick: resetFilter
-              }, resetButtonText || getI18n('vxe.table.resetFilter'))
-            ])
+            h(
+              'div',
+              {
+                class: 'vxe-table--filter-footer'
+              },
+              [
+                h(
+                  'button',
+                  {
+                    class: {
+                      'is--disabled': isDisabled
+                    },
+                    disabled: isDisabled,
+                    onClick: confirmFilter
+                  },
+                  confirmButtonText || getI18n('vxe.table.confirmFilter')
+                ),
+                h(
+                  'button',
+                  {
+                    onClick: resetFilter
+                  },
+                  resetButtonText || getI18n('vxe.table.resetFilter')
+                )
+              ]
+            )
           ]
         : []
     }
@@ -263,42 +319,50 @@ export default defineVxeComponent({
       }
       const rendererOpts = computeRendererOpts.value
       const filterRender = column ? column.filterRender : null
-      const compConf = filterRender && isEnableConf(filterRender) && filterRender.name ? (rendererOpts[filterRender.name] || renderer.get(filterRender.name)) : null
-      const filterClassName = compConf ? (compConf.tableFilterClassName || compConf.filterClassName) : ''
+      const compConf = filterRender && isEnableConf(filterRender) && filterRender.name ? rendererOpts[filterRender.name] || renderer.get(filterRender.name) : null
+      const filterClassName = compConf ? compConf.tableFilterClassName || compConf.filterClassName : ''
       const params = Object.assign({}, tableInternalData._currFilterParams, { $panel: $xeFilterPanel, $table: $xeTable })
       const tableProps = $xeTable.props
       const { computeSize } = $xeTable.getComputeMaps()
       const vSize = computeSize.value
       const filterOpts = computeFilterOpts.value
       const { transfer, destroyOnClose, className } = filterOpts
-      return h(Teleport, {
-        to: 'body',
-        disabled: !transfer
-      }, [
-        h('div', {
-          ref: refElem,
-          class: [
-            'vxe-table--filter-wrapper',
-            'filter--prevent-default',
-            className,
-            getPropClass(filterClassName, params),
+      return h(
+        Teleport,
+        {
+          to: 'body',
+          disabled: !transfer
+        },
+        [
+          h(
+            'div',
             {
-              [`size--${vSize}`]: vSize,
-              'is--animat': tableProps.animat,
-              'is--multiple': column.filterMultiple,
-              'is--active': visible
-            }
-          ],
-          style: filterStore.style
-        }, initStore.filter && (destroyOnClose ? visible : true) && column ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
-      ])
+              ref: refElem,
+              class: [
+                'vxe-table--filter-wrapper',
+                'filter--prevent-default',
+                className,
+                getPropClass(filterClassName, params),
+                {
+                  [`size--${vSize}`]: vSize,
+                  'is--animat': tableProps.animat,
+                  'is--multiple': column.filterMultiple,
+                  'is--active': visible
+                }
+              ],
+              style: filterStore.style
+            },
+            initStore.filter && (destroyOnClose ? visible : true) && column ? renderOptions(filterRender, compConf).concat(renderFooters()) : []
+          )
+        ]
+      )
     }
 
     $xeFilterPanel.renderVN = renderVN
 
     return $xeFilterPanel
   },
-  render () {
+  render() {
     return this.renderVN()
   }
 })

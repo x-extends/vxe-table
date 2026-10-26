@@ -1,12 +1,12 @@
 import { App } from 'vue'
-import { VxeUI } from '../ui'
+import { VxeUI } from '@vxe-ui/core'
 import VxeTableComponent from './src/table'
 import { useCellView } from './src/use'
 
 import type { TableHandleExport } from '../../types'
 
 export const VxeTable = Object.assign({}, VxeTableComponent, {
-  install (app: App) {
+  install(app: App) {
     app.component(VxeTableComponent.name as string, VxeTableComponent)
   }
 })

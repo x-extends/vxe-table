@@ -1,5 +1,6 @@
 import { App } from 'vue'
-import { VxeUI } from './ui'
+import { VxeUI } from '@vxe-ui/core'
+import './ui'
 
 import { VxeColumn } from './column'
 import { VxeColgroup } from './colgroup'
@@ -11,18 +12,12 @@ import zhCN from './locale/lang/zh-CN'
 
 import type { VxeGlobalConfig } from '../types'
 
-const components = [
-  VxeColumn,
-  VxeColgroup,
-  VxeGrid,
-  VxeTable,
-  VxeToolbar
-]
+const components = [VxeColumn, VxeColgroup, VxeGrid, VxeTable, VxeToolbar]
 
 // 默认安装
-export function install (app: App, options?: VxeGlobalConfig) {
+export function install(app: App, options?: VxeGlobalConfig) {
   VxeUI.setConfig(options)
-  components.forEach(component => component.install(app))
+  components.forEach((component) => component.install(app))
 }
 
 // 保留兼容老版本
@@ -33,7 +28,7 @@ if (!VxeUI.hasLanguage('zh-CN')) {
 }
 VxeUI.setTheme('light')
 
-export * from './ui'
+export { VxeUI }
 
 // Components
 export * from './table'

@@ -1,9 +1,9 @@
 import { App } from 'vue'
-import { VxeUI } from '../ui'
+import { VxeUI } from '@vxe-ui/core'
 import VxeToolbarComponent from './src/toolbar'
 
 export const VxeToolbar = Object.assign({}, VxeToolbarComponent, {
-  install (app: App) {
+  install(app: App) {
     app.component(VxeToolbarComponent.name as string, VxeToolbarComponent)
   }
 })

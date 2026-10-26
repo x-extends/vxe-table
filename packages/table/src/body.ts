@@ -1,7 +1,7 @@
 import { h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
-import { VxeUI } from '../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { getRowid, createHandleGetRowId, getCellRestHeight } from './util'
 import { updateCellTitle, getPropClass } from '../../ui/src/dom'
 import { isEnableConf, getDefaultConfig, hasEnableConf } from '../../ui/src/utils'
@@ -25,11 +25,33 @@ export default defineVxeComponent({
       default: ''
     }
   },
-  setup (props) {
+  setup(props) {
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeEditOpts, computeMouseOpts, computeCellOffsetWidth, computeAreaOpts, computeDefaultRowHeight, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeResizableOpts, computeVirtualXOpts, computeVirtualYOpts, computeIsBodyRenderOptimize, computeRendererOpts } = $xeTable.getComputeMaps()
+    const {
+      computeEditOpts,
+      computeMouseOpts,
+      computeCellOffsetWidth,
+      computeAreaOpts,
+      computeDefaultRowHeight,
+      computeEmptyOpts,
+      computeTooltipOpts,
+      computeRadioOpts,
+      computeExpandOpts,
+      computeTreeOpts,
+      computeCheckboxOpts,
+      computeCellOpts,
+      computeValidOpts,
+      computeRowOpts,
+      computeColumnOpts,
+      computeRowDragOpts,
+      computeResizableOpts,
+      computeVirtualXOpts,
+      computeVirtualYOpts,
+      computeIsBodyRenderOptimize,
+      computeRendererOpts
+    } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refBodyScroll = ref() as Ref<HTMLDivElement>
@@ -82,19 +104,23 @@ export default defineVxeComponent({
           lineHeight = `calc(-1em + ${Math.floor(cellHeight / 2 + getCellRestHeight(parentRowRest, cellOpts, rowOpts, defaultRowHeight) / 2)}px)`
         }
         return [
-          h('div', {
-            key: 'tl',
-            class: 'vxe-tree--line-wrapper'
-          }, [
-            h('div', {
-              class: 'vxe-tree--line',
-              style: {
-                height: lineHeight,
-                bottom: `-${Math.floor(cellHeight / 2)}px`,
-                left: `calc(${(rLevel * treeOpts.indent)}px + 1em)`
-              }
-            })
-          ])
+          h(
+            'div',
+            {
+              key: 'tl',
+              class: 'vxe-tree--line-wrapper'
+            },
+            [
+              h('div', {
+                class: 'vxe-tree--line',
+                style: {
+                  height: lineHeight,
+                  bottom: `-${Math.floor(cellHeight / 2)}px`,
+                  left: `calc(${rLevel * treeOpts.indent}px + 1em)`
+                }
+              })
+            ]
+          )
         ]
       }
       return []
@@ -137,7 +163,7 @@ export default defineVxeComponent({
       const rowOpts = computeRowOpts.value
       const rowDragOpts = computeRowDragOpts.value
       const defaultRowHeight = computeDefaultRowHeight.value
-      const customCellHeight = calcCellHeightFlag ? (cellOpts.height || rowOpts.height) : 0
+      const customCellHeight = calcCellHeightFlag ? cellOpts.height || rowOpts.height : 0
       const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = rowDragOpts
       const columnOpts = computeColumnOpts.value
       const mouseOpts = computeMouseOpts.value
@@ -151,9 +177,9 @@ export default defineVxeComponent({
       const colid = column.id
       const colRest = fullColumnIdData[colid] || {}
       const renderOpts = editRender || cellRender
-      const compConf = renderOpts && renderOpts.name ? (rendererOpts[renderOpts.name] || renderer.get(renderOpts.name)) : null
-      const compCellClassName = compConf ? (compConf.tableCellClassName || compConf.cellClassName) : null
-      const compCellStyle = compConf ? (compConf.tableCellStyle || compConf.cellStyle) : ''
+      const compConf = renderOpts && renderOpts.name ? rendererOpts[renderOpts.name] || renderer.get(renderOpts.name) : null
+      const compCellClassName = compConf ? compConf.tableCellClassName || compConf.cellClassName : null
+      const compCellStyle = compConf ? compConf.tableCellStyle || compConf.cellStyle : ''
       const showAllTip = tooltipOpts.showAll
       const columnIndex = colRest.index
       const _columnIndex = colRest._index
@@ -161,19 +187,19 @@ export default defineVxeComponent({
       const resizeHeight = resizeHeightFlag ? rowRest.resizeHeight : 0
       let fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
 
-      const cellPadding = getDefaultConfig(padding, (allPadding === null ? cellOpts.padding : allPadding))
+      const cellPadding = getDefaultConfig(padding, allPadding === null ? cellOpts.padding : allPadding)
       const isAllCellPadding = cellPadding === true
-      const isCellPaddingTop = cellPadding ? (isAllCellPadding || cellPadding.top !== false) : false
-      const isCellPaddingBottom = cellPadding ? (isAllCellPadding || cellPadding.bottom !== false) : false
-      const isCellPaddingLeft = cellPadding ? (isAllCellPadding || cellPadding.left !== false) : false
-      const isCellPaddingRight = cellPadding ? (isAllCellPadding || cellPadding.right !== false) : false
+      const isCellPaddingTop = cellPadding ? isAllCellPadding || cellPadding.top !== false : false
+      const isCellPaddingBottom = cellPadding ? isAllCellPadding || cellPadding.bottom !== false : false
+      const isCellPaddingLeft = cellPadding ? isAllCellPadding || cellPadding.left !== false : false
+      const isCellPaddingRight = cellPadding ? isAllCellPadding || cellPadding.right !== false : false
 
       const cellOverflow = getDefaultConfig(showOverflow, allShowOverflow)
       const showEllipsis = (cellOverflow === true ? tooltipOpts.mode : cellOverflow) === 'ellipsis'
       const showTitle = (cellOverflow === true ? tooltipOpts.mode : cellOverflow) === 'title'
       const showTooltip = (cellOverflow === true ? tooltipOpts.mode : cellOverflow) === 'tooltip'
       const hasEllipsis = isAllOverflow || showTitle || showTooltip || showEllipsis
-      const showResizable = (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
+      const showResizable = XEUtils.isBoolean(column.resizable) ? column.resizable : columnOpts.resizable || allResizable
       const isCsHeight = !!customCellHeight
       const isRsHeight = resizeHeight > 0
       let isDirty
@@ -181,7 +207,7 @@ export default defineVxeComponent({
       const cellAlign = align || (compConf ? compConf.tableCellAlign : '') || allAlign
       const cellVerticalAlign = XEUtils.eqNull(verticalAlign) ? allVerticalAlign : verticalAlign
       const errorValidItem = validErrorMaps[`${rowid}:${colid}`]
-      const showValidTip = editRules && validOpts.showErrorMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
+      const showValidTip = editRules && validOpts.showErrorMessage && (validOpts.message === 'default' ? height || tableData.length > 1 : validOpts.message === 'inline')
       const tdAttrs: any = { colid }
       const cellParams: VxeTableDefines.CellRenderBodyParams & {
         $table: VxeTableConstructor<any> & VxeTablePrivateMethods
@@ -352,7 +378,7 @@ export default defineVxeComponent({
             }
           }
         }
-        tcStyle.width = (column.renderWidth + mergeColWidth - cellOffsetWidth) + 'px'
+        tcStyle.width = column.renderWidth + mergeColWidth - cellOffsetWidth + 'px'
       }
       if (scrollYLoad || scrollXLoad || hasEllipsis || isCsHeight || isRsHeight) {
         tcStyle.height = cellHeight + 'px'
@@ -368,11 +394,14 @@ export default defineVxeComponent({
         tdVNs.push(
           h('div', {
             key: 'tc',
-            class: ['vxe-cell', {
-              'c--title': showTitle,
-              'c--tooltip': showTooltip,
-              'c--ellipsis': showEllipsis
-            }],
+            class: [
+              'vxe-cell',
+              {
+                'c--title': showTitle,
+                'c--tooltip': showTooltip,
+                'c--ellipsis': showEllipsis
+              }
+            ],
             style: tcStyle
           })
         )
@@ -384,51 +413,75 @@ export default defineVxeComponent({
         const clVNs: VxeComponentSlotType[] = []
         if (!isVNPreEmptyStatus) {
           clVNs.push(
-            h('div', {
-              colid,
-              rowid,
-              class: 'vxe-cell--wrapper vxe-body-cell--wrapper'
-            }, column.renderCell(cellParams))
+            h(
+              'div',
+              {
+                colid,
+                rowid,
+                class: 'vxe-cell--wrapper vxe-body-cell--wrapper'
+              },
+              column.renderCell(cellParams)
+            )
           )
         }
         tdVNs.push(
-          h('div', {
-            key: 'tc',
-            class: ['vxe-cell', {
-              'c--title': showTitle,
-              'c--tooltip': showTooltip,
-              'c--ellipsis': showEllipsis
-            }],
-            style: tcStyle,
-            title: showTitle ? $xeTable.getCellLabel(row, column) : null
-          }, clVNs)
+          h(
+            'div',
+            {
+              key: 'tc',
+              class: [
+                'vxe-cell',
+                {
+                  'c--title': showTitle,
+                  'c--tooltip': showTooltip,
+                  'c--ellipsis': showEllipsis
+                }
+              ],
+              style: tcStyle,
+              title: showTitle ? $xeTable.getCellLabel(row, column) : null
+            },
+            clVNs
+          )
         )
         if (showValidTip && errorValidItem) {
           const errRule = errorValidItem.rule
           const validSlot = slots ? slots.valid : null
           const validParams = { ...cellParams, ...errorValidItem, rule: errorValidItem }
           tdVNs.push(
-            h('div', {
-              key: 'tcv',
-              class: ['vxe-cell--valid-error-tip', getPropClass(validOpts.className, validParams)],
-              style: errRule && errRule.maxWidth
-                ? {
-                    width: errRule.maxWidth + 'px'
-                  }
-                : null
-            }, [
-              h('div', {
-                class: `vxe-cell--valid-error-wrapper vxe-cell--valid-error-theme-${validOpts.theme || 'normal'}`
-              }, [
-                validSlot
-                  ? $xeTable.callSlot(validSlot, validParams)
-                  : [
-                      h('span', {
-                        class: 'vxe-cell--valid-error-msg'
-                      }, errorValidItem.content)
-                    ]
-              ])
-            ])
+            h(
+              'div',
+              {
+                key: 'tcv',
+                class: ['vxe-cell--valid-error-tip', getPropClass(validOpts.className, validParams)],
+                style:
+                  errRule && errRule.maxWidth
+                    ? {
+                        width: errRule.maxWidth + 'px'
+                      }
+                    : null
+              },
+              [
+                h(
+                  'div',
+                  {
+                    class: `vxe-cell--valid-error-wrapper vxe-cell--valid-error-theme-${validOpts.theme || 'normal'}`
+                  },
+                  [
+                    validSlot
+                      ? $xeTable.callSlot(validSlot, validParams)
+                      : [
+                          h(
+                            'span',
+                            {
+                              class: 'vxe-cell--valid-error-msg'
+                            },
+                            errorValidItem.content
+                          )
+                        ]
+                  ]
+                )
+              ]
+            )
           )
         }
       }
@@ -442,9 +495,12 @@ export default defineVxeComponent({
         tdVNs.push(
           h('div', {
             key: 'tcc',
-            class: ['vxe-cell--col-resizable', {
-              'is--line': !border || border === 'none'
-            }],
+            class: [
+              'vxe-cell--col-resizable',
+              {
+                'is--line': !border || border === 'none'
+              }
+            ],
             onMousedown: (evnt: MouseEvent) => $xeTable.handleColResizeMousedownEvent(evnt, fixedType, cellParams),
             onDblclick: (evnt: MouseEvent) => $xeTable.handleColResizeDblclickEvent(evnt, cellParams)
           })
@@ -462,47 +518,51 @@ export default defineVxeComponent({
         )
       }
 
-      return h('td', {
-        class: [
-          'vxe-table--column vxe-body--column',
-          colid,
-          cellVerticalAlign ? `col--vertical-${cellVerticalAlign}` : '',
-          cellAlign ? `col--${cellAlign}` : '',
-          type ? `col--${type}` : '',
-          {
-            'col--last': isLastColumn,
-            'col--tree-node': treeNode,
-            'col--edit': isEdit,
-            'col--ellipsis': hasEllipsis,
-            'col--cs-height': isCsHeight,
-            'col--rs-height': isRsHeight,
-            'col--to-row': showAreaRowStatus,
-            'col--auto-height': isVNAutoHeight,
-            'col--max-height': maxHeight,
-            'fixed--width': !isAutoCellWidth,
-            'fixed--hidden': fixedHiddenColumn,
-            'is--pg-top': isCellPaddingTop,
-            'is--pg-bottom': isCellPaddingBottom,
-            'is--pg-left': isCellPaddingLeft,
-            'is--pg-right': isCellPaddingRight,
-            'is--progress': (fixedHiddenColumn && isAllOverflow) || isVNPreEmptyStatus,
-            'is--drag-cell': isRowDragCell && (isCrossDrag || isPeerDrag || !rowLevel),
-            'is--drag-disabled': isDisabledDrag,
-            'col--dirty': isDirty,
-            'col--active': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
-            'col--valid-error': !!errorValidItem,
-            'show--valid-bg': errorValidItem && validOpts.showErrorBackground,
-            'col--current': currColFlag && currentCol === column
-          },
-          getPropClass(compCellClassName, cellParams),
-          getPropClass(className, cellParams),
-          getPropClass(allCellClassName, cellParams)
-        ],
-        key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || rowOpts.useKey || columnOpts.drag ? colid : $columnIndex,
-        ...tdAttrs,
-        style: Object.assign({}, XEUtils.isFunction(compCellStyle) ? compCellStyle(cellParams) : compCellStyle, XEUtils.isFunction(cellStyle) ? cellStyle(cellParams) : cellStyle),
-        ...tdOns
-      }, isOptimizeMode && fixedHiddenColumn ? [] : tdVNs)
+      return h(
+        'td',
+        {
+          class: [
+            'vxe-table--column vxe-body--column',
+            colid,
+            cellVerticalAlign ? `col--vertical-${cellVerticalAlign}` : '',
+            cellAlign ? `col--${cellAlign}` : '',
+            type ? `col--${type}` : '',
+            {
+              'col--last': isLastColumn,
+              'col--tree-node': treeNode,
+              'col--edit': isEdit,
+              'col--ellipsis': hasEllipsis,
+              'col--cs-height': isCsHeight,
+              'col--rs-height': isRsHeight,
+              'col--to-row': showAreaRowStatus,
+              'col--auto-height': isVNAutoHeight,
+              'col--max-height': maxHeight,
+              'fixed--width': !isAutoCellWidth,
+              'fixed--hidden': fixedHiddenColumn,
+              'is--pg-top': isCellPaddingTop,
+              'is--pg-bottom': isCellPaddingBottom,
+              'is--pg-left': isCellPaddingLeft,
+              'is--pg-right': isCellPaddingRight,
+              'is--progress': (fixedHiddenColumn && isAllOverflow) || isVNPreEmptyStatus,
+              'is--drag-cell': isRowDragCell && (isCrossDrag || isPeerDrag || !rowLevel),
+              'is--drag-disabled': isDisabledDrag,
+              'col--dirty': isDirty,
+              'col--active': editConfig && isEdit && actived.row === row && (actived.column === column || editOpts.mode === 'row'),
+              'col--valid-error': !!errorValidItem,
+              'show--valid-bg': errorValidItem && validOpts.showErrorBackground,
+              'col--current': currColFlag && currentCol === column
+            },
+            getPropClass(compCellClassName, cellParams),
+            getPropClass(className, cellParams),
+            getPropClass(allCellClassName, cellParams)
+          ],
+          key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || rowOpts.useKey || columnOpts.drag ? colid : $columnIndex,
+          ...tdAttrs,
+          style: Object.assign({}, XEUtils.isFunction(compCellStyle) ? compCellStyle(cellParams) : compCellStyle, XEUtils.isFunction(cellStyle) ? cellStyle(cellParams) : cellStyle),
+          ...tdOns
+        },
+        isOptimizeMode && fixedHiddenColumn ? [] : tdVNs
+      )
     }
 
     const renderRows = (fixedType: 'left' | 'right' | '', isOptimizeMode: boolean, tableData: any[], tableColumn: VxeTableDefines.ColumnInfo[]) => {
@@ -554,7 +614,7 @@ export default defineVxeComponent({
           seq = rowRest.seq
           if (hasRowGroupAggregate || (treeConfig && transform && seqMode === 'increasing')) {
             seq = rowRest._index + 1
-          } else if ((treeConfig && seqMode === 'fixed')) {
+          } else if (treeConfig && seqMode === 'fixed') {
             seq = rowRest._tIndex + 1
           }
         }
@@ -610,13 +670,17 @@ export default defineVxeComponent({
           return renderTdColumn(seq, rowid, fixedType, isOptimizeMode, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
         })
         rows.push(
-          h('tr', {
-            class: trClass,
-            rowid: rowid,
-            style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-            key: rowKey || rowOpts.useKey || rowOpts.drag || columnOpts.drag || isRowGroupStatus || treeConfig ? rowid : $rowIndex,
-            ...trOn
-          }, tdVNs)
+          h(
+            'tr',
+            {
+              class: trClass,
+              rowid: rowid,
+              style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
+              key: rowKey || rowOpts.useKey || rowOpts.drag || columnOpts.drag || isRowGroupStatus || treeConfig ? rowid : $rowIndex,
+              ...trOn
+            },
+            tdVNs
+          )
         )
         // 如果行被展开了
         if (isExpandRow) {
@@ -631,19 +695,23 @@ export default defineVxeComponent({
               }
             }
             rows.push(
-              h('tr', {
-                class: 'vxe-body--row-expanded-place',
-                key: `expand_${rowid}`,
-                rowid
-              }, [
-                h('td', {
-                  class: 'vxe-body--row-expanded-place-column',
-                  colspan: tableColumn.length,
-                  style: {
-                    height: `${expHeight}px`
-                  }
-                })
-              ])
+              h(
+                'tr',
+                {
+                  class: 'vxe-body--row-expanded-place',
+                  key: `expand_${rowid}`,
+                  rowid
+                },
+                [
+                  h('td', {
+                    class: 'vxe-body--row-expanded-place-column',
+                    colspan: tableColumn.length,
+                    style: {
+                      height: `${expHeight}px`
+                    }
+                  })
+                ]
+              )
             )
           } else {
             const cellStyle: any = {}
@@ -651,7 +719,7 @@ export default defineVxeComponent({
               cellStyle.height = `${expandHeight}px`
             }
             if (treeConfig) {
-              cellStyle.paddingLeft = `${(rowLevel * treeOpts.indent) + 30}px`
+              cellStyle.paddingLeft = `${rowLevel * treeOpts.indent + 30}px`
             }
             const { showOverflow } = expandColumn || {}
             const colid = expandColumn.id
@@ -690,29 +758,48 @@ export default defineVxeComponent({
               items: []
             }
             rows.push(
-              h('tr', {
-                class: ['vxe-body--expanded-row', {
-                  'is--padding': padding
-                }],
-                key: `expand_${rowid}`
-              }, [
-                h('td', {
-                  class: ['vxe-body--expanded-column', {
-                    'fixed--hidden': fixedType && !hasFixedColumn,
-                    'col--ellipsis': hasEllipsis
-                  }],
-                  colspan: tableColumn.length
-                }, [
-                  h('div', {
-                    class: ['vxe-body--expanded-cell', {
-                      'is--ellipsis': expandHeight
-                    }],
-                    style: cellStyle
-                  }, [
-                    expandColumn.renderData(expandParams)
-                  ])
-                ])
-              ])
+              h(
+                'tr',
+                {
+                  class: [
+                    'vxe-body--expanded-row',
+                    {
+                      'is--padding': padding
+                    }
+                  ],
+                  key: `expand_${rowid}`
+                },
+                [
+                  h(
+                    'td',
+                    {
+                      class: [
+                        'vxe-body--expanded-column',
+                        {
+                          'fixed--hidden': fixedType && !hasFixedColumn,
+                          'col--ellipsis': hasEllipsis
+                        }
+                      ],
+                      colspan: tableColumn.length
+                    },
+                    [
+                      h(
+                        'div',
+                        {
+                          class: [
+                            'vxe-body--expanded-cell',
+                            {
+                              'is--ellipsis': expandHeight
+                            }
+                          ],
+                          style: cellStyle
+                        },
+                        [expandColumn.renderData(expandParams)]
+                      )
+                    ]
+                  )
+                ]
+              )
             )
           }
         }
@@ -836,8 +923,8 @@ export default defineVxeComponent({
         emptyContent = $xeTable.callSlot(emptySlot, emptyParams)
       } else {
         const rendererOpts = computeRendererOpts.value
-        const compConf = emptyOpts.name ? (rendererOpts[emptyOpts.name] || renderer.get(emptyOpts.name)) : null
-        const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
+        const compConf = emptyOpts.name ? rendererOpts[emptyOpts.name] || renderer.get(emptyOpts.name) : null
+        const rtEmptyView = compConf ? compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty : null
         if (rtEmptyView) {
           emptyContent = getSlotVNs(rtEmptyView(emptyOpts, emptyParams))
         } else {
@@ -845,109 +932,145 @@ export default defineVxeComponent({
         }
       }
 
-      return h('div', {
-        ref: refElem,
-        class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
-        xid: xID
-      }, [
-        h('div', {
-          ref: refBodyScroll,
-          class: 'vxe-table--body-inner-wrapper',
-          onScroll (evnt) {
-            $xeTable.triggerBodyScrollEvent(evnt, fixedType)
-          }
-        }, [
-          fixedType
-            ? renderEmptyElement($xeTable)
-            : h('div', {
-              ref: refBodyXSpace,
-              class: 'vxe-body--x-space'
-            }),
-          h('div', {
-            ref: refBodyYSpace,
-            class: 'vxe-body--y-space'
-          }),
-          h('table', {
-            ref: refBodyTable,
-            class: 'vxe-table--body',
-            xid: xID,
-            cellspacing: 0,
-            cellpadding: 0,
-            border: 0,
-            xvm: isOptimizeMode ? '1' : null
-          }, [
-            /**
-             * 列宽
-             */
-            h('colgroup', {
-              ref: refBodyColgroup
-            }, renderColumnList.map((column, $columnIndex) => {
-              return h('col', {
-                name: column.id,
-                key: $columnIndex,
-                style: {
-                  width: `${column.renderWidth}px`
-                }
-              })
-            })),
-            /**
-             * 内容
-             */
-            h('tbody', {
-              ref: refBodyTBody
-            }, renderRows(fixedType, isOptimizeMode, renderDataList, renderColumnList))
-          ]),
-          h('div', {
-            class: 'vxe-table--checkbox-range'
-          }),
-          hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area
-            ? h('div', {
-              class: 'vxe-table--cell-area',
-              xid: xID
-            }, [
-              h('span', {
-                class: 'vxe-table--cell-main-area'
-              }, mouseOpts.extension
-                ? [
-                    h('span', {
-                      class: 'vxe-table--cell-main-area-btn',
-                      onMousedown (evnt: MouseEvent) {
-                        if ($xeTable.triggerCellAreaExtendMousedownEvent) {
-                          $xeTable.triggerCellAreaExtendMousedownEvent(evnt, { $table: $xeTable, fixed: fixedType, type: renderType })
+      return h(
+        'div',
+        {
+          ref: refElem,
+          class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
+          xid: xID
+        },
+        [
+          h(
+            'div',
+            {
+              ref: refBodyScroll,
+              class: 'vxe-table--body-inner-wrapper',
+              onScroll(evnt) {
+                $xeTable.triggerBodyScrollEvent(evnt, fixedType)
+              }
+            },
+            [
+              fixedType
+                ? renderEmptyElement($xeTable)
+                : h('div', {
+                  ref: refBodyXSpace,
+                  class: 'vxe-body--x-space'
+                }),
+              h('div', {
+                ref: refBodyYSpace,
+                class: 'vxe-body--y-space'
+              }),
+              h(
+                'table',
+                {
+                  ref: refBodyTable,
+                  class: 'vxe-table--body',
+                  xid: xID,
+                  cellspacing: 0,
+                  cellpadding: 0,
+                  border: 0,
+                  xvm: isOptimizeMode ? '1' : null
+                },
+                [
+                  /**
+                   * 列宽
+                   */
+                  h(
+                    'colgroup',
+                    {
+                      ref: refBodyColgroup
+                    },
+                    renderColumnList.map((column, $columnIndex) => {
+                      return h('col', {
+                        name: column.id,
+                        key: $columnIndex,
+                        style: {
+                          width: `${column.renderWidth}px`
                         }
-                      }
+                      })
+                    })
+                  ),
+                  /**
+                   * 内容
+                   */
+                  h(
+                    'tbody',
+                    {
+                      ref: refBodyTBody
+                    },
+                    renderRows(fixedType, isOptimizeMode, renderDataList, renderColumnList)
+                  )
+                ]
+              ),
+              h('div', {
+                class: 'vxe-table--checkbox-range'
+              }),
+              hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area
+                ? h(
+                  'div',
+                  {
+                    class: 'vxe-table--cell-area',
+                    xid: xID
+                  },
+                  [
+                    h(
+                      'span',
+                      {
+                        class: 'vxe-table--cell-main-area'
+                      },
+                      mouseOpts.extension
+                        ? [
+                            h('span', {
+                              class: 'vxe-table--cell-main-area-btn',
+                              onMousedown(evnt: MouseEvent) {
+                                if ($xeTable.triggerCellAreaExtendMousedownEvent) {
+                                  $xeTable.triggerCellAreaExtendMousedownEvent(evnt, { $table: $xeTable, fixed: fixedType, type: renderType })
+                                }
+                              }
+                            })
+                          ]
+                        : []
+                    ),
+                    h('span', {
+                      class: 'vxe-table--cell-clip-area'
+                    }),
+                    h('span', {
+                      class: 'vxe-table--cell-extend-area'
+                    }),
+                    h('span', {
+                      class: 'vxe-table--cell-multi-area'
+                    }),
+                    h('span', {
+                      class: 'vxe-table--cell-active-area'
+                    }),
+                    h('span', {
+                      class: 'vxe-table--cell-row-status-area'
                     })
                   ]
-                : []),
-              h('span', {
-                class: 'vxe-table--cell-clip-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-extend-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-multi-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-active-area'
-              }),
-              h('span', {
-                class: 'vxe-table--cell-row-status-area'
-              })
-            ])
-            : renderEmptyElement($xeTable),
-          !fixedType
-            ? h('div', {
-              class: 'vxe-table--empty-block',
-              ref: refBodyEmptyBlock
-            }, [
-              h('div', {
-                class: 'vxe-table--empty-content'
-              }, emptyContent)
-            ])
-            : renderEmptyElement($xeTable)
-        ])
-      ])
+                )
+                : renderEmptyElement($xeTable),
+              !fixedType
+                ? h(
+                  'div',
+                  {
+                    class: 'vxe-table--empty-block',
+                    ref: refBodyEmptyBlock
+                  },
+                  [
+                    h(
+                      'div',
+                      {
+                        class: 'vxe-table--empty-content'
+                      },
+                      emptyContent
+                    )
+                  ]
+                )
+                : renderEmptyElement($xeTable)
+            ]
+          )
+        ]
+      )
     }
 
     return renderVN

@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { VxeUI } from '../../../ui'
+import { VxeUI } from '@vxe-ui/core'
 import { getRefElem } from '../../src/util'
 import { getAbsolutePos, addClass, removeClass, hasControlKey } from '../../../ui/src/dom'
 import { hasEnableConf } from '../../../ui/src/utils'
@@ -9,12 +9,12 @@ import type { TableKeyboardPrivateMethods, VxeTableDefines } from '../../../../t
 const { hooks } = VxeUI
 
 hooks.add('tableKeyboardModule', {
-  setupTable ($xeTable) {
+  setupTable($xeTable) {
     const { props, reactData, internalData } = $xeTable
     const { refElem, refTableBody } = $xeTable.getRefMaps()
     const { computeEditOpts, computeCheckboxOpts, computeMouseOpts, computeTreeOpts, computeRowOpts, computeColumnOpts, computeCellOpts, computeDefaultRowHeight, computeCurrentRowOpts, computeCurrentColumnOpts } = $xeTable.getComputeMaps()
 
-    function getCheckboxRangeRows (evnt: MouseEvent, params: any, targetTrElem: HTMLElement, trRect: DOMRect, offsetClientTop: number, moveRange: number) {
+    function getCheckboxRangeRows(evnt: MouseEvent, params: any, targetTrElem: HTMLElement, trRect: DOMRect, offsetClientTop: number, moveRange: number) {
       const { showOverflow } = props
       const { fullAllDataRowIdData, isResizeCellHeight } = internalData
       const rowOpts = computeRowOpts.value
@@ -30,7 +30,7 @@ hooks.add('tableKeyboardModule', {
       if (isDown) {
         moveSize = offsetClientTop + moveRange
       } else {
-        moveSize = (trRect.height - offsetClientTop) + Math.abs(moveRange)
+        moveSize = trRect.height - offsetClientTop + Math.abs(moveRange)
       }
       if (scrollYLoad) {
         const _rowIndex = $xeTable.getVTRowIndex(row)
@@ -115,10 +115,14 @@ hooks.add('tableKeyboardModule', {
         let isMouseScrollDown: any = false
         let mouseScrollSpaceSize = 1
         const triggerEvent = (type: 'change' | 'start' | 'end', evnt: MouseEvent) => {
-          $xeTable.dispatchEvent(`checkbox-range-${type}` as 'checkbox-range-change' | 'checkbox-range-start' | 'checkbox-range-end', {
-            records: () => $xeTable.getCheckboxRecords(),
-            reserves: () => $xeTable.getCheckboxReserveRecords()
-          }, evnt)
+          $xeTable.dispatchEvent(
+            `checkbox-range-${type}` as 'checkbox-range-change' | 'checkbox-range-start' | 'checkbox-range-end',
+            {
+              records: () => $xeTable.getCheckboxRecords(),
+              reserves: () => $xeTable.getCheckboxReserveRecords()
+            },
+            evnt
+          )
         }
         const handleChecked = (evnt: MouseEvent) => {
           const { clientX, clientY } = evnt
@@ -183,7 +187,7 @@ hooks.add('tableKeyboardModule', {
           mouseScrollTimeout = setTimeout(() => {
             if (mouseScrollTimeout) {
               const { scrollLeft, scrollTop, clientHeight, scrollHeight } = bodyWrapperElem
-              const topSize = Math.ceil(mouseScrollSpaceSize * 50 / rowHeight)
+              const topSize = Math.ceil((mouseScrollSpaceSize * 50) / rowHeight)
               if (isMouseScrollDown) {
                 if (scrollTop + clientHeight < scrollHeight) {
                   $xeTable.scrollTo(scrollLeft, scrollTop + topSize)
@@ -205,7 +209,7 @@ hooks.add('tableKeyboardModule', {
           }, 50)
         }
         addClass(el, 'drag--range')
-        document.onmousemove = evnt => {
+        document.onmousemove = (evnt) => {
           evnt.preventDefault()
           evnt.stopPropagation()
           const { clientY } = evnt
@@ -266,9 +270,9 @@ hooks.add('tableKeyboardModule', {
       const _rowIndex = $xeTable.getVTRowIndex(row)
       const _columnIndex = $xeTable.getVTColumnIndex(column)
       const tableBody = refTableBody.value
-      const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+      const tableBodyElem = tableBody ? (tableBody.$el as HTMLDivElement) : null
       const tableWidth = tableBodyElem ? tableBodyElem.clientWidth : 0
-      let colAlign = isLeftArrow || isRightArrow || (column.renderWidth < tableWidth)
+      let colAlign = isLeftArrow || isRightArrow || column.renderWidth < tableWidth
       if ((isLeftArrow && _columnIndex >= 0) || (isRightArrow && _columnIndex <= visibleColumn.length - 1)) {
         colAlign = false
       } else {
@@ -291,18 +295,20 @@ hooks.add('tableKeyboardModule', {
         params.columnIndex = _columnIndex + 1
         params.column = visibleColumn[params.columnIndex]
       }
-      $xeTable.scrollToRow(params.row, params.column, {
-        colAlign
-      }).then(() => {
-        params.cell = $xeTable.getCellElement(params.row, params.column)
-        $xeTable.handleSelected(params, evnt)
-      })
+      $xeTable
+        .scrollToRow(params.row, params.column, {
+          colAlign
+        })
+        .then(() => {
+          params.cell = $xeTable.getCellElement(params.row, params.column)
+          $xeTable.handleSelected(params, evnt)
+        })
       return params
     }
 
     const keyboardMethods: TableKeyboardPrivateMethods = {
       // 处理 Tab 键移动
-      moveTabSelected (args, isLeft, evnt) {
+      moveTabSelected(args, isLeft, evnt) {
         const { editConfig } = props
         const { afterFullData, visibleColumn } = internalData
         const editOpts = computeEditOpts.value
@@ -376,7 +382,7 @@ hooks.add('tableKeyboardModule', {
         }
       },
       // 处理当前行方向键移动
-      moveCurrentRow (isUpArrow, isDwArrow, evnt) {
+      moveCurrentRow(isUpArrow, isDwArrow, evnt) {
         const { treeConfig } = props
         const { afterFullData, currentRow } = internalData
         const treeOpts = computeTreeOpts.value
@@ -384,7 +390,7 @@ hooks.add('tableKeyboardModule', {
         let targetRow
         if (currentRow) {
           if (treeConfig) {
-            const { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, { children: childrenField })
+            const { index, items } = XEUtils.findTree(afterFullData, (item) => item === currentRow, { children: childrenField })
             if (isUpArrow && index > 0) {
               targetRow = items[index - 1]
             } else if (isDwArrow && index < items.length - 1) {
@@ -409,12 +415,11 @@ hooks.add('tableKeyboardModule', {
             rowIndex: $xeTable.getRowIndex(targetRow),
             $rowIndex: $xeTable.getVMRowIndex(targetRow)
           }
-          $xeTable.scrollToRow(targetRow)
-            .then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
+          $xeTable.scrollToRow(targetRow).then(() => $xeTable.triggerCurrentRowEvent(evnt, params))
         }
       },
       // 处理当前列方向键移动
-      moveCurrentColumn (isLeftArrow, isRightArrow, evnt) {
+      moveCurrentColumn(isLeftArrow, isRightArrow, evnt) {
         const { currentCol, visibleColumn } = internalData
         let targetCol: VxeTableDefines.ColumnInfo | null = null
         if (currentCol) {
@@ -435,12 +440,11 @@ hooks.add('tableKeyboardModule', {
             columnIndex: $xeTable.getColumnIndex(targetCol),
             $columnIndex: $xeTable.getVMColumnIndex(targetCol)
           }
-          $xeTable.scrollToColumn(targetCol)
-            .then(() => $xeTable.triggerCurrentColumnEvent(evnt, params))
+          $xeTable.scrollToColumn(targetCol).then(() => $xeTable.triggerCurrentColumnEvent(evnt, params))
         }
       },
       // 处理可编辑方向键移动
-      moveArrowSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
+      moveArrowSelected(args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
         const { highlightCurrentRow, highlightCurrentColumn } = props
         const rowOpts = computeRowOpts.value
         const currentRowOpts = computeCurrentRowOpts.value
@@ -468,14 +472,14 @@ hooks.add('tableKeyboardModule', {
           }
         }
       },
-      moveEnterSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
+      moveEnterSelected(args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
         const { highlightCurrentRow, highlightCurrentColumn } = props
         const rowOpts = computeRowOpts.value
         const currentRowOpts = computeCurrentRowOpts.value
         const columnOpts = computeColumnOpts.value
         const currentColumnOpts = computeCurrentColumnOpts.value
         const params = handleMoveSelected(evnt, args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow)
-        if (((rowOpts.isCurrent || highlightCurrentRow) && currentRowOpts.isFollowSelected)) {
+        if ((rowOpts.isCurrent || highlightCurrentRow) && currentRowOpts.isFollowSelected) {
           $xeTable.triggerCurrentRowEvent(evnt, params)
         }
         if ((columnOpts.isCurrent || highlightCurrentColumn) && currentColumnOpts.isFollowSelected) {
@@ -483,7 +487,7 @@ hooks.add('tableKeyboardModule', {
         }
       },
       // 已废弃，待删除
-      moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
+      moveSelected(args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
         handleMoveSelected(evnt, args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow)
       },
       handleCellMousedownEvent

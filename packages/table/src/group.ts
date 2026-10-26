@@ -9,7 +9,7 @@ import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types
 export default defineVxeComponent({
   name: 'VxeColgroup',
   props: columnProps,
-  setup (props, { slots }) {
+  setup(props, { slots }) {
     const refElem = ref<HTMLDivElement>()
     const $xeTable = inject<(VxeTableConstructor & VxeTablePrivateMethods) | null>('$xeTable', null)
     const $xeParentColgroup = inject<XEColumnInstance | null>('$xeColgroup', null)
@@ -47,9 +47,13 @@ export default defineVxeComponent({
 
     const renderVN = () => {
       const defaultSlot = slots.default
-      return h('div', {
-        ref: refElem
-      }, defaultSlot ? defaultSlot() : [])
+      return h(
+        'div',
+        {
+          ref: refElem
+        },
+        defaultSlot ? defaultSlot() : []
+      )
     }
 
     const $xeColgroup = { columnConfig } as XEColumnInstance
