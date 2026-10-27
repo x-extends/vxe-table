@@ -1121,11 +1121,11 @@ export default /* define-vxe-component start */ defineVxeComponent({
      */
     function getCustomStorageMap(id: string) {
       if (customStoreDB) {
-        return customStoreDB.getById(id).then(dbRest => dbRest ? dbRest.data : {})
+        return customStoreDB.getById(id).then((dbRest) => (dbRest ? dbRest.data : {}))
       }
 
       // 已废弃，兼容旧版本
-      return new Promise<VxeTableDefines.CustomStoreData>(resolve => {
+      return new Promise<VxeTableDefines.CustomStoreData>((resolve) => {
         const version = getConfig().version
         const rest = XEUtils.toStringJSON(localStorage.getItem(customStorageKey) || '')
         const maps = rest && rest._v === version ? rest : { _v: version }
@@ -8888,12 +8888,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           }
         }
       } else if (hasEnableConf(mouseConfig, mouseOpts)) {
-        if (
-          !getEventTargetNode(evnt, el).flag &&
-          !($xeGGWrapper && getEventTargetNode(evnt, $xeGGWrapper.getRefMaps().refElem.value).flag) &&
-          !(tableMenu && getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) &&
-          !($xeToolbar && getEventTargetNode(evnt, $xeToolbar.getRefMaps().refElem.value).flag)
-        ) {
+        if (!getEventTargetNode(evnt, el).flag && !($xeGGWrapper && getEventTargetNode(evnt, $xeGGWrapper.getRefMaps().refElem.value).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) && !($xeToolbar && getEventTargetNode(evnt, $xeToolbar.getRefMaps().refElem.value).flag)) {
           if ($xeTable.clearSelected) {
             $xeTable.clearSelected()
           }
@@ -9766,15 +9761,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
      * @param {Event} evnt 事件
      * @param {Row} row 行对象
      */
-    const handleTooltip = (
-      evnt: MouseEvent,
-      tipOpts: VxeTablePropTypes.TooltipConfig | VxeTablePropTypes.HeaderTooltipConfig | VxeTablePropTypes.FooterTooltipConfig,
-      type: 'header' | 'body' | 'footer',
-      tdEl: HTMLTableCellElement,
-      overflowElem: HTMLElement | null,
-      tipElem: HTMLElement | null,
-      params: any
-    ) => {
+    const handleTooltip = (evnt: MouseEvent, tipOpts: VxeTablePropTypes.TooltipConfig | VxeTablePropTypes.HeaderTooltipConfig | VxeTablePropTypes.FooterTooltipConfig, type: 'header' | 'body' | 'footer', tdEl: HTMLTableCellElement, overflowElem: HTMLElement | null, tipElem: HTMLElement | null, params: any) => {
       const tipOverEl = overflowElem || tdEl
       if (!tipOverEl) {
         return nextTick()
@@ -12731,11 +12718,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
               }
             }
           }
-          if (
-            $xeTable.eqRow(dragRow, row) ||
-            (isControlKey && treeConfig && lazy && row[hasChildField] && rowRest && !rowRest.treeLoaded && !isAutoLazyLoadToChild && !isAutoExpandToChild) ||
-            (!isCrossDrag && treeConfig && transform && (isPeerDrag ? dragRow[parentField] !== row[parentField] : rowRest.level))
-          ) {
+          if ($xeTable.eqRow(dragRow, row) || (isControlKey && treeConfig && lazy && row[hasChildField] && rowRest && !rowRest.treeLoaded && !isAutoLazyLoadToChild && !isAutoExpandToChild) || (!isCrossDrag && treeConfig && transform && (isPeerDrag ? dragRow[parentField] !== row[parentField] : rowRest.level))) {
             showDropTip(evnt, trEl, null, false, dragPos)
             return
           }

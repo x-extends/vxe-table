@@ -7,7 +7,7 @@
   "useTabs": false,
   "arrowParens": "always",
   "trailingComma": "none",
-  "printWidth": 400,
+  "printWidth": 320,
   "insertFinalNewline": true,
   "endOfLine": "lf"
 }
