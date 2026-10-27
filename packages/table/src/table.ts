@@ -31,7 +31,9 @@ import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes, Ta
 
 const { warnLog, errLog } = createComponentLog('table')
 
-const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, domUtils, globalMixins, renderEmptyElement } = VxeUI
+const { getConfig, getIcon, getI18n, renderer, globalResize, dbUtils, globalEvents, domUtils, globalMixins, renderEmptyElement } = VxeUI
+
+const customStorageKey = 'VXE_CUSTOM_STORE'
 
 function bindScrollbarResize($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const internalData = $xeTable as unknown as TableInternalData
@@ -2091,6 +2093,14 @@ export default {
 
     XEUtils.assign(internalData, createInternalData())
 
+    const customOpts = $xeTable.computeCustomOpts
+
+    $xeTable.customStoreDB = dbUtils
+      ? dbUtils.createStore(customStorageKey, {
+        driver: customOpts.storeDriver
+      })
+      : null
+
     handleKeyField($xeTable)
 
     const { editConfig, exportConfig, importConfig, treeConfig, minHeight, keepSource, areaConfig } = props
@@ -2103,7 +2113,6 @@ export default {
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const expandOpts = $xeTable.computeExpandOpts
     const rowOpts = $xeTable.computeRowOpts
-    const customOpts = $xeTable.computeCustomOpts
     const mouseOpts = $xeTable.computeMouseOpts
     const exportOpts = $xeTable.computeExportOpts
     const importOpts = $xeTable.computeImportOpts

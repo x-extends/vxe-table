@@ -117,6 +117,7 @@ VxeUI.setConfig({
     },
     customConfig: {
       // enabled: false,
+      storeDriver: 'localStorage',
       allowVisible: true,
       allowResizable: true,
       allowFixed: true,

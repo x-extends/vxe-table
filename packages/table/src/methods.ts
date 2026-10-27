@@ -77,19 +77,34 @@ function getNextSortOrder($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   return orders[oIndex < orders.length ? oIndex : 0]
 }
 
-const getCustomStorageMap = (id?: any) => {
+const getCustomStorageMap = ($xeTable: VxeTableConstructor, id: any) => {
+  const customStoreDB = $xeTable.customStoreDB
+
+  if (customStoreDB) {
+    return customStoreDB.getById(id).then(dbRest => dbRest ? dbRest.data : {})
+  }
+
+  // 已废弃，兼容旧版本
+  return new Promise<VxeTableDefines.CustomStoreData>(resolve => {
+    const version = getConfig().version
+    const rest = XEUtils.toStringJSON(localStorage.getItem(customStorageKey) || '')
+    const maps = rest && rest._v === version ? rest : { _v: version }
+    resolve(maps[id] || {})
+  })
+}
+
+const setCustomStorageMap = ($xeTable: VxeTableConstructor, id: any, data: any) => {
+  const customStoreDB = $xeTable.customStoreDB
+
+  if (customStoreDB) {
+    return customStoreDB.updateById(id, data)
+  }
   const version = getConfig().version
   const rest = XEUtils.toStringJSON(localStorage.getItem(customStorageKey) || '')
   const maps = rest && rest._v === version ? rest : { _v: version }
-  return (id ? maps[id] : maps) || {}
-}
-
-const setCustomStorageMap = (id: any, data: any) => {
-  const version = getConfig().version
-  const maps = getCustomStorageMap()
   maps[id] = data || undefined
-  maps._v = version
   localStorage.setItem(customStorageKey, XEUtils.toJSONString(maps))
+  return Promise.resolve()
 }
 
 const getRecoverRowMaps = ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, keyMaps: any) => {
@@ -293,20 +308,21 @@ function restoreCustomStorage($xeTable: VxeTableConstructor & VxeTablePrivateMet
       errLog('vxe.error.reqProp', ['id'])
       return
     }
-    const storeData: VxeTableDefines.CustomStoreData = getCustomStorageMap(tableId)
-    if (restoreStore) {
-      return Promise.resolve(restoreStore({ $table: $xeTable, id: tableId, type: 'restore', storeData }))
-        .then((storeData) => {
-          if (!storeData) {
-            return
-          }
-          return handleCustomRestore($xeTable, storeData)
-        })
-        .catch((e) => e)
-    } else {
+    return getCustomStorageMap($xeTable, tableId).then((storeData) => {
+      if (restoreStore) {
+        return Promise.resolve(restoreStore({ $table: $xeTable, id: tableId, type: 'restore', storeData }))
+          .then((storeData) => {
+            if (!storeData) {
+              return
+            }
+            return handleCustomRestore($xeTable, storeData)
+          })
+          .catch((e) => e)
+      }
       return handleCustomRestore($xeTable, storeData)
-    }
+    })
   }
+  return Promise.resolve()
 }
 
 /**
@@ -6933,39 +6949,6 @@ const tableMethods: any = {
     return $xeTable.refreshColumn(true)
   },
   /**
-   * 还原自定义列操作状态
-   */
-  restoreCustomStorage() {
-    const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-    const props = $xeTable
-
-    const { customConfig } = props
-    const tableId = $xeTable.computeTableId
-    const customOpts = $xeTable.computeCustomOpts
-    const { storage, restoreStore } = customOpts
-    const { isCustomAlign, isCustomHeaderAlign, isCustomFooterAlign, isCustomResizable, isCustomVisible, isCustomFixed, isCustomSort, isCustomAggGroup, isCustomAggFunc } = handleCustomStoreConfig($xeTable)
-
-    if (storage && (customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomAlign || isCustomHeaderAlign || isCustomFooterAlign || isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort || isCustomAggGroup || isCustomAggFunc)) {
-      if (!tableId) {
-        errLog('vxe.error.reqProp', ['id'])
-        return
-      }
-      const storeData = getCustomStorageMap(tableId)
-      if (restoreStore) {
-        return Promise.resolve(restoreStore({ $table: $xeTable, id: tableId, type: 'restore', storeData }))
-          .then((storeData) => {
-            if (!storeData) {
-              return
-            }
-            return handleCustomRestore($xeTable, storeData)
-          })
-          .catch((e) => e)
-      } else {
-        return handleCustomRestore($xeTable, storeData)
-      }
-    }
-  },
-  /**
    * 用于 custom-config，用于手动恢复自定义列设置信息，恢复表格重置为初始状态
    * @param storeData
    * @returns
@@ -7228,9 +7211,8 @@ const tableMethods: any = {
           type,
           storeData
         })
-      } else {
-        setCustomStorageMap(tableId, type === 'reset' ? null : storeData)
       }
+      return setCustomStorageMap($xeTable, tableId, type === 'reset' ? null : storeData)
     }
     return $xeTable.$nextTick()
   },

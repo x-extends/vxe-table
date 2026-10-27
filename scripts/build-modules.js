@@ -282,8 +282,6 @@ async function buildDistStyle () {
     fsp.writeFile(path.join(LIB_DIR, 'style.css'), css),
     fsp.writeFile(path.join(LIB_DIR, 'style.mini.css'), cssMin)
   ])
-
-  return `${OUT_DIST}, ${OUT_LIB}`
 }
 
 /* ------------------------------ 图标资源复制 ------------------------------ */
@@ -364,8 +362,6 @@ async function copyIconAssets () {
         .then(() => fsp.copyFile(file, target))
     })
   }))
-
-  return `iicon: ${files.length} -> ${OUT_ES}, ${OUT_LIB}, ${OUT_DIST}`
 }
 
 /* ------------------------------ 移除 defineVxeComponent 包裹 ------------------------------ */
@@ -443,6 +439,8 @@ async function buildBundle () {
   const srcPlugins = doStripDefineWrapper ? [stripDefineVxeComponentPlugin] : []
 
   const outFile = path.join(DIST_DIR, 'all.esm.js')
+  const minOutFile = path.join(DIST_DIR, 'all.esm.min.js')
+
   await esbuild.build({
     entryPoints: [entry],
     outfile: outFile,
@@ -462,7 +460,16 @@ async function buildBundle () {
     plugins: [scssStubPlugin, ...srcPlugins]
   })
 
-  return `${OUT_DIST}/all.esm.js`
+  // 生成 min 版本
+  const code = await fsp.readFile(outFile, 'utf8')
+  const { code: minCode } = await esbuild.transform(code, {
+    loader: 'js',
+    minify: true,
+    target: 'es2018',
+    charset: 'utf8',
+    format: 'esm'
+  })
+  await fsp.writeFile(minOutFile, minCode)
 }
 
 /* ------------------------------ UMD Bundle ------------------------------ */
@@ -562,8 +569,6 @@ async function buildUmdBundle () {
     charset: 'utf8'
   })
   await fsp.writeFile(minPath, minCode)
-
-  return `${OUT_LIB}`
 }
 
 /* ------------------------------ 语言包编译 ------------------------------ */
@@ -629,12 +634,24 @@ async function buildLocales () {
       })
 
       const code = await fsp.readFile(tempOut, 'utf8')
+      const { code: minCode } = await esbuild.transform(code, {
+        loader: 'js',
+        minify: true,
+        target: 'es2018',
+        charset: 'utf8'
+      })
 
-      const writes = [fsp.writeFile(path.join(LOCALE_OUT_DIR, `${fileName}.umd.js`), code)]
+      const writes = [
+        fsp.writeFile(path.join(LOCALE_OUT_DIR, `${fileName}.umd.js`), code),
+        fsp.writeFile(path.join(LOCALE_OUT_DIR, `${fileName}.umd.min.js`), minCode)
+      ]
 
       // 兼容旧版本
       if (hasOldLocaleOutDir) {
-        writes.push(fsp.writeFile(path.join(oldLocaleOutDir, `${fileName}.umd.js`), code))
+        writes.push(
+          fsp.writeFile(path.join(oldLocaleOutDir, `${fileName}.umd.js`), code),
+          fsp.writeFile(path.join(oldLocaleOutDir, `${fileName}.umd.min.js`), minCode)
+        )
       }
       await Promise.all(writes)
     } finally {
@@ -709,14 +726,13 @@ async function main () {
 
   console.log(`[build] 源码 ${SRC} | CPU ${os.cpus().length} 核`)
   console.log(`[build] 组件 Define 包裹: ${doStripDefineWrapper ? '开启' : '关闭'}`)
-  console.log(`[build] 输出 es=${OUT_ES}  lib=${OUT_LIB}  dist=${OUT_DIST}`)
+  console.log(`[build] 编译输出 es=${OUT_ES}  lib=${OUT_LIB}  dist=${OUT_DIST}`)
   if (DO_LOCALE) {
     console.log(`[build] 语言包输出: ${localeOut}`)
   }
-  console.log(`[build] 替换 VUE_APP_VXE_VERSION -> ${DEFINE['process.env.VUE_APP_VXE_VERSION']}`)
   console.log(`[build] UMD 编译: ${DO_UMD ? '开启' : '关闭'}`)
   console.log(`[build] 语言包编译: ${DO_LOCALE ? '开启' : '关闭'}`)
-  console.log(`[build] 图标资源复制: ${DO_ICON ? '开启' : '关闭'}`)
+  console.log(`[build] 图标资源: ${DO_ICON ? '开启' : '关闭'}`)
   if (DO_ICON) {
     console.log(`[build] iconfont 版本号: ${buildTime}`)
   }
@@ -735,11 +751,11 @@ async function main () {
     copySrcToTmpl(),
     ...cleanJobs
   ])
-  console.log(`[build] 源文件 ${srcFiles.length} 个`)
+  console.log(`[build] 资源文件 ${srcFiles.length} 个`)
 
   const aliasSources = await generateAliasSources()
   if (aliasSources.length) {
-    console.log(`[build] 生成别名源码: ${aliasSources.length}`)
+    console.log(`[build] 组件: ${aliasSources.length} 个`)
   }
 
   FILES = [
@@ -751,30 +767,29 @@ async function main () {
     if (!FILES.length) {
       throw new Error(`${rel(SRC_DIR)} 下未发现 .ts/.tsx`)
     }
-    console.log(`[build] entryPoints ${FILES.length} 个`)
 
-    const mark = name => () => console.log(`[build] ✔ ${name.padEnd(8)} ${Date.now() - t0}ms`)
+    const mark = name => () => console.log(`[build] ✔ ${name.padEnd(20)} ${Date.now() - t0}ms`)
 
     const buildTasks = [
       esbuildTranspile('esm', ES_DIR).then(mark('es')),
       esbuildTranspile('cjs', LIB_DIR).then(mark('lib')),
       buildTypes().then(mark('types')),
       buildStyles().then(ns => {
-        if (ns.length) console.log(`[build] ✔ ${'style'.padEnd(8)} ${Date.now() - t0}ms  (components: ${ns.length})`)
+        if (ns.length) console.log(`[build] ✔ ${'component style'.padEnd(20)} ${Date.now() - t0}ms  (${ns.length})`)
       }),
-      buildBundle().then(out => {
-        if (out) console.log(`[build] ✔ ${'esm'.padEnd(8)} ${Date.now() - t0}ms  (${out})`)
+      buildBundle().then(() => {
+        console.log(`[build] ✔ ${'esm'.padEnd(20)} ${Date.now() - t0}ms`)
       }),
-      buildDistStyle().then(out => {
-        if (out) console.log(`[build] ✔ ${'dstyle'.padEnd(8)} ${Date.now() - t0}ms  (${out})`)
+      buildDistStyle().then(() => {
+        console.log(`[build] ✔ ${'all style'.padEnd(20)} ${Date.now() - t0}ms`)
       })
     ]
 
     // 根据配置项动态决定是否加入 图标资源 构建任务
     if (DO_ICON) {
       buildTasks.push(
-        copyIconAssets().then(out => {
-          if (out) console.log(`[build] ✔ ${'icon'.padEnd(8)} ${Date.now() - t0}ms  (${out})`)
+        copyIconAssets().then(() => {
+          console.log(`[build] ✔ ${'icon'.padEnd(20)} ${Date.now() - t0}ms`)
         })
       )
     }
@@ -782,8 +797,8 @@ async function main () {
     // 根据配置项动态决定是否加入 UMD 构建任务
     if (DO_UMD) {
       buildTasks.push(
-        buildUmdBundle().then(out => {
-          if (out) console.log(`[build] ✔ ${'umd'.padEnd(8)} ${Date.now() - t0}ms  (${out})`)
+        buildUmdBundle().then(() => {
+          console.log(`[build] ✔ ${'umd'.padEnd(20)} ${Date.now() - t0}ms`)
         })
       )
     }
@@ -792,7 +807,7 @@ async function main () {
     if (DO_LOCALE) {
       buildTasks.push(
         buildLocales().then(outs => {
-          if (outs) console.log(`[build] ✔ ${'locale'.padEnd(8)} ${Date.now() - t0}ms  (${localeOut}: ${outs.length})`)
+          if (outs) console.log(`[build] ✔ ${'locale'.padEnd(20)} ${Date.now() - t0}ms  (${outs.length})`)
         })
       )
     }
