@@ -81,11 +81,11 @@ const getCustomStorageMap = ($xeTable: VxeTableConstructor, id: any) => {
   const customStoreDB = $xeTable.customStoreDB
 
   if (customStoreDB) {
-    return customStoreDB.getById(id).then(dbRest => dbRest ? dbRest.data : {})
+    return customStoreDB.getById(id).then((dbRest) => (dbRest ? dbRest.data : {}))
   }
 
   // 已废弃，兼容旧版本
-  return new Promise<VxeTableDefines.CustomStoreData>(resolve => {
+  return new Promise<VxeTableDefines.CustomStoreData>((resolve) => {
     const version = getConfig().version
     const rest = XEUtils.toStringJSON(localStorage.getItem(customStorageKey) || '')
     const maps = rest && rest._v === version ? rest : { _v: version }
@@ -8551,12 +8551,7 @@ const tableMethods: any = {
             evnt.preventDefault()
             $xeTable.handleUndoStackEvent(evnt)
           }
-        } else if (
-          hasEnableConf(keyboardConfig, keyboardOpts) &&
-          keyboardOpts.isEdit &&
-          !isControlKey &&
-          (isSpacebar || isProcess || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))
-        ) {
+        } else if (hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isEdit && !isControlKey && (isSpacebar || isProcess || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
           const { editMode, editMethod } = keyboardOpts
           // 启用编辑后，空格键功能将失效
           // if (isSpacebar) {
@@ -11282,11 +11277,7 @@ const tableMethods: any = {
           }
         }
       }
-      if (
-        $xeTable.eqRow(dragRow, row) ||
-        (isControlKey && treeConfig && lazy && row[hasChildField] && rowRest && !rowRest.treeLoaded && !isAutoLazyLoadToChild && !isAutoExpandToChild) ||
-        (!isCrossDrag && treeConfig && transform && (isPeerDrag ? dragRow[parentField] !== row[parentField] : rowRest.level))
-      ) {
+      if ($xeTable.eqRow(dragRow, row) || (isControlKey && treeConfig && lazy && row[hasChildField] && rowRest && !rowRest.treeLoaded && !isAutoLazyLoadToChild && !isAutoExpandToChild) || (!isCrossDrag && treeConfig && transform && (isPeerDrag ? dragRow[parentField] !== row[parentField] : rowRest.level))) {
         showDropTip($xeTable, evnt, trEl, null, false, dragPos)
         return
       }

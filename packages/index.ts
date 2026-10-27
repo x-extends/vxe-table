@@ -5,7 +5,7 @@ if (typeof window !== 'undefined') {
   if ((window as any).Vue) {
     // 兼容老版本
     if (!window.VXETable) {
-      (window as any).VXETable = VxeTableExport
+      ;(window as any).VXETable = VxeTableExport
     }
     window.Vue.use(VxeTableExport)
   }
