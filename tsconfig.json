@@ -36,7 +36,7 @@
     "./examples/**/*.vue",
     "./packages/**/*.ts",
     "./packages/**/*.tsx"
-  ],
+, "../vxe-core/packages/src/db-utils.ts"  ],
   "exclude": [
     "node_modules"
   ]

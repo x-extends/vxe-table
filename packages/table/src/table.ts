@@ -83,7 +83,7 @@ import type {
 
 const { warnLog, errLog } = createComponentLog('table')
 
-const { getConfig, getIcon, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, domUtils, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
+const { getConfig, getIcon, getI18n, renderer, formats, createEvent, dbUtils, globalResize, interceptor, hooks, domUtils, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
 
 const supportMaxRow = 5e6
 const customStorageKey = 'VXE_CUSTOM_STORE'
@@ -97,7 +97,7 @@ let crossTableDragRowObj: {
   $newTable: (VxeTableConstructor & VxeTablePrivateMethods) | null
 } | null = null
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeTable',
   props: tableProps,
   emits: tableEmits,
@@ -1080,8 +1080,13 @@ export default defineVxeComponent({
       xegrid: $xeGrid
     } as unknown as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods
 
-    const { refTrackXElem, refTrackYElem, refThumbXElem, refThumbYElem, updateThumbSize, updateThumbOffset, clickTrackXEvent, clickTrackYEvent, pointerdownThumbXEvent, pointermoveThumbXEvent, cleatPointerThumbEvent, pointerdownThumbYEvent, pointermoveThumbYEvent } =
-      useFns.useInitVScrollbar($xeTable)
+    const customStoreDB = dbUtils
+      ? dbUtils.createStore<VxeTableDefines.CustomStoreData>(customStorageKey, {
+        driver: computeCustomOpts.value.storeDriver
+      })
+      : null
+
+    const { refTrackXElem, refTrackYElem, refThumbXElem, refThumbYElem, updateThumbSize, updateThumbOffset, clickTrackXEvent, clickTrackYEvent, pointerdownThumbXEvent, pointermoveThumbXEvent, cleatPointerThumbEvent, pointerdownThumbYEvent, pointermoveThumbYEvent } = useFns.useInitVScrollbar($xeTable)
 
     const eqCellValue = (newRow: any, oldRow: any, field: string) => {
       const val1 = XEUtils.get(newRow, field)
@@ -1111,19 +1116,43 @@ export default defineVxeComponent({
       return orders[oIndex < orders.length ? oIndex : 0]
     }
 
-    const getCustomStorageMap = (id?: string) => {
+    /**
+     * 获取个性化数据
+     */
+    function getCustomStorageMap(id: string) {
+      if (customStoreDB) {
+        return customStoreDB.getById(id).then(dbRest => dbRest ? dbRest.data : {})
+      }
+
+      // 已废弃，兼容旧版本
+      return new Promise<VxeTableDefines.CustomStoreData>(resolve => {
+        const version = getConfig().version
+        const rest = XEUtils.toStringJSON(localStorage.getItem(customStorageKey) || '')
+        const maps = rest && rest._v === version ? rest : { _v: version }
+        resolve((id ? maps[id] : maps) || {})
+      })
+    }
+
+    /**
+     * 更新个性化数据
+     * 储存结构以 id 为 key， 储存个性化数据，上升版本号可以用于重置组件保存的数据
+     * {
+     *  [id: string]: VxeTableDefines.CustomStoreData,
+     *  v: 1
+     * }
+     */
+    const setCustomStorageMap = (id: string, data: any) => {
+      if (customStoreDB) {
+        return customStoreDB.updateById(id, data)
+      }
+
+      // 已废弃，兼容旧版本
       const version = getConfig().version
       const rest = XEUtils.toStringJSON(localStorage.getItem(customStorageKey) || '')
       const maps = rest && rest._v === version ? rest : { _v: version }
-      return (id ? maps[id] : maps) || {}
-    }
-
-    const setCustomStorageMap = (id: string, data: any) => {
-      const version = getConfig().version
-      const maps = getCustomStorageMap()
       maps[id] = data || undefined
-      maps._v = version
       localStorage.setItem(customStorageKey, XEUtils.toJSONString(maps))
+      return Promise.resolve()
     }
 
     const getRecoverRowMaps = (keyMaps: Record<string, any>) => {
@@ -1879,20 +1908,21 @@ export default defineVxeComponent({
           errLog('vxe.error.reqProp', ['id'])
           return
         }
-        const storeData: VxeTableDefines.CustomStoreData = getCustomStorageMap(tableId)
-        if (restoreStore) {
-          return Promise.resolve(restoreStore({ $table: $xeTable, id: tableId, type: 'restore', storeData }))
-            .then((storeData) => {
-              if (!storeData) {
-                return
-              }
-              return handleCustomRestore(storeData)
-            })
-            .catch((e) => e)
-        } else {
+        return getCustomStorageMap(tableId).then((storeData) => {
+          if (restoreStore) {
+            return Promise.resolve(restoreStore({ $table: $xeTable, id: tableId, type: 'restore', storeData }))
+              .then((storeData) => {
+                if (!storeData) {
+                  return
+                }
+                return handleCustomRestore(storeData)
+              })
+              .catch((e) => e)
+          }
           return handleCustomRestore(storeData)
-        }
+        })
       }
+      return Promise.resolve()
     }
 
     const updateColumnAllOverflow = () => {
@@ -10691,9 +10721,8 @@ export default defineVxeComponent({
               type,
               storeData
             })
-          } else {
-            setCustomStorageMap(tableId, type === 'reset' ? null : storeData)
           }
+          return setCustomStorageMap(tableId, type === 'reset' ? null : storeData)
         }
         return nextTick()
       },
@@ -16008,4 +16037,4 @@ export default defineVxeComponent({
   render() {
     return this.renderVN()
   }
-})
+}) /* define-vxe-component end */

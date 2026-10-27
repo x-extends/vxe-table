@@ -26,7 +26,7 @@ function createInternalData(): ToolbarInternalData {
   }
 }
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeToolbar',
   props: {
     loading: Boolean,
@@ -765,4 +765,4 @@ export default defineVxeComponent({
   render() {
     return this.renderVN()
   }
-})
+}) /* define-vxe-component end */

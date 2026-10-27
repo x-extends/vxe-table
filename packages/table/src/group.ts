@@ -6,7 +6,7 @@ import Cell from './cell'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeColgroup',
   props: columnProps,
   setup(props, { slots }) {
@@ -64,4 +64,4 @@ export default defineVxeComponent({
 
     return renderVN
   }
-})
+}) /* define-vxe-component end */

@@ -145,7 +145,7 @@ export const columnProps = {
   params: Object as PropType<VxeColumnPropTypes.Params>
 }
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeColumn',
   props: columnProps,
   setup(props, { slots }) {
@@ -189,4 +189,4 @@ export default defineVxeComponent({
 
     return renderVN
   }
-})
+}) /* define-vxe-component end */

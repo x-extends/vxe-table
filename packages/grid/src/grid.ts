@@ -254,7 +254,7 @@ function createInternalData(): GridInternalData {
   }
 }
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeGrid',
   props: gridProps,
   emits: gridEmits,
@@ -2226,4 +2226,4 @@ export default defineVxeComponent({
   render() {
     return this.renderVN()
   }
-})
+}) /* define-vxe-component end */
