@@ -4,12 +4,12 @@ import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
 import { getOffsetHeight, getPaddingTopBottomSize, getDomNode, toCssUnit, hasClass } from '../../ui/src/dom'
-import { gridProps } from './props'
-import { gridEmits } from './emits'
+import { gridComponeProps } from './props'
+import { gridComponeEmits } from './emits'
 import { getSlotVNs } from '../../ui/src/vn'
 import { createComponentLog } from '../../ui/src/log'
-import { tableEmits } from '../../table/src/emits'
-import { tableProps } from '../../table/src/props'
+import { tableComponenEmits } from '../../table/src/emits'
+import { tableComponenProps } from '../../table/src/props'
 import VxeTableComponent from '../../table'
 import VxeToolbarComponent from '../../toolbar'
 
@@ -42,7 +42,7 @@ const { warnLog, errLog } = createComponentLog('grid')
 
 const { getConfig, getI18n, commands, hooks, useFns, createEvent, globalEvents, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
 
-const tableComponentPropKeys = Object.keys(tableProps) as (keyof VxeTableProps)[]
+const tableComponentPropKeys = Object.keys(tableComponenProps) as (keyof VxeTableProps)[]
 const tableComponentMethodKeys: (keyof VxeTableMethods)[] = [
   'clearAll',
   'syncData',
@@ -256,8 +256,8 @@ function createInternalData(): GridInternalData {
 
 export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeGrid',
-  props: gridProps,
-  emits: gridEmits,
+  props: gridComponeProps,
+  emits: gridComponeEmits,
   setup(props, context) {
     const { slots, emit } = context
 
@@ -1191,7 +1191,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     }
 
     const tableCompEvents: VxeTableEventProps = {}
-    tableEmits.forEach((name) => {
+    tableComponenEmits.forEach((name) => {
       const type = XEUtils.camelCase(`on-${name}`) as keyof VxeTableEventProps
       tableCompEvents[type] = (...args: any[]) => emit(name, ...args)
     })

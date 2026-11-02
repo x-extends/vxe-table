@@ -14,7 +14,7 @@ const { getI18n, renderer, renderEmptyElement } = VxeUI
 const sourceType = 'table'
 const renderType = 'body'
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeTableBody',
   props: {
     tableData: Array as PropType<any[]>,
@@ -1075,4 +1075,4 @@ export default defineVxeComponent({
 
     return renderVN
   }
-})
+}) /* define-vxe-component end */

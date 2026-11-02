@@ -13,7 +13,7 @@ const { renderer, renderEmptyElement } = VxeUI
 const sourceType = 'table'
 const renderType = 'footer'
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeTableFooter',
   props: {
     footerTableData: {
@@ -422,4 +422,4 @@ export default defineVxeComponent({
 
     return renderVN
   }
-})
+}) /* define-vxe-component end */

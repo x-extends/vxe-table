@@ -14,7 +14,7 @@ const { warnLog } = createComponentLog('table')
 
 const { getI18n, getIcon, renderer, renderEmptyElement } = VxeUI
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeTableFilterPanel',
   props: {
     filterStore: {
@@ -365,4 +365,4 @@ export default defineVxeComponent({
   render() {
     return this.renderVN()
   }
-})
+}) /* define-vxe-component end */

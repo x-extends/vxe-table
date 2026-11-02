@@ -1,7 +1,7 @@
 /**
  * 极速构建:
  *   <SRC>/**\/*.ts              ->  <OUT_ES>/**\/*.js (ESM) + .d.ts
- *                              ->  <OUT_LIB>/**\/*.js (CJS)
+ *                              ->  <OUT_LIB>/**\/*.js (CJS) + .d.ts（镜像自 OUT_ES）
  *   styles/components/*.scss   ->  <OUT_ES>/<name>/style[.mini].css
  *                              ->  <OUT_LIB>/<name>/style/style[.mini].css
  *                              ->  <OUT_LIB>/<name>/style/index.js（require('./style.css')）
@@ -9,7 +9,9 @@
  *                              ->  <OUT_LIB>/*  （平铺到根目录，iconfont.* 加 buildTime；可由 doIcon 关闭）
  *                              ->  <OUT_DIST>/* （平铺到根目录，iconfont.* 加 buildTime；可由 doIcon 关闭）
  *   <SRC>/<localeDir>/*.ts     ->  <LOCALE_OUT>/*.umd.js（UMD 语言包）
+ *                              ->  <LOCALE_OUT>/*.umd.d.ts（语言包类型，镜像自 <OUT_ES>/<localeDir>）
  *   <SRC>/index.ts             ->  <OUT_DIST>/all.esm.js（bundle 单文件）
+ *                              ->  <OUT_DIST>/all.esm.min.js（bundle 单文件，压缩版）
  *                              ->  <OUT_LIB>/<UMD_FILE>[.min].js（兼容旧版 Webpack 的 UMD 产物）
  *   styles/all.scss            ->  <OUT_DIST>/style.css + style.mini.css
  *                              ->  <OUT_LIB>/style.css + style.mini.css
@@ -74,6 +76,8 @@ const DIST_DIR = path.resolve(ROOT, OUT_DIST)
 
 const LOCALE_DIR_TMPL = path.resolve(SRC_TMPL_DIR, LOCALE_DIR_REL)
 const LOCALE_OUT_DIR = path.resolve(ROOT, localeOut)
+// 兼容旧版语言包输出目录
+const OLD_LOCALE_OUT_DIR = path.resolve(ROOT, 'lib/locale/lang')
 
 // iconfont 资源改名相关
 const ICON_FONT_BASE = 'iconfont'
@@ -108,6 +112,58 @@ function toSafeIdent (input) {
   if (!id) id = '_mod'
   if (/^[0-9]/.test(id)) id = '_' + id
   return id
+}
+
+/**
+ * 跨版本通用：获取 tsc 可执行文件路径
+ * 兼容 TS 5.x / 6.x / 7.0 (Go 原生版)
+ */
+function resolveTscBin () {
+  try {
+    const pkgPath = require.resolve('typescript/package.json')
+    const pkg = require(pkgPath)
+    const binRelPath = typeof pkg.bin === 'string' ? pkg.bin : pkg.bin?.tsc
+    if (binRelPath) {
+      const tscPath = path.resolve(path.dirname(pkgPath), binRelPath)
+      if (fs.existsSync(tscPath)) return tscPath
+    }
+  } catch (e) { /* 忽略错误，进入兜底 */ }
+
+  const tryPaths = [
+    path.join(ROOT, 'node_modules', 'typescript', 'bin', 'tsc'),
+    path.join(ROOT, 'node_modules', 'typescript', 'lib', 'tsc.js')
+  ]
+  for (const p of tryPaths) {
+    if (fs.existsSync(p)) return p
+  }
+
+  throw new Error('Cannot find typescript tsc binary. Please ensure typescript is installed.')
+}
+
+/**
+ * 跨版本通用：判断文件是否为 Node.js 脚本
+ */
+function isNodeScript (file) {
+  try {
+    const fd = fs.openSync(file, 'r')
+    const buf = Buffer.alloc(64)
+    const n = fs.readSync(fd, buf, 0, buf.length, 0)
+    fs.closeSync(fd)
+    const head = buf.subarray(0, n).toString('utf8')
+    return head.startsWith('#!') && head.split('\n')[0].includes('node')
+  } catch {
+    return false
+  }
+}
+
+/**
+ * 跨版本通用：执行 tsc
+ */
+function runTsc (tscBin, configPath) {
+  if (isNodeScript(tscBin)) {
+    return run(process.execPath, [tscBin, '-p', configPath])
+  }
+  return run(tscBin, ['-p', configPath])
 }
 
 /* --------------------------- CSS 处理 --------------------------- */
@@ -282,16 +338,13 @@ async function buildDistStyle () {
     fsp.writeFile(path.join(LIB_DIR, 'style.css'), css),
     fsp.writeFile(path.join(LIB_DIR, 'style.mini.css'), cssMin)
   ])
+  return `${OUT_DIST}, ${OUT_LIB}`
 }
 
 /* ------------------------------ 图标资源复制 ------------------------------ */
 
 /**
  * 把 styles/icon 下所有文件平铺复制到 ES_DIR / LIB_DIR / DIST_DIR 根目录。
- * - `iconfont.*` 文件会加 buildTime，例如 `iconfont.ttf` -> `iconfont.${buildTime}.ttf`
- * - 复制前会清理输出根目录下旧的 `iconfont.<非当前buildTime>.<font-ext>` 文件
- * - 不会清理输出目录其他产物
- * - 由 doIcon 开关控制是否执行（在 main 中判断）
  */
 function getRenamedRelPath (relPath) {
   const base = path.basename(relPath)
@@ -312,9 +365,7 @@ async function cleanupOldIconFonts (dir) {
     if (!e.name.startsWith(`${ICON_FONT_BASE}.`)) return
     const ext = path.extname(e.name).toLowerCase()
     if (!FONT_EXTS.has(ext)) return
-    // iconfont.<version>.<ext> 中的 version 部分
     const mid = e.name.slice(ICON_FONT_BASE.length + 1, e.name.length - ext.length)
-    // 无版本号（如 iconfont.ttf）或当前版本 → 保留
     if (!mid || mid === current) return
     await fsp.unlink(path.join(dir, e.name)).catch(() => { })
   }))
@@ -336,14 +387,11 @@ async function copyIconAssets () {
       const st = await fsp.stat(path.join(SRC_TMPL_DIR, 'icon'))
       hasIcon = st.isDirectory()
     } catch { }
-    // 判断是否有 icon 组件
     if (hasIcon) {
-      // ES 侧：CSS 在 <ES_DIR>/<name>/style.css，字体需放到 <ES_DIR>/<name>/
       outDirs.push(
         path.join(ES_DIR, 'icon'),
         path.join(ES_DIR, `${componentPrefix}-icon`)
       )
-      // LIB 侧：CSS 在 <LIB_DIR>/<name>/style/style.css，字体需放到 <LIB_DIR>/<name>/style/
       outDirs.push(
         path.join(LIB_DIR, 'icon', 'style'),
         path.join(LIB_DIR, `${componentPrefix}-icon`, 'style')
@@ -362,37 +410,18 @@ async function copyIconAssets () {
         .then(() => fsp.copyFile(file, target))
     })
   }))
+
+  return `icon: ${files.length} -> ${OUT_ES}, ${OUT_LIB}, ${OUT_DIST}`
 }
 
 /* ------------------------------ 移除 defineVxeComponent 包裹 ------------------------------ */
 
-// defineVxeComponent 包裹移除相关
 const SRC_TMPL_PREFIX = SRC_TMPL_DIR + path.sep
 const DEFINE_VXE_COMPONENT_START = '/* define-vxe-component start */ defineVxeComponent({'
 
-/**
- * 组件源码以如下形式书写：
- *
- *   export default /* define-vxe-component start *\/ defineVxeComponent({
- *     // 组件选项
- *   }) /* define-vxe-component end *\/
- *
- * 编译后移除包裹，仅保留内部组件选项对象：
- *
- *   export default {
- *     // 组件选项
- *   };
- *
- * 说明：
- * - 未匹配时静默保留原样（运行时仍可工作）
- * - 只匹配一半时语法错误，esbuild 会直接报错
- * - .d.ts 由 tsc 生成，不经过此插件，类型约束完整保留
- */
 function stripDefineVxeComponent (source) {
   return source
-    // 1. 移除起包裹，保留内部对象
     .replace(DEFINE_VXE_COMPONENT_START, '{')
-    // 2. 结尾兼容「有分号 / 无分号」两种写法，并补上分号避免 ASI 边界问题
     .replace(/\}\)\s*;?\s*\/\*\s*define-vxe-component end\s*\*\//, '};')
 }
 
@@ -400,7 +429,6 @@ const stripDefineVxeComponentPlugin = {
   name: 'strip-define-vxe-component',
   setup (build) {
     build.onLoad({ filter: /\.(ts|tsx)$/ }, async args => {
-      // 只处理临时目录内的源码，不碰 node_modules
       if (!args.path.startsWith(SRC_TMPL_PREFIX)) return null
       const source = await fsp.readFile(args.path, 'utf8')
       if (!source.includes(DEFINE_VXE_COMPONENT_START)) return null
@@ -412,7 +440,7 @@ const stripDefineVxeComponentPlugin = {
   }
 }
 
-/* ------------------------------ Bundle（all.esm.js） ------------------------------ */
+/* ------------------------------ Bundle ------------------------------ */
 
 const scssStubPlugin = {
   name: 'scss-stub',
@@ -460,7 +488,6 @@ async function buildBundle () {
     plugins: [scssStubPlugin, ...srcPlugins]
   })
 
-  // 生成 min 版本
   const code = await fsp.readFile(outFile, 'utf8')
   const { code: minCode } = await esbuild.transform(code, {
     loader: 'js',
@@ -470,6 +497,8 @@ async function buildBundle () {
     format: 'esm'
   })
   await fsp.writeFile(minOutFile, minCode)
+
+  return `${OUT_DIST} esm`
 }
 
 /* ------------------------------ UMD Bundle ------------------------------ */
@@ -483,10 +512,8 @@ async function buildUmdBundle () {
   await fsp.mkdir(LIB_DIR, { recursive: true })
 
   const globalsEntries = Object.entries(externalGlobals)
-
   const externalPackages = Object.keys(externalGlobals).flatMap(pkg => [pkg, `${pkg}/*`])
 
-  // 一次性分配安全参数名（去重），banner 与 _requires 共用同一套
   const identOf = {}
   const usedIdents = new Set()
   for (const [pkg] of globalsEntries) {
@@ -501,6 +528,7 @@ async function buildUmdBundle () {
   const factoryParamsList = globalsEntries.map(([pkg]) => identOf[pkg]).join(', ')
   const requiresList = globalsEntries.map(([pkg]) => `require('${pkg}')`).join(', ')
   const amdList = globalsEntries.map(([pkg]) => `'${pkg}'`).join(', ')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const browserList = globalsEntries.map(([_, g]) => `root.${g}`).join(', ')
   const internalRequires = globalsEntries.map(([pkg]) => `'${pkg}': ${identOf[pkg]}`).join(',\n    ')
 
@@ -569,12 +597,13 @@ async function buildUmdBundle () {
     charset: 'utf8'
   })
   await fsp.writeFile(minPath, minCode)
+
+  return `${OUT_LIB}`
 }
 
 /* ------------------------------ 语言包编译 ------------------------------ */
 
 async function buildLocales () {
-  // 如果源码目录不存在，则跳过
   let stat
   try { stat = await fsp.stat(LOCALE_DIR_TMPL) } catch { return null }
   if (!stat.isDirectory()) return null
@@ -585,20 +614,17 @@ async function buildLocales () {
 
   await fsp.mkdir(LOCALE_OUT_DIR, { recursive: true })
 
-  // 判断目录 locale/lang 是否存在
-  const oldLocaleOutDir = path.resolve(ROOT, 'lib/locale/lang')
   let hasOldLocaleOutDir = false
   try {
     const st = await fsp.stat(path.resolve(SRC_TMPL_DIR, 'locale/lang'))
     hasOldLocaleOutDir = st.isDirectory()
   } catch { }
   if (hasOldLocaleOutDir) {
-    await fsp.mkdir(oldLocaleOutDir, { recursive: true })
+    await fsp.mkdir(OLD_LOCALE_OUT_DIR, { recursive: true })
   }
 
   const results = await Promise.all(langFiles.map(async file => {
     const fileName = path.basename(file, '.ts')
-    // 全局变量名称，例如 VxeLanguageZhCN
     const globalVarName = `VxeLanguage${capitalize(XEUtils.camelCase(fileName))}`
 
     const banner = `(function (root, factory) {
@@ -646,11 +672,10 @@ async function buildLocales () {
         fsp.writeFile(path.join(LOCALE_OUT_DIR, `${fileName}.umd.min.js`), minCode)
       ]
 
-      // 兼容旧版本
       if (hasOldLocaleOutDir) {
         writes.push(
-          fsp.writeFile(path.join(oldLocaleOutDir, `${fileName}.umd.js`), code),
-          fsp.writeFile(path.join(oldLocaleOutDir, `${fileName}.umd.min.js`), minCode)
+          fsp.writeFile(path.join(OLD_LOCALE_OUT_DIR, `${fileName}.umd.js`), code),
+          fsp.writeFile(path.join(OLD_LOCALE_OUT_DIR, `${fileName}.umd.min.js`), minCode)
         )
       }
       await Promise.all(writes)
@@ -700,15 +725,70 @@ function buildTypes () {
       declaration: true,
       emitDeclarationOnly: true,
       noEmit: false,
+      // 跳过第三方库（node_modules）的类型检查
+      skipLibCheck: true,
+      // 开启增量编译：如果只改了少量文件，二次构建极快
+      incremental: true,
+      tsBuildInfoFile: './node_modules/.cache/tsconfig.build-dts.tsbuildinfo',
       ...(types ? { types } : {})
     },
     include: [`./${SRC_TMPL}/**/*.ts`, `./${SRC_TMPL}/**/*.tsx`],
     exclude: ['node_modules', `./${SRC_TMPL}/**/*.test.ts`, `./${SRC_TMPL}/**/*.spec.ts`]
   }
   fs.writeFileSync(tmpConfig, JSON.stringify(config, null, 2))
-  const tscBin = require.resolve('typescript/bin/tsc')
-  return run(process.execPath, [tscBin, '-p', tmpConfig])
+
+  const tscBin = resolveTscBin()
+  return runTsc(tscBin, tmpConfig)
     .finally(() => { try { fs.unlinkSync(tmpConfig) } catch { } })
+}
+
+/**
+ * 把 ES_DIR 下的所有 .d.ts 镜像到 LIB_DIR，让 CJS 产物同样具备类型。
+ */
+async function copyTypesToLib () {
+  const files = await walk(ES_DIR, f => f.endsWith('.d.ts'))
+  if (!files.length) return 0
+  await Promise.all(files.map(async f => {
+    const relPath = path.relative(ES_DIR, f)
+    const target = path.join(LIB_DIR, relPath)
+    await fsp.mkdir(path.dirname(target), { recursive: true })
+    await fsp.copyFile(f, target)
+  }))
+  return files.length
+}
+
+/**
+ * 把 <OUT_ES>/<localeDir> 下的 .d.ts 复制到 <LOCALE_OUT> 目录，命名为 *.umd.d.ts
+ */
+async function copyLocaleTypes () {
+  if (!DO_LOCALE) return 0
+
+  const srcLocaleDir = path.join(ES_DIR, LOCALE_DIR_REL)
+  let stat
+  try { stat = await fsp.stat(srcLocaleDir) } catch { return 0 }
+  if (!stat.isDirectory()) return 0
+
+  const files = await walk(srcLocaleDir, f => f.endsWith('.d.ts'))
+  if (!files.length) return 0
+
+  const outDirs = [LOCALE_OUT_DIR]
+  let hasOldLocaleOutDir = false
+  try {
+    const st = await fsp.stat(path.resolve(SRC_TMPL_DIR, 'locale/lang'))
+    hasOldLocaleOutDir = st.isDirectory()
+  } catch { }
+  if (hasOldLocaleOutDir) outDirs.push(OLD_LOCALE_OUT_DIR)
+
+  await Promise.all(outDirs.map(d => fsp.mkdir(d, { recursive: true })))
+
+  await Promise.all(files.flatMap(f => {
+    const fileName = path.basename(f, '.d.ts')
+    return outDirs.map(dir => {
+      const target = path.join(dir, `${fileName}.umd.d.ts`)
+      return fsp.copyFile(f, target)
+    })
+  }))
+  return files.length
 }
 
 async function aliasEntry (dir, from, to) {
@@ -773,7 +853,9 @@ async function main () {
     const buildTasks = [
       esbuildTranspile('esm', ES_DIR).then(mark('es')),
       esbuildTranspile('cjs', LIB_DIR).then(mark('lib')),
-      buildTypes().then(mark('types')),
+      buildTypes()
+        .then(() => Promise.all([copyTypesToLib(), copyLocaleTypes()]))
+        .then(mark('types')),
       buildStyles().then(ns => {
         if (ns.length) console.log(`[build] ✔ ${'component style'.padEnd(20)} ${Date.now() - t0}ms  (${ns.length})`)
       }),
@@ -785,7 +867,6 @@ async function main () {
       })
     ]
 
-    // 根据配置项动态决定是否加入 图标资源 构建任务
     if (DO_ICON) {
       buildTasks.push(
         copyIconAssets().then(() => {
@@ -794,7 +875,6 @@ async function main () {
       )
     }
 
-    // 根据配置项动态决定是否加入 UMD 构建任务
     if (DO_UMD) {
       buildTasks.push(
         buildUmdBundle().then(() => {
@@ -803,7 +883,6 @@ async function main () {
       )
     }
 
-    // 根据配置项动态决定是否加入 语言包 构建任务
     if (DO_LOCALE) {
       buildTasks.push(
         buildLocales().then(outs => {

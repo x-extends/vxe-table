@@ -1,13 +1,13 @@
 import { PropType } from 'vue'
 import { VxeUI } from '@vxe-ui/core'
-import { tableProps } from '../../table/src/props'
+import { tableComponenProps } from '../../table/src/props'
 
 import type { VxeGridPropTypes } from '../../../types'
 
 const { getConfig } = VxeUI
 
-export const gridProps = {
-  ...tableProps,
+export const gridComponeProps = {
+  ...tableComponenProps,
   layouts: Array as PropType<VxeGridPropTypes.Layouts>,
   columns: Array as PropType<VxeGridPropTypes.Columns<any>>,
   pagerConfig: Object as PropType<VxeGridPropTypes.PagerConfig>,

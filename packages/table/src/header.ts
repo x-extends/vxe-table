@@ -13,7 +13,7 @@ const { renderer, renderEmptyElement } = VxeUI
 const sourceType = 'table'
 const renderType = 'header'
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeTableHeader',
   props: {
     tableData: Array as PropType<any[]>,
@@ -639,4 +639,4 @@ export default defineVxeComponent({
 
     return renderVN
   }
-})
+}) /* define-vxe-component end */

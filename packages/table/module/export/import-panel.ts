@@ -11,7 +11,7 @@ const { errLog } = createComponentLog('table')
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeTableImportPanel',
   props: {
     defaultOptions: {
@@ -316,4 +316,4 @@ export default defineVxeComponent({
 
     return renderVN
   }
-})
+}) /* define-vxe-component end */

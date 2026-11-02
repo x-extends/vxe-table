@@ -9,7 +9,7 @@ import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } fro
 
 const { getIcon, getI18n, renderEmptyElement } = VxeUI
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeTableMenuPanel',
   setup(props, context) {
     const xID = XEUtils.uniqueId()
@@ -269,4 +269,4 @@ export default defineVxeComponent({
   render() {
     return this.renderVN()
   }
-})
+}) /* define-vxe-component end */

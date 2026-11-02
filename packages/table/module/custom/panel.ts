@@ -25,7 +25,7 @@ export function createInternalData(): TableCustomPanelInternalData {
   }
 }
 
-export default defineVxeComponent({
+export default /* define-vxe-component start */ defineVxeComponent({
   name: 'TableCustomPanel',
   props: {
     customStore: {
@@ -1999,4 +1999,4 @@ export default defineVxeComponent({
   render() {
     return this.renderVN()
   }
-})
+}) /* define-vxe-component end */

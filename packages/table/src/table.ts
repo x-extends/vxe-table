@@ -44,8 +44,8 @@ import Cell from './cell'
 import TableBodyComponent from './body'
 import TableHeaderComponent from './header'
 import TableFooterComponent from './footer'
-import { tableProps } from './props'
-import { tableEmits } from './emits'
+import { tableComponenProps } from './props'
+import { tableComponenEmits } from './emits'
 import TableCustomPanelComponent from '../module/custom/panel'
 import TableFilterPanelComponent from '../module/filter/panel'
 import TableImportPanelComponent from '../module/export/import-panel'
@@ -99,8 +99,8 @@ let crossTableDragRowObj: {
 
 export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeTable',
-  props: tableProps,
-  emits: tableEmits,
+  props: tableComponenProps,
+  emits: tableComponenEmits,
   setup(props, context) {
     const { slots, emit } = context
 
@@ -2366,8 +2366,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
             const reHeight = calcCellAutoHeight(rowid, rowRest, el)
             rowRest.height = Math.max(defaultRowHeight, reHeight)
           }
-          el.removeAttribute('data-calc-row')
         })
+        el.removeAttribute('data-calc-row')
         reactData.calcCellHeightFlag++
       }
     }
@@ -4513,6 +4513,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           }
         })
       }
+      const oldVisibleColumn = internalData.visibleColumn
       const visibleColumn = leftList.concat(centerList).concat(rightList)
       internalData.visibleColumn = visibleColumn
       updateColumnOffsetLeft()
@@ -4551,7 +4552,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }
       // 如果列被显示/隐藏，则清除合并状态
       // 如果列被设置为固定，则清除合并状态
-      if (visibleColumn.length !== internalData.visibleColumn.length || !internalData.visibleColumn.every((column, index) => column === visibleColumn[index])) {
+      if (oldVisibleColumn.length !== visibleColumn.length || !visibleColumn.every((column, index) => column === oldVisibleColumn[index])) {
         $xeTable.clearMergeCells()
         $xeTable.clearMergeFooterItems()
       }
@@ -6749,8 +6750,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
             if (rowRest) {
               rowRest.resizeHeight = calcCellAutoHeight(rowid, rowRest, el)
             }
-            el.removeAttribute('data-calc-row')
           })
+          el.removeAttribute('data-calc-row')
           reactData.calcCellHeightFlag++
         }
         return nextTick()
@@ -7110,7 +7111,11 @@ export default /* define-vxe-component start */ defineVxeComponent({
           }
         }
         if (reserve) {
-          tableFullData.forEach((row) => handleCheckboxReserveRow(row, false))
+          if (treeConfig) {
+            XEUtils.eachTree(tableFullData, (row) => handleCheckboxReserveRow(row, false), { children: childrenField })
+          } else {
+            tableFullData.forEach((row) => handleCheckboxReserveRow(row, false))
+          }
         }
         reactData.isAllSelected = false
         reactData.isIndeterminate = false
@@ -9324,8 +9329,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
           } else if (hasBackspaceKey && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isBack && isEnableConf(editConfig) && (selectRow || selectColumn)) {
             if (!isEditStatus) {
               const { backMethod } = keyboardOpts
-              // 如果是删除键
-              if (keyboardOpts.isDel && isEnableConf(editConfig) && (selectRow || selectColumn)) {
+              // 如果是回车键
+              if (isEnableConf(editConfig) && (selectRow || selectColumn)) {
                 const params = {
                   row: selectRow,
                   rowIndex: $xeTable.getRowIndex(selectRow),
@@ -13489,7 +13494,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           return
         }
 
-        const { highlightHoverRow } = tableProps
+        const { highlightHoverRow } = props
         const { scrollXLoad, scrollYLoad, overflowX, overflowY, expandColumn } = reactData
         const leftFixedWidth = computeLeftFixedWidth.value
         const rightFixedWidth = computeRightFixedWidth.value
