@@ -6,7 +6,7 @@ import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
 import { getOffsetHeight, getPaddingTopBottomSize, getDomNode, toCssUnit, hasClass } from '../../ui/src/dom'
 import { getSlotVNs } from '../../ui/src/vn'
 import { createComponentLog } from '../../ui/src/log'
-import { tableProps } from '../../table/src/props'
+import { tableComponenProps } from '../../table/src/props'
 import VxeTableComponent from '../../table'
 import VxeToolbarComponent from '../../toolbar'
 
@@ -35,7 +35,7 @@ const { warnLog, errLog } = createComponentLog('grid')
 const { getConfig, getI18n, commands, globalEvents, globalMixins, createEvent, GLOBAL_EVENT_KEYS, renderEmptyElement } = VxeUI
 
 const tableMethods: VxeTableMethods = {} as VxeTableMethods
-const propKeys = Object.keys(tableProps) as (keyof VxeTableProps)[]
+const propKeys = Object.keys(tableComponenProps) as (keyof VxeTableProps)[]
 
 const defaultLayouts: VxeGridPropTypes.Layouts = [['Form'], ['Toolbar', 'Top', 'Table', 'Bottom', 'Pager']]
 
@@ -98,7 +98,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
   name: 'VxeGrid',
   mixins: [globalMixins.sizeMixin],
   props: {
-    ...(tableProps as unknown as {
+    ...(tableComponenProps as unknown as {
       border: PropType<VxeTablePropTypes.Border>
       round: PropType<VxeTablePropTypes.Round>
       loading: PropType<VxeTablePropTypes.Loading>

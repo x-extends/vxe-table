@@ -2744,8 +2744,8 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
         const height = calcCellAutoHeight($xeTable, rowid, rowRest, el)
         rowRest.height = Math.max(defaultRowHeight, height)
       }
-      el.removeAttribute('data-calc-row')
     })
+    el.removeAttribute('data-calc-row')
     reactData.calcCellHeightFlag++
   }
 }
@@ -4118,6 +4118,7 @@ function parseColumns($xeTable: VxeTableConstructor & VxeTablePrivateMethods, is
       }
     })
   }
+  const oldVisibleColumn = internalData.visibleColumn
   const visibleColumn = leftList.concat(centerList).concat(rightList)
   internalData.visibleColumn = visibleColumn
   updateColumnOffsetLeft($xeTable)
@@ -4156,7 +4157,7 @@ function parseColumns($xeTable: VxeTableConstructor & VxeTablePrivateMethods, is
   }
   // 如果列被显示/隐藏，则清除合并状态
   // 如果列被设置为固定，则清除合并状态
-  if (visibleColumn.length !== internalData.visibleColumn.length || !internalData.visibleColumn.every((column, index) => column === visibleColumn[index])) {
+  if (oldVisibleColumn.length !== visibleColumn.length || !visibleColumn.every((column, index) => column === oldVisibleColumn[index])) {
     $xeTable.clearMergeCells()
     $xeTable.clearMergeFooterItems()
   }
@@ -7770,8 +7771,8 @@ const tableMethods: any = {
         if (rowRest) {
           rowRest.resizeHeight = calcCellAutoHeight($xeTable, rowid, rowRest, el)
         }
-        el.removeAttribute('data-calc-row')
       })
+      el.removeAttribute('data-calc-row')
       reactData.calcCellHeightFlag++
     }
     return $xeTable.$nextTick()
@@ -8495,8 +8496,8 @@ const tableMethods: any = {
         } else if (hasBackspaceKey && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isBack && isEnableConf(editConfig) && (selectRow || selectColumn)) {
           if (!isEditStatus) {
             const { backMethod } = keyboardOpts
-            // 如果是删除键
-            if (keyboardOpts.isDel && isEnableConf(editConfig) && (selectRow || selectColumn)) {
+            // 如果是回车键
+            if (isEnableConf(editConfig) && (selectRow || selectColumn)) {
               const params = {
                 row: selectRow,
                 rowIndex: $xeTable.getRowIndex(selectRow),
@@ -9804,7 +9805,11 @@ const tableMethods: any = {
       }
     }
     if (reserve) {
-      tableFullData.forEach((row) => this.handleCheckboxReserveRow(row, false))
+      if (treeConfig) {
+        XEUtils.eachTree(tableFullData, (row) => this.handleCheckboxReserveRow(row, false), { children: childrenField })
+      } else {
+        tableFullData.forEach((row) => this.handleCheckboxReserveRow(row, false))
+      }
     }
     reactData.isAllSelected = false
     reactData.isIndeterminate = false

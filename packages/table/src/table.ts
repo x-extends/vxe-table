@@ -8,7 +8,7 @@ import methods from './methods'
 import TableBodyComponent from './body'
 import TableHeaderComponent from './header'
 import TableFooterComponent from './footer'
-import { tableProps } from './props'
+import { tableComponenProps } from './props'
 import { getSlotVNs } from '../../ui/src/vn'
 import { createComponentLog } from '../../ui/src/log'
 import { crossTableDragRowGlobal, getCrossTableDragRowInfo } from './store'
@@ -771,7 +771,7 @@ function renderVirtualBody(h: CreateElement, $xeTable: VxeTableConstructor & Vxe
 export default {
   name: 'VxeTable',
   mixins: [globalMixins.sizeMixin, globalMixins.vScrollbarMixin, globalMixins.initVScrollbarMixin, filterMixin, menuMixin, editMixin, exportMixin, keyboardMixin, validatorMixin, customMixin],
-  props: tableProps,
+  props: tableComponenProps,
   provide() {
     const $xeTable = this
     return {
