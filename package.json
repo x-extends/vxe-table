@@ -76,11 +76,11 @@
     "vxe-pc-ui": "3.20.35"
   },
   "allowScripts": {
-    "esbuild@0.28.2": true,
-    "@parcel/watcher@2.5.6": true,
-    "yorkie@2.0.0": true,
-    "core-js@3.49.0": true,
-    "es5-ext@0.10.64": true
+    "esbuild": true,
+    "@parcel/watcher": true,
+    "yorkie": true,
+    "core-js": true,
+    "es5-ext": true
   },
   "vetur": {
     "tags": "helper/vetur/tags.json",
