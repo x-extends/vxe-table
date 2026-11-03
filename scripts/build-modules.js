@@ -727,9 +727,6 @@ function buildTypes () {
       noEmit: false,
       // 跳过第三方库（node_modules）的类型检查
       skipLibCheck: true,
-      // 开启增量编译：如果只改了少量文件，二次构建极快
-      incremental: true,
-      tsBuildInfoFile: './node_modules/.cache/tsconfig.build-dts.tsbuildinfo',
       ...(types ? { types } : {})
     },
     include: [`./${SRC_TMPL}/**/*.ts`, `./${SRC_TMPL}/**/*.tsx`],
