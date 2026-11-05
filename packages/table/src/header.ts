@@ -1,4 +1,4 @@
-import { h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted } from 'vue'
+import { h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted, VNode } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '@vxe-ui/core'
@@ -313,8 +313,15 @@ export default /* define-vxe-component start */ defineVxeComponent({
         const flCompConf = isEnableConf(filterRender) && filterRender.name ? rendererOpts[filterRender.name] || renderer.get(filterRender.name) : null
         const rtFloatingFilter = flCompConf ? flCompConf.renderTableFloatingFilter : null
         const fixedHiddenColumn = overflowX && (fixedType ? column.fixed !== fixedType : !!column.fixed)
-        const isPadding = XEUtils.isBoolean(headerCellOpts.padding) ? headerCellOpts.padding : cellOpts.padding
+
+        const cellPadding = getDefaultConfig(headerCellOpts.padding, cellOpts.padding)
+        const isAllCellPadding = cellPadding === true
+        const isCellPaddingTop = cellPadding ? isAllCellPadding || cellPadding.top !== false : false
+        const isCellPaddingBottom = cellPadding ? isAllCellPadding || cellPadding.bottom !== false : false
+        const isCellPaddingLeft = cellPadding ? isAllCellPadding || cellPadding.left !== false : false
+        const isCellPaddingRight = cellPadding ? isAllCellPadding || cellPadding.right !== false : false
         const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+
         const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
         const showEllipsis = headOverflow === 'ellipsis'
         const showTitle = headOverflow === 'title'
@@ -373,8 +380,13 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 'col--fixed': column.fixed,
                 'col--ellipsis': hasEllipsis,
                 'fixed--width': !isAutoCellWidth,
-                'is--padding': isPadding,
+                'is--pg-top': isCellPaddingTop,
+                'is--pg-bottom': isCellPaddingBottom,
+                'is--pg-left': isCellPaddingLeft,
+                'is--pg-right': isCellPaddingRight,
                 'is--sortable': column.sortable,
+                'col--filter': !!filters,
+                'is--filter-active': hasFilter,
                 'col--current': currColFlag && currentCol === column
               }
             ],
@@ -419,29 +431,36 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       const { headerRowClassName, headerRowStyle } = tableProps
       const floatingFilterOpts = computeFloatingFilterOpts.value
-      const rowVNs = headerGroups.map((cols, _rowIndex) => {
+      const isFFEnabled = floatingFilterOpts.enabled
+      const isFFTop = floatingFilterOpts.position === 'top'
+      const rowVNs: VNode[] = []
+
+      if (isFFEnabled && isFFTop) {
+        rowVNs.push(
+          h('tr', {
+            key: 'fft',
+            class: ['vxe-header--row is--floating-filters', '' + (floatingFilterOpts.rowClassName || '')]
+          }, renderFilterRows(isOptimizeMode, renderColumnList))
+        )
+      }
+
+      headerGroups.forEach((cols, _rowIndex) => {
         const params = { $table: $xeTable, rowIndex: _rowIndex, _rowIndex, $rowIndex: _rowIndex, fixed: fixedType, type: renderType }
-        return h(
-          'tr',
-          {
+        rowVNs.push(
+          h('tr', {
             key: _rowIndex,
             class: ['vxe-header--row', headerRowClassName ? (XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName) : ''],
             style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) : null
-          },
-          renderRows(isGroup, isOptimizeMode, headerGroups, _rowIndex, cols)
+          }, renderRows(isGroup, isOptimizeMode, headerGroups, _rowIndex, cols))
         )
       })
 
-      if (floatingFilterOpts.enabled) {
+      if (isFFEnabled && !isFFTop) {
         rowVNs.push(
-          h(
-            'tr',
-            {
-              key: 'ff',
-              class: ['vxe-header--row is--floating-filters', '' + (floatingFilterOpts.rowClassName || '')]
-            },
-            renderFilterRows(isOptimizeMode, renderColumnList)
-          )
+          h('tr', {
+            key: 'ffb',
+            class: ['vxe-header--row is--floating-filters', '' + (floatingFilterOpts.rowClassName || '')]
+          }, renderFilterRows(isOptimizeMode, renderColumnList))
         )
       }
 
