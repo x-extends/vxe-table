@@ -174,8 +174,7 @@ VxeUI.setConfig({
       maxHeight: 320
     },
     floatingFilterConfig: {
-      // enabled: false,
-      padding: true
+      // enabled: false
     },
     aggregateConfig: {
       padding: true,
