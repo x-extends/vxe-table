@@ -61,7 +61,8 @@ export default {
       reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: '최대 지원되는 데이터 볼륨 {0} 행을 초과하면 오류가 발생할 수 있습니다.',
       useNew: '{0} 권장되지 않습니다. {1}을 사용하십시오.',
-      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}',
+      errMaxVersion: '版本不匹配，当前版本 {0}，最高支持版本为 {1}'
     },
     table: {
       emptyText: '아직 데이터가 없습니다',
@@ -501,6 +502,9 @@ export default {
           VxeUploadImage: '그림',
           VxeRate: '점수',
           VxeSlider: '슬라이더'
+        },
+        row: {
+          placeholder: '控件位置'
         }
       },
       widgetProp: {
@@ -558,6 +562,9 @@ export default {
           limitImgCount: '사진의 수를 제한합니다',
           limitImgSize: '이미지 크기 제한',
           multiImg: '여러 사진을 업로드 할 수 있습니다'
+        },
+        rules: {
+          required: '必填字段'
         }
       }
     },
