@@ -61,7 +61,8 @@ export default {
       reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Overskridende det maksimale støttede datavolumet {0} Rader, dette kan føre til en feil',
       useNew: '不建议使用 {0}，请使用 {1}',
-      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}',
+      errMaxVersion: '版本不匹配，当前版本 {0}，最高支持版本为 {1}'
     },
     table: {
       emptyText: 'Ingen data ennå',
@@ -501,6 +502,9 @@ export default {
           VxeUploadImage: 'bilde',
           VxeRate: 'poengsum',
           VxeSlider: 'glidebryteren'
+        },
+        row: {
+          placeholder: '控件位置'
         }
       },
       widgetProp: {
@@ -558,6 +562,9 @@ export default {
           limitImgCount: 'Begrens antall bilder',
           limitImgSize: 'Bildestørrelsesgrense',
           multiImg: 'La flere bilder laste opp'
+        },
+        rules: {
+          required: '必填字段'
         }
       }
     },

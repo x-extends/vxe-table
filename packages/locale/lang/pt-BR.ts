@@ -61,7 +61,8 @@ export default {
       reqPlugin: '扩展插件未安装 "{1}" https://vxeui.com/other{0}/#/{1}/start/npmInstall',
       errMaxRow: 'Excedendo o volume máximo de dados suportado {0} linhas, isso pode causar um erro',
       useNew: '不建议使用 {0}，请使用 {1}',
-      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}'
+      errorVersion: '版本不匹配，当前版本 {0}，最低支持版本为 {1}',
+      errMaxVersion: '版本不匹配，当前版本 {0}，最高支持版本为 {1}'
     },
     table: {
       emptyText: 'Ainda não há dados',
@@ -501,6 +502,9 @@ export default {
           VxeUploadImage: 'foto',
           VxeRate: 'pontuação',
           VxeSlider: 'Slider'
+        },
+        row: {
+          placeholder: '控件位置'
         }
       },
       widgetProp: {
@@ -558,6 +562,9 @@ export default {
           limitImgCount: 'Número limite de fotos',
           limitImgSize: 'Limite de tamanho da imagem',
           multiImg: 'Permitir que várias fotos enviem'
+        },
+        rules: {
+          required: '必填字段'
         }
       }
     },
