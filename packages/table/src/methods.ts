@@ -2098,6 +2098,7 @@ function buildMergeData(mergeConfigs: VxeTableDefines.MergeItem[]) {
       }
     }
   }
+  // 保留 mergeRowMaps， mergeColMaps 暂时不用，待后续优化
   return { mergeMaps, mergeRowMaps, mergeColMaps }
 }
 
@@ -2681,7 +2682,7 @@ function autoCellWidth($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
 /**
  * 计算自适应行高
  */
-const calcCellAutoHeight = ($xeTable: VxeTableConstructor, rowid: string | number, rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement) => {
+const calcCellAutoHeight = ($xeTable: VxeTableConstructor, rowid: string | number, rowRest: VxeTableDefines.RowCacheItem, wrapperEl: HTMLDivElement, cacheElemList?: HTMLElement[]) => {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { fullCellHeightMaps } = internalData
@@ -2690,28 +2691,52 @@ const calcCellAutoHeight = ($xeTable: VxeTableConstructor, rowid: string | numbe
     chRest = {}
     fullCellHeightMaps[rowid] = chRest
   }
-  const wrapperElemList = wrapperEl.querySelectorAll(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`)
-  let firstCellStyle: CSSStyleDeclaration | null = null
-  let topBottomPadding = 0
+  const wrapperElemList = cacheElemList || Array.from(wrapperEl.querySelectorAll<HTMLElement>(`.vxe-cell--wrapper[rowid="${rowRest.rowid}"]`))
+  const cellItemList: {
+    wrapperElem: HTMLElement
+    cellElem: HTMLTableCellElement
+    colid: string
+    orHeight: string
+  }[] = []
   let changeCH = false
+  // 集中清除内联行高（写），避免「写-读-写」交替触发反复的强制同步布局
   for (let i = 0; i < wrapperElemList.length; i++) {
-    const wrapperElem = wrapperElemList[i] as HTMLElement
+    const wrapperElem = wrapperElemList[i]
     const cellElem = wrapperElem.parentElement as HTMLTableCellElement
-    const cellStyle = cellElem.style
-    const orHeight = cellStyle.height
-    const colid = wrapperElem.getAttribute('colid') || ''
-    cellStyle.height = ''
-    if (!firstCellStyle) {
-      firstCellStyle = getComputedStyle(cellElem)
-      topBottomPadding = firstCellStyle ? Math.ceil(XEUtils.toNumber(firstCellStyle.paddingTop) + XEUtils.toNumber(firstCellStyle.paddingBottom)) : 0
+    if (!cellElem) {
+      continue
     }
-    const cellHeight = wrapperElem ? wrapperElem.clientHeight : 0
-    const colHeight = Math.ceil(cellHeight + topBottomPadding)
+    const orHeight = cellElem.style.height
+    if (orHeight) {
+      cellElem.style.height = ''
+    }
+    cellItemList.push({
+      wrapperElem,
+      cellElem,
+      colid: wrapperElem.getAttribute('colid') || '',
+      orHeight
+    })
+  }
+  // 集中读取：此阶段不再写样式，浏览器只需一次布局
+  let topBottomPadding = 0
+  if (cellItemList.length) {
+    const firstCellStyle = getComputedStyle(cellItemList[0].cellElem)
+    topBottomPadding = Math.ceil(XEUtils.toNumber(firstCellStyle.paddingTop) + XEUtils.toNumber(firstCellStyle.paddingBottom))
+  }
+  for (let i = 0; i < cellItemList.length; i++) {
+    const { wrapperElem, colid } = cellItemList[i]
+    const colHeight = Math.ceil(wrapperElem.clientHeight + topBottomPadding)
     if (chRest[colid] !== colHeight) {
       changeCH = true
       chRest[colid] = colHeight
     }
-    cellStyle.height = orHeight
+  }
+  // 统一恢复内联行高
+  for (let i = 0; i < cellItemList.length; i++) {
+    const { cellElem, orHeight } = cellItemList[i]
+    if (orHeight) {
+      cellElem.style.height = orHeight
+    }
   }
   const cellMaxHeight = getRowMaxHeight(chRest, changeCH)
   return cellMaxHeight
@@ -2736,15 +2761,23 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
   if (!isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine))) {
     const { handleGetRowId } = createHandleGetRowId($xeTable)
+    // 一次扫描建立 rowid -> 单元格列表，避免逐行全表 querySelectorAll
+    const rowWrapperMaps: Record<string, HTMLElement[]> = {}
+    el.querySelectorAll<HTMLElement>('.vxe-cell--wrapper[rowid]').forEach(wrapperElem => {
+      const rid = wrapperElem.getAttribute('rowid') || ''
+      const elemList = rowWrapperMaps[rid] || (rowWrapperMaps[rid] = [])
+      elemList.push(wrapperElem)
+    })
     el.setAttribute('data-calc-row', 'Y')
     tableData.forEach((row) => {
       const rowid = handleGetRowId(row)
       const rowRest = fullAllDataRowIdData[rowid]
       if (rowRest) {
-        const height = calcCellAutoHeight($xeTable, rowid, rowRest, el)
-        rowRest.height = Math.max(defaultRowHeight, height)
+        const reHeight = calcCellAutoHeight($xeTable, rowid, rowRest, el, rowWrapperMaps[rowid] || [])
+        rowRest.height = Math.max(defaultRowHeight, reHeight)
       }
     })
+    // 测量态统一退出，避免循环内反复增删属性造成样式失效
     el.removeAttribute('data-calc-row')
     reactData.calcCellHeightFlag++
   }
@@ -4372,7 +4405,7 @@ function lazyScrollYData($xeTable: VxeTableConstructor & VxeTablePrivateMethods)
   }, fpsTime)
 }
 
-function handleSyncScroll($xeTable: VxeTableConstructor & VxeTablePrivateMethods, isRollX: boolean, isRollY: boolean) {
+function handleSyncScroll($xeTable: VxeTableConstructor & VxeTablePrivateMethods, isRollX: boolean, isRollY: boolean, isCompensate?: boolean) {
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
 
@@ -4399,7 +4432,12 @@ function handleSyncScroll($xeTable: VxeTableConstructor & VxeTablePrivateMethods
   let xRest = null
   let yRest = null
   if (!isAllOverflow) {
-    calcCellHeight($xeTable)
+    // 与原有行为保持一致：滚动停止后首轮重新测量行高，
+    // 内容异步变化（图片/字体/外部 DOM）也能被自动修正；
+    // 补偿轮只做窗口同步，避免同一轮滚动重复全量测量
+    if (!isCompensate) {
+      calcCellHeight($xeTable)
+    }
     updateRowOffsetTop($xeTable)
   }
   if (isRollX && scrollXLoad) {
@@ -4415,7 +4453,9 @@ function handleSyncScroll($xeTable: VxeTableConstructor & VxeTablePrivateMethods
         autoCellWidth($xeTable)
       }
       if (!isAllOverflow) {
-        calcCellHeight($xeTable)
+        if (!isCompensate) {
+          calcCellHeight($xeTable)
+        }
         updateRowOffsetTop($xeTable)
       }
       return $xeTable.updateScrollYSpace()
@@ -4439,8 +4479,9 @@ function checkLastSyncScroll($xeTable: VxeTableConstructor & VxeTablePrivateMeth
       if (reactData.scrollXLoad || reactData.scrollYLoad) {
         $xeTable.$nextTick(() => {
           updateRowExpandStyle($xeTable)
+          // 保留原有的补偿同步，仅跳过补偿轮里重复的全量行高测量
           if (!internalData.lcsTimeout) {
-            handleSyncScroll($xeTable, isRollX, isRollY)
+            handleSyncScroll($xeTable, isRollX, isRollY, true)
           }
         })
       }
@@ -7762,6 +7803,7 @@ const tableMethods: any = {
     const { fullAllDataRowIdData } = internalData
     const rows = XEUtils.isArray(rowOrId) ? rowOrId : [rowOrId]
     const el = $xeTable.$refs.refElem as HTMLDivElement
+    let status = false
     if (el) {
       const { handleGetRowId } = createHandleGetRowId($xeTable)
       el.setAttribute('data-calc-row', 'Y')
@@ -7770,12 +7812,15 @@ const tableMethods: any = {
         const rowRest = fullAllDataRowIdData[rowid]
         if (rowRest) {
           rowRest.resizeHeight = calcCellAutoHeight($xeTable, rowid, rowRest, el)
+          status = true
         }
       })
       el.removeAttribute('data-calc-row')
       reactData.calcCellHeightFlag++
     }
-    return $xeTable.$nextTick()
+    return $xeTable.$nextTick().then(() => {
+      return { status }
+    })
   },
   setRowHeight(rowOrId: any | any[], height: number) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods

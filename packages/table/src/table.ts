@@ -82,7 +82,7 @@ function handleUpdateMergeHeaderCells($xeTable: VxeTableConstructor & VxeTablePr
   internalData.mergeHeaderMaps = {}
   internalData.mergeHeaderCellMaps = {}
   internalData.mergeHeaderRowMaps = {}
-  internalData.mergeBodyColMaps = {}
+  internalData.mergeHeaderColMaps = {}
   $xeTable.setMergeHeaderCells(merges)
 }
 
