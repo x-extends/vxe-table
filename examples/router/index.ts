@@ -79,6 +79,21 @@ const routes: Array<RouteRecordRaw> = [
         path: 'table10',
         name: 'TableTest10',
         component: () => import('../views/table/TableTest10.vue')
+      },
+      {
+        path: 'virtual-scroll',
+        name: 'TableVirtualScroll',
+        component: () => import('../views/table/TableVirtualScroll.vue')
+      },
+      {
+        path: 'virtual-scroll-slot',
+        name: 'TableVirtualScrollSlot',
+        component: () => import('../views/table/TableVirtualScrollSlot.vue')
+      },
+      {
+        path: 'optimize-check',
+        name: 'TableOptimizeCheck',
+        component: () => import('../views/table/TableOptimizeCheck.vue')
       }
     ]
   },
