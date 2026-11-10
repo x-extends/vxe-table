@@ -1361,6 +1361,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           }
         }
       }
+      // 保留 mergeRowMaps， mergeColMaps 暂时不用，待后续优化
       return { mergeMaps, mergeRowMaps, mergeColMaps }
     }
 
@@ -1485,7 +1486,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       internalData.mergeHeaderMaps = {}
       internalData.mergeHeaderCellMaps = {}
       internalData.mergeHeaderRowMaps = {}
-      internalData.mergeBodyColMaps = {}
+      internalData.mergeHeaderColMaps = {}
       $xeTable.setMergeHeaderCells(merges)
     }
 
@@ -2394,7 +2395,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           const rowid = handleGetRowId(row)
           const rowRest = fullAllDataRowIdData[rowid]
           if (rowRest) {
-            const reHeight = calcCellAutoHeight(rowid, rowRest, el, rowWrapperMaps[String(rowRest.rowid)] || [])
+            const reHeight = calcCellAutoHeight(rowid, rowRest, el, rowWrapperMaps[rowid] || [])
             rowRest.height = Math.max(defaultRowHeight, reHeight)
           }
         })
@@ -4464,7 +4465,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
     const loadScrollXData = () => {
       const { isScrollXBig } = reactData
-      const { mergeBodyList, mergeFooterList, mergeBodyRowMaps, scrollXStore } = internalData
+      const { mergeBodyList, mergeFooterList, mergeBodyColMaps, scrollXStore } = internalData
       const { preloadSize, startIndex, endIndex, offsetSize } = scrollXStore
       const { toVisibleIndex, visibleSize } = handleVirtualXVisible()
       const offsetItem: VxeTableDefines.MergeCacheCol = {
@@ -4473,7 +4474,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }
       scrollXStore.visibleStartIndex = toVisibleIndex - 1
       scrollXStore.visibleEndIndex = toVisibleIndex + visibleSize + 1
-      calculateMergerOffsetIndex(mergeBodyList.concat(mergeFooterList), mergeBodyRowMaps, offsetItem, 'col')
+      calculateMergerOffsetIndex(mergeBodyList.concat(mergeFooterList), mergeBodyColMaps, offsetItem, 'col')
       const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
       if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
         if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
@@ -4930,7 +4931,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
      */
     const loadScrollYData = () => {
       const { isAllOverflow, isScrollYBig } = reactData
-      const { mergeBodyList, mergeBodyColMaps, scrollYStore } = internalData
+      const { mergeBodyList, mergeBodyRowMaps, scrollYStore } = internalData
       const { preloadSize, startIndex, endIndex, offsetSize } = scrollYStore
       const autoOffsetYSize = isAllOverflow ? offsetSize : offsetSize + 1
       const { toVisibleIndex, visibleSize } = handleVirtualYVisible()
@@ -4940,7 +4941,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }
       scrollYStore.visibleStartIndex = toVisibleIndex - 1
       scrollYStore.visibleEndIndex = toVisibleIndex + visibleSize + 1
-      calculateMergerOffsetIndex(mergeBodyList, mergeBodyColMaps, offsetItem, 'row')
+      calculateMergerOffsetIndex(mergeBodyList, mergeBodyRowMaps, offsetItem, 'row')
       const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
       if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
         if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {

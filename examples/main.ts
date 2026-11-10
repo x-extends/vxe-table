@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 
+import XEUtils from 'xe-utils'
+
 import VxeUIBase, { VxeUI } from 'vxe-pc-ui'
 import 'vxe-pc-ui/lib/style.css'
 
@@ -13,6 +15,8 @@ import '../styles/all.scss'
 import './style/index.scss'
 
 VxeUI.setI18n('en-US', enUS)
+
+;(window as any).XEUtils = XEUtils
 
 createApp(App)
   .use(router)
