@@ -305,15 +305,6 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
     const gridExtendTableMethods = extendTableMethods(tableComponentMethodKeys) as VxeTableMethods
 
-    tableComponentMethodKeys.forEach((name) => {
-      gridExtendTableMethods[name] = (...args: any[]) => {
-        const $xeTable: any = refTable.value
-        if ($xeTable && $xeTable[name]) {
-          return $xeTable && $xeTable[name](...args)
-        }
-      }
-    })
-
     const computeProxyOpts = computed(() => {
       return XEUtils.merge({}, XEUtils.clone(getConfig().grid.proxyConfig, true), props.proxyConfig)
     })

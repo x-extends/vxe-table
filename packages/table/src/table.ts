@@ -9104,7 +9104,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
           const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
           const operCtxMenu = isContentMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
           const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
-          const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
+          const beforeEditFn = editOpts.beforeEditMethod || editOpts.activeMethod
+          const beforeEditAsyncFn = editOpts.beforeEditAsyncMethod
           const selectRow = selected.row
           const selectColumn = selected.column
           if (operCtxMenu) {
@@ -9355,8 +9356,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 $grid: $xeGrid,
                 $gantt: $xeGantt
               }
-              // 是否被禁用
-              if (!beforeEditMethod || beforeEditMethod(params)) {
+
+              const handleEdit = () => {
                 if (delMethod) {
                   delMethod(params)
                 } else {
@@ -9369,6 +9370,21 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 // 如果按下 del 键，更新表尾数据
                 $xeTable.updateFooter()
                 dispatchEvent('cell-delete-value', params, evnt)
+              }
+
+              // 是否被禁用
+              if (beforeEditFn) {
+                if (beforeEditFn(params)) {
+                  handleEdit()
+                }
+              } else if (beforeEditAsyncFn) {
+                Promise.resolve(beforeEditAsyncFn(params)).then((status) => {
+                  if (status) {
+                    handleEdit()
+                  }
+                }).catch(() => {})
+              } else {
+                handleEdit()
               }
             }
           } else if (hasBackspaceKey && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isBack && isEnableConf(editConfig) && (selectRow || selectColumn)) {
@@ -9389,8 +9405,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
                   $grid: $xeGrid,
                   $gantt: $xeGantt
                 }
-                // 是否被禁用
-                if (!beforeEditMethod || beforeEditMethod(params)) {
+
+                const handleEdit = () => {
                   if (backMethod) {
                     backMethod(params)
                   } else {
@@ -9399,6 +9415,21 @@ export default /* define-vxe-component start */ defineVxeComponent({
                     })
                   }
                   dispatchEvent('cell-backspace-value', params, evnt)
+                }
+
+                // 是否被禁用
+                if (beforeEditFn) {
+                  if (beforeEditFn(params)) {
+                    handleEdit()
+                  }
+                } else if (beforeEditAsyncFn) {
+                  Promise.resolve(beforeEditAsyncFn(params)).then((status) => {
+                    if (status) {
+                      handleEdit()
+                    }
+                  }).catch(() => {})
+                } else {
+                  handleEdit()
                 }
               }
             }
@@ -9446,7 +9477,6 @@ export default /* define-vxe-component start */ defineVxeComponent({
             // }
             // 如果是按下非功能键之外允许直接编辑
             if (selectColumn && selectRow && isEnableConf(selectColumn.editRender)) {
-              const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
               const params = {
                 row: selectRow,
                 rowIndex: $xeTable.getRowIndex(selectRow),
@@ -9460,7 +9490,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
                 $grid: $xeGrid,
                 $gantt: $xeGantt
               }
-              if (!beforeEditMethod || beforeEditMethod(params)) {
+
+              const handleEdit = () => {
                 if (editMethod) {
                   editMethod(params)
                 } else {
@@ -9473,6 +9504,21 @@ export default /* define-vxe-component start */ defineVxeComponent({
                     isClear: isClearValue
                   })
                 }
+              }
+
+              // 是否被禁用
+              if (beforeEditFn) {
+                if (beforeEditFn(params)) {
+                  handleEdit()
+                }
+              } else if (beforeEditAsyncFn) {
+                Promise.resolve(beforeEditAsyncFn(params)).then((status) => {
+                  if (status) {
+                    handleEdit()
+                  }
+                }).catch(() => {})
+              } else {
+                handleEdit()
               }
             }
           }
@@ -15659,7 +15705,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const importOpts = computeImportOpts.value
       // const currentRowOpts = computeCurrentRowOpts.value
       // const currentColumnOpts = computeCurrentColumnOpts.value
-      // const keyboardOpts = computeKeyboardOpts.value
+      const keyboardOpts = computeKeyboardOpts.value
       const rowDragOpts = computeRowDragOpts.value
       const areaOpts = computeAreaOpts.value
       const sortOpts = computeSortOpts.value
@@ -15845,8 +15891,16 @@ export default /* define-vxe-component start */ defineVxeComponent({
       if (mouseOpts.area && props.treeConfig && !treeOpts.transform) {
         errLog('vxe.error.notSupportProp', ['mouse-config.area', 'tree-config.transform=false', 'tree-config.transform=true'])
       }
-      if (props.editConfig && editOpts.activeMethod) {
-        warnLog('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
+      if (props.editConfig) {
+        if (editOpts.activeMethod) {
+          warnLog('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
+        }
+        if (editOpts.beforeEditMethod && editOpts.beforeEditAsyncMethod) {
+          errLog('vxe.error.errConflicts', ['edit-config.beforeEditMethod', 'edit-config.beforeEditAsyncMethod'])
+        }
+        if (keyboardOpts.isEdit && editOpts.beforeEditAsyncMethod) {
+          warnLog('vxe.error.errConflicts', ['keyboard-config.isEdit', 'edit-config.beforeEditAsyncMethod'])
+        }
       }
       if (checkboxOpts.halfField) {
         warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
