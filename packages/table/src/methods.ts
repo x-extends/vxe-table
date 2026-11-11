@@ -8273,7 +8273,8 @@ const tableMethods: any = {
         const operCtxMenu = isContentMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
         const childrenField = treeOpts.children || treeOpts.childrenField
-        const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
+        const beforeEditFn = editOpts.beforeEditMethod || editOpts.activeMethod
+        const beforeEditAsyncFn = editOpts.beforeEditAsyncMethod
         const selectRow = selected.row
         const selectColumn = selected.column
         if (operCtxMenu) {
@@ -8522,8 +8523,8 @@ const tableMethods: any = {
               $grid: $xeGrid,
               $gantt: $xeGantt
             }
-            // 是否被禁用
-            if (!beforeEditMethod || beforeEditMethod(params)) {
+
+            const handleEdit = () => {
               if (delMethod) {
                 delMethod(params)
               } else {
@@ -8536,6 +8537,21 @@ const tableMethods: any = {
               // 如果按下 del 键，更新表尾数据
               $xeTable.updateFooter()
               $xeTable.dispatchEvent('cell-delete-value', params, evnt)
+            }
+
+            // 是否被禁用
+            if (beforeEditFn) {
+              if (beforeEditFn(params)) {
+                handleEdit()
+              }
+            } else if (beforeEditAsyncFn) {
+              Promise.resolve(beforeEditAsyncFn(params)).then((status) => {
+                if (status) {
+                  handleEdit()
+                }
+              }).catch(() => {})
+            } else {
+              handleEdit()
             }
           }
         } else if (hasBackspaceKey && hasEnableConf(keyboardConfig, keyboardOpts) && keyboardOpts.isBack && isEnableConf(editConfig) && (selectRow || selectColumn)) {
@@ -8556,8 +8572,8 @@ const tableMethods: any = {
                 $grid: $xeGrid,
                 $gantt: $xeGantt
               }
-              // 是否被禁用
-              if (!beforeEditMethod || beforeEditMethod(params)) {
+
+              const handleEdit = () => {
                 if (backMethod) {
                   backMethod(params)
                 } else {
@@ -8566,6 +8582,21 @@ const tableMethods: any = {
                   })
                 }
                 $xeTable.dispatchEvent('cell-backspace-value', params, evnt)
+              }
+
+              // 是否被禁用
+              if (beforeEditFn) {
+                if (beforeEditFn(params)) {
+                  handleEdit()
+                }
+              } else if (beforeEditAsyncFn) {
+                Promise.resolve(beforeEditAsyncFn(params)).then((status) => {
+                  if (status) {
+                    handleEdit()
+                  }
+                }).catch(() => {})
+              } else {
+                handleEdit()
               }
             }
           }
@@ -8605,7 +8636,6 @@ const tableMethods: any = {
           // }
           // 如果是按下非功能键之外允许直接编辑
           if (selectColumn && selectRow && isEnableConf(selectColumn.editRender)) {
-            const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
             const params = {
               row: selectRow,
               rowIndex: $xeTable.getRowIndex(selectRow),
@@ -8619,7 +8649,8 @@ const tableMethods: any = {
               $grid: $xeGrid,
               $gantt: $xeGantt
             }
-            if (!beforeEditMethod || beforeEditMethod(params)) {
+
+            const handleEdit = () => {
               if (editMethod) {
                 editMethod(params)
               } else {
@@ -8632,6 +8663,21 @@ const tableMethods: any = {
                   isClear: isClearValue
                 })
               }
+            }
+
+            // 是否被禁用
+            if (beforeEditFn) {
+              if (beforeEditFn(params)) {
+                handleEdit()
+              }
+            } else if (beforeEditAsyncFn) {
+              Promise.resolve(beforeEditAsyncFn(params)).then((status) => {
+                if (status) {
+                  handleEdit()
+                }
+              }).catch(() => {})
+            } else {
+              handleEdit()
             }
           }
         }

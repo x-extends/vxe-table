@@ -2118,7 +2118,7 @@ export default {
     const importOpts = $xeTable.computeImportOpts
     // const currentRowOpts = $xeTable.computeCurrentRowOpts
     // const currentColumnOpts = $xeTable.computeCurrentColumnOpts
-    // const keyboardOpts = $xeTable.computeKeyboardOpts
+    const keyboardOpts = $xeTable.computeKeyboardOpts
     const aggregateOpts = $xeTable.computeAggregateOpts
     const rowDragOpts = $xeTable.computeRowDragOpts
     const areaOpts = $xeTable.computeAreaOpts
@@ -2288,8 +2288,16 @@ export default {
     if (mouseOpts.area && props.treeConfig && !treeOpts.transform) {
       errLog('vxe.error.notSupportProp', ['mouse-config.area', 'tree-config.transform=false', 'tree-config.transform=true'])
     }
-    if (props.editConfig && editOpts.activeMethod) {
-      warnLog('vxe.error.delProp', ['table.edit-config.activeMethod', 'table.edit-config.beforeEditMethod'])
+    if (props.editConfig) {
+      if (editOpts.activeMethod) {
+        warnLog('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
+      }
+      if (editOpts.beforeEditMethod && editOpts.beforeEditAsyncMethod) {
+        errLog('vxe.error.errConflicts', ['edit-config.beforeEditMethod', 'edit-config.beforeEditAsyncMethod'])
+      }
+      if (keyboardOpts.isEdit && editOpts.beforeEditAsyncMethod) {
+        warnLog('vxe.error.errConflicts', ['keyboard-config.isEdit', 'edit-config.beforeEditAsyncMethod'])
+      }
     }
     if (checkboxOpts.halfField) {
       warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
