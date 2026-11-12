@@ -51,9 +51,6 @@ hooks.add('tableEditModule', {
 
     const browseObj = XEUtils.browse()
 
-    let editMethods = {} as TableEditMethods
-    let editPrivateMethods = {} as TableEditPrivateMethods
-
     const getEditColumnModel = (row: any, column: VxeTableDefines.ColumnInfo) => {
       const { model, editRender } = column
       if (editRender) {
@@ -625,7 +622,7 @@ hooks.add('tableEditModule', {
       return nextTick()
     }
 
-    editMethods = {
+    const editMethods: TableEditMethods = {
       /**
        * 往表格中插入临时数据
        *
@@ -1100,7 +1097,7 @@ hooks.add('tableEditModule', {
       return null
     }
 
-    editPrivateMethods = {
+    const editPrivateMethods: TableEditPrivateMethods = {
       /**
        * 处理激活编辑
        */

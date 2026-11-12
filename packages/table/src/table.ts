@@ -10285,7 +10285,6 @@ export default /* define-vxe-component start */ defineVxeComponent({
             rowExpandedMaps[rowid] = row
           }
 
-          rowNum++
           idMaps[rowid] = true
           fullDataRowIdMaps[rowid] = rowRest
           fullAllDataRowIdMaps[rowid] = rowRest

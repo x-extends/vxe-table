@@ -1194,9 +1194,11 @@ hooks.add('tableExportModule', {
             }
           })
         })
-      } else if (opts.message !== false) {
-        if (VxeUI.modal) {
-          VxeUI.modal.message({ content: getI18n('vxe.error.impFields'), status: 'error' })
+      } else {
+        if (opts.message !== false) {
+          if (VxeUI.modal) {
+            VxeUI.modal.message({ content: getI18n('vxe.error.impFields'), status: 'error' })
+          }
         }
         if (_importReject) {
           _importReject({ status: false, msg: 'field mismatching' })
@@ -1437,13 +1439,9 @@ hooks.add('tableExportModule', {
       exportStore.hasColgroup = isGroup
       exportStore.visible = true
       // 默认参数
-      Object.assign(
-        exportParams,
-        {
-          mode: selectRecords.length ? 'selected' : 'current'
-        },
-        defOpts
-      )
+      Object.assign(exportParams, {
+        mode: selectRecords.length ? 'selected' : 'current'
+      }, defOpts)
       const { filename, sheetName, mode, type } = exportParams
       if (filename) {
         if (XEUtils.isFunction(filename)) {
