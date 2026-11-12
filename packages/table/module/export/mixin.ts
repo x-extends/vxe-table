@@ -1148,12 +1148,14 @@ function handleImport($xeTable: VxeTableConstructor & VxeTablePrivateMethods, co
         }
       })
     })
-  } else if (opts.message !== false) {
-    // 检测弹窗模块
-    if (!VxeUI.modal) {
-      errLog('vxe.error.reqModule', ['Modal'])
+  } else {
+    if (opts.message !== false) {
+      // 检测弹窗模块
+      if (!VxeUI.modal) {
+        errLog('vxe.error.reqModule', ['Modal'])
+      }
+      VxeUI.modal.message({ content: getI18n('vxe.error.impFields'), status: 'error' })
     }
-    VxeUI.modal.message({ content: getI18n('vxe.error.impFields'), status: 'error' })
     if (_importReject) {
       _importReject({ status: false, msg: 'field mismatching' })
     }
@@ -1407,13 +1409,9 @@ function handleExportAndPrint($xeTable: VxeTableConstructor, options: VxeTablePr
   exportStore.hasColgroup = isGroup
   exportStore.visible = true
   // 默认参数
-  Object.assign(
-    exportParams,
-    {
-      mode: selectRecords.length ? 'selected' : 'current'
-    },
-    defOpts
-  )
+  Object.assign(exportParams, {
+    mode: selectRecords.length ? 'selected' : 'current'
+  }, defOpts)
   const { filename, sheetName, mode, type } = exportParams
   if (filename) {
     if (XEUtils.isFunction(filename)) {

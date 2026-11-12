@@ -518,4 +518,8 @@ export const modal = {
   }
 }
 
+export {
+  VxeUI
+}
+
 export default VxeUI
