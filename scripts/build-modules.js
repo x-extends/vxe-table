@@ -76,8 +76,8 @@ const DIST_DIR = path.resolve(ROOT, OUT_DIST)
 
 const LOCALE_DIR_TMPL = path.resolve(SRC_TMPL_DIR, LOCALE_DIR_REL)
 const LOCALE_OUT_DIR = path.resolve(ROOT, localeOut)
-// 兼容旧版语言包输出目录
-const OLD_LOCALE_OUT_DIR = path.resolve(ROOT, 'lib/locale/lang')
+// 与 localeDir 对应的输出目录（兼容旧版 Webpack 的 UMD 语言包路径，跟随 localeDir 配置）
+const OLD_LOCALE_OUT_DIR = path.join(LIB_DIR, LOCALE_DIR_REL)
 
 // iconfont 资源改名相关
 const ICON_FONT_BASE = 'iconfont'
@@ -612,16 +612,19 @@ async function buildLocales () {
   const langFiles = FILES.filter(f => f.startsWith(localePrefix) && f.endsWith('.ts'))
   if (!langFiles.length) return null
 
-  await fsp.mkdir(LOCALE_OUT_DIR, { recursive: true })
-
+  // 旧版兼容输出目录：跟随 localeDir，与主输出目录去重
   let hasOldLocaleOutDir = false
   try {
-    const st = await fsp.stat(path.resolve(SRC_TMPL_DIR, 'locale/lang'))
+    const st = await fsp.stat(LOCALE_DIR_TMPL)
     hasOldLocaleOutDir = st.isDirectory()
   } catch { }
-  if (hasOldLocaleOutDir) {
-    await fsp.mkdir(OLD_LOCALE_OUT_DIR, { recursive: true })
+
+  const outDirs = [LOCALE_OUT_DIR]
+  if (hasOldLocaleOutDir && OLD_LOCALE_OUT_DIR !== LOCALE_OUT_DIR) {
+    outDirs.push(OLD_LOCALE_OUT_DIR)
   }
+
+  await Promise.all(outDirs.map(d => fsp.mkdir(d, { recursive: true })))
 
   const results = await Promise.all(langFiles.map(async file => {
     const fileName = path.basename(file, '.ts')
@@ -667,17 +670,10 @@ async function buildLocales () {
         charset: 'utf8'
       })
 
-      const writes = [
-        fsp.writeFile(path.join(LOCALE_OUT_DIR, `${fileName}.umd.js`), code),
-        fsp.writeFile(path.join(LOCALE_OUT_DIR, `${fileName}.umd.min.js`), minCode)
-      ]
-
-      if (hasOldLocaleOutDir) {
-        writes.push(
-          fsp.writeFile(path.join(OLD_LOCALE_OUT_DIR, `${fileName}.umd.js`), code),
-          fsp.writeFile(path.join(OLD_LOCALE_OUT_DIR, `${fileName}.umd.min.js`), minCode)
-        )
-      }
+      const writes = outDirs.flatMap(dir => [
+        fsp.writeFile(path.join(dir, `${fileName}.umd.js`), code),
+        fsp.writeFile(path.join(dir, `${fileName}.umd.min.js`), minCode)
+      ])
       await Promise.all(writes)
     } finally {
       await fsp.unlink(tempOut).catch(() => { })
@@ -756,6 +752,7 @@ async function copyTypesToLib () {
 
 /**
  * 把 <OUT_ES>/<localeDir> 下的 .d.ts 复制到 <LOCALE_OUT> 目录，命名为 *.umd.d.ts
+ * 同时复制到与 localeDir 对应的旧版兼容目录（跟随 localeDir 配置，不写死路径）。
  */
 async function copyLocaleTypes () {
   if (!DO_LOCALE) return 0
@@ -768,13 +765,17 @@ async function copyLocaleTypes () {
   const files = await walk(srcLocaleDir, f => f.endsWith('.d.ts'))
   if (!files.length) return 0
 
-  const outDirs = [LOCALE_OUT_DIR]
+  // 旧版兼容输出目录：跟随 localeDir，与主输出目录去重
   let hasOldLocaleOutDir = false
   try {
-    const st = await fsp.stat(path.resolve(SRC_TMPL_DIR, 'locale/lang'))
+    const st = await fsp.stat(LOCALE_DIR_TMPL)
     hasOldLocaleOutDir = st.isDirectory()
   } catch { }
-  if (hasOldLocaleOutDir) outDirs.push(OLD_LOCALE_OUT_DIR)
+
+  const outDirs = [LOCALE_OUT_DIR]
+  if (hasOldLocaleOutDir && OLD_LOCALE_OUT_DIR !== LOCALE_OUT_DIR) {
+    outDirs.push(OLD_LOCALE_OUT_DIR)
+  }
 
   await Promise.all(outDirs.map(d => fsp.mkdir(d, { recursive: true })))
 
@@ -805,7 +806,7 @@ async function main () {
   console.log(`[build] 组件 Define 包裹: ${doStripDefineWrapper ? '开启' : '关闭'}`)
   console.log(`[build] 编译输出 es=${OUT_ES}  lib=${OUT_LIB}  dist=${OUT_DIST}`)
   if (DO_LOCALE) {
-    console.log(`[build] 语言包输出: ${localeOut}`)
+    console.log(`[build] 语言包输出: ${localeOut} + ${rel(OLD_LOCALE_OUT_DIR)}`)
   }
   console.log(`[build] UMD 编译: ${DO_UMD ? '开启' : '关闭'}`)
   console.log(`[build] 语言包编译: ${DO_LOCALE ? '开启' : '关闭'}`)

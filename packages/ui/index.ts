@@ -1,12 +1,14 @@
 import { VxeUI } from '@vxe-ui/core'
-import { getFuncText } from './src/utils'
-
-import type { VxeUploadDefines, VxePrintDefines, VxeGlobalConfig } from 'vxe-pc-ui'
 
 export const version = process.env.VUE_APP_VXE_VERSION as string
 
-VxeUI.version = version
 VxeUI.tableVersion = version
+
+/**
+ * 已废弃，兼容老版本
+ * @deprecated
+ */
+VxeUI.version = version
 
 VxeUI.setConfig({
   emptyCell: '　',
@@ -182,7 +184,7 @@ VxeUI.setConfig({
       parentField: '_X_ROW_PARENT_KEY',
       childrenField: '_X_ROW_CHILDREN',
       mapChildrenField: '_X_ROW_CHILD_LIST',
-      indent: 20,
+      indent: 28,
       showIcon: true,
       maxGroupSize: 4,
       showAggFuncTitle: true
@@ -194,8 +196,9 @@ VxeUI.setConfig({
       childrenField: 'children',
       hasChildField: 'hasChild',
       mapChildrenField: '_X_ROW_CHILD',
-      indent: 20,
+      indent: 28,
       showIcon: true,
+      // lineType: 'dashed',
       showRootLine: true
     },
     expandConfig: {
@@ -401,124 +404,11 @@ VxeUI.setIcon({
   TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVE: iconPrefix + 'fixed-right-fill'
 })
 
-/**
- * 已废弃
- * @deprecated
- */
-export const setup = (options?: VxeGlobalConfig) => {
-  return VxeUI.setConfig(options)
-}
-VxeUI.setup = setup
-/**
- * 已废弃
- * @deprecated
- */
-export const config = (options?: VxeGlobalConfig) => {
-  return VxeUI.setConfig(options)
-}
-VxeUI.config = config
-/**
- * 已废弃
- * @deprecated
- */
-export const t = (key: string, args?: any) => {
-  return VxeUI.getI18n(key, args)
-}
-VxeUI.t = t
-/**
- * 已废弃
- * @deprecated
- */
-export const _t = (content: string | number | boolean | null | undefined, args?: any) => {
-  return getFuncText(content, args)
-}
-VxeUI._t = _t
-
-/**
- * 已废弃，兼容老版本
- * @deprecated
- */
-export const VXETable = VxeUI
-
-/**
- * 已废弃，兼容老版本
- * @deprecated
- */
-export const saveFile: VxeUploadDefines.SaveFileFunction = (options) => {
-  return VxeUI.saveFile(options)
-}
-/**
- * 已废弃，兼容老版本
- * @deprecated
- */
-export const readFile: VxeUploadDefines.ReadFileFunction = (options) => {
-  return VxeUI.readFile(options)
-}
-/**
- * 已废弃，兼容老版本
- * @deprecated
- */
-export const print: VxePrintDefines.PrintFunction = (options) => {
-  return VxeUI.print(options)
-}
-/**
- * 已废弃，兼容老版本
- * @deprecated
- */
-export const modal = {
-  /**
-   * 已废弃，兼容老版本
-   * @deprecated
-   */
-  get(id: any) {
-    return VxeUI.modal.get(id)
-  },
-  /**
-   * 已废弃，兼容老版本
-   * @deprecated
-   */
-  close(id: any) {
-    return VxeUI.modal.close(id)
-  },
-  /**
-   * 已废弃，兼容老版本
-   * @deprecated
-   */
-  open(options: any) {
-    return VxeUI.modal.open(options)
-  },
-  /**
-   * 已废弃，兼容老版本
-   * @deprecated
-   */
-  alert(content: any, title: any, options: any) {
-    return VxeUI.modal.alert(content, title, options)
-  },
-  /**
-   * 已废弃，兼容老版本
-   * @deprecated
-   */
-  confirm(content: any, title: any, options: any) {
-    return VxeUI.modal.confirm(content, title, options)
-  },
-  /**
-   * 已废弃，兼容老版本
-   * @deprecated
-   */
-  message(content: any, options: any) {
-    return VxeUI.modal.message(content, options)
-  },
-  /**
-   * 已废弃，兼容老版本
-   * @deprecated
-   */
-  notification(content: any, title: any, options: any) {
-    return VxeUI.modal.notification(content, title, options)
-  }
-}
-
 export {
   VxeUI
 }
+
+// 兼容老版本
+export * from './abandon'
 
 export default VxeUI

@@ -386,8 +386,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
 
       if (prevDragGroupField || prevDragAggFnColid) {
-        if ($xeTable.handlePivotTableAggPanelDragendEvent) {
-          $xeTable.handlePivotTableAggPanelDragendEvent(evnt)
+        if ($xeTable.handlePivotTableAggPanelDgedEvent) {
+          $xeTable.handlePivotTableAggPanelDgedEvent(evnt)
         }
       } else if (prevDragCol && dragCol) {
         // 判断是否有拖动

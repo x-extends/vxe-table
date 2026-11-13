@@ -1,4 +1,4 @@
-import { h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
+import { h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted, VNode } from 'vue'
 import { defineVxeComponent } from '../../ui/src/comp'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '@vxe-ui/core'
@@ -50,7 +50,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
       computeVirtualXOpts,
       computeVirtualYOpts,
       computeIsBodyRenderOptimize,
-      computeRendererOpts
+      computeRendererOpts,
+      computeShowTreeLine
     } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
@@ -70,60 +71,34 @@ export default /* define-vxe-component start */ defineVxeComponent({
       return !!(isDragResize || (lastSTime && Date.now() < lastSTime + (delayHover as number)))
     }
 
-    const renderLine = (rowid: string, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number): VxeComponentSlotType[] => {
+    const renderLine = (rowid: string, params: VxeTableDefines.CellRenderBodyParams): VxeComponentSlotType[] => {
       const { column } = params
       const { treeConfig } = tableProps
-      const cellOpts = computeCellOpts.value
-      const rowOpts = computeRowOpts.value
-      const defaultRowHeight = computeDefaultRowHeight.value
-      const treeOpts = computeTreeOpts.value
       const { slots, treeNode } = column
-      const { fullAllDataRowIdData } = tableInternalData
-      if (treeConfig && treeNode && (treeOpts.showLine || treeOpts.line)) {
+      const lineVNs: VNode[] = []
+
+      if (treeConfig && treeNode) {
         if (slots && (slots as any).line) {
           return $xeTable.callSlot((slots as any).line, params)
         }
+        const treeOpts = computeTreeOpts.value
+        const { fullAllDataRowIdData } = tableInternalData
+        const { lineType } = treeOpts
         const rowRest = fullAllDataRowIdData[rowid]
-        let rLevel = 0
-        let prevRow = null
-        let parentRow = null
-        let lineHeight = ''
-        if (rowRest) {
-          rLevel = rowRest.level
-          prevRow = rowRest.items[rowRest.treeIndex - 1]
-          parentRow = rowRest.parent
-        }
-        if (!rLevel && !treeOpts.showRootLine) {
-          return []
-        }
-        if (prevRow) {
-          const prevRowRest = fullAllDataRowIdData[getRowid($xeTable, prevRow)] || {}
-          lineHeight = `${prevRowRest.lineHeight || 0}px`
-        } else if (rLevel && parentRow) {
-          const parentRowRest = fullAllDataRowIdData[getRowid($xeTable, parentRow)] || {}
-          lineHeight = `calc(-1em + ${Math.floor(cellHeight / 2 + getCellRestHeight(parentRowRest, cellOpts, rowOpts, defaultRowHeight) / 2)}px)`
-        }
-        return [
-          h(
-            'div',
-            {
-              key: 'tl',
-              class: 'vxe-tree--line-wrapper'
-            },
-            [
-              h('div', {
-                class: 'vxe-tree--line',
-                style: {
-                  height: lineHeight,
-                  bottom: `-${Math.floor(cellHeight / 2)}px`,
-                  left: `calc(${rLevel * treeOpts.indent}px + 1em)`
-                }
+        const treeLines = rowRest.treeLines
+        if (treeLines) {
+          treeLines.forEach((item, i) => {
+            lineVNs.push(
+              h('span', {
+                key: 'le' + i,
+                class: ['vxe-tree--line', `type--${lineType || 'dashed'}`, item.type],
+                style: item.style
               })
-            ]
-          )
-        ]
+            )
+          })
+        }
       }
-      return []
+      return lineVNs
     }
 
     /**
@@ -150,6 +125,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, treeConfig, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
       const { tableData, tableColumn, dragRow, overflowX, overflowY, scrollXLoad, scrollYLoad, mergeBodyFlag, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, editStore, isAllOverflow, validErrorMaps, currColFlag } = tableReactData
       const { fullAllDataRowIdData, fullColumnIdData, mergeBodyCellMaps, visibleColumn, afterFullData, mergeBodyList, scrollXStore, scrollYStore, keepUpdateFieldMaps, currentCol } = tableInternalData
+      const showTreeLine = computeShowTreeLine.value
       const cellOpts = computeCellOpts.value
       const validOpts = computeValidOpts.value
       const checkboxOpts = computeCheckboxOpts.value
@@ -363,6 +339,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         }
       }
 
+      const tdStyle: Record<string, string> = {}
       const tcStyle: Record<string, string> = {}
       if (maxHeight) {
         tcStyle.maxHeight = maxHeight + 'px'
@@ -382,6 +359,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }
       if (scrollYLoad || scrollXLoad || hasEllipsis || isCsHeight || isRsHeight) {
         tcStyle.height = cellHeight + 'px'
+        tdStyle['--vxe-ui-table-cell-height'] = cellHeight + 'px'
       } else {
         tcStyle.minHeight = cellHeight + 'px'
       }
@@ -407,8 +385,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
         )
       } else {
         // 渲染单元格
-        if (treeConfig) {
-          tdVNs.push(...renderLine(rowid, cellParams, cellHeight))
+        if (treeConfig && showTreeLine) {
+          tdVNs.push(...renderLine(rowid, cellParams))
         }
         const clVNs: VxeComponentSlotType[] = []
         if (!isVNPreEmptyStatus) {
@@ -558,7 +536,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
           ],
           key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || rowOpts.useKey || columnOpts.drag ? colid : $columnIndex,
           ...tdAttrs,
-          style: Object.assign({}, XEUtils.isFunction(compCellStyle) ? compCellStyle(cellParams) : compCellStyle, XEUtils.isFunction(cellStyle) ? cellStyle(cellParams) : cellStyle),
+          style: Object.assign(tdStyle, XEUtils.isFunction(compCellStyle) ? compCellStyle(cellParams) : compCellStyle, XEUtils.isFunction(cellStyle) ? cellStyle(cellParams) : cellStyle),
           ...tdOns
         },
         isOptimizeMode && fixedHiddenColumn ? [] : tdVNs

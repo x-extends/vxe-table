@@ -1,195 +1,67 @@
 <template>
   <div>
-    <vxe-button status="primary" @click="addEvent">新增</vxe-button>
-    <vxe-button status="success" @click="saveEvent">保存</vxe-button>
+    显示连接线：<vxe-switch v-model="treeConfig.showLine"></vxe-switch>
+    显示根节点线：<vxe-switch v-model="treeConfig.showRootLine"></vxe-switch>
 
-    <vxe-grid ref="gridRef" v-bind="gridOptions">
-      <template #name_default="slotParams">
-        <vxe-input v-if="slotParams.row.isEdit" v-model="slotParams.row.name" @change="changeEditEvent(slotParams)"></vxe-input>
-        <span v-else>{{ slotParams.row.name }}</span>
-      </template>
-
-      <template #sex_default="slotParams">
-        <vxe-select v-if="slotParams.row.isEdit" v-model="slotParams.row.sex" :options="sexList" @change="changeEditEvent(slotParams)"></vxe-select>
-        <span v-else>{{ slotParams.row.sex }}</span>
-      </template>
-
-      <template #age_default="slotParams">
-        <vxe-input v-if="slotParams.row.isEdit" v-model="slotParams.row.age" @change="changeEditEvent(slotParams)"></vxe-input>
-        <span v-else>{{ slotParams.row.age }}</span>
-      </template>
-
-      <template #action="{ row }">
-        <vxe-button v-if="row.isEdit" mode="text" status="success" :loading="row.isLoading" @click.stop="handleRowSave(row)">保存</vxe-button>
-        <vxe-button v-else mode="text" status="primary" @click.stop="handleRowEdit(row)">编辑</vxe-button>
-        <vxe-button v-if="row.isEdit" mode="text" @click.stop="cancelRowEdit(row)">取消</vxe-button>
-      </template>
-    </vxe-grid>
+    <vxe-grid v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import { VxeUI } from 'vxe-pc-ui'
-import type { VxeGridInstance, VxeGridProps } from '../../../types'
-import XEUtils from 'xe-utils'
+import { reactive } from 'vue'
+import type { VxeGridProps, VxeTablePropTypes } from '../../../types'
 
 interface RowVO {
   id: number
+  parentId: number | null
   name: string
-  role: string
-  sex: string
-  age: number
-  address: string
-  isEdit: boolean
-  isLoading: boolean
+  type: string
+  size: number
+  date: string
 }
 
-const gridRef = ref<VxeGridInstance<RowVO>>()
-
-const sexList = ref([
-  { label: '男', value: 'Man' },
-  { label: '女', value: 'Women' }
-])
-
-const gridOptions = reactive<VxeGridProps<RowVO>>({
-  border: true,
-  showOverflow: true,
-  keepSource: true,
-  rowConfig: {
-    keyField: 'id'
-  },
-  editConfig: {
-    trigger: 'manual',
-    mode: 'row',
-    showStatus: true
-  },
-  validConfig: {
-    msgMode: 'full'
-  },
-  editRules: {
-    name: [
-      { required: true, message: '必须填写' }
-    ],
-    sex: [
-      { required: true, message: '必须填写' }
-    ]
-  },
-  columns: [
-    { type: 'seq', width: 70 },
-    { field: 'name', title: 'Name', editRender: { name: 'VxeInput' }, slots: { default: 'name_default' } },
-    { field: 'sex', title: 'Sex', editRender: { name: 'VxeSelect', options: sexList.value }, slots: { default: 'sex_default' } },
-    { field: 'age', title: 'Age', editRender: { name: 'VxeInput' }, slots: { default: 'age_default' } },
-    { field: 'action', title: '操作', width: 140, slots: { default: 'action' } }
-  ],
-  data: []
+const treeConfig = reactive<VxeTablePropTypes.TreeConfig>({
+  transform: true,
+  showLine: true,
+  showRootLine: true,
+  lineType: 'dotted'
 })
 
-const loadList = () => {
-  // 模拟后端接口
-  gridOptions.loading = true
-  setTimeout(() => {
-    gridOptions.data = [
-      { id: 10001, name: '', role: 'Develop', sex: 'Man', age: 28, address: 'test abc', isEdit: false, isLoading: false },
-      { id: 10002, name: 'Test2', role: 'Test', sex: '', age: 22, address: 'Guangzhou', isEdit: false, isLoading: false },
-      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', isEdit: false, isLoading: false },
-      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai', isEdit: false, isLoading: false }
-    ]
-    gridOptions.loading = false
-  }, 200)
-}
-
-const handleRowEdit = (row: RowVO) => {
-  row.isEdit = true
-}
-
-const cancelRowEdit = (row: RowVO) => {
-  const $grid = gridRef.value
-  if (!$grid) {
-    return
-  }
-  row.isEdit = false
-  $grid.clearValidate(row)
-}
-
-const handleRowSave = async (row: RowVO) => {
-  const $grid = gridRef.value
-  if (!$grid) {
-    return
-  }
-  const errMap = await $grid.fullValidate(row)
-  if (errMap) {
-    // 将校验不通过行显示编辑状态
-    XEUtils.each(errMap, errRules => {
-      errRules.forEach(errRule => {
-        handleRowEdit(errRule.row)
-      })
-    })
-    VxeUI.modal.message({
-      status: 'error',
-      content: '校验不通过！'
-    })
-    return
-  }
-  row.isLoading = true
-  // 模拟后端接口
-  setTimeout(() => {
-    row.isEdit = false
-    row.isLoading = false
-  }, 300)
-}
-
-const addEvent = async () => {
-  const $grid = gridRef.value
-  if (!$grid) {
-    return
-  }
-  const record = {}
-  const { row: newRow } = await $grid.insert(record)
-  handleRowEdit(newRow)
-}
-
-const saveEvent = async () => {
-  const $grid = gridRef.value
-  if (!$grid) {
-    return
-  }
-  const errMap = await $grid.fullValidate(true)
-  if (errMap) {
-    // 将校验不通过行显示编辑状态
-    XEUtils.each(errMap, errRules => {
-      errRules.forEach(errRule => {
-        handleRowEdit(errRule.row)
-      })
-    })
-    VxeUI.modal.message({
-      status: 'error',
-      content: '校验不通过！'
-    })
-    return
-  }
-  const updateRecords = $grid.getUpdateRecords()
-  if (updateRecords.length > 0) {
-    console.log('保存数据', updateRecords)
-    loadList()
-    VxeUI.modal.message({
-      content: '保存成功',
-      status: 'success'
-    })
-  } else {
-    VxeUI.modal.message({
-      content: '数据未改动',
-      status: 'warning'
-    })
-  }
-}
-
-const changeEditEvent = (slotParams: any) => {
-  const $grid = gridRef.value
-  if ($grid) {
-    $grid.updateStatus(slotParams)
-  }
-}
-
-loadList()
+const gridOptions = reactive<VxeGridProps<RowVO>>({
+  showOverflow: true,
+  border: 'outer',
+  rowConfig: {
+    useKey: true
+  },
+  columnConfig: {
+    resizable: true
+  },
+  treeConfig,
+  columns: [
+    { field: 'name', title: 'Name', treeNode: true },
+    { field: 'size', title: 'Size' },
+    { field: 'type', title: 'Type' },
+    { field: 'date', title: 'Date' }
+  ],
+  data: [
+    { id: 10000, parentId: null, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+    { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: 0, date: '2021-04-01' },
+    { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+    { id: 20045, parentId: 24300, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+    { id: 10053, parentId: 24300, name: 'Test5', type: 'avi', size: 0, date: '2021-04-01' },
+    { id: 24330, parentId: 10053, name: 'Test6', type: 'txt', size: 25, date: '2021-10-01' },
+    { id: 21011, parentId: 10053, name: 'Test7', type: 'pdf', size: 512, date: '2020-01-01' },
+    { id: 22200, parentId: 10053, name: 'Test8', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 23666, parentId: null, name: 'Test9', type: 'xlsx', size: 2048, date: '2020-11-01' },
+    { id: 23677, parentId: 23666, name: 'Test10', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 23671, parentId: 23677, name: 'Test11', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 23672, parentId: 23677, name: 'Test12', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 23688, parentId: 23666, name: 'Test13', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 23681, parentId: 23688, name: 'Test14', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 23682, parentId: 23688, name: 'Test15', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 24555, parentId: null, name: 'Test16', type: 'avi', size: 224, date: '2020-10-01' },
+    { id: 24566, parentId: 24555, name: 'Test17', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 24577, parentId: 24555, name: 'Test18', type: 'js', size: 1024, date: '2021-06-01' }
+  ]
+})
 </script>
