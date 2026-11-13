@@ -49,7 +49,7 @@ function renderLine(h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePr
         lineVNs.push(
           h('span', {
             key: 'le' + i,
-            class: ['vxe-tree--line', `type--${lineType || 'dashed'}`, item.type],
+            class: ['vxe-tree--line', `type--${lineType || 'solid'}`, item.type],
             style: item.style
           })
         )
