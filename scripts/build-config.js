@@ -8,6 +8,7 @@ exports.src = 'packages'
 exports.srcTmpl = 'packages_temp'
 // 输出目录
 exports.outEs = 'es'
+exports.esEntry = 'esm.index.ts'
 exports.outLib = 'lib'
 exports.outDist = 'dist'
 // 构建前是否清空输出目录
