@@ -55,7 +55,8 @@ const {
   umdMinFile,
   doStripDefineWrapper,
   // 构建时间戳（用于 iconfont 文件改名，避免浏览器缓存）
-  buildTime
+  buildTime,
+  esEntry
 } = require('./build-config')
 
 /* ======================== 常量 ======================== */
@@ -457,7 +458,7 @@ const scssStubPlugin = {
 }
 
 async function buildBundle () {
-  const entry = path.join(SRC_TMPL_DIR, 'index.ts')
+  const entry = path.join(SRC_TMPL_DIR, esEntry)
   let stat
   try { stat = await fsp.stat(entry) } catch { return null }
   if (!stat.isFile()) return null
