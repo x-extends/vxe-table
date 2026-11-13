@@ -10,25 +10,31 @@
   --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-default);
   --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-default);
   --vxe-ui-table-current-row-line-height: var(--vxe-ui-table-row-line-height);
+  --vxe-ui-table-current-row-height: var(--vxe-ui-table-row-height-default);
   &.size--xlarge {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-xlarge);
     --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-xlarge);
+    --vxe-ui-table-current-row-height: var(--vxe-ui-table-row-height-xlarge);
   }
   &.size--large {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-large);
     --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-large);
+    --vxe-ui-table-current-row-height: var(--vxe-ui-table-row-height-large);
   }
   &.size--medium {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-medium);
     --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-medium);
+    --vxe-ui-table-current-row-height: var(--vxe-ui-table-row-height-medium);
   }
   &.size--small {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-small);
     --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-small);
+    --vxe-ui-table-current-row-height: var(--vxe-ui-table-row-height-small);
   }
   &.size--mini {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-mini);
     --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-mini);
+    --vxe-ui-table-current-row-height: var(--vxe-ui-table-row-height-mini);
   }
 }
 
@@ -1623,17 +1629,6 @@ $btnThemeList: (
       // }
     }
   }
-  // &.is--tree-line {
-  //   .vxe-header--column,
-  //   .vxe-body--column,
-  //   .vxe-footer--column {
-  //     &.col--current {
-  //       .vxe-cell--tree-btn {
-  //         background-color: var(--vxe-ui-table-column-current-background-color);
-  //       }
-  //     }
-  //   }
-  // }
 
   // 行高亮
   .vxe-body--row {
@@ -1681,55 +1676,6 @@ $btnThemeList: (
       }
     }
   }
-  // &.is--tree-line {
-  //   .vxe-body--row {
-  //     &.row--stripe {
-  //       .vxe-cell--tree-btn {
-  //         background-color: var(--vxe-ui-table-row-striped-background-color);
-  //       }
-  //     }
-  //     &.row--radio {
-  //       .vxe-cell--tree-btn {
-  //         background-color: var(--vxe-ui-table-row-radio-checked-background-color);
-  //       }
-  //     }
-  //     &.row--checked {
-  //       .vxe-cell--tree-btn {
-  //         background-color: var(--vxe-ui-table-row-checkbox-checked-background-color);
-  //       }
-  //     }
-  //     &.row--current {
-  //       .vxe-cell--tree-btn {
-  //         background-color: var(--vxe-ui-table-row-current-background-color);
-  //       }
-  //     }
-  //     &.row--hover {
-  //       .vxe-cell--tree-btn {
-  //         background-color: var(--vxe-ui-table-row-hover-background-color);
-  //       }
-  //       &.row--stripe {
-  //         .vxe-cell--tree-btn {
-  //           background-color: var(--vxe-ui-table-row-hover-striped-background-color);
-  //         }
-  //       }
-  //       &.row--radio {
-  //         .vxe-cell--tree-btn {
-  //           background-color: var(--vxe-ui-table-row-hover-radio-checked-background-color);
-  //         }
-  //       }
-  //       &.row--checked {
-  //         .vxe-cell--tree-btn {
-  //           background-color: var(--vxe-ui-table-row-hover-checkbox-checked-background-color);
-  //         }
-  //       }
-  //       &.row--current {
-  //         .vxe-cell--tree-btn {
-  //           background-color: var(--vxe-ui-table-row-hover-current-background-color);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
   
   /*边框*/
   &.border--default,
@@ -2068,36 +2014,144 @@ $btnThemeList: (
     border: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
   }
 
+  // 虚线
+  @mixin dashed-vertical {
+    background-color: transparent;
+    background-image: linear-gradient(to bottom, var(--vxe-ui-table-tree-node-line-color) 50%, transparent 50%);
+    background-size: var(--vxe-ui-table-tree-node-line-width) calc(var(--vxe-ui-table-tree-node-line-width) * 4);
+  }
+  @mixin dashed-horizontal {
+    background-color: transparent;
+    background-image: linear-gradient(to right, var(--vxe-ui-table-tree-node-line-color) 50%, transparent 50%);
+    background-size: calc(var(--vxe-ui-table-tree-node-line-width) * 4) var(--vxe-ui-table-tree-node-line-width);
+  }
+
+  // 点线
+  @mixin dotted-vertical {
+    background-color: transparent;
+    background-image: linear-gradient(to bottom, var(--vxe-ui-table-tree-node-line-color) 50%, transparent 50%);
+    background-size: var(--vxe-ui-table-tree-node-line-width) calc(var(--vxe-ui-table-tree-node-line-width) * 2);
+  }
+  @mixin dotted-horizontal {
+    background-color: transparent;
+    background-image: linear-gradient(to right, var(--vxe-ui-table-tree-node-line-color) 50%, transparent 50%);
+    background-size: calc(var(--vxe-ui-table-tree-node-line-width) * 2) var(--vxe-ui-table-tree-node-line-width);
+  }
   /*树形节点*/
-  // &.is--tree-line {
-  //   .vxe-body--row {
-  //     &:first-child {
-  //       .vxe-tree--line {
-  //         border-width: 0 0 1px 0;
-  //       }
-  //     }
-  //   }
-  //   .vxe-body--row {
-  //     .vxe-body--column {
-  //       background-image: none;
-  //     }
-  //   }
-  // }
-  .vxe-tree--line-wrapper {
-    position: relative;
-    display: block;
-    height: 0;
+  .vxe-tree--line {
+    --vxe-ui-table-current-line-gap: calc((var(--vxe-ui-table-cell-height, var(--vxe-ui-table-current-row-height)) - var(--vxe-ui-table-tree-node-btn-width)) / 2);
   }
   .vxe-tree--line {
-    content: "";
     position: absolute;
-    bottom: -1.5em;
-    width: 0.8em;
-    border-width: 0 0 1px 1px;
-    border-style: var(--vxe-ui-table-tree-node-line-style);
-    border-color: var(--vxe-ui-table-tree-node-line-color);
     pointer-events: none;
+
+    &.v {
+      width: var(--vxe-ui-table-tree-node-line-width);
+      transform: translateX(-50%);
+
+      /* 伪元素基础尺寸和位置，不含背景 */
+      &.cut-full::before,
+      &.cut-top::before,
+      &.cut-full::after,
+      &.cut-bottom::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: var(--vxe-ui-table-tree-node-line-width);
+      }
+
+      &.cut-full::before,
+      &.cut-top::before {
+        top: 0;
+        height: var(--vxe-ui-table-current-line-gap);
+      }
+
+      &.cut-full::after,
+      &.cut-bottom::after {
+        top: calc(100% - var(--vxe-ui-table-current-line-gap));
+        height: var(--vxe-ui-table-current-line-gap);
+      }
+    }
+
+    &.h {
+      height: var(--vxe-ui-table-tree-node-line-width);
+      transform: translateY(-50%);
+    }
   }
+  .vxe-tree--line {
+    // 实线
+    &.type--solid {
+      &.v {
+        background-color: var(--vxe-ui-table-tree-node-line-color);
+
+        &.cut-full,
+        &.cut-top,
+        &.cut-bottom {
+          background: none;
+        }
+
+        &.cut-full::before,
+        &.cut-top::before,
+        &.cut-full::after,
+        &.cut-bottom::after {
+          background-color: var(--vxe-ui-table-tree-node-line-color);
+        }
+      }
+
+      &.h {
+        background-color: var(--vxe-ui-table-tree-node-line-color);
+      }
+    }
+
+    // 虚线
+    &.type--dashed {
+      &.v {
+        @include dashed-vertical;
+
+        &.cut-full,
+        &.cut-top,
+        &.cut-bottom {
+          background: none;
+        }
+
+        &.cut-full::before,
+        &.cut-top::before,
+        &.cut-full::after,
+        &.cut-bottom::after {
+          @include dashed-vertical;
+        }
+      }
+
+      &.h {
+        @include dashed-horizontal;
+      }
+    }
+
+    // 点线
+    &.type--dotted {
+      &.v {
+        @include dotted-vertical;
+
+        &.cut-full,
+        &.cut-top,
+        &.cut-bottom {
+          background: none;
+        }
+
+        &.cut-full::before,
+        &.cut-top::before,
+        &.cut-full::after,
+        &.cut-bottom::after {
+          @include dotted-vertical;
+        }
+      }
+
+      &.h {
+        @include dotted-horizontal;
+      }
+    }
+  }
+
   .vxe-row-group--tree-node,
   .vxe-cell--tree-node {
     position: relative;
@@ -2116,14 +2170,14 @@ $btnThemeList: (
   .vxe-row-group-cell,
   .vxe-tree-cell {
     display: block;
-    padding-left: 1.5em;
+    padding-left: var(--vxe-ui-table-tree-node-indent);
   }
   .vxe-cell--tree-btn,
   .vxe-row-group--node-btn{
     position: absolute;
     top: 50%;
-    width: 1em;
-    height: 1em;
+    width: var(--vxe-ui-table-tree-node-btn-width);
+    height: var(--vxe-ui-table-tree-node-btn-width);
     text-align: center;
     transform: translateY(-50%);
     z-index: 1;

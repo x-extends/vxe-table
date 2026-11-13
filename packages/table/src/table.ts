@@ -812,6 +812,7 @@ export default {
       footFlag: 0,
       kfFlag: 0,
       layoutReFlag: 0,
+      lineFlag: 0,
       mergeFooteCellFlag: 0,
       crossTableDragRowInfo: crossTableDragRowGlobal,
       scrollDefaultConf: Object.assign({}, getConfig().scrollbar)
@@ -1547,6 +1548,18 @@ export default {
     computeTreeOpts() {
       return Object.assign({}, getConfig().table.treeConfig, this.treeConfig)
     },
+    computeShowTreeLine() {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      const treeOpts = $xeTable.computeTreeOpts
+      return getDefaultConfig(treeOpts.showLine, treeOpts.line)
+    },
+    computeShowTreeRootLine() {
+      const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+
+      const treeOpts = $xeTable.computeTreeOpts
+      return treeOpts.showRootLine
+    },
     emptyOpts() {
       return this.computeEmptyOpts
     },
@@ -1593,15 +1606,28 @@ export default {
     },
     computeTableStyle() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
+      const props = $xeTable
 
+      const { treeConfig } = props
       const barWidth = $xeTable.computeScrollYWidth
       const barHeight = $xeTable.computeScrollXHeight
+      const treeOpts = $xeTable.computeTreeOpts
+      const { indent, lineWidth, lineColor } = treeOpts
       const stys: VxeComponentStyleType = {}
       if (barWidth || barHeight) {
         stys['--vxe-ui-table-view-scrollbar-width'] = toCssUnit(barWidth || barHeight)
         stys['--vxe-ui-scrollbar-y-width'] = toCssUnit(barWidth || barHeight)
         stys['--vxe-ui-table-view-scrollbar-height'] = toCssUnit(barHeight || barWidth)
         stys['--vxe-ui-scrollbar-x-height'] = toCssUnit(barHeight || barWidth)
+      }
+      if (treeConfig) {
+        stys['--vxe-ui-table-tree-node-indent'] = toCssUnit(indent)
+      }
+      if (lineWidth) {
+        stys['--vxe-ui-table-tree-node-line-width'] = toCssUnit(lineWidth)
+      }
+      if (lineColor) {
+        stys['--vxe-ui-table-tree-node-line-color'] = toCssUnit(lineColor)
       }
       return stys
     },
@@ -1969,6 +1995,21 @@ export default {
       $xeTable.$nextTick().then(() => {
         $xeTable.recalculate(true)
       })
+    },
+    computeShowTreeLine() {
+      const $xeTable = this
+
+      $xeTable.lineFlag++
+    },
+    computeShowTreeRootLine() {
+      const $xeTable = this
+
+      $xeTable.lineFlag++
+    },
+    lineFlag() {
+      const $xeTable = this
+
+      $xeTable.updateAfterDataIndex()
     },
     reScrollFlag() {
       const $xeTable = this
@@ -2667,7 +2708,7 @@ export default {
     const validTipConfig = $xeTable.computeValidTipConfig
     const validOpts = $xeTable.computeValidOpts
     const checkboxOpts = $xeTable.computeCheckboxOpts
-    const treeOpts = $xeTable.computeTreeOpts
+    const showTreeLine = $xeTable.computeShowTreeLine
     const rowOpts = $xeTable.computeRowOpts
     const columnOpts = $xeTable.computeColumnOpts
     const vSize = $xeTable.computeSize
@@ -2729,7 +2770,7 @@ export default {
             'not--footer': !showFooter,
             'is--group': isGroup,
             'is-row-group': isRowGroupStatus,
-            'is--tree-line': treeConfig && (treeOpts.showLine || treeOpts.line),
+            'is--tree-line': treeConfig && showTreeLine,
             'is--fixed-left': leftList.length,
             'is--fixed-right': rightList.length,
             'is--animat': !!props.animat,

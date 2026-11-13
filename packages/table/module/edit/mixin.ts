@@ -80,7 +80,25 @@ function insertTreeRow($xeTable: VxeTableConstructor & VxeTablePrivateMethods, n
       }
       pChilds[funcName](item)
       pMapChilds[funcName](item)
-      const rest = { row: item, rowid, _seq: -1, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: pChilds, parent: parentRow, level: parentLevel + 1, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+      const rest = {
+        row: item,
+        rowid,
+        _seq: -1,
+        seq: -1,
+        index: -1,
+        _index: -1,
+        $index: -1,
+        treeIndex: -1,
+        _tIndex: -1,
+        items: pChilds,
+        parent: parentRow,
+        level: parentLevel + 1,
+        linesMask: 0,
+        height: 0,
+        resizeHeight: 0,
+        oTop: 0,
+        expandHeight: 0
+      }
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
     } else {
@@ -89,7 +107,25 @@ function insertTreeRow($xeTable: VxeTableConstructor & VxeTablePrivateMethods, n
       }
       afterFullData[funcName](item)
       tableFullTreeData[funcName](item)
-      const rest = { row: item, rowid, _seq: -1, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: tableFullTreeData, parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+      const rest = {
+        row: item,
+        rowid,
+        _seq: -1,
+        seq: -1,
+        index: -1,
+        _index: -1,
+        $index: -1,
+        treeIndex: -1,
+        _tIndex: -1,
+        items: tableFullTreeData,
+        parent: null,
+        level: 0,
+        linesMask: 0,
+        height: 0,
+        resizeHeight: 0,
+        oTop: 0,
+        expandHeight: 0
+      }
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
     }
@@ -144,7 +180,25 @@ function handleInsertRowAt($xeTable: VxeTableConstructor & VxeTablePrivateMethod
     } else {
       newRecords.forEach((item) => {
         const rowid = getRowid($xeTable, item)
-        const rest = { row: item, rowid, _seq: -1, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: afterFullData, parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+        const rest = {
+          row: item,
+          rowid,
+          _seq: -1,
+          seq: -1,
+          index: -1,
+          _index: -1,
+          $index: -1,
+          treeIndex: -1,
+          _tIndex: -1,
+          items: afterFullData,
+          parent: null,
+          level: 0,
+          linesMask: 0,
+          height: 0,
+          resizeHeight: 0,
+          oTop: 0,
+          expandHeight: 0
+        }
         fullDataRowIdData[rowid] = rest
         fullAllDataRowIdData[rowid] = rest
         afterFullData.unshift(item)
@@ -173,7 +227,25 @@ function handleInsertRowAt($xeTable: VxeTableConstructor & VxeTablePrivateMethod
       } else {
         newRecords.forEach((item) => {
           const rowid = getRowid($xeTable, item)
-          const rest = { row: item, rowid, _seq: -1, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: afterFullData, parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+          const rest = {
+            row: item,
+            rowid,
+            _seq: -1,
+            seq: -1,
+            index: -1,
+            _index: -1,
+            $index: -1,
+            treeIndex: -1,
+            _tIndex: -1,
+            items: afterFullData,
+            parent: null,
+            level: 0,
+            linesMask: 0,
+            height: 0,
+            resizeHeight: 0,
+            oTop: 0,
+            expandHeight: 0
+          }
           fullDataRowIdData[rowid] = rest
           fullAllDataRowIdData[rowid] = rest
           afterFullData.push(item)
@@ -213,7 +285,25 @@ function handleInsertRowAt($xeTable: VxeTableConstructor & VxeTablePrivateMethod
             treeRecords,
             (item) => {
               const rowid = getRowid($xeTable, item)
-              const rest = { row: item, rowid, _seq: -1, seq: -1, index: -1, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items: parentMapChilds, parent: parentRow, level: parentLevel + 1, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+              const rest = {
+                row: item,
+                rowid,
+                _seq: -1,
+                seq: -1,
+                index: -1,
+                _index: -1,
+                $index: -1,
+                treeIndex: -1,
+                _tIndex: -1,
+                items: parentMapChilds,
+                parent: parentRow,
+                level: parentLevel + 1,
+                linesMask: 0,
+                height: 0,
+                resizeHeight: 0,
+                oTop: 0,
+                expandHeight: 0
+              }
               if (item[childrenField]) {
                 item[mapChildrenField] = item[childrenField]
               }

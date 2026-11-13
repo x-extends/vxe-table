@@ -27,14 +27,11 @@ if (!VxeUI.hasLanguage('zh-CN')) {
 }
 VxeUI.setTheme('light')
 
-// eslint-disable-next-line import/export
-export { VxeUI }
-
-// eslint-disable-next-line import/export
+// 兼容老版本
 export * from '@vxe-ui/core'
 
 // 兼容老版本
-export * from './ui'
+export * from './ui/abandon'
 
 // Components
 export * from './table'

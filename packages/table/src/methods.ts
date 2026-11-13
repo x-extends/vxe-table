@@ -710,38 +710,210 @@ function handleDefaultRowGroupExpand($xeTable: VxeTableConstructor & VxeTablePri
   }
 }
 
+/**
+ * 分配树节点的连接线
+ * 类名（cut-full / cut-top / cut-bottom）
+ */
+function getTreeNodeLines(isExpandable: boolean, depth: number, linesMask: number, isFirstRow: boolean, isLastRow: boolean, showRootLine: boolean) {
+  const lines: VxeTableDefines.RowCacheTreeLineData[] = []
+
+  for (let col = 1; col <= depth; col++) {
+    const leftVal = `var(--vxe-ui-table-tree-node-btn-width) + var(--vxe-ui-table-tree-node-indent) * ${(col - 1)}`
+    const through = (linesMask & (1 << (col - 1))) !== 0
+
+    if (col === 1 && !showRootLine) {
+      continue
+    }
+
+    if (col < depth) {
+      // 普通列（贯穿线）
+      if (through) {
+        let top = '0'
+        let height = '100%'
+        if (isFirstRow) {
+          top = '50%'
+          height = '50%'
+        } else if (isLastRow) {
+          top = '0'
+          height = '50%'
+        }
+
+        lines.push({
+          type: 'v',
+          style: {
+            left: `calc(${leftVal})`,
+            top,
+            height
+          }
+        })
+      }
+    } else {
+      // 肘部列
+      let vTop = '0'
+      let vHeight = through ? '100%' : '50%'
+
+      if (isFirstRow && isLastRow) {
+        vTop = '50%'
+        vHeight = '0px'
+      } else if (isFirstRow) {
+        vTop = '50%'
+        vHeight = '50%'
+      } else if (isLastRow) {
+        vTop = '0'
+        vHeight = '50%'
+      }
+
+      if (isExpandable && vHeight !== '0px') {
+        // 元素切割：根据头和尾的情况分配不同的类名
+        let cutType = 'v cut'
+        if (vTop === '0' && vHeight === '50%') {
+          cutType = 'v cut-top'
+        } else if (vTop === '50%' && vHeight === '50%') {
+          cutType = 'v cut-bottom'
+        } else if (vHeight === '100%') {
+          cutType = 'v cut-full'
+        }
+
+        lines.push({
+          type: cutType,
+          style: {
+            left: `calc(${leftVal})`,
+            top: vTop,
+            height: vHeight
+          }
+        })
+      } else {
+        // 正常竖线
+        if (vHeight !== '0px') {
+          lines.push({
+            type: 'v',
+            style: {
+              left: `calc(${leftVal})`,
+              top: vTop,
+              height: vHeight
+            }
+          })
+        }
+      }
+
+      // 横线处理：如果可展开，横线从图标右侧开始画；否则正常画
+      if (isExpandable) {
+        lines.push({
+          type: 'h',
+          style: {
+            left: `calc(${leftVal} + var(--vxe-ui-table-tree-node-btn-width) / 2 + 1px)`,
+            top: '50%',
+            width: 'calc(var(--vxe-ui-table-tree-node-indent) - var(--vxe-ui-table-tree-node-btn-width) - 0.25em)'
+          }
+        })
+      } else {
+        lines.push({
+          type: 'h',
+          style: {
+            left: `calc(${leftVal})`,
+            top: '50%',
+            width: 'calc(var(--vxe-ui-table-tree-node-indent) - var(--vxe-ui-table-tree-node-btn-width))'
+          }
+        })
+      }
+    }
+  }
+  return lines
+}
+
 function updateAfterTreeIndex($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
   const internalData = $xeTable as unknown as TableInternalData
 
   const { fullDataRowIdData, fullAllDataRowIdData, afterFullData, afterTreeFullData } = internalData
   const treeOpts = $xeTable.computeTreeOpts
-  const { transform, mapChildrenField } = treeOpts
+  const { lazy, transform, showRootLine, mapChildrenField } = treeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
+  const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
+  const showTreeLine = $xeTable.computeShowTreeLine
   const fullMaps: Record<string, any> = {}
-  let rowNum = 0
+  const treeFullSize = afterTreeFullData.length
+  const rowNum = 0
   const { handleGetRowId } = createHandleGetRowId($xeTable)
-  XEUtils.eachTree(
-    afterTreeFullData,
-    (row, index, items, path, parentRow) => {
-      const rowid = handleGetRowId(row)
-      const rowRest = fullAllDataRowIdData[rowid]
-      const seq = path.map((num, i) => (i % 2 === 0 ? Number(num) + 1 : '.')).join('')
-      if (rowRest) {
-        rowRest.seq = seq
-        rowRest._seq = rowNum
-        rowRest.treeIndex = index
-        rowRest._index = rowNum
-        rowRest._tIndex = rowNum
-      } else {
-        const rest = { row, rowid, _seq: rowNum, seq, index, $index: -1, _index: rowNum, treeIndex: index, _tIndex: rowNum, items, parent: parentRow, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
-        fullAllDataRowIdData[rowid] = rest
-        fullDataRowIdData[rowid] = rest
+
+  function handleTreeDFS(row: any, index: number, items: any[], parentRow: any, depth: number, isFirstRow: boolean, isLastRow: boolean, isLastChild: boolean, stackMask: number, seq: string) {
+    const rowid = handleGetRowId(row)
+    let rowRest = fullAllDataRowIdData[rowid]
+    const rowChilds = row[transform ? mapChildrenField : childrenField]
+
+    if (rowRest) {
+      rowRest.seq = seq
+      rowRest._seq = rowNum
+      rowRest.items = items
+      rowRest.treeIndex = index
+      rowRest._index = rowNum
+      rowRest._tIndex = rowNum
+    } else {
+      rowRest = {
+        row,
+        rowid,
+        _seq: rowNum,
+        seq,
+        index,
+        $index: -1,
+        _index: rowNum,
+        treeIndex: index,
+        _tIndex: rowNum,
+        items,
+        parent: parentRow,
+        level: 0,
+        linesMask: 0,
+        height: 0,
+        resizeHeight: 0,
+        oTop: 0,
+        expandHeight: 0
       }
-      rowNum++
-      fullMaps[rowid] = row
-    },
-    { children: transform ? mapChildrenField : childrenField }
-  )
+      fullAllDataRowIdData[rowid] = rowRest
+      fullDataRowIdData[rowid] = rowRest
+    }
+
+    // 计算当前节点的线条标记
+    let linesMask = (stackMask >> 1)
+    if (!isLastChild) {
+      linesMask |= (1 << (depth - 1))
+    }
+
+    rowRest.seq = seq
+    rowRest._seq = rowNum
+
+    rowRest.level = depth - 1
+    rowRest.linesMask = linesMask
+
+    const hasChild = rowChilds && rowChilds.length
+    let hasLazyChilds = false
+    let isLazyLoaded = false
+    if (lazy) {
+      const rest = fullAllDataRowIdData[rowid]
+      hasLazyChilds = row[hasChildField]
+      isLazyLoaded = !!rest.treeLoaded
+    }
+    const isExpandable = (lazy ? (isLazyLoaded ? hasChild : hasChild || hasLazyChilds) : hasChild)
+
+    rowRest.treeLines = showTreeLine && treeFullSize > 1 ? getTreeNodeLines(isExpandable, depth, linesMask, isFirstRow, isLastRow, showRootLine) : []
+
+    // 计算传给子节点的状态
+    let nextStackMask = stackMask
+    if (!isLastChild) {
+      nextStackMask |= (1 << depth)
+    }
+
+    fullMaps[rowid] = row
+
+    // 递归子节点
+    for (let i = 0; i < rowChilds.length; i++) {
+      handleTreeDFS(rowChilds[i], i, rowChilds, row, depth + 1, false, false, i === rowChilds.length - 1, nextStackMask, `${seq}.${i + 1}`)
+    }
+  }
+
+  // 根节点 depth 从 1 开始
+  for (let i = 0; i < treeFullSize; i++) {
+    handleTreeDFS(afterTreeFullData[i], i, afterTreeFullData, null, 1, !i, i === treeFullSize - 1, i === treeFullSize - 1, 0, '' + i)
+  }
+
   if (transform) {
     afterFullData.forEach((row, index) => {
       const rowid = handleGetRowId(row)
@@ -770,7 +942,25 @@ function updateAfterListIndex($xeTable: VxeTableConstructor & VxeTablePrivateMet
       rowRest._seq = rowNum
       rowRest._index = index
     } else {
-      const rest = { row, rowid, _seq: rowNum, seq, index: -1, $index: -1, _index: index, treeIndex: -1, _tIndex: -1, items: [], parent: null, level: 0, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+      const rest = {
+        row,
+        rowid,
+        _seq: rowNum,
+        seq,
+        index: -1,
+        $index: -1,
+        _index: index,
+        treeIndex: -1,
+        _tIndex: -1,
+        items: [],
+        parent: null,
+        level: 0,
+        linesMask: 0,
+        height: 0,
+        resizeHeight: 0,
+        oTop: 0,
+        expandHeight: 0
+      }
       fullAllDataRowIdData[rowid] = rest
       fullDataRowIdData[rowid] = rest
     }
@@ -2757,9 +2947,9 @@ const calcCellHeight = ($xeTable: VxeTableConstructor) => {
   if (!el || !el.clientWidth) {
     return
   }
-  const treeOpts = $xeTable.computeTreeOpts
   const defaultRowHeight = $xeTable.computeDefaultRowHeight
-  if (!isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && treeOpts.showLine))) {
+  const showTreeLine = $xeTable.computeShowTreeLine
+  if (!isAllOverflow && (scrollYLoad || scrollXLoad || (treeConfig && showTreeLine))) {
     const { handleGetRowId } = createHandleGetRowId($xeTable)
     // 一次扫描建立 rowid -> 单元格列表，避免逐行全表 querySelectorAll
     const rowWrapperMaps: Record<string, HTMLElement[]> = {}
@@ -5455,7 +5645,25 @@ const tableMethods: any = {
         errLog('vxe.error.repeatKey', [currKeyField, rowid])
       }
       if (!rowRest) {
-        rowRest = { row, rowid, _seq: -1, seq, index: -1, _index: -1, $index: -1, treeIndex: index, _tIndex: -1, items, parent: parentRow, level, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+        rowRest = {
+          row,
+          rowid,
+          _seq: -1,
+          seq,
+          index: -1,
+          _index: -1,
+          $index: -1,
+          treeIndex: index,
+          _tIndex: -1,
+          items,
+          parent: parentRow,
+          level,
+          linesMask: 0,
+          height: 0,
+          resizeHeight: 0,
+          oTop: 0,
+          expandHeight: 0
+        }
       }
       if (isReset || isReLoaded) {
         rowRest.treeLoaded = false
@@ -5586,7 +5794,25 @@ const tableMethods: any = {
         (childRow, index, items, path, parentItem, nodes) => {
           const rowid = getRowid($xeTable, childRow)
           const parentRow = parentItem || parentRest.row
-          const rest = { row: childRow, rowid, _seq: -1, seq: -1, index, _index: -1, $index: -1, treeIndex: -1, _tIndex: -1, items, parent: parentRow, level: parentLevel + nodes.length, height: 0, resizeHeight: 0, oTop: 0, expandHeight: 0 }
+          const rest = {
+            row: childRow,
+            rowid,
+            _seq: -1,
+            seq: -1,
+            index,
+            _index: -1,
+            $index: -1,
+            treeIndex: -1,
+            _tIndex: -1,
+            items,
+            parent: parentRow,
+            level: parentLevel + nodes.length,
+            linesMask: 0,
+            height: 0,
+            resizeHeight: 0,
+            oTop: 0,
+            expandHeight: 0
+          }
           fullDataRowIdData[rowid] = rest
           fullAllDataRowIdData[rowid] = rest
         },
@@ -10590,8 +10816,8 @@ const tableMethods: any = {
         $xeTable.handleHeaderCellDragMousedownEvent(evnt, params)
       }
     }
-    if (!triggerDrag && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleHeaderCellAreaMouseDnEvent) {
-      $xeTable.handleHeaderCellAreaMouseDnEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
+    if (!triggerDrag && hasEnableConf(mouseConfig, mouseOpts) && mouseOpts.area && $xeTable.handleHeadCellAreaMouseDnEvent) {
+      $xeTable.handleHeadCellAreaMouseDnEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
     }
     $xeTable.focus()
     if ($xeTable.closeMenu) {

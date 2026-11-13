@@ -1,4 +1,4 @@
-import { PropType, CreateElement } from 'vue'
+import { PropType, CreateElement, VNode } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '@vxe-ui/core'
 import { defineVxeComponent } from '../../ui/src/comp'
@@ -26,63 +26,37 @@ const isVMScrollProcess = ($xeTable: VxeTableConstructor & VxeTablePrivateMethod
   return !!(isDragResize || (lastSTime && Date.now() < lastSTime + (delayHover as number)))
 }
 
-function renderLine(h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods, rowid: string, params: VxeTableDefines.CellRenderBodyParams, cellHeight: number): VxeComponentSlotType[] {
+function renderLine(h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePrivateMethods, rowid: string, params: VxeTableDefines.CellRenderBodyParams): VxeComponentSlotType[] {
   const tableProps = $xeTable
   const tableInternalData = $xeTable as unknown as TableInternalData
 
   const { column } = params
   const { treeConfig } = tableProps
-  const cellOpts = $xeTable.computeCellOpts
-  const rowOpts = $xeTable.computeRowOpts
-  const defaultRowHeight = $xeTable.computeDefaultRowHeight
-  const treeOpts = $xeTable.computeTreeOpts
   const { slots, treeNode } = column
-  const { fullAllDataRowIdData } = tableInternalData
-  if (treeConfig && treeNode && (treeOpts.showLine || treeOpts.line)) {
+  const lineVNs: VNode[] = []
+
+  if (treeConfig && treeNode) {
     if (slots && (slots as any).line) {
       return $xeTable.callSlot((slots as any).line, params, h)
     }
+    const treeOpts = $xeTable.computeTreeOpts
+    const { fullAllDataRowIdData } = tableInternalData
+    const { lineType } = treeOpts
     const rowRest = fullAllDataRowIdData[rowid]
-    let rLevel = 0
-    let prevRow = null
-    let parentRow = null
-    let lineHeight = ''
-    if (rowRest) {
-      rLevel = rowRest.level
-      prevRow = rowRest.items[rowRest.treeIndex - 1]
-      parentRow = rowRest.parent
-    }
-    if (!rLevel && !treeOpts.showRootLine) {
-      return []
-    }
-    if (prevRow) {
-      const prevRowRest = fullAllDataRowIdData[getRowid($xeTable, prevRow)] || {}
-      lineHeight = `${prevRowRest.lineHeight || 0}px`
-    } else if (rLevel && parentRow) {
-      const parentRowRest = fullAllDataRowIdData[getRowid($xeTable, parentRow)] || {}
-      lineHeight = `calc(-1em + ${Math.floor(cellHeight / 2 + getCellRestHeight(parentRowRest, cellOpts, rowOpts, defaultRowHeight) / 2)}px)`
-    }
-    return [
-      h(
-        'div',
-        {
-          key: 'tl',
-          class: 'vxe-tree--line-wrapper'
-        },
-        [
-          h('div', {
-            class: 'vxe-tree--line',
-            style: {
-              height: lineHeight,
-              bottom: `-${Math.floor(cellHeight / 2)}px`,
-              left: `calc(${rLevel * treeOpts.indent}px + 1em)`
-            }
+    const treeLines = rowRest.treeLines
+    if (treeLines) {
+      treeLines.forEach((item, i) => {
+        lineVNs.push(
+          h('span', {
+            key: 'le' + i,
+            class: ['vxe-tree--line', `type--${lineType || 'dashed'}`, item.type],
+            style: item.style
           })
-        ]
-      )
-    ]
+        )
+      })
+    }
   }
-  return []
+  return lineVNs
 }
 
 /**
@@ -114,6 +88,7 @@ function renderTdColumn(
   const { columnKey, resizable: allResizable, showOverflow: allShowOverflow, border, height, treeConfig, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig, padding: allPadding } = tableProps
   const { tableData, tableColumn, dragRow, overflowX, overflowY, scrollXLoad, scrollYLoad, mergeBodyFlag, calcCellHeightFlag, resizeHeightFlag, resizeWidthFlag, editStore, isAllOverflow, validErrorMaps, currColFlag } = tableReactData
   const { fullAllDataRowIdData, fullColumnIdData, mergeBodyCellMaps, visibleColumn, afterFullData, mergeBodyList, scrollXStore, scrollYStore, keepUpdateFieldMaps, currentCol } = tableInternalData
+  const showTreeLine = $xeTable.computeShowTreeLine
   const cellOpts = $xeTable.computeCellOpts
   const validOpts = $xeTable.computeValidOpts
   const checkboxOpts = $xeTable.computeCheckboxOpts
@@ -369,8 +344,8 @@ function renderTdColumn(
     )
   } else {
     // 渲染单元格
-    if (treeConfig) {
-      tdVNs.push(...renderLine(h, $xeTable, rowid, cellParams, cellHeight))
+    if (treeConfig && showTreeLine) {
+      tdVNs.push(...renderLine(h, $xeTable, rowid, cellParams))
     }
     const clVNs: VxeComponentSlotType[] = []
     if (!isVNPreEmptyStatus) {
