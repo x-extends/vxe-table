@@ -2678,7 +2678,8 @@ $btnThemeList: (
   .vxe-body--row {
     .vxe-table--column {
       .vxe-cell {
-        .vxe-cell--wrapper {
+        .vxe-cell--wrapper,
+        .vxe-tree-cell {
           %ReusekeepControl {
             position: absolute;
             width: 0;

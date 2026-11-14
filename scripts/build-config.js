@@ -8,14 +8,16 @@ exports.src = 'packages'
 exports.srcTmpl = 'packages_temp'
 // 输出目录
 exports.outEs = 'es'
+exports.esEntry = 'esm.index.ts'
 exports.outLib = 'lib'
 exports.outDist = 'dist'
+
 // 构建前是否清空输出目录
 exports.doClean = true
 // 组件目录前缀，用于生成 vxe-${name} 别名入口
 exports.componentPrefix = 'vxe'
 // 是否移除 DefineVxeComponent 包裹
-exports.doStripDefineWrapper = true
+exports.doStripDefineWrapper = false
 /* ========================================================= */
 
 /* ======================== 图标资源 ======================== */
