@@ -91,7 +91,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
             lineVNs.push(
               h('span', {
                 key: 'le' + i,
-                class: ['vxe-tree--line', `type--${lineType || 'solid'}`, item.type],
+                class: ['vxe-table--tree-node-line', `type--${lineType || 'solid'}`, item.type],
                 style: item.style
               })
             )
@@ -697,7 +697,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
               cellStyle.height = `${expandHeight}px`
             }
             if (treeConfig) {
-              cellStyle.paddingLeft = `${rowLevel * treeOpts.indent + 30}px`
+              cellStyle.paddingLeft = `calc(${rowLevel} * var(--vxe-ui-table-tree-node-indent) + 30px)`
             }
             const { showOverflow } = expandColumn || {}
             const colid = expandColumn.id

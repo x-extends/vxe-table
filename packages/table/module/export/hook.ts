@@ -763,6 +763,7 @@ hooks.add('tableExportModule', {
       const { isAllSelected, isIndeterminate } = reactData
       const { mergeBodyCellMaps, mergeFooterCellMaps } = internalData
       const treeOpts = computeTreeOpts.value
+      const treeIndent = treeOpts.indent || 20
       const { print: isPrint, widthMode, isHeader, isFooter, isColgroup, isMerge, colgroups, _columnConfs, original } = opts
       const isAutoWidth = widthMode === 'auto'
       const isScaleWidth = widthMode === 'scale'
@@ -917,11 +918,11 @@ hooks.add('tableExportModule', {
                       }
                       classNames.push('vxe-table--tree-node')
                       if (column.type === 'radio') {
-                        return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></div></div></td>`
+                        return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeIndent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></div></div></td>`
                       } else if (column.type === 'checkbox') {
-                        return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></div></div></td>`
+                        return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeIndent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></div></div></td>`
                       }
-                      return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell">${cellValue}</div></div></div></td>`
+                      return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="${getCellWidthStyle(column)}"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeIndent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell">${cellValue}</div></div></div></td>`
                     }
                     if (column.type === 'radio') {
                       return `<td class="${classNames.join(' ')}"><div style="${getCellWidthStyle(column)}"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></td>`

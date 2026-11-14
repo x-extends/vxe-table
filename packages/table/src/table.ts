@@ -38,6 +38,7 @@ import {
 } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { moveRowAnimateToTb, clearRowAnimate, moveColAnimateToLr, clearColAnimate } from '../../ui/src/anime'
+import { getTreeNodeLines } from './tree'
 import { createComponentLog } from '../../ui/src/log'
 import { getCrossTableDragRowInfo } from './store'
 import Cell from './cell'
@@ -773,11 +774,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
     })
 
     const computeTableStyle = computed(() => {
-      const { treeConfig } = props
       const barWidth = computeScrollYWidth.value
       const barHeight = computeScrollXHeight.value
       const treeOpts = computeTreeOpts.value
-      const { indent, lineWidth, lineColor } = treeOpts
+      const { indent: treeIndent, lineWidth, lineColor } = treeOpts
+      const expandOpts = computeExpandOpts.value
+      const { indent: edIndent } = expandOpts
+      const aggregateOpts = computeAggregateOpts.value
+      const { indent: rgIndent } = aggregateOpts
       const stys: VxeComponentStyleType = {}
       if (barWidth || barHeight) {
         stys['--vxe-ui-table-view-scrollbar-width'] = toCssUnit(barWidth || barHeight)
@@ -785,8 +789,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
         stys['--vxe-ui-table-view-scrollbar-height'] = toCssUnit(barHeight || barWidth)
         stys['--vxe-ui-scrollbar-x-height'] = toCssUnit(barHeight || barWidth)
       }
-      if (treeConfig) {
-        stys['--vxe-ui-table-tree-node-indent'] = toCssUnit(indent)
+      if (edIndent) {
+        stys['--vxe-ui-table-expand-tree-node-indent'] = toCssUnit(edIndent)
+      }
+      if (rgIndent) {
+        stys['--vxe-ui-table-row-group-tree-node-indent'] = toCssUnit(rgIndent)
+      }
+      if (treeIndent) {
+        stys['--vxe-ui-table-tree-node-indent'] = toCssUnit(treeIndent)
       }
       if (lineWidth) {
         stys['--vxe-ui-table-tree-node-line-width'] = toCssUnit(lineWidth)
@@ -1060,6 +1070,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       computeExpandOpts,
       computeTreeOpts,
       computeShowTreeLine,
+      computeShowTreeRootLine,
       computeEmptyOpts,
       computeLoadingOpts,
       computeCellOffsetWidth,
@@ -2471,127 +2482,17 @@ export default /* define-vxe-component start */ defineVxeComponent({
           }
     }
 
-    /**
-     * 分配树节点的连接线
-     * 类名（cut-full / cut-top / cut-bottom）
-     */
-    function getTreeNodeLines(isExpandable: boolean, depth: number, linesMask: number, isFirstRow: boolean, isLastRow: boolean, showRootLine: boolean) {
-      const lines: VxeTableDefines.RowCacheTreeLineData[] = []
-
-      for (let col = 1; col <= depth; col++) {
-        const leftVal = `var(--vxe-ui-table-tree-node-btn-width) + var(--vxe-ui-table-tree-node-indent) * ${(col - 1)}`
-        const through = (linesMask & (1 << (col - 1))) !== 0
-
-        if (col === 1 && !showRootLine) {
-          continue
-        }
-
-        if (col < depth) {
-          // 普通列（贯穿线）
-          if (through) {
-            let top = '0'
-            let height = '100%'
-            if (isFirstRow) {
-              top = '50%'
-              height = '50%'
-            } else if (isLastRow) {
-              top = '0'
-              height = '50%'
-            }
-
-            lines.push({
-              type: 'v',
-              style: {
-                left: `calc(${leftVal})`,
-                top,
-                height
-              }
-            })
-          }
-        } else {
-          // 肘部列
-          let vTop = '0'
-          let vHeight = through ? '100%' : '50%'
-
-          if (isFirstRow && isLastRow) {
-            vTop = '50%'
-            vHeight = '0px'
-          } else if (isFirstRow) {
-            vTop = '50%'
-            vHeight = '50%'
-          } else if (isLastRow) {
-            vTop = '0'
-            vHeight = '50%'
-          }
-
-          if (isExpandable && vHeight !== '0px') {
-            // 元素切割：根据头和尾的情况分配不同的类名
-            let cutType = 'v cut'
-            if (vTop === '0' && vHeight === '50%') {
-              cutType = 'v cut-top'
-            } else if (vTop === '50%' && vHeight === '50%') {
-              cutType = 'v cut-bottom'
-            } else if (vHeight === '100%') {
-              cutType = 'v cut-full'
-            }
-
-            lines.push({
-              type: cutType,
-              style: {
-                left: `calc(${leftVal})`,
-                top: vTop,
-                height: vHeight
-              }
-            })
-          } else {
-            // 正常竖线
-            if (vHeight !== '0px') {
-              lines.push({
-                type: 'v',
-                style: {
-                  left: `calc(${leftVal})`,
-                  top: vTop,
-                  height: vHeight
-                }
-              })
-            }
-          }
-
-          // 横线处理：如果可展开，横线从图标右侧开始画；否则正常画
-          if (isExpandable) {
-            lines.push({
-              type: 'h',
-              style: {
-                left: `calc(${leftVal} + var(--vxe-ui-table-tree-node-btn-width) / 2 + 1px)`,
-                top: '50%',
-                width: 'calc(var(--vxe-ui-table-tree-node-indent) - var(--vxe-ui-table-tree-node-btn-width) - 0.25em)'
-              }
-            })
-          } else {
-            lines.push({
-              type: 'h',
-              style: {
-                left: `calc(${leftVal})`,
-                top: '50%',
-                width: 'calc(var(--vxe-ui-table-tree-node-indent) - var(--vxe-ui-table-tree-node-btn-width))'
-              }
-            })
-          }
-        }
-      }
-      return lines
-    }
-
     const updateAfterTreeIndex = () => {
       const { fullDataRowIdData, fullAllDataRowIdData, afterFullData, afterTreeFullData } = internalData
       const treeOpts = computeTreeOpts.value
-      const { lazy, transform, showRootLine, mapChildrenField } = treeOpts
+      const { lazy, transform, mapChildrenField } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
       const showTreeLine = computeShowTreeLine.value
+      const showTreeRootLine = computeShowTreeRootLine.value
       const fullMaps: Record<string, any> = {}
       const treeFullSize = afterTreeFullData.length
-      const rowNum = 0
+      let rowNum = 0
       const { handleGetRowId } = createHandleGetRowId($xeTable)
 
       function handleTreeDFS(row: any, index: number, items: any[], parentRow: any, depth: number, isFirstRow: boolean, isLastRow: boolean, isLastChild: boolean, stackMask: number, seq: string) {
@@ -2601,22 +2502,19 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
         if (rowRest) {
           rowRest.seq = seq
-          rowRest._seq = rowNum
           rowRest.items = items
           rowRest.treeIndex = index
-          rowRest._index = rowNum
-          rowRest._tIndex = rowNum
         } else {
           rowRest = {
             row,
             rowid,
-            _seq: rowNum,
-            seq,
+            _seq: 0,
+            seq: 0,
             index,
             $index: -1,
-            _index: rowNum,
+            _index: 0,
             treeIndex: index,
-            _tIndex: rowNum,
+            _tIndex: 0,
             items,
             parent: parentRow,
             level: 0,
@@ -2638,6 +2536,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
         rowRest.seq = seq
         rowRest._seq = rowNum
+        rowRest._index = rowNum
+        rowRest._tIndex = rowNum
 
         rowRest.level = depth - 1
         rowRest.linesMask = linesMask
@@ -2652,7 +2552,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         }
         const isExpandable = (lazy ? (isLazyLoaded ? hasChild : hasChild || hasLazyChilds) : hasChild)
 
-        rowRest.treeLines = showTreeLine && treeFullSize > 1 ? getTreeNodeLines(isExpandable, depth, linesMask, isFirstRow, isLastRow, showRootLine) : []
+        rowRest.treeLines = showTreeLine && treeFullSize > 1 ? getTreeNodeLines(isExpandable, depth, linesMask, isFirstRow, isLastRow, showTreeRootLine) : []
 
         // 计算传给子节点的状态
         let nextStackMask = stackMask
@@ -2660,11 +2560,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
           nextStackMask |= (1 << depth)
         }
 
+        rowNum++
         fullMaps[rowid] = row
 
         // 递归子节点
-        for (let i = 0; i < rowChilds.length; i++) {
-          handleTreeDFS(rowChilds[i], i, rowChilds, row, depth + 1, false, false, i === rowChilds.length - 1, nextStackMask, `${seq}.${i + 1}`)
+        if (rowChilds) {
+          for (let i = 0; i < rowChilds.length; i++) {
+            handleTreeDFS(rowChilds[i], i, rowChilds, row, depth + 1, false, false, i === rowChilds.length - 1, nextStackMask, `${seq}.${i + 1}`)
+          }
         }
       }
 
@@ -14699,7 +14602,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         const { handleGetRowId } = createHandleGetRowId($xeTable)
         tableRowExpandedList.forEach((row) => {
           const expandOpts = computeExpandOpts.value
-          const { height: expandHeight, padding, indent } = expandOpts
+          const { height: expandHeight, padding } = expandOpts
           const { fullAllDataRowIdData, fullColumnIdData } = internalData
           const treeOpts = computeTreeOpts.value
           const { transform, seqMode } = treeOpts
@@ -14729,7 +14632,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
             cellStyle.height = `${expandHeight}px`
           }
           if (isRowGroupStatus || treeConfig) {
-            cellStyle.paddingLeft = `${rowLevel * (XEUtils.isNumber(indent) ? indent : treeOpts.indent) + 30}px`
+            cellStyle.paddingLeft = `calc(${rowLevel} * var(--vxe-ui-table-expand-tree-node-indent) + 30px)`
           }
           let columnIndex = -1
           let $columnIndex = -1

@@ -2038,10 +2038,10 @@ $btnThemeList: (
     background-size: calc(var(--vxe-ui-table-tree-node-line-width) * 2) var(--vxe-ui-table-tree-node-line-width);
   }
   /*树形节点*/
-  .vxe-tree--line {
+  .vxe-table--tree-node-line {
     --vxe-ui-table-current-line-gap: calc((var(--vxe-ui-table-cell-height, var(--vxe-ui-table-current-row-height)) - var(--vxe-ui-table-tree-node-btn-width)) / 2);
   }
-  .vxe-tree--line {
+  .vxe-table--tree-node-line {
     position: absolute;
     pointer-events: none;
 
@@ -2078,7 +2078,7 @@ $btnThemeList: (
       transform: translateY(-50%);
     }
   }
-  .vxe-tree--line {
+  .vxe-table--tree-node-line {
     // 实线
     &.type--solid {
       &.v {

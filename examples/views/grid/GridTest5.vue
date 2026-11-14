@@ -23,8 +23,8 @@ interface RowVO {
 const treeConfig = reactive<VxeTablePropTypes.TreeConfig>({
   transform: true,
   showLine: true,
-  showRootLine: true,
-  lineType: 'dotted'
+  showRootLine: true
+  // lineType: 'dotted'
 })
 
 const gridOptions = reactive<VxeGridProps<RowVO>>({
