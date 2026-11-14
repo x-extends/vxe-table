@@ -6,13 +6,16 @@
   font-family: Verdana,Arial,Tahoma;
   font-weight: normal;
   user-select: none;
-  &.rotate45 {
+  &.rotate45,
+  &.rotate-45 {
     transform: rotate(45deg);
   }
-  &.rotate90 {
+  &.rotate90,
+  &.rotate-90 {
     transform: rotate(90deg);
   }
-  &.rotate180 {
+  &.rotate180,
+  &.rotate-180 {
     transform: rotate(180deg);
   }
 }

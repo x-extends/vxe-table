@@ -34,8 +34,10 @@
   --vxe-ui-table-tree-node-indent: 1.5em;
   --vxe-ui-table-tree-node-line-width: 1px;
   --vxe-ui-table-tree-node-line-color:#909399;
-  --vxe-ui-table-tree-node-line-style: dotted;
   --vxe-ui-table-header-font-weight: 700;
+  
+  --vxe-ui-table-expand-tree-node-indent: var(--vxe-ui-table-tree-node-indent);
+  --vxe-ui-table-row-group-tree-node-indent: var(--vxe-ui-table-tree-node-indent);
 
   --vxe-ui-table-row-height-xlarge: 54px;
   --vxe-ui-table-row-height-large: 52px;

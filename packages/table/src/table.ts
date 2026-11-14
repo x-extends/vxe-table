@@ -369,7 +369,7 @@ function renderRowExpandedVNs(h: CreateElement, $xeTable: VxeTableConstructor & 
     const { handleGetRowId } = createHandleGetRowId($xeTable)
     tableRowExpandedList.forEach((row) => {
       const expandOpts = $xeTable.computeExpandOpts
-      const { height: expandHeight, padding, indent } = expandOpts
+      const { height: expandHeight, padding } = expandOpts
       const { fullAllDataRowIdData, fullColumnIdData } = internalData
       const treeOpts = $xeTable.computeTreeOpts
       const { transform, seqMode } = treeOpts
@@ -399,7 +399,7 @@ function renderRowExpandedVNs(h: CreateElement, $xeTable: VxeTableConstructor & 
         cellStyle.height = `${expandHeight}px`
       }
       if (isRowGroupStatus || treeConfig) {
-        cellStyle.paddingLeft = `${rowLevel * (XEUtils.isNumber(indent) ? indent : treeOpts.indent) + 30}px`
+        cellStyle.paddingLeft = `calc(${rowLevel} * var(--vxe-ui-table-expand-tree-node-indent) + 30px)`
       }
       let columnIndex = -1
       let $columnIndex = -1
@@ -1606,13 +1606,15 @@ export default {
     },
     computeTableStyle() {
       const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
-      const props = $xeTable
 
-      const { treeConfig } = props
       const barWidth = $xeTable.computeScrollYWidth
       const barHeight = $xeTable.computeScrollXHeight
       const treeOpts = $xeTable.computeTreeOpts
-      const { indent, lineWidth, lineColor } = treeOpts
+      const { indent: treeIndent, lineWidth, lineColor } = treeOpts
+      const expandOpts = $xeTable.computeExpandOpts
+      const { indent: edIndent } = expandOpts
+      const aggregateOpts = $xeTable.computeAggregateOpts
+      const { indent: rgIndent } = aggregateOpts
       const stys: VxeComponentStyleType = {}
       if (barWidth || barHeight) {
         stys['--vxe-ui-table-view-scrollbar-width'] = toCssUnit(barWidth || barHeight)
@@ -1620,8 +1622,14 @@ export default {
         stys['--vxe-ui-table-view-scrollbar-height'] = toCssUnit(barHeight || barWidth)
         stys['--vxe-ui-scrollbar-x-height'] = toCssUnit(barHeight || barWidth)
       }
-      if (treeConfig) {
-        stys['--vxe-ui-table-tree-node-indent'] = toCssUnit(indent)
+      if (edIndent) {
+        stys['--vxe-ui-table-expand-tree-node-indent'] = toCssUnit(edIndent)
+      }
+      if (rgIndent) {
+        stys['--vxe-ui-table-row-group-tree-node-indent'] = toCssUnit(rgIndent)
+      }
+      if (treeIndent) {
+        stys['--vxe-ui-table-tree-node-indent'] = toCssUnit(treeIndent)
       }
       if (lineWidth) {
         stys['--vxe-ui-table-tree-node-line-width'] = toCssUnit(lineWidth)

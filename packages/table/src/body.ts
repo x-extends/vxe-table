@@ -49,7 +49,7 @@ function renderLine(h: CreateElement, $xeTable: VxeTableConstructor & VxeTablePr
         lineVNs.push(
           h('span', {
             key: 'le' + i,
-            class: ['vxe-tree--line', `type--${lineType || 'solid'}`, item.type],
+            class: ['vxe-table--tree-node-line', `type--${lineType || 'solid'}`, item.type],
             style: item.style
           })
         )
@@ -675,7 +675,7 @@ function renderRows(h: CreateElement, _vm: any, fixedType: 'left' | 'right' | ''
           cellStyle.height = `${expandHeight}px`
         }
         if (treeConfig) {
-          cellStyle.paddingLeft = `${rowLevel * treeOpts.indent + 30}px`
+          cellStyle.paddingLeft = `calc(${rowLevel} * var(--vxe-ui-table-tree-node-indent) + 30px)`
         }
         const { showOverflow } = expandColumn || {}
         const colid = expandColumn.id

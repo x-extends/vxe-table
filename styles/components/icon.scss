@@ -58,17 +58,25 @@ $btnThemeList: (
   &.animat {
     transition: transform 0.25s ease-in-out;
   }
-  &.rotate45 {
+  &.rotate45,
+  &.rotate-45 {
     transform: rotate(45deg);
   }
-  &.rotate90 {
+  &.rotate90,
+  &.rotate-90 {
     transform: rotate(90deg);
   }
-  &.rotate180 {
+  &.rotate180,
+  &.rotate-180 {
     transform: rotate(180deg);
   }
   &.roll {
     animation: rollCircle 1s infinite linear;
+  }
+  @for $i from 6 through 18 {
+    &.fs-#{$i} {
+      font-size: #{$i}px;
+    }
   }
   @for $index from 0 to list.length($btnThemeList) {
     $item: list.nth($btnThemeList, $index + 1);

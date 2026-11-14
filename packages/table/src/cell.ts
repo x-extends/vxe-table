@@ -560,7 +560,7 @@ export const Cell = {
     const { rowGroupExpandedFlag } = tableReactData
     const { rowGroupExpandedMaps } = tableInternalData
     const aggregateOpts = $table.computeAggregateOpts
-    const { mode, padding, indent, showIcon, iconOpen, iconClose } = aggregateOpts
+    const { mode, padding, showIcon, iconOpen, iconClose } = aggregateOpts
     const rowid = getRowid($table, row)
     const isExpand = !!rowGroupExpandedFlag && !!rowGroupExpandedMaps[rowid]
     return h(
@@ -573,9 +573,9 @@ export const Cell = {
           }
         ],
         style:
-          mode !== 'column' && padding && indent
+          mode !== 'column' && padding
             ? {
-                paddingLeft: `${level * indent}px`
+                paddingLeft: `calc(${level} * var(--vxe-ui-table-row-group-tree-node-indent))`
               }
             : undefined
       },
@@ -620,7 +620,7 @@ export const Cell = {
     const treeOpts = $table.computeTreeOpts
     const { row, column, level } = params
     const { slots } = column
-    const { padding, indent, lazy, trigger, visibleMethod, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
+    const { padding, lazy, trigger, visibleMethod, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowChilds = row[childrenField]
@@ -659,12 +659,11 @@ export const Cell = {
               'is--active': isActive
             }
           ],
-          style:
-            padding && indent
-              ? {
-                  paddingLeft: `${level * indent}px`
-                }
-              : undefined
+          style: padding
+            ? {
+                paddingLeft: `calc(${level} * var(--vxe-ui-table-tree-node-indent))`
+              }
+            : undefined
         },
         [
           showIcon && (lazy ? (isLazyLoaded ? hasChild : hasChild || hasLazyChilds) : hasChild) && (!visibleMethod || visibleMethod(params))
