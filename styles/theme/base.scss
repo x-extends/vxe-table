@@ -31,14 +31,16 @@
   --vxe-ui-table-resizable-drag-line-color: var(--vxe-ui-font-primary-color);
   --vxe-ui-table-footer-background-color: var(--vxe-ui-layout-background-color);
   --vxe-ui-table-tree-node-btn-width: 1em;
-  --vxe-ui-table-tree-node-indent: 1.5em;
+  --vxe-ui-table-tree-node-indent-xlarge: 28px;
+  --vxe-ui-table-tree-node-indent-large: 26px;
+  --vxe-ui-table-tree-node-indent-default: 24px;
+  --vxe-ui-table-tree-node-indent-medium: 22px;
+  --vxe-ui-table-tree-node-indent-small: 20px;
+  --vxe-ui-table-tree-node-indent-mini: 18px;
   --vxe-ui-table-tree-node-line-width: 1px;
   --vxe-ui-table-tree-node-line-color:#909399;
   --vxe-ui-table-header-font-weight: 700;
   
-  --vxe-ui-table-expand-tree-node-indent: var(--vxe-ui-table-tree-node-indent);
-  --vxe-ui-table-row-group-tree-node-indent: var(--vxe-ui-table-tree-node-indent);
-
   --vxe-ui-table-row-height-xlarge: 54px;
   --vxe-ui-table-row-height-large: 52px;
   --vxe-ui-table-row-height-default: 48px;
@@ -59,12 +61,12 @@
   --vxe-ui-table-cell-padding-mini: 5px;
   --vxe-ui-table-cell-placeholder-color: #C0C4CC;
   --vxe-ui-table-cell-negative-color: #f56c6c;
-  --vxe-ui-table-cell-input-height-xlarge: var(--vxe-ui-table-row-height-xlarge) - 6;
-  --vxe-ui-table-cell-input-height-large: var(--vxe-ui-table-row-height-large) - 6;
-  --vxe-ui-table-cell-input-height-default: var(--vxe-ui-table-row-height-default) - 6;
-  --vxe-ui-table-cell-input-height-medium: var(--vxe-ui-table-row-height-medium) - 6;
-  --vxe-ui-table-cell-input-height-small: var(--vxe-ui-table-row-height-small) - 6;
-  --vxe-ui-table-cell-input-height-mini: var(--vxe-ui-table-row-height-mini) - 6;
+  --vxe-ui-table-cell-input-height-xlarge: calc(var(--vxe-ui-table-row-height-xlarge) - 6px);
+  --vxe-ui-table-cell-input-height-large: calc(var(--vxe-ui-table-row-height-large) - 6px);
+  --vxe-ui-table-cell-input-height-default: calc(var(--vxe-ui-table-row-height-default) - 6px);
+  --vxe-ui-table-cell-input-height-medium: calc(var(--vxe-ui-table-row-height-medium) - 6px);
+  --vxe-ui-table-cell-input-height-small: calc(var(--vxe-ui-table-row-height-small) - 6px);
+  --vxe-ui-table-cell-input-height-mini: calc(var(--vxe-ui-table-row-height-mini) - 6px);
   --vxe-ui-table-cell-dirty-width: 5px;
   --vxe-ui-table-cell-dirty-update-color: #f56c6c;
   --vxe-ui-table-cell-dirty-insert-color: #19A15F;
