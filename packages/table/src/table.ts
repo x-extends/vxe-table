@@ -9030,9 +9030,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
                   let isClear
                   if (editOpts.mode === 'row') {
                     const rowTargetNode = getEventTargetNode(evnt, el, 'vxe-body--row')
-                    const rowNodeRest = rowTargetNode.flag ? $xeTable.getRowNode(rowTargetNode.targetElem) : null
-                    // row 方式，如果点击了不同行
-                    isClear = rowNodeRest ? !$xeTable.eqRow(rowNodeRest.item, actived.args.row) : false
+                    if (rowTargetNode && rowTargetNode.flag) {
+                      const rowNodeRest = rowTargetNode.flag ? $xeTable.getRowNode(rowTargetNode.targetElem) : null
+                      // row 方式，如果点击了不同行
+                      isClear = rowNodeRest ? !$xeTable.eqRow(rowNodeRest.item, actived.args.row) : false
+                    } else {
+                      // 如果是非单元格则清除
+                      isClear = true
+                    }
                   } else {
                     // cell 方式，如果是非编辑列
                     isClear = !getEventTargetNode(evnt, el, 'col--edit').flag
