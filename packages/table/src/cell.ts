@@ -971,7 +971,6 @@ export const Cell = {
     let isChecked = false
     let isVisible = true
     let isDisabled = false
-    const ons: Record<string, any> = {}
     if (!isHidden) {
       const rowid = getRowid($table, row)
       isChecked = !!updateCheckboxFlag && !!selectCheckboxMaps[rowid]
@@ -987,17 +986,20 @@ export const Cell = {
       if (treeConfig || isRowGroupStatus) {
         indeterminate = !!treeIndeterminateRowMaps[rowid]
       }
-      ons.click = (evnt: MouseEvent) => {
-        if (!isDisabled && isVisible) {
-          $table.triggerCheckRowEvent(evnt, params, !isChecked)
-        }
-      }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
     if (checkboxSlot) {
       return renderCellBaseVNs(h, params, $table.callSlot(checkboxSlot, checkboxParams, h))
     }
     const checkVNs = []
+    const ons: Record<string, any> = {}
+    if (!isHidden) {
+      ons.click = (evnt: MouseEvent) => {
+        if (!isDisabled && isVisible) {
+          $table.triggerCheckRowEvent(evnt, params, !isChecked)
+        }
+      }
+    }
     if (isVisible) {
       checkVNs.push(
         h('span', {
@@ -1058,7 +1060,6 @@ export const Cell = {
     let isChecked = false
     let isVisible = true
     let isDisabled = false
-    const ons: Record<string, any> = {}
     if (!isHidden) {
       const rowid = getRowid($table, row)
       isChecked = !!updateCheckboxFlag && XEUtils.get(row, checkField)
@@ -1074,17 +1075,20 @@ export const Cell = {
       if (treeConfig || isRowGroupStatus) {
         indeterminate = !!treeIndeterminateRowMaps[rowid]
       }
-      ons.click = (evnt: MouseEvent) => {
-        if (!isDisabled && isVisible) {
-          $table.triggerCheckRowEvent(evnt, params, !isChecked)
-        }
-      }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
     if (checkboxSlot) {
       return renderCellBaseVNs(h, params, $table.callSlot(checkboxSlot, checkboxParams, h))
     }
     const checkVNs = []
+    const ons: Record<string, any> = {}
+    if (!isHidden) {
+      ons.click = (evnt: MouseEvent) => {
+        if (!isDisabled && isVisible) {
+          $table.triggerCheckRowEvent(evnt, params, !isChecked)
+        }
+      }
+    }
     if (isVisible) {
       checkVNs.push(
         h('span', {

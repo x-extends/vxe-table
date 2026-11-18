@@ -1650,7 +1650,7 @@ function handleCheckedRadioRow($xeTable: VxeTableConstructor & VxeTablePrivateMe
   return $xeTable.$nextTick()
 }
 
-function handleCheckedCheckboxRow($xeTable: VxeTableConstructor & VxeTablePrivateMethods, rows: any[], value: boolean, isForce?: boolean) {
+function handleCheckedCheckboxRow($xeTable: VxeTableConstructor & VxeTablePrivateMethods, rows: any[], value: boolean, isForce: boolean) {
   if (rows && !XEUtils.isArray(rows)) {
     rows = [rows]
   }
@@ -1659,7 +1659,7 @@ function handleCheckedCheckboxRow($xeTable: VxeTableConstructor & VxeTablePrivat
   return $xeTable.$nextTick()
 }
 
-function handleCheckedAllCheckboxRow($xeTable: VxeTableConstructor & VxeTablePrivateMethods, checked: boolean, isForce?: boolean) {
+function handleCheckedAllCheckboxRow($xeTable: VxeTableConstructor & VxeTablePrivateMethods, checked: boolean, isForce: boolean) {
   const props = $xeTable
   const reactData = $xeTable as unknown as TableReactData
   const internalData = $xeTable as unknown as TableInternalData
@@ -1940,7 +1940,7 @@ const handleAsyncTreeExpandChilds = ($xeTable: VxeTableConstructor & VxeTablePri
               reactData.treeExpandedFlag++
               // 如果当前节点已选中，则展开后子节点也被选中
               if (!checkStrictly && $xeTable.isCheckedByCheckboxRow(row)) {
-                handleCheckedCheckboxRow($xeTable, childRows, true)
+                handleCheckedCheckboxRow($xeTable, childRows, true, false)
               }
               return $xeTable.$nextTick().then(() => {
                 if (transform) {
@@ -9158,7 +9158,7 @@ const tableMethods: any = {
     }
     return []
   },
-  handleCheckedCheckboxRow(rows: any[], value: boolean, isForce?: boolean) {
+  handleCheckedCheckboxRow(rows: any[], value: boolean, isForce: boolean) {
     const $xeTable = this
 
     return handleCheckedCheckboxRow($xeTable, rows, value, isForce)
@@ -9168,18 +9168,20 @@ const tableMethods: any = {
    * @param {Array/Row} rows 行数据
    * @param {Boolean} value 是否选中
    */
-  setCheckboxRow(rows: any, checked: any) {
+  setCheckboxRow(rows: any, options: any) {
     const $xeTable = this
 
+    const { checked, force } = Object.assign({ force: true }, XEUtils.isBoolean(options) ? { checked: options } : options)
     if (rows && !XEUtils.isArray(rows)) {
       rows = [rows]
     }
-    return handleCheckedCheckboxRow($xeTable, rows, checked, true)
+    return handleCheckedCheckboxRow($xeTable, rows, checked, force)
   },
-  setCheckboxRowByKey(keys: any, checked: boolean) {
+  setCheckboxRowByKey(keys: any, options: boolean) {
     const $xeTable = this
     const internalData = $xeTable as unknown as TableInternalData
 
+    const { checked, force } = Object.assign({ force: true }, XEUtils.isBoolean(options) ? { checked: options } : options)
     const { fullAllDataRowIdData } = internalData
     if (keys && !XEUtils.isArray(keys)) {
       keys = [keys]
@@ -9192,11 +9194,16 @@ const tableMethods: any = {
         rows.push(rowRest.row)
       }
     })
-    return handleCheckedCheckboxRow($xeTable, rows, checked, true)
+    return handleCheckedCheckboxRow($xeTable, rows, !!checked, force)
   },
+  /**
+   * 请使用 setCheckboxRowByKey
+   * @deprecated
+   */
   setCheckboxRowKey(keys: any, checked: boolean) {
     const $xeTable = this
 
+    // warnLog('vxe.error.delFunc', ['setCheckboxRowKey', 'setCheckboxRowByKey'])
     return $xeTable.setCheckboxRowByKey(keys, checked)
   },
   isCheckedByCheckboxRow(row: any) {
@@ -9583,26 +9590,27 @@ const tableMethods: any = {
   /**
    * 多选，切换某一行的选中状态
    */
-  toggleCheckboxRow(row: any) {
+  toggleCheckboxRow(row: any, options?: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const internalData = $xeTable as unknown as TableInternalData
 
     const { selectCheckboxMaps } = internalData
     const checkboxOpts = $xeTable.computeCheckboxOpts
     const { checkField } = checkboxOpts
+    const { force } = Object.assign({ force: true }, options)
     const checked = checkField ? !XEUtils.get(row, checkField) : !selectCheckboxMaps[getRowid($xeTable, row)]
-    $xeTable.handleBatchSelectRows([row], checked, true)
+    $xeTable.handleBatchSelectRows([row], checked, force)
     $xeTable.checkSelectionStatus()
     return $xeTable.$nextTick()
   },
   /**
    * 用于多选行，设置所有行的选中状态
-   * @param {Boolean} value 是否选中
    */
-  setAllCheckboxRow(value: boolean) {
+  setAllCheckboxRow(options: any) {
     const $xeTable = this
 
-    return handleCheckedAllCheckboxRow($xeTable, value, true)
+    const { checked, force } = Object.assign({ force: true }, XEUtils.isBoolean(options) ? { checked: options } : options)
+    return handleCheckedAllCheckboxRow($xeTable, !!checked, force)
   },
   updateCheckboxStatus() {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
@@ -9947,10 +9955,10 @@ const tableMethods: any = {
       }
     }
   },
-  handleCheckAllEvent(evnt: any, value: any) {
+  handleCheckAllEvent(evnt: any, value: any, isForce: boolean) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
 
-    handleCheckedAllCheckboxRow($xeTable, value)
+    handleCheckedAllCheckboxRow($xeTable, value, isForce)
     if (evnt) {
       $xeTable.dispatchEvent(
         'checkbox-all',
@@ -9976,16 +9984,17 @@ const tableMethods: any = {
     if (evnt) {
       evnt.stopPropagation()
     }
-    this.handleCheckAllEvent(evnt, value)
+    this.handleCheckAllEvent(evnt, value, false)
   },
   /**
    * 多选，切换所有行的选中状态
    */
-  toggleAllCheckboxRow() {
+  toggleAllCheckboxRow(options: any) {
     const $xeTable = this as VxeTableConstructor & VxeTablePrivateMethods
     const reactData = $xeTable as unknown as TableReactData
 
-    this.handleCheckAllEvent(null, !reactData.isAllSelected)
+    const { force } = Object.assign({ force: true }, options)
+    this.handleCheckAllEvent(null, !reactData.isAllSelected, force)
     return $xeTable.$nextTick()
   },
   /**

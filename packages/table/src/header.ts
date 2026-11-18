@@ -24,7 +24,7 @@ function renderRows(h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
 
   const { fixedType } = props
   const { resizable: allResizable, columnKey, showCustomHeader, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
-  const { dragCol, scrollXLoad, scrollYLoad, overflowX, mergeHeadFlag, tableColumn, currColFlag } = tableReactData
+  const { dragCol, scrollXLoad, scrollYLoad, overflowX, mergeHeadFlag, tableColumn, currColFlag, isAllSelected: isAllCheckboxSelected, isIndeterminate: isAllCheckboxIndeterminate } = tableReactData
   const { fullColumnIdData, scrollXStore, mergeHeaderList, mergeHeaderCellMaps, currentCol } = tableInternalData
   const virtualXOpts = $xeTable.computeVirtualXOpts
   const columnOpts = $xeTable.computeColumnOpts
@@ -36,6 +36,7 @@ function renderRows(h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
   const rendererOpts = $xeTable.computeRendererOpts
   const mouseOpts = $xeTable.computeMouseOpts
   const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
+  const isAllCheckboxDisabled = $xeTable.computeIsAllCheckboxDisabled
   const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
   const isLastRow = _rowIndex === headerGroups.length - 1
 
@@ -85,6 +86,12 @@ function renderRows(h: CreateElement, _vm: any, isGroup: boolean, isOptimizeMode
       _columnIndex,
       firstFilterOption: firstFilterOption as VxeTableDefines.FilterOption,
       fixed: fixedType,
+
+      // 复选框勾选状态
+      checked: isAllCheckboxSelected,
+      disabled: isAllCheckboxDisabled,
+      indeterminate: isAllCheckboxIndeterminate,
+
       source: sourceType,
       type: renderType,
       isHidden: fixedHiddenColumn,
