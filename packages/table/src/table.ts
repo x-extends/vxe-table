@@ -3368,7 +3368,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       return nextTick()
     }
 
-    const handleCheckedCheckboxRow = (rows: any[], value: boolean, isForce?: boolean) => {
+    const handleCheckedCheckboxRow = (rows: any[], value: boolean, isForce: boolean) => {
       if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
@@ -3377,7 +3377,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       return nextTick()
     }
 
-    const handleCheckedAllCheckboxRow = (checked: boolean, isForce?: boolean) => {
+    const handleCheckedAllCheckboxRow = (checked: boolean, isForce: boolean) => {
       const { treeConfig } = props
       const { isRowGroupStatus } = reactData
       const { afterFullData, afterTreeFullData, afterGroupFullData, checkboxReserveRowMap, selectCheckboxMaps } = internalData
@@ -3644,7 +3644,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
                   reactData.treeExpandedFlag++
                   // 如果当前节点已选中，则展开后子节点也被选中
                   if (!checkStrictly && $xeTable.isCheckedByCheckboxRow(row)) {
-                    handleCheckedCheckboxRow(childRows, true)
+                    handleCheckedCheckboxRow(childRows, true, false)
                   }
                   return nextTick().then(() => {
                     if (transform) {
@@ -5026,8 +5026,8 @@ export default /* define-vxe-component start */ defineVxeComponent({
       }
     }
 
-    const handleCheckAllEvent = (evnt: Event | null, value: any) => {
-      handleCheckedAllCheckboxRow(value)
+    const handleCheckAllEvent = (evnt: Event | null, value: any, isForce: boolean) => {
+      handleCheckedAllCheckboxRow(value, isForce)
       if (evnt) {
         dispatchEvent(
           'checkbox-all',
@@ -7098,13 +7098,15 @@ export default /* define-vxe-component start */ defineVxeComponent({
        * @param {Array/Row} rows 行数据
        * @param {Boolean} value 是否选中
        */
-      setCheckboxRow(rows, checked) {
+      setCheckboxRow(rows, options) {
+        const { checked, force } = Object.assign({ force: true }, XEUtils.isBoolean(options) ? { checked: options } : options)
         if (rows && !XEUtils.isArray(rows)) {
           rows = [rows]
         }
-        return handleCheckedCheckboxRow(rows, checked, true)
+        return handleCheckedCheckboxRow(rows, checked, force)
       },
-      setCheckboxRowByKey(keys: any, checked) {
+      setCheckboxRowByKey(keys: any, options) {
+        const { checked, force } = Object.assign({ force: true }, XEUtils.isBoolean(options) ? { checked: options } : options)
         const { fullAllDataRowIdData } = internalData
         if (!XEUtils.isArray(keys)) {
           keys = [keys]
@@ -7117,9 +7119,14 @@ export default /* define-vxe-component start */ defineVxeComponent({
             rows.push(rowRest.row)
           }
         })
-        return handleCheckedCheckboxRow(rows, checked, true)
+        return handleCheckedCheckboxRow(rows, !!checked, force)
       },
+      /**
+       * 请使用 setCheckboxRowByKey
+       * @deprecated
+       */
       setCheckboxRowKey(keys, checked) {
+        // warnLog('vxe.error.delFunc', ['setCheckboxRowKey', 'setCheckboxRowByKey'])
         return $xeTable.setCheckboxRowByKey(keys, checked)
       },
       isCheckedByCheckboxRow(row) {
@@ -7159,21 +7166,22 @@ export default /* define-vxe-component start */ defineVxeComponent({
       /**
        * 多选，切换某一行的选中状态
        */
-      toggleCheckboxRow(row) {
+      toggleCheckboxRow(row, options) {
         const { selectCheckboxMaps } = internalData
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField } = checkboxOpts
+        const { force } = Object.assign({ force: true }, options)
         const checked = checkField ? !XEUtils.get(row, checkField) : !selectCheckboxMaps[getRowid($xeTable, row)]
-        $xeTable.handleBatchSelectRows([row], checked, true)
+        $xeTable.handleBatchSelectRows([row], checked, force)
         $xeTable.checkSelectionStatus()
         return nextTick()
       },
       /**
        * 用于多选行，设置所有行的选中状态
-       * @param {Boolean} value 是否选中
        */
-      setAllCheckboxRow(value) {
-        return handleCheckedAllCheckboxRow(value, true)
+      setAllCheckboxRow(options) {
+        const { checked, force } = Object.assign({ force: true }, XEUtils.isBoolean(options) ? { checked: options } : options)
+        return handleCheckedAllCheckboxRow(!!checked, force)
       },
       /**
        * 获取单选框保留选中的行
@@ -7259,8 +7267,9 @@ export default /* define-vxe-component start */ defineVxeComponent({
       /**
        * 多选，切换所有行的选中状态
        */
-      toggleAllCheckboxRow() {
-        handleCheckAllEvent(null, !reactData.isAllSelected)
+      toggleAllCheckboxRow(options) {
+        const { force } = Object.assign({ force: true }, options)
+        handleCheckAllEvent(null, !reactData.isAllSelected, force)
         return nextTick()
       },
       /**
@@ -11942,7 +11951,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         if (evnt) {
           evnt.stopPropagation()
         }
-        handleCheckAllEvent(evnt, value)
+        handleCheckAllEvent(evnt, value, false)
       },
       /**
        * 单选，行选中事件

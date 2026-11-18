@@ -29,7 +29,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeMouseOpts, computeHeaderCellOpts, computeDefaultRowHeight, computeVirtualXOpts, computeFloatingFilterOpts, computeIsHeaderRenderOptimize, computeHeaderTooltipOpts, computeRendererOpts } = $xeTable.getComputeMaps()
+    const { computeColumnOpts, computeColumnDragOpts, computeCellOpts, computeMouseOpts, computeHeaderCellOpts, computeDefaultRowHeight, computeVirtualXOpts, computeFloatingFilterOpts, computeIsHeaderRenderOptimize, computeHeaderTooltipOpts, computeRendererOpts, computeIsAllCheckboxDisabled } = $xeTable.getComputeMaps()
 
     const headerColumn = ref<VxeTableDefines.ColumnInfo[][]>([])
 
@@ -64,7 +64,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       const { fixedType } = props
       const { resizable: allResizable, columnKey, showCustomHeader, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
-      const { dragCol, scrollXLoad, scrollYLoad, overflowX, mergeHeadFlag, tableColumn, currColFlag } = tableReactData
+      const { dragCol, scrollXLoad, scrollYLoad, overflowX, mergeHeadFlag, tableColumn, currColFlag, isAllSelected: isAllCheckboxSelected, isIndeterminate: isAllCheckboxIndeterminate } = tableReactData
       const { fullColumnIdData, scrollXStore, mergeHeaderList, mergeHeaderCellMaps, currentCol } = tableInternalData
       const virtualXOpts = computeVirtualXOpts.value
       const columnOpts = computeColumnOpts.value
@@ -76,6 +76,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
       const rendererOpts = computeRendererOpts.value
       const mouseOpts = computeMouseOpts.value
       const currCellHeight = getCalcHeight(headerCellOpts.height) || defaultRowHeight
+      const isAllCheckboxDisabled = computeIsAllCheckboxDisabled.value
       const { disabledMethod: dragDisabledMethod, isCrossDrag, isPeerDrag } = columnDragOpts
       const isLastRow = _rowIndex === headerGroups.length - 1
 
@@ -109,6 +110,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
         }
         const columnIndex = colRest.index
         const _columnIndex = colRest._index
+
         const cellParams: VxeTableDefines.CellRenderHeaderParams & {
           $table: VxeTableConstructor & VxeTablePrivateMethods
         } = {
@@ -124,6 +126,12 @@ export default /* define-vxe-component start */ defineVxeComponent({
           _columnIndex,
           firstFilterOption: firstFilterOption as VxeTableDefines.FilterOption,
           fixed: fixedType,
+
+          // 复选框勾选状态
+          checked: isAllCheckboxSelected,
+          disabled: isAllCheckboxDisabled,
+          indeterminate: isAllCheckboxIndeterminate,
+
           source: sourceType,
           type: renderType,
           isHidden: fixedHiddenColumn,
