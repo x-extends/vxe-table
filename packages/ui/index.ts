@@ -239,6 +239,7 @@ VxeUI.setConfig({
     },
     areaConfig: {
       autoClear: true,
+      overlapMode: 'stack',
       selectCellByHeader: true,
       selectCellByBody: true,
       extendDirection: {
