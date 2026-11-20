@@ -15,7 +15,8 @@
     "lib:modules": "gulp build",
     "lib:old": "npm run lib:pack && npm run lib:modules",
     "lib:new": "node scripts/build-modules.js",
-    "lib": "npm run lib:new"
+    "lib": "npm run lib:new",
+    "clean:all": "node scripts/clean-all"
   },
   "files": [
     "lib",
