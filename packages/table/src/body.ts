@@ -1014,6 +1014,11 @@ export default /* define-vxe-component start */ defineVxeComponent({
                           h('span', {
                             class: 'vxe-table--cell-main-area-btn',
                             on: {
+                              dblclick(evnt: MouseEvent) {
+                                if ($xeTable.triggerCellAreaExtendDblclickEvent) {
+                                  $xeTable.triggerCellAreaExtendDblclickEvent(evnt, { $table: $xeTable, fixed: fixedType, type: renderType })
+                                }
+                              },
                               mousedown(evnt: MouseEvent) {
                                 if ($xeTable.triggerCellAreaExtendMousedownEvent) {
                                   $xeTable.triggerCellAreaExtendMousedownEvent(evnt, { $table: $xeTable, fixed: fixedType, type: renderType })
