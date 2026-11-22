@@ -847,7 +847,7 @@ async function main () {
       throw new Error(`${rel(SRC_DIR)} 下未发现 .ts/.tsx`)
     }
 
-    const mark = name => () => console.log(`[build] ✔ ${name.padEnd(20)} ${Date.now() - t0}ms`)
+    const mark = name => () => console.log(`[build]  ✔ ${name.padEnd(20)} ${Date.now() - t0}ms`)
 
     const buildTasks = [
       esbuildTranspile('esm', ES_DIR).then(mark('es')),
@@ -856,20 +856,20 @@ async function main () {
         .then(() => Promise.all([copyTypesToLib(), copyLocaleTypes()]))
         .then(mark('types')),
       buildStyles().then(ns => {
-        if (ns.length) console.log(`[build] ✔ ${'component style'.padEnd(20)} ${Date.now() - t0}ms  (${ns.length})`)
+        if (ns.length) console.log(`[build]  ✔ ${'component style'.padEnd(20)} ${Date.now() - t0}ms  (${ns.length})`)
       }),
       buildBundle().then(() => {
-        console.log(`[build] ✔ ${'esm'.padEnd(20)} ${Date.now() - t0}ms`)
+        console.log(`[build]  ✔ ${'esm'.padEnd(20)} ${Date.now() - t0}ms`)
       }),
       buildDistStyle().then(() => {
-        console.log(`[build] ✔ ${'all style'.padEnd(20)} ${Date.now() - t0}ms`)
+        console.log(`[build]  ✔ ${'all style'.padEnd(20)} ${Date.now() - t0}ms`)
       })
     ]
 
     if (DO_ICON) {
       buildTasks.push(
         copyIconAssets().then(() => {
-          console.log(`[build] ✔ ${'icon'.padEnd(20)} ${Date.now() - t0}ms`)
+          console.log(`[build]  ✔ ${'icon'.padEnd(20)} ${Date.now() - t0}ms`)
         })
       )
     }
@@ -877,7 +877,7 @@ async function main () {
     if (DO_UMD) {
       buildTasks.push(
         buildUmdBundle().then(() => {
-          console.log(`[build] ✔ ${'umd'.padEnd(20)} ${Date.now() - t0}ms`)
+          console.log(`[build]  ✔ ${'umd'.padEnd(20)} ${Date.now() - t0}ms`)
         })
       )
     }
@@ -885,7 +885,7 @@ async function main () {
     if (DO_LOCALE) {
       buildTasks.push(
         buildLocales().then(outs => {
-          if (outs) console.log(`[build] ✔ ${'locale'.padEnd(20)} ${Date.now() - t0}ms  (${outs.length})`)
+          if (outs) console.log(`[build]  ✔ ${'locale'.padEnd(20)} ${Date.now() - t0}ms  (${outs.length})`)
         })
       )
     }

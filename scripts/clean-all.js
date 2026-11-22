@@ -99,7 +99,7 @@ async function main () {
       ok++
     } catch (err) {
       errs++
-      console.error(`✘ 删除失败：${it.name} — ${err?.message ?? err}`)
+      console.error(`❌ 删除失败：${it.name} — ${err?.message ?? err}`)
     }
   }
 
