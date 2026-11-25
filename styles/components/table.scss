@@ -11,36 +11,37 @@
   --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-default);
   --vxe-ui-table-current-row-line-height: var(--vxe-ui-table-row-line-height);
   --vxe-ui-table-current-row-height: var(--vxe-ui-table-row-height-default);
-  --vxe-ui-table-current-tree-node-indent: var(--vxe-ui-table-tree-node-indent-default);
+  --vxe-ui-table-current-tree-node-default-indent: var(--vxe-ui-table-tree-node-indent-default);
+  --vxe-ui-table-current-tree-node-indent: var(--vxe-ui-table-tree-node-indent, var(--vxe-ui-table-current-tree-node-default-indent));
   &.size--xlarge {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-xlarge);
     --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-xlarge);
     --vxe-ui-table-current-row-height: var(--vxe-ui-table-row-height-xlarge);
-    --vxe-ui-table-current-tree-node-indent: var(--vxe-ui-table-tree-node-indent-xlarge);
+    --vxe-ui-table-current-tree-node-default-indent: var(--vxe-ui-table-tree-node-indent-xlarge);
   }
   &.size--large {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-large);
     --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-large);
     --vxe-ui-table-current-row-height: var(--vxe-ui-table-row-height-large);
-    --vxe-ui-table-current-tree-node-indent: var(--vxe-ui-table-tree-node-indent-large);
+    --vxe-ui-table-current-tree-node-default-indent: var(--vxe-ui-table-tree-node-indent-large);
   }
   &.size--medium {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-medium);
     --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-medium);
     --vxe-ui-table-current-row-height: var(--vxe-ui-table-row-height-medium);
-    --vxe-ui-table-current-tree-node-indent: var(--vxe-ui-table-tree-node-indent-medium);
+    --vxe-ui-table-current-tree-node-default-indent: var(--vxe-ui-table-tree-node-indent-medium);
   }
   &.size--small {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-small);
     --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-small);
     --vxe-ui-table-current-row-height: var(--vxe-ui-table-row-height-small);
-    --vxe-ui-table-current-tree-node-indent: var(--vxe-ui-table-tree-node-indent-small);
+    --vxe-ui-table-current-tree-node-default-indent: var(--vxe-ui-table-tree-node-indent-small);
   }
   &.size--mini {
     --vxe-ui-table-current-font-size: var(--vxe-ui-font-size-mini);
     --vxe-ui-table-current-cell-padding: var(--vxe-ui-table-cell-padding-mini);
     --vxe-ui-table-current-row-height: var(--vxe-ui-table-row-height-mini);
-    --vxe-ui-table-current-tree-node-indent: var(--vxe-ui-table-tree-node-indent-mini);
+    --vxe-ui-table-current-tree-node-default-indent: var(--vxe-ui-table-tree-node-indent-mini);
   }
 }
 
@@ -103,9 +104,6 @@ $btnThemeList: (
   }
 }
 
-.vxe-table {
-  --vxe-ui-table-tree-node-indent: var(--vxe-ui-table-current-tree-node-indent);
-}
 .vxe-table--print-frame {
   position: fixed;
   bottom: -100%;
@@ -2179,7 +2177,7 @@ $btnThemeList: (
   .vxe-row-group-cell,
   .vxe-tree-cell {
     display: block;
-    padding-left: var(--vxe-ui-table-tree-node-indent);
+    padding-left: var(--vxe-ui-table-current-tree-node-indent);
   }
   .vxe-cell--tree-btn,
   .vxe-row-group--node-btn{
