@@ -2573,7 +2573,7 @@ export default /* define-vxe-component start */ defineVxeComponent({
 
       // 根节点 depth 从 1 开始
       for (let i = 0; i < treeFullSize; i++) {
-        handleTreeDFS(afterTreeFullData[i], i, afterTreeFullData, null, 1, !i, i === treeFullSize - 1, i === treeFullSize - 1, 0, '' + i)
+        handleTreeDFS(afterTreeFullData[i], i, afterTreeFullData, null, 1, !i, i === treeFullSize - 1, i === treeFullSize - 1, 0, '' + (i + 1))
       }
 
       if (transform) {

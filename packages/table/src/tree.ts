@@ -8,7 +8,7 @@ export function getTreeNodeLines(isExpandable: boolean, depth: number, linesMask
   const lines: VxeTableDefines.RowCacheTreeLineData[] = []
 
   for (let col = 1; col <= depth; col++) {
-    const leftVal = `var(--vxe-ui-table-tree-node-btn-width) + var(--vxe-ui-table-tree-node-indent) * ${(col - 1)}`
+    const leftVal = `var(--vxe-ui-table-tree-node-btn-width) + var(--vxe-ui-table-current-tree-node-indent) * ${(col - 1)}`
     const through = (linesMask & (1 << (col - 1))) !== 0
 
     if (col === 1 && !showRootLine) {
@@ -93,7 +93,7 @@ export function getTreeNodeLines(isExpandable: boolean, depth: number, linesMask
           style: {
             left: `calc(${leftVal} + var(--vxe-ui-table-tree-node-btn-width) / 2 + 1px)`,
             top: '50%',
-            width: 'calc(var(--vxe-ui-table-tree-node-indent) - var(--vxe-ui-table-tree-node-btn-width) - 0.2em)'
+            width: 'calc(var(--vxe-ui-table-current-tree-node-indent) - var(--vxe-ui-table-tree-node-btn-width) - 0.2em)'
           }
         })
       } else {
@@ -102,7 +102,7 @@ export function getTreeNodeLines(isExpandable: boolean, depth: number, linesMask
           style: {
             left: `calc(${leftVal})`,
             top: '50%',
-            width: 'calc(var(--vxe-ui-table-tree-node-indent) - var(--vxe-ui-table-tree-node-btn-width) / 2 - 0.1em)'
+            width: 'calc(var(--vxe-ui-table-current-tree-node-indent) - var(--vxe-ui-table-tree-node-btn-width) / 2 - 0.1em)'
           }
         })
       }

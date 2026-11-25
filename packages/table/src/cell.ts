@@ -678,7 +678,7 @@ export const Cell = {
         ],
         style: padding
           ? {
-              paddingLeft: `calc(${level} * var(--vxe-ui-table-tree-node-indent))`
+              paddingLeft: `calc(${level} * var(--vxe-ui-table-current-tree-node-indent))`
             }
           : undefined
       },

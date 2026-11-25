@@ -1,85 +1,78 @@
 <template>
   <div>
-    <vxe-button @click="insertEvent">新增</vxe-button>
-    <vxe-toolbar ref="toolbarRef" custom></vxe-toolbar>
-    <vxe-table
-      id="id"
-      border
-      show-overflow
-      ref="tableRef"
-      :edit-config="editConfig"
-      :data="tableData"
-      :toolbar-config="{
-        custom: true,
+    缩进：<vxe-radio-group v-model="nodeIndent">
+      <vxe-radio-button checked-value="20px" content="20px"></vxe-radio-button>
+      <vxe-radio-button checked-value="30px" content="30px"></vxe-radio-button>
+      <vxe-radio-button checked-value="40px" content="40px"></vxe-radio-button>
+    </vxe-radio-group>
+
+    <vxe-grid
+      v-bind="gridOptions"
+      :style="{
+        '--vxe-ui-table-tree-node-indent': nodeIndent
       }"
-      :column-config="{
-        resizable: true,
-      }"
-      :custom-config="{
-          storage: true,
-          storeOptions: {
-            resizable: false,
-          },
-        }"
-      @edit-activated="editActivatedEvent">
-      <vxe-column type="seq" width="70"></vxe-column>
-      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-column>
-    </vxe-table>
+    >
+    </vxe-grid>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
-import type { VxeTableInstance, VxeTablePropTypes, VxeToolbarInstance } from '../../../types'
+import { ref, reactive } from 'vue'
+import type { VxeGridProps } from '../../../types'
 
 interface RowVO {
   id: number
+  parentId: number | null
   name: string
-  role: string
-  sex: string
-  age: number
-  address: string
+  type: string
+  size: number
+  date: string
 }
 
-const tableRef = ref<VxeTableInstance<RowVO>>()
+const nodeIndent = ref('20px')
 
-const tableData = ref<RowVO[]>([
-  { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
-  { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-  { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-  { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
-])
-
-const editConfig = ref<VxeTablePropTypes.EditConfig>({
-  trigger: 'click',
-  mode: 'cell'
-})
-
-const insertEvent = async () => {
-  const $table = tableRef.value
-  if ($table) {
-    const record = {
-      sex: '1',
-      date12: '2021-01-01'
-    }
-    const { row: newRow } = await $table.insert(record)
-    await $table.setEditCell(newRow, 'name')
-  }
-}
-
-const editActivatedEvent = (params: any) => {
-  console.log(params)
-}
-
-const toolbarRef = ref<VxeToolbarInstance>()
-
-onMounted(() => {
-  const $toolbar = toolbarRef.value
-  const $table = tableRef.value
-  if ($toolbar && $table) {
-    $table.connect($toolbar)
-  }
+const gridOptions = reactive<VxeGridProps<RowVO>>({
+  showOverflow: true,
+  border: 'outer',
+  stripe: true,
+  rowConfig: {
+    useKey: true
+  },
+  columnConfig: {
+    resizable: true
+  },
+  checkboxConfig: {
+    labelField: 'name'
+  },
+  treeConfig: {
+    transform: true,
+    showLine: true
+  },
+  columns: [
+    { type: 'checkbox', treeNode: true, minWidth: 300 },
+    { field: 'size', title: 'Size' },
+    { field: 'type', title: 'Type' },
+    { field: 'date', title: 'Date' }
+  ],
+  data: [
+    { id: 10000, parentId: null, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+    { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: 0, date: '2021-04-01' },
+    { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+    { id: 20045, parentId: 24300, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+    { id: 10053, parentId: 24300, name: 'Test5', type: 'avi', size: 0, date: '2021-04-01' },
+    { id: 24330, parentId: 10053, name: 'Test6', type: 'txt', size: 25, date: '2021-10-01' },
+    { id: 21011, parentId: 10053, name: 'Test7', type: 'pdf', size: 512, date: '2020-01-01' },
+    { id: 22200, parentId: 10053, name: 'Test8', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 23666, parentId: null, name: 'Test9', type: 'xlsx', size: 2048, date: '2020-11-01' },
+    { id: 23677, parentId: 23666, name: 'Test10', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 23671, parentId: 23677, name: 'Test11', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 23672, parentId: 23677, name: 'Test12', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 23688, parentId: 23666, name: 'Test13', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 23681, parentId: 23688, name: 'Test14', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 23682, parentId: 23688, name: 'Test15', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 24555, parentId: null, name: 'Test16', type: 'avi', size: 224, date: '2020-10-01' },
+    { id: 24566, parentId: 24555, name: 'Test17', type: 'js', size: 1024, date: '2021-06-01' },
+    { id: 24577, parentId: 24555, name: 'Test18', type: 'js', size: 1024, date: '2021-06-01' }
+  ]
 })
 </script>
