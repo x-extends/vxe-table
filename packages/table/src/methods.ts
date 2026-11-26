@@ -783,7 +783,8 @@ function updateAfterTreeIndex($xeTable: VxeTableConstructor & VxeTablePrivateMet
     }
     const isExpandable = (lazy ? (isLazyLoaded ? hasChild : hasChild || hasLazyChilds) : hasChild)
 
-    rowRest.treeLines = showTreeLine && treeFullSize > 1 ? getTreeNodeLines(isExpandable, depth, linesMask, isFirstRow, isLastRow, showTreeRootLine) : []
+    // 树节点连接线
+    rowRest.treeLines = showTreeLine ? getTreeNodeLines(isExpandable, depth, linesMask, isFirstRow, isLastRow, showTreeRootLine) : []
 
     // 计算传给子节点的状态
     let nextStackMask = stackMask
